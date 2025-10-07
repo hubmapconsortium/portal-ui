@@ -42,6 +42,7 @@ interface EntityTableProps<Doc extends Entity>
   reverseExpandIndicator?: boolean;
   onExpand?: (id: string) => (isExpanded: boolean) => void;
   estimatedExpandedRowHeight?: number;
+  initialSortState?: { columnId: string; direction: 'asc' | 'desc' };
 }
 
 const headerRowHeight = 60;
@@ -63,6 +64,7 @@ function EntityTable<Doc extends Entity>({
   reverseExpandIndicator,
   onExpand,
   estimatedExpandedRowHeight,
+  initialSortState = { columnId: 'last_modified_timestamp', direction: 'desc' },
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -90,7 +92,7 @@ function EntityTable<Doc extends Entity>({
   } = useScrollTable<Doc>({
     query,
     columnNameMapping,
-    initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
+    initialSortState,
     columns,
     isExpandable,
     estimatedExpandedRowHeight,
@@ -115,7 +117,9 @@ function EntityTable<Doc extends Entity>({
     <StyledTableContainer
       component={Paper}
       ref={tableContainerRef}
-      onScroll={(event) => fetchMoreOnBottomReached(event)}
+      onScroll={(event) => {
+        fetchMoreOnBottomReached(event);
+      }}
       maxHeight={maxHeight}
     >
       {isSelectable && numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
@@ -145,8 +149,12 @@ function EntityTable<Doc extends Entity>({
                 filterValues={getColumnValues(column.id)}
                 selectedFilterValues={getColumnSelectedValues(column.id)}
                 isFilterLoading={aggregationsLoading}
-                onToggleFilterValue={(value) => toggleFilterValue(column.id, value)}
-                onClearFilter={() => clearColumnFilter(column.id)}
+                onToggleFilterValue={(value) => {
+                  toggleFilterValue(column.id, value);
+                }}
+                onClearFilter={() => {
+                  clearColumnFilter(column.id);
+                }}
               />
             ))}
             {isExpandable && !reverseExpandIndicator && expandableHeaderCell}

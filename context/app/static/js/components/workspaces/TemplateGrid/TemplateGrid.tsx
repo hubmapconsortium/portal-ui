@@ -51,13 +51,13 @@ function TemplateGrid({
               <InternalLink
                 href={`/templates/${templateKey}`}
                 target={openLinksInNewTab ? '_blank' : '_self'}
-                onClick={() =>
+                onClick={() => {
                   trackEvent({
                     category: currentEventCategory,
                     action: 'Templates / Navigate to Template',
                     label: currentWorkspaceItemId ? `${currentWorkspaceItemId} ${title}` : title,
-                  })
-                }
+                  });
+                }}
                 data-testid="template-card"
               >
                 {title}

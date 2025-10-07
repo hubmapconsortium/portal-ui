@@ -49,7 +49,7 @@ describe("Entity detail page all load", () => {
     { name: "Collection", url: "/collections", testId: "panel-title" },
     { name: "Dataset", url: "/search/datasets", testId: "hubmap-id-link" },
     { name: "Donor", url: "/search/donors", testId: "hubmap-id-link" },
-    { name: "Organ", url: "/organs", testId: "organ-tile" },
+    { name: "Organ", url: "/organs/kidney", testId: "entity-title" },
     { name: "Publication", url: "/publications", testId: "panel-title" },
     { name: "Sample", url: "/search/samples", testId: "hubmap-id-link" },
   ];  

@@ -22,9 +22,15 @@ const createStore = ({ isOpenToStart }: CreateDropdownMenuStore, menuRef: RefObj
   createZustandStore<DropdownMenuStore>((set) => ({
     menuRef,
     menuIsOpen: isOpenToStart,
-    openMenu: () => set({ menuIsOpen: true }),
-    closeMenu: () => set({ menuIsOpen: false }),
-    toggleMenu: () => set((state) => ({ menuIsOpen: !state.menuIsOpen })),
+    openMenu: () => {
+      set({ menuIsOpen: true });
+    },
+    closeMenu: () => {
+      set({ menuIsOpen: false });
+    },
+    toggleMenu: () => {
+      set((state) => ({ menuIsOpen: !state.menuIsOpen }));
+    },
   }));
 
 export { createStore };

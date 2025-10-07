@@ -37,7 +37,7 @@ function TutorialTooltip({ index, isLastStep, size, step: { title, content, cont
     </StyledPaper>
   );
 }
-/* eslint-disable react/forbid-prop-types */
+
 TutorialTooltip.propTypes = {
   index: PropTypes.number.isRequired,
   isLastStep: PropTypes.bool.isRequired,
@@ -49,6 +49,5 @@ TutorialTooltip.propTypes = {
   closeOnClick: PropTypes.func.isRequired,
   incrementStepOnClick: PropTypes.func.isRequired,
 };
-/* eslint-enable react/forbid-prop-types */
 
 export default TutorialTooltip;

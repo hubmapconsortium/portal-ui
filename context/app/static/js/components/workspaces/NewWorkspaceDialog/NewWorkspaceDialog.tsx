@@ -102,7 +102,7 @@ interface NewWorkspaceDialogProps {
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   autocompleteValue: SearchAheadHit | null;
-  addDataset: (e: React.SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => void;
+  addDataset: (e: React.SyntheticEvent, newValue: SearchAheadHit | null) => void;
   workspaceDatasets: string[];
   allDatasets: string[];
   searchHits: SearchAheadHit[];
@@ -220,8 +220,7 @@ function NewWorkspaceDialog({
                 gap: 2,
                 marginTop: 1,
               }}
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onSubmit={handleSubmit(submit)}
+              onSubmit={void handleSubmit(submit)}
             >
               <WorkspaceNameField control={control} name="workspace-name" />
               <WorkspaceDescriptionField control={control} name="workspace-description" />

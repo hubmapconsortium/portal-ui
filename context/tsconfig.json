@@ -22,7 +22,7 @@
       "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
     }
   },
-  "include": ["./app/static/js/**/*"],
+  "include": ["./app/static/js/**/*", "./typings/**/*", "./.storybook/main.ts", "./.storybook/preview.tsx"],
   "exclude": ["node_modules", "**/*.bundle.js", "@storybook/types/dist"],
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"

@@ -11,9 +11,9 @@ import { ProvData } from '../types';
 
 interface DetailPanelProps {
   prov: Record<string, string>;
-  // eslint-disable-next-line react/no-unused-prop-types
+
   timeKey: string;
-  // eslint-disable-next-line react/no-unused-prop-types
+
   uuid: string;
   typeKey: string;
   idKey: string;
@@ -37,7 +37,9 @@ function ID({ prov, idKey, typeKey }: Pick<DetailPanelProps, 'prov' | 'idKey' | 
     <SectionItem label="ID" ml>
       <InternalLink
         href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}
-        onClick={() => trackEntityPageEvent({ action: 'Provenance / Graph / Link', label: prov[idKey] })}
+        onClick={() => {
+          trackEntityPageEvent({ action: 'Provenance / Graph / Link', label: prov[idKey] });
+        }}
       >
         {prov[idKey]}
       </InternalLink>

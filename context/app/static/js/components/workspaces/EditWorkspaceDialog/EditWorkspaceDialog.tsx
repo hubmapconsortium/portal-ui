@@ -67,8 +67,7 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
       title={title}
       maxWidth="lg"
       content={
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        <form id={formId} onSubmit={handleSubmit(submit)}>
+        <form id={formId} onSubmit={void handleSubmit(submit)}>
           {children}
         </form>
       }

@@ -15,7 +15,9 @@ export type OpenKeyNavStore = OpenKeyNavStoreState & OpenKeyNavStoreActions;
 export const createOpenKeyNavStore = ({ initialize }: { initialize: boolean }) =>
   createStore<OpenKeyNavStore>((set) => ({
     initialize,
-    setInitialize: (val) => set({ initialize: val }),
+    setInitialize: (val) => {
+      set({ initialize: val });
+    },
   }));
 
 const [OpenKeyNavStoreProvider, useOpenKeyNavStore, OpenKeyNavStoreContext] = createStoreContext(

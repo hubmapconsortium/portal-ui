@@ -23,7 +23,7 @@ const AnimatedNav = animated(StickyNav);
 
 interface LinkProps {
   currentSection: string;
-  handleClick: (hash: string, text: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  handleClick: (hash: string, text: string) => (event: React.MouseEvent<HTMLAnchorElement>) => void;
   isNested?: boolean;
 }
 
@@ -79,7 +79,9 @@ function ItemLinks({
         {subItems && (
           <IconButton
             size="small"
-            onClick={() => setOpen((value) => !value)}
+            onClick={() => {
+              setOpen((value) => !value);
+            }}
             color="primary"
             aria-label={open ? `Collapse section for ${item.text}` : `Expand section for ${item.text}`}
           >
@@ -134,7 +136,7 @@ function TableOfContents({
   useThrottledOnScroll(items.length > 0 ? findActiveIndex : null, 200);
 
   const handleClick = useCallback(
-    (hash: string, text: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    (hash: string, text: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
       if (
         event.defaultPrevented ||
         event.button !== 0 ||

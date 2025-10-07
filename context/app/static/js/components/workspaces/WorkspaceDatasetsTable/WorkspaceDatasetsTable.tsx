@@ -10,7 +10,7 @@ import {
   lastModifiedTimestamp,
   assayTypes,
   status,
-  organ,
+  organCol,
   hubmapID,
   hubmapIDWithLinksInNewTab,
 } from 'js/shared-styles/tables/columns';
@@ -80,7 +80,13 @@ function WorkspaceDatasetsTable({
   );
 
   const columns = useMemo(
-    () => [openLinksInNewTab ? hubmapIDWithLinksInNewTab : hubmapID, organ, assayTypes, status, lastModifiedTimestamp],
+    () => [
+      openLinksInNewTab ? hubmapIDWithLinksInNewTab : hubmapID,
+      organCol,
+      assayTypes,
+      status,
+      lastModifiedTimestamp,
+    ],
     [openLinksInNewTab],
   );
 
@@ -110,7 +116,9 @@ function WorkspaceDatasetsTable({
               )}
               {removeDatasets && datasetsPresent && (
                 <Delete
-                  onClick={() => removeDatasets([...selectedRows])}
+                  onClick={() => {
+                    removeDatasets([...selectedRows]);
+                  }}
                   tooltip={tooltips.delete}
                   disabled={selectedRows.size === 0}
                 />

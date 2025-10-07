@@ -45,7 +45,11 @@ const defaultState: SCFindResultsStatisticsStoreState = {
 export type SCFindResultsStatisticsStore = SCFindResultsStatisticsStoreState & SCFindResultsStatisticsStoreAction;
 export const useSCFindResultsStatisticsStore = create<SCFindResultsStatisticsStore>((set) => ({
   ...defaultState,
-  setCellTypeStats: (cellTypeStats) => set({ cellTypeStats }),
-  setDatasetStats: (datasetStats) => set({ datasetStats }),
+  setCellTypeStats: (cellTypeStats) => {
+    set({ cellTypeStats });
+  },
+  setDatasetStats: (datasetStats) => {
+    set({ datasetStats });
+  },
 }));
 export default useSCFindResultsStatisticsStore;

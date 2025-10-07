@@ -31,7 +31,7 @@ export function getNearestIdentifier(target: HTMLElement | null): string | null 
   if (!target) return null;
   // Since these can be empty strings, use the logical OR operator to select the first non-empty value
   // instead of the nullish coalescing operator
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
   const label = target.ariaLabel || target.title || target.innerText || (target as HTMLInputElement)?.placeholder || '';
   switch (target.localName) {
     case 'a':

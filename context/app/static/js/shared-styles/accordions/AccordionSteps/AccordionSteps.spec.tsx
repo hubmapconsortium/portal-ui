@@ -34,7 +34,15 @@ const step1 = getAccordionStepText(1);
 function ExampleContent({ stepIndex }: { stepIndex: number }) {
   const { contentButton, completed } = getAccordionStepText(stepIndex);
   const { completeStep } = useAccordionStep();
-  return <Button onClick={() => completeStep(completed)}>{contentButton}</Button>;
+  return (
+    <Button
+      onClick={() => {
+        completeStep(completed);
+      }}
+    >
+      {contentButton}
+    </Button>
+  );
 }
 
 async function clickOpenAccordion(step: Step) {

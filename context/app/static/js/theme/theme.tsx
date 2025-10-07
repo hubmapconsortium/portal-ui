@@ -75,6 +75,10 @@ declare module '@mui/material/styles' {
     secondaryContainer: ContainerColors;
     primaryContainer: ContainerColors;
     action: TypeAction;
+    graphs: {
+      matched: string;
+      unmatched: string;
+    };
     accent: AccentColors;
   }
   export interface PaletteOptions {
@@ -84,6 +88,10 @@ declare module '@mui/material/styles' {
     caption?: CaptionColors;
     secondaryContainer?: ContainerColors;
     primaryContainer?: ContainerColors;
+    graphs?: {
+      matched: string;
+      unmatched: string;
+    };
     accent?: AccentColors;
   }
 
@@ -123,7 +131,6 @@ declare module '@mui/material/Typography' {
 }
 
 declare module '@mui/material/SvgIcon' {
-  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   export interface SvgIconPropsSizeOverrides {
     [key: `${number}rem`]: true;
   }
@@ -232,6 +239,10 @@ const theme = createTheme({
     caption: {
       background: '#EEEEFF',
       link: '#3781D1',
+    },
+    graphs: {
+      matched: '#4B5F27',
+      unmatched: '#D1DAC1',
     },
     accent: {
       success90: '#F0F3EB', // success-90 in figma
@@ -345,6 +356,12 @@ const theme = createTheme({
           style: {
             boxShadow:
               '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
+            backgroundColor: 'white',
+            '&:hover': {
+              backgroundColor: grey[100],
+            },
+            borderRadius: 8,
+            fontWeight: 300,
           },
         },
       ],
@@ -406,7 +423,6 @@ const theme = createTheme({
     },
   },
 });
-
 export const darkTheme = createTheme(theme, {
   palette: {
     mode: 'dark',

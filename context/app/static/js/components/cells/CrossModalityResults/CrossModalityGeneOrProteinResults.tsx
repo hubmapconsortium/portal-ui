@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
+import { lastModifiedTimestamp, assayTypes, status, organCol, hubmapID } from 'js/shared-styles/tables/columns';
 import Stack from '@mui/material/Stack';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import CellsCharts from '../CellsCharts';
@@ -8,7 +8,7 @@ import { useCrossModalityResults } from './hooks';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 
-const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
+const columns = [hubmapID, organCol, assayTypes, status, lastModifiedTimestamp];
 export default function CrossModalityGeneOrProteinResults<T extends 'gene' | 'protein'>() {
   const { data, error, isLoading: isLoadingInitialResults } = useCrossModalityResults<T>();
 

@@ -47,13 +47,15 @@ function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
           <FilesConditionalLink
             href={fileUrl}
             hasAgreedToDUA={hasAgreedToDUA}
-            openDUA={() => openDUA(fileUrl)}
+            openDUA={() => {
+              openDUA(fileUrl);
+            }}
             variant="body1"
             download
             fileName={fileObj.file}
-            onClick={() =>
-              trackEntityPageEvent({ action: 'File Browser / Download File Link', label: fileObj.rel_path })
-            }
+            onClick={() => {
+              trackEntityPageEvent({ action: 'File Browser / Download File Link', label: fileObj.rel_path });
+            }}
           />
           {fileObj.description && (
             <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>

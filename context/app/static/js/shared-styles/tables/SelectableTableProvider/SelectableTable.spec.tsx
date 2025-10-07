@@ -8,11 +8,17 @@ test('should handle clicking header checkbox', () => {
 
   const headerCheckboxLabel = `${tableLabel}-header-row-checkbox`;
 
-  screen.getAllByRole('checkbox').forEach((checkbox) => expect(checkbox).not.toBeChecked());
+  screen.getAllByRole('checkbox').forEach((checkbox) => {
+    expect(checkbox).not.toBeChecked();
+  });
   fireEvent.click(screen.getByLabelText(headerCheckboxLabel));
-  screen.getAllByRole('checkbox').forEach((checkbox) => expect(checkbox).toBeChecked());
+  screen.getAllByRole('checkbox').forEach((checkbox) => {
+    expect(checkbox).toBeChecked();
+  });
   fireEvent.click(screen.getByLabelText(headerCheckboxLabel));
-  screen.getAllByRole('checkbox').forEach((checkbox) => expect(checkbox).not.toBeChecked());
+  screen.getAllByRole('checkbox').forEach((checkbox) => {
+    expect(checkbox).not.toBeChecked();
+  });
 });
 
 test('should handle clicking body row checkbox', () => {

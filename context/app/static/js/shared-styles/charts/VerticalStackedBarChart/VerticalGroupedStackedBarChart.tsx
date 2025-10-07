@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { scaleBand, AnyD3Scale } from '@visx/scale';
 import { AxisBottom, AxisLeft, AxisScale } from '@visx/axis';
 import { Group } from '@visx/group';
@@ -6,13 +6,14 @@ import { BarGroup, BarStack } from '@visx/shape';
 import { withParentSize, WithParentSizeProvidedProps } from '@visx/responsive';
 import { ScaleBand, ScaleOrdinal } from 'd3';
 import { AnyScaleBand } from '@visx/shape/lib/types';
-import Typography from '@mui/material/Typography';
 import { OrdinalScale, useChartTooltip, useVerticalChart } from '../hooks';
 import { TICK_LABEL_SIZE } from '../constants';
 import { defaultXScaleRange, defaultYScaleRange } from '../utils';
-import { TooltipData, tooltipHasBarData } from '../types';
+import { TooltipData } from '../types';
 import VerticalChartGridRowsGroup from '../VerticalChartGridRowsGroup';
 import StackedBar from '../StackedBar';
+import TickComponent from '../TickComponent';
+import ChartTooltip from '../ChartTooltip';
 
 /**
  * @example const ex: BarStackValues<'a' |'b'| 'c'> = {a: 10, b: 20, c: 30}
@@ -22,7 +23,7 @@ export type BarStackValues<StackKey extends string> = Record<StackKey, number>;
 
 /**
  * @example const ex: BarStackGroup<'matched' | 'unmatched'> = {group: 'Group 1', stacks: {a: {matched: 0, unmatched: 0}, b: {matched: 10, unmatched: 20}, c: {matched: 30, unmatched: 40}}}
- * In this case, StackKey is 'matched' | 'unmatched', comparebykey is 'a' | 'b' | 'c', and GroupKey is 'Group 1'.
+ * In this case, StackKey is 'matched' | 'unmatched', compareByKey is 'a' | 'b' | 'c', and GroupKey is 'Group 1'.
  */
 export interface BarStackGroup<
   StackKey extends string = string,
@@ -139,7 +140,7 @@ interface GroupedBarStackProps<StackKey extends string, CompareByKey extends str
   data: BarStackGroup<StackKey, CompareByKey, XAxisKey>[];
   stackKeys: StackKey[];
   compareByKeys: CompareByKey[];
-  barColorScale: ScaleOrdinal<string, string, never>;
+  barColorScale: ScaleOrdinal<string, string>;
   getX: (d: StackBarFootprint) => string;
   handleMouseEnter: (
     bar: TooltipData<BarStackValues<StackKey> & { group: string }>,
@@ -277,6 +278,7 @@ interface GroupedBarStackChartProps<
   compareByKeys: CompareByKey[];
   stackKeys: StackKey[];
   yTickFormat?: (value: number) => string;
+  excludedKeys?: string[];
 }
 
 function GroupedBarStackChart<
@@ -304,6 +306,7 @@ function GroupedBarStackChart<
   compareByKeys,
   stackKeys,
   yTickFormat,
+  excludedKeys,
 }: GroupedBarStackChartProps<StackKey, CompareByKey, XAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin } = useVerticalChart({
     margin,
@@ -326,6 +329,37 @@ function GroupedBarStackChart<
 
   yScale.range(getYScaleRange(yHeight));
   xScale.range(getXScaleRange(xWidth));
+
+  // Create summarized data for tick component tooltips
+  const tickComponentData = useMemo(() => {
+    const summaryData: Record<string, BarStackValues<StackKey> & { group: string }> = {};
+
+    data.forEach((group) => {
+      // Aggregate all stack values across all compareBy categories for this group
+      const aggregatedStacks = {} as BarStackValues<StackKey>;
+
+      // Initialize all stack keys to 0
+      stackKeys.forEach((stackKey) => {
+        aggregatedStacks[stackKey] = 0;
+      });
+
+      // Sum up values from all compareBy categories
+      compareByKeys.forEach((compareByKey) => {
+        const stackData = group.stacks[compareByKey];
+        if (stackData) {
+          stackKeys.forEach((stackKey) => {
+            aggregatedStacks[stackKey] += stackData[stackKey] || 0;
+          });
+        }
+      });
+
+      // @ts-expect-error Adding the group key here causes duplication in the tick label tooltip,
+      // so we can just ignore the error.
+      summaryData[group.group] = aggregatedStacks;
+    });
+
+    return summaryData;
+  }, [data, stackKeys, compareByKeys]);
 
   return (
     <svg width={parentWidth} height={parentHeight} ref={containerRef}>
@@ -379,23 +413,13 @@ function GroupedBarStackChart<
           fontWeight: 500,
           fontFamily: 'Inter Variable',
         }}
+        tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data: tickComponentData })}
         hideTicks
         labelOffset={24}
       />
       {tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          {TooltipContent ? (
-            <TooltipContent tooltipData={tooltipData} />
-          ) : (
-            <>
-              <Typography>{tooltipData.key}</Typography>
-              {tooltipHasBarData(tooltipData) && (
-                <Typography variant="h6" component="p" color="textPrimary">
-                  {tooltipData.bar.data[tooltipData.key]}
-                </Typography>
-              )}
-            </>
-          )}
+          <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
         </TooltipInPortal>
       )}
     </svg>

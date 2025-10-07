@@ -36,11 +36,11 @@ function VisualizationErrorBoundary({ children }: PropsWithChildren) {
   return (
     <FaroErrorBoundary
       fallback={VisualizationFallback}
-      beforeCapture={() =>
+      beforeCapture={() => {
         faro.api.setView({
           name: 'Vitessce Visualization',
-        })
-      }
+        });
+      }}
     >
       {children}
     </FaroErrorBoundary>

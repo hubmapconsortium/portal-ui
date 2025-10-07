@@ -27,7 +27,9 @@ function DeleteListButton({ listUUID }: { listUUID: string }) {
     <>
       <SecondaryBackgroundTooltip title="More Options">
         <WhiteBackgroundIconButton
-          onClick={() => setMenuIsOpen(true)}
+          onClick={() => {
+            setMenuIsOpen(true);
+          }}
           aria-controls="list-actions-menu"
           aria-haspopup="true"
           ref={anchorEl}
@@ -40,9 +42,15 @@ function DeleteListButton({ listUUID }: { listUUID: string }) {
         anchorEl={anchorEl.current}
         keepMounted
         open={menuIsOpen}
-        onClose={() => setMenuIsOpen(false)}
+        onClose={() => {
+          setMenuIsOpen(false);
+        }}
       >
-        <MenuItem onClick={() => setDeleteListDialogIsOpen(true)}>
+        <MenuItem
+          onClick={() => {
+            setDeleteListDialogIsOpen(true);
+          }}
+        >
           <Stack direction="row" spacing={1} alignItems="center">
             <DeleteIcon color="primary" />
             <Typography>Delete List</Typography>

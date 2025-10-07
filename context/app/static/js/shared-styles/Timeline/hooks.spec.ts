@@ -23,7 +23,9 @@ describe('useExpandableItems', () => {
   it('should return all items when expandable is true and expanded is true', () => {
     const { result } = renderHook(() => useExpandableItems(testItems, true));
     const { handleExpand } = result.current;
-    act(() => handleExpand());
+    act(() => {
+      handleExpand();
+    });
     expect(result.current.itemsToRender).toEqual(testItems);
   });
 });

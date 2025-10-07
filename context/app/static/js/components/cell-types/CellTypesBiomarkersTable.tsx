@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
-import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
 import Description from 'js/shared-styles/sections/Description';
 
 import Table from '@mui/material/Table';
@@ -14,76 +13,21 @@ import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import Paper from '@mui/material/Paper';
 import { InternalLink } from 'js/shared-styles/Links';
-import { useGeneOntologyDetails } from 'js/hooks/useUBKG';
-import Skeleton from '@mui/material/Skeleton';
 import { LineClamp } from 'js/shared-styles/text';
 import { useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
-import { isError } from 'js/helpers/is-error';
 import { trackEvent } from 'js/helpers/trackers';
 import IndexedDatasetsSummary from '../organ/OrganCellTypes/IndexedDatasetsSummary';
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import { ScientificNotationDisplayCell } from '../genes/CellTypes/ScientificNotationDisplay';
-import { useIndexedDatasetsForCellTypePage } from './hooks';
+import { useBiomarkersTableData, useIndexedDatasetsForCellTypePage } from './hooks';
 
 function GeneDescription({ description }: { description: React.ReactNode }) {
   return <LineClamp lines={2}>{description ?? 'No description available.'}</LineClamp>;
 }
-
-function useBiomarkersTableData() {
-  const { cellTypes } = useCellTypesDetailPageContext();
-  const { data, isLoading } = useCellTypeMarkers({
-    cellTypes,
-  });
-
-  const geneIds = useMemo(() => {
-    if (!data?.findGeneSignatures) {
-      return [];
-    }
-    return data.findGeneSignatures.map(({ genes }) => genes);
-  }, [data]);
-
-  // Fetch gene descriptions for the gene IDs
-  const { data: descriptions, isLoading: isLoadingDescriptions } = useGeneOntologyDetails(geneIds);
-
-  const restructuredDescriptions = useMemo(() => {
-    if (!descriptions) {
-      return {};
-    }
-    const unwrappedDescriptions = descriptions.flat();
-    return unwrappedDescriptions.reduce<Record<string, string>>((acc, entry, idx) => {
-      if (isError(entry)) {
-        return acc;
-      }
-      // Handle cases where approved_symbol or summary is missing (where gene description is not available)
-      if (!entry.approved_symbol || !entry.summary) {
-        return acc;
-      }
-      const { summary } = entry;
-      acc[geneIds[idx]] = summary;
-      return acc;
-    }, {});
-  }, [descriptions, geneIds]);
-
-  const rows = useMemo(() => {
-    if (!data?.findGeneSignatures) {
-      return [];
-    }
-    return data.findGeneSignatures.map(({ genes: geneName, precision, recall, f1 }) => ({
-      genes: geneName,
-      precision,
-      recall,
-      f1,
-      description:
-        restructuredDescriptions[geneName] ?? (isLoadingDescriptions ? <Skeleton /> : 'No description available.'),
-    }));
-  }, [data, isLoadingDescriptions, restructuredDescriptions]);
-  return { data, isLoading, isLoadingDescriptions, rows };
-}
-
 // noop for convenience
 const cellContent = () => null;
 
@@ -211,7 +155,9 @@ function BiomarkersTable() {
               <TableCell>
                 <InternalLink
                   href={`/genes/${genes}`}
-                  onClick={() => trackEvent('Biomarkers / Select Biomarker', genes)}
+                  onClick={() => {
+                    trackEvent('Biomarkers / Select Biomarker', genes);
+                  }}
                 >
                   {genes}
                 </InternalLink>

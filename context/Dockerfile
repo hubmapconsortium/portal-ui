@@ -6,7 +6,15 @@ ARG PYTHON_MINOR_V
 FROM node:${NODE_V}-alpine AS frontend
 
 WORKDIR /work
-RUN apk add --no-cache git
+
+# Install system dependencies and increase virtual memory
+RUN apk add --no-cache git make g++ python3 \
+  && echo 'vm.max_map_count=262144' >> /etc/sysctl.conf
+
+# Set memory optimization environment variables
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NPM_CONFIG_PROGRESS=false
+ENV NPM_CONFIG_LOGLEVEL=warn
 
 # COPY only what is needed so layers can be cached.
 COPY package.json .
@@ -21,7 +29,6 @@ COPY build-utils build-utils
 COPY app app
 # portal-visualization is python-only, and not needed for the npm build.
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
@@ -31,7 +38,7 @@ COPY requirements.txt /app
 # Legacy resolver is used to avoid issues with a non-pinned subdependency which causes build failures in CI
 # https://github.com/hubmapconsortium/portal-ui/actions/runs/6087458665/job/16516023950
 COPY constraints.txt /tmp
-RUN PIP_CONSTRAINT=/tmp/constraints.txt pip install -r /app/requirements.txt --use-deprecated=legacy-resolver
+RUN PIP_CONSTRAINT=/tmp/constraints.txt pip install -r /app/requirements.txt
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   assayTypes,
-  organ,
+  organCol,
   hubmapID,
   parentDonorAge,
   parentDonorRace,
@@ -23,35 +23,51 @@ import { useDeduplicatedResults, useSCFindGeneResults, useTableTrackingProps } f
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import SCFindGeneCharts from '../CellsCharts/SCFindGeneCharts';
-import { CurrentGeneContextProvider } from './CurrentGeneContext';
+import { CurrentGeneContextProvider, useOptionalGeneContext } from './CurrentGeneContext';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { MatchingGeneContextProvider } from './MatchingGeneContext';
-import { matchingGeneColumn } from './columns';
+import { GeneCountsContextProvider } from './GeneCountsContext';
+import { matchingGeneColumn, matchingGenesColumn, totalCellCountColumn } from './columns';
+import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 
-const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
+const columns = [hubmapID, organCol, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
-const columnsWithMatchingGene = [
-  hubmapID,
-  organ,
-  assayTypes,
-  parentDonorAge,
-  parentDonorRace,
-  parentDonorSex,
-  matchingGeneColumn,
-];
+const useColumnsWithMatchingGene = (
+  hasIndividualGene: boolean,
+  countsMap?: Record<string, number | string>,
+  allCountsMap?: Record<string, number | string>,
+  geneCountMap?: Record<string, number>,
+) => {
+  return useMemo(
+    () => [
+      ...columns,
+      totalCellCountColumn(allCountsMap),
+      hasIndividualGene ? matchingGeneColumn(countsMap, allCountsMap) : matchingGenesColumn(geneCountMap),
+    ],
+    [hasIndividualGene, countsMap, allCountsMap, geneCountMap],
+  );
+};
 
-function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
-  const genes = useCellVariableNames();
+interface SCFindGeneQueryDatasetListProps extends SCFindQueryResultsListProps {
+  geneCountMap?: Record<string, number>;
+}
 
-  const columnsToUse = genes.length > 1 ? columnsWithMatchingGene : columns;
-
+function SCFindGeneQueryDatasetList({ datasetIds, countsMap, geneCountMap }: SCFindGeneQueryDatasetListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+  const gene = useOptionalGeneContext();
+  const hasIndividualGene = Boolean(gene);
+
+  const { data } = useIndexedDatasets();
+
+  const allCountsMap = data?.countsMap;
+
+  const estimatedExpandedRowHeight = gene ? 1365 : 665; // Chart 1 = 700px, Chart 2 = 600px, padding = 64px, border = 1px
 
   return (
     <EntityTable<Dataset>
       maxHeight={800}
       isSelectable
-      columns={columnsToUse}
+      columns={useColumnsWithMatchingGene(hasIndividualGene, countsMap, allCountsMap, geneCountMap)}
       query={{
         query: {
           bool: {
@@ -76,11 +92,12 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
         ],
       }}
       expandedContent={SCFindGeneCharts}
-      estimatedExpandedRowHeight={1364 /* Chart 1 = 700px, Chart 2 = 600px, padding = 64px */}
+      estimatedExpandedRowHeight={estimatedExpandedRowHeight}
       {...useTableTrackingProps()}
       expandTooltip="View additional visualizations including gene expression levels and cell type distributions."
       collapseTooltip="Collapse row."
       reverseExpandIndicator
+      initialSortState={{ columnId: hasIndividualGene ? 'matching_gene' : 'matching_genes', direction: 'desc' }}
     />
   );
 }
@@ -103,7 +120,22 @@ function DatasetListSection() {
   const { openTabIndex, handleTabChange } = useTabs();
   const genes = useCellVariableNames();
 
-  const { order, categorizedResults, emptyResults, isLoading, error } = useSCFindGeneResults();
+  const { order, categorizedResults, emptyResults, isLoading, error, countsMaps, datasetToGeneMap } =
+    useSCFindGeneResults();
+
+  // Create a map of dataset UUID to number of matching genes for multi-gene sorting
+  const datasetToGeneCountMap = useMemo(() => {
+    const geneCountMap: Record<string, number> = {};
+    // Only proceed if there's no error and datasetToGeneMap exists
+    if (!error && datasetToGeneMap) {
+      Object.entries(datasetToGeneMap).forEach(([datasetUuid, geneSet]) => {
+        if (geneSet && typeof geneSet.size === 'number') {
+          geneCountMap[datasetUuid] = geneSet.size;
+        }
+      });
+    }
+    return geneCountMap;
+  }, [datasetToGeneMap, error]);
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
@@ -114,41 +146,50 @@ function DatasetListSection() {
   }
 
   return (
-    <Stack spacing={1} pt={2}>
-      <DatasetListHeader />
-      <Description>
-        Datasets expressing each selected gene are listed below. The number of datasets for each gene is shown in
-        parentheses.
-        {emptyResults.length > 0 && (
-          <div>
-            No datasets were found for{' '}
-            <Typography component="span" color="warning">
-              {emptyResults.length}
-            </Typography>{' '}
-            of the selected genes:{' '}
-            <Typography component="span" color="warning">
-              {emptyResults.join(', ')}
-            </Typography>
-            .
-          </div>
-        )}
-      </Description>
-      <Tabs onChange={handleTabChange} value={openTabIndex} variant={order.length > 10 ? 'scrollable' : 'fullWidth'}>
-        {order.map((gene, idx) => (
-          <Tab key={gene} label={`${gene} (${categorizedResults[gene]?.length ?? 0})`} index={idx} />
-        ))}
-      </Tabs>
-      {order.map((gene, idx) => (
-        <TabPanel key={gene} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
-          <CurrentGeneContextProvider value={genes.includes(gene) ? gene : undefined}>
-            <SCFindGeneQueryDatasetList
-              key={gene}
-              datasetIds={categorizedResults[gene]?.map((hubmap_id) => ({ hubmap_id })) ?? []}
-            />
-          </CurrentGeneContextProvider>
-        </TabPanel>
-      ))}
-    </Stack>
+    <MatchingGeneContextProvider value={datasetToGeneMap}>
+      <Stack spacing={1} pt={2}>
+        <DatasetListHeader />
+        <Description>
+          Datasets expressing each selected gene are listed below. The number of datasets for each gene is shown in
+          parentheses.
+          {emptyResults.length > 0 && (
+            <div>
+              No datasets were found for{' '}
+              <Typography component="span" color="warning">
+                {emptyResults.length}
+              </Typography>{' '}
+              of the selected genes:{' '}
+              <Typography component="span" color="warning">
+                {emptyResults.join(', ')}
+              </Typography>
+              .
+            </div>
+          )}
+        </Description>
+        <Tabs onChange={handleTabChange} value={openTabIndex} variant={order.length > 10 ? 'scrollable' : 'fullWidth'}>
+          {order.map((gene, idx) => (
+            <Tab key={gene} label={`${gene} (${categorizedResults[gene]?.length ?? 0})`} index={idx} />
+          ))}
+        </Tabs>
+        {order.map((gene, idx) => {
+          // Get dataset IDs for this tab
+          const tabDatasetIds = categorizedResults[gene]?.map((hubmap_id) => ({ hubmap_id })) ?? [];
+
+          return (
+            <TabPanel key={gene} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
+              <CurrentGeneContextProvider value={genes.includes(gene) ? gene : undefined}>
+                <SCFindGeneQueryDatasetList
+                  key={gene}
+                  datasetIds={tabDatasetIds}
+                  countsMap={countsMaps[gene]}
+                  geneCountMap={datasetToGeneCountMap}
+                />
+              </CurrentGeneContextProvider>
+            </TabPanel>
+          );
+        })}
+      </Stack>
+    </MatchingGeneContextProvider>
   );
 }
 
@@ -159,7 +200,7 @@ interface SCFindGeneQueryResultsLoaderProps {
 function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLoaderProps) {
   const { setResults } = useResultsProvider();
 
-  const { datasets, isLoading, error, datasetToGeneMap, noResults } = useSCFindGeneResults();
+  const { datasets, isLoading, error, noResults, countsMaps } = useSCFindGeneResults();
 
   const deduplicatedResults = useDeduplicatedResults(datasets?.findDatasets);
 
@@ -172,8 +213,11 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
     return <Skeleton variant="rectangular" width="100%" height={800} />;
   }
 
+  // countsMaps is Record<string, Record<string, number>> - gene -> dataset -> count
+  const geneCountsContextValue = countsMaps || {};
+
   return (
-    <MatchingGeneContextProvider value={datasetToGeneMap}>
+    <GeneCountsContextProvider value={geneCountsContextValue}>
       {!noResults && (
         <DatasetsOverview
           datasets={deduplicatedResults}
@@ -194,7 +238,7 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
         </DatasetsOverview>
       )}
       <DatasetListSection />
-    </MatchingGeneContextProvider>
+    </GeneCountsContextProvider>
   );
 }
 

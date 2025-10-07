@@ -27,11 +27,15 @@ function GlobusLink({ uuid, hubmap_id, label }: GlobusLinkProps) {
       <FilesConditionalLink
         href={responseUrl}
         hasAgreedToDUA={hasAgreedToDUA}
-        openDUA={() => (responseUrl ? openDUA(responseUrl) : undefined)}
+        openDUA={() => {
+          if (responseUrl) openDUA(responseUrl);
+        }}
         variant="subtitle2"
         hasIcon
         fileName={`${label} (${hubmap_id})`}
-        onClick={() => trackEntityPageEvent({ action: 'Bulk Data Transfer / Globus Navigation' })}
+        onClick={() => {
+          trackEntityPageEvent({ action: 'Bulk Data Transfer / Globus Navigation' });
+        }}
       />
     </LinkContainer>
   );

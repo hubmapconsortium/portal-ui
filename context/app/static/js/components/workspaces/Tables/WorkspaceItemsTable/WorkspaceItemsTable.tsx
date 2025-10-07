@@ -18,7 +18,9 @@ function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTable
             key={label}
             label={label}
             isSelected={show}
-            onClick={() => trackFilterClick(label, setShow)}
+            onClick={() => {
+              trackFilterClick(label, setShow);
+            }}
             disabled={disabled}
           />
         ))}

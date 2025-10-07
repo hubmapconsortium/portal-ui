@@ -210,12 +210,12 @@ function CellTypesTable() {
 
   const { data: allCellTypesForGene, isLoading: isLoadingAllCellTypes } = useHyperQueryCellTypes({
     geneList: geneSymbol,
-    datasetName: undefined, // Fetch all datasets
+    organName: undefined, // Fetch all datasets
   });
 
   const { data: cellTypes, isLoading: isLoadingCurrentCellTypes } = useHyperQueryCellTypes({
     geneList: geneSymbol,
-    datasetName: selectedOrgan,
+    organName: selectedOrgan,
   });
 
   const cellTypeOrgans = useMemo(
@@ -280,7 +280,7 @@ function CellTypesTable() {
 
   const changeSortTrackingInfo = useGeneDetailPageTrackingInfo();
 
-  const handleOrganChange = useEventCallback((event: SelectChangeEvent<string>) => {
+  const handleOrganChange = useEventCallback((event: SelectChangeEvent) => {
     setSelectedOrgan(event.target.value);
     trackChangeOrgan();
   });

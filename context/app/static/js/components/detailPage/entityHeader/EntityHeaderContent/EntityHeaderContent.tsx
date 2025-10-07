@@ -174,7 +174,12 @@ function HuBMAPIDItem({ title, entityTypeIcon }: { title: string } & { entityTyp
   return (
     <EntityHeaderItem
       endIcon={
-        <TooltipIconButton onClick={() => handleCopyClick(title)} tooltip="Copy ID">
+        <TooltipIconButton
+          onClick={() => {
+            handleCopyClick(title);
+          }}
+          tooltip="Copy ID"
+        >
           <ContentCopyIcon sx={(theme) => ({ color: theme.palette.common.link, fontSize: '1.25rem' })} />
         </TooltipIconButton>
       }
@@ -203,7 +208,10 @@ function OrganItem({ organ }: { organ: OrganFile }) {
       <EntityHeaderItem startIcon={<OrganIcon organName={organ.name} />}>{organ.name}</EntityHeaderItem>
       {organ.asctb && (
         <EntityHeaderItem>
-          <OutboundIconLink href={organ.asctb} underline="none" variant="body2">
+          <OutboundIconLink
+            href={`https://hubmapconsortium.github.io/ccf-asct-reporter/vis?selectedOrgans=${organ.asctb}`}
+            variant="body2"
+          >
             ASCT+B Reporter
           </OutboundIconLink>
         </EntityHeaderItem>

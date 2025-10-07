@@ -60,7 +60,9 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
     <SectionItem label={data?.payload?.title}>
       {data?.payload && (
         <OutboundIconLink
-          onClick={() => trackEntityPageEvent({ action: 'Protocols / Protocol Link Navigation', label: hubmapId })}
+          onClick={() => {
+            trackEntityPageEvent({ action: 'Protocols / Protocol Link Navigation', label: hubmapId });
+          }}
           href={data.payload.url}
         >
           {data.payload.url}

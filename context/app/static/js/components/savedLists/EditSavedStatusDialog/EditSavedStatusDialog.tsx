@@ -62,10 +62,20 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
 
   const dialogActions = (
     <>
-      <Button onClick={() => handleClose()} color="primary">
+      <Button
+        onClick={() => {
+          handleClose();
+        }}
+        color="primary"
+      >
         Cancel
       </Button>
-      <Button onClick={() => handleSave()} color="primary">
+      <Button
+        onClick={() => {
+          handleSave();
+        }}
+        color="primary"
+      >
         Save
       </Button>
     </>
@@ -77,7 +87,9 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
       content={dialogContent}
       actions={dialogActions}
       isOpen={dialogIsOpen}
-      handleClose={() => handleClose()}
+      handleClose={() => {
+        handleClose();
+      }}
     />
   );
 }

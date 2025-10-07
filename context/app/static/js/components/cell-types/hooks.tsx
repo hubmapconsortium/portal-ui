@@ -1,9 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
-import { useEventCallback } from '@mui/material/utils';
-import { SelectChangeEvent } from '@mui/material/Select';
-
-import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo, useGeneOntologyDetails } from 'js/hooks/useUBKG';
+import { useCellTypeOntologyDetail, useGeneOntologyDetails } from 'js/hooks/useUBKG';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
 import useSearchData from 'js/hooks/useSearchData';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
@@ -58,46 +55,6 @@ export const useCellTypeVariants = () => {
 export const useCellTypeVariantsForOrgan = (organ: string) => {
   const { variants } = useExtractedCellTypeInfo();
   return variants[organ] ?? [];
-};
-
-/**
- * Helper function for fetching the current cell type's biomarker info from the UBKG.
- * @returns {string} The cell type definition for the current page.
- */
-export const useCellTypeBiomarkers = () => {
-  const { data } = useCellTypeInfo();
-
-  const sources = useMemo(() => {
-    const biomarkers = data?.biomarkers ?? [];
-    return biomarkers
-      .map((biomarker) => biomarker.reference)
-      .filter((value, index, self) => self.indexOf(value) === index);
-  }, [data?.biomarkers]);
-  const [selectedSource, setSelectedSource] = useState(sources[0] ?? '');
-  if (!selectedSource && sources.length > 0) {
-    setSelectedSource(sources[0]);
-  }
-
-  const [genes, proteins] = useMemo(() => {
-    const genesForSource: CellTypeBiomarkerInfo[] = [];
-    const proteinsForSource: CellTypeBiomarkerInfo[] = [];
-    data?.biomarkers
-      .filter((biomarker) => biomarker.reference === selectedSource)
-      .forEach((biomarker) => {
-        if (biomarker.biomarker_type === 'gene') {
-          genesForSource.push(biomarker);
-        } else {
-          proteinsForSource.push(biomarker);
-        }
-      });
-    return [genesForSource, proteinsForSource];
-  }, [data?.biomarkers, selectedSource]);
-
-  const handleSourceSelection = useEventCallback((event: SelectChangeEvent<string>) => {
-    setSelectedSource(event.target.value);
-  });
-
-  return { genes, proteins, sources, selectedSource, handleSourceSelection };
 };
 
 interface IndexedDatasetsForCellTypeAggs {

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { join } = require('path');
 const { merge } = require('webpack-merge');
 const maintenance = require('./webpack.maintenance');

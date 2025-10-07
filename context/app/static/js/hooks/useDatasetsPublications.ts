@@ -55,7 +55,7 @@ function useDatasetsPublicationsTabs() {
 
   const publicationsMap = useMemo(
     () =>
-      datasetUUIDs.reduce(
+      datasetUUIDs.reduce<Record<string, PublicationHit[]>>(
         (acc, datasetUUID) => {
           const publicationsContainingDataset = publications.filter((pub) => {
             const { ancestor_ids } = pub._source;
@@ -69,7 +69,7 @@ function useDatasetsPublicationsTabs() {
           }
           return acc;
         },
-        { [primaryDatasetId]: [] } as Record<string, PublicationHit[]>,
+        { [primaryDatasetId]: [] },
       ),
     [publications, datasetUUIDs, primaryDatasetId],
   );

@@ -50,7 +50,9 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
         <InternalLink
           href="https://docs.hubmapconsortium.org/assays"
           underline="none"
-          onClick={() => trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: dataTypes })}
+          onClick={() => {
+            trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: dataTypes });
+          }}
         >
           {dataTypes}
         </InternalLink>

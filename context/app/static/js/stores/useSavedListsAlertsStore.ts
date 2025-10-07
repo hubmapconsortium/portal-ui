@@ -15,9 +15,13 @@ export interface SavedListsAlertsState {
 
 const storeDefinition = (set: StoreApi<SavedListsAlertsState>['setState']) => ({
   transferredToProfileAlert: false,
-  setTransferredToProfileAlert: (transferredToProfileAlert: boolean) => set({ transferredToProfileAlert }),
+  setTransferredToProfileAlert: (transferredToProfileAlert: boolean) => {
+    set({ transferredToProfileAlert });
+  },
   successAlert: undefined,
-  setSuccessAlert: (val: SavedListsSuccessAlertType | undefined) => set({ successAlert: val }),
+  setSuccessAlert: (val: SavedListsSuccessAlertType | undefined) => {
+    set({ successAlert: val });
+  },
 });
 
 export const useSavedListsAlertsStore = create<SavedListsAlertsState>(storeDefinition);

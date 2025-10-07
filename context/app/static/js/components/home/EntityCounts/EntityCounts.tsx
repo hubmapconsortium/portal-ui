@@ -55,7 +55,9 @@ function EntityCounts({ organsCount }: EntityCountsProps) {
             href={buildSearchLink({
               entity_type,
             })}
-            onClick={() => handleTrack(entity_type)}
+            onClick={() => {
+              handleTrack(entity_type);
+            }}
           />
         ))}
         <EntityCount
@@ -63,14 +65,18 @@ function EntityCounts({ organsCount }: EntityCountsProps) {
           count={organsCount}
           label="Organs"
           href="/organs"
-          onClick={() => handleTrack('Organ')}
+          onClick={() => {
+            handleTrack('Organ');
+          }}
         />
         <EntityCount
           icon={<StyledSvgIcon as={CollectionIcon} aria-label="Number of curated data collections" color="primary" />}
           count={entityCounts?.Collection}
           label="Collections"
           href="/collections"
-          onClick={() => handleTrack('Collection')}
+          onClick={() => {
+            handleTrack('Collection');
+          }}
         />
       </FlexContainer>
     </Background>

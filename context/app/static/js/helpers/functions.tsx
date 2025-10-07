@@ -48,7 +48,7 @@ export function replaceUnderscore(s: string) {
 export function readCookie(name: string) {
   const nameEQ = `${name}=`;
   const ca = document.cookie.split(';');
-  // eslint-disable-next-line no-plusplus
+
   for (let i = 0; i !== ca.length; i++) {
     let c = ca[i];
     while (c.startsWith(' ')) c = c.substring(1, c.length);
@@ -143,7 +143,7 @@ interface SearchHit {
 }
 
 export function getSearchHitsEntityCounts(searchHits: SearchHit[]) {
-  const counts = searchHits.reduce(
+  const counts = searchHits.reduce<Record<string, number>>(
     (acc, { _source: { entity_type } }) => {
       if (!(entity_type in acc)) {
         // Support entities may be in the user's list.
@@ -152,7 +152,7 @@ export function getSearchHitsEntityCounts(searchHits: SearchHit[]) {
       const incrementedCount = acc[entity_type] + 1;
       return { ...acc, [entity_type]: incrementedCount };
     },
-    { Donor: 0, Sample: 0, Dataset: 0 } as Record<string, number>,
+    { Donor: 0, Sample: 0, Dataset: 0 },
   );
 
   return counts;
@@ -172,12 +172,12 @@ export function getDonorAgeString({ age_value, age_unit }: { age_value: number; 
 export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, keys: K[]) {
   const allKeys = Object.keys(obj) as K[];
   const validKeys = keys.filter((k) => allKeys.includes(k));
-  return validKeys.reduce((acc, k: K) => {
+  return validKeys.reduce<Partial<O>>((acc, k: K) => {
     return {
       ...acc,
       [k]: obj[k],
     };
-  }, {} as Partial<O>);
+  }, {});
 }
 
 export function getOriginSamplesOrgan(entity: { origin_samples_unique_mapped_organs: string[] }) {
@@ -285,7 +285,6 @@ export function isWorkspaceAtDatasetLimit(workspace: MergedWorkspace) {
 export function isValidEmail(email: string) {
   // validation regex, sourced from HTML living standard: http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#e-mail-state-(type=email)
   const emailRegex =
-    // eslint-disable-next-line
     /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
   const cleanedValue: string = email?.replace(/^\s+|\s+$/g, '');

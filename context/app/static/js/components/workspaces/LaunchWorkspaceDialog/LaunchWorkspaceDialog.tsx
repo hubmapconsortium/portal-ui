@@ -105,8 +105,7 @@ function LaunchWorkspaceDialog() {
         title={`Launch ${workspaceName}`}
         maxWidth="md"
         content={
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          <form id={formId} onSubmit={handleSubmit(onSubmit)}>
+          <form id={formId} onSubmit={void handleSubmit(onSubmit)}>
             {newWorkspaceLaunch ? (
               tooManyWorkspacesAlert
             ) : (

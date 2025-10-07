@@ -79,7 +79,9 @@ function CollectionsSection() {
             index={index}
             icon={Icon ? <Icon /> : undefined}
             iconPosition="start"
-            onClick={() => setOpenTabIndex(index)}
+            onClick={() => {
+              setOpenTabIndex(index);
+            }}
             value={index}
           />
         ))}

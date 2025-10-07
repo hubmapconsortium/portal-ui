@@ -37,6 +37,8 @@ import {
   useOrganOrder,
   useSearchDataRange,
 } from './hooks';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 // Margins in figma are 32 pixels everywhere except the bottom
 const margin = { top: 32, right: 32, bottom: 32, left: 32 };
@@ -45,15 +47,36 @@ const getOrgan = (d: AggregatedDatum) => d.organ;
 
 function HuBMAPDatasetsChartTooltip({ tooltipData }: { tooltipData: TooltipData<AggregatedDatum> }) {
   if (!tooltipData.bar || !tooltipData.key) return null;
+
+  // Hovering a bar segment
+  if (tooltipData.bar.data.data[tooltipData.key]) {
+    return (
+      <>
+        <Typography variant="subtitle2" color="secondary">
+          {tooltipData.bar.data.organ}
+        </Typography>
+        <Typography>{tooltipData.key}</Typography>
+        <Typography variant="h3" component="p" color="textPrimary">
+          {tooltipData.bar.data.data[tooltipData.key]}
+        </Typography>
+      </>
+    );
+  }
+
+  const entries = Object.entries(tooltipData.bar.data.data);
+
   return (
     <>
       <Typography variant="subtitle2" color="secondary">
         {tooltipData.bar.data.organ}
       </Typography>
-      <Typography>{tooltipData.key}</Typography>
-      <Typography variant="h3" component="p" color="textPrimary">
-        {tooltipData.bar.data.data[tooltipData.key]}
-      </Typography>
+      <List dense disablePadding>
+        {entries.map(([key, value]) => (
+          <ListItem key={key} disablePadding>
+            {key}: {value}
+          </ListItem>
+        ))}
+      </List>
     </>
   );
 }
@@ -67,7 +90,11 @@ interface ColorOption {
   getAriaLabel?: (d: TooltipData<AggregatedDatum>) => string;
 }
 
-function HuBMAPDatasetsChart() {
+interface HuBMAPDatasetsChartProps {
+  getBarHrefOverride?: ColorOption['getBarHref'];
+}
+
+function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
   const colors = useChartPalette();
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
@@ -214,12 +241,12 @@ function HuBMAPDatasetsChart() {
     ],
     [
       assayBuckets,
+      selectedEntityType,
       donorSexBuckets,
       donorRaceBuckets,
       analyteClassBuckets,
       processingStatusBuckets,
       datasetTypeMap,
-      selectedEntityType,
     ],
   );
 
@@ -278,9 +305,9 @@ function HuBMAPDatasetsChart() {
               options={colorOptions.map((c) => c.dropdownLabel)}
               value={selectedColor.dropdownLabel}
               label="Compare by"
-              onChange={(e: SelectChangeEvent) =>
-                setSelectedColorDataIndex(colorOptions.findIndex((c) => c.dropdownLabel === e.target.value))
-              }
+              onChange={(e: SelectChangeEvent) => {
+                setSelectedColorDataIndex(colorOptions.findIndex((c) => c.dropdownLabel === e.target.value));
+              }}
               fullWidth
             />
           }
@@ -321,7 +348,7 @@ function HuBMAPDatasetsChart() {
                 label: `${d.bar.data.organ} ${d.key}`,
               });
             }}
-            getBarHref={selectedColor.getBarHref}
+            getBarHref={getBarHrefOverride ?? selectedColor.getBarHref}
             getAriaLabel={selectedColor.getAriaLabel}
             canBeMultipleKeys
           />

@@ -11,7 +11,9 @@ function WorkspaceNameField<FormType extends FieldValues>({ control, name }: Use
       placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
       maxLength={50}
       autoFocus
-      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.stopPropagation()}
+      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        e.stopPropagation();
+      }}
     />
   );
 }

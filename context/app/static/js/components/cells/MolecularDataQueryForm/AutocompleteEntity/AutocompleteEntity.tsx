@@ -105,7 +105,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
 
   const onChange = useEventCallback((_event: React.SyntheticEvent, value: AutocompleteResult[]) => {
     // Handle selection of multi-value options by pulling out the values and formatting them to match the expected structure
-    const formattedValue = value.reduce((acc, curr) => {
+    const formattedValue = value.reduce<AutocompleteResult[]>((acc, curr) => {
       if (curr.values) {
         const values = curr.values.map((v) => ({
           full: v,
@@ -117,7 +117,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
         return [...acc, ...values];
       }
       return [...acc, curr];
-    }, [] as AutocompleteResult[]);
+    }, []);
 
     track(
       `Parameters / Select ${labelAndHelperTextProps[targetEntity].label as string}`,

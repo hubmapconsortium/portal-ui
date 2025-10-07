@@ -241,7 +241,7 @@ async function* fetchAllPages(
     let i = 0;
     while (i < numberOfPagesToRequest) {
       // disabling eslint rule because that's the whole point of this generator
-      // eslint-disable-next-line no-await-in-loop
+
       const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken);
       yield firstPageResults;
       q.search_after = getSearchAfterSort(firstPageResults.hits.hits);
@@ -278,7 +278,7 @@ async function fetchAllIDs({
   const query = useDefaultQuery ? addRestrictionsToQuery(q) : q;
   const ids = new Set<string>();
   // For await loop is the clearest way to fetch all pages sequentially.
-  // eslint-disable-next-line no-restricted-syntax
+
   for await (const results of fetchAllPages(query, elasticsearchEndpoint, groupsToken, numberOfPagesToRequest)) {
     extractIDs(results).forEach((id) => ids.add(id));
   }
@@ -382,9 +382,7 @@ export function useScrollSearchHits(
 
   const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<SearchResponseBody, SWRError>(
     getKey,
-    // TODO: revisit to fix types/make keys more type-safe
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-    (args) => fetcher(...args),
+    (args: [SearchRequest, string, string, boolean, number]) => fetcher(...args) as Promise<SearchResponseBody>,
     {
       fallbackData: [],
       revalidateAll: false,

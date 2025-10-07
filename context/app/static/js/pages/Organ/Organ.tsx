@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
-import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import CellTypes from 'js/components/organ/OrganCellTypes';
 import Description from 'js/components/organ/Description';
@@ -54,7 +53,7 @@ function Organ({ organ }: OrganProps) {
     [hraId]: Boolean(organ.has_iu_component),
     [cellpopId]: labeledDatasetUuids.length > 0,
     [cellTypesId]: cellTypes.length > 0,
-    [referenceId]: Boolean(organ?.azimuth),
+    [referenceId]: false, // TODO: Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
     [assaysId]: assayBuckets.length > 0,
     [dataProductsId]: dataProducts.length > 0,
     [samplesId]: samplesHits.length > 0,
@@ -77,7 +76,6 @@ function Organ({ organ }: OrganProps) {
           organ={organ.name}
         />
         <CellTypes shouldDisplay={shouldDisplaySection[cellTypesId]} cellTypes={cellTypes} />
-        <Azimuth shouldDisplay={shouldDisplaySection[referenceId]} />
         <Assays organTerms={searchItems} bucketData={assayBuckets} shouldDisplay={shouldDisplaySection[assaysId]} />
         <DataProducts
           dataProducts={dataProducts}

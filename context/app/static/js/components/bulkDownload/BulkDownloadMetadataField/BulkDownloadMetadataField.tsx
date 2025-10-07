@@ -22,7 +22,9 @@ function BulkDownloadMetadataField<FormType extends FieldValues>({
       <StyledFormLabel id="bulk-download-metadata">Download Metadata File (TSV)</StyledFormLabel>
       <PrimarySwitch
         checked={field.value}
-        onChange={(e) => field.onChange(!!e.target.checked)}
+        onChange={(e) => {
+          field.onChange(!!e.target.checked);
+        }}
         inputProps={{ 'aria-labelledby': 'bulk-download-metadata' }}
         sx={(theme) => ({ marginLeft: theme.spacing(-1) })}
       />

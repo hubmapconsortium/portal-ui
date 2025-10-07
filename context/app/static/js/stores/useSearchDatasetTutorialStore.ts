@@ -47,7 +47,9 @@ const useSearchDatasetTutorialStore = create<SearchDatasetTutorialStore>((set, g
     }));
   },
   tutorialHasExited: Boolean(localStorage.getItem(localStorageKey)),
-  setTutorialHasExited: (val) => localStorage.setItem(localStorageKey, String(val)),
+  setTutorialHasExited: (val) => {
+    localStorage.setItem(localStorageKey, String(val));
+  },
   closeSearchDatasetTutorial: () => {
     recordEvent('Clicked to close', get().searchDatasetTutorialStep);
     localStorage.setItem(localStorageKey, String(true));

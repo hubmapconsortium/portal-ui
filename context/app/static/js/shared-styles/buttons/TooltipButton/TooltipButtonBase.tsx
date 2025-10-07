@@ -49,6 +49,8 @@ const WrappedButton = React.forwardRef(
   },
 );
 
+WrappedButton.displayName = 'WrappedButton';
+
 function TooltipButtonBase(
   { tooltip, placement, children, component, isIconButton, ...props }: TooltipButtonBaseProps,
   ref: React.Ref<HTMLButtonElement>,

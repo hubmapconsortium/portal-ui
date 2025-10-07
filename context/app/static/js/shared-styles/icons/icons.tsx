@@ -63,8 +63,8 @@ import EuiSVG from 'assets/svg/eui.svg';
 import AsctBSVG from 'assets/svg/asct+b.svg';
 
 // The "any" here mirrors the "any" in the original SvgIconProps definition.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type CustomIconProps<T extends ElementType<any>> = {
+
+type CustomIconProps<T extends ElementType> = {
   fontSize?: string;
 } & SvgIconProps<T>;
 

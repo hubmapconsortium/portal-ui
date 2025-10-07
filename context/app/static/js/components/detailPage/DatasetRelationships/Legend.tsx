@@ -89,7 +89,9 @@ function StatusItem({ status }: { status: string }) {
 export function StatusLegend({ statuses }: StatusLegendProps) {
   return (
     <Legend title="Status Legend" tooltip="Hover on node status icon for additional status details">
-      {statuses?.map((status) => <StatusItem key={status} status={status} />)}
+      {statuses?.map((status) => (
+        <StatusItem key={status} status={status} />
+      ))}
     </Legend>
   );
 }

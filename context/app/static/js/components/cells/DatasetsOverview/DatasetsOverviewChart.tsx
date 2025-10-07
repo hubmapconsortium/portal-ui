@@ -63,7 +63,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
     if (trackingInfo) {
       const yAxisLabel = e.target.value as YAxisOptions;
       const actionName = 'Datasets Overview / Select Y-Axis';
-      const actionlabel = `${yAxisLabel}`;
+      const actionlabel = yAxisLabel;
       trackEvent({
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
@@ -86,7 +86,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
     if (trackingInfo) {
       const xAxisLabel = e.target.value as XAxisOptions;
       const actionName = 'Datasets Overview / Select X-Axis';
-      const actionlabel = `${xAxisLabel}`;
+      const actionlabel = xAxisLabel;
       trackEvent({
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
@@ -100,7 +100,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
     if (trackingInfo) {
       const compareByLabel = e.target.value as XAxisOptions;
       const actionName = 'Datasets Overview / Select Grouping';
-      const actionlabel = `${compareByLabel}`;
+      const actionlabel = compareByLabel;
       trackEvent({
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,

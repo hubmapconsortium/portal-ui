@@ -3,7 +3,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 
 import { useSortState, ColumnNameMapping, SortState } from 'js/hooks/useSortState';
-import { useScrollSearchHits, useAllSearchIDs } from 'js/hooks/useSearchData';
+import { useScrollSearchHits, useAllSearchIDs, useSearchHits } from 'js/hooks/useSearchData';
 import { useColumnFilters } from 'js/hooks/useColumnFilters';
 import { Column } from 'js/shared-styles/tables/EntitiesTable/types';
 
@@ -65,6 +65,8 @@ interface UseScrollSearchHitsTypes<Document> {
   totalHitsCount: number;
 }
 
+const noOp = () => {};
+
 function useScrollTable<Document>({
   query,
   columnNameMapping,
@@ -77,7 +79,13 @@ function useScrollTable<Document>({
 
   const { sortState, setSort, sort } = useSortState(columnNameMapping, initialSortState);
 
-  const queryWithSort = { ...query, sort } as SearchRequest;
+  // Determine if we're using custom sorting
+  const currentColumn = columns.find((col) => col.id === sortState.columnId);
+  const isCustomSort = Boolean(currentColumn?.customSortValues && !currentColumn.sort);
+
+  // For custom sorting, we need to fetch all results and sort client-side
+  // For ES sorting, use the existing scroll-based approach
+  const queryWithSort = isCustomSort ? query : ({ ...query, sort } as SearchRequest);
 
   // Initialize column filters
   const {
@@ -95,10 +103,53 @@ function useScrollTable<Document>({
     enabled: true,
   });
 
-  const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(
-    filteredQuery,
-    {},
-  ) as UseScrollSearchHitsTypes<Document>;
+  // Use different data fetching strategies based on sort type
+  const scrollData = useScrollSearchHits(filteredQuery, {}) as UseScrollSearchHitsTypes<Document>;
+
+  const { searchHits: allSearchHits, isLoading: allDataLoading } = useSearchHits<Document>(filteredQuery, {
+    shouldFetch: isCustomSort,
+  });
+
+  // Apply custom sorting when needed
+  const sortedSearchHits = useMemo(() => {
+    if (!isCustomSort || !currentColumn?.customSortValues) {
+      return scrollData.searchHits;
+    }
+
+    const hits = allSearchHits.map((hit) => hit as SearchHit<Document>);
+    const customSortValues = currentColumn.customSortValues;
+
+    return hits.sort((a, b) => {
+      const aId = a._id;
+      const bId = b._id;
+
+      const aValue = customSortValues[aId];
+      const bValue = customSortValues[bId];
+
+      // Handle undefined values (put them at the end)
+      if (aValue === undefined && bValue === undefined) return 0;
+      if (aValue === undefined) return 1;
+      if (bValue === undefined) return -1;
+
+      // Sort based on data type
+      let comparison = 0;
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        comparison = aValue.localeCompare(bValue);
+      } else {
+        comparison = Number(aValue) - Number(bValue);
+      }
+
+      // Apply sort direction
+      return sortState.direction === 'desc' ? -comparison : comparison;
+    });
+  }, [isCustomSort, currentColumn?.customSortValues, allSearchHits, scrollData.searchHits, sortState.direction]);
+
+  // Use the appropriate data source
+  const searchHits = isCustomSort ? sortedSearchHits : scrollData.searchHits;
+  const isLoading = isCustomSort ? allDataLoading : scrollData.isLoading;
+  // Pagination is disabled for custom sort because custom sort needs all results' values to be known to ensure correctness
+  const loadMore = useMemo(() => (isCustomSort ? noOp : scrollData.loadMore), [isCustomSort, scrollData.loadMore]); // No pagination for custom sort
+  const totalHitsCount = isCustomSort ? searchHits.length : scrollData.totalHitsCount;
 
   // Track which rows are expanded for accurate size estimation
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());

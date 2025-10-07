@@ -3,7 +3,7 @@ import { EmailIcon } from 'js/shared-styles/icons';
 import { trackLink } from 'js/helpers/trackers';
 import IconLink, { IconLinkProps } from '../IconLink';
 
-function sendEmailEvent(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+function sendEmailEvent(event: React.MouseEvent<HTMLAnchorElement>) {
   trackLink((event.target as HTMLAnchorElement).href, 'email');
 }
 

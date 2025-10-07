@@ -30,13 +30,13 @@ function LogInPanel({ children, trackingInfo }: LogInPanelProps) {
           href="/login"
           variant="contained"
           color="primary"
-          onClick={() =>
+          onClick={() => {
             trackEvent({
               ...trackingInfo,
               action: 'Log In / From panel',
               label: 'info panel',
-            })
-          }
+            });
+          }}
         >
           Log In
         </LoginButton>
