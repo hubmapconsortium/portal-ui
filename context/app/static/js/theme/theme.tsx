@@ -243,6 +243,7 @@ const theme = createTheme({
     graphs: {
       matched: '#4B5F27',
       unmatched: '#D1DAC1',
+    },
     accent: {
       success90: '#F0F3EB', // success-90 in figma
       primary90: '#FBEBF3', // primary-90 in figma
@@ -422,7 +423,6 @@ const theme = createTheme({
     },
   },
 });
-
 export const darkTheme = createTheme(theme, {
   palette: {
     mode: 'dark',
