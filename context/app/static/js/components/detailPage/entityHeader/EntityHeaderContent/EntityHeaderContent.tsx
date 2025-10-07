@@ -208,7 +208,10 @@ function OrganItem({ organ }: { organ: OrganFile }) {
       <EntityHeaderItem startIcon={<OrganIcon organName={organ.name} />}>{organ.name}</EntityHeaderItem>
       {organ.asctb && (
         <EntityHeaderItem>
-          <OutboundIconLink href={organ.asctb} underline="none" variant="body2">
+          <OutboundIconLink
+            href={`https://hubmapconsortium.github.io/ccf-asct-reporter/vis?selectedOrgans=${organ.asctb}`}
+            variant="body2"
+          >
             ASCT+B Reporter
           </OutboundIconLink>
         </EntityHeaderItem>
