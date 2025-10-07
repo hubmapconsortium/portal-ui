@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
+import { Theme, useTheme } from '@mui/material/styles';
 import { DownloadIcon, LightbulbIcon, SearchIcon, VisualizationIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { buildSearchLink } from 'js/components/search/store';
@@ -13,72 +14,76 @@ const fontSize = {
   fontSize: '1.5rem',
 } as const;
 
-const heroTabs = [
-  {
-    title: 'Discover',
-    description:
-      'Find data with our faceted search or explore by biological entities of organs, molecules or cell types.',
-    icon: <SearchIcon color="success" {...fontSize} />,
-    actions: [
-      {
-        title: 'Explore datasets',
-        icon: <entityIconMap.Dataset {...fontSize} />,
-        href: buildSearchLink({
-          entity_type: 'Dataset',
-        }),
-      },
-      {
-        title: 'Explore molecules/cell types',
-        icon: <entityIconMap.Gene {...fontSize} />,
-        href: '/search/biomarkers-cell-types',
-      },
-    ],
-    bgColor: '#F0F3EB', // success-90 in figma
-    content: HeroImageSlide,
-  },
-  {
-    title: 'Visualize',
-    description:
-      'Explore spatial and single-cell data through powerful visualizations to gain deeper insights for your research.',
-    icon: <VisualizationIcon color="error" {...fontSize} />,
-    actions: [
-      {
-        title: 'Visualize data with Workspaces',
-        icon: <entityIconMap.Workspace {...fontSize} />,
-        href: '/workspaces',
-      },
-    ],
-    bgColor: '#FBEBF3', // primary-90 in figma
-    content: HeroImageSlide,
-  },
-  {
-    title: 'Download',
-    description:
-      'Preview files with our built-in file browser and download datasets from Globus or dbGaP straight to your device.',
-    icon: <DownloadIcon color="info" {...fontSize} />,
-    actions: [
-      {
-        title: 'Find datasets to download',
-        icon: <entityIconMap.Dataset {...fontSize} />,
-        href: buildSearchLink({
-          entity_type: 'Dataset',
-        }),
-      },
-    ],
-    bgColor: '#EAF0F8', // info-90 in figma
-    content: HeroImageSlide,
-  },
-  {
-    title: "What's New?",
-    description: 'Stay up to date with the latest HuBMAP Data Portal developments.',
-    icon: <LightbulbIcon color="warning" {...fontSize} />,
-    bgColor: '#FBEEEB', // warning-90 in figma
-    content: HeroTimelineSlide,
-  },
-] satisfies Partial<HeroTabProps>[];
+const themedHeroTabs = (theme: Theme) =>
+  [
+    {
+      title: 'Discover',
+      description:
+        'Find data with our faceted search or explore by biological entities of organs, molecules or cell types.',
+      icon: <SearchIcon color="success" {...fontSize} />,
+      actions: [
+        {
+          title: 'Explore datasets',
+          icon: <entityIconMap.Dataset {...fontSize} />,
+          href: buildSearchLink({
+            entity_type: 'Dataset',
+          }),
+        },
+        {
+          title: 'Explore molecules/cell types',
+          icon: <entityIconMap.Gene {...fontSize} />,
+          href: '/search/biomarkers-cell-types',
+        },
+      ],
+      bgColor: theme.palette.accent.success90,
+      content: HeroImageSlide,
+    },
+    {
+      title: 'Visualize',
+      description:
+        'Explore spatial and single-cell data through powerful visualizations to gain deeper insights for your research.',
+      icon: <VisualizationIcon color="error" {...fontSize} />,
+      actions: [
+        {
+          title: 'Visualize data with Workspaces',
+          icon: <entityIconMap.Workspace {...fontSize} />,
+          href: '/workspaces',
+        },
+      ],
+      bgColor: theme.palette.accent.primary90,
+      content: HeroImageSlide,
+    },
+    {
+      title: 'Download',
+      description:
+        'Preview files with our built-in file browser and download datasets from Globus or dbGaP straight to your device.',
+      icon: <DownloadIcon color="info" {...fontSize} />,
+      actions: [
+        {
+          title: 'Find datasets to download',
+          icon: <entityIconMap.Dataset {...fontSize} />,
+          href: buildSearchLink({
+            entity_type: 'Dataset',
+          }),
+        },
+      ],
+      bgColor: theme.palette.accent.info90,
+      content: HeroImageSlide,
+    },
+    {
+      title: "What's New?",
+      description: 'Stay up to date with the latest HuBMAP Data Portal developments.',
+      icon: <LightbulbIcon color="warning" {...fontSize} />,
+      bgColor: theme.palette.accent.warning90,
+      content: HeroTimelineSlide,
+    },
+  ] satisfies Partial<HeroTabProps>[];
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState(0);
+  const theme = useTheme();
+  const heroTabs = themedHeroTabs(theme);
+
   return (
     <Paper component="section" aria-label="HuBMAP Introduction">
       <HeroTabContextProvider activeTab={activeTab} setActiveTab={setActiveTab}>
