@@ -23,7 +23,7 @@ hubmap-commons>=2.1.20
 boto3>=1.39.3
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.16.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -34,15 +34,15 @@ lxml>=6.0.0
 
 ```
 {
-"@dagrejs/dagre": "^1.1.3",
+"@dagrejs/dagre": "^1.1.5",
 "@datapunt/matomo-tracker-js": "^0.5.1",
 "@elastic/elasticsearch": "^8.13.0",
-"@fontsource-variable/inter": "^5.0.17",
-"@fontsource-variable/jetbrains-mono": "^5.2.5",
+"@fontsource-variable/inter": "^5.2.8",
+"@fontsource-variable/jetbrains-mono": "^5.2.8",
 "@grafana/faro-react": "^1.5.0",
 "@grafana/faro-web-sdk": "^1.5.0",
 "@grafana/faro-web-tracing": "^1.5.0",
-"@hms-dbmi-bgm/react-workflow-viz": "^0.1.10",
+"@hms-dbmi-bgm/react-workflow-viz": "^0.1.11",
 "@hookform/resolvers": "^3.3.4",
 "@mui/icons-material": "^6.1.6",
 "@mui/lab": "^6.0.0-beta.14",
@@ -79,7 +79,7 @@ lxml>=6.0.0
 "isomorphic-dompurify": "^2.12.0",
 "lineupjsx": "^4.6.0",
 "lz-string": "^1.5.0",
-"openkeynav": "^0.1.217",
+"openkeynav": "^0.1.229",
 "pretty-bytes": "^6.1.1",
 "prop-types": "^15.8.1",
 "react": "^18.3.1",
@@ -89,12 +89,10 @@ lxml>=6.0.0
 "react-ga4": "^2.1.0",
 "react-hook-form": "^7.51.2",
 "react-intersection-observer": "^9.8.1",
-"react-joyride": "^2.8.0",
 "react-markdown": "^9.0.1",
 "react-pdf": "^9.2.1",
 "reactify-wc": "^4.0.0",
 "rehype-raw": "^7.0.0",
-"sass": "^1.72.0",
 "styled-components": "^6.1.12",
 "swr": "^2.2.5",
 "universal-cookie": "^7.1.2",
@@ -102,7 +100,7 @@ lxml>=6.0.0
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.6.18",
+"vitessce": "^3.8.2",
 "zod": "^3.22.4",
 "zustand": "^4.5.2"
 }
