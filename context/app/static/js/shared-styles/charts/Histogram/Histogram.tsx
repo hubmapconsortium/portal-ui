@@ -4,12 +4,23 @@ import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { scaleLinear } from '@visx/scale';
 import { bin } from 'd3-array';
-import Typography from '@mui/material/Typography';
 
-import { TitleWrapper } from 'js/shared-styles/charts/style';
 import { useVerticalChart } from 'js/shared-styles/charts/hooks';
 
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts//VerticalChartGridRowsGroup';
+import ChartWrapper from '../ChartWrapper';
+
+interface HistogramProps {
+  parentWidth: number;
+  parentHeight: number;
+  visxData: number[];
+  margin: { top: number; right: number; bottom: number; left: number };
+  barColor: string;
+  xAxisLabel: string;
+  yAxisLabel: string;
+  chartTitle?: React.ReactNode;
+  binMapFunction?: (d: number) => number;
+}
 
 function Histogram({
   parentWidth,
@@ -21,7 +32,7 @@ function Histogram({
   yAxisLabel,
   chartTitle,
   binMapFunction = (d) => d,
-}) {
+}: HistogramProps) {
   const binFunc = bin();
   const chartData = binFunc(visxData.map(binMapFunction));
 
@@ -30,7 +41,11 @@ function Histogram({
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
     tickLabelSize,
-    xAxisTickLabels: chartData.map((d) => [d.x0, d.x1]).flat(),
+    xAxisTickLabels: chartData
+      .map((d) => [d.x0, d.x1])
+      .flat()
+      .filter((d): d is number => d !== undefined)
+      .map(String),
     parentWidth,
     parentHeight,
   });
@@ -38,7 +53,7 @@ function Histogram({
   const xScale = useMemo(
     () =>
       scaleLinear({
-        domain: [chartData[0].x0, chartData[chartData.length - 1].x1],
+        domain: [chartData[0].x0 ?? 0, chartData[chartData.length - 1].x1 ?? 0],
         range: [0, xWidth],
       }),
     [chartData, xWidth],
@@ -56,19 +71,16 @@ function Histogram({
   );
 
   return (
-    <div>
-      <TitleWrapper $leftOffset={updatedMargin.left - updatedMargin.right}>
-        {chartTitle && <Typography>{chartTitle}</Typography>}
-      </TitleWrapper>
+    <ChartWrapper chartTitle={chartTitle} margin={updatedMargin}>
       <svg width={parentWidth} height={parentHeight}>
         <VerticalChartGridRowsGroup margin={updatedMargin} yScale={yScale} xWidth={xWidth}>
           <>
-            {chartData.map((d) => {
-              const barWidth = Math.max(0, xScale(d.x1) - xScale(d.x0) - 1);
+            {chartData.map((d, idx) => {
+              const barWidth = Math.max(0, xScale(d.x1!) - xScale(d.x0!) - 1);
               const barHeight = yScale(0) - yScale(d.length);
-              const barX = xScale(d.x0) + 1;
+              const barX = xScale(d.x0!) + 1;
               const barY = yScale(d.length);
-              return <Bar key={d} x={barX} y={barY} width={barWidth} height={barHeight} fill={barColor} />;
+              return <Bar key={idx} x={barX} y={barY} width={barWidth} height={barHeight} fill={barColor} />;
             })}
             <AxisLeft
               hideTicks
@@ -108,7 +120,7 @@ function Histogram({
           </>
         </VerticalChartGridRowsGroup>
       </svg>
-    </div>
+    </ChartWrapper>
   );
 }
 

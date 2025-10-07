@@ -133,7 +133,7 @@ function OrganCell({
   return origin_samples_unique_mapped_organs.join(', ');
 }
 
-export const organ = {
+export const organCol = {
   id: 'origin_samples.mapped_organ',
   label: 'Organ',
   sort: 'origin_samples.mapped_organ.keyword',

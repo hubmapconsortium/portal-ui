@@ -3,14 +3,14 @@ import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-import { TitleWrapper } from 'js/shared-styles/charts/style';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import { OrdinalScale } from '../hooks';
+import { BoxProps } from '@mui/system';
 
 interface ChartWrapperProps extends PropsWithChildren {
-  chartTitle?: string;
+  chartTitle?: React.ReactNode;
   margin: Record<'top' | 'right' | 'bottom' | 'left', number>;
   colorScale?: OrdinalScale;
   xAxisDropdown?: React.ReactNode;
@@ -21,6 +21,8 @@ interface ChartWrapperProps extends PropsWithChildren {
   dividersInLegend?: boolean;
   labelValueMap?: Record<string, string>;
   caption?: React.ReactNode;
+  sx?: BoxProps['sx'];
+  fullWidthGraph?: boolean;
 }
 
 const pullUpMultiple = (a: string, b: string) => {
@@ -28,6 +30,22 @@ const pullUpMultiple = (a: string, b: string) => {
   if (b === 'Multiple') return 1;
   return a.localeCompare(b);
 };
+
+const defaultGridTemplateAreas = `
+  "title          title         title          buttons"
+  "top-controls   top-controls  top-controls   top-controls"
+  "axis-controls  axis-controls axis-controls  legend"
+  "chart          chart         chart          legend"
+  "caption        caption       caption        caption"
+`;
+
+const fullWidthGraphTemplateAreas = `
+  "title          title         title          buttons"
+  "top-controls   top-controls  top-controls   top-controls"
+  "axis-controls  axis-controls axis-controls  axis-controls"
+  "chart          chart         chart          chart"
+  "caption        caption       caption        caption"
+`;
 
 function ChartWrapper(
   {
@@ -43,6 +61,8 @@ function ChartWrapper(
     dividersInLegend,
     labelValueMap = {},
     caption,
+    sx,
+    fullWidthGraph = false,
   }: ChartWrapperProps,
   ref: React.Ref<HTMLDivElement>,
 ) {
@@ -54,30 +74,30 @@ function ChartWrapper(
     <Box
       sx={{
         display: 'grid',
-        gridTemplateAreas: `
-          "title          title         title          buttons"
-          "top-controls   top-controls  top-controls   top-controls"
-          "axis-controls  axis-controls axis-controls  legend"
-          "chart          chart         chart          legend"
-          "caption        caption       caption        caption"
-        `,
+        gridTemplateAreas: fullWidthGraph ? fullWidthGraphTemplateAreas : defaultGridTemplateAreas,
         overflow: 'none',
         gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',
         gridTemplateRows: 'auto auto minmax(0, auto) 500px minmax(0, auto)',
+        ...sx,
       }}
       ref={ref}
     >
       {chartTitle && (
-        <TitleWrapper $leftOffset={margin.left - margin.right} sx={{ gridArea: 'title' }}>
-          {chartTitle && <Typography>{chartTitle}</Typography>}
-        </TitleWrapper>
+        // aligns the title with the left edge of the chart area
+        <Box sx={{ gridArea: 'title', paddingLeft: `${margin.left + 16}px` }}>
+          {chartTitle && (
+            <Typography variant="subtitle2" display="flex" alignItems="center" justifyContent="start">
+              {chartTitle}
+            </Typography>
+          )}
+        </Box>
       )}
       <Stack direction="row" gap={1} sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0 }}>
         {xAxisDropdown}
         {yAxisDropdown}
       </Stack>
       <Box sx={{ gridArea: 'chart' }}>{children}</Box>
-      <Box sx={{ gridArea: 'legend', display: 'grid', maxHeight: '100%', overflow: 'none' }}>
+      <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid', maxHeight: '100%', overflow: 'none' }}>
         <Stack direction="column" pl={1}>
           {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}
           <Box sx={{ flex: 1, overflowY: 'auto', gridArea: 'legend', mt: dropdown ? 0 : 2 }} tabIndex={0}>

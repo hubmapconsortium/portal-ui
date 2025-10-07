@@ -1,5 +1,4 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
+import React, { useMemo } from 'react';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
@@ -14,7 +13,9 @@ import StackedBar from 'js/shared-styles/charts/StackedBar';
 import { TextProps } from '@visx/text';
 import Skeleton from '@mui/material/Skeleton';
 import { TICK_LABEL_SIZE } from '../constants';
-import { TooltipData, tooltipHasBarData } from '../types';
+import { TooltipData } from '../types';
+import TickComponent from '../TickComponent';
+import ChartTooltip from '../ChartTooltip';
 
 const srOnlyLabelStyles: Partial<TextProps> = {
   style: {
@@ -67,6 +68,7 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
   canBeMultipleKeys?: boolean;
   xTickFormat?: (value: number) => string;
   xTickValues?: number[];
+  excludedKeys?: string[];
 }
 
 function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>({
@@ -96,6 +98,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   canBeMultipleKeys = false,
   xTickFormat,
   xTickValues,
+  excludedKeys,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
     margin,
@@ -118,6 +121,20 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
+
+  const data = useMemo(() => {
+    if (!showTooltipAndHover) {
+      return undefined;
+    }
+    const dataMap: Record<string, Datum> = {};
+    visxData.forEach((d) => {
+      const key = getY(d);
+      dataMap[key] = d;
+    });
+    return dataMap;
+  }, [visxData, getY, showTooltipAndHover]);
+
+  const TickComponentWithData = TickComponent({ handleMouseEnter, handleMouseLeave, data });
 
   if (visxData.length === 0) {
     return <Skeleton variant="rectangular" width={parentWidth} height={parentHeight} />;
@@ -189,6 +206,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
               textAnchor: 'end',
               dy: '0.33em',
             })}
+            tickComponent={TickComponentWithData}
           />
           <AxisTop
             hideTicks
@@ -210,18 +228,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
       </svg>
       {showTooltipAndHover && tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          {TooltipContent ? (
-            <TooltipContent tooltipData={tooltipData} />
-          ) : (
-            <>
-              <Typography>{tooltipData.key}</Typography>
-              {tooltipHasBarData(tooltipData) && (
-                <Typography variant="h6" component="p" color="textPrimary">
-                  {tooltipData.bar.data[tooltipData.key]}
-                </Typography>
-              )}
-            </>
-          )}
+          <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
         </TooltipInPortal>
       )}
     </>

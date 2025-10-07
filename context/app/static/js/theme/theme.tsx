@@ -68,6 +68,10 @@ declare module '@mui/material/styles' {
     secondaryContainer: ContainerColors;
     primaryContainer: ContainerColors;
     action: TypeAction;
+    graphs: {
+      matched: string;
+      unmatched: string;
+    };
   }
   export interface PaletteOptions {
     black?: BlackVariants;
@@ -76,6 +80,10 @@ declare module '@mui/material/styles' {
     caption?: CaptionColors;
     secondaryContainer?: ContainerColors;
     primaryContainer?: ContainerColors;
+    graphs?: {
+      matched: string;
+      unmatched: string;
+    };
   }
 
   export interface PaletteColor {
@@ -222,6 +230,10 @@ const theme = createTheme({
     caption: {
       background: '#EEEEFF',
       link: '#3781D1',
+    },
+    graphs: {
+      matched: '#4B5F27',
+      unmatched: '#D1DAC1',
     },
   },
   typography: {
