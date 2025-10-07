@@ -53,7 +53,7 @@ function Organ({ organ }: OrganProps) {
     [hraId]: Boolean(organ.has_iu_component),
     [cellpopId]: labeledDatasetUuids.length > 0,
     [cellTypesId]: cellTypes.length > 0,
-    [referenceId]: false, // Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
+    [referenceId]: false, // TODO: Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
     [assaysId]: assayBuckets.length > 0,
     [dataProductsId]: dataProducts.length > 0,
     [samplesId]: samplesHits.length > 0,

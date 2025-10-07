@@ -210,7 +210,6 @@ function OrganItem({ organ }: { organ: OrganFile }) {
         <EntityHeaderItem>
           <OutboundIconLink
             href={`https://hubmapconsortium.github.io/ccf-asct-reporter/vis?selectedOrgans=${organ.asctb}`}
-            underline="none"
             variant="body2"
           >
             ASCT+B Reporter
