@@ -32,8 +32,8 @@ interface OrgansSearchProviderProps extends PropsWithChildren {
 const defaultInitialState: OrgansSearchState = {
   search: '',
   sortState: {
-    columnId: 'name',
-    direction: 'asc',
+    columnId: 'datasets',
+    direction: 'desc',
   },
 };
 

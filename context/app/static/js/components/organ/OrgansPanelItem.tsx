@@ -125,25 +125,33 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
   return (
     <StackTemplate>
       <BodyCell {...desktopConfig.name} aria-label="Organ" hideMobileLabel>
-        <Stack direction="row" spacing={1} alignItems="center">
-          {/* Using URLSvgIcon here directly instead of OrganIcon to prevent redundant request for icon URL */}
-          <URLSvgIcon iconURL={icon} ariaLabel={name} aria-hidden fontSize="small" />
-          <Stack direction="column" alignItems="start" spacing={0.25}>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <InternalLink href={href} variant="body2" data-testid={`organ-link-${name}`}>
-                {name}
-              </InternalLink>
-              {cellTypes.length > 0 && (
-                <SecondaryBackgroundTooltip title="This organ contains datasets with annotated cell types">
-                  <CellTypeIcon />
-                </SecondaryBackgroundTooltip>
-              )}
+        <InternalLink
+          href={href}
+          variant="body2"
+          data-testid={`organ-link-${name}`}
+          sx={{
+            width: '100%',
+          }}
+        >
+          <Stack direction="row" spacing={1} alignItems="center">
+            {/* Using URLSvgIcon here directly instead of OrganIcon to prevent redundant request for icon URL */}
+            <URLSvgIcon iconURL={icon} ariaLabel={name} aria-hidden fontSize="small" />
+
+            <Stack direction="column" alignItems="start" spacing={0.25}>
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <Typography variant="body2">{name}</Typography>
+                {cellTypes.length > 0 && (
+                  <SecondaryBackgroundTooltip title="This organ contains datasets with annotated cell types.">
+                    <CellTypeIcon />
+                  </SecondaryBackgroundTooltip>
+                )}
+              </Stack>
+              <Typography variant="body2" color="text.secondary" component="span">
+                {uberon_short}
+              </Typography>
             </Stack>
-            <Typography variant="body2" color="text.secondary" component="span">
-              {uberon_short}
-            </Typography>
           </Stack>
-        </Stack>
+        </InternalLink>
       </BodyCell>
       <BodyCell {...desktopConfig.description} aria-label="Description" hideMobileLabel>
         <Box
