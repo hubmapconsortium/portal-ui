@@ -22,13 +22,10 @@ export default function useIndexedDatasets() {
   const key = createIndexedDatasetsKey(scFindEndpoint, scFindIndexVersion);
   const swr = useSWR<AugmentedIndexedDatasetsResponse, Error, IndexedDatasetsKey>(key, (url) =>
     fetcher<IndexedDatasetsResponse>({ url }).then((d) => {
-      const countsMap = d.counts.reduce(
-        (acc, count, index) => {
-          acc[d.datasets[index]] = count;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
+      const countsMap = d.counts.reduce<Record<string, number>>((acc, count, index) => {
+        acc[d.datasets[index]] = count;
+        return acc;
+      }, {});
       return { ...d, countsMap };
     }),
   );

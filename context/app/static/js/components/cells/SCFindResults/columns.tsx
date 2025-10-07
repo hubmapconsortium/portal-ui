@@ -285,6 +285,24 @@ function MatchingGenesColumn({ hit }: CellContentProps<DatasetDocument>) {
   );
 }
 
+function calculatePercentageMap(
+  countsMap?: Record<string, number | string>,
+  totalCountsMap?: Record<string, number | string>,
+) {
+  if (!countsMap || !totalCountsMap) {
+    return undefined;
+  }
+  return Object.fromEntries(
+    Object.entries(countsMap).map(([uuid, geneCount]) => {
+      const totalCount = totalCountsMap[uuid];
+      if (typeof geneCount === 'number' && typeof totalCount === 'number' && totalCount > 0) {
+        return [uuid, geneCount / totalCount];
+      }
+      return [uuid, 0];
+    }),
+  );
+}
+
 export const matchingGeneColumn = (
   countsMap?: Record<string, number | string>,
   totalCountsMap?: Record<string, number | string>,
@@ -295,18 +313,7 @@ export const matchingGeneColumn = (
     <MatchingGeneColumn {...props} totalCountsMap={totalCountsMap} />
   ),
   width: 150,
-  customSortValues:
-    totalCountsMap && countsMap
-      ? Object.fromEntries(
-          Object.entries(countsMap).map(([uuid, geneCount]) => {
-            const totalCount = totalCountsMap[uuid];
-            if (typeof geneCount === 'number' && typeof totalCount === 'number' && totalCount > 0) {
-              return [uuid, geneCount / totalCount];
-            }
-            return [uuid, 0];
-          }),
-        )
-      : countsMap,
+  customSortValues: totalCountsMap && countsMap ? calculatePercentageMap(countsMap, totalCountsMap) : countsMap,
 });
 
 export const matchingGenesColumn = (countsMap?: Record<string, number | string>) => ({

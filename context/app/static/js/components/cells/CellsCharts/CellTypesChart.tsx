@@ -64,11 +64,11 @@ function GeneTooltipContent({
       </Typography>
       {geneAssociation && geneAssociation.genes.length > 0 && (
         <>
-          <Typography variant="body2" sx={{ mt: 1, fontWeight: 'medium' }}>
-            Associated genes:
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {geneAssociation.genes.join(', ')}
+          <Typography variant="body2" sx={{ mt: 1, fontWeight: 'medium' }} component="p">
+            Associated genes:{' '}
+            <Typography variant="body2" color="text.secondary" component="span">
+              {geneAssociation.genes.join(', ')}
+            </Typography>
           </Typography>
         </>
       )}

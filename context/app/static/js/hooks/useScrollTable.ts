@@ -120,10 +120,8 @@ function useScrollTable<Document>({
     const customSortValues = currentColumn.customSortValues;
 
     return hits.sort((a, b) => {
-      const aSource = a._source as Record<string, unknown>;
-      const bSource = b._source as Record<string, unknown>;
-      const aId = (aSource?.uuid as string) ?? a._id;
-      const bId = (bSource?.uuid as string) ?? b._id;
+      const aId = a._id;
+      const bId = b._id;
 
       const aValue = customSortValues[aId];
       const bValue = customSortValues[bId];
