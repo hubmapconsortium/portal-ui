@@ -1,17 +1,27 @@
 import React from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 import { useEventCallback } from '@mui/material/utils';
-import { DatasetIcon } from 'js/shared-styles/icons';
 import { SearchURLTypes, getSearchURL } from 'js/components/organ/utils';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { EventWithOptionalCategory } from 'js/components/types';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 interface ViewEntitiesButtonProps extends ButtonProps {
   entityType: 'Donor' | 'Dataset' | 'Sample';
   filters: Omit<SearchURLTypes, 'entityType'>;
   trackingInfo?: EventWithOptionalCategory;
+  count?: number;
 }
-function ViewEntitiesButton({ entityType, filters, trackingInfo, ...rest }: ViewEntitiesButtonProps) {
+function ViewEntitiesButton({
+  entityType,
+  filters,
+  trackingInfo,
+  color = 'primary',
+  variant = 'outlined',
+  component = 'a',
+  count,
+  ...rest
+}: ViewEntitiesButtonProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent('Organ Page');
 
   const handleTrack = useEventCallback(() => {
@@ -25,17 +35,19 @@ function ViewEntitiesButton({ entityType, filters, trackingInfo, ...rest }: View
     });
   });
 
+  const Icon = entityIconMap[entityType];
+
   return (
     <Button
-      color="primary"
-      variant="outlined"
-      component="a"
+      color={color}
+      variant={variant}
+      component={component}
       href={getSearchURL({ entityType, ...filters })}
       onClick={handleTrack}
-      startIcon={<DatasetIcon />}
+      startIcon={<Icon color={color} />}
       {...rest}
     >
-      View {entityType}s
+      {count ? `${entityType}s: ${count.toLocaleString()}` : `View ${entityType}s`}
     </Button>
   );
 }

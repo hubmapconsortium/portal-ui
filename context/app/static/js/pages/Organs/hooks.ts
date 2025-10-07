@@ -2,7 +2,7 @@ import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import { OrganFile, OrganFileWithDescendants } from 'js/components/organ/types';
 import useSearchData from 'js/hooks/useSearchData';
 
-const query: SearchRequest = {
+const datasetQuery: SearchRequest = {
   size: 0,
   query: {
     bool: {
@@ -11,6 +11,18 @@ const query: SearchRequest = {
   },
   aggs: {
     'origin_samples.mapped_organ': { terms: { field: 'origin_samples.mapped_organ.keyword', size: 10000 } },
+  },
+};
+
+const sampleQuery: SearchRequest = {
+  size: 0,
+  query: {
+    bool: {
+      must: { term: { 'entity_type.keyword': 'Sample' } },
+    },
+  },
+  aggs: {
+    mapped_organ: { terms: { field: 'mapped_organ.keyword', size: 10000 } },
   },
 };
 
@@ -30,36 +42,55 @@ function addSearchTermsCount(search: string[], organToCountMap: Record<string, n
   return search.reduce((sum, searchTerm) => sum + (organToCountMap[searchTerm] ?? 0), 0);
 }
 
-function addDatasetCountToOrgan(organ: OrganFile, organToCountMap: Record<string, number>) {
+function addCountsToOrgan(
+  organ: OrganFile,
+  datasetCountMap: Record<string, number>,
+  sampleCountMap: Record<string, number>,
+) {
   const { name, search } = organ;
   const searchWithName = Array.from(new Set([...search, name]));
   return {
     ...organ,
-    descendantCounts: { Dataset: addSearchTermsCount(searchWithName, organToCountMap) },
+    descendantCounts: {
+      Dataset: addSearchTermsCount(searchWithName, datasetCountMap),
+      Sample: addSearchTermsCount(searchWithName, sampleCountMap),
+    },
   };
 }
 
-function addDatasetCountsToOrgans(
+function addCountsToOrgans(
   organs: Record<string, OrganFile>,
-  aggsBuckets: TermsBucket[],
+  datasetBuckets: TermsBucket[],
+  sampleBuckets: TermsBucket[],
 ): Record<string, OrganFileWithDescendants> {
-  const organToCountMap = buildOrganToCountMap(aggsBuckets);
+  const datasetCountMap = buildOrganToCountMap(datasetBuckets);
+  const sampleCountMap = buildOrganToCountMap(sampleBuckets);
   return Object.entries(organs).reduce<Record<string, OrganFileWithDescendants>>((acc, [k, organ]) => {
-    acc[k] = addDatasetCountToOrgan(organ, organToCountMap);
+    acc[k] = addCountsToOrgan(organ, datasetCountMap, sampleCountMap);
     return acc;
   }, {});
 }
 
 function useOrgansDatasetCounts(organs: Record<string, OrganFile>) {
-  const { searchData, isLoading } = useSearchData<unknown, Record<string, { buckets: TermsBucket[] }>>(query);
+  const { searchData: datasetData, isLoading: isLoadingDatasets } = useSearchData<
+    unknown,
+    Record<string, { buckets: TermsBucket[] }>
+  >(datasetQuery);
+  const { searchData: sampleData, isLoading: isLoadingSamples } = useSearchData<
+    unknown,
+    Record<string, { buckets: TermsBucket[] }>
+  >(sampleQuery);
 
-  if (isLoading || !searchData?.aggregations) {
+  const isLoading = isLoadingDatasets || isLoadingSamples;
+
+  if (isLoading || !datasetData?.aggregations || !sampleData?.aggregations) {
     return { organsWithDatasetCounts: {}, isLoading };
   }
 
-  const organsWithDatasetCounts = addDatasetCountsToOrgans(
+  const organsWithDatasetCounts = addCountsToOrgans(
     organs,
-    searchData.aggregations['origin_samples.mapped_organ'].buckets,
+    datasetData.aggregations['origin_samples.mapped_organ'].buckets,
+    sampleData.aggregations.mapped_organ.buckets,
   );
 
   return { organsWithDatasetCounts, isLoading };
@@ -72,7 +103,7 @@ function organNotFoundMessageTemplate(redirectedOrganName: string) {
 export {
   useOrgansDatasetCounts,
   buildOrganToCountMap,
-  addDatasetCountsToOrgans,
+  addCountsToOrgans,
   addSearchTermsCount,
   organNotFoundMessageTemplate,
 };

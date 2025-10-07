@@ -67,7 +67,11 @@ interface ColorOption {
   getAriaLabel?: (d: TooltipData<AggregatedDatum>) => string;
 }
 
-function HuBMAPDatasetsChart() {
+interface HuBMAPDatasetsChartProps {
+  getBarHrefOverride?: ColorOption['getBarHref'];
+}
+
+function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
   const colors = useChartPalette();
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
@@ -214,12 +218,12 @@ function HuBMAPDatasetsChart() {
     ],
     [
       assayBuckets,
+      selectedEntityType,
       donorSexBuckets,
       donorRaceBuckets,
       analyteClassBuckets,
       processingStatusBuckets,
       datasetTypeMap,
-      selectedEntityType,
     ],
   );
 
@@ -321,7 +325,7 @@ function HuBMAPDatasetsChart() {
                 label: `${d.bar.data.organ} ${d.key}`,
               });
             }}
-            getBarHref={selectedColor.getBarHref}
+            getBarHref={getBarHrefOverride ?? selectedColor.getBarHref}
             getAriaLabel={selectedColor.getAriaLabel}
             canBeMultipleKeys
           />
