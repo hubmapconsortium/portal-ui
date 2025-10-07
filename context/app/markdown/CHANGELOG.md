@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.33.2 - 2025-10-07
+
+- Fix ASCT+B link in organ page entity header.
+- Hide Reference Based Analysis section on organ pages to suppress errors related to outdated Azimuth data format.
+- Add reused accent colors to MUI theme and replace hard coded values.
+- Add "—" keys in metadata table that don't have corresponding values.
+- Adjust date range facets to correctly set start/end of month for start/end dates.
+- Ensure search links sent by authenticated users work for unauthenticated users.
+- Implement redesigned organs landing page.
+- Improve Cells API validation efficiency.
+- Refresh front-end linting rules to finalize ESLint v8->v9 update, drop legacy rules, and remove compatibility layers.
+- Update Vitessce to resolve issues loading cell sets from zipped zarr stores.
+- Update portal-visualization to 0.4.18 to resolve spatial RNAseq dataset layout regressions.
+- Fix incorrect icon being displayed for Visualizations section of publication pages.
+- Fix publication accordions not displaying titles when expanded.
+
+
+
 ## v1.33.1 - 2025-10-02
 
 - Adjust specificity of TypeScript config to improve developer experience.

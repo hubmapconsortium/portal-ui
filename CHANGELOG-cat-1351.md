@@ -1,1 +1,0 @@
-- Add "—" keys in metadata table that don't have corresponding values.

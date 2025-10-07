@@ -1,1 +1,0 @@
-- Update portal-visualization to 0.4.18 to resolve spatial RNAseq dataset layout regressions.

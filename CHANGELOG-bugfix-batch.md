@@ -1,2 +1,0 @@
-- Fix ASCT+B link in organ page entity header.
-- Hide Reference Based Analysis section on organ pages to suppress errors related to outdated Azimuth data format.
