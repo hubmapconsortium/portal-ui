@@ -20,7 +20,6 @@ from dataclasses import dataclass
 from functools import cache
 
 from csv import DictReader
-from concurrent.futures import ThreadPoolExecutor
 
 
 blueprint = make_blueprint(__name__)

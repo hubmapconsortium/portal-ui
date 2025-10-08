@@ -6,8 +6,6 @@ from . import (
     routes_workspaces, routes_cell_types, routes_scfind, default_config)
 from .flask_static_digest import FlaskStaticDigest
 
-from os import environ as env
-
 flask_static_digest = FlaskStaticDigest()
 
 
