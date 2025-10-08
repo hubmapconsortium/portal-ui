@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.34.0 - 2025-10-08
+
+- Disable preloading indices to prevent Portal UI server from hanging after deploy in case of outage.
+
+
+
 ## v1.33.2 - 2025-10-07
 
 - Fix ASCT+B link in organ page entity header.
