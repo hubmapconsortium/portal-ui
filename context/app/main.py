@@ -117,35 +117,6 @@ def create_app(testing=False):
                 workspaces_token='',
                 user_groups=[])
 
-    # Preload the cells api data in a background thread on server start
-    # Check for various CI environment indicators
-    is_ci = (env.get('CI', False)
-             or env.get('GH_ACTIONS', False)
-             or env.get('GITHUB_ACTIONS', False)
-             or env.get('CONTINUOUS_INTEGRATION', False))
-
-    if testing or is_ci:
-        app.logger.info("Skipping preload of cells API data (testing=%s, CI=%s)",
-                        testing, is_ci)
-    else:
-        app.logger.info("Starting background thread to preload cells API data...")
-        import threading
-        import time
-
-        def preload_in_background():
-            with app.app_context():
-                try:
-                    start = time.time()
-                    routes_cells.preload_cells_api(app)
-                    end = time.time()
-                    app.logger.info(
-                        "Successfully preloaded cells API data in %.2f seconds", end - start)
-                except Exception as e:
-                    app.logger.error(f"Failed to preload cells API data: {e}")
-
-        thread = threading.Thread(target=preload_in_background, daemon=True)
-        thread.start()
-
     return app
 
 

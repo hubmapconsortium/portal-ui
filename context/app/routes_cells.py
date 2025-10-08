@@ -75,26 +75,6 @@ def timeit(f):
 
 
 @cache
-def preload_cells_api(app):
-    # Preload the gene symbols, protein IDs, and cell IDs on server startup
-    # so that they are immediately available when the user starts typing.
-
-    def run_in_thread(func, app):
-        return func(app)
-
-    # Run all functions in parallel using ThreadPoolExecutor
-    with ThreadPoolExecutor() as executor:
-        funcs = [
-            _get_gene_symbols, _get_protein_ids, _get_cell_ids,
-            _get_rna_genes, _get_atac_genes
-        ]
-        futures = [executor.submit(run_in_thread, func, app) for func in funcs]
-        # Wait for all to complete
-        for future in futures:
-            future.result()
-
-
-@cache
 def _get_gene_symbols(app):
     client = _get_client(app)
     gene_symbols = tuple([gene["gene_symbol"] for gene in client.select_genes().get_list()])
