@@ -112,14 +112,8 @@ def entities_plain_tsv(entity_type):
 
 @blueprint.route('/lineup/<entity_type>')
 def lineup(entity_type):
-    all_args = request.args.to_dict(flat=False)
-    uuids, constraints = _extract_uuids_and_constraints(all_args)
-
-    entities = _get_entities(entity_type, constraints, uuids)
-    entities.sort(key=lambda e: e['uuid'])
     flask_data = {
         **get_default_flask_data(),
-        'entities': entities
     }
     return render_template(
         'base-pages/react-content.html',

@@ -92,6 +92,8 @@ export interface Donor extends Entity {
   }>;
   group_name: string;
   protocol_url: string;
+  organ_donor_data: Record<string, unknown>;
+  living_donor_data: Record<string, unknown>;
 }
 
 export interface Sample extends Entity {
@@ -102,6 +104,7 @@ export interface Sample extends Entity {
   origin_samples_unique_mapped_organs: string[];
   origin_samples: Sample[];
   protocol_url: string;
+  organ_donor_data: Record<string, unknown>;
 }
 
 export type CreationAction =

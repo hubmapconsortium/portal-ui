@@ -49,7 +49,6 @@ function Routes({ flaskData } = {}) {
     markdown,
     errorCode,
     list_uuid,
-    entities,
     organs,
     organs_count,
     organ,
@@ -283,9 +282,11 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/lineup/')) {
+    const entityType = urlPath.split('/').pop().replace(/s$/, ''); // remove trailing 's', e.g. 'samples' -> 'sample'
+    const uuids = new URLSearchParams(window.location.search).get('uuids');
     return (
       <Route>
-        <LineUpPage entities={entities} />
+        <LineUpPage entityType={entityType} uuids={uuids} />
       </Route>
     );
   }
