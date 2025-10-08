@@ -1,0 +1,1 @@
+- Disable preloading indices to prevent Portal UI server from hanging after deploy in case of outage.
