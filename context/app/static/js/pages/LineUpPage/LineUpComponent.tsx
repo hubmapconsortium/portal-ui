@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import LineUp, {
   LineUpStringColumnDesc,
   LineUpNumberColumnDesc,
@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 
 import { useMetadataFieldTypes } from 'js/hooks/useUBKG';
 import { ESEntityType } from 'js/components/types';
-import { useLineupPageEntities } from './hooks';
+import { useLineupEntities } from './hooks';
 import Skeleton from '@mui/material/Skeleton';
 
 interface LineUpProps {
@@ -20,8 +20,9 @@ interface LineUpProps {
 
 const notEnumFields = new Set([
   'uuid',
-  // Donors:
   'hubmap_id',
+  'title',
+  // Donors:
   'medical_history',
   // Samples:
   'donor.hubmap_id',
@@ -32,48 +33,54 @@ const notEnumFields = new Set([
   'library_id',
 ]);
 
-function LineUpPage({ uuids, entityType }: LineUpProps) {
-  const { searchHits: entities = [], isLoading } = useLineupPageEntities({ uuids, entityType });
+interface LineUpColumnsProps {
+  dataKeys: string[];
+}
 
-  const dataKeys = useMemo(() => {
-    if (entities.length === 0) {
-      return [];
-    }
-    // Get keys of first row
-    const firstRow = entities[0];
-    const entityKeys = Object.keys(firstRow).sort();
-
-    return entityKeys;
-  }, [entities]);
-
+function LineUpColumns({ dataKeys }: LineUpColumnsProps) {
   const { data: metadataFieldTypes } = useMetadataFieldTypes();
-
   if (Object.keys(metadataFieldTypes).length === 0) {
     return null;
   }
+  return (
+    <>
+      {dataKeys.map((key) => {
+        const fieldType = metadataFieldTypes[key];
+        if (fieldType === 'number' || fieldType === 'integer') {
+          return <LineUpNumberColumnDesc column={key} key={key} />;
+        }
+        if (fieldType === 'datetime') {
+          return <LineUpDateColumnDesc column={key} key={key} />;
+        }
+        if (notEnumFields.has(key)) {
+          return <LineUpStringColumnDesc column={key} key={key} />;
+        }
+        return <LineUpCategoricalColumnDesc column={key} key={key} />;
+      })}
+    </>
+  );
+}
 
-  if (isLoading) {
-    return <Skeleton variant="rectangular" width="100%" height={400} />;
+function LineUpWrapper({ uuids, entityType }: LineUpProps) {
+  const { entities = [], isLoading, allKeys: dataKeys } = useLineupEntities({ uuids, entityType });
+
+  const { data: metadataFieldTypes } = useMetadataFieldTypes();
+
+  if (isLoading || Object.keys(metadataFieldTypes).length === 0) {
+    return (
+      <Paper>
+        <Skeleton variant="rectangular" width="100%" height={400} />
+      </Paper>
+    );
   }
-
-  const columns = dataKeys.map((key) => {
-    if (metadataFieldTypes[key] === 'number' || metadataFieldTypes[key] === 'integer') {
-      return <LineUpNumberColumnDesc column={key} key={key} />;
-    }
-    if (metadataFieldTypes[key] === 'datetime') {
-      return <LineUpDateColumnDesc column={key} key={key} />;
-    }
-    if (notEnumFields.has(key)) {
-      return <LineUpStringColumnDesc column={key} key={key} />;
-    }
-    return <LineUpCategoricalColumnDesc column={key} key={key} />;
-  });
 
   return (
     <Paper>
-      <LineUp data={entities}>{columns}</LineUp>
+      <LineUp data={entities}>
+        <LineUpColumns dataKeys={dataKeys} />
+      </LineUp>
     </Paper>
   );
 }
 
-export default LineUpPage;
+export default LineUpWrapper;

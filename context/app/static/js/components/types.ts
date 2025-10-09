@@ -75,6 +75,9 @@ export interface Entity {
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
   mapped_metadata?: Record<string, unknown>;
+  organ_donor_data?: Record<string, unknown>;
+  living_donor_data?: Record<string, unknown>;
+  extra_metadata?: Record<string, unknown>;
   [key: string]: unknown;
 }
 

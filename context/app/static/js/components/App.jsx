@@ -11,6 +11,7 @@ import Header from './Header';
 import { StyledAlert, FlexContainer } from './style';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
 import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
+import LineUpModal from 'js/pages/LineUpPage/LineUpModal';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
 import OpenKeyNavInitializer from './OpenKeyNavInitializer';
 
@@ -57,6 +58,7 @@ function App(props) {
             improved on by using a global modal stack with portals. */}
         <LaunchWorkspaceDialog />
         <EditWorkspaceDialog />
+        <LineUpModal />
         <OpenKeyNavInitializer />
       </Providers>
     </StrictMode>
