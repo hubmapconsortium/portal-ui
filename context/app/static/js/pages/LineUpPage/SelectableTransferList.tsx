@@ -13,6 +13,11 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import Skeleton from '@mui/material/Skeleton';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRightRounded';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
+
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import Box from '@mui/material/Box';
 
 function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => !b.includes(value));
@@ -157,6 +162,10 @@ interface TransferListProps {
   setRight: (right: string[]) => void;
   itemSecondaryDescriptions?: (item: string) => React.ReactNode;
   isLoadingSecondaryDescriptions?: boolean;
+  leftTitle?: React.ReactNode;
+  rightTitle?: React.ReactNode;
+  moveToLeftTooltip?: string;
+  moveToRightTooltip?: string;
 }
 
 export default function SelectableTransferList({
@@ -166,6 +175,10 @@ export default function SelectableTransferList({
   setRight,
   itemSecondaryDescriptions,
   isLoadingSecondaryDescriptions = false,
+  leftTitle = 'Available Choices',
+  rightTitle = 'Chosen',
+  moveToLeftTooltip = 'Move selected to left',
+  moveToRightTooltip = 'Move selected to right',
 }: TransferListProps) {
   const [checked, setChecked] = React.useState<string[]>([]);
 
@@ -211,7 +224,7 @@ export default function SelectableTransferList({
     <Grid2 container spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       <Grid2 size="grow">
         <SearchableTransferList
-          title="Choices"
+          title={leftTitle}
           items={left}
           checked={checked}
           onToggle={handleToggle}
@@ -222,32 +235,38 @@ export default function SelectableTransferList({
         />
       </Grid2>
       <Grid2 size={1}>
-        <Grid2 container direction="column" sx={{ alignItems: 'center' }}>
-          <Button
-            sx={{ my: 0.5 }}
-            variant="outlined"
-            size="small"
-            onClick={handleCheckedRight}
-            disabled={leftChecked.length === 0}
-            aria-label="move selected right"
-          >
-            &gt;
-          </Button>
-          <Button
-            sx={{ my: 0.5 }}
-            variant="outlined"
-            size="small"
-            onClick={handleCheckedLeft}
-            disabled={rightChecked.length === 0}
-            aria-label="move selected left"
-          >
-            &lt;
-          </Button>
+        <Grid2 container direction="column" sx={{ alignItems: 'center', gap: 1 }}>
+          <SecondaryBackgroundTooltip title={moveToRightTooltip}>
+            <Box>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleCheckedRight}
+                disabled={leftChecked.length === 0}
+                aria-label="move selected right"
+              >
+                <KeyboardArrowRightIcon />
+              </Button>
+            </Box>
+          </SecondaryBackgroundTooltip>
+          <SecondaryBackgroundTooltip title={moveToLeftTooltip}>
+            <Box>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleCheckedLeft}
+                disabled={rightChecked.length === 0}
+                aria-label="move selected left"
+              >
+                <KeyboardArrowLeftIcon />
+              </Button>
+            </Box>
+          </SecondaryBackgroundTooltip>
         </Grid2>
       </Grid2>
       <Grid2 size="grow">
         <SearchableTransferList
-          title="Chosen"
+          title={rightTitle}
           items={right}
           checked={checked}
           onToggle={handleToggle}

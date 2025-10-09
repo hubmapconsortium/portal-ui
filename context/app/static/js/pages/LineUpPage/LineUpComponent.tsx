@@ -18,9 +18,12 @@ import { useEventCallback } from '@mui/material/utils';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { decimal } from 'js/helpers/number-format';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import Box from '@mui/material/Box';
 interface LineUpProps {
   uuids?: string[];
   entityType?: ESEntityType;
+  filters?: Record<string, unknown>;
 }
 
 const notEnumFields = new Set([
@@ -101,6 +104,8 @@ function LineUpTransferList({ initialItems, onConfirm, hitCount, entityType }: L
     return isPlural ? `${decimal.format(hitCount)} ${entityType}s` : entityType;
   }, [hitCount, entityType]);
 
+  const confirmIsDisabled = right.length === 0;
+
   return (
     <Stack gap={1}>
       <Typography variant="h4">Select Fields to Visualize for {entityLabel}</Typography>
@@ -111,22 +116,30 @@ function LineUpTransferList({ initialItems, onConfirm, hitCount, entityType }: L
         setRight={setRight}
         itemSecondaryDescriptions={getFieldDescription}
         isLoadingSecondaryDescriptions={isLoading}
+        leftTitle="Available Fields"
+        rightTitle="Fields to Visualize"
+        moveToLeftTooltip="Move selected back to Available Fields"
+        moveToRightTooltip="Move selected to Visualize"
       />
-      <Button variant="contained" onClick={confirm} disabled={right.length === 0} sx={{ alignSelf: 'center' }}>
-        Confirm
-      </Button>
+      <SecondaryBackgroundTooltip title={confirmIsDisabled ? 'Select fields to visualize in Lineup' : undefined}>
+        <Box alignSelf="center">
+          <Button variant="contained" onClick={confirm} disabled={confirmIsDisabled}>
+            Confirm
+          </Button>
+        </Box>
+      </SecondaryBackgroundTooltip>
     </Stack>
   );
 }
 
-function LineUpWrapper({ uuids, entityType }: LineUpProps) {
+function LineUpWrapper({ uuids, entityType, filters }: LineUpProps) {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const {
     entities = [],
     isLoading,
     allKeys: dataKeys,
     hitCount,
-  } = useLineupEntities({ uuids, entityType, selectedKeys });
+  } = useLineupEntities({ uuids, entityType, selectedKeys, filters });
 
   const { data: metadataFieldTypes } = useMetadataFieldTypes();
 

@@ -122,6 +122,7 @@ interface UseLineupPageEntitiesProps<EntityType extends ESEntityType = ESEntityT
   uuids?: string[];
   entityType?: EntityType;
   selectedKeys?: string[];
+  filters?: Record<string, unknown>;
 }
 
 interface UseLineupPageEntitiesReturnType {
@@ -135,27 +136,45 @@ interface UseLineupPageEntitiesReturnType {
  * Fetches and flattens entities for the LineUp page based on provided UUIDs and/or entity type.
  * @param uuids Optional array of UUIDs to filter entities
  * @param entityType Optional entity type to filter entities
+ * @param filters Optional filters from SearchStore to apply when no UUIDs are specified
  * @returns The fetched and flattened entities
  */
 export function useLineupEntities<EntityType extends ESEntityType>({
   uuids,
   entityType,
   selectedKeys,
+  filters,
 }: UseLineupPageEntitiesProps<EntityType>): UseLineupPageEntitiesReturnType {
   const query: SearchRequest['query'] = useMemo<SearchRequest['query']>(() => {
-    if (!uuids && !entityType) {
+    if (!uuids && !entityType && !filters) {
       return {};
     }
-    const uuidsFilter = uuids ? { ids: { values: uuids } } : undefined;
-    const entityTypeFilter = entityType ? { term: { entity_type: entityType.toLowerCase() } } : undefined;
-    const conditions = [...(uuidsFilter ? [uuidsFilter] : []), ...(entityTypeFilter ? [entityTypeFilter] : [])];
+
+    const conditions: Array<Record<string, unknown>> = [];
+
+    // If UUIDs are provided, prioritize them and ignore filters
+    if (uuids) {
+      conditions.push({ ids: { values: uuids } });
+    } else if (filters) {
+      // Apply filters only when no specific UUIDs are provided
+      conditions.push(filters);
+    }
+
+    // Always apply entity type filter if provided
+    if (entityType) {
+      conditions.push({ term: { entity_type: entityType.toLowerCase() } });
+    }
+
+    if (conditions.length === 0) {
+      return {};
+    }
 
     return {
       bool: {
         must: conditions,
       },
     };
-  }, [entityType, uuids]);
+  }, [entityType, uuids, filters]);
 
   const { searchHits, ...rest } = useSearchHits<Entity>({
     size: 10_000,

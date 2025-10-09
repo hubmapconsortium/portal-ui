@@ -5,7 +5,8 @@ interface LineUpModalStore {
   isOpen: boolean;
   uuids?: string[];
   entityType?: ESEntityType;
-  open: (params: { uuids?: string[]; entityType?: ESEntityType }) => void;
+  filters?: Record<string, unknown>;
+  open: (params: { uuids?: string[]; entityType?: ESEntityType; filters?: Record<string, unknown> }) => void;
   close: () => void;
 }
 
@@ -13,10 +14,11 @@ export const useLineUpModalStore = create<LineUpModalStore>((set) => ({
   isOpen: false,
   uuids: undefined,
   entityType: undefined,
-  open: ({ uuids, entityType }) => {
-    set({ isOpen: true, uuids, entityType });
+  filters: undefined,
+  open: ({ uuids, entityType, filters }) => {
+    set({ isOpen: true, uuids, entityType, filters });
   },
   close: () => {
-    set({ isOpen: false, uuids: undefined, entityType: undefined });
+    set({ isOpen: false, uuids: undefined, entityType: undefined, filters: undefined });
   },
 }));

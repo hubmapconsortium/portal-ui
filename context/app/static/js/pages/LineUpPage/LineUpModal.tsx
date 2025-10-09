@@ -7,7 +7,7 @@ import { useLineUpModalStore } from 'js/stores/useLineUpModalStore';
 import LineUpComponent from './LineUpComponent';
 
 function LineUpModal() {
-  const { isOpen, uuids, entityType, close } = useLineUpModalStore();
+  const { isOpen, uuids, entityType, filters, close } = useLineUpModalStore();
 
   return (
     <DialogModal
@@ -19,7 +19,7 @@ function LineUpModal() {
       withCloseButton
       content={
         <Box sx={{ height: '70vh', minHeight: '500px' }}>
-          <LineUpComponent uuids={uuids} entityType={entityType} />
+          <LineUpComponent uuids={uuids} entityType={entityType} filters={filters} />
         </Box>
       }
       actions={
