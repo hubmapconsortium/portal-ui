@@ -105,6 +105,7 @@ function LineUpTransferList({ initialItems, onConfirm, hitCount, entityType }: L
   }, [hitCount, entityType]);
 
   const confirmIsDisabled = right.length === 0;
+  const confirmTooltip = confirmIsDisabled ? 'Select fields to visualize in Lineup.' : undefined;
 
   return (
     <Stack gap={1}>
@@ -118,10 +119,10 @@ function LineUpTransferList({ initialItems, onConfirm, hitCount, entityType }: L
         isLoadingSecondaryDescriptions={isLoading}
         leftTitle="Available Fields"
         rightTitle="Fields to Visualize"
-        moveToLeftTooltip="Move selected back to Available Fields"
-        moveToRightTooltip="Move selected to Visualize"
+        moveToLeftTooltip="Move selected back to Available Fields."
+        moveToRightTooltip="Move selected to Visualize."
       />
-      <SecondaryBackgroundTooltip title={confirmIsDisabled ? 'Select fields to visualize in Lineup' : undefined}>
+      <SecondaryBackgroundTooltip title={confirmTooltip}>
         <Box alignSelf="center">
           <Button variant="contained" onClick={confirm} disabled={confirmIsDisabled}>
             Confirm
