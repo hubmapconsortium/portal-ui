@@ -37,17 +37,17 @@ const flattenEntity = (entity: Required<SearchHit<Entity>>, keys: string[]) => {
     ...source
   } = data;
   return {
+    hubmap_id: source.hubmap_id,
     'donor.hubmap_id': (donor as Donor)?.hubmap_id || '',
     ...Object.fromEntries(
       [...keys].map(
         (key) =>
           [
             key,
-            getValueFromObjects([metadata, mapped_metadata, organ_donor_data, living_donor_data], key) ?? '',
+            getValueFromObjects([source, metadata, mapped_metadata, organ_donor_data, living_donor_data], key) ?? '',
           ] as const,
       ),
     ),
-    ...source,
   };
 };
 
@@ -75,7 +75,7 @@ const _source = [
   'created_by_user_email',
   'origin_samples_unique_mapped_organs',
   'sample_category',
-  'donor.hubmap_id',
+  'donor',
   ...nestedFields,
 ];
 
@@ -121,12 +121,14 @@ const getAllKeys = (entities: SearchHit<Entity>[]) => {
 interface UseLineupPageEntitiesProps<EntityType extends ESEntityType = ESEntityType> {
   uuids?: string[];
   entityType?: EntityType;
+  selectedKeys?: string[];
 }
 
 interface UseLineupPageEntitiesReturnType {
   entities: Record<string, unknown>[];
   isLoading: boolean;
   allKeys: string[];
+  hitCount: number;
 }
 
 /**
@@ -138,18 +140,21 @@ interface UseLineupPageEntitiesReturnType {
 export function useLineupEntities<EntityType extends ESEntityType>({
   uuids,
   entityType,
+  selectedKeys,
 }: UseLineupPageEntitiesProps<EntityType>): UseLineupPageEntitiesReturnType {
-  const query: SearchRequest['query'] = useMemo(() => {
+  const query: SearchRequest['query'] = useMemo<SearchRequest['query']>(() => {
     if (!uuids && !entityType) {
       return {};
     }
     const uuidsFilter = uuids ? { ids: { values: uuids } } : undefined;
     const entityTypeFilter = entityType ? { term: { entity_type: entityType.toLowerCase() } } : undefined;
+    const conditions = [...(uuidsFilter ? [uuidsFilter] : []), ...(entityTypeFilter ? [entityTypeFilter] : [])];
+
     return {
       bool: {
-        must: [...(uuidsFilter ? [uuidsFilter] : []), ...(entityTypeFilter ? [entityTypeFilter] : [])],
+        must: conditions,
       },
-    } as SearchRequest['query'];
+    };
   }, [entityType, uuids]);
 
   const { searchHits, ...rest } = useSearchHits<Entity>({
@@ -158,15 +163,17 @@ export function useLineupEntities<EntityType extends ESEntityType>({
     _source,
   });
 
-  // Flatten metadata fields into top-level fields and fill them with empty strings if not present
-  // This allows LineUp to treat all rows uniformly
-  const [entities, allKeys] = useMemo(() => {
-    const allMetadataKeys = getAllKeys(searchHits);
-    const flattened = searchHits.map((hit) =>
-      filterNestedFields(flattenEntity(hit, Array.from(allMetadataKeys).sort())),
-    );
-    return [flattened, Array.from(allMetadataKeys).sort()];
-  }, [searchHits]);
+  // Extract all keys from the fetched entities for use in LineUp columns
+  const allKeys = useMemo(() => Array.from(getAllKeys(searchHits)).sort(), [searchHits]);
 
-  return { entities, allKeys, ...rest };
+  // selectedKeys must be provided and non-empty to show any columns in the lineup.
+  const entities = useMemo(() => {
+    if (!selectedKeys || selectedKeys.length === 0) {
+      return [];
+    }
+    const keysToUse = selectedKeys.filter((key) => allKeys.includes(key));
+    return searchHits.map((hit) => filterNestedFields(flattenEntity(hit, keysToUse)));
+  }, [searchHits, allKeys, selectedKeys]);
+
+  return { entities, hitCount: searchHits.length, allKeys, ...rest };
 }
