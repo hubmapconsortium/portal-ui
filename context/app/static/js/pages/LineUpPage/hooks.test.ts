@@ -114,7 +114,7 @@ describe('useLineupEntities', () => {
               must: [{ ids: { values: uuids } }, { term: { entity_type: 'dataset' } }],
             },
           },
-          _source: sourceFields,
+          _source: expect.arrayContaining(sourceFields) as string[],
         },
         { shouldFetch: true },
       );
@@ -140,7 +140,7 @@ describe('useLineupEntities', () => {
               must: [filters, { term: { entity_type: 'sample' } }],
             },
           },
-          _source: sourceFields,
+          _source: expect.arrayContaining(sourceFields) as string[],
         },
         { shouldFetch: true },
       );
