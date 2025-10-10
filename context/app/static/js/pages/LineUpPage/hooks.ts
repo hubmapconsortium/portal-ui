@@ -118,7 +118,7 @@ const getAllKeys = (entities: SearchHit<Entity>[]) => {
   }, new Set<string>());
 };
 
-interface UseLineupPageEntitiesProps<EntityType extends ESEntityType = ESEntityType> {
+export interface UseLineupPageEntitiesProps<EntityType extends ESEntityType = ESEntityType> {
   uuids?: string[];
   entityType?: EntityType;
   selectedKeys?: string[];

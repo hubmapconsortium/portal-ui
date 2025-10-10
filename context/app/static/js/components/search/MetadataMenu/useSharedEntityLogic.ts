@@ -81,8 +81,8 @@ export function entitiesToTableData(
   metadataFieldDescriptions: Record<string, string> = {},
   entityType: string = 'entities',
 ) {
-  const fileName = `hubmap-metadata-${entityType}-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.tsv`;
-  if (entities.length > 0) {
+  const fileName = `hubmap-${entityType}-metadata-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.tsv`;
+  if (entities.length === 0) {
     return {
       columnNames: [],
       rows: [],
