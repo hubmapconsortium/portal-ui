@@ -123,6 +123,7 @@ interface UseLineupPageEntitiesProps<EntityType extends ESEntityType = ESEntityT
   entityType?: EntityType;
   selectedKeys?: string[];
   filters?: Record<string, unknown>;
+  shouldFetchData?: boolean;
 }
 
 interface UseLineupPageEntitiesReturnType {
@@ -144,6 +145,7 @@ export function useLineupEntities<EntityType extends ESEntityType>({
   entityType,
   selectedKeys,
   filters,
+  shouldFetchData = true,
 }: UseLineupPageEntitiesProps<EntityType>): UseLineupPageEntitiesReturnType {
   const query: SearchRequest['query'] = useMemo<SearchRequest['query']>(() => {
     if (!uuids && !entityType && !filters) {
@@ -176,21 +178,24 @@ export function useLineupEntities<EntityType extends ESEntityType>({
     };
   }, [entityType, uuids, filters]);
 
-  const { searchHits, ...rest } = useSearchHits<Entity>({
-    size: 10_000,
-    query,
-    _source,
-  });
+  const { searchHits, ...rest } = useSearchHits<Entity>(
+    {
+      size: 10_000,
+      query,
+      _source,
+    },
+    {
+      shouldFetch: shouldFetchData,
+    },
+  );
 
   // Extract all keys from the fetched entities for use in LineUp columns
   const allKeys = useMemo(() => Array.from(getAllKeys(searchHits)).sort(), [searchHits]);
 
   // selectedKeys must be provided and non-empty to show any columns in the lineup.
   const entities = useMemo(() => {
-    if (!selectedKeys || selectedKeys.length === 0) {
-      return [];
-    }
-    const keysToUse = selectedKeys.filter((key) => allKeys.includes(key));
+    const keysToUse =
+      !selectedKeys || selectedKeys.length === 0 ? allKeys : selectedKeys.filter((key) => allKeys.includes(key));
     return searchHits.map((hit) => filterNestedFields(flattenEntity(hit, keysToUse)));
   }, [searchHits, allKeys, selectedKeys]);
 
