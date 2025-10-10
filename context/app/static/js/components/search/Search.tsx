@@ -190,9 +190,9 @@ function Bar({ type }: SearchTypeProps) {
       <Box flexGrow={1}>
         <SearchBar type={type} />
       </Box>
+      <MetadataMenu type={type} />
       {!isDevSearch(type) && (
         <>
-          <MetadataMenu type={type} />
           <WorkspacesDropdownMenu type={type} />
           {view === 'tile' && <TilesSortSelect />}
           {view === 'table' && (

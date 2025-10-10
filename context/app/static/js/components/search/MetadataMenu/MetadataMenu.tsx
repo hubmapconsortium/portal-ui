@@ -5,6 +5,7 @@ import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 import LineupMenuItem from './LineupMenuItem';
 import { DownloadTSVItem } from './DownloadTSVItem';
+import { isDevSearch } from '../utils';
 
 const menuID = 'metadata-menu';
 
@@ -14,7 +15,7 @@ interface MetadataMenuProps {
 }
 
 function MetadataMenu({ type, analyticsCategory }: MetadataMenuProps) {
-  const lcPluralType = `${type.toLowerCase()}s`;
+  const lcPluralType = isDevSearch(type) ? 'entities' : `${type.toLowerCase()}s`;
 
   return (
     <>

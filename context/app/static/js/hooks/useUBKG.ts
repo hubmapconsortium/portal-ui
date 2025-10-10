@@ -405,11 +405,13 @@ async function fetchDescriptions(url: string) {
 
 // Since both flask and js depend on manipulated field descriptions, get them from flask for now in the hook below. Keeping this here for future use.
 export const useMFD = () => {
-  const { data, ...swr } = useSWRImmutable<Record<string, string> | Record<string, never>>(
+  const { data, ...swr } = useSWR<Record<string, string> | Record<string, never>>(
     useUbkg().fieldDescriptions,
     (url: string) => fetchDescriptions(url),
     {
       fallbackData: {},
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     },
   );
 
@@ -417,13 +419,11 @@ export const useMFD = () => {
 };
 
 export const useMetadataFieldDescriptions = () => {
-  const { data, ...swr } = useSWRImmutable<Record<string, string>>(
-    '/metadata/descriptions',
-    (url: string) => fetcher({ url }),
-    {
-      fallbackData: {},
-    },
-  );
+  const { data, ...swr } = useSWR<Record<string, string>>('/metadata/descriptions', (url: string) => fetcher({ url }), {
+    fallbackData: {},
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   return { data: data ?? {}, ...swr };
 };

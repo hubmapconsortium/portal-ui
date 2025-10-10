@@ -1,0 +1,2 @@
+- Improve lineup visualization by loading data on front-end, improving selection/filtering of entities for lineup, and enabling selection of fields.
+- Improve TSV export of entities by loading data on front-end and pulling in more fields.

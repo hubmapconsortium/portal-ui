@@ -1,4 +1,4 @@
-const { addRestrictionsToQuery } = require('../functions');
+import { addRestrictionsToQuery } from '../functions';
 
 test('it should return the correct query', () => {
   const baseQuery = {

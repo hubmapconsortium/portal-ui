@@ -136,13 +136,13 @@ export function addRestrictionsToQuery({ query, ...rest }: SearchRequest): Searc
   };
 }
 
-interface SearchHit {
+export interface EntityTypeSearchHit {
   _source: {
     entity_type: string;
   };
 }
 
-export function getSearchHitsEntityCounts(searchHits: SearchHit[]) {
+export function getSearchHitsEntityCounts(searchHits: EntityTypeSearchHit[]) {
   const counts = searchHits.reduce<Record<string, number>>(
     (acc, { _source: { entity_type } }) => {
       if (!(entity_type in acc)) {
@@ -162,7 +162,12 @@ export function getArrayRange(n: number): number[] {
   return [...Array(n).keys()];
 }
 
-export function getDonorAgeString({ age_value, age_unit }: { age_value: number; age_unit: string }) {
+interface DonorAge {
+  age_value?: number;
+  age_unit?: string;
+}
+
+export function getDonorAgeString({ age_value, age_unit }: DonorAge) {
   if (!(age_value && age_unit)) {
     return '';
   }
