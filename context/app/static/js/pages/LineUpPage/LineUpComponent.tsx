@@ -133,22 +133,45 @@ function LineUpTransferList({ initialItems, onConfirm, hitCount, entityType }: L
   );
 }
 
+const usePluralEntityLabel = (entityType: ESEntityType | undefined, count: number) => {
+  if (!entityType) {
+    return count === 1 ? 'Entity' : 'Entities';
+  }
+  return count === 1 ? entityType : `${entityType}s`;
+};
+
 function LineUpWrapper({ uuids, entityType, filters }: LineUpProps) {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const {
     entities = [],
     isLoading,
     allKeys: dataKeys,
-    hitCount,
+    totalHitsCount,
   } = useLineupEntities({ uuids, entityType, selectedKeys, filters });
 
   const { data: metadataFieldTypes } = useMetadataFieldTypes();
 
-  if (isLoading || Object.keys(metadataFieldTypes).length === 0) {
+  const label = usePluralEntityLabel(entityType, totalHitsCount || 0);
+
+  if (isLoading || Object.keys(metadataFieldTypes).length === 0 || !totalHitsCount) {
     return (
-      <Paper>
-        <Skeleton variant="rectangular" width="100%" height={400} />
-      </Paper>
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+        }}
+      >
+        {totalHitsCount && totalHitsCount > 0 && (
+          <Typography variant="h4" alignSelf={'flex-start'}>
+            Loading data for {decimal.format(totalHitsCount)} {label.toLocaleLowerCase()}...
+          </Typography>
+        )}
+        <Skeleton variant="rectangular" width="100%" height="100%" sx={{ flex: 1 }} />
+      </Box>
     );
   }
 
@@ -157,7 +180,7 @@ function LineUpWrapper({ uuids, entityType, filters }: LineUpProps) {
       <LineUpTransferList
         initialItems={dataKeys}
         onConfirm={setSelectedKeys}
-        hitCount={hitCount}
+        hitCount={totalHitsCount}
         entityType={entityType}
       />
     );

@@ -17,6 +17,23 @@ export function isEmptyArrayOrObject(val: object | unknown[]) {
   return false;
 }
 
+function isDeepEmpty(val: unknown): boolean {
+  if (!val || typeof val !== 'object') {
+    return !val;
+  }
+
+  if (Array.isArray(val)) {
+    return val.length === 0 || val.every(isDeepEmpty);
+  }
+
+  if (val.constructor?.name === 'Object') {
+    const keys = Object.keys(val);
+    return keys.length === 0 || keys.every((key) => isDeepEmpty((val as Record<string, unknown>)[key]));
+  }
+
+  return false;
+}
+
 export function capitalizeString(s?: string) {
   if (!s) {
     return '';
@@ -118,10 +135,28 @@ export function getDefaultQuery() {
   };
 }
 
-export function combineQueryClauses(queries: object | object[]) {
+export function combineQueryClauses(
+  queries: (object | null | undefined | false)[] | (object | null | undefined | false),
+) {
+  const queryArray = Array.isArray(queries) ? queries : [queries];
+
+  const filteredQueries = queryArray.filter((query): query is object => {
+    // Filter out falsy values (null, undefined, false)
+    if (!query) {
+      return false;
+    }
+
+    // Filter out empty objects (including deeply nested empty objects)
+    if (typeof query === 'object' && query !== null) {
+      return !isDeepEmpty(query);
+    }
+
+    return true;
+  });
+
   return {
     bool: {
-      must: queries,
+      must: filteredQueries,
     },
   };
 }

@@ -229,7 +229,7 @@ describe('useLineupEntities', () => {
 
       // Should have entities
       expect(result.current.entities).toHaveLength(1);
-      expect(result.current.hitCount).toBe(1);
+      expect(result.current.totalHitsCount).toBe(1);
 
       // Should extract keys from all nested objects
       expect(result.current.allKeys).toContain('uuid');
@@ -279,7 +279,7 @@ describe('useLineupEntities', () => {
 
       expect(result.current.allKeys).toEqual([]);
       expect(result.current.entities).toEqual([]);
-      expect(result.current.hitCount).toBe(0);
+      expect(result.current.totalHitsCount).toBe(0);
     });
 
     it('should filter nested fields from final entity objects', () => {

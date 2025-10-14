@@ -1,6 +1,6 @@
 import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import { Donor, Entity, ESEntityType } from 'js/components/types';
-import { useSearchHits } from 'js/hooks/useSearchData';
+import { useAllSearchHits } from 'js/hooks/useSearchData';
 import { useMemo } from 'react';
 
 /**
@@ -130,7 +130,7 @@ interface UseLineupPageEntitiesReturnType {
   entities: Record<string, unknown>[];
   isLoading: boolean;
   allKeys: string[];
-  hitCount: number;
+  totalHitsCount?: number;
 }
 
 /**
@@ -178,9 +178,8 @@ export function useLineupEntities<EntityType extends ESEntityType>({
     };
   }, [entityType, uuids, filters]);
 
-  const { searchHits, ...rest } = useSearchHits<Entity>(
+  const { searchHits, ...rest } = useAllSearchHits<Entity>(
     {
-      size: 10_000,
       query,
       _source,
     },
@@ -199,5 +198,5 @@ export function useLineupEntities<EntityType extends ESEntityType>({
     return searchHits.map((hit) => filterNestedFields(flattenEntity(hit, keysToUse)));
   }, [searchHits, allKeys, selectedKeys]);
 
-  return { entities, hitCount: searchHits.length, allKeys, ...rest };
+  return { entities, allKeys, ...rest };
 }
