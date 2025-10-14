@@ -33,12 +33,15 @@ RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
 
-# Use a constraints file to force pip to use correct versions of numpy/pandas/frozenlist that are compatible with python 3.12.
-COPY requirements.txt /app
-# Legacy resolver is used to avoid issues with a non-pinned subdependency which causes build failures in CI
-# https://github.com/hubmapconsortium/portal-ui/actions/runs/6087458665/job/16516023950
-COPY constraints.txt /tmp
-RUN PIP_CONSTRAINT=/tmp/constraints.txt pip install -r /app/requirements.txt
+# Install uv for faster dependency management
+RUN pip install uv
+
+# Copy project configuration and dependencies from context directory
+COPY pyproject.toml /
+COPY uv.lock /
+
+# Install dependencies using uv (production only)
+RUN uv sync --no-dev --frozen
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path

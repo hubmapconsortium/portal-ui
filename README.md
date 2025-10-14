@@ -109,7 +109,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
     - [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) using any supported installation method.
     - Create a `uv` virtual environment with the appropriate python version via `uv venv --python $(cat .python-version)`.
     - Activate the environment with `source .venv/bin/activate`.
-    - Install locked requirements with `uv pip sync context/requirements.txt` and `uv pip install -r context/requirements-dev.txt`.
+    - Install dependencies with `uv sync --dev` (to include development dependencies) or `uv sync` (production only).
   - MiniConda:
     - [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
   - pyenv:
@@ -143,10 +143,10 @@ After checking out the project, cd-ing into it, and setting up a Python 3.12 vir
 - Run `etc/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
   - If using VS Code, you can also use the `dev-start` task, which will launch these services in separate terminal windows.
 
+**Note**: The project uses `pyproject.toml` for dependency management. All dependencies, constraints, and development dependencies are centrally managed in `pyproject.toml`. The `uv.lock` file provides exact version pinning for reproducible builds.
+
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
-
-Note: Searchkit, our interface to Elasticsearch for the dev-search page, has changed significantly in recent releases. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
 
 ### Changelog files
 
