@@ -92,7 +92,16 @@ const useCellPopDataForOrgan = (
         values: datasets || [],
       },
     },
-    _source: ['hubmap_id', 'title', 'donor.mapped_metadata', 'assay_display_name', 'anatomy_1', 'anatomy_2'],
+    _source: [
+      'hubmap_id',
+      'title',
+      'group_name',
+      'donor.hubmap_id',
+      'donor.mapped_metadata',
+      'assay_display_name',
+      'anatomy_1',
+      'anatomy_2',
+    ],
     size: 10000,
   });
 
@@ -126,6 +135,9 @@ const useCellPopDataForOrgan = (
         title,
         assay: getFirstValue(assay_display_name),
         anatomy: getFirstAnatomyValue(anatomy_1, anatomy_2),
+        donor_id: getFirstValue(donor?.hubmap_id),
+        group_name: getFirstValue(source.group_name),
+        // Donor metadata fields
         donor_age: getFirstValue(dmm?.age_value),
         donor_sex: getFirstValue(dmm?.sex),
         donor_height: getFirstValue(dmm?.height_value),
