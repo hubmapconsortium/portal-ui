@@ -1,0 +1,1 @@
+- Hide "multiple" keys from single-gene queries' result charts.

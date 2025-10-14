@@ -5,7 +5,6 @@ import { useBandScale, useChartTooltip, useLinearScale, useOrdinalScale, useVert
 import TickComponent from '../TickComponent';
 import VerticalChartGridRowsGroup from '../VerticalChartGridRowsGroup';
 import { TooltipComponentType, TooltipData } from '../types';
-import { ScaleOrdinal } from 'd3';
 import { useTheme } from '@mui/material/styles';
 import ChartTooltip from '../ChartTooltip';
 
@@ -23,7 +22,6 @@ interface BarChartProps<T extends { value: number }, K extends string, D extends
   yAxisLabel: string;
   xAxisLabel: string;
   TooltipContent?: TooltipComponentType<T>;
-  colorScale?: ScaleOrdinal<string, string>;
   multiGeneAssociations?: MultiGeneAssociation[];
   excludedKeys?: string[];
 }
@@ -46,7 +44,6 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
   yAxisLabel,
   xAxisLabel,
   TooltipContent,
-  colorScale: externalColorScale,
   multiGeneAssociations = [],
   excludedKeys,
 }: BarChartProps<T, K, D>) {
@@ -96,8 +93,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
 
     if (!geneAssociation || geneAssociation.genes.length <= 1) {
       // Single gene or no association - use solid color
-      const fill =
-        externalColorScale?.(key as string) ?? colorScale(highlightedKeys?.includes(key) ? 'matched' : 'unmatched');
+      const fill = colorScale(highlightedKeys?.includes(key) ? 'matched' : 'unmatched');
       return (
         <pattern id={id} patternUnits="userSpaceOnUse" width="1.5" height="1.5" patternTransform="rotate(90)">
           <rect width="100%" height="100%" fill={fill} />
