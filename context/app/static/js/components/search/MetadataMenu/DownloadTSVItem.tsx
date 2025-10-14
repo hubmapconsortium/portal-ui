@@ -6,13 +6,14 @@ import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { StyledMenuItem } from './style';
 import { useSharedEntityLogic, entitiesToTableData } from './useSharedEntityLogic';
 import { useEventCallback } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface DownloadTSVItemProps {
   lcPluralType: string;
   analyticsCategory?: string;
 }
 
-export function DownloadTSVItem({ lcPluralType, analyticsCategory: _analyticsCategory }: DownloadTSVItemProps) {
+export function DownloadTSVItem({ lcPluralType, analyticsCategory }: DownloadTSVItemProps) {
   const { toastError } = useSnackbarActions();
   const [shouldFetchData, setShouldFetchData] = useState(false);
 
@@ -34,9 +35,17 @@ export function DownloadTSVItem({ lcPluralType, analyticsCategory: _analyticsCat
   const download = useEventCallback(() => {
     try {
       downloadTable();
+      trackEvent({
+        category: analyticsCategory || 'MetadataMenu',
+        action: `Download ${lcPluralType} TSV`,
+      });
     } catch (error) {
       toastError('Download failed.');
       console.error('Download failed', error);
+      trackEvent({
+        category: analyticsCategory || 'MetadataMenu',
+        action: `Download ${lcPluralType} TSV failed`,
+      });
     }
   });
 

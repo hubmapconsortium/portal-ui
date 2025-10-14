@@ -21,7 +21,7 @@ function MetadataMenu({ type, analyticsCategory }: MetadataMenuProps) {
     <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
-        <LineupMenuItem lcPluralType={lcPluralType} />
+        <LineupMenuItem lcPluralType={lcPluralType} analyticsCategory={analyticsCategory} />
         <DownloadTSVItem lcPluralType={lcPluralType} analyticsCategory={analyticsCategory} />
       </DropdownMenu>
     </>

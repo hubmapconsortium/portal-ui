@@ -5,11 +5,14 @@ import { useMetadataMenu } from './hooks';
 import { useLineUpModalStore } from 'js/stores/useLineUpModalStore';
 import { useSharedEntityLogic } from './useSharedEntityLogic';
 
+import { trackEvent } from 'js/helpers/trackers';
+
 interface LineupMenuItemProps {
   lcPluralType: string;
+  analyticsCategory?: string;
 }
 
-export default function LineupMenuItem({ lcPluralType }: LineupMenuItemProps) {
+export default function LineupMenuItem({ lcPluralType, analyticsCategory }: LineupMenuItemProps) {
   const { closeMenu } = useMetadataMenu();
   const { open } = useLineUpModalStore();
 
@@ -17,6 +20,10 @@ export default function LineupMenuItem({ lcPluralType }: LineupMenuItemProps) {
 
   const handleClick = () => {
     open(queryParams);
+    trackEvent({
+      category: analyticsCategory || 'MetadataMenu',
+      action: `Visualize ${lcPluralType} in LineUp`,
+    });
     closeMenu();
   };
 
