@@ -14,17 +14,11 @@ import { useEntityTileAriaLabelText } from 'js/hooks/useEntityTileAriaLabel';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
+import { compareSampleCategory } from 'js/helpers/samples';
 
 type ProvEntityType = 'Donor' | 'Sample' | 'Dataset';
 function isProvEntityType(type: string): type is ProvEntityType {
   return ['Donor', 'Sample', 'Dataset'].includes(type);
-}
-
-function compareSampleCategory(a: string, b: string) {
-  const normalizedA = a.toLowerCase();
-  const normalizedB = b.toLowerCase();
-  const order = ['organ', 'block', 'section', 'suspension'];
-  return order.indexOf(normalizedA) - order.indexOf(normalizedB);
 }
 
 function entitySorter(a: Entity, b: Entity) {
