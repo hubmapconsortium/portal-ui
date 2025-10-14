@@ -3,15 +3,15 @@ import { useLineupEntities, UseLineupPageEntitiesProps } from './hooks';
 
 // Mock the dependencies
 jest.mock('js/hooks/useSearchData', () => ({
-  useSearchHits: jest.fn(),
+  useAllSearchHits: jest.fn(),
 }));
 
-import { useSearchHits } from 'js/hooks/useSearchData';
+import { useAllSearchHits } from 'js/hooks/useSearchData';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { Entity } from 'js/components/types';
 
 // Type the mocked function
-const mockUseSearchHits = useSearchHits as jest.MockedFunction<typeof useSearchHits>;
+const mockUseSearchHits = useAllSearchHits as jest.MockedFunction<typeof useAllSearchHits>;
 
 // Simplified mock data for testing
 const createMockEntity = (sourceOverrides = {}) =>
@@ -92,6 +92,7 @@ describe('useLineupEntities', () => {
     mockUseSearchHits.mockReturnValue({
       searchHits: [],
       isLoading: false,
+      totalHitsCount: undefined,
     });
   });
 
@@ -108,7 +109,6 @@ describe('useLineupEntities', () => {
 
       expect(mockUseSearchHits).toHaveBeenCalledWith(
         {
-          size: 10_000,
           query: {
             bool: {
               must: [{ ids: { values: uuids } }, { term: { entity_type: 'dataset' } }],
@@ -134,7 +134,6 @@ describe('useLineupEntities', () => {
 
       expect(mockUseSearchHits).toHaveBeenCalledWith(
         {
-          size: 10_000,
           query: {
             bool: {
               must: [filters, { term: { entity_type: 'sample' } }],
@@ -219,6 +218,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: false,
+        totalHitsCount: 1,
       });
 
       const { result } = renderHook(() =>
@@ -249,6 +249,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: false,
+        totalHitsCount: 1,
       });
 
       const { result } = renderHook(() =>
@@ -269,6 +270,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: [],
         isLoading: false,
+        totalHitsCount: 0,
       });
 
       const { result } = renderHook(() =>
@@ -288,6 +290,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: false,
+        totalHitsCount: 1,
       });
 
       const { result } = renderHook(() =>
@@ -315,6 +318,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: true,
+        totalHitsCount: 1,
       });
 
       const { result } = renderHook(() =>
@@ -329,7 +333,7 @@ describe('useLineupEntities', () => {
         isLoading: true,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         allKeys: expect.any(Array<string>),
-        hitCount: 1,
+        totalHitsCount: 1,
       });
     });
   });
