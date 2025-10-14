@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
@@ -79,6 +79,8 @@ function ProvEntityColumnContent({
       })),
   );
 
+  const sortedEntities = useMemo(() => entities.sort(entitySorter), [entities]);
+
   if (noDisplayedContent) {
     return (
       <Alert severity="warning" $width="100%">
@@ -89,8 +91,8 @@ function ProvEntityColumnContent({
 
   return (
     <>
-      {entities.length > 0 &&
-        entities.sort(entitySorter).map((item, j, items) => {
+      {sortedEntities.length > 0 &&
+        sortedEntities.map((item, j, items) => {
           const isSampleSibling =
             j > 0 && item.entity_type === 'Sample' && items[j - 1]?.sample_category === item.sample_category;
           if (isSampleSibling && !isExpanded[item.sample_category as string]) {
