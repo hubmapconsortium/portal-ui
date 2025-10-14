@@ -70,6 +70,8 @@ export function useSharedEntityLogic(lcPluralType: string) {
 // First fields that should appear at the beginning of the TSV
 const firstFields = ['uuid', 'hubmap_id'];
 
+const formatDateForFilename = (date: Date) => date.toISOString().slice(0, 19).replace(/:/g, '-');
+
 /**
  * Convert flattened entities to the format expected by useDownloadTable.
  * Mimics the backend _dicts_to_tsv function behavior.
@@ -81,7 +83,7 @@ export function entitiesToTableData(
   metadataFieldDescriptions: Record<string, string> = {},
   entityType: string = 'entities',
 ) {
-  const fileName = `hubmap-${entityType}-metadata-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.tsv`;
+  const fileName = `hubmap-${entityType}-metadata-${formatDateForFilename(new Date())}.tsv`;
   if (entities.length === 0) {
     return {
       columnNames: [],

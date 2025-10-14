@@ -6,33 +6,7 @@ import { Dataset, ESEntityType, Entity, isDataset } from 'js/components/types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { MergedWorkspace } from 'js/components/workspaces/types';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-
-export function isEmptyArrayOrObject(val: object | unknown[]) {
-  if (val.constructor.name === 'Object') {
-    return Object.keys(val).length === 0;
-  }
-  if (val.constructor.name === 'Array' && Array.isArray(val)) {
-    return val.length === 0;
-  }
-  return false;
-}
-
-function isDeepEmpty(val: unknown): boolean {
-  if (!val || typeof val !== 'object') {
-    return !val;
-  }
-
-  if (Array.isArray(val)) {
-    return val.length === 0 || val.every(isDeepEmpty);
-  }
-
-  if (val.constructor?.name === 'Object') {
-    const keys = Object.keys(val);
-    return keys.length === 0 || keys.every((key) => isDeepEmpty((val as Record<string, unknown>)[key]));
-  }
-
-  return false;
-}
+import { isDeepEmpty } from './type-guards';
 
 export function capitalizeString(s?: string) {
   if (!s) {

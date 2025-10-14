@@ -1,4 +1,4 @@
-import { isEmpty, isObject, isPrimitive } from '../type-guards';
+import { isEmpty, isObject, isPrimitive, isEmptyArrayOrObject, isDeepEmpty } from '../type-guards';
 
 describe('isEmpty', () => {
   test('should return true for null', () => {
@@ -207,6 +207,205 @@ describe('isPrimitive', () => {
 
   test('should return false for Set object', () => {
     expect(isPrimitive(new Set())).toBe(false);
+  });
+});
+
+describe('isEmptyArrayOrObject', () => {
+  test('should return true for empty array', () => {
+    expect(isEmptyArrayOrObject([])).toBe(true);
+  });
+
+  test('should return false for non-empty array', () => {
+    expect(isEmptyArrayOrObject([1])).toBe(false);
+    expect(isEmptyArrayOrObject([1, 2, 3])).toBe(false);
+    expect(isEmptyArrayOrObject(['a', 'b'])).toBe(false);
+    expect(isEmptyArrayOrObject([null, undefined])).toBe(false);
+  });
+
+  test('should return true for empty plain object', () => {
+    expect(isEmptyArrayOrObject({})).toBe(true);
+  });
+
+  test('should return false for non-empty plain object', () => {
+    expect(isEmptyArrayOrObject({ key: 'value' })).toBe(false);
+    expect(isEmptyArrayOrObject({ a: 1, b: 2 })).toBe(false);
+    expect(isEmptyArrayOrObject({ nested: {} })).toBe(false);
+  });
+
+  test('should return false for objects with constructor other than Object', () => {
+    expect(isEmptyArrayOrObject(new Date())).toBe(false);
+    expect(isEmptyArrayOrObject(new Map())).toBe(false);
+    expect(isEmptyArrayOrObject(new Set())).toBe(false);
+    expect(isEmptyArrayOrObject(/regex/)).toBe(false);
+    expect(isEmptyArrayOrObject(new Error())).toBe(false);
+  });
+
+  test('should return false for objects created with custom constructors', () => {
+    class CustomClass {}
+    expect(isEmptyArrayOrObject(new CustomClass())).toBe(false);
+  });
+
+  test('should handle objects created with Object.create(null)', () => {
+    const obj = Object.create(null) as Record<string, unknown>;
+
+    // Now correctly handles Object.create(null) - should return true for empty object
+    expect(isEmptyArrayOrObject(obj)).toBe(true);
+  });
+
+  test('should handle objects created with Object.create(null) with properties', () => {
+    const obj = Object.create(null) as Record<string, unknown>;
+    obj.prop = 'value';
+
+    // Now correctly handles Object.create(null) - should return false for non-empty object
+    expect(isEmptyArrayOrObject(obj)).toBe(false);
+  });
+
+  test('should handle edge cases with array-like objects', () => {
+    const arrayLikeEmpty = { length: 0 };
+    const arrayLikeWithItems = { 0: 'a', 1: 'b', length: 2 };
+
+    expect(isEmptyArrayOrObject(arrayLikeEmpty)).toBe(false); // Has length property
+    expect(isEmptyArrayOrObject(arrayLikeWithItems)).toBe(false); // Has properties
+  });
+});
+
+describe('isDeepEmpty', () => {
+  test('should return true for null and undefined', () => {
+    expect(isDeepEmpty(null)).toBe(true);
+    expect(isDeepEmpty(undefined)).toBe(true);
+  });
+
+  test('should return true for falsy primitive values', () => {
+    expect(isDeepEmpty(false)).toBe(true);
+    expect(isDeepEmpty(0)).toBe(true);
+    expect(isDeepEmpty('')).toBe(true);
+    expect(isDeepEmpty(NaN)).toBe(true);
+  });
+
+  test('should return false for truthy primitive values', () => {
+    expect(isDeepEmpty(true)).toBe(false);
+    expect(isDeepEmpty(1)).toBe(false);
+    expect(isDeepEmpty('hello')).toBe(false);
+    expect(isDeepEmpty(' ')).toBe(false); // whitespace is truthy
+  });
+
+  test('should return true for empty arrays', () => {
+    expect(isDeepEmpty([])).toBe(true);
+  });
+
+  test('should return false for arrays with non-empty values', () => {
+    expect(isDeepEmpty([1])).toBe(false);
+    expect(isDeepEmpty(['hello'])).toBe(false);
+    expect(isDeepEmpty([true])).toBe(false);
+    expect(isDeepEmpty([{ key: 'value' }])).toBe(false);
+  });
+
+  test('should return true for arrays with only empty values', () => {
+    expect(isDeepEmpty([null])).toBe(true);
+    expect(isDeepEmpty([undefined])).toBe(true);
+    expect(isDeepEmpty([null, undefined])).toBe(true);
+    expect(isDeepEmpty([[], {}])).toBe(true);
+    expect(isDeepEmpty([0, false, ''])).toBe(true);
+  });
+
+  test('should return true for arrays with nested empty structures', () => {
+    expect(isDeepEmpty([[], []])).toBe(true);
+    expect(isDeepEmpty([{}, {}])).toBe(true);
+    expect(isDeepEmpty([[], {}, null, undefined])).toBe(true);
+    expect(isDeepEmpty([[{}], [[]]])).toBe(true);
+  });
+
+  test('should return false for arrays with mixed empty and non-empty values', () => {
+    expect(isDeepEmpty([null, 'hello'])).toBe(false);
+    expect(isDeepEmpty([[], [1]])).toBe(false);
+    expect(isDeepEmpty([{}, { key: 'value' }])).toBe(false);
+  });
+
+  test('should return true for empty plain objects', () => {
+    expect(isDeepEmpty({})).toBe(true);
+  });
+
+  test('should return false for objects with non-empty values', () => {
+    expect(isDeepEmpty({ key: 'value' })).toBe(false);
+    expect(isDeepEmpty({ num: 1 })).toBe(false);
+    expect(isDeepEmpty({ bool: true })).toBe(false);
+    expect(isDeepEmpty({ nested: { key: 'value' } })).toBe(false);
+  });
+
+  test('should return true for objects with only empty values', () => {
+    expect(isDeepEmpty({ a: null })).toBe(true);
+    expect(isDeepEmpty({ a: undefined })).toBe(true);
+    expect(isDeepEmpty({ a: null, b: undefined })).toBe(true);
+    expect(isDeepEmpty({ a: [], b: {} })).toBe(true);
+    expect(isDeepEmpty({ a: 0, b: false, c: '' })).toBe(true);
+  });
+
+  test('should return true for objects with nested empty structures', () => {
+    expect(isDeepEmpty({ a: {}, b: {} })).toBe(true);
+    expect(isDeepEmpty({ a: [], b: [] })).toBe(true);
+    expect(isDeepEmpty({ a: { nested: {} } })).toBe(true);
+    expect(isDeepEmpty({ a: { nested: [] } })).toBe(true);
+    expect(isDeepEmpty({ a: [{}], b: [[]] })).toBe(true);
+  });
+
+  test('should return false for objects with mixed empty and non-empty values', () => {
+    expect(isDeepEmpty({ a: null, b: 'value' })).toBe(false);
+    expect(isDeepEmpty({ a: {}, b: { key: 'value' } })).toBe(false);
+    expect(isDeepEmpty({ a: [], b: [1] })).toBe(false);
+  });
+
+  test('should handle deeply nested structures', () => {
+    expect(isDeepEmpty({ a: { b: { c: {} } } })).toBe(true);
+    expect(isDeepEmpty({ a: { b: { c: [] } } })).toBe(true);
+    expect(isDeepEmpty({ a: { b: { c: null } } })).toBe(true);
+    expect(isDeepEmpty({ a: { b: { c: 'value' } } })).toBe(false);
+
+    expect(isDeepEmpty([[[[]]]])).toBe(true);
+    expect(isDeepEmpty([[[['value']]]])).toBe(false);
+  });
+
+  test('should return false for non-plain objects', () => {
+    expect(isDeepEmpty(new Date())).toBe(false);
+    expect(isDeepEmpty(new Map())).toBe(false);
+    expect(isDeepEmpty(new Set())).toBe(false);
+    expect(isDeepEmpty(/regex/)).toBe(false);
+    expect(isDeepEmpty(new Error())).toBe(false);
+  });
+
+  test('should handle objects created with Object.create(null)', () => {
+    const emptyObj = Object.create(null) as Record<string, unknown>;
+    // Now correctly handles Object.create(null) - should return true for empty object
+    expect(isDeepEmpty(emptyObj)).toBe(true);
+
+    const nonEmptyObj = Object.create(null) as Record<string, unknown>;
+    nonEmptyObj.prop = 'value';
+    expect(isDeepEmpty(nonEmptyObj)).toBe(false);
+  });
+
+  test('should handle complex mixed scenarios', () => {
+    expect(
+      isDeepEmpty({
+        a: [],
+        b: {},
+        c: null,
+        d: undefined,
+        e: 0,
+        f: false,
+        g: '',
+        h: { nested: [] },
+        i: [{}],
+      }),
+    ).toBe(true);
+
+    expect(
+      isDeepEmpty({
+        a: [],
+        b: {},
+        c: null,
+        d: undefined,
+        e: 'not empty', // This makes the whole structure non-empty
+      }),
+    ).toBe(false);
   });
 });
 
