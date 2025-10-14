@@ -36,12 +36,14 @@ FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
 # Install uv for faster dependency management
 RUN pip install uv
 
-# Copy project configuration and dependencies from context directory
-COPY pyproject.toml /
-COPY uv.lock /
+# Copy project configuration to /app (where the base image expects the app)
+WORKDIR /app
+COPY pyproject.toml .
+COPY uv.lock .
+COPY app ./app
 
-# Install dependencies using uv (production only)
-RUN uv sync --no-dev --frozen
+# Install dependencies using uv into system Python
+RUN uv pip install --system --no-cache-dir -e .
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path

@@ -20,20 +20,16 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          cache-dependency-glob: "context/requirements*.txt"
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: ".python-version"
+          python-version-file: "context/pyproject.toml"
           architecture: "x64"
 
-      - name: Install python main dependencies
-        run: uv pip sync context/requirements.txt
-
-      - name: Install python dev dependencies
-        run: uv pip install -r context/requirements-dev.txt
-
+      - name: Install python dependencies
+        run: uv pip sync --dev --frozen
+ 
       - name: Install and register Jupyter kernel
         run: |
           uv pip install ipykernel
