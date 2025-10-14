@@ -183,9 +183,9 @@ export function getDonorAgeString({ age_value, age_unit }: DonorAge) {
   return [age_value, age_unit].join(' ');
 }
 
-export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, keys: K[]) {
+export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, keys: (string | K)[]) {
   const allKeys = Object.keys(obj) as K[];
-  const validKeys = keys.filter((k) => allKeys.includes(k));
+  const validKeys = keys.filter((k): k is K => allKeys.includes(k as K));
   return validKeys.reduce<Partial<O>>((acc, k: K) => {
     return {
       ...acc,
