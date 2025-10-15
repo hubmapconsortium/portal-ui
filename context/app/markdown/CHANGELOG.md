@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.34.1 - 2025-10-15
+
+- Fix regression with form submissions not executing as expected.
+
+
+
 ## v1.34.0 - 2025-10-08
 
 - Disable preloading indices to prevent Portal UI server from hanging after deploy in case of outage.

@@ -220,7 +220,7 @@ function NewWorkspaceDialog({
                 gap: 2,
                 marginTop: 1,
               }}
-              onSubmit={void handleSubmit(submit)}
+              onSubmit={(e) => void handleSubmit(submit)(e)}
             >
               <WorkspaceNameField control={control} name="workspace-name" />
               <WorkspaceDescriptionField control={control} name="workspace-description" />
