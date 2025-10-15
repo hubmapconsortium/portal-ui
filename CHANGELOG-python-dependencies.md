@@ -1,0 +1,2 @@
+- Updated python dependency management to rely entirely on `uv` for consistency across all environments.
+- Updated project structure to use `pyproject.toml` file for configuration.
