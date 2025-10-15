@@ -1,0 +1,1 @@
+- Fix regression with form submissions not executing as expected.

@@ -133,7 +133,13 @@ function NewWorkspaceDialogFromExample({
             />
           </Step>
           <Step title={text.configure.title} index={1} isRequired>
-            <Stack gap={2} mt={1} component="form" id="create-workspace-form" onSubmit={void handleSubmit(submit)}>
+            <Stack
+              gap={2}
+              mt={1}
+              component="form"
+              id="create-workspace-form"
+              onSubmit={(e) => void handleSubmit(submit)(e)}
+            >
               <WorkspaceNameField control={control} name="workspace-name" />
               <Accordion>
                 <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
