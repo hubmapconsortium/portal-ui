@@ -15,10 +15,7 @@ class FlaskStaticDigest(object):
         self.manifest_path = Path(app.static_folder) / 'public/manifest.json'
         self.has_manifest = self.manifest_path.exists()
 
-        self.manifest = (
-            json.loads(self.manifest_path.read_text())
-            if self.has_manifest else {}
-        )
+        self.manifest = json.loads(self.manifest_path.read_text()) if self.has_manifest else {}
 
         app.add_template_global(self.static_url_for)
 
@@ -32,11 +29,8 @@ class FlaskStaticDigest(object):
         :param values: Arguments of the URL rule
         :return: Static file path.
         """
-        filename = values.get("filename")
-        temp_filename = (
-            Path(self.manifest[filename]).name
-            if self.has_manifest else filename
-        )
+        filename = values.get('filename')
+        temp_filename = Path(self.manifest[filename]).name if self.has_manifest else filename
 
         values.update({'filename': 'public/' + temp_filename})
         return flask_url_for(endpoint, **values)

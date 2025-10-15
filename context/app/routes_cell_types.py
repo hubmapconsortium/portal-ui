@@ -28,9 +28,8 @@ blueprint = make_blueprint(__name__)
 @blueprint.route('/cell-types')
 def cell_types_view():
     return render_template(
-        'base-pages/react-content.html',
-        title='Cell Types',
-        flask_data=get_default_flask_data())
+        'base-pages/react-content.html', title='Cell Types', flask_data=get_default_flask_data()
+    )
 
 
 @blueprint.route('/cell-types/<cl_id>')
@@ -38,19 +37,15 @@ def cell_types_detail_view(cl_id):
     return render_template(
         'base-pages/react-content.html',
         title='Cell Type Details',
-        flask_data={**get_default_flask_data(), 'cell_type': cl_id})
+        flask_data={**get_default_flask_data(), 'cell_type': cl_id},
+    )
 
 
 @blueprint.route('/genes/<gene_symbol>')
 def genes_detail_view(gene_symbol):
-    flask_data = {
-        **get_default_flask_data(),
-        'geneSymbol': gene_symbol
-    }
+    flask_data = {**get_default_flask_data(), 'geneSymbol': gene_symbol}
     return render_template(
-        'base-pages/react-content.html',
-        title=gene_symbol,
-        flask_data=flask_data
+        'base-pages/react-content.html', title=gene_symbol, flask_data=flask_data
     )
 
 
@@ -62,33 +57,31 @@ async def get_feature_details(feature, feature_id):
     if feature == 'cell_type':
         datasets, organs = await gather(
             _get_datasets_for_cell_type(client, feature_id),
-            _get_organs_for_cell_type(client, feature_id))
+            _get_organs_for_cell_type(client, feature_id),
+        )
         samples = _get_samples_for_datasets(datasets)
-        return json.dumps({
-            'datasets': datasets,
-            'samples': samples,
-            'organs': organs
-        })
+        return json.dumps({'datasets': datasets, 'samples': samples, 'organs': organs})
     elif feature == 'gene':
         organs = await _get_organs_for_gene(client, feature_id)
 
-        return json.dumps({
-            'organs': organs,
-        })
+        return json.dumps(
+            {
+                'organs': organs,
+            }
+        )
     elif feature == 'protein':
         # TODO - not yet implemented
         # organs = _get_organs_for_protein(client, feature_id)
         # datasets = _get_datasets_for_protein(client, feature_id)
-        return json.dumps({'organs': [],
-                           'datasets': []})
+        return json.dumps({'organs': [], 'datasets': []})
 
 
 # Fetches a list of datasets containing a given cell type
 async def _get_datasets_for_cell_type(client, feature_id):
     def fetch_and_unwrap_datasets():
-        datasets = client.select_datasets(
-            where="cell_type", has=[feature_id])
+        datasets = client.select_datasets(where='cell_type', has=[feature_id])
         return _unwrap_result_set(datasets)
+
     return await to_thread(fetch_and_unwrap_datasets)
 
 
@@ -96,39 +89,34 @@ async def _get_organs_for_cell_type(client, cell_type):
     # Fetches set of organs containing a given cell type
     def _get_organs_for_cell_type():
         try:
-            organs = client.select_organs(
-                where="cell_type", has=[cell_type])
+            organs = client.select_organs(where='cell_type', has=[cell_type])
             organs = _unwrap_result_set(organs)
             organs = list(map(lambda x: x['grouping_name'], organs))
             return organs
         except Exception as err:
-            current_app.logger.info(
-                f'Organs not found for cell type {cell_type}. {err}')
+            current_app.logger.info(f'Organs not found for cell type {cell_type}. {err}')
             return None
 
     # Fetches all cells of a given type
     def _get_cells_of_type():
         try:
-            cells_of_type = client.select_cells(
-                where="cell_type", has=[cell_type])
+            cells_of_type = client.select_cells(where='cell_type', has=[cell_type])
             return cells_of_type
         except Exception as err:
-            current_app.logger.info(
-                f'Cells not found for cell type {cell_type}. {err}')
+            current_app.logger.info(f'Cells not found for cell type {cell_type}. {err}')
             return None
 
     # Make above calls in parallel
     organs, cells_of_type = await gather(
-        to_thread(_get_organs_for_cell_type),
-        to_thread(_get_cells_of_type))
+        to_thread(_get_organs_for_cell_type), to_thread(_get_cells_of_type)
+    )
 
     if not cells_of_type or not organs:
         return []
 
     # Get cell counts for each organ
     def get_cell_counts(organ):
-        organ_counts = client.select_cells(
-            where="organ", has=[organ])
+        organ_counts = client.select_cells(where='organ', has=[organ])
         total_cells = len(organ_counts)
         feature_cells = organ_counts & cells_of_type
         feature_cells = len(feature_cells)
@@ -136,12 +124,10 @@ async def _get_organs_for_cell_type(client, cell_type):
             'organ': organ,
             'total_cells': total_cells,
             'feature_cells': feature_cells,
-            'other_cells': total_cells - feature_cells
+            'other_cells': total_cells - feature_cells,
         }
 
-    organs = await gather(
-        *[to_thread(get_cell_counts, organ) for organ in organs]
-    )
+    organs = await gather(*[to_thread(get_cell_counts, organ) for organ in organs])
     return organs
 
 
@@ -150,17 +136,18 @@ async def _get_organs_for_gene(client, gene_symbol):
     def request_organs_with_modality(modality):
         try:
             return client.select_organs(
-                where='gene',
-                has=[gene_symbol],
-                genomic_modality=modality,
-                p_value=0.05)
+                where='gene', has=[gene_symbol], genomic_modality=modality, p_value=0.05
+            )
         except Exception as err:
             current_app.logger.info(
-                f'Organs not found for gene {gene_symbol} with {modality} modality. {err}')
+                f'Organs not found for gene {gene_symbol} with {modality} modality. {err}'
+            )
             return []
+
     organs_with_gene_atac, organs_with_gene_rna = await gather(
         to_thread(request_organs_with_modality, 'atac'),
-        to_thread(request_organs_with_modality, 'rna'))
+        to_thread(request_organs_with_modality, 'rna'),
+    )
     if not organs_with_gene_atac and not organs_with_gene_rna:
         return []
     # Combine results from both modalities
@@ -208,25 +195,29 @@ def _feature_name(feature):
 def _get_samples_for_datasets(datasets):
     client = get_client()
     try:
-        query_override = {
-            "bool": {
-                "must": {
-                    "terms": {
-                        "descendant_ids": datasets
-                    }
-                }
+        query_override = {'bool': {'must': {'terms': {'descendant_ids': datasets}}}}
+        fields = [
+            'uuid',
+            'hubmap_id',
+            'origin_samples_unique_mapped_organs',
+            'sample_category',
+            'last_modified_timestamp',
+        ]
+        samples = client.get_entities(
+            plural_lc_entity_type='samples',
+            query_override=query_override,
+            non_metadata_fields=fields,
+        )
+        samples = [
+            {
+                'uuid': sample['uuid'],
+                'hubmap_id': sample['hubmap_id'],
+                'organ': sample['origin_samples_unique_mapped_organs'],
+                'sample_category': sample['sample_category'],
+                'last_modified_timestamp': sample['last_modified_timestamp'],
             }
-        }
-        fields = ['uuid', 'hubmap_id', 'origin_samples_unique_mapped_organs',
-                  'sample_category', 'last_modified_timestamp']
-        samples = client.get_entities(plural_lc_entity_type='samples',
-                                      query_override=query_override, non_metadata_fields=fields)
-        samples = [{'uuid': sample['uuid'],
-                    'hubmap_id': sample['hubmap_id'],
-                    'organ': sample['origin_samples_unique_mapped_organs'],
-                    'sample_category': sample['sample_category'],
-                    'last_modified_timestamp': sample['last_modified_timestamp']
-                    } for sample in samples]
+            for sample in samples
+        ]
         return samples
     except Exception as err:
         current_app.logger.info(f'Samples not found for {datasets}. {err}')

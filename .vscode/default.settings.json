@@ -1,5 +1,7 @@
 {
-  "eslint.workingDirectories": ["./context"],
+  "eslint.workingDirectories": [
+    "./context"
+  ],
   "eslint.format.enable": true,
   "[javascript,javascriptreact,typescript,typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
@@ -8,9 +10,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[python]": {
-    "editor.defaultFormatter": "ms-python.autopep8"
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "python.formatting.provider": "autopep8",
   "optional": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

@@ -39,25 +39,20 @@ mock_cell_type_names = {
         'heart.cardiomyocyte',
         'heart.endothelial cell',
         'lung.alveolar epithelial cell',
-        'lung.macrophage'
+        'lung.macrophage',
     ]
 }
 
-mock_gene_names = {
-    'genes': ['ACTB', 'GAPDH', 'TP53', 'MYC', 'EGFR', 'BRCA1', 'BRCA2']
-}
+mock_gene_names = {'genes': ['ACTB', 'GAPDH', 'TP53', 'MYC', 'EGFR', 'BRCA1', 'BRCA2']}
 
-mock_label_to_clid = {
-    'CLIDs': ['CL:0000066', 'CL:0000067']
-}
+mock_label_to_clid = {'CLIDs': ['CL:0000066', 'CL:0000067']}
 
-mock_clid_to_label = {
-    'cell_types': ['epithelial cell', 'mesenchymal cell']
-}
+mock_clid_to_label = {'cell_types': ['epithelial cell', 'mesenchymal cell']}
 
 
 def mock_scfind_get(url, **kwargs):
     """Mock function for SCFIND API requests."""
+
     class MockResponse:
         def __init__(self, json_data, status_code=200):
             self.json_data = json_data
@@ -86,6 +81,7 @@ def mock_scfind_get(url, **kwargs):
 
 def mock_scfind_get_error(url, **kwargs):
     """Mock function that simulates SCFIND API errors."""
+
     class MockResponse:
         def __init__(self):
             self.status_code = 500
@@ -118,8 +114,9 @@ class TestSCFindEndpoints:
     def test_cell_type_names_error(self, client, mocker):
         """Test error handling for cell type names endpoint."""
         # Mock the cached function directly to raise an exception
-        mocker.patch('app.routes_scfind._get_all_cell_type_names',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch(
+            'app.routes_scfind._get_all_cell_type_names', side_effect=Exception('SCFIND API error')
+        )
 
         response = client.get('/scfind/cell-type-names.json')
         assert response.status_code == 500
@@ -139,8 +136,7 @@ class TestSCFindEndpoints:
 
     def test_genes_error(self, client, mocker):
         """Test error handling for genes endpoint."""
-        mocker.patch('app.routes_scfind._get_all_genes',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch('app.routes_scfind._get_all_genes', side_effect=Exception('SCFIND API error'))
 
         response = client.get('/scfind/genes.json')
         assert response.status_code == 500
@@ -160,8 +156,9 @@ class TestSCFindEndpoints:
 
     def test_label_to_clid_map_error(self, client, mocker):
         """Test error handling for label-to-CLID mapping endpoint."""
-        mocker.patch('app.routes_scfind._get_complete_mappings',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch(
+            'app.routes_scfind._get_complete_mappings', side_effect=Exception('SCFIND API error')
+        )
 
         response = client.get('/scfind/label-to-clid-map.json')
         assert response.status_code == 500
@@ -181,8 +178,9 @@ class TestSCFindEndpoints:
 
     def test_clid_to_label_map_error(self, client, mocker):
         """Test error handling for CLID-to-label mapping endpoint."""
-        mocker.patch('app.routes_scfind._get_complete_mappings',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch(
+            'app.routes_scfind._get_complete_mappings', side_effect=Exception('SCFIND API error')
+        )
 
         response = client.get('/scfind/clid-to-label-map.json')
         assert response.status_code == 500
@@ -204,8 +202,9 @@ class TestSCFindEndpoints:
 
     def test_combined_maps_error(self, client, mocker):
         """Test error handling for combined mappings endpoint."""
-        mocker.patch('app.routes_scfind._get_complete_mappings',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch(
+            'app.routes_scfind._get_complete_mappings', side_effect=Exception('SCFIND API error')
+        )
 
         response = client.get('/scfind/combined-maps.json')
         assert response.status_code == 500
@@ -263,8 +262,7 @@ class TestGenesAutocomplete:
 
     def test_genes_autocomplete_error(self, client, mocker):
         """Test error handling for gene autocomplete."""
-        mocker.patch('app.routes_scfind._get_all_genes',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch('app.routes_scfind._get_all_genes', side_effect=Exception('SCFIND API error'))
 
         response = client.get('/scfind/genes/autocomplete?q=BRC')
         assert response.status_code == 500
@@ -325,8 +323,9 @@ class TestCellTypesAutocomplete:
 
     def test_cell_types_autocomplete_error(self, client, mocker):
         """Test error handling for cell type autocomplete."""
-        mocker.patch('app.routes_scfind._get_all_cell_type_names',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch(
+            'app.routes_scfind._get_all_cell_type_names', side_effect=Exception('SCFIND API error')
+        )
 
         response = client.get('/scfind/cell-types/autocomplete?q=epithelial')
         assert response.status_code == 500
@@ -343,8 +342,7 @@ class TestGenesValidate:
         mocker.patch('requests.get', side_effect=mock_scfind_get)
 
         test_genes = ['ACTB', 'GAPDH', 'INVALID_GENE', 'TP53']
-        response = client.post('/scfind/genes/validate',
-                               json={'genes': test_genes})
+        response = client.post('/scfind/genes/validate', json={'genes': test_genes})
 
         assert response.status_code == 200
         data = response.get_json()
@@ -443,8 +441,7 @@ class TestGenesValidate:
 
     def test_genes_validate_error(self, client, mocker):
         """Test error handling for gene validation."""
-        mocker.patch('app.routes_scfind._get_all_genes',
-                     side_effect=Exception("SCFIND API error"))
+        mocker.patch('app.routes_scfind._get_all_genes', side_effect=Exception('SCFIND API error'))
 
         response = client.post('/scfind/genes/validate', json={'genes': ['ACTB']})
         assert response.status_code == 500
@@ -458,8 +455,7 @@ class TestRequestTimeouts:
 
     def test_timeout_handling(self, client, mocker):
         """Test that timeout exceptions are properly handled."""
-        mocker.patch('app.routes_scfind._get_all_genes',
-                     side_effect=Exception("Request timeout"))
+        mocker.patch('app.routes_scfind._get_all_genes', side_effect=Exception('Request timeout'))
 
         # Test with a simple endpoint
         response = client.get('/scfind/genes.json')
@@ -479,7 +475,7 @@ class TestRequestTimeouts:
         ('/scfind/genes/autocomplete', 'GET', 200),
         ('/scfind/cell-types/autocomplete', 'GET', 200),
         ('/scfind/genes/validate', 'POST', 400),  # No JSON body
-    ]
+    ],
 )
 def test_endpoint_accessibility(client, mocker, endpoint, method, expected_status):
     """Test that all endpoints are accessible and return expected status codes."""

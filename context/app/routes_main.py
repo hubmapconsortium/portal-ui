@@ -1,5 +1,4 @@
-from flask import (render_template, current_app, abort,
-                   session, request, redirect, url_for)
+from flask import render_template, current_app, abort, session, request, redirect, url_for
 
 from .utils import get_default_flask_data, make_blueprint, get_organs
 
@@ -19,7 +18,7 @@ def index():
             advancing biomedical research with single-cell, \
                 spatial, and molecular data. Explore datasets, \
                     tools, and visualizations.',
-        skip_title_suffix=True
+        skip_title_suffix=True,
     )
 
 
@@ -27,9 +26,7 @@ def index():
 def service_status():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        flask_data=flask_data,
-        title='Services'
+        'base-pages/react-content.html', flask_data=flask_data, title='Services'
     )
 
 
@@ -39,11 +36,7 @@ def ccf_eui():
         'special-pages/ccf-eui.html',
         config=current_app.config,
         url_root=request.url_root,
-        groups_token=(
-            session['groups_token']
-            if 'groups_token' in session
-            else ''
-        )
+        groups_token=(session['groups_token'] if 'groups_token' in session else ''),
     )
 
 
@@ -67,8 +60,7 @@ def search(type):
 @blueprint.route('/search')
 def search_redirect():
     entity_type = request.args.get('entity_type[0]')
-    return redirect(
-        url_for('routes_main.search', type=f'{entity_type}s'.lower()))
+    return redirect(url_for('routes_main.search', type=f'{entity_type}s'.lower()))
 
 
 @blueprint.route('/dev-search')
@@ -78,25 +70,14 @@ def dev_search():
         **get_default_flask_data(),
         'title': title,
     }
-    return render_template(
-        'base-pages/react-content.html',
-        title=title,
-        flask_data=flask_data
-    )
+    return render_template('base-pages/react-content.html', title=title, flask_data=flask_data)
 
 
 @blueprint.route('/diversity')
 def vis():
     title = 'Donor Diversity'
-    flask_data = {
-        **get_default_flask_data(),
-        'title': title
-    }
-    return render_template(
-        'base-pages/react-content.html',
-        title=title,
-        flask_data=flask_data
-    )
+    flask_data = {**get_default_flask_data(), 'title': title}
+    return render_template('base-pages/react-content.html', title=title, flask_data=flask_data)
 
 
 @blueprint.route('/collections')
@@ -108,7 +89,7 @@ def collections():
         description='Explore curated collections of HuBMAP datasets for single-cell and spatial \
             biology. Find grouped datasets relevant to tissue and biomolecular research.',
         flask_data=flask_data,
-        skip_title_suffix=True
+        skip_title_suffix=True,
     )
 
 
@@ -122,7 +103,7 @@ def publications():
             Find peer-reviewed papers, preprints, referenced datasets, \
                 and applications in biomolecular research.',
         flask_data=flask_data,
-        skip_title_suffix=True
+        skip_title_suffix=True,
     )
 
 
@@ -130,35 +111,25 @@ def publications():
 def my_lists():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        title='My Lists',
-        flask_data=flask_data
+        'base-pages/react-content.html', title='My Lists', flask_data=flask_data
     )
 
 
 @blueprint.route('/my-lists/<saved_list_uuid>')
 def list_page(saved_list_uuid):
-    flask_data = {
-        **get_default_flask_data(),
-        'list_uuid': saved_list_uuid
-    }
+    flask_data = {**get_default_flask_data(), 'list_uuid': saved_list_uuid}
     return render_template(
-        'base-pages/react-content.html',
-        title='Saved List',
-        flask_data=flask_data
+        'base-pages/react-content.html', title='Saved List', flask_data=flask_data
     )
 
 
 @blueprint.route('/iframe/<path:path>')
 def iframe_page(path):
-    flask_data = {
-        **get_default_flask_data(),
-        'organs_count': len(get_organs())
-    }
+    flask_data = {**get_default_flask_data(), 'organs_count': len(get_organs())}
     return render_template(
         'special-pages/organ.html' if path == 'organs' else 'base-pages/react-content.html',
         title=f'{path} iframe',
-        flask_data=flask_data
+        flask_data=flask_data,
     )
 
 
@@ -168,40 +139,27 @@ def tutorials():
         **get_default_flask_data(),
     }
     return render_template(
-        'base-pages/react-content.html',
-        title='Tutorials',
-        flask_data=flask_data
+        'base-pages/react-content.html', title='Tutorials', flask_data=flask_data
     )
 
 
 @blueprint.route('/tutorials/<tutorial_name>')
 def tutorial_detail(tutorial_name):
-    flask_data = {
-        **get_default_flask_data(),
-        'tutorialName': tutorial_name
-    }
+    flask_data = {**get_default_flask_data(), 'tutorialName': tutorial_name}
     return render_template(
-        'base-pages/react-content.html',
-        title=tutorial_name,
-        flask_data=flask_data
+        'base-pages/react-content.html', title=tutorial_name, flask_data=flask_data
     )
 
 
 @blueprint.route('/profile')
 def profile():
     flask_data = {**get_default_flask_data()}
-    return render_template(
-        'base-pages/react-content.html',
-        title='Profile',
-        flask_data=flask_data
-    )
+    return render_template('base-pages/react-content.html', title='Profile', flask_data=flask_data)
 
 
 @blueprint.route('/data-overview')
 def figure():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        title='Data Overview',
-        flask_data=flask_data
+        'base-pages/react-content.html', title='Data Overview', flask_data=flask_data
     )

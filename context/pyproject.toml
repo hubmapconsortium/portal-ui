@@ -34,10 +34,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.4.1",
-    "flake8>=7.3.0",
+    "ruff>=0.8.0",
     "pytest-mock>=3.14.1",
-    "autopep8>=2.3.2",
-    "pip-tools>=7.4.1",
     "papermill>=2.6.0",
     "matplotlib>=3.10.5",
 ]
@@ -80,9 +78,8 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "--strict-markers --strict-config"
 
-[tool.flake8]
-max-line-length = 88
-extend-ignore = ["E203", "W503"]
+[tool.ruff]
+line-length = 99
 exclude = [
     ".git",
     "__pycache__",
@@ -95,14 +92,37 @@ exclude = [
     "venv",
     "env",
     ".env",
+    "node_modules",
+    "etc/dev/organ-utils",
+    "*.ipynb"
 ]
 
-[tool.autopep8]
-max_line_length = 88
-aggressive = 1
+[tool.ruff.lint]
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
+select = ["E", "F"]
+ignore = [
+    "E203",  # whitespace before ':'
+    "E501",  # line length handled by ruff
+    # W503 doesn't exist in ruff - it uses a different approach to line breaks
+]
+
+[tool.ruff.format]
+# Use single quotes for strings
+quote-style = "single"
+# Indent with spaces, not tabs
+indent-style = "space"
+# Respect magic trailing comma
+skip-magic-trailing-comma = false
+# Automatically detect the appropriate line ending
+line-ending = "auto"
 
 [tool.setuptools]
 packages = ["app"]
 
 [tool.setuptools.package-data]
 app = ["*.csv", "*.json", "*.yml", "*.yaml"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
+]

@@ -20,7 +20,7 @@ def client():
 
 
 def to_xml(html):
-    '''
+    """
     Ad-hoc regexes, so we can check for missing or mismatched tags.
     >>> to_xml('<!doctype html><html><meta XYZ></html>')
     '<html><meta XYZ/></html>'
@@ -30,18 +30,12 @@ def to_xml(html):
 
     ''
 
-    '''
-    html = re.sub(
-        r'<!doctype html>',
-        '', html)
-    html = re.sub(
-        r'(<(meta|link|br|base)[^>]*)>',
-        r'\1/>', html)
+    """
+    html = re.sub(r'<!doctype html>', '', html)
+    html = re.sub(r'(<(meta|link|br|base)[^>]*)>', r'\1/>', html)
     for attr in ['async', 'nomodule', 'defer']:
         # Since the targets overlap, we need to run sub multiple times.
-        html = re.sub(
-            r'(<script [^>]*)(' + attr + r')([^=])',
-            r'\1\2="true"\3', html)
+        html = re.sub(r'(<script [^>]*)(' + attr + r')([^=])', r'\1\2="true"\3', html)
     return html
 
 
@@ -55,20 +49,18 @@ def assert_is_valid_html(response):
 
 
 def mock_prov_get(path, **kwargs):
-    class MockResponse():
+    class MockResponse:
         def json(self):
-            return {
-                'agent': '',
-                'prefix': {}
-            }
+            return {'agent': '', 'prefix': {}}
 
         def raise_for_status(self):
             pass
+
     return MockResponse()
 
 
 def mock_search_donor_post(path, **kwargs):
-    class MockResponse():
+    class MockResponse:
         def __init__(self):
             self.status_code = 0  # _request requires a status code
             self.text = 'Logger call requires this'
@@ -83,7 +75,7 @@ def mock_search_donor_post(path, **kwargs):
                                 'entity_type': 'Donor',
                                 'provenance_created_timestamp': '100000',
                                 'provenance_modified_timestamp': '100000',
-                                'hubmap_id': 'HBM:12345'
+                                'hubmap_id': 'HBM:12345',
                             }
                         }
                     ]
@@ -92,13 +84,13 @@ def mock_search_donor_post(path, **kwargs):
 
         def raise_for_status(self):
             pass
+
     return MockResponse()
 
 
 @pytest.mark.parametrize(
     'path',
-    ['/', '/browse/donor/fake-uuid', '/ccf-eui',
-     '/preview/multimodal-molecular-imaging-data']
+    ['/', '/browse/donor/fake-uuid', '/ccf-eui', '/preview/multimodal-molecular-imaging-data'],
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)
@@ -109,8 +101,7 @@ def test_200_html_page(client, path, mocker):
 
 
 @pytest.mark.parametrize(
-    'path',
-    ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid', '/docs']
+    'path', ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid', '/docs']
 )
 def test_302_redirect(client, path, mocker):
     mocker.patch('requests.post', side_effect=mock_search_donor_post)
@@ -118,20 +109,14 @@ def test_302_redirect(client, path, mocker):
     assert response.status == '302 FOUND'
 
 
-@pytest.mark.parametrize(
-    'path',
-    ['/browse/no-such-type/fake-uuid']
-)
+@pytest.mark.parametrize('path', ['/browse/no-such-type/fake-uuid'])
 def test_404_details_page(client, path, mocker):
     mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '404 NOT FOUND'
 
 
-@pytest.mark.parametrize(
-    'path',
-    [f'/browse/{t}/fake-uuid.json' for t in entity_types]
-)
+@pytest.mark.parametrize('path', [f'/browse/{t}/fake-uuid.json' for t in entity_types])
 def test_200_json_page(client, path, mocker):
     mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
@@ -142,9 +127,7 @@ def test_200_json_page(client, path, mocker):
 def test_login(client):
     response = client.get('/login')
     assert response.status == '302 FOUND'
-    assert response.location.startswith(
-        'https://auth.globus.org/v2/oauth2/authorize'
-    )
+    assert response.location.startswith('https://auth.globus.org/v2/oauth2/authorize')
 
 
 def test_robots_txt_disallow(client):
@@ -166,13 +149,11 @@ paths = ['/organs', '/publications', '/collections', '/search/biomarkers-cell-ty
     [
         ('/', '200 OK'),
         ('/docs', '302 FOUND', 'https://docs.hubmapconsortium.org/'),
-
         *[(path, '200 OK') for path in paths],
         *[(path + '/', '302 FOUND', path) for path in paths],
-        *[(path + '/?query=fake', '302 FOUND',
-            f'{path}?query=fake') for path in paths],
+        *[(path + '/?query=fake', '302 FOUND', f'{path}?query=fake') for path in paths],
     ],
-    ids=lambda path_status: f'{path_status[0]} -> {path_status[1]} {"".join(path_status[2:])}'
+    ids=lambda path_status: f'{path_status[0]} -> {path_status[1]} {"".join(path_status[2:])}',
 )
 def test_truncate_and_redirect(client, path_status):
     (path, status, *location) = path_status

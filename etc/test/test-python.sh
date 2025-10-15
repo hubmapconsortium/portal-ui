@@ -8,20 +8,16 @@ copy_conf
 # Work from the context directory, where uv.lock is.
 cd context
 
-start flake8
-EXCLUDE=node_modules,etc/dev/organ-utils
-# The organ-utils script uses the walrus operator (:=).
-# Latest pycodestyle does support that syntax,
-# but latest flake8 doesn't support the latest pycodestyle,
-# or something like that.
-# ¯\_(ツ)_/¯
-uv run flake8 --exclude=$EXCLUDE .. \
-  || die "Try: uv run autopep8 --in-place --aggressive -r .. --exclude $EXCLUDE"
-cd -
-end flake8
+start ruff
+# Ruff is a fast Python linter that replaces flake8
+# It supports Python 3.12 syntax including match statements
+uv run ruff check .. \
+  || die "Try: uv run ruff check --fix .."
+uv run ruff format --check .. \
+  || die "Try: uv run ruff format .."
+end ruff
 
 
 start pytest
 uv run pytest app
-cd -
 end pytest

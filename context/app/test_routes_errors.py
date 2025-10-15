@@ -18,13 +18,14 @@ def client():
 
 
 def mock_post_400(path, **kwargs):
-    class MockResponse():
+    class MockResponse:
         def __init__(self):
             self.status_code = 400
             self.text = 'Logger call requires this'
 
         def raise_for_status(self):
             raise requests.exceptions.HTTPError(response=self)
+
     return MockResponse()
 
 
@@ -35,13 +36,14 @@ def test_400_html_page(client, mocker):
 
 
 def mock_post_401(path, **kwargs):
-    class MockResponse():
+    class MockResponse:
         def __init__(self):
             self.status_code = 401
             self.text = 'Logger call requires this'
 
         def raise_for_status(self):
             raise requests.exceptions.HTTPError(response=self)
+
     return MockResponse()
 
 
@@ -59,9 +61,8 @@ def client_not_logged_in():
         yield client
 
 
-@pytest.mark.parametrize('path', [
-    '/no-page-here']
-    + [f'/browse/{t}/fake-uuid.fake' for t in entity_types]
+@pytest.mark.parametrize(
+    'path', ['/no-page-here'] + [f'/browse/{t}/fake-uuid.fake' for t in entity_types]
 )
 def test_404_html_page(client, path):
     response = client.get(path)
