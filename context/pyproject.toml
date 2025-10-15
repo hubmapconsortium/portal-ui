@@ -5,9 +5,7 @@ description = "HuBMAP Data Portal - Flask app with React frontend"
 readme = "README.md"
 requires-python = ">=3.12.8"
 license = "MIT"
-authors = [
-    {name = "HuBMAP Consortium", email = "help@hubmapconsortium.org"},
-]
+authors = [{ name = "HuBMAP Consortium", email = "help@hubmapconsortium.org" }]
 keywords = ["hubmap", "portal", "bioinformatics", "flask", "react"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -85,15 +83,15 @@ exclude = [
     ".env",
     "node_modules",
     "etc/dev/organ-utils",
-    "*.ipynb"
+    "*.ipynb",
 ]
 
 [tool.ruff.lint]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = ["E", "F"]
 ignore = [
-    "E203",  # whitespace before ':'
-    "E501",  # line length handled by ruff
+    "E203", # whitespace before ':'
+    "E501", # line length handled by ruff
     # W503 doesn't exist in ruff - it uses a different approach to line breaks
 ]
 
@@ -116,7 +114,7 @@ app = ["*.csv", "*.json", "*.yml", "*.yaml"]
 [dependency-groups]
 dev = [
     "pytest>=8.4.2",
-    "pytest-mock>=3.15.1", 
+    "pytest-mock>=3.15.1",
     "ruff>=0.14.0",
     "papermill>=2.6.0",
     "matplotlib>=3.10.5",
