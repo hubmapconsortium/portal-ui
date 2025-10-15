@@ -3,6 +3,7 @@
     "./context"
   ],
   "eslint.format.enable": true,
+  "eslint.useFlatConfig": true,
   "[javascript,javascriptreact,typescript,typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },

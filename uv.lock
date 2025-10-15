@@ -5,21 +5,6 @@ resolution-markers = [
     "python_full_version < '3.13'",
 ]
 
-[manifest]
-constraints = [
-    { name = "aiohttp", specifier = ">=3.12.14" },
-    { name = "certifi", specifier = ">=2024.7.4" },
-    { name = "cryptography", specifier = ">=44.0.1" },
-    { name = "frozenlist", specifier = ">=1.4.1" },
-    { name = "jinja2", specifier = ">=3.1.6" },
-    { name = "pip", specifier = ">=25.2" },
-    { name = "setuptools", specifier = ">=78.1.1" },
-    { name = "tornado", specifier = ">=6.5" },
-    { name = "tqdm", specifier = ">=4.66.3" },
-    { name = "traitlets", specifier = ">=5.14.3" },
-    { name = "urllib3", specifier = ">=2.5.0" },
-]
-
 [[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
@@ -758,12 +743,10 @@ name = "hubmap-portal-ui"
 version = "1.34.0"
 source = { editable = "." }
 dependencies = [
-    { name = "boto3" },
     { name = "flask", extra = ["async"] },
     { name = "globus-sdk" },
     { name = "hubmap-api-py-client" },
     { name = "hubmap-commons" },
-    { name = "lxml" },
     { name = "portal-visualization" },
     { name = "python-frontmatter" },
     { name = "pyyaml" },
@@ -772,6 +755,8 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "boto3" },
+    { name = "lxml" },
     { name = "matplotlib" },
     { name = "papermill" },
     { name = "pytest" },
@@ -781,13 +766,11 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "boto3", specifier = ">=1.39.3" },
     { name = "flask", specifier = ">=3.1.1" },
     { name = "flask", extras = ["async"], specifier = ">=3.1.1" },
     { name = "globus-sdk", specifier = ">=3.59.0" },
     { name = "hubmap-api-py-client", specifier = ">=0.0.11" },
     { name = "hubmap-commons", specifier = ">=2.1.20" },
-    { name = "lxml", specifier = ">=6.0.0" },
     { name = "portal-visualization", url = "https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip" },
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
@@ -796,6 +779,8 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "boto3", specifier = ">=1.39.3" },
+    { name = "lxml", specifier = ">=6.0.0" },
     { name = "matplotlib", specifier = ">=3.10.5" },
     { name = "papermill", specifier = ">=2.6.0" },
     { name = "pytest", specifier = ">=8.4.2" },

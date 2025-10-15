@@ -26,8 +26,6 @@ dependencies = [
     "python-frontmatter>=1.1.0",
     "hubmap-api-py-client>=0.0.11",
     "hubmap-commons>=2.1.20",
-    "boto3>=1.39.3",
-    "lxml>=6.0.0",
     "portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip",
 ]
 
@@ -42,22 +40,7 @@ requires = ["setuptools>=78.1.1", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.uv]
-constraint-dependencies = [
-    # Frozenlist resolves to v1.3.0 otherwise, which fails to build on python 3.12
-    "frozenlist>=1.4.1",
-    # Security constraints from dependabot
-    "tornado>=6.5",
-    "setuptools>=78.1.1",
-    "urllib3>=2.5.0",
-    "Jinja2>=3.1.6",
-    "certifi>=2024.7.4",
-    "cryptography>=44.0.1",
-    "tqdm>=4.66.3",
-    "aiohttp>=3.12.14",
-    "pip>=25.2",
-    # For compatibility between requirements and requirements-dev
-    "traitlets>=5.14.3",
-]
+constraint-dependencies = []
 
 [tool.uv.sources]
 portal-visualization = { url = "https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip" }
@@ -119,5 +102,9 @@ dev = [
     "pytest-mock>=3.15.1",
     "ruff>=0.14.0",
     "papermill>=2.6.0",
+    # used in `test_routes_main.py`, nowhere else
+    "lxml>=6.0.0",
+    # used in `qa/query-portal-logs.py`, nowhere else
+    "boto3>=1.39.3",
     "matplotlib>=3.10.5",
 ]
