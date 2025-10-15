@@ -69,38 +69,17 @@ if [[ -z "$MAJOR" ]]; then
 
   if [[ $DAYS_PAST_REF -lt 14 ]]; then
     VERSION=`cd context && npm version patch --no-git-tag-version`
+    uv version --bump patch
   else
     echo "End of 2-week cycle."
     VERSION=`cd context && npm version minor --no-git-tag-version`
+    uv version --bump minor
   fi
 else
   # major version bump, don't need to check for 2-week cycle
   VERSION=`cd context && npm version major --no-git-tag-version`
+  uv version --bump major
 fi
-
-# Update version in pyproject.toml as well
-uv run python << EOF
-import tomllib
-import re
-from pathlib import Path
-
-# Read current pyproject.toml
-with open('pyproject.toml', 'rb') as f:
-    content = f.read().decode('utf-8')
-
-# Update version using regex (preserving exact formatting)
-version_without_v = "${VERSION#v}"  # Remove 'v' prefix if present
-new_content = re.sub(
-    r'^version = ".*"',
-    f'version = "{version_without_v}"',
-    content,
-    flags=re.MULTILINE
-)
-
-# Write back to file
-with open('pyproject.toml', 'w') as f:
-    f.write(new_content)
-EOF
 
 
 echo "Version: $VERSION"
