@@ -20,7 +20,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          cache-dependency-glob: "context/uv.lock"
+          cache-dependency-glob: "uv.lock"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,7 +30,6 @@ jobs:
 
       - name: Install dependencies
         run: uv sync --dev
-        working-directory: context
 
       - name: Install and register Jupyter kernel
         run: |
@@ -50,8 +49,7 @@ jobs:
         run: etc/test/test-python.sh
 
       - name: Generate figure SVGs
-        run: uv run app/figure/build_figure.py
-        working-directory: context
+        run: uv run context/app/figure/build_figure.py
 
       - name: Upload figure SVGs
         uses: actions/upload-artifact@v4

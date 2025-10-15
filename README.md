@@ -147,18 +147,15 @@ Every PR should be reviewed, and every PR should include a new `CHANGELOG-someth
 
 <details><summary>:atom_symbol: React</summary>
 
-> **Note**  
-> **Any mentions of `.js`/`.jsx` in the following guidelines are interchangeable with `.ts`/`.tsx`. New features should ideally be developed in TypeScript.**
-
 - Components with tests or styles should be placed in to their own directory.
-- Styles should follow the `style.*` pattern where the extension is `js` for styled components or `css` for stylesheets.
+- Styles should follow the `style.*` pattern where the extension is `ts` for styled components or `css` for stylesheets.
   - New styled components should use `styled` from `@mui/material/styles`.
 - Supporting test files have specific naming conventions:
-  - Jest Tests should follow the `*.spec.js` pattern.
-  - Stories should follow the `*.stories.js` pattern.
-  - Cypress tests should follow the `*.cy.js` pattern.
+  - Jest Tests should follow the `*.spec.ts` pattern.
+  - Stories should follow the `*.stories.ts` pattern.
+  - Cypress tests should follow the `*.cy.ts` pattern.
   - For all test files, the prefix is the name of the component.
-- Each component directory should have an `index.js` which exports the component as default.
+- Each component directory should have an `index.ts` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
 </details>
@@ -217,8 +214,7 @@ You can also lint and auto-correct from the command-line:
 cd context
 npm run lint
 npm run lint:fix
-EXCLUDE=node_modules,etc/dev/organ-utils
-autopep8 --in-place --aggressive -r . --exclude $EXCLUDE
+uv run ruff format
 ```
 
 ### Storybook
