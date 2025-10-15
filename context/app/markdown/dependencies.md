@@ -11,17 +11,17 @@ The services the portal relies on are [listed separately](/services).
 # Production dependencies
 Flask>=3.1.1
 Flask[async]>=3.1.1
-boto3>=1.39.3
 globus-sdk>=3.59.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
-lxml>=6.0.0
 portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
 
 # Development dependencies
+boto3>=1.39.3
+lxml>=6.0.0
 matplotlib>=3.10.5
 papermill>=2.6.0
 pytest-mock>=3.15.1
