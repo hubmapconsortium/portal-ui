@@ -58,7 +58,7 @@ def log(message):
     current_app.logger.info(f'routes_auth: {message} [IP: {get_ip()}]', extra={})
 
 
-auth_scope = ' '.join(
+GLOBUS_AUTH_SCOPE = ' '.join(
     [
         'openid profile email',
         'urn:globus:auth:scope:transfer.api.globus.org:all',
@@ -85,13 +85,13 @@ def login():
     client = load_app_client()
     log('1/4: oauth2_start_flow')
 
-    client.oauth2_start_flow(redirect_uri, auth_scope)
+    client.oauth2_start_flow(redirect_uri, GLOBUS_AUTH_SCOPE)
 
     # If there's no "code" query string parameter, we're in this route
     # starting a Globus Auth login flow; Redirect out to Globus Auth:
     if 'code' not in request.args:
         log('2: oauth2_get_authorize_url')
-        auth_uri = client.oauth2_get_authorize_url(query_params={'scope': auth_scope})
+        auth_uri = client.oauth2_get_authorize_url(query_params={'scope': GLOBUS_AUTH_SCOPE})
         log('3: redirect auth_url')
         return redirect(auth_uri)
 
@@ -99,15 +99,14 @@ def login():
     # and can start the process of exchanging an auth code for a token.
     code = request.args.get('code')
     log('5: oauth2_exchange_code_for_tokens')
-    tokens = client.oauth2_exchange_code_for_tokens(code)
-    # The repr is deceptive: Looks like a dict, but direct access not possible.
+    tokens = client.oauth2_exchange_code_for_tokens(code) if code else None
+    # The repr is deceptive: Looks like a dict, but direct access not possible.)
 
-    token_object = tokens.by_resource_server['groups.api.globus.org']
-    groups_token = token_object['access_token']
+    token_object = tokens.by_resource_server['groups.api.globus.org'] if tokens else {}
+    groups_token = token_object['access_token'] if token_object else ''
 
-    auth_token_object = tokens.by_resource_server['auth.globus.org']
-    auth_token = auth_token_object['access_token']
-
+    auth_token_object = tokens.by_resource_server['auth.globus.org'] if tokens else {}
+    auth_token = auth_token_object['access_token'] if auth_token_object else ''
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
 
     log('6: userinfo')
@@ -177,12 +176,20 @@ def login():
         user_groups=user_permission_groups,
     )
 
-    previous_url = unquote(request.cookies.get('urlBeforeLogin'))
+    previous_url = unquote(request.cookies.get('urlBeforeLogin') or '')
     # Validate previous_url before redirecting to it
-    safe_url = previous_url.replace('\\', '')
+    safe_url = previous_url.replace('\\', '') if previous_url else '/'
     parsed = urlparse(safe_url)
-    if not parsed.netloc and not parsed.scheme:
-        # relative path, safe to redirect
+
+    # Check if URL is safe: must be relative path without netloc/scheme or same host
+    is_safe = (
+        not parsed.netloc
+        and not parsed.scheme
+        and not safe_url.startswith('//')  # Prevent protocol-relative URLs
+        and safe_url.startswith('/')  # Ensure it starts with /
+    )
+
+    if is_safe:
         response = make_response(redirect(safe_url))
     else:
         # fallback to home page for unsafe URLs
@@ -243,8 +250,9 @@ def logout():
     # Destroy the session state
     session.clear()
 
-    kwargs = {redirect_to_globus_param: True}
-    response = make_response(redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
+    response = make_response(
+        redirect(url_for('routes_auth.logout', _external=True, redirect_to_globus_param=True))
+    )
     # Reset cookies used in trackers.js:
     response.set_cookie(key='last_login', value='', max_age=0)
     response.set_cookie(key='user_groups', value='none', max_age=0)
