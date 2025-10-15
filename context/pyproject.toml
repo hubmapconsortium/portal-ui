@@ -31,7 +31,6 @@ dependencies = [
     "portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip",
 ]
 
-
 [project.urls]
 Homepage = "https://portal.hubmapconsortium.org/"
 Repository = "https://github.com/hubmapconsortium/portal-ui"
@@ -116,10 +115,9 @@ app = ["*.csv", "*.json", "*.yml", "*.yaml"]
 
 [dependency-groups]
 dev = [
-    "pytest-mock>=3.15.1",
     "pytest>=8.4.2",
+    "pytest-mock>=3.15.1", 
     "ruff>=0.14.0",
-    "pip-tools>=7.4.1",
     "papermill>=2.6.0",
     "matplotlib>=3.10.5",
 ]

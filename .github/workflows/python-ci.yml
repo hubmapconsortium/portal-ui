@@ -50,7 +50,7 @@ jobs:
         run: etc/test/test-python.sh
 
       - name: Generate figure SVGs
-        run: python context/app/figure/build_figure.py
+        run: uv run context/app/figure/build_figure.py
 
       - name: Upload figure SVGs
         uses: actions/upload-artifact@v4
