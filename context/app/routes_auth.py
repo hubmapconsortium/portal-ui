@@ -58,6 +58,16 @@ def log(message):
     current_app.logger.info(f'routes_auth: {message} [IP: {get_ip()}]', extra={})
 
 
+auth_scope = ' '.join(
+    [
+        'openid profile email',
+        'urn:globus:auth:scope:transfer.api.globus.org:all',
+        'urn:globus:auth:scope:auth.globus.org:view_identities',
+        'urn:globus:auth:scope:groups.api.globus.org:all',
+    ]
+)
+
+
 @blueprint.route('/login')
 def login():
     """
@@ -74,24 +84,14 @@ def login():
 
     client = load_app_client()
     log('1/4: oauth2_start_flow')
-    client.oauth2_start_flow(redirect_uri)
+
+    client.oauth2_start_flow(redirect_uri, auth_scope)
 
     # If there's no "code" query string parameter, we're in this route
     # starting a Globus Auth login flow; Redirect out to Globus Auth:
     if 'code' not in request.args:
         log('2: oauth2_get_authorize_url')
-        auth_uri = client.oauth2_get_authorize_url(
-            query_params={
-                'scope': ' '.join(
-                    [
-                        'openid profile email',
-                        'urn:globus:auth:scope:transfer.api.globus.org:all',
-                        'urn:globus:auth:scope:auth.globus.org:view_identities',
-                        'urn:globus:auth:scope:groups.api.globus.org:all',
-                    ]
-                )
-            }
-        )
+        auth_uri = client.oauth2_get_authorize_url(query_params={'scope': auth_scope})
         log('3: redirect auth_url')
         return redirect(auth_uri)
 
