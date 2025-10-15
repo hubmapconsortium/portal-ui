@@ -136,3 +136,7 @@ compose/.env
 
 # Ignore tsbuildinfo files
 *.tsbuildinfo
+
+# Ignore ruff cache
+.ruff_cache
+

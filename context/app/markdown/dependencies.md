@@ -6,28 +6,27 @@ The services the portal relies on are [listed separately](/services).
 
 ## Python packages
 
-`requirements.in`:
+`pyproject.toml` dependencies:
 ```
-# Update requirements.txt if this file changes:
-# pip install pip-tools
-# uv pip compile context/requirements.in --universal --python-version 3.12.8 --constraint context/constraints.txt --output-file context/requirements.txt
+# Production dependencies
 Flask>=3.1.1
 Flask[async]>=3.1.1
+boto3>=1.39.3
 globus-sdk>=3.59.0
-requests>=2.32.4
-pyyaml>=6.0.2
-python-frontmatter>=1.1.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
-# As of 2025-07-07, this version should be compatible with the hubmap-commons constraint of boto3>=1.24.47
-boto3>=1.39.3
-
-# Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip
-
-# Security warning for older versions;
-# Can be removed when commons drops prov dependency.
 lxml>=6.0.0
+portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip
+python-frontmatter>=1.1.0
+pyyaml>=6.0.2
+requests>=2.32.5
+
+# Development dependencies
+matplotlib>=3.10.5
+papermill>=2.6.0
+pytest-mock>=3.15.1
+pytest>=8.4.2
+ruff>=0.14.0
 ```
 
 ## NodeJS packages

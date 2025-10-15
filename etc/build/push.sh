@@ -75,8 +75,32 @@ if [[ -z "$MAJOR" ]]; then
   fi
 else
   # major version bump, don't need to check for 2-week cycle
-  VERSION=`cd context && npm version major`
+  VERSION=`cd context && npm version major --no-git-tag-version`
 fi
+
+# Update version in pyproject.toml as well
+uv run python << EOF
+import tomllib
+import re
+from pathlib import Path
+
+# Read current pyproject.toml
+with open('pyproject.toml', 'rb') as f:
+    content = f.read().decode('utf-8')
+
+# Update version using regex (preserving exact formatting)
+version_without_v = "${VERSION#v}"  # Remove 'v' prefix if present
+new_content = re.sub(
+    r'^version = ".*"',
+    f'version = "{version_without_v}"',
+    content,
+    flags=re.MULTILINE
+)
+
+# Write back to file
+with open('pyproject.toml', 'w') as f:
+    f.write(new_content)
+EOF
 
 
 echo "Version: $VERSION"
@@ -84,6 +108,7 @@ echo "Version: $VERSION"
 ./grab-dependencies.sh
 
 git add context/package*.json
+git add pyproject.toml
 git add context/app/markdown/dependencies.md
 git commit -m "Version bump to $VERSION"
 
