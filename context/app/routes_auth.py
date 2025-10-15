@@ -1,4 +1,4 @@
-from urllib.parse import urlencode, unquote
+from urllib.parse import urlencode, unquote, urlparse
 from datetime import datetime
 
 from flask import make_response, current_app, url_for, request, redirect, session
@@ -178,7 +178,15 @@ def login():
     )
 
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
-    response = make_response(redirect(previous_url))
+    # Validate previous_url before redirecting to it
+    safe_url = previous_url.replace('\\', '')
+    parsed = urlparse(safe_url)
+    if not parsed.netloc and not parsed.scheme:
+        # relative path, safe to redirect
+        response = make_response(redirect(safe_url))
+    else:
+        # fallback to home page for unsafe URLs
+        response = make_response(redirect('/'))
 
     # Set cookies used in trackers.js:
     if is_internal_user:
