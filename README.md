@@ -107,7 +107,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
 - `python 3.12`
   - `uv` (Recommended):
     - [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) using any supported installation method.
-    - Create a `uv` virtual environment with the appropriate python version via `uv venv --python $(cat .python-version)`.
+    - Create a `uv` virtual environment with the appropriate python version via `uv venv`.
     - Activate the environment with `source .venv/bin/activate`.
     - Install dependencies with `uv sync --dev` (to include development dependencies) or `uv sync` (production only).
 - `nodejs/npm`: Suggest installing a node version manager and then using it to install the appropriate node version:
