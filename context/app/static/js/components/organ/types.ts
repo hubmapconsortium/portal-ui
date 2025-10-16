@@ -73,6 +73,6 @@ export enum OrganPageIds {
   assaysId = 'assays',
   dataProductsId = 'data-products',
   samplesId = 'samples',
-  cellpopId = 'cell-population-plot',
+  scellopId = 'cell-population-plot',
   cellTypesId = 'cell-types',
 }
