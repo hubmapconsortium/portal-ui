@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
@@ -14,10 +14,25 @@ import { useEntityTileAriaLabelText } from 'js/hooks/useEntityTileAriaLabel';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
+import { compareSampleCategory } from 'js/helpers/samples';
 
 type ProvEntityType = 'Donor' | 'Sample' | 'Dataset';
 function isProvEntityType(type: string): type is ProvEntityType {
   return ['Donor', 'Sample', 'Dataset'].includes(type);
+}
+
+function entitySorter(a: Entity, b: Entity) {
+  if (a.entity_type === 'Sample' && b.entity_type === 'Sample') {
+    // Make sure samples are ordered by their category first
+    // Organ > Block > Section > Suspension)
+    const categoryComparison = compareSampleCategory(
+      (a.sample_category as string) || '',
+      (b.sample_category as string) || '',
+    );
+    if (categoryComparison !== 0) return categoryComparison;
+  }
+
+  return a.created_timestamp - b.created_timestamp;
 }
 
 interface ProvTableColumnProps {
@@ -64,6 +79,8 @@ function ProvEntityColumnContent({
       })),
   );
 
+  const sortedEntities = useMemo(() => entities.sort(entitySorter), [entities]);
+
   if (noDisplayedContent) {
     return (
       <Alert severity="warning" $width="100%">
@@ -74,50 +91,48 @@ function ProvEntityColumnContent({
 
   return (
     <>
-      {entities.length > 0 &&
-        entities
-          .sort((a, b) => a.created_timestamp - b.created_timestamp)
-          .map((item, j, items) => {
-            const isSampleSibling =
-              j > 0 && item.entity_type === 'Sample' && items[j - 1]?.sample_category === item.sample_category;
-            if (isSampleSibling && !isExpanded[item.sample_category as string]) {
-              const siblings = items.filter((i) => i.sample_category === item.sample_category);
-              const numberOfSiblings = siblings.length - 1;
-              // Only draw the button once for the first sibling in the list
-              // First element in the siblings list is the first item in the category,
-              // so the second item in the list is the first sibling.
-              const isFirstSibling = siblings.findIndex((i) => i.uuid === item.uuid) === 1;
-              if (!isFirstSibling) return null;
-              return (
-                <Button
-                  key={item.uuid}
-                  variant="contained"
-                  onClick={() => {
-                    setIsExpanded((s) => ({ ...s, [item.sample_category as string]: true }));
-                  }}
-                >
-                  View More in Category ({numberOfSiblings})
-                </Button>
-              );
-            }
+      {sortedEntities.length > 0 &&
+        sortedEntities.map((item, j, items) => {
+          const isSampleSibling =
+            j > 0 && item.entity_type === 'Sample' && items[j - 1]?.sample_category === item.sample_category;
+          if (isSampleSibling && !isExpanded[item.sample_category as string]) {
+            const siblings = items.filter((i) => i.sample_category === item.sample_category);
+            const numberOfSiblings = siblings.length - 1;
+            // Only draw the button once for the first sibling in the list
+            // First element in the siblings list is the first item in the category,
+            // so the second item in the list is the first sibling.
+            const isFirstSibling = siblings.findIndex((i) => i.uuid === item.uuid) === 1;
+            if (!isFirstSibling) return null;
             return (
-              <ProvTableTile
+              <Button
                 key={item.uuid}
-                uuid={item.uuid}
-                id={item.hubmap_id}
-                entity_type={item.entity_type}
-                ariaLabelText={ariaLabelText[j]}
-                isCurrentEntity={currentEntityUUID === item.uuid}
-                isSampleSibling={isSampleSibling}
-                isFirstTile={j === 0}
-                isLastTile={j === type.length - 1}
+                variant="contained"
                 onClick={() => {
-                  handleCardSelect(item.hubmap_id);
+                  setIsExpanded((s) => ({ ...s, [item.sample_category as string]: true }));
                 }}
-                entityData={item}
-              />
+              >
+                View More in Category ({numberOfSiblings})
+              </Button>
             );
-          })}
+          }
+          return (
+            <ProvTableTile
+              key={item.uuid}
+              uuid={item.uuid}
+              id={item.hubmap_id}
+              entity_type={item.entity_type}
+              ariaLabelText={ariaLabelText[j]}
+              isCurrentEntity={currentEntityUUID === item.uuid}
+              isSampleSibling={isSampleSibling}
+              isFirstTile={j === 0}
+              isLastTile={j === type.length - 1}
+              onClick={() => {
+                handleCardSelect(item.hubmap_id);
+              }}
+              entityData={item}
+            />
+          );
+        })}
       {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={currentEntityUUID} type={type} />}
       {displayMissingAncestors && missingAncestors.map((id) => <ErrorTile key={id} entity_type={type} id={id} />)}
     </>
