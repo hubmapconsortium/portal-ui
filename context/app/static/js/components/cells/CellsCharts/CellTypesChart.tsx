@@ -91,14 +91,17 @@ interface CellTypeGeneAssociation {
   colors: string[];
 }
 
-interface CellTypesChartProps {
+interface GeneResultsAdditionalProps {
+  geneHighlights?: GeneHighlightInfo[];
+  cellTypeGeneAssociations?: CellTypeGeneAssociation[];
+}
+
+interface CellTypesChartProps extends GeneResultsAdditionalProps {
   totalCells: number;
   cellTypeCounts: CellTypeCounts;
   isLoading: boolean;
   cellNames: string[];
   title?: React.ReactNode;
-  geneHighlights?: GeneHighlightInfo[];
-  cellTypeGeneAssociations?: CellTypeGeneAssociation[];
 }
 
 const margin = {
@@ -132,14 +135,26 @@ function CellTypesChart({
     if (geneHighlights.length === 0) {
       return [false, undefined];
     }
+    if (geneHighlights.length === 1) {
+      return [
+        true,
+        scaleOrdinal<string, string>({
+          domain: ['Unmatched', geneHighlights[0].gene],
+          range: [theme.palette.graphs.unmatched, theme.palette.graphs.matched],
+        }),
+      ];
+    }
+    const domain = ['Unmatched', ...geneHighlights.map(({ gene }) => gene), 'Multiple'];
+    const range = [theme.palette.graphs.unmatched, ...geneHighlights.map(({ color }) => color), 'placeholder'];
+
     return [
       true,
       scaleOrdinal<string, string>({
-        domain: ['Unmatched', ...geneHighlights.map(({ gene }) => gene), 'Multiple'],
-        range: [theme.palette.graphs.unmatched, ...geneHighlights.map(({ color }) => color), 'placeholder'],
+        domain,
+        range,
       }),
     ];
-  }, [geneHighlights, theme]);
+  }, [geneHighlights, theme.palette.graphs]);
 
   // Create tooltip component that shows gene associations if available
   const TooltipComponent = useMemo(() => {
@@ -238,15 +253,14 @@ export function CrossModalityCellTypesChart({ uuid }: Dataset) {
   );
 }
 
+interface SCFindCellTypesChartProps extends Dataset, GeneResultsAdditionalProps {}
+
 export function SCFindCellTypesChart({
   uuid,
   hyperQueryLoading,
   geneHighlights = [],
   cellTypeGeneAssociations = [],
-}: Dataset & {
-  geneHighlights?: GeneHighlightInfo[];
-  cellTypeGeneAssociations?: CellTypeGeneAssociation[];
-}) {
+}: SCFindCellTypesChartProps) {
   const cellVariableNames = useCellVariableNames();
   const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
   const isCellTypesQuery = useIsQueryType('cell-type');
