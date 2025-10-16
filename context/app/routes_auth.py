@@ -184,13 +184,16 @@ def login():
     # Check if URL is safe: must be a relative path without netloc/scheme and not protocol-relative
     # Must start with a single '/'
     is_safe = (
-        safe_url and
-        not parsed.netloc and
-        not parsed.scheme and
-        not safe_url.startswith('//') and
-        safe_url.startswith('/') and
-        (' ' not in safe_url) and
-        not any(safe_url.startswith(prefix) for prefix in ['/\\', '\\', '/..', '/../', '/./', '/%2e', '/%2f', '/%5c'])
+        safe_url
+        and not parsed.netloc
+        and not parsed.scheme
+        and not safe_url.startswith('//')
+        and safe_url.startswith('/')
+        and (' ' not in safe_url)
+        and not any(
+            safe_url.startswith(prefix)
+            for prefix in ['/\\', '\\', '/..', '/../', '/./', '/%2e', '/%2f', '/%5c']
+        )
     )
     if is_safe:
         response = make_response(redirect(safe_url))
