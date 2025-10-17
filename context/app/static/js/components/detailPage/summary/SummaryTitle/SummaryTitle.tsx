@@ -5,18 +5,18 @@ import { useInView } from 'react-intersection-observer';
 
 import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { AllEntityTypes, entityIconMap, hasIconForEntity } from 'js/shared-styles/icons/entityIconMap';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 
 const entityStoreSelector = (state: EntityStore) => state.setSummaryComponentObserver;
 
 interface SummaryTitleProps extends PropsWithChildren {
   iconTooltipText?: string;
-  entityIcon?: keyof typeof entityIconMap;
+  entityIcon?: keyof typeof titleLinks;
   organIcon?: string; // name of the organ to fetch icon for (e.g. 'Kidney', 'Lung', etc.
 }
 
-const titleLinks: Record<AllEntityTypes, string | undefined> = {
+const titleLinks: Record<AllEntityTypes | 'Tutorial', string | undefined> = {
   Donor: '/search/donors',
   Sample: '/search/samples',
   Dataset: '/search/datasets',
@@ -28,9 +28,10 @@ const titleLinks: Record<AllEntityTypes, string | undefined> = {
   CellType: '/cell-types',
   Gene: '/genes',
   VerifiedUser: undefined,
+  Tutorial: '/tutorials',
 };
 
-const useSummaryHref = (entityIcon?: keyof typeof entityIconMap, organIcon?: string) => {
+const useSummaryHref = (entityIcon?: keyof typeof titleLinks, organIcon?: string) => {
   if (organIcon) {
     return '/organs';
   }
@@ -49,7 +50,7 @@ function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon }: Summ
     initialInView: true,
   });
 
-  const Icon = entityIcon ? entityIconMap[entityIcon] : null;
+  const Icon = hasIconForEntity(entityIcon) ? entityIconMap[entityIcon] : null;
 
   useEffect(() => {
     if (entry) {

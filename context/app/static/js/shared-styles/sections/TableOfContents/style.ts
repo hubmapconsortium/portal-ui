@@ -9,7 +9,7 @@ const StickyNav = styled('nav')({
 
 const TableTitle = styled(Typography)(({ theme }) => ({
   marginLeft: theme.spacing(1),
-}));
+})) as typeof Typography;
 
 const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boolean }>(
   ({ theme, $isCurrentSection, $isNested }) => ({

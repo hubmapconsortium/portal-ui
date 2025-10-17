@@ -7,6 +7,7 @@ import {
   CellTypeIcon,
   CollectionIcon,
   DatasetIcon,
+  FeaturedIcon,
   FileIcon,
   GeneIcon,
   MetadataIcon,
@@ -15,6 +16,7 @@ import {
   ProvenanceIcon,
   PublicationIcon,
   SampleIcon,
+  SearchIcon,
   SentIcon,
   SummaryIcon,
   VisualizationIcon,
@@ -54,6 +56,10 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   'sent-invitations-status': SentIcon,
   templates: WorkspacesIcon,
   publications: PublicationIcon,
+  // Tutorials
+  workspaces: WorkspacesIcon,
+  'featured-tutorials': FeaturedIcon,
+  'biomarker-and-cell-type-search': SearchIcon,
 } as const;
 
 export const sectionImageIconMap: Record<string, keyof typeof externalIconMap> = {
