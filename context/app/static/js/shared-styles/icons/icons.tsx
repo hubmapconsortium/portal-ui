@@ -52,6 +52,7 @@ import CancelPresentationRoundedIcon from '@mui/icons-material/CancelPresentatio
 import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import StarsRounded from '@mui/icons-material/StarsRounded';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -61,8 +62,6 @@ import GeneIconSVG from 'assets/svg/gene.svg';
 import OrganSVG from 'assets/svg/organ.svg';
 import EuiSVG from 'assets/svg/eui.svg';
 import AsctBSVG from 'assets/svg/asct+b.svg';
-
-// The "any" here mirrors the "any" in the original SvgIconProps definition.
 
 type CustomIconProps<T extends ElementType> = {
   fontSize?: string;
@@ -171,6 +170,8 @@ const StopAllIcon = withIconStyles(CancelPresentationRoundedIcon);
 
 const ChecklistIcon = withIconStyles(ChecklistRoundedIcon);
 
+const FeaturedIcon = withIconStyles(StarsRounded);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -242,4 +243,5 @@ export {
   NotificationIcon,
   StopAllIcon,
   ChecklistIcon,
+  FeaturedIcon,
 };

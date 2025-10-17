@@ -6,6 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledCard, SelectableCardText } from './styles';
+import Box from '@mui/material/Box';
 
 interface SelectableCardProps extends React.ComponentProps<typeof StyledCard> {
   title: React.ReactNode;
@@ -16,6 +17,17 @@ interface SelectableCardProps extends React.ComponentProps<typeof StyledCard> {
   cardKey: string;
   disabled?: boolean;
   tooltip?: string;
+  category?: string;
+  grow?: boolean;
+}
+
+function useColorVariant(
+  isSelected?: boolean,
+  isSelectable?: boolean,
+): 'primaryContainer' | 'secondaryContainer' | undefined {
+  if (isSelected) return 'primaryContainer';
+  if (isSelectable) return 'secondaryContainer';
+  return undefined;
 }
 
 function SelectableCard({
@@ -27,13 +39,22 @@ function SelectableCard({
   cardKey,
   disabled,
   tooltip,
+  category,
+  grow = false,
+  children,
   ...rest
 }: SelectableCardProps) {
-  const colorVariant = isSelected ? 'primaryContainer' : 'secondaryContainer';
+  const isSelectable = Boolean(selectItem);
+  const colorVariant = useColorVariant(isSelected, isSelectable);
   return (
     <SecondaryBackgroundTooltip title={tooltip}>
-      <StyledCard $colorVariant={colorVariant} {...rest}>
+      <StyledCard $grow={grow} $colorVariant={colorVariant} {...rest}>
         <CardContent component={Stack} direction="column" sx={{ height: '100%' }}>
+          {category && (
+            <Box>
+              <Chip label={category} borderRadius="halfRound" sx={{ backgroundColor: 'accent.info90', mb: 1 }} />
+            </Box>
+          )}
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <SelectableCardText variant="subtitle1" $colorVariant={colorVariant}>
               {title}
@@ -46,10 +67,17 @@ function SelectableCard({
           {tags.length > 0 && (
             <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" mt="auto">
               {tags.map((tag) => (
-                <Chip label={tag} sx={{ borderRadius: 8, backgroundColor: 'white.main' }} key={tag} />
+                <Chip
+                  borderRadius="halfRound"
+                  label={tag}
+                  variant="outlined"
+                  sx={{ backgroundColor: 'white.main' }}
+                  key={tag}
+                />
               ))}
             </Stack>
           )}
+          {children}
         </CardContent>
       </StyledCard>
     </SecondaryBackgroundTooltip>
