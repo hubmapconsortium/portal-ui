@@ -6,7 +6,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import { FilterListRounded } from '@mui/icons-material';
 import { useTutorialLandingPageSearchActions, useTutorialLandingPageSearchData } from './TutorialLandingPageContext';
-import { StyledChip } from './style';
+import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 
 export default function TutorialsFilterBar() {
   const { filterCategory } = useTutorialLandingPageSearchData();
@@ -24,13 +24,10 @@ export default function TutorialsFilterBar() {
           const isSelected = filterCategory === category;
 
           return (
-            <StyledChip
-              variant="outlined"
-              borderRadius="halfRound"
+            <SelectableChip
               isSelected={isSelected}
               label={category}
               key={category}
-              clickable
               onClick={() => setFilterCategory(isSelected ? undefined : category)}
             />
           );

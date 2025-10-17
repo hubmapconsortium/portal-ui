@@ -62,6 +62,7 @@ import GeneIconSVG from 'assets/svg/gene.svg';
 import OrganSVG from 'assets/svg/organ.svg';
 import EuiSVG from 'assets/svg/eui.svg';
 import AsctBSVG from 'assets/svg/asct+b.svg';
+import MenuBookRounded from '@mui/icons-material/MenuBookRounded';
 
 type CustomIconProps<T extends ElementType> = {
   fontSize?: string;
@@ -172,6 +173,8 @@ const ChecklistIcon = withIconStyles(ChecklistRoundedIcon);
 
 const FeaturedIcon = withIconStyles(StarsRounded);
 
+const TutorialIcon = withIconStyles(MenuBookRounded);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -244,4 +247,5 @@ export {
   StopAllIcon,
   ChecklistIcon,
   FeaturedIcon,
+  TutorialIcon,
 };

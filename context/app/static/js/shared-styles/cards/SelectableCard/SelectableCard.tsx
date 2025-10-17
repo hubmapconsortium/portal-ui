@@ -52,7 +52,7 @@ function SelectableCard({
         <CardContent component={Stack} direction="column" sx={{ height: '100%' }}>
           {category && (
             <Box>
-              <Chip label={category} borderRadius="halfRound" sx={{ backgroundColor: 'accent.info90', mb: 1 }} />
+              <Chip label={category} $borderRadius="halfRound" sx={{ backgroundColor: 'accent.info90', mb: 1 }} />
             </Box>
           )}
           <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -68,7 +68,7 @@ function SelectableCard({
             <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" mt="auto">
               {tags.map((tag) => (
                 <Chip
-                  borderRadius="halfRound"
+                  $borderRadius="halfRound"
                   label={tag}
                   variant="outlined"
                   sx={{ backgroundColor: 'white.main' }}

@@ -154,7 +154,7 @@ declare module '@mui/material' {
   }
 
   export interface ChipOwnProps {
-    borderRadius?: 'halfRound';
+    $borderRadius?: 'halfRound';
   }
 }
 
@@ -380,7 +380,7 @@ const theme = createTheme({
           },
         },
         {
-          props: { borderRadius: 'halfRound' },
+          props: { $borderRadius: 'halfRound' },
           style: {
             borderRadius: '4px',
           },

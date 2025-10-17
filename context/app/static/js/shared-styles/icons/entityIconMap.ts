@@ -9,6 +9,7 @@ import {
   GeneIcon,
   WorkspacesIcon,
   CellTypeIcon,
+  TutorialIcon,
 } from './icons';
 
 export type MUIIcon = typeof DonorIcon;
@@ -24,7 +25,7 @@ type WorkspaceEntityType = 'Workspace' | 'WorkspaceTemplate';
 
 type WorkspaceAPIEntityType = WorkspaceEntityType;
 
-export type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType;
+export type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType | 'Tutorial';
 
 export const entityIconMap: Record<AllEntityTypes, MUIIcon> = {
   Donor: DonorIcon,
@@ -38,4 +39,9 @@ export const entityIconMap: Record<AllEntityTypes, MUIIcon> = {
   CellType: CellTypeIcon,
   Gene: GeneIcon,
   VerifiedUser: VerifiedIcon,
+  Tutorial: TutorialIcon,
+};
+
+export const hasIconForEntity = (entityType?: string): entityType is AllEntityTypes => {
+  return Boolean(entityType && entityType in entityIconMap);
 };

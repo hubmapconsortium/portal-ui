@@ -12,7 +12,12 @@ export interface TutorialCategoryData {
   id: string;
 }
 
-export type TutorialCategorySection = TutorialCategory | 'Featured Tutorials';
+export const TUTORIAL_CATEGORY_SECTIONS: ['Featured Tutorials', ...TutorialCategory[]] = [
+  'Featured Tutorials',
+  ...TUTORIAL_CATEGORIES,
+];
+
+export type TutorialCategorySection = (typeof TUTORIAL_CATEGORY_SECTIONS)[number];
 
 export const TUTORIAL_CATEGORY_DATA: Record<TutorialCategorySection, TutorialCategoryData> = {
   'Featured Tutorials': {
@@ -25,7 +30,7 @@ export const TUTORIAL_CATEGORY_DATA: Record<TutorialCategorySection, TutorialCat
     title: 'Biomarker and Cell Type Search',
     description: "Learn how to explore biomarkers and cell types using HuBMAP's Biomarker and Cell Type Search tool.",
     icon: SearchIcon,
-    id: 'biomarker-cell-type-search',
+    id: 'biomarker-and-cell-type-search',
   },
   Data: {
     title: 'Data',
