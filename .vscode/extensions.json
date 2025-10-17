@@ -1,7 +1,7 @@
 {
   "recommendations": [
     "dbaeumer.vscode-eslint",
-    "ms-python.autopep8",
+    "charliermarsh.ruff",
     "streetsidesoftware.code-spell-checker"
   ]
 }

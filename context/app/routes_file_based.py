@@ -28,31 +28,23 @@ def preview_details_view(name):
             'created_by_user_displayname': preview_metadata['created_by_user_displayname'],
             'created_by_user_email': preview_metadata['created_by_user_email'],
         },
-        'vitessce_conf': preview_metadata.get('vitessce_conf')
+        'vitessce_conf': preview_metadata.get('vitessce_conf'),
     }
-    return render_template(
-        'base-pages/react-content.html',
-        title='Preview',
-        flask_data=flask_data
-    )
+    return render_template('base-pages/react-content.html', title='Preview', flask_data=flask_data)
 
 
 @blueprint.route('/organs')
 def organ_index_view():
     organs = get_organs()
     redirected_from = request.args.get('redirected_from') or None
-    flask_data = {
-        **get_default_flask_data(),
-        'organs': organs,
-        'redirected_from': redirected_from
-    }
+    flask_data = {**get_default_flask_data(), 'organs': organs, 'redirected_from': redirected_from}
     return render_template(
         'base-pages/react-content.html',
         title='Organs | HuBMAP Datasets by Organ and Tissue Type',
         description='Explore HuBMAP organ pages featuring datasets grouped by tissue type. \
             View 3D anatomical maps, cell type distributions, and molecular data insights.',
         flask_data=flask_data,
-        skip_title_suffix=True
+        skip_title_suffix=True,
     )
 
 
@@ -67,12 +59,9 @@ def redirect_to_organ_from_search(name, organs):
 @blueprint.route('/organs/<name>')
 def organ_details_view(name):
     organ = get_organ_details(name)
-    if (organ.keys().__len__() == 0):
+    if organ.keys().__len__() == 0:
         return redirect_to_organ_from_search(name, get_organs())
-    flask_data = {
-        **get_default_flask_data(),
-        'organ': organ
-    }
+    flask_data = {**get_default_flask_data(), 'organ': organ}
     organ_name = organ.get('name')
 
     return render_template(
@@ -83,7 +72,7 @@ def organ_details_view(name):
             View anatomical maps, cell population plots, \
             and molecular data insights for research.',
         flask_data=flask_data,
-        skip_title_suffix=True
+        skip_title_suffix=True,
     )
 
 
@@ -93,8 +82,7 @@ def get_organ_details(name):
     organ_names = get_organ_name_mapping()
     # Remove all spaces, underscores, and any text in parentheses
     normalized_name = name.lower().strip()
-    normalized_name = normalized_name.split('(')[0].strip().replace(
-        ' ', '-').replace('_', '-')
+    normalized_name = normalized_name.split('(')[0].strip().replace(' ', '-').replace('_', '-')
     safe_organ_name = organ_names.get(normalized_name)
     if safe_organ_name not in organs:
         return {}
@@ -129,6 +117,6 @@ def _get_organ_list(organs_to_get):
     organs = {}
     for organ in organs_to_get:
         org = get_organ_details(organ)
-        if (org.keys().__len__() > 0):
+        if org.keys().__len__() > 0:
             organs[organ] = org
     return organs

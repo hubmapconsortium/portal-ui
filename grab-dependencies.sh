@@ -12,16 +12,38 @@ The services the portal relies on are [listed separately](/services).
 
 ## Python packages
 
-\`requirements.in\`:
+\`pyproject.toml\` dependencies:
 \`\`\`
-$(cat context/requirements.in)
-\`\`\`
+EOF
+
+uv run python << 'EOF' >> $MD
+import tomllib
+from pathlib import Path
+
+# Read pyproject.toml from the root directory
+with open('pyproject.toml', 'rb') as f:
+    pyproject = tomllib.load(f)
+
+dependencies = pyproject.get('project', {}).get('dependencies', [])
+dev_dependencies = pyproject.get('dependency-groups', {}).get('dev', [])
+
+print("# Production dependencies")
+for dep in sorted(dependencies):
+    print(dep)
+
+print("\n# Development dependencies")
+for dep in sorted(dev_dependencies):
+    print(dep)
+EOF
+
+cat << 'EOF' >> $MD
+```
 
 ## NodeJS packages
 
 EOF
 
-python << 'EOF' >> $MD
+uv run python << 'EOF' >> $MD
 import json
 from pathlib import Path
 

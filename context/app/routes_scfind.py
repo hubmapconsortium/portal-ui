@@ -23,7 +23,7 @@ def _make_scfind_request(endpoint, params=None):
     base_url = current_app.config['SCFIND_ENDPOINT']
     index_version = current_app.config['SCFIND_DEFAULT_INDEX_VERSION']
 
-    url = f"{base_url}/api/{endpoint}"
+    url = f'{base_url}/api/{endpoint}'
 
     # Add index_version parameter
     request_params = {'index_version': index_version}
@@ -35,7 +35,7 @@ def _make_scfind_request(endpoint, params=None):
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
-        current_app.logger.error(f"Error making SCFIND request to {url}: {e}")
+        current_app.logger.error(f'Error making SCFIND request to {url}: {e}')
         raise
 
 
@@ -173,10 +173,7 @@ def _build_clid_to_label_map():
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit all tasks
-        future_to_clid = {
-            executor.submit(fetch_labels_for_clid, clid): clid
-            for clid in all_clids
-        }
+        future_to_clid = {executor.submit(fetch_labels_for_clid, clid): clid for clid in all_clids}
 
         # Collect results as they complete
         for future in as_completed(future_to_clid):
@@ -196,21 +193,22 @@ def _get_complete_mappings():
         Tuple of (label_to_clid_map, clid_to_label_map)
     """
     import time
+
     start_time = time.time()
-    current_app.logger.info("Starting to build complete mappings...")
+    current_app.logger.info('Starting to build complete mappings...')
 
     label_to_clid_map = _build_label_to_clid_map()
     mid_time = time.time()
     current_app.logger.info(
-        f"Label-to-CLID mapping completed in {mid_time - start_time:.2f} seconds"
+        f'Label-to-CLID mapping completed in {mid_time - start_time:.2f} seconds'
     )
 
     clid_to_label_map = _build_clid_to_label_map()
     end_time = time.time()
     current_app.logger.info(
-        f"CLID-to-label mapping completed in {end_time - mid_time:.2f} seconds"
+        f'CLID-to-label mapping completed in {end_time - mid_time:.2f} seconds'
     )
-    current_app.logger.info(f"Total mapping build time: {end_time - start_time:.2f} seconds")
+    current_app.logger.info(f'Total mapping build time: {end_time - start_time:.2f} seconds')
 
     return label_to_clid_map, clid_to_label_map
 
@@ -227,7 +225,7 @@ def label_to_clid_map():
         label_to_clid_map, _ = _get_complete_mappings()
         return jsonify(label_to_clid_map)
     except Exception as e:
-        current_app.logger.error(f"Error building label-to-CLID map: {e}")
+        current_app.logger.error(f'Error building label-to-CLID map: {e}')
         return jsonify({'error': 'Failed to build label-to-CLID mapping'}), 500
 
 
@@ -243,7 +241,7 @@ def clid_to_label_map():
         _, clid_to_label_map = _get_complete_mappings()
         return jsonify(clid_to_label_map)
     except Exception as e:
-        current_app.logger.error(f"Error building CLID-to-label map: {e}")
+        current_app.logger.error(f'Error building CLID-to-label map: {e}')
         return jsonify({'error': 'Failed to build CLID-to-label mapping'}), 500
 
 
@@ -257,12 +255,9 @@ def combined_maps():
     """
     try:
         label_to_clid_map, clid_to_label_map = _get_complete_mappings()
-        return jsonify({
-            'label_to_clid': label_to_clid_map,
-            'clid_to_label': clid_to_label_map
-        })
+        return jsonify({'label_to_clid': label_to_clid_map, 'clid_to_label': clid_to_label_map})
     except Exception as e:
-        current_app.logger.error(f"Error building combined maps: {e}")
+        current_app.logger.error(f'Error building combined maps: {e}')
         return jsonify({'error': 'Failed to build mappings'}), 500
 
 
@@ -278,7 +273,7 @@ def cell_type_names():
         cell_types = _get_all_cell_type_names()
         return jsonify({'cell_types': cell_types})
     except Exception as e:
-        current_app.logger.error(f"Error fetching cell type names: {e}")
+        current_app.logger.error(f'Error fetching cell type names: {e}')
         return jsonify({'error': 'Failed to fetch cell type names'}), 500
 
 
@@ -294,7 +289,7 @@ def genes():
         gene_list = _get_all_genes()
         return jsonify({'genes': gene_list})
     except Exception as e:
-        current_app.logger.error(f"Error fetching gene names: {e}")
+        current_app.logger.error(f'Error fetching gene names: {e}')
         return jsonify({'error': 'Failed to fetch gene names'}), 500
 
 
@@ -323,7 +318,7 @@ def genes_autocomplete():
 
         return jsonify({'results': results})
     except Exception as e:
-        current_app.logger.error(f"Error in gene autocomplete: {e}")
+        current_app.logger.error(f'Error in gene autocomplete: {e}')
         return jsonify({'error': 'Failed to search genes'}), 500
 
 
@@ -371,18 +366,22 @@ def cell_types_autocomplete():
                 # Find the match position for highlighting
                 match_index = cell_type.lower().find(query.lower())
                 pre = cell_type[:match_index]
-                match = cell_type[match_index:match_index + len(query)]
-                post = cell_type[match_index + len(query):]
+                match = cell_type[match_index : match_index + len(query)]
+                post = cell_type[match_index + len(query) :]
 
-                matching_results.append({
-                    'full': cell_type,
-                    'pre': pre,
-                    'match': match,
-                    'post': post,
-                    'tags': organs_list,  # Organs as tags for chip display
-                    'organs': organs_list,  # Additional field for organs
-                    'values': [f'{organ}.{cell_type}' for organ in organs_list]  # Original names
-                })
+                matching_results.append(
+                    {
+                        'full': cell_type,
+                        'pre': pre,
+                        'match': match,
+                        'post': post,
+                        'tags': organs_list,  # Organs as tags for chip display
+                        'organs': organs_list,  # Additional field for organs
+                        'values': [
+                            f'{organ}.{cell_type}' for organ in organs_list
+                        ],  # Original names
+                    }
+                )
 
         # Sort by relevance: exact matches first, then starts-with, then contains
         def sort_key(result):
@@ -402,7 +401,7 @@ def cell_types_autocomplete():
 
         return jsonify({'results': limited_results})
     except Exception as e:
-        current_app.logger.error(f"Error in cell type autocomplete: {e}")
+        current_app.logger.error(f'Error in cell type autocomplete: {e}')
         return jsonify({'error': 'Failed to search cell types'}), 500
 
 
@@ -451,12 +450,14 @@ def genes_validate():
             else:
                 invalid_genes.append(gene)
 
-        return jsonify({
-            'valid_genes': valid_genes,
-            'invalid_genes': invalid_genes,
-            'total_provided': len(provided_genes),
-            'total_valid': len(valid_genes)
-        })
+        return jsonify(
+            {
+                'valid_genes': valid_genes,
+                'invalid_genes': invalid_genes,
+                'total_provided': len(provided_genes),
+                'total_valid': len(valid_genes),
+            }
+        )
     except Exception as e:
-        current_app.logger.error(f"Error in gene validation: {e}")
+        current_app.logger.error(f'Error in gene validation: {e}')
         return jsonify({'error': 'Failed to validate genes'}), 500

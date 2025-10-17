@@ -1,4 +1,4 @@
-from flask import (render_template)
+from flask import render_template
 
 from .utils import get_default_flask_data, make_blueprint
 
@@ -10,9 +10,7 @@ blueprint = make_blueprint(__name__)
 def index():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        flask_data=flask_data,
-        title='Workspaces'
+        'base-pages/react-content.html', flask_data=flask_data, title='Workspaces'
     )
 
 
@@ -20,9 +18,7 @@ def index():
 def please_wait(workspace_id):
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        flask_data=flask_data,
-        title='Please Wait'
+        'base-pages/react-content.html', flask_data=flask_data, title='Please Wait'
     )
 
 
@@ -30,9 +26,7 @@ def please_wait(workspace_id):
 def workspace_detail(workspace_id):
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        flask_data=flask_data,
-        title='Workspace'
+        'base-pages/react-content.html', flask_data=flask_data, title='Workspace'
     )
 
 
@@ -42,7 +36,7 @@ def invitation_detail(invitation_id):
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,
-        title='Invitation to Collaborate on a Workspace'
+        title='Invitation to Collaborate on a Workspace',
     )
 
 
@@ -50,9 +44,7 @@ def invitation_detail(invitation_id):
 def templates():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        flask_data=flask_data,
-        title='Templates'
+        'base-pages/react-content.html', flask_data=flask_data, title='Templates'
     )
 
 
@@ -60,7 +52,5 @@ def templates():
 def template_detail(template_id):
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'base-pages/react-content.html',
-        flask_data=flask_data,
-        title='Template'
+        'base-pages/react-content.html', flask_data=flask_data, title='Template'
     )

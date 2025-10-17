@@ -13,7 +13,7 @@ for path in Path(__file__).parents:
         sys.path.append(str(path))
         break
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     client = boto3.Session(profile_name='harvarddev', region_name='us-east-1').client('logs')
 
     boto3.client('logs').waiter_names
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         queryString="""fields @timestamp, @logStream, @message
         | filter @message like /(?i)(error|exception)/
         | sort @timestamp desc""",
-        limit=200
+        limit=200,
     )
 
     query_id = query['queryId']
@@ -34,18 +34,16 @@ if __name__ == "__main__":
     while response is None or response['status'] == 'Running':
         print('Waiting for query to complete')
         time.sleep(5)
-        response = client.get_query_results(
-            queryId=query_id
-        )
+        response = client.get_query_results(queryId=query_id)
 
     log_dir = 'portal-logs-errors'
-    if response['status'] == "Complete":
+    if response['status'] == 'Complete':
         if os.path.isdir(log_dir) is False:
             os.mkdir(log_dir)
-        with open(f"{log_dir}/errors-{date.today()}.csv",
-                  'w', newline='') as csvfile:
-            writer = DictWriter(csvfile, fieldnames=[
-                                '@timestamp', '@logStream', '@message', '@ptr'])
+        with open(f'{log_dir}/errors-{date.today()}.csv', 'w', newline='') as csvfile:
+            writer = DictWriter(
+                csvfile, fieldnames=['@timestamp', '@logStream', '@message', '@ptr']
+            )
             writer.writeheader()
 
             for result in response['results']:

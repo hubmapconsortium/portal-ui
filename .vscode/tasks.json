@@ -4,7 +4,20 @@
     {
       "label": "pip install",
       "type": "shell",
-      "command": "PIP_CONSTRAINT=context/constraints.txt uv pip sync context/requirements.txt",
+      "command": "uv sync --dev",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "focus": false,
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "pip install (production only)",
+      "type": "shell",
+      "command": "uv sync",
       "group": {
         "kind": "build",
         "isDefault": false
@@ -200,7 +213,7 @@
       "script": "test:watch",
       "options": {
         "cwd": "${workspaceFolder}/context"
-      },
+      }
     }
   ]
 }
