@@ -152,6 +152,3 @@ describe('TutorialCard', () => {
     expect(button).toBeDisabled();
   });
 });
-
-// TutorialsList integration tests would require more complex setup
-// The TutorialCard component tests above provide good coverage for the main functionality
