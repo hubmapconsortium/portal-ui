@@ -60,6 +60,7 @@ export function TutorialCard({ tutorial }: TutorialDisplayProps) {
         cardKey={tutorial.title}
         tags={tutorial.tags}
         category={tutorial.category}
+        data-testid="tutorial-card"
         grow
       >
         <Box mt={1}>
