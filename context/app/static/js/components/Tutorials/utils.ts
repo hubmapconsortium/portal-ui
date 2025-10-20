@@ -1,5 +1,5 @@
 import { Tutorial } from './types';
 
 export function tutorialIsReady(tutorial: Tutorial): boolean {
-  return !!tutorial.iframeLink;
+  return !!tutorial.iframeLink || !!tutorial.iframeLink.trim();
 }

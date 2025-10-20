@@ -39,9 +39,7 @@ describe('utils', () => {
         iframeLink: '   ',
       };
 
-      // The current implementation returns true for whitespace, but this test documents the expected behavior
-      // If this test fails, it means we might want to update the tutorialIsReady function to trim whitespace
-      expect(tutorialIsReady(tutorial)).toBe(true); // Current behavior - returns true for whitespace
+      expect(tutorialIsReady(tutorial)).toBe(false);
     });
 
     it('should return true when tutorial has valid URL with different protocols', () => {
