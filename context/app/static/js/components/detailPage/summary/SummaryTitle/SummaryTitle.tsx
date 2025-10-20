@@ -12,11 +12,11 @@ const entityStoreSelector = (state: EntityStore) => state.setSummaryComponentObs
 
 interface SummaryTitleProps extends PropsWithChildren {
   iconTooltipText?: string;
-  entityIcon?: keyof typeof titleLinks;
+  entityIcon?: keyof typeof entityIconMap;
   organIcon?: string; // name of the organ to fetch icon for (e.g. 'Kidney', 'Lung', etc.
 }
 
-const titleLinks: Record<AllEntityTypes | 'Tutorial', string | undefined> = {
+const titleLinks: Record<AllEntityTypes, string | undefined> = {
   Donor: '/search/donors',
   Sample: '/search/samples',
   Dataset: '/search/datasets',
@@ -31,7 +31,7 @@ const titleLinks: Record<AllEntityTypes | 'Tutorial', string | undefined> = {
   Tutorial: '/tutorials',
 };
 
-const useSummaryHref = (entityIcon?: keyof typeof titleLinks, organIcon?: string) => {
+const useSummaryHref = (entityIcon?: keyof typeof entityIconMap, organIcon?: string) => {
   if (organIcon) {
     return '/organs';
   }
