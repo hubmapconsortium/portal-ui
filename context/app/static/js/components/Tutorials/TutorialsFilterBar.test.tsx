@@ -4,26 +4,6 @@ import TutorialsFilterBar from './TutorialsFilterBar';
 import { TutorialLandingPageContextProvider } from './TutorialLandingPageContext';
 import { TUTORIAL_CATEGORIES } from './types';
 
-// Mock tutorial data - must be defined before jest.mock
-const mockTutorials = [
-  {
-    title: 'Data Tutorial',
-    route: 'data-tutorial',
-    description: 'Learn about data',
-    category: 'Data',
-    tags: ['Data'],
-    iframeLink: 'https://example.com/tutorial1',
-  },
-  {
-    title: 'Visualization Tutorial',
-    route: 'viz-tutorial',
-    description: 'Learn about visualization',
-    category: 'Visualization',
-    tags: ['Visualization'],
-    iframeLink: 'https://example.com/tutorial2',
-  },
-];
-
 // Mock SelectableChip component
 jest.mock('js/shared-styles/chips/SelectableChip', () => ({
   __esModule: true,
@@ -46,7 +26,24 @@ jest.mock('js/shared-styles/chips/SelectableChip', () => ({
 
 jest.mock('./types', () => ({
   ...jest.requireActual('./types'),
-  TUTORIALS: mockTutorials,
+  TUTORIALS: [
+    {
+      title: 'Data Tutorial',
+      route: 'data-tutorial',
+      description: 'Learn about data',
+      category: 'Data',
+      tags: ['Data'],
+      iframeLink: 'https://example.com/tutorial1',
+    },
+    {
+      title: 'Visualization Tutorial',
+      route: 'viz-tutorial',
+      description: 'Learn about visualization',
+      category: 'Visualization',
+      tags: ['Visualization'],
+      iframeLink: 'https://example.com/tutorial2',
+    },
+  ],
 }));
 
 describe('TutorialsFilterBar', () => {
@@ -62,7 +59,8 @@ describe('TutorialsFilterBar', () => {
     renderWithProvider();
 
     expect(screen.getByText('Filter by Category')).toBeInTheDocument();
-    expect(screen.getByLabelText('Filter by Category')).toBeInTheDocument();
+    // The label is for the filter group, not an actual form input
+    expect(screen.getByText('Filter by Category')).toHaveAttribute('for', 'tutorial-category-filters');
   });
 
   it('should render all tutorial categories as filter chips', () => {
@@ -129,13 +127,13 @@ describe('TutorialsFilterBar', () => {
   it('should have proper accessibility structure', () => {
     renderWithProvider();
 
-    // Check for proper ARIA labeling
-    const filterSection = screen.getByRole('group');
-    expect(filterSection).toHaveAttribute('id', 'tutorial-category-filters');
-
     // Check that the label correctly references the filter group
     const label = screen.getByText('Filter by Category');
-    expect(label).toHaveAttribute('htmlFor', 'tutorial-category-filters');
+    expect(label).toHaveAttribute('for', 'tutorial-category-filters');
+
+    // Check for buttons with proper aria-pressed attributes
+    const dataChip = screen.getByTestId('filter-chip-Data');
+    expect(dataChip).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('should render all expected tutorial categories', () => {

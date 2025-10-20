@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from 'test-utils/functions';
+import { render, screen, fireEvent } from 'test-utils/functions';
 import {
   TutorialLandingPageContextProvider,
   useTutorialLandingPageSearchData,
@@ -7,50 +7,46 @@ import {
   useTutorialsByCategory,
   useFeaturedTutorials,
 } from './TutorialLandingPageContext';
-import { Tutorial } from './types';
-
-// Mock tutorial data for testing - must be defined before jest.mock
-const mockTutorials: Tutorial[] = [
-  {
-    title: 'Test Tutorial 1',
-    route: 'test-tutorial-1',
-    description: 'This is a test tutorial about data',
-    category: 'Data',
-    tags: ['Test', 'Data'],
-    iframeLink: 'https://example.com/tutorial1',
-    isFeatured: true,
-  },
-  {
-    title: 'Test Tutorial 2',
-    route: 'test-tutorial-2',
-    description: 'This is a visualization tutorial',
-    category: 'Visualization',
-    tags: ['Visualization', 'Charts'],
-    iframeLink: 'https://example.com/tutorial2',
-  },
-  {
-    title: 'Test Tutorial 3',
-    route: 'test-tutorial-3',
-    description: 'Another data tutorial with biomarker info',
-    category: 'Data',
-    tags: ['Biomarker', 'Analysis'],
-    iframeLink: '',
-  },
-  {
-    title: 'Workspaces Tutorial',
-    route: 'workspaces-tutorial',
-    description: 'Learn about workspaces',
-    category: 'Workspaces',
-    tags: ['Workspaces', 'Analysis'],
-    iframeLink: 'https://example.com/workspaces',
-    isFeatured: true,
-  },
-];
 
 // Mock the TUTORIALS constant
 jest.mock('./types', () => ({
   ...jest.requireActual('./types'),
-  TUTORIALS: mockTutorials,
+  TUTORIALS: [
+    {
+      title: 'Test Tutorial 1',
+      route: 'test-tutorial-1',
+      description: 'This is a test tutorial about data',
+      category: 'Data',
+      tags: ['Test', 'Data'],
+      iframeLink: 'https://example.com/tutorial1',
+      isFeatured: true,
+    },
+    {
+      title: 'Test Tutorial 2',
+      route: 'test-tutorial-2',
+      description: 'This is a visualization tutorial',
+      category: 'Visualization',
+      tags: ['Visualization', 'Charts'],
+      iframeLink: 'https://example.com/tutorial2',
+    },
+    {
+      title: 'Test Tutorial 3',
+      route: 'test-tutorial-3',
+      description: 'Another data tutorial with biomarker info',
+      category: 'Data',
+      tags: ['Biomarker', 'Analysis'],
+      iframeLink: '',
+    },
+    {
+      title: 'Workspaces Tutorial',
+      route: 'workspaces-tutorial',
+      description: 'Learn about workspaces',
+      category: 'Workspaces',
+      tags: ['Workspaces', 'Analysis'],
+      iframeLink: 'https://example.com/workspaces',
+      isFeatured: true,
+    },
+  ],
 }));
 
 // Test component to access hooks
@@ -103,8 +99,8 @@ describe('TutorialLandingPageContext', () => {
     it('should update search and filter tutorials', () => {
       renderWithProvider(<TestComponent />);
 
-      // Click to set search
-      screen.getByTestId('set-search').click();
+      // Use fireEvent for more reliable event handling
+      fireEvent.click(screen.getByTestId('set-search'));
 
       expect(screen.getByTestId('search')).toHaveTextContent('data');
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('2'); // Only tutorials with 'data' in title/description/tags
@@ -113,8 +109,8 @@ describe('TutorialLandingPageContext', () => {
     it('should filter by category', () => {
       renderWithProvider(<TestComponent />);
 
-      // Click to set filter
-      screen.getByTestId('set-filter').click();
+      // Use fireEvent for more reliable event handling
+      fireEvent.click(screen.getByTestId('set-filter'));
 
       expect(screen.getByTestId('filter-category')).toHaveTextContent('Visualization');
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('1');
@@ -124,11 +120,11 @@ describe('TutorialLandingPageContext', () => {
       renderWithProvider(<TestComponent />);
 
       // Set filter first
-      screen.getByTestId('set-filter').click();
+      fireEvent.click(screen.getByTestId('set-filter'));
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('1');
 
       // Clear filter
-      screen.getByTestId('clear-filter').click();
+      fireEvent.click(screen.getByTestId('clear-filter'));
       expect(screen.getByTestId('filter-category')).toHaveTextContent('none');
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('4');
     });

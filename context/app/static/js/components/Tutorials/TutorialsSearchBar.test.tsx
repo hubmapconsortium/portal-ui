@@ -3,26 +3,6 @@ import { render, screen, fireEvent } from 'test-utils/functions';
 import TutorialsSearchBar from './TutorialsSearchBar';
 import { TutorialLandingPageContextProvider } from './TutorialLandingPageContext';
 
-// Mock tutorial data - must be defined before jest.mock
-const mockTutorials = [
-  {
-    title: 'Data Tutorial',
-    route: 'data-tutorial',
-    description: 'Learn about data analysis',
-    category: 'Data',
-    tags: ['Data', 'Analysis'],
-    iframeLink: 'https://example.com/tutorial1',
-  },
-  {
-    title: 'Visualization Tutorial',
-    route: 'viz-tutorial',
-    description: 'Learn about data visualization',
-    category: 'Visualization',
-    tags: ['Visualization', 'Charts'],
-    iframeLink: 'https://example.com/tutorial2',
-  },
-];
-
 // Mock the SearchBar component
 jest.mock('js/shared-styles/inputs/SearchBar', () => ({
   __esModule: true,
@@ -51,15 +31,35 @@ jest.mock('js/shared-styles/inputs/SearchBar', () => ({
 }));
 
 // Mock the trackEvent function
-const mockTrackEvent = jest.fn();
 jest.mock('js/helpers/trackers', () => ({
-  trackEvent: mockTrackEvent,
+  trackEvent: jest.fn(),
 }));
 
 jest.mock('./types', () => ({
   ...jest.requireActual('./types'),
-  TUTORIALS: mockTutorials,
+  TUTORIALS: [
+    {
+      title: 'Data Tutorial',
+      route: 'data-tutorial',
+      description: 'Learn about data analysis',
+      category: 'Data',
+      tags: ['Data', 'Analysis'],
+      iframeLink: 'https://example.com/tutorial1',
+    },
+    {
+      title: 'Visualization Tutorial',
+      route: 'viz-tutorial',
+      description: 'Learn about data visualization',
+      category: 'Visualization',
+      tags: ['Visualization', 'Charts'],
+      iframeLink: 'https://example.com/tutorial2',
+    },
+  ],
 }));
+
+// Import the mocked function
+import { trackEvent } from 'js/helpers/trackers';
+const mockTrackEvent = trackEvent as jest.MockedFunction<typeof trackEvent>;
 
 describe('TutorialsSearchBar', () => {
   const renderWithProvider = () => {
