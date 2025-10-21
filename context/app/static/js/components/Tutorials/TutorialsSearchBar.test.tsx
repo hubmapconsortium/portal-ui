@@ -125,7 +125,7 @@ describe('TutorialsSearchBar', () => {
     fireEvent.blur(searchBar);
 
     expect(mockTrackEvent).toHaveBeenCalledWith({
-      category: 'Cell Type Landing Page',
+      category: 'Tutorials Landing Page',
       action: 'Search Bar',
       label: 'visualization',
     });
@@ -140,7 +140,7 @@ describe('TutorialsSearchBar', () => {
     fireEvent.blur(searchBar);
 
     expect(mockTrackEvent).toHaveBeenCalledWith({
-      category: 'Cell Type Landing Page',
+      category: 'Tutorials Landing Page',
       action: 'Search Bar',
       label: '',
     });
@@ -156,7 +156,7 @@ describe('TutorialsSearchBar', () => {
     fireEvent.blur(searchBar);
 
     expect(mockTrackEvent).toHaveBeenCalledWith({
-      category: 'Cell Type Landing Page',
+      category: 'Tutorials Landing Page',
       action: 'Search Bar',
       label: 'data',
     });
@@ -167,7 +167,7 @@ describe('TutorialsSearchBar', () => {
     fireEvent.blur(searchBar);
 
     expect(mockTrackEvent).toHaveBeenCalledWith({
-      category: 'Cell Type Landing Page',
+      category: 'Tutorials Landing Page',
       action: 'Search Bar',
       label: 'charts',
     });
@@ -186,7 +186,7 @@ describe('TutorialsSearchBar', () => {
 
     fireEvent.blur(searchBar);
     expect(mockTrackEvent).toHaveBeenCalledWith({
-      category: 'Cell Type Landing Page',
+      category: 'Tutorials Landing Page',
       action: 'Search Bar',
       label: specialText,
     });

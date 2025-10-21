@@ -19,7 +19,7 @@ export default function TutorialsSearchBar() {
       }}
       onBlur={() => {
         trackEvent({
-          category: 'Cell Type Landing Page',
+          category: 'Tutorials Landing Page',
           action: 'Search Bar',
           label: search,
         });

@@ -62,7 +62,7 @@ function ItemLink({
       gap={0.5}
       color={currentSection === item.hash ? 'textPrimary' : 'textSecondary'}
       href={isRoute ? item.hash : `#${item.hash}`}
-      onClick={isRoute ? handleClickInternal : handleClickInternal}
+      onClick={handleClickInternal}
       $isCurrentSection={currentSection === item.hash}
       $isNested={isNested}
     >
