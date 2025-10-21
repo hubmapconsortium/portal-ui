@@ -71,7 +71,7 @@ describe("Entity detail page all load", () => {
 
 describe("Other detail pages all load", () => {
   const pages = [
-    { name: "Tutorial", url: "/tutorial/getting-started", testId: "tutorial-iframe-section", titleTestId: "tutorial-title" },
+    { name: "Tutorial", url: "/tutorials/getting-started", testId: "tutorial-iframe-section", titleTestId: "tutorial-title" },
     { name: "Template", url: "/templates", testId: "template-card", titleTestId: "entity-title" },
   ];  
 
