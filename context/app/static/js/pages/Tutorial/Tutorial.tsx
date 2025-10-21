@@ -128,7 +128,7 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
         >
           {description}
         </Description>
-        <CollapsibleDetailPageSection title="Tutorial" icon={TutorialIcon}>
+        <CollapsibleDetailPageSection title="Tutorial" icon={TutorialIcon} data-testid="tutorial-iframe-section">
           <StyledIframe src={iframeLink} title={title} />
         </CollapsibleDetailPageSection>
         {relatedTutorials.length > 0 && (
