@@ -6,16 +6,7 @@ import { Dataset, ESEntityType, Entity, isDataset } from 'js/components/types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { MergedWorkspace } from 'js/components/workspaces/types';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-
-export function isEmptyArrayOrObject(val: object | unknown[]) {
-  if (val.constructor.name === 'Object') {
-    return Object.keys(val).length === 0;
-  }
-  if (val.constructor.name === 'Array' && Array.isArray(val)) {
-    return val.length === 0;
-  }
-  return false;
-}
+import { isDeepEmpty } from './type-guards';
 
 export function capitalizeString(s?: string) {
   if (!s) {
@@ -118,10 +109,28 @@ export function getDefaultQuery() {
   };
 }
 
-export function combineQueryClauses(queries: object | object[]) {
+export function combineQueryClauses(
+  queries: (object | null | undefined | false)[] | (object | null | undefined | false),
+) {
+  const queryArray = Array.isArray(queries) ? queries : [queries];
+
+  const filteredQueries = queryArray.filter((query): query is object => {
+    // Filter out falsy values (null, undefined, false)
+    if (!query) {
+      return false;
+    }
+
+    // Filter out empty objects (including deeply nested empty objects)
+    if (typeof query === 'object' && query !== null) {
+      return !isDeepEmpty(query);
+    }
+
+    return true;
+  });
+
   return {
     bool: {
-      must: queries,
+      must: filteredQueries,
     },
   };
 }
@@ -136,13 +145,13 @@ export function addRestrictionsToQuery({ query, ...rest }: SearchRequest): Searc
   };
 }
 
-interface SearchHit {
+export interface EntityTypeSearchHit {
   _source: {
     entity_type: string;
   };
 }
 
-export function getSearchHitsEntityCounts(searchHits: SearchHit[]) {
+export function getSearchHitsEntityCounts(searchHits: EntityTypeSearchHit[]) {
   const counts = searchHits.reduce<Record<string, number>>(
     (acc, { _source: { entity_type } }) => {
       if (!(entity_type in acc)) {
@@ -162,16 +171,21 @@ export function getArrayRange(n: number): number[] {
   return [...Array(n).keys()];
 }
 
-export function getDonorAgeString({ age_value, age_unit }: { age_value: number; age_unit: string }) {
+interface DonorAge {
+  age_value?: number;
+  age_unit?: string;
+}
+
+export function getDonorAgeString({ age_value, age_unit }: DonorAge) {
   if (!(age_value && age_unit)) {
     return '';
   }
   return [age_value, age_unit].join(' ');
 }
 
-export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, keys: K[]) {
+export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, keys: (string | K)[]) {
   const allKeys = Object.keys(obj) as K[];
-  const validKeys = keys.filter((k) => allKeys.includes(k));
+  const validKeys = keys.filter((k): k is K => allKeys.includes(k as K));
   return validKeys.reduce<Partial<O>>((acc, k: K) => {
     return {
       ...acc,

@@ -1,11 +1,11 @@
-import { getSearchHitsEntityCounts } from '../functions';
+import { getSearchHitsEntityCounts, EntityTypeSearchHit } from '../functions';
 
-function getHitWithEntityType(entityType) {
+function getHitWithEntityType(entityType: string): EntityTypeSearchHit {
   return { _source: { entity_type: entityType } };
 }
 
 test('should count expected entities', () => {
-  const hits = [
+  const hits: EntityTypeSearchHit[] = [
     getHitWithEntityType('Dataset'),
     getHitWithEntityType('Donor'),
     getHitWithEntityType('Sample'),
@@ -16,12 +16,12 @@ test('should count expected entities', () => {
 });
 
 test('should provide default 0 value for expected entities', () => {
-  const hits = [];
+  const hits: EntityTypeSearchHit[] = [];
   expect(getSearchHitsEntityCounts(hits)).toEqual({ Donor: 0, Sample: 0, Dataset: 0 });
 });
 
 test('should count unexpected entities', () => {
-  const hits = [getHitWithEntityType('Dataset'), getHitWithEntityType('Support')];
+  const hits: EntityTypeSearchHit[] = [getHitWithEntityType('Dataset'), getHitWithEntityType('Support')];
 
   expect(getSearchHitsEntityCounts(hits)).toEqual({ Donor: 0, Sample: 0, Dataset: 1, Support: 1 });
 });
