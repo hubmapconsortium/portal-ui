@@ -1,0 +1,1 @@
+- Ensure sample hierarchy in provenance tables properly handles edge cases where organs were registered after their descendants.
