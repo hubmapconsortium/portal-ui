@@ -113,9 +113,9 @@ const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
     [clids],
   );
 
-  const { data: cellTypeDetails } = useCellTypeOntologyDetails(cellTypeIds);
+  const { data: cellTypeDetails, isLoading: isLoadingDescriptions } = useCellTypeOntologyDetails(cellTypeIds);
 
-  return useMemo(() => {
+  const rows = useMemo(() => {
     return cellTypes.map((cellType, idx) => {
       const clid = clids?.[idx]?.CLIDs?.[0] ?? null;
       const description = (clid && cellTypeDetails?.[clid.replace(/\D/g, '')]?.definition) ?? '';
@@ -131,9 +131,10 @@ const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
       };
     });
   }, [cellTypes, clids, cellTypeDetails]);
+  return { rows, isLoadingDescriptions };
 };
 
-function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
+function CellTypesRow({ cellType, isLoadingDescriptions }: { cellType: CellTypeRow; isLoadingDescriptions: boolean }) {
   const formattedCellName = useMemo(() => cellType.cell_type.split('.').slice(1).join('.'), [cellType.cell_type]);
   const trackCLIDClick = useTrackGeneDetailPage({
     action: 'Cell Types / Select CLID',
@@ -160,7 +161,9 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
         </div>
       </TableCell>
       <TableCell>
-        <LineClamp lines={2}>{(cellType.description || 'No description available') ?? <Skeleton />}</LineClamp>
+        <LineClamp lines={2}>
+          {isLoadingDescriptions ? <Skeleton /> : cellType.description || 'No description available'}
+        </LineClamp>
       </TableCell>
       <TableCell>
         {cellType.cell_hits} / {cellType.total_cells} ({percent.format(cellType.cell_hits / cellType.total_cells)}){' '}
@@ -238,7 +241,7 @@ function CellTypesTable() {
     [allCellTypesForGene],
   );
 
-  const cellTypeRows = useCellTypeRows(cellTypes?.findGeneSignatures);
+  const { rows: cellTypeRows, isLoadingDescriptions } = useCellTypeRows(cellTypes?.findGeneSignatures);
 
   const filteredSortedCellTypes = useMemo(() => {
     const sortedCellTypes = [...cellTypeRows].sort((a, b) => {
@@ -357,7 +360,11 @@ function CellTypesTable() {
           <TableBody>
             {isLoading && <TableSkeleton />}
             {filteredSortedCellTypes.map((cellType) => (
-              <CellTypesRow key={cellType.cell_type} cellType={cellType} />
+              <CellTypesRow
+                key={cellType.cell_type}
+                cellType={cellType}
+                isLoadingDescriptions={isLoadingDescriptions}
+              />
             ))}
           </TableBody>
         </Table>
