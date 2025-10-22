@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 
 import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { AllEntityTypes, entityIconMap, hasIconForEntity } from 'js/shared-styles/icons/entityIconMap';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 
 const entityStoreSelector = (state: EntityStore) => state.setSummaryComponentObserver;
@@ -28,6 +28,7 @@ const titleLinks: Record<AllEntityTypes, string | undefined> = {
   CellType: '/cell-types',
   Gene: '/genes',
   VerifiedUser: undefined,
+  Tutorial: '/tutorials',
 };
 
 const useSummaryHref = (entityIcon?: keyof typeof entityIconMap, organIcon?: string) => {
@@ -49,7 +50,7 @@ function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon }: Summ
     initialInView: true,
   });
 
-  const Icon = entityIcon ? entityIconMap[entityIcon] : null;
+  const Icon = hasIconForEntity(entityIcon) ? entityIconMap[entityIcon] : null;
 
   useEffect(() => {
     if (entry) {

@@ -18,6 +18,7 @@ import { StickyNav, TableTitle, StyledItemLink, StyledIconContainer } from './st
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
 import { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition } from './hooks';
+import { useEventCallback } from '@mui/material/utils';
 
 const AnimatedNav = animated(StickyNav);
 
@@ -27,8 +28,32 @@ interface LinkProps {
   isNested?: boolean;
 }
 
-function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkProps & { item: TableOfContentsItem }) {
-  const { icon: Icon, externalIcon } = item;
+const trackRouteNavigation = (text: string, trackingInfo: EventInfo | undefined) => {
+  if (trackingInfo) {
+    trackEvent({
+      ...trackingInfo,
+      action: 'Navigate with Table of Contents',
+      label: `${trackingInfo.label} ${text}`,
+    });
+  }
+};
+
+function ItemLink({
+  item,
+  currentSection,
+  handleClick,
+  isNested = false,
+  trackingInfo,
+}: LinkProps & { item: TableOfContentsItem; trackingInfo?: EventInfo }) {
+  const { icon: Icon, externalIcon, isRoute } = item;
+
+  const handleClickInternal = useEventCallback(() => {
+    if (isRoute) {
+      trackRouteNavigation(item.text, trackingInfo);
+    } else {
+      handleClick(item.hash, item.text);
+    }
+  });
 
   return (
     <StyledItemLink
@@ -36,8 +61,8 @@ function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkP
       alignItems="center"
       gap={0.5}
       color={currentSection === item.hash ? 'textPrimary' : 'textSecondary'}
-      href={`#${item.hash}`}
-      onClick={handleClick(item.hash, item.text)}
+      href={isRoute ? item.hash : `#${item.hash}`}
+      onClick={handleClickInternal}
       $isCurrentSection={currentSection === item.hash}
       $isNested={isNested}
     >
@@ -59,8 +84,9 @@ function ItemLinks({
 }: LinkProps & {
   level: number;
   item: TableOfContentsItem;
+  trackingInfo?: EventInfo;
 }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(!item.initiallyClosed);
 
   const { items: subItems } = item;
 
@@ -111,16 +137,24 @@ function ItemSkeleton() {
   );
 }
 
+interface TableOfContentsProps {
+  items: TableOfContentsItems;
+  isLoading?: boolean;
+  trackingInfo?: EventInfo;
+  initialCurrentSection?: string;
+  title?: string;
+  titleHref?: string;
+}
+
 function TableOfContents({
   items,
   isLoading = false,
   trackingInfo,
-}: {
-  items: TableOfContentsItems;
-  isLoading?: boolean;
-  trackingInfo?: EventInfo;
-}) {
-  const [currentSection, setCurrentSection] = useState(items[0].hash);
+  initialCurrentSection,
+  title = 'Contents',
+  titleHref,
+}: TableOfContentsProps) {
+  const [currentSection, setCurrentSection] = useState(initialCurrentSection || items[0]?.hash || '');
 
   const itemsWithNodeRef = React.useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
 
@@ -187,7 +221,9 @@ function TableOfContents({
   return (
     <Box data-testid="table-of-contents" height="100%" mr={1}>
       <AnimatedNav style={position}>
-        <TableTitle variant="h5">Contents</TableTitle>
+        <TableTitle variant="h5" component={titleHref ? 'a' : 'div'} href={titleHref}>
+          {title}
+        </TableTitle>
         {isLoading ? (
           <>
             <ItemSkeleton />
@@ -205,6 +241,7 @@ function TableOfContents({
                 handleClick={handleClick}
                 key={`${item.hash}-${item.text}`}
                 level={0}
+                trackingInfo={trackingInfo}
               />
             ))}
           </List>
