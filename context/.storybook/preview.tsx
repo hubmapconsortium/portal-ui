@@ -45,6 +45,10 @@ export const decorators = [
       isWorkspacesUser={false}
       isHubmapUser={false}
       flaskData={{}}
+      userFirstName={undefined}
+      userLastName={undefined}
+      userGlobusId={undefined}
+      userGlobusAffiliation={undefined}
     >
       <Story />
     </Providers>

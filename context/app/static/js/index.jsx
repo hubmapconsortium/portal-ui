@@ -27,6 +27,10 @@ root.render(
       userEmail={userEmail}
       workspacesToken={workspacesToken}
       userGroups={userGroups}
+      userFirstName={userFirstName}
+      userLastName={userLastName}
+      userGlobusId={userGlobusId}
+      userGlobusAffiliation={userGlobusAffiliation}
     />
   ),
 );

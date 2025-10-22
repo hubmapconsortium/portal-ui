@@ -49,6 +49,10 @@ export function AllTheProviders({
       userEmail={undefined}
       workspacesToken={undefined}
       isHubmapUser={undefined}
+      userFirstName={undefined}
+      userLastName={undefined}
+      userGlobusId={undefined}
+      userGlobusAffiliation={undefined}
     >
       {children}
     </Providers>
