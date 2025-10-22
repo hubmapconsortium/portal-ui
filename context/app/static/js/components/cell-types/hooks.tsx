@@ -142,7 +142,7 @@ export function useIndexedDatasetsForCellType({
   return {
     datasets: hubmapIds,
     datasetUUIDs,
-    isLoading: isLoadingScFind || isLoadingSearchApi,
+    isLoadingDatasets: isLoadingScFind || isLoadingSearchApi,
     organs,
     datasetTypes,
     trackingInfo,
