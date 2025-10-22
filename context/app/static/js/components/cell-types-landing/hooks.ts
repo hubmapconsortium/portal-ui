@@ -1,6 +1,7 @@
 import useCellTypeNames, { useCellTypeNamesMap } from 'js/api/scfind/useCellTypeNames';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { formatCellTypeName } from 'js/api/scfind/utils';
+import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import { useMemo } from 'react';
 
 export function useCellTypesList() {
@@ -30,9 +31,28 @@ export function useCellTypesList() {
     );
   }, [results, data?.cellTypeNames, cellTypesMap]);
 
+  // Extract CLIDs for fetching descriptions
+  const clids = useMemo(() => cellTypes.map((ct) => ct.clid).filter(Boolean), [cellTypes]);
+
+  // Fetch cell type descriptions using the UBKG API
+  const {
+    data: cellTypeDetails,
+    isLoading: isLoadingDescriptions,
+    error: descriptionsError,
+  } = useCellTypeOntologyDetails(clids);
+
+  // Combine cell types with their descriptions
+  const cellTypesWithDescriptions = useMemo(() => {
+    return cellTypes.map((cellType) => ({
+      ...cellType,
+      description: cellType.clid ? cellTypeDetails?.[cellType.clid.replace(/\D/g, '')]?.definition : undefined,
+    }));
+  }, [cellTypes, cellTypeDetails]);
+
   return {
-    cellTypes,
-    isLoading: isLoadingCLIDs || isLoadingLabels,
+    cellTypes: cellTypesWithDescriptions,
+    isLoading: isLoadingCLIDs || isLoadingLabels || isLoadingDescriptions,
     isValidating: isValidatingLabels,
+    descriptionsError,
   };
 }

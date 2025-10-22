@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,9 +9,6 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { useCellTypeOntologyDetail } from 'js/hooks/useUBKG';
-import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
-import { CheckIcon, DownIcon, UpIcon } from 'js/shared-styles/icons';
 import { useCellTypeOrgans } from 'js/api/scfind/useCellTypeNames';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import Divider from '@mui/material/Divider';
@@ -23,23 +19,23 @@ import Typography from '@mui/material/Typography';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Filter from '@mui/icons-material/FilterListRounded';
 import Badge from '@mui/material/Badge';
+import { CheckIcon } from 'js/shared-styles/icons';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
-import { CellTypeDescriptionSkeleton } from '../organ/OrganCellTypes/CellTypeDescription';
 
 const desktopConfig = {
   name: {
-    flexBasis: '30%',
+    flexBasis: '20%',
     flexGrow: 1,
     flexShrink: 0,
   },
-  clid: {
-    flexBasis: '20%',
+  description: {
+    flexBasis: '40%',
     flexShrink: 0,
-    flexGrow: 0,
+    flexGrow: 1,
   },
   organs: {
-    flexBasis: '20%',
+    flexBasis: '15%',
     flexShrink: 0,
     flexGrow: 0,
   },
@@ -47,7 +43,6 @@ const desktopConfig = {
     flexBasis: 'fit-content',
     flexShrink: 0,
     flexGrow: 0,
-    pr: 2,
   },
 };
 
@@ -75,7 +70,7 @@ function CellTypesHeaderPanel() {
   }
   return (
     <StackTemplate spacing={4}>
-      <HeaderCell {...desktopConfig.name} pl={4}>
+      <HeaderCell {...desktopConfig.name}>
         <TableSortLabel
           active={sortState.columnId === 'name'}
           direction={sortState.direction}
@@ -88,20 +83,8 @@ function CellTypesHeaderPanel() {
           Cell Type
         </TableSortLabel>
       </HeaderCell>
-      <HeaderCell {...desktopConfig.clid} pl={1}>
-        <TableSortLabel
-          active={sortState.columnId === 'clid'}
-          direction={sortState.direction}
-          onClick={() => {
-            setSort('clid');
-          }}
-          sx={{ width: '100%' }}
-          data-testid="cell-types-header-clid"
-        >
-          Cell Ontology ID
-        </TableSortLabel>
-      </HeaderCell>
-      <HeaderCell {...desktopConfig.organs} pl={1.5}>
+      <HeaderCell {...desktopConfig.description}>Description</HeaderCell>
+      <HeaderCell {...desktopConfig.organs}>
         <Button
           onClick={handleOpen}
           sx={{
@@ -131,8 +114,10 @@ function CellTypesHeaderPanel() {
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'organ-filters-button',
+          slotProps={{
+            list: {
+              'aria-labelledby': 'organ-filters-button',
+            },
           }}
           sx={{
             width: {
@@ -186,72 +171,12 @@ function CellTypesHeaderPanel() {
   );
 }
 
-interface CellTypeDescriptionProps {
-  clid?: string;
-  name: string;
-}
-
-function CellTypeDescription({ clid, name }: CellTypeDescriptionProps) {
-  const { data, isLoading } = useCellTypeOntologyDetail(clid);
-
-  if (isLoading) {
-    return <CellTypeDescriptionSkeleton cellType={name} />;
-  }
-
-  return (
-    <Box sx={{ color: 'text.secondary' }} aria-live="polite">
-      {data?.cell_type?.definition ?? 'No description available.'}
-    </Box>
-  );
-}
-
-interface CellTypeDescriptionButtonProps {
-  isExpanded: boolean;
-  onClick?: () => void;
-}
-
-function CellTypeDescriptionButton({ isExpanded, onClick }: CellTypeDescriptionButtonProps) {
-  return (
-    <TooltipIconButton
-      tooltip={isExpanded ? 'Hide description.' : 'Show description.'}
-      aria-label={isExpanded ? 'Hide description.' : 'Show description.'}
-      onClick={onClick}
-    >
-      {isExpanded ? <UpIcon fontSize="small" /> : <DownIcon fontSize="small" />}
-    </TooltipIconButton>
-  );
-}
-
-function MobileCellTypeDescriptionButton({
-  isExpanded,
-  clid,
-  name,
-  onClick,
-}: CellTypeDescriptionButtonProps & CellTypeDescriptionProps) {
-  const isMobile = useIsMobile();
-
-  if (!isMobile) {
-    return null;
-  }
-
-  return (
-    <BodyCell aria-label="Description" flexBasis="50%" flexShrink={0} flexGrow={1}>
-      {isExpanded ? (
-        <CellTypeDescription clid={clid} name={name} />
-      ) : (
-        <Button size="small" onClick={onClick} variant="text">
-          Show Description
-        </Button>
-      )}
-    </BodyCell>
-  );
-}
-
 interface CellTypePanelItemProps {
   name: string;
   href?: string;
   clid?: string;
   organs: string[];
+  description?: string;
 }
 
 function OrgansCell({ organs }: { organs: string[] }) {
@@ -296,27 +221,46 @@ function OrgansCell({ organs }: { organs: string[] }) {
   );
 }
 
-function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps) {
+function CellTypesPanelItem({ name, href, organs, clid, description }: CellTypePanelItemProps) {
   // New index version does not lowercase the organ names
   const cellTypes = organs.map((o) => `${o}.${name}`);
-  const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpanded = useEventCallback(() => {
-    setIsExpanded((prev) => !prev);
-  });
-
-  const isMobile = useIsMobile();
-
-  const row = (
+  return (
     <StackTemplate>
       <BodyCell {...desktopConfig.name} aria-label="Cell Type">
-        {!isMobile && <CellTypeDescriptionButton isExpanded={isExpanded} onClick={toggleExpanded} />}
-        <InternalLink href={href} display="inline">
-          {name}
-        </InternalLink>
+        <Box>
+          <InternalLink href={href} display="inline">
+            {name}
+          </InternalLink>
+          {clid && (
+            <Typography
+              variant="caption"
+              sx={{
+                display: 'block',
+                color: 'text.secondary',
+                fontSize: '0.75rem',
+                mt: 0.25,
+              }}
+            >
+              {clid}
+            </Typography>
+          )}
+        </Box>
       </BodyCell>
-      <BodyCell {...desktopConfig.clid} aria-label="CL ID">
-        {clid}
+      <BodyCell {...desktopConfig.description} aria-label="Description">
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.secondary',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+          }}
+        >
+          {description || 'No description available.'}
+        </Typography>
       </BodyCell>
       <BodyCell {...desktopConfig.organs} aria-label={organs.length === 1 ? 'Organ' : 'Organs'}>
         <OrgansCell organs={organs} />
@@ -326,24 +270,7 @@ function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps
           <ViewDatasetsButton scFindParams={{ cellTypes }} />
         </SecondaryBackgroundTooltip>
       </BodyCell>
-      <MobileCellTypeDescriptionButton isExpanded={isExpanded} name={name} clid={clid} onClick={toggleExpanded} />
     </StackTemplate>
-  );
-
-  if (isMobile) {
-    return row;
-  }
-
-  return (
-    // Including the extra margin ensures that the list doesn't become horizontally scrollable
-    <Stack direction="column" width="100%" mr={2}>
-      {row}
-      {isExpanded && !isMobile && (
-        <BodyCell width="100%" p={2} pr={0} aria-label="Description">
-          <CellTypeDescription clid={clid} name={name} />
-        </BodyCell>
-      )}
-    </Stack>
   );
 }
 
