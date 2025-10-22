@@ -22,7 +22,7 @@ export function useCellTypeRows(cellTypes: string[]) {
   const formattedCellNames = useFormattedCellTypeNames(cellTypes);
   const { results: clids, isLoading: isLoadingClids } = useLabelsToCLIDs(formattedCellNames);
   const { matchedDatasets, isLoading: isLoadingMatchedDatasets } = useMatchedDatasets(formattedCellNames);
-  const { datasets: totalIndexedDatasets, isLoading: isLoadingTotalDatasets } = useIndexedDatasetsForOrgan();
+  const { datasets: totalIndexedDatasets, isLoadingDatasets: isLoadingTotalDatasets } = useIndexedDatasetsForOrgan();
 
   const rows = useMemo(() => {
     return (

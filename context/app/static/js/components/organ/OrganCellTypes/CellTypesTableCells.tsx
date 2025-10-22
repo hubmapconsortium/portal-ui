@@ -32,7 +32,7 @@ interface CLIDCellPropsWithTracking extends CLIDCellProps {
   onClick?: MouseEventHandler;
 }
 
-export function CLIDCell({ clid, onClick }: CLIDCellPropsWithTracking) {
+export function CLIDLink({ clid, onClick }: CLIDCellPropsWithTracking) {
   if (!clid) return <Skeleton variant="text" width={100} />;
   return (
     <OutboundIconLink

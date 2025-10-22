@@ -16,7 +16,7 @@ import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableH
 import { useDownloadTable } from 'js/helpers/download';
 import { useCellTypeRows } from './hooks';
 import { CellTypeRowProps, CellTypesTableProps } from './types';
-import { OrganCellTypeCell, CLIDCell, MatchedDatasetsCell, ViewDatasetsCell } from './CellTypesTableCells';
+import { OrganCellTypeCell, CLIDLink, MatchedDatasetsCell, ViewDatasetsCell } from './CellTypesTableCells';
 import { useOrganContext } from '../contexts';
 import CellTypeDescription from './CellTypeDescription';
 
@@ -27,7 +27,7 @@ function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexed
         <OrganCellTypeCell cellType={cellType} />
       </ExpandableRowCell>
       <ExpandableRowCell>
-        <CLIDCell clid={clid} cellType={cellType} />
+        <CLIDLink clid={clid} cellType={cellType} />
       </ExpandableRowCell>
       <ExpandableRowCell>
         <MatchedDatasetsCell
@@ -110,7 +110,7 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
               column={{
                 id: 'clid',
                 label: 'Cell Ontology ID',
-                cellContent: CLIDCell,
+                cellContent: CLIDLink,
               }}
               setSort={setSort}
               sortState={sortState}

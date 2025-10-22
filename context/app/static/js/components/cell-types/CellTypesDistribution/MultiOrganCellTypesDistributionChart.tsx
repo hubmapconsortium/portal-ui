@@ -239,6 +239,7 @@ function MultiOrganCellTypeDistributionChart({
           margin={margin}
           dropdown={hideLegend ? undefined : <Typography variant="body1">Cell Types</Typography>}
           additionalControls={<ChartControls />}
+          fullWidthGraph={hideLegend}
         >
           <VerticalStackedBarChart
             visxData={visxData}

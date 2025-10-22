@@ -1,32 +1,42 @@
 from flask import Flask, session, render_template, redirect, request
 
 from . import (
-    routes_main, routes_browse, routes_api, routes_file_based,
-    routes_auth, routes_cells, routes_markdown, routes_notebooks,
-    routes_workspaces, routes_cell_types, routes_scfind, default_config)
+    routes_main,
+    routes_browse,
+    routes_api,
+    routes_file_based,
+    routes_auth,
+    routes_cells,
+    routes_markdown,
+    routes_notebooks,
+    routes_workspaces,
+    routes_cell_types,
+    routes_scfind,
+    default_config,
+)
 from .flask_static_digest import FlaskStaticDigest
 
 flask_static_digest = FlaskStaticDigest()
 
 
 def render_react_error(code, title):
-    return render_template('base-pages/react-content.html',
-                           flask_data={'errorCode': code},
-                           title=title), code
+    return render_template(
+        'base-pages/react-content.html', flask_data={'errorCode': code}, title=title
+    ), code
 
 
 def bad_request(e):
-    '''A 400 means the request to the API failed.'''
+    """A 400 means the request to the API failed."""
     return render_react_error(400, 'Bad Request')
 
 
 def not_found(e):
-    '''A 404 means Flask routing failed.'''
+    """A 404 means Flask routing failed."""
     return render_react_error(404, 'Page Not Found')
 
 
 def unauthorized(e):
-    '''A 401 probably means Globus credentials have expired.'''
+    """A 401 probably means Globus credentials have expired."""
     # Go ahead and clear the flask session for the user.
     # Without this, the button still says "Logout", as if they were still logged in.
     # We check group membership on login, which is a distinct 401,
@@ -40,15 +50,15 @@ def forbidden(e):
 
 
 def gateway_timeout(e):
-    '''A 504 means the API has timed out.'''
+    """A 504 means the API has timed out."""
     return render_react_error(504, 'Gateway Timeout')
 
 
 def any_other_error(e):
-    '''
+    """
     In debug mode, we will still fall back to the interactive debugger.
     https://flask.palletsprojects.com/en/2.0.x/errorhandling/#unhandled-exceptions
-    '''
+    """
     return render_react_error(500, 'Internal Server Error')
 
 
@@ -113,7 +123,8 @@ def create_app(testing=False):
                 user_email='',
                 is_authenticated=False,
                 workspaces_token='',
-                user_groups=[])
+                user_groups=[],
+            )
 
     return app
 

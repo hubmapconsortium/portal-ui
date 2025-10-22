@@ -20,4 +20,4 @@ DOCKER_BUILDKIT=1 docker build \
   --tag $IMAGE_NAME \
   --build-arg NODE_V=$NODE_V \
   --build-arg PYTHON_MINOR_V=$PYTHON_MINOR_V \
-  context
+  .

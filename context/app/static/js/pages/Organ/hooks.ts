@@ -231,7 +231,7 @@ export function useIndexedDatasetsForOrgan() {
 
   return {
     datasets: datasetUUIDs,
-    isLoading,
+    isLoadingDatasets: isLoading,
     datasetTypes,
     filters: {
       organTerms: searchItems,

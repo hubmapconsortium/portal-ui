@@ -107,18 +107,9 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
 - `python 3.12`
   - `uv` (Recommended):
     - [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) using any supported installation method.
-    - Create a `uv` virtual environment with the appropriate python version via `uv venv --python $(cat .python-version)`.
+    - Create a `uv` virtual environment with the appropriate python version via `uv venv`.
     - Activate the environment with `source .venv/bin/activate`.
-    - Install locked requirements with `uv pip sync context/requirements.txt` and `uv pip install -r context/requirements-dev.txt`.
-  - MiniConda:
-    - [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
-  - pyenv:
-    - `brew install pyenv`
-    - `brew install pyenv-virtualenv`
-    - cd into portal-ui (or provide full path to /portal-ui/.python-version file)
-    - `` pyenv install `cat .python-version`  ``
-    - `` pyenv virtualenv `cat .python-version` portal ``
-    - `pyenv activate portal`
+    - Install dependencies with `uv sync --dev` (to include development dependencies) or `uv sync` (production only).
 - `nodejs/npm`: Suggest installing a node version manager and then using it to install the appropriate node version:
   - [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating)
     - `` nvm install `cat .nvmrc`  ``
@@ -143,10 +134,10 @@ After checking out the project, cd-ing into it, and setting up a Python 3.12 vir
 - Run `etc/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
   - If using VS Code, you can also use the `dev-start` task, which will launch these services in separate terminal windows.
 
+**Note**: The project uses `pyproject.toml` for dependency management. All dependencies, constraints, and development dependencies are centrally managed in `pyproject.toml`. The `uv.lock` file provides exact version pinning for reproducible builds.
+
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
-
-Note: Searchkit, our interface to Elasticsearch for the dev-search page, has changed significantly in recent releases. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
 
 ### Changelog files
 
@@ -156,18 +147,15 @@ Every PR should be reviewed, and every PR should include a new `CHANGELOG-someth
 
 <details><summary>:atom_symbol: React</summary>
 
-> **Note**  
-> **Any mentions of `.js`/`.jsx` in the following guidelines are interchangeable with `.ts`/`.tsx`. New features should ideally be developed in TypeScript.**
-
 - Components with tests or styles should be placed in to their own directory.
-- Styles should follow the `style.*` pattern where the extension is `js` for styled components or `css` for stylesheets.
+- Styles should follow the `style.*` pattern where the extension is `ts` for styled components or `css` for stylesheets.
   - New styled components should use `styled` from `@mui/material/styles`.
 - Supporting test files have specific naming conventions:
-  - Jest Tests should follow the `*.spec.js` pattern.
-  - Stories should follow the `*.stories.js` pattern.
-  - Cypress tests should follow the `*.cy.js` pattern.
+  - Jest Tests should follow the `*.spec.ts` pattern.
+  - Stories should follow the `*.stories.ts` pattern.
+  - Cypress tests should follow the `*.cy.ts` pattern.
   - For all test files, the prefix is the name of the component.
-- Each component directory should have an `index.js` which exports the component as default.
+- Each component directory should have an `index.ts` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
 </details>
@@ -226,8 +214,7 @@ You can also lint and auto-correct from the command-line:
 cd context
 npm run lint
 npm run lint:fix
-EXCLUDE=node_modules,etc/dev/organ-utils
-autopep8 --in-place --aggressive -r . --exclude $EXCLUDE
+uv run ruff format
 ```
 
 ### Storybook

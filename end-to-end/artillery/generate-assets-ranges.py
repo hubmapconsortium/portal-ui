@@ -15,16 +15,13 @@ def generate():
     response = requests.post(
         es_url,
         json={
-            "post_filter": {
-                "exists": {"field": "files"}
-            },
-            "size": es_docs,
-            "_source": ["uuid", "files"],
-            "sort": {"uuid.keyword": "asc"}
+            'post_filter': {'exists': {'field': 'files'}},
+            'size': es_docs,
+            '_source': ['uuid', 'files'],
+            'sort': {'uuid.keyword': 'asc'},
         },
-        headers={
-            'Content-Type': 'application/json'
-        }).json()
+        headers={'Content-Type': 'application/json'},
+    ).json()
 
     file_sizes = {}
 
@@ -35,7 +32,7 @@ def generate():
                 full_url = f'{assets_url}/{uuid}/{file_info["rel_path"]}'
                 file_sizes[full_url] = file_info['size']
 
-    for (url, size) in file_sizes.items():
+    for url, size in file_sizes.items():
         chunk_count = size // chunk_size
         if chunk_count < rows_per_file:
             continue
@@ -46,5 +43,5 @@ def generate():
             print(f'{size},{bottom}-{top},{url}')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     generate()

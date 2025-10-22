@@ -50,11 +50,19 @@ export default function CellTypesPanelList() {
         noPadding: true,
         children: <CellTypesPanel.Header />,
       },
-      ...sortedCellTypes.map(({ label, organs: cellTypeOrgans, clid }) => ({
+      ...sortedCellTypes.map(({ label, organs: cellTypeOrgans, clid, description }) => ({
         key: label,
         noPadding: true,
         noHover: false,
-        children: <CellTypesPanel.Item name={label} href={`/cell-types/${clid}`} clid={clid} organs={cellTypeOrgans} />,
+        children: (
+          <CellTypesPanel.Item
+            name={label}
+            href={`/cell-types/${clid}`}
+            clid={clid}
+            organs={cellTypeOrgans}
+            description={description}
+          />
+        ),
       })),
     ];
     return propsList;
