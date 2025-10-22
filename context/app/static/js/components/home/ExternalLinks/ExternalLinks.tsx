@@ -70,7 +70,7 @@ const relatedTools: ExternalLinkPropsAdapter[] = [
   {
     linkText: 'Antibody Validation Reports',
     ...avr,
-    linkHref: 'https://avr.hubmapconsortium.org/',
+    linkHref: 'https://avr.xconsortia.org/',
     description:
       'Provide antibody details for multiplex imaging assays and capture data requested by journals for manuscript submission.',
   },

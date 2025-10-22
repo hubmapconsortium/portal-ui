@@ -1,2 +1,3 @@
 - Enhanced [cell types](/cell-types) table, moving from expandable rows to a dedicated "Description" column for immediate visibility.
 - Enhanced [gene detail page's](/genes/MMRN1) cell types table to display descriptions by default.
+- Update AVR links to point to [updated cross-consortium link](https://avr.xconsortia.org/).
