@@ -22,6 +22,7 @@ import Badge from '@mui/material/Badge';
 import { CheckIcon } from 'js/shared-styles/icons';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
+import { LineClamp } from 'js/shared-styles/text';
 
 const desktopConfig = {
   name: {
@@ -248,19 +249,9 @@ function CellTypesPanelItem({ name, href, organs, clid, description }: CellTypeP
         </Box>
       </BodyCell>
       <BodyCell {...desktopConfig.description} aria-label="Description">
-        <Typography
-          variant="body2"
-          sx={{
-            color: 'text.secondary',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-          }}
-        >
+        <LineClamp color="text.secondary" lines={2}>
           {description || 'No description available.'}
-        </Typography>
+        </LineClamp>
       </BodyCell>
       <BodyCell {...desktopConfig.organs} aria-label={organs.length === 1 ? 'Organ' : 'Organs'}>
         <OrgansCell organs={organs} />
