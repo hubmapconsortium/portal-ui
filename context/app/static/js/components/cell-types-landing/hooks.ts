@@ -31,15 +31,12 @@ export function useCellTypesList() {
     );
   }, [results, data?.cellTypeNames, cellTypesMap]);
 
-  // Extract CLIDs for fetching descriptions
-  const clids = useMemo(() => cellTypes.map((ct) => ct.clid).filter(Boolean), [cellTypes]);
-
   // Fetch cell type descriptions using the UBKG API
   const {
     data: cellTypeDetails,
     isLoading: isLoadingDescriptions,
     error: descriptionsError,
-  } = useCellTypeOntologyDetails(clids);
+  } = useCellTypeOntologyDetails(cellTypes.map((ct) => ct.clid).filter(Boolean));
 
   // Combine cell types with their descriptions
   const cellTypesWithDescriptions = useMemo(() => {

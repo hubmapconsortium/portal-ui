@@ -147,18 +147,16 @@ function CellTypesRow({ cellType, isLoadingDescriptions }: { cellType: CellTypeR
   return (
     <TableRow>
       <TableCell>
-        <div>
-          {cellType.clid ? (
-            <Stack spacing={1}>
-              <CellTypeLink cellType={formattedCellName} clid={cellType.clid} onClick={trackCellTypeClick} />
-              <div>
-                <CLIDLink onClick={trackCLIDClick} clid={cellType.clid} cellType={cellType.cell_type} />
-              </div>
-            </Stack>
-          ) : (
-            formattedCellName
-          )}
-        </div>
+        {cellType.clid ? (
+          <Stack spacing={1}>
+            <CellTypeLink cellType={formattedCellName} clid={cellType.clid} onClick={trackCellTypeClick} />
+            <div>
+              <CLIDLink onClick={trackCLIDClick} clid={cellType.clid} cellType={cellType.cell_type} />
+            </div>
+          </Stack>
+        ) : (
+          formattedCellName
+        )}
       </TableCell>
       <TableCell>
         <LineClamp lines={2}>
