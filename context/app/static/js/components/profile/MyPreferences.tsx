@@ -75,7 +75,7 @@ function OpenKeyNavSection() {
       >
         <Stack spacing={1} mt={1}>
           {openKeyNavCommands.map(({ command, description }) => (
-            <Typography key="command" variant="parameters" color="secondary">
+            <Typography key={command} variant="parameters" color="secondary">
               {command} : {description}
             </Typography>
           ))}

@@ -9,7 +9,6 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink, OutboundLink } from 'js/shared-styles/Links';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
@@ -20,11 +19,14 @@ import { buildSearchLink } from '../search/store';
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
+import SignUpForWorkspacesLink from 'js/shared-styles/Links/SignUpForWorkspacesLink';
 
-function ContactUsForAccess() {
+function SignUpForAccess() {
   return (
     <>
-      <ContactUsLink>Contact us</ContactUsLink> for questions about access.
+      <SignUpForWorkspacesLink>Sign up</SignUpForWorkspacesLink> to request access to workspaces. <br />
+      These requests are processed by the HuBMAP Helpdesk, typically in 24 to 48 hours, if received during normal
+      business hours, M-F 8am-4pm EST.
     </>
   );
 }
@@ -96,13 +98,10 @@ const text = {
   nonWorkspacesUser: [
     workspacesDescription,
     {
-      title: 'How do I get access to workspaces as a HuBMAP member?',
+      title: 'How do I get access to workspaces?',
       body: (
         <>
-          Log into the <OutboundIconLink href="https://hubmapconsortium.org">consortium website</OutboundIconLink>. Go
-          to Member Services {'>'} My Profile. On the profile update page, request access to: “HuBMAP Data Via Globus”
-          and “HuBMAP Slack Workspace”. Allow up to 2 days to process your request. Once approved, you will receive a
-          ticket sent to your email confirming your access. <ContactUsForAccess />
+          <SignUpForAccess />
         </>
       ),
     },
@@ -151,8 +150,7 @@ function WorkspacesLogInAlert() {
 function AccessAlert() {
   return (
     <Alert severity="info">
-      You do not have access to workspaces. Access to workspaces is restricted to HuBMAP members at present. If you are
-      a HuBMAP member, follow the instructions below to gain access. <ContactUsForAccess />
+      You do not have access to workspaces. <SignUpForAccess />
     </Alert>
   );
 }
@@ -209,4 +207,4 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
   );
 }
 
-export { WorkspacesLogInAlert, AccessAlert, ContactUsForAccess, TemplatePreviewSection, TextItems };
+export { WorkspacesLogInAlert, AccessAlert, SignUpForAccess as ContactUsForAccess, TemplatePreviewSection, TextItems };
