@@ -114,13 +114,11 @@ def login():
         'https://auth.globus.org/v2/oauth2/userinfo', headers=user_info_request_headers
     ).json()
 
-    print(user_info)
-
     user_email = user_info.get('email', '')
     user_name = user_info.get('name', '')
     # Best effort split of full name into first and last names
     user_first_name = user_name.split(' ')[0] if user_name else ''
-    user_last_name = ' '.join(user_name.split(' ')[1:-1]) if user_name else ''
+    user_last_name = ' '.join(user_name.split(' ')[1:]) if user_name else ''
     user_globus_id = user_info.get('sub', '')
     user_globus_affiliation = user_info.get('organization', '')
     user_globus_groups = get_globus_groups(groups_token)
