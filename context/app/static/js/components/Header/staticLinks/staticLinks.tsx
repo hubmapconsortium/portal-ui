@@ -265,7 +265,7 @@ export const toolsAndAppsLinks: DrawerSection[] = [
         label: 'Antibody Validation Reports',
         description:
           'Provide antibody details for multiplex imaging assays and capture data requested by journals for manuscript submission.',
-        href: 'https://avr.hubmapconsortium.org/',
+        href: 'https://avr.xconsortia.org/',
         icon: <ExternalImageIcon icon="avr" />,
       },
     ],
