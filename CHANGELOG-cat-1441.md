@@ -1,0 +1,1 @@
+- Update AVR links to point to [updated cross-consortium link](https://avr.xconsortia.org/).
