@@ -1,2 +1,0 @@
-- Update name for Cell Population Plot library (scellop).
-- Add Donor ID and group name to scellop metadata.

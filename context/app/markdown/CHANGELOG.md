@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.35.0 - 2025-11-03
+
+- Hide "multiple" keys from single-gene queries' result charts.
+- Add link to directly sign up for HuBMAP Workspaces access.
+- Update name for Cell Population Plot library (scellop).
+- Add Donor ID and group name to scellop metadata.
+- Enhanced [cell types](/cell-types) table, moving from expandable rows to a dedicated "Description" column for immediate visibility.
+- Enhanced [gene detail page's](/genes/MMRN1) cell types table to display descriptions by default.
+- Update AVR links to point to [updated cross-consortium link](https://avr.xconsortia.org/).
+- Updated python dependency management to rely entirely on `uv` for consistency across all environments.
+- Updated project structure to use `pyproject.toml` file for configuration.
+- Implement [updated Tutorial pages](/tutorials).
+
+
+
 ## v1.34.1 - 2025-10-15
 
 - Fix regression with form submissions not executing as expected.

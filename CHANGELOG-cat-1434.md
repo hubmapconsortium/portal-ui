@@ -1,1 +1,0 @@
-- Add link to directly sign up for HuBMAP Workspaces access.
