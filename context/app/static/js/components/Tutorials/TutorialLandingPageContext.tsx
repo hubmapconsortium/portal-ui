@@ -1,24 +1,19 @@
-import { createContext, useContext } from 'js/helpers/context';
-import React, { PropsWithChildren, useMemo, useState } from 'react';
+import { createStore } from 'zustand';
+import { createStoreContext } from 'js/helpers/zustand/create-context-store';
 import { Tutorial, TutorialCategory, TUTORIALS } from './types';
 
-interface TutorialLandingPageSearchDataContextType {
+interface TutorialLandingPageState {
   search: string;
   filterCategory?: TutorialCategory;
   tutorials: Tutorial[];
 }
 
-interface TutorialLandingPageSearchActionsContextType {
+interface TutorialLandingPageActions {
   setSearch: (search: string) => void;
   setFilterCategory: (filterCategory?: TutorialCategory) => void;
 }
 
-const TutorialLandingPageSearchDataContext = createContext<TutorialLandingPageSearchDataContextType>(
-  'TutorialLandingPageSearchDataContext',
-);
-const TutorialLandingPageSearchActionsContext = createContext<TutorialLandingPageSearchActionsContextType>(
-  'TutorialLandingPageSearchActionsContext',
-);
+type TutorialLandingPageStore = TutorialLandingPageState & TutorialLandingPageActions;
 
 function matchSearchAndFilter(tutorials: Tutorial[], search: string, filterCategory: TutorialCategory | undefined) {
   return tutorials.filter(({ title, description, tags, category }) => {
@@ -30,38 +25,51 @@ function matchSearchAndFilter(tutorials: Tutorial[], search: string, filterCateg
   });
 }
 
-export const TutorialLandingPageContextProvider = ({ children }: PropsWithChildren) => {
-  const [search, setSearch] = useState('');
-  const [filterCategory, setFilterCategory] = useState<TutorialCategory | undefined>();
+function createTutorialLandingPageStore() {
+  return createStore<TutorialLandingPageStore>((set) => ({
+    search: '',
+    filterCategory: undefined,
+    tutorials: TUTORIALS,
+    setSearch: (search: string) =>
+      set((state) => ({
+        search,
+        tutorials: matchSearchAndFilter(TUTORIALS, search, state.filterCategory),
+      })),
+    setFilterCategory: (filterCategory?: TutorialCategory) =>
+      set((state) => ({
+        filterCategory,
+        tutorials: matchSearchAndFilter(TUTORIALS, state.search, filterCategory),
+      })),
+  }));
+}
 
-  const data = useMemo(
-    () => ({
-      search,
-      filterCategory,
-      tutorials: matchSearchAndFilter(TUTORIALS, search, filterCategory),
-    }),
-    [search, filterCategory],
-  );
-  const actions = useMemo(() => ({ setSearch, setFilterCategory }), []);
+const [TutorialLandingPageContextProvider, useTutorialLandingPageStore] = createStoreContext(
+  createTutorialLandingPageStore,
+  'TutorialLandingPageStore',
+);
 
-  return (
-    <TutorialLandingPageSearchDataContext.Provider value={data}>
-      <TutorialLandingPageSearchActionsContext.Provider value={actions}>
-        {children}
-      </TutorialLandingPageSearchActionsContext.Provider>
-    </TutorialLandingPageSearchDataContext.Provider>
-  );
-};
+export { TutorialLandingPageContextProvider };
 
-export const useTutorialLandingPageSearchData = () => useContext(TutorialLandingPageSearchDataContext);
-export const useTutorialLandingPageSearchActions = () => useContext(TutorialLandingPageSearchActionsContext);
+// Convenience hooks for accessing specific parts of the store
+export const useTutorialLandingPageSearchData = () =>
+  useTutorialLandingPageStore((state) => ({
+    search: state.search,
+    filterCategory: state.filterCategory,
+    tutorials: state.tutorials,
+  }));
+
+export const useTutorialLandingPageSearchActions = () =>
+  useTutorialLandingPageStore((state) => ({
+    setSearch: state.setSearch,
+    setFilterCategory: state.setFilterCategory,
+  }));
 
 export const useTutorialsByCategory = (category: TutorialCategory) => {
-  const { tutorials } = useTutorialLandingPageSearchData();
+  const tutorials = useTutorialLandingPageStore((state) => state.tutorials);
   return tutorials.filter((tutorial) => tutorial.category === category);
 };
 
 export const useFeaturedTutorials = () => {
-  const { tutorials } = useTutorialLandingPageSearchData();
+  const tutorials = useTutorialLandingPageStore((state) => state.tutorials);
   return tutorials.filter((tutorial) => tutorial.isFeatured);
 };
