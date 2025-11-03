@@ -1,4 +1,6 @@
+from functools import cache
 from itertools import islice
+import json
 from urllib.parse import urlparse
 from flask import current_app, request, session, Blueprint
 
@@ -10,6 +12,22 @@ from pathlib import Path
 from yaml import safe_load
 
 entity_types = ['donor', 'sample', 'dataset', 'support', 'collection', 'publication']
+
+
+@cache
+def _load_tutorials():
+    """Load tutorials from JSON file."""
+    # Get the directory of the current file (utils.py)
+    current_dir = Path(__file__).parent
+    tutorials_json_path = current_dir / 'static' / 'assets' / 'json' / 'tutorials.json'
+    with open(tutorials_json_path) as f:
+        return json.load(f)
+
+
+def get_valid_tutorial_routes():
+    """Get set of valid tutorial routes."""
+    tutorials = _load_tutorials()
+    return {tutorial['route'] for tutorial in tutorials}
 
 
 def get_client():

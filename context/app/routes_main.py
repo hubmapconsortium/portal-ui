@@ -1,6 +1,6 @@
 from flask import render_template, current_app, abort, session, request, redirect, url_for
 
-from .utils import get_default_flask_data, make_blueprint, get_organs
+from .utils import get_default_flask_data, make_blueprint, get_organs, get_valid_tutorial_routes
 
 
 blueprint = make_blueprint(__name__)
@@ -145,6 +145,9 @@ def tutorials():
 
 @blueprint.route('/tutorials/<tutorial_name>')
 def tutorial_detail(tutorial_name):
+    valid_routes = get_valid_tutorial_routes()
+    if tutorial_name not in valid_routes:
+        abort(404)
     flask_data = {**get_default_flask_data(), 'tutorialName': tutorial_name}
     return render_template(
         'base-pages/react-content.html', title=tutorial_name, flask_data=flask_data

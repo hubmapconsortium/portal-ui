@@ -1,7 +1,7 @@
 from functools import cache
 import json
 from urllib.parse import urlparse, quote
-from .utils import get_organs
+from .utils import get_organs, get_valid_tutorial_routes
 
 from flask import (
     current_app,
@@ -180,6 +180,7 @@ def details_rui_json(type, uuid):
 def sitemap_txt():
     template_keys = _get_all_template_keys()
     organ_keys = list(get_organs().keys())
+    tutorial_routes = list(get_valid_tutorial_routes())
     dataset_uuids = _get_all_primary_dataset_uuids()
     sample_uuids = _get_all_sample_uuids()
     donor_uuids = _get_all_donor_uuids()
@@ -198,6 +199,7 @@ def sitemap_txt():
                 # Detail pages
                 *[f'{url_base}/templates/{key}' for key in template_keys],
                 *[f'{url_base}/organs/{key}' for key in organ_keys],
+                *[f'{url_base}/tutorials/{route}' for route in tutorial_routes],
                 *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
                 *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
                 *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],

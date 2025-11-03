@@ -1,5 +1,6 @@
 import { DatabaseIcon, VisualizationIcon, WorkspacesIcon, SearchIcon, FeaturedIcon } from 'js/shared-styles/icons';
 import { MUIIcon } from 'js/shared-styles/icons/entityIconMap';
+import tutorialsData from 'assets/json/tutorials.json';
 
 export const TUTORIAL_CATEGORIES = ['Biomarker and Cell Type Search', 'Data', 'Visualization', 'Workspaces'] as const;
 
@@ -62,73 +63,7 @@ export interface Tutorial {
   isFeatured?: boolean;
 }
 
-export const TUTORIALS: Tutorial[] = [
-  {
-    title: 'Exploring Organs, Cell Types, and Biomarkers',
-    route: 'exploring-organs-cell-types-biomarkers',
-    description: 'Learn how to explore organs, cell types and biomarkers available in HuBMAP data.',
-    category: 'Data',
-    tags: ['Biomarker', 'Cell Type', 'Organ'],
-    iframeLink: '',
-  },
-  {
-    title: 'Getting Started with HuBMAP Data',
-    route: 'getting-started',
-    description:
-      'Learn how to find HuBMAP datasets using the datasets search page, and explore key information, visualizations and file download options.',
-    category: 'Data',
-    isFeatured: true,
-    tags: ['Data Download', 'Metadata'],
-    iframeLink:
-      'https://app.tango.us/app/embed/04529384-4ed4-49d4-9c52-0eca16c147fb?skipCover=false&defaultListView=true&skipBranding=false',
-  },
-  {
-    title: 'How to Download HuBMAP Data',
-    route: 'downloading-data',
-    description:
-      'Learn how to download HuBMAP data using different methods, including Globus and dbGaP for individual datasets, and the HuBMAP Command Line Transfer (CLT) tool for bulk downloads.',
-    category: 'Data',
-    tags: ['Data Download'],
-    iframeLink: '',
-  },
-  {
-    title: 'Navigating Workspaces',
-    route: 'workspaces',
-    description:
-      'Learn how to use workspaces to analyze HuBMAP data by initiating Jupyter notebooks and choosing from a variety of pre-established templates.',
-    tags: ['Data Analysis'],
-    category: 'Workspaces',
-    iframeLink:
-      'https://app.tango.us/app/embed/bcece94f-ba05-4acb-b05b-a7d333afc583?skipCover=false&defaultListView=true&skipBranding=false',
-  },
-  {
-    title: 'Search for Cell Types',
-    route: 'search-for-cell-types',
-    description:
-      'Learn how to find datasets for selected cell types, and visualize distributions across organs and within an individual dataset.',
-    category: 'Biomarker and Cell Type Search',
-    tags: ['Cell Type'],
-    iframeLink: '',
-  },
-  {
-    title: 'Search for Gene or Pathway',
-    route: 'search-for-gene-or-pathway',
-    description:
-      'Learn how to find datasets for genes or pathways, and visualize the gene expression for the individual datasets.',
-    category: 'Biomarker and Cell Type Search',
-    tags: ['Biomarker', 'Gene', 'Pathway'],
-    iframeLink: '',
-  },
-  {
-    title: 'Search for Proteins',
-    route: 'search-for-proteins',
-    description:
-      'Learn how to find datasets for proteins, and visualize the protein abundance for the individual datasets.',
-    category: 'Biomarker and Cell Type Search',
-    tags: ['Protein', 'Biomarker'],
-    iframeLink: '',
-  },
-];
+export const TUTORIALS: Tutorial[] = tutorialsData as Tutorial[];
 
 export const TUTORIAL_TAGS = TUTORIALS.reduce<string[]>((acc, tutorial) => {
   tutorial.tags.forEach((tag) => {

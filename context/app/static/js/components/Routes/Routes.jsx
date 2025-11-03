@@ -56,6 +56,7 @@ function Routes({ flaskData } = {}) {
     vignette_json,
     geneSymbol,
     cell_type: cellId,
+    tutorialName,
     type,
   } = flaskData;
   const urlPath = window.location.pathname;
@@ -325,10 +326,7 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/tutorials')) {
-    const routeSegments = urlPath.split('/');
-
-    if (routeSegments.length > 2) {
-      const tutorialName = routeSegments[2];
+    if (tutorialName) {
       return (
         <Route>
           <Tutorial tutorialRoute={tutorialName} />
