@@ -15,25 +15,26 @@ blueprint = make_blueprint(__name__)
 
 
 def _drop_dict_keys(d, keys_to_remove):
-    '''
+    """
     >>> d = {'apple': 'a', 'pear': 'p'}
     >>> _drop_dict_keys(d, ['apple'])
     {'pear': 'p'}
-    '''
+    """
     return {k: d[k] for k in d.keys() - keys_to_remove}
 
 
 def _get_api_json_error(status, message):
-    return jsonify({
-        'status': status,
-        'message': message,
-
-    })
+    return jsonify(
+        {
+            'status': status,
+            'message': message,
+        }
+    )
 
 
 def _extract_uuids_and_constraints(all_args, use_list=False):
     constraints = _drop_dict_keys(all_args, ['uuids'])
-    if (use_list):
+    if use_list:
         uuids = request.args.getlist('uuids')
     else:
         uuids = request.args.get('uuids')
@@ -45,7 +46,7 @@ def _extract_uuids_and_constraints(all_args, use_list=False):
 
 
 def _get_recent_description(descriptions):
-    cedar_descriptions = [d for d in descriptions if d['source'] == "CEDAR"]
+    cedar_descriptions = [d for d in descriptions if d['source'] == 'CEDAR']
     return (cedar_descriptions if cedar_descriptions else descriptions)[0]['description']
 
 
@@ -57,9 +58,7 @@ def metadata_descriptions():
 
 
 def _generate_tsv_response(
-    entity_type: str,
-    with_descriptions: bool = True,
-    cors_origin: Optional[str] = None
+    entity_type: str, with_descriptions: bool = True, cors_origin: Optional[str] = None
 ):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
@@ -104,9 +103,7 @@ def entities_tsv(entity_type):
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
     return _generate_tsv_response(
-        entity_type,
-        with_descriptions=False,
-        cors_origin='https://hms-dbmi.github.io'
+        entity_type, with_descriptions=False, cors_origin='https://hms-dbmi.github.io'
     )
 
 
@@ -117,14 +114,9 @@ def lineup(entity_type):
 
     entities = _get_entities(entity_type, constraints, uuids)
     entities.sort(key=lambda e: e['uuid'])
-    flask_data = {
-        **get_default_flask_data(),
-        'entities': entities
-    }
+    flask_data = {**get_default_flask_data(), 'entities': entities}
     return render_template(
-        'base-pages/react-content.html',
-        flask_data=flask_data,
-        title=f'Lineup {entity_type}'
+        'base-pages/react-content.html', flask_data=flask_data, title=f'Lineup {entity_type}'
     )
 
 
@@ -139,29 +131,21 @@ def _get_entities(entity_type, constraints={}, uuids=None):
     extra_fields += [
         # Version number is not in document:
         # We hit the API at render-time to determine it.
-
         # Publication Date
         'published_timestamp',
-
         # Last Modified
         'last_modified_timestamp',
-
         # Creation Date
         'created_timestamp',
-
         # Status
         'status',
         'mapped_status'
-
         # Access
         'data_access_level',
-
         # Consortium
         'mapped_consortium',
-
         # Affiliation - Group
         'group_name',
-
         # Affiliation - Registered By
         'created_by_user_displayname',
         'created_by_user_email',
@@ -171,9 +155,10 @@ def _get_entities(entity_type, constraints={}, uuids=None):
     if entity_type in ['samples']:
         extra_fields += ['sample_category']
     entities = client.get_entities(
-        plural_lc_entity_type=entity_type, non_metadata_fields=extra_fields,
+        plural_lc_entity_type=entity_type,
+        non_metadata_fields=extra_fields,
         constraints=constraints,
-        uuids=uuids
+        uuids=uuids,
         # Default "True" would throw away repeated keys after the first.
     )
     return entities
@@ -182,13 +167,13 @@ def _get_entities(entity_type, constraints={}, uuids=None):
 def _make_tsv_response(tsv_content, filename):
     return Response(
         response=tsv_content,
-        headers={'Content-Disposition': f"attachment; filename={filename}"},
-        mimetype='text/tab-separated-values'
+        headers={'Content-Disposition': f'attachment; filename={filename}'},
+        mimetype='text/tab-separated-values',
     )
 
 
 def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
-    '''
+    """
     >>> data_dicts = [
     ...   # explicit subtitle
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
@@ -211,10 +196,8 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
     | The Empire Strikes Back | 1980 |  |
     | Return of the Jedi | 1983 | N/A |
     |  |
-    '''
-    body_fields = sorted(
-        set().union(*[d.keys() for d in data_dicts]) - set(first_fields)
-    )
+    """
+    body_fields = sorted(set().union(*[d.keys() for d in data_dicts]) - set(first_fields))
     for dd in data_dicts:
         for field in body_fields:
             if field not in dd:

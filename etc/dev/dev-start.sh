@@ -15,16 +15,16 @@ REQUIRED_NODE_V=$(cat .nvmrc)
 [[ "$INSTALLED_NODE_V" = "$REQUIRED_NODE_V" ]] \
   || die "Installed node version ($INSTALLED_NODE_V) != required version ($REQUIRED_NODE_V) " 
 
-# Check whether to run NPM/PIP install
+# Check whether to run NPM/UV install
 NO_NPM=0
-NO_PIP=0
+NO_UV=0
 optspec=":hnps-:"
 while getopts "$optspec" optchar; do
     case "${optchar}" in
-        h) echo "usage: $0 [-h] [-n | --no-npm-install] [-p | --no-pip-install] [-s | --skip-install]"
+        h) echo "usage: $0 [-h] [-n | --no-npm-install] [-p | --no-uv-install] [-s | --skip-install]"
            echo "  -h: show this help message"
            echo "  -n: skip npm install"
-           echo "  -p: skip pip install"
+           echo "  -p: skip uv sync"
            echo "  -s: skip both installs"
            exit 0
            ;;
@@ -32,16 +32,16 @@ while getopts "$optspec" optchar; do
             case "${OPTARG}" in
                 skip-install)
                     NO_NPM=1
-                    NO_PIP=1
+                    NO_UV=1
                     echo "Skipping both installs due to arg: '--${OPTARG}'";
                     ;;
                 no-npm-install)
                     NO_NPM=1
                     echo "Skipping npm install due to arg: '--${OPTARG}'";
                     ;;
-                no-pip-install)
-                    NO_PIP=1
-                    echo "Skipping pip install due to arg: '--${OPTARG}'";
+                no-pip-install|no-uv-install)
+                    NO_UV=1
+                    echo "Skipping uv sync due to arg: '--${OPTARG}'";
                     ;;
                 *)
                     if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
@@ -50,8 +50,8 @@ while getopts "$optspec" optchar; do
                     ;;
             esac;;
         p)
-            NO_PIP=1
-            echo "Skipping pip install due to arg: '-${optchar}'"
+            NO_UV=1
+            echo "Skipping uv sync due to arg: '-${optchar}'"
             ;;
         n)
             NO_NPM=1
@@ -59,7 +59,7 @@ while getopts "$optspec" optchar; do
             ;;
         s)
             NO_NPM=1
-            NO_PIP=1
+            NO_UV=1
             echo "Skipping both installs due to arg: '-${optchar}'"
             ;;
         *)
@@ -75,8 +75,8 @@ trap 'jobs -p | xargs kill' EXIT
 
 CONTEXT=context
 
-if [ "$NO_PIP" -lt 1 ] ; then 
-  PIP_CONSTRAINT=$CONTEXT/constraints.txt uv pip sync $CONTEXT/requirements.txt > /dev/null
+if [ "$NO_UV" -lt 1 ] ; then 
+  uv sync --dev > /dev/null
 fi
 
 etc/dev/copy-app-conf.sh

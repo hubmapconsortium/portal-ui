@@ -13,7 +13,6 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useEventCallback } from '@mui/material/utils';
-import Skeleton from '@mui/material/Skeleton';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
@@ -22,14 +21,12 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import useHyperQueryCellTypes, { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { percent } from 'js/helpers/number-format';
-import { CellTypeLink, CLIDCell } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
+import { CellTypeLink, CLIDLink } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
 import { SortState, useSortState } from 'js/hooks/useSortState';
+import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
-import CellTypeDescription from 'js/components/organ/OrganCellTypes/CellTypeDescription';
-import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
-import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import IndexedDatasetsSummary from 'js/components/organ/OrganCellTypes/IndexedDatasetsSummary';
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useSearchData from 'js/hooks/useSearchData';
@@ -41,8 +38,11 @@ import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import ScientificNotationDisplay from './ScientificNotationDisplay';
 import { useGenePageContext, useGeneDetailPageTrackingInfo, useTrackGeneDetailPage } from '../hooks';
 import { cellTypes as cellTypesSection } from '../constants';
+import Stack from '@mui/material/Stack';
+import { LineClamp } from 'js/shared-styles/text';
+import Skeleton from '@mui/material/Skeleton';
 
-const downloadLabels = ['Cell Type', 'Cell Ontology ID', 'Cells Hit', 'Total Cells', 'Percentage', 'p-value'];
+const downloadLabels = ['Cell Type', 'Cells Hit', 'Total Cells', 'Percentage', 'p-value', 'Description'];
 
 const noop = () => null;
 
@@ -51,11 +51,14 @@ const columns = {
     id: 'cell_type',
     label: 'Cell Type',
     cellContent: noop,
+    sort: 'cell-type',
   },
-  clid: {
-    id: 'clid',
-    label: 'Cell Ontology ID',
+  description: {
+    id: 'description',
+    label: 'Description',
     cellContent: noop,
+    tooltipText: 'Cell type description from the Cell Ontology.',
+    sort: 'description',
   },
   cellsHitPercent: {
     id: 'cell_hits',
@@ -63,17 +66,21 @@ const columns = {
     cellContent: noop,
     tooltipText:
       'Proportion of the amount of cells of this type that significantly express this marker gene relative to the total count of this cell type.',
+    sort: 'percentage',
+    width: 250,
   },
   pval: {
     id: 'adj-pval',
     label: 'p-value',
     cellContent: noop,
     tooltipText: 'Statistical significance of gene expression for this cell type in the context of the selected organ.',
+    sort: 'adj-pval',
+    width: 150,
   },
 } as const;
 
 const columnIdMap = Object.fromEntries(Object.entries(columns).map(([key, value]) => [key, value.id]));
-const columnList = [columns.cellType, columns.clid, columns.cellsHitPercent, columns.pval];
+const columnList = [columns.cellType, columns.description, columns.cellsHitPercent, columns.pval];
 
 export function TableSkeleton({ numberOfCols = downloadLabels.length }: { numberOfCols?: number }) {
   return (
@@ -95,33 +102,40 @@ interface CellTypeRow {
   total_cells: number;
   percentage: string;
   'adj-pval': number;
+  description: string;
 }
 
 const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
   const { results: clids } = useLabelsToCLIDs(useMemo(() => cellTypes.map((ct) => ct.cell_type), [cellTypes]));
 
-  return useMemo(() => {
-    return cellTypes.map((cellType, idx) => ({
-      cell_type: cellType.cell_type,
-      clid: clids?.[idx]?.CLIDs?.[0] ?? null,
-      cell_hits: cellType.cell_hits,
-      total_cells: cellType.total_cells,
-      percentage: percent.format(cellType.cell_hits / cellType.total_cells),
-      'adj-pval': cellType['adj-pval'],
-    }));
-  }, [cellTypes, clids]);
+  const cellTypeIds = useMemo(
+    () => clids?.map((clid) => clid?.CLIDs?.[0]).filter((id): id is string => id != null) ?? [],
+    [clids],
+  );
+
+  const { data: cellTypeDetails, isLoading: isLoadingDescriptions } = useCellTypeOntologyDetails(cellTypeIds);
+
+  const rows = useMemo(() => {
+    return cellTypes.map((cellType, idx) => {
+      const clid = clids?.[idx]?.CLIDs?.[0] ?? null;
+      const description = (clid && cellTypeDetails?.[clid.replace(/\D/g, '')]?.definition) ?? '';
+
+      return {
+        cell_type: cellType.cell_type,
+        clid,
+        cell_hits: cellType.cell_hits,
+        total_cells: cellType.total_cells,
+        percentage: percent.format(cellType.cell_hits / cellType.total_cells),
+        'adj-pval': cellType['adj-pval'],
+        description,
+      };
+    });
+  }, [cellTypes, clids, cellTypeDetails]);
+  return { rows, isLoadingDescriptions };
 };
 
-function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
+function CellTypesRow({ cellType, isLoadingDescriptions }: { cellType: CellTypeRow; isLoadingDescriptions: boolean }) {
   const formattedCellName = useMemo(() => cellType.cell_type.split('.').slice(1).join('.'), [cellType.cell_type]);
-  const trackExpandRow = useTrackGeneDetailPage({
-    action: 'Cell Types / Expand Row',
-    label: formattedCellName,
-  });
-  const trackCollapseRow = useTrackGeneDetailPage({
-    action: 'Cell Types / Collapse Row',
-    label: formattedCellName,
-  });
   const trackCLIDClick = useTrackGeneDetailPage({
     action: 'Cell Types / Select CLID',
     label: formattedCellName,
@@ -131,36 +145,33 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
     label: formattedCellName,
   });
   return (
-    <ExpandableRow
-      numCells={6}
-      expandedContent={
-        cellType.clid ? <CellTypeDescription clid={cellType.clid} cellType={cellType.cell_type} /> : <Skeleton />
-      }
-      reverse
-      onExpand={(isExpanded) => {
-        const track = isExpanded ? trackExpandRow : trackCollapseRow;
-        track();
-      }}
-    >
-      <ExpandableRowCell>
+    <TableRow>
+      <TableCell>
         {cellType.clid ? (
-          <CellTypeLink cellType={formattedCellName} clid={cellType.clid} onClick={trackCellTypeClick} />
+          <Stack spacing={1}>
+            <CellTypeLink cellType={formattedCellName} clid={cellType.clid} onClick={trackCellTypeClick} />
+            <div>
+              <CLIDLink onClick={trackCLIDClick} clid={cellType.clid} cellType={cellType.cell_type} />
+            </div>
+          </Stack>
         ) : (
           formattedCellName
         )}
-      </ExpandableRowCell>
-      <ExpandableRowCell>
-        <CLIDCell onClick={trackCLIDClick} clid={cellType.clid} cellType={cellType.cell_type} />
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+      </TableCell>
+      <TableCell>
+        <LineClamp lines={2}>
+          {isLoadingDescriptions ? <Skeleton /> : cellType.description || 'No description available'}
+        </LineClamp>
+      </TableCell>
+      <TableCell>
         {cellType.cell_hits} / {cellType.total_cells} ({percent.format(cellType.cell_hits / cellType.total_cells)}){' '}
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+      </TableCell>
+      <TableCell>
         <ScientificNotationDisplay value={cellType['adj-pval']} />
-      </ExpandableRowCell>
+      </TableCell>
       {/* Empty action column cell */}
-      <ExpandableRowCell />
-    </ExpandableRow>
+      <TableCell />
+    </TableRow>
   );
 }
 
@@ -180,8 +191,6 @@ function CellTypesTableHeader({
   return (
     <TableHead>
       <TableRow>
-        {/* Expand column */}
-        <TableCell sx={{ backgroundColor: 'background.paper' }} />
         {columnList.map((column) => (
           <EntityHeaderCell column={column} key={column.id} setSort={handleSortChange} sortState={sortState} />
         ))}
@@ -230,7 +239,7 @@ function CellTypesTable() {
     [allCellTypesForGene],
   );
 
-  const cellTypeRows = useCellTypeRows(cellTypes?.findGeneSignatures);
+  const { rows: cellTypeRows, isLoadingDescriptions } = useCellTypeRows(cellTypes?.findGeneSignatures);
 
   const filteredSortedCellTypes = useMemo(() => {
     const sortedCellTypes = [...cellTypeRows].sort((a, b) => {
@@ -260,7 +269,7 @@ function CellTypesTable() {
     columnNames: downloadLabels,
     rows: filteredSortedCellTypes.map((row) => [
       row.cell_type,
-      row.clid ?? '',
+      row.description || 'No description available',
       row.cell_hits.toString(),
       row.total_cells.toString(),
       row.percentage,
@@ -349,7 +358,11 @@ function CellTypesTable() {
           <TableBody>
             {isLoading && <TableSkeleton />}
             {filteredSortedCellTypes.map((cellType) => (
-              <CellTypesRow key={cellType.cell_type} cellType={cellType} />
+              <CellTypesRow
+                key={cellType.cell_type}
+                cellType={cellType}
+                isLoadingDescriptions={isLoadingDescriptions}
+              />
             ))}
           </TableBody>
         </Table>
@@ -431,7 +444,7 @@ const useIndexedDatasetsForGene = () => {
       genes: [geneSymbol],
     },
     organs,
-    isLoading: isLoadingDatasets || isLoadingDatasetTypes,
+    isLoadingDatasets: isLoadingDatasets || isLoadingDatasetTypes,
   };
 };
 

@@ -69,13 +69,16 @@ if [[ -z "$MAJOR" ]]; then
 
   if [[ $DAYS_PAST_REF -lt 14 ]]; then
     VERSION=`cd context && npm version patch --no-git-tag-version`
+    uv version --bump patch
   else
     echo "End of 2-week cycle."
     VERSION=`cd context && npm version minor --no-git-tag-version`
+    uv version --bump minor
   fi
 else
   # major version bump, don't need to check for 2-week cycle
-  VERSION=`cd context && npm version major`
+  VERSION=`cd context && npm version major --no-git-tag-version`
+  uv version --bump major
 fi
 
 
@@ -84,6 +87,7 @@ echo "Version: $VERSION"
 ./grab-dependencies.sh
 
 git add context/package*.json
+git add pyproject.toml
 git add context/app/markdown/dependencies.md
 git commit -m "Version bump to $VERSION"
 

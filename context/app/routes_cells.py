@@ -30,7 +30,7 @@ def cells_ui():
     return render_template(
         'base-pages/react-content.html',
         title='Biomarker and Cell Type Search',
-        flask_data={**get_default_flask_data()}
+        flask_data={**get_default_flask_data()},
     )
 
 
@@ -44,7 +44,7 @@ def biomarkers_ui():
     return render_template(
         'base-pages/react-content.html',
         title='Biomarkers',
-        flask_data={**get_default_flask_data()}
+        flask_data={**get_default_flask_data()},
     )
 
 
@@ -70,36 +70,45 @@ def timeit(f):
         elapsed = f'{round(end - start, 3)} seconds'
         current_app.logger.info(' | '.join([elapsed, url, func]))
         return result
+
     return timed
 
 
 @cache
 def _get_gene_symbols(app):
     client = _get_client(app)
-    gene_symbols = tuple([gene["gene_symbol"] for gene in client.select_genes().get_list()])
+    gene_symbols = tuple([gene['gene_symbol'] for gene in client.select_genes().get_list()])
     return gene_symbols
 
 
 @cache
 def _get_rna_genes(app):
     client = _get_client(app)
-    gene_symbols = tuple([gene["gene_symbol"] for gene in client.select_genes(
-        where="modality", has=["rna"]).get_list()])
+    gene_symbols = tuple(
+        [
+            gene['gene_symbol']
+            for gene in client.select_genes(where='modality', has=['rna']).get_list()
+        ]
+    )
     return gene_symbols
 
 
 @cache
 def _get_atac_genes(app):
     client = _get_client(app)
-    gene_symbols = tuple([gene["gene_symbol"] for gene in client.select_genes(
-        where="modality", has=["atac"]).get_list()])
+    gene_symbols = tuple(
+        [
+            gene['gene_symbol']
+            for gene in client.select_genes(where='modality', has=['atac']).get_list()
+        ]
+    )
     return gene_symbols
 
 
 @cache
 def _get_protein_ids(app):
     client = _get_client(app)
-    protein_ids = tuple([protein["protein_id"] for protein in client.select_proteins().get_list()])
+    protein_ids = tuple([protein['protein_id'] for protein in client.select_proteins().get_list()])
     return protein_ids
 
 
@@ -109,8 +118,11 @@ def _get_all_labels():
     # https://github.com/hubmapconsortium/azimuth-annotate/blob/main/data/all_labels.csv
     with open(f'{dirname(__file__)}/all_labels.csv') as f:
         # Read in each row as a dictionary and store them in a list
-        all_labels = DictReader(f, delimiter=',', fieldnames=[
-                                'Organ_Level', 'A_L', 'A_ID', 'Label', 'CL_ID', 'CL_Match'])
+        all_labels = DictReader(
+            f,
+            delimiter=',',
+            fieldnames=['Organ_Level', 'A_L', 'A_ID', 'Label', 'CL_ID', 'CL_Match'],
+        )
         all_labels = tuple(all_labels)
     return all_labels
 
@@ -118,7 +130,7 @@ def _get_all_labels():
 @cache
 def _get_cell_ids(app):
     client = _get_client(app)
-    cell_label_ids = [cell["grouping_name"] for cell in client.select_celltypes().get_list()]
+    cell_label_ids = [cell['grouping_name'] for cell in client.select_celltypes().get_list()]
     all_labels = _get_all_labels()
     # Filter labels to only include the ones that are in the cell_label_ids
     all_labels = tuple([label for label in all_labels if label['CL_ID'] in cell_label_ids])
@@ -131,15 +143,13 @@ def _get_cell_ids(app):
     # as separate options is unnecessary and confusing to the user
     labels_to_remove = []
     for label in all_labels:
-        duplicate_clids = [lab for lab in all_labels if lab['CL_ID']
-                           == label['CL_ID']]
+        duplicate_clids = [lab for lab in all_labels if lab['CL_ID'] == label['CL_ID']]
         if len(duplicate_clids) > 1:
-            duplicate_clids = sorted(
-                duplicate_clids, key=lambda x: len(x['Label']))
+            duplicate_clids = sorted(duplicate_clids, key=lambda x: len(x['Label']))
             for lab in duplicate_clids[1:]:
                 # Azimuth ID's are unique, so we can use them to remove the duplicates
-                labels_to_remove.append(lab["A_ID"])
-    all_labels = [label for label in all_labels if label["A_ID"] not in labels_to_remove]
+                labels_to_remove.append(lab['A_ID'])
+    all_labels = [label for label in all_labels if label['A_ID'] not in labels_to_remove]
 
     return all_labels
 
@@ -154,13 +164,13 @@ class Cluster:
 
 
 def _get_cluster_name_and_number(cluster_str):
-    '''
+    """
     >>> n_n = _get_cluster_name_and_number('cluster-name-number')
     >>> n_n.name
     'cluster-name'
     >>> n_n.number
     'number'
-    '''
+    """
     cluster_name_arr = cluster_str.split('-')
     cluster_number = cluster_name_arr.pop()
     cluster_name = '-'.join(cluster_name_arr)
@@ -169,7 +179,7 @@ def _get_cluster_name_and_number(cluster_str):
 
 @timeit
 def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None):
-    '''
+    """
     >>> cells = _get_cluster_cells(cells=[
     ...         {
     ...             "clusters": [
@@ -224,23 +234,24 @@ def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None)
       'cluster_number': '1',
       'meets_minimum_expression': False,
       'modality': None}]
-    '''
+    """
     cluster_cells = []
     for cell in cells:
         for cluster in cell['clusters']:
             cluster_name, cluster_number = _get_cluster_name_and_number(cluster)
-            cluster_cell = {'cluster_name': cluster_name,
-                            'cluster_number': cluster_number,
-                            'meets_minimum_expression':
-                            cell['values'][cell_variable_name] >= min_expression,
-                            'modality': cell.get('modality')}
+            cluster_cell = {
+                'cluster_name': cluster_name,
+                'cluster_number': cluster_number,
+                'meets_minimum_expression': cell['values'][cell_variable_name] >= min_expression,
+                'modality': cell.get('modality'),
+            }
             cluster_cells.append(cluster_cell)
     return cluster_cells
 
 
 @timeit
 def _get_matched_cell_counts_per_cluster(cells):
-    '''
+    """
     >>> clusters = _get_matched_cell_counts_per_cluster(cells=[
     ...         {
     ...             'modality': 'Z',
@@ -290,29 +301,29 @@ def _get_matched_cell_counts_per_cluster(cells):
                            'matched': 1,
                            'modality': 'Z',
                            'unmatched': 0}]}
-    '''
-    group_keys = ["cluster_name", "cluster_number", "modality"]
+    """
+    group_keys = ['cluster_name', 'cluster_number', 'modality']
     grouper = itemgetter(*group_keys)
     clusters = defaultdict(lambda: [])
     for key, grp in groupby(sorted(cells, key=grouper), grouper):
         is_annotation = key[0] == ''
         grp_list = list(grp)
         # Re-format the annotation cluster set
-        if (is_annotation):
+        if is_annotation:
             cluster_name = 'Annotation'
             key = (cluster_name, translate_clid(key[1]), key[2])
-            grp_list = [{
-                'cluster_name': 'Annotation',
-                'cluster_number': translate_clid(item['cluster_number']),
-                'modality': item['modality'],
-                'meets_minimum_expression': item['meets_minimum_expression']
-            } for item in grp_list]
+            grp_list = [
+                {
+                    'cluster_name': 'Annotation',
+                    'cluster_number': translate_clid(item['cluster_number']),
+                    'modality': item['modality'],
+                    'meets_minimum_expression': item['meets_minimum_expression'],
+                }
+                for item in grp_list
+            ]
         cluster = dict(zip(group_keys, key))
         matched_count = [item['meets_minimum_expression'] for item in grp_list].count(True)
-        cluster.update({
-            'matched': matched_count,
-            'unmatched': len(grp_list) - matched_count
-        })
+        cluster.update({'matched': matched_count, 'unmatched': len(grp_list) - matched_count})
         clusters[cluster['cluster_name']].append(cluster)
     return clusters
 
@@ -399,10 +410,10 @@ def genes_validate():
             'valid_genes': valid_genes,
             'invalid_genes': invalid_genes,
             'total_provided': len(provided_genes),
-            'total_valid': len(valid_genes)
+            'total_valid': len(valid_genes),
         }
     except Exception as e:
-        current_app.logger.error(f"Error in gene validation: {e}", exc_info=True)
+        current_app.logger.error(f'Error in gene validation: {e}', exc_info=True)
         return {'error': 'Failed to validate genes'}, 500
 
 
@@ -419,24 +430,22 @@ def datasets_selected_by_level(target_entity):
     try:
         if target_entity == 'cell-type':
             dataset_set = client.select_datasets(
-                where="cell_type",
-                has=[translate_label(name) for name in cell_variable_names]
+                where='cell_type', has=[translate_label(name) for name in cell_variable_names]
             )
             matched_datasets = dataset_set.get_list()
             total_datasets = len(client.select_datasets())
             results = {
                 'matching': len(matched_datasets),
                 'total': total_datasets,
-                'list': list(matched_datasets)
+                'list': list(matched_datasets),
             }
 
         else:
             dataset_set = client.select_datasets(
                 where=target_entity,
-                has=[f'{name} > {min_expression}'
-                     for name in cell_variable_names],
+                has=[f'{name} > {min_expression}' for name in cell_variable_names],
                 genomic_modality=modality,
-                min_cell_percentage=min_cell_percentage
+                min_cell_percentage=min_cell_percentage,
             )
             results = list(dataset_set.get_list())
     except ClientError as e:
@@ -464,9 +473,7 @@ def cell_percentages_for_datasets():
     client = _get_client(current_app)
 
     dataset_set = client.select_datasets(where='dataset', has=[uuids])
-    results = list(dataset_set.get_list(
-        values_included=[f'{gene_name} > {min_gene_expression}'])
-    )
+    results = list(dataset_set.get_list(values_included=[f'{gene_name} > {min_gene_expression}']))
 
     return {'results': results}
 
@@ -518,11 +525,15 @@ def cells_in_dataset_clusters():
     cells = client.select_cells(where='dataset', has=[uuid])
     cells_list = cells.get_list(values_included=cell_variable_name)
 
-    return {'results':
-            _get_matched_cell_counts_per_cluster(
-                cells=_get_cluster_cells(cells=cells_list,
-                                         cell_variable_name=cell_variable_name,
-                                         min_expression=float(min_expression)))}
+    return {
+        'results': _get_matched_cell_counts_per_cluster(
+            cells=_get_cluster_cells(
+                cells=cells_list,
+                cell_variable_name=cell_variable_name,
+                min_expression=float(min_expression),
+            )
+        )
+    }
 
 
 @timeit

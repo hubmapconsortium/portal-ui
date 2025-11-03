@@ -25,6 +25,7 @@ const config = {
       '<rootDir>/test-utils/__mocks__/file.js',
     '^.+\\.(css|scss)$': '<rootDir>/test-utils/__mocks__/style.js',
     '^js/(.*)$': '<rootDir>/app/static/js/$1',
+    '^assets/(.*)$': '<rootDir>/app/static/assets/$1',
     '^test-utils/(.*)$': '<rootDir>/test-utils/$1',
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },

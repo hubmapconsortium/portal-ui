@@ -14,12 +14,14 @@ function SearchBar({ onChange, ...rest }: SearchBarProps) {
       size="small"
       margin="none"
       onChange={onChange}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <SearchRoundedIcon color="primary" />
-          </InputAdornment>
-        ),
+      slotProps={{
+        input: {
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchRoundedIcon color="primary" />
+            </InputAdornment>
+          ),
+        },
       }}
       {...rest}
     />

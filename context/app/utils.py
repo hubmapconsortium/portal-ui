@@ -1,6 +1,8 @@
+from functools import cache
 from itertools import islice
+import json
 from urllib.parse import urlparse
-from flask import (current_app, request, session, Blueprint)
+from flask import current_app, request, session, Blueprint
 
 from portal_visualization.client import ApiClient
 from portal_visualization.mock_client import MockApiClient
@@ -10,6 +12,22 @@ from pathlib import Path
 from yaml import safe_load
 
 entity_types = ['donor', 'sample', 'dataset', 'support', 'collection', 'publication']
+
+
+@cache
+def _load_tutorials():
+    """Load tutorials from JSON file."""
+    # Get the directory of the current file (utils.py)
+    current_dir = Path(__file__).parent
+    tutorials_json_path = current_dir / 'static' / 'assets' / 'json' / 'tutorials.json'
+    with open(tutorials_json_path) as f:
+        return json.load(f)
+
+
+def get_valid_tutorial_routes():
+    """Get set of valid tutorial routes."""
+    tutorials = _load_tutorials()
+    return {tutorial['route'] for tutorial in tutorials}
 
 
 def get_client():
@@ -32,7 +50,8 @@ def get_default_flask_data():
         'endpoints': {
             'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
             'baseElasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
-            + '/' + current_app.config['VERSION'],
+            + '/'
+            + current_app.config['VERSION'],
             'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
             'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
@@ -48,9 +67,9 @@ def get_default_flask_data():
             'ukvEndpoint': current_app.config['UKV_ENDPOINT'],
             'dataProductsEndpoint': current_app.config['DATA_PRODUCTS_ENDPOINT'],
             'scFindEndpoint': current_app.config['SCFIND_ENDPOINT'],
-            'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION']
+            'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION'],
         },
-        'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
+        'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD'),
     }
 
 
@@ -106,69 +125,37 @@ def find_raw_dataset_ancestor(client, ancestor_ids):
     return client.get_entities(
         'datasets',
         query_override={
-            "bool": {
-                "must": [
-                    {
-                        "term": {
-                            "processing": "raw"
-                        }
-                    },
-                    {
-                        "terms": {
-                            "uuid": ancestor_ids
-                        }
-                    },
+            'bool': {
+                'must': [
+                    {'term': {'processing': 'raw'}},
+                    {'terms': {'uuid': ancestor_ids}},
                 ],
-                "must_not": [
-                    {
-                        "exists": {
-                            "field": "ancestor_counts.entity_type.Dataset"
-                        }
-                    }
-                ]
+                'must_not': [{'exists': {'field': 'ancestor_counts.entity_type.Dataset'}}],
             }
         },
-        non_metadata_fields=[
-            'uuid',
-            'processing',
-            'entity_type',
-            'is_component'
-        ]
+        non_metadata_fields=['uuid', 'processing', 'entity_type', 'is_component'],
     )
 
 
 def find_sibling_datasets(client, dataset):
-    if (dataset.get("dataset_type").lower() != "snare-seq2"):
+    if dataset.get('dataset_type').lower() != 'snare-seq2':
         return []
 
-    main_raw_dataset_uuid = dataset.get("uuid", None)
+    main_raw_dataset_uuid = dataset.get('uuid', None)
     if not main_raw_dataset_uuid:
         return []
 
     processed_descendants = client.get_entities(
         'datasets',
         query_override={
-            "bool": {
-                "must": [
-                    {
-                        "term": {
-                            "ancestor_ids": main_raw_dataset_uuid
-                        }
-                    },
-                    {
-                        "term": {
-                            "processing": "processed"
-                        }
-                    }
+            'bool': {
+                'must': [
+                    {'term': {'ancestor_ids': main_raw_dataset_uuid}},
+                    {'term': {'processing': 'processed'}},
                 ]
             }
         },
-        non_metadata_fields=[
-            'uuid',
-            'processing',
-            'entity_type',
-            'is_component'
-        ]
+        non_metadata_fields=['uuid', 'processing', 'entity_type', 'is_component'],
     )
     if len(processed_descendants) == 0:
         return []
@@ -177,7 +164,7 @@ def find_sibling_datasets(client, dataset):
 
     # Get the siblings of the raw dataset by finding datasets with the same processed descendant
 
-    processed_dataset_uuid = processed_dataset.get("uuid", None)
+    processed_dataset_uuid = processed_dataset.get('uuid', None)
 
     if not processed_dataset_uuid:
         return []
@@ -185,11 +172,11 @@ def find_sibling_datasets(client, dataset):
     siblings = client.get_entities(
         'datasets',
         query_override={
-            "bool": {
-                "must": [
+            'bool': {
+                'must': [
                     {
-                        "term": {
-                            "descendant_ids": processed_dataset_uuid,
+                        'term': {
+                            'descendant_ids': processed_dataset_uuid,
                         },
                     },
                 ],
@@ -197,12 +184,13 @@ def find_sibling_datasets(client, dataset):
         },
         non_metadata_fields=[
             'uuid',
-        ]
+        ],
     )
 
     # Filter out the original dataset
-    sibling_ids = [sibling.get("uuid")
-                   for sibling in siblings if sibling.get("uuid") != main_raw_dataset_uuid]
+    sibling_ids = [
+        sibling.get('uuid') for sibling in siblings if sibling.get('uuid') != main_raw_dataset_uuid
+    ]
 
     return sibling_ids
 
@@ -217,9 +205,12 @@ def first_n_matches(strings, substring, n):
     substring_lower = substring.lower()
     first_n = list(islice((s for s in strings if substring_lower in s.lower()), n))
     offsets = [s.lower().find(substring_lower) for s in first_n]
-    return [{
-        'full': s,
-        'pre': s[:offset],
-        'match': s[offset:offset + len(substring)],
-        'post': s[offset + len(substring):]
-    } for s, offset in zip(first_n, offsets)]
+    return [
+        {
+            'full': s,
+            'pre': s[:offset],
+            'match': s[offset : offset + len(substring)],
+            'post': s[offset + len(substring) :],
+        }
+        for s, offset in zip(first_n, offsets)
+    ]

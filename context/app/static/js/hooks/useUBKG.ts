@@ -20,6 +20,10 @@ interface PathwayWithGenesParams {
   geneIds?: string[];
 }
 
+export function stripCLIDPrefix(clid: string) {
+  return clid.replace(/\D/g, ''); // Remove non-digit characters
+}
+
 /**
  * Generates API URLs for the UBKG API.
  * @returns A set of functions that generate URLs for the UBKG API.
@@ -28,8 +32,12 @@ const useUbkg = () => {
   const { ubkgEndpoint } = useAppContext();
   return useMemo(
     () => ({
-      geneDetail(geneId: string) {
-        return `${ubkgEndpoint}/genes/${geneId.toUpperCase()}`;
+      geneDetail(geneId?: string | string[]) {
+        if (!geneId) {
+          return null;
+        }
+        const ids = Array.isArray(geneId) ? geneId : [geneId];
+        return `${ubkgEndpoint}/genes/${ids.map((id) => id.toUpperCase()).join(',')}`;
       },
       get geneList() {
         return `${ubkgEndpoint}/genes-info`;
@@ -40,15 +48,12 @@ const useUbkg = () => {
       get proteinList() {
         return `${ubkgEndpoint}/proteins-info`;
       },
-      cellTypeDetail(cellTypeId?: string) {
+      cellTypeDetail(cellTypeId?: string | string[]) {
         if (!cellTypeId) {
           return null;
         }
-        // Remove any non-digit characters from the cell type ID
-        // This is to ensure that the ID is in the correct format for the API,
-        // which expects a CL ID without any prefixes or suffixes.
-        const formattedClid = cellTypeId.replace(/\D/g, '');
-        return `${ubkgEndpoint}/celltypes/${formattedClid}`;
+        const ids = Array.isArray(cellTypeId) ? cellTypeId : [cellTypeId];
+        return `${ubkgEndpoint}/celltypes/${ids.map(stripCLIDPrefix).join(',')}`;
       },
       get cellTypeList() {
         return `${ubkgEndpoint}/celltypes-info`;
@@ -164,16 +169,10 @@ export interface CellTypeBiomarkerInfo {
  * Response type for the cell type info (`celltypes/:cellTypeId`) endpoint.
  */
 export interface CellTypeDetail {
-  biomarkers: CellTypeBiomarkerInfo[];
   cell_type: {
-    cl_id: string;
+    id: string;
     definition: string;
     name: string;
-  };
-  organs: {
-    id: string;
-    name: string;
-    source: string;
   };
 }
 
@@ -271,6 +270,11 @@ export const useGeneOntologyList = (starts_with: string) => {
   });
 };
 
+/**
+ * Retrieves cell type details for a single cell type ID.
+ * @param cellTypeId
+ * @returns
+ */
 export const useCellTypeOntologyDetail = (cellTypeId?: string) => {
   const { data, ...swr } = useSWR<[CellTypeDetail], SWRError>(
     useUbkg().cellTypeDetail(cellTypeId),
@@ -287,6 +291,37 @@ export const useCellTypeOntologyDetail = (cellTypeId?: string) => {
     },
   );
   return { data: data?.[0], ...swr };
+};
+
+/**
+ * Requests cell type details for multiple cell type IDs.
+ * Invalid IDs are skipped in the response.
+ * The keys in the returned mapping correspond to the provided cell type IDs,
+ * stripped of any non-digit characters.
+ *
+ * @param cellTypeIds a list of cell type IDs
+ * @returns a mapping of cell type ID to its details
+ */
+export const useCellTypeOntologyDetails = (cellTypeIds: string[]) => {
+  return useSWR<Record<string, CellTypeDetail['cell_type']>, SWRError>(
+    useUbkg().cellTypeDetail(cellTypeIds),
+    (url: string) =>
+      fetcher<CellTypeDetail[]>({
+        url,
+        errorMessages: {
+          404: `The cell types ${cellTypeIds.join(', ')} were not found.`,
+        },
+      }).then((data) => {
+        return data.reduce<Record<string, CellTypeDetail['cell_type']>>((acc, detail) => {
+          acc[stripCLIDPrefix(detail.cell_type.id)] = detail.cell_type;
+          return acc;
+        }, {});
+      }),
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  );
 };
 interface Description {
   // HMFIELD refers to legacy metadata.

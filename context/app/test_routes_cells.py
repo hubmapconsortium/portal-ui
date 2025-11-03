@@ -42,7 +42,7 @@ mock_cell_labels = [
         'Label': 'epithelial cell',
         'CL_ID': 'CL:0000066',
         'CL_Match': '1',
-        'Lookup_Label': 'epithelial cell (CL:0000066)'
+        'Lookup_Label': 'epithelial cell (CL:0000066)',
     },
     {
         'Organ_Level': 'heart',
@@ -51,12 +51,12 @@ mock_cell_labels = [
         'Label': 'cardiomyocyte',
         'CL_ID': 'CL:0000746',
         'CL_Match': '1',
-        'Lookup_Label': 'cardiomyocyte (CL:0000746)'
-    }
+        'Lookup_Label': 'cardiomyocyte (CL:0000746)',
+    },
 ]
 mock_dataset_results = [
     {'uuid': 'dataset1', 'title': 'Test Dataset 1'},
-    {'uuid': 'dataset2', 'title': 'Test Dataset 2'}
+    {'uuid': 'dataset2', 'title': 'Test Dataset 2'},
 ]
 
 
@@ -66,9 +66,7 @@ def create_mock_client():
 
     # Mock gene selection
     mock_genes = Mock()
-    mock_genes.get_list.return_value = [
-        {'gene_symbol': symbol} for symbol in mock_gene_symbols
-    ]
+    mock_genes.get_list.return_value = [{'gene_symbol': symbol} for symbol in mock_gene_symbols]
     mock_client.select_genes.return_value = mock_genes
 
     # Mock protein selection
@@ -98,7 +96,7 @@ def create_mock_client():
             'cell_type': 'CL:0000066',
             'clusters': ['cluster-method-a-1'],
             'values': {'ACTB': 15.0},
-            'modality': 'rna'
+            'modality': 'rna',
         }
     ]
     mock_client.select_cells.return_value = mock_cells
@@ -133,8 +131,7 @@ class TestCellsAutocompleteRoutes:
 
     def test_genes_by_substring_success(self, client, mocker):
         """Test successful gene substring search."""
-        mocker.patch('app.routes_cells._get_gene_symbols',
-                     return_value=mock_gene_symbols)
+        mocker.patch('app.routes_cells._get_gene_symbols', return_value=mock_gene_symbols)
 
         response = client.post('/cells/genes-by-substring.json?substring=BRC')
         assert response.status_code == 200
@@ -144,8 +141,7 @@ class TestCellsAutocompleteRoutes:
 
     def test_genes_by_substring_empty_query(self, client, mocker):
         """Test gene substring search with empty query."""
-        mocker.patch('app.routes_cells._get_gene_symbols',
-                     return_value=mock_gene_symbols)
+        mocker.patch('app.routes_cells._get_gene_symbols', return_value=mock_gene_symbols)
 
         response = client.post('/cells/genes-by-substring.json?substring=')
         assert response.status_code == 200
@@ -155,8 +151,7 @@ class TestCellsAutocompleteRoutes:
 
     def test_proteins_by_substring_success(self, client, mocker):
         """Test successful protein substring search."""
-        mocker.patch('app.routes_cells._get_protein_ids',
-                     return_value=mock_protein_ids)
+        mocker.patch('app.routes_cells._get_protein_ids', return_value=mock_protein_ids)
 
         response = client.post('/cells/proteins-by-substring.json?substring=P04')
         assert response.status_code == 200
@@ -166,8 +161,7 @@ class TestCellsAutocompleteRoutes:
 
     def test_proteins_by_substring_empty_query(self, client, mocker):
         """Test protein substring search with empty query."""
-        mocker.patch('app.routes_cells._get_protein_ids',
-                     return_value=mock_protein_ids)
+        mocker.patch('app.routes_cells._get_protein_ids', return_value=mock_protein_ids)
 
         response = client.post('/cells/proteins-by-substring.json?substring=')
         assert response.status_code == 200
@@ -177,8 +171,7 @@ class TestCellsAutocompleteRoutes:
 
     def test_cell_types_by_substring_success(self, client, mocker):
         """Test successful cell type substring search."""
-        mocker.patch('app.routes_cells._get_cell_ids',
-                     return_value=mock_cell_labels)
+        mocker.patch('app.routes_cells._get_cell_ids', return_value=mock_cell_labels)
 
         response = client.post('/cells/cell-types-by-substring.json?substring=epithelial')
         assert response.status_code == 200
@@ -188,8 +181,7 @@ class TestCellsAutocompleteRoutes:
 
     def test_cell_types_by_substring_empty_query(self, client, mocker):
         """Test cell type substring search with empty query."""
-        mocker.patch('app.routes_cells._get_cell_ids',
-                     return_value=mock_cell_labels)
+        mocker.patch('app.routes_cells._get_cell_ids', return_value=mock_cell_labels)
 
         response = client.post('/cells/cell-types-by-substring.json?substring=')
         assert response.status_code == 200
@@ -204,12 +196,12 @@ class TestGenesValidate:
     def test_genes_validate_success(self, client, mocker):
         """Test successful gene validation."""
         # Mock the RNA genes function to return a subset of genes
-        mocker.patch('app.routes_cells._get_rna_genes',
-                     return_value=['ACTB', 'GAPDH', 'TP53'])
+        mocker.patch('app.routes_cells._get_rna_genes', return_value=['ACTB', 'GAPDH', 'TP53'])
 
         test_genes = ['ACTB', 'GAPDH', 'INVALID_GENE', 'TP53']
-        response = client.post('/cells/genes/validate',
-                               json={'genes': test_genes, 'modality': 'rna'})
+        response = client.post(
+            '/cells/genes/validate', json={'genes': test_genes, 'modality': 'rna'}
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -227,12 +219,12 @@ class TestGenesValidate:
     def test_genes_validate_default_modality(self, client, mocker):
         """Test gene validation with default modality."""
         # Mock the RNA genes function (default modality is 'rna')
-        mocker.patch('app.routes_cells._get_rna_genes',
-                     return_value=['ACTB', 'GAPDH'])
+        mocker.patch('app.routes_cells._get_rna_genes', return_value=['ACTB', 'GAPDH'])
 
         test_genes = ['ACTB', 'GAPDH']
-        response = client.post('/cells/genes/validate',
-                               json={'genes': test_genes})  # No modality specified
+        response = client.post(
+            '/cells/genes/validate', json={'genes': test_genes}
+        )  # No modality specified
 
         assert response.status_code == 200
         data = response.get_json()
@@ -242,12 +234,12 @@ class TestGenesValidate:
     def test_genes_validate_atac_modality(self, client, mocker):
         """Test gene validation with ATAC modality."""
         # Mock the ATAC genes function
-        mocker.patch('app.routes_cells._get_atac_genes',
-                     return_value=['ACTB', 'TP53'])
+        mocker.patch('app.routes_cells._get_atac_genes', return_value=['ACTB', 'TP53'])
 
         test_genes = ['ACTB', 'GAPDH', 'TP53']
-        response = client.post('/cells/genes/validate',
-                               json={'genes': test_genes, 'modality': 'atac'})
+        response = client.post(
+            '/cells/genes/validate', json={'genes': test_genes, 'modality': 'atac'}
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -260,8 +252,9 @@ class TestGenesValidate:
     def test_genes_validate_unsupported_modality(self, client):
         """Test gene validation with unsupported modality."""
         test_genes = ['ACTB']
-        response = client.post('/cells/genes/validate',
-                               json={'genes': test_genes, 'modality': 'unsupported'})
+        response = client.post(
+            '/cells/genes/validate', json={'genes': test_genes, 'modality': 'unsupported'}
+        )
 
         assert response.status_code == 400
         data = response.get_json()
@@ -271,12 +264,14 @@ class TestGenesValidate:
     def test_genes_validate_client_error(self, client, mocker):
         """Test gene validation with RNA genes function error."""
         # Mock _get_rna_genes to raise an exception
-        mocker.patch('app.routes_cells._get_rna_genes',
-                     side_effect=Exception("RNA genes API error"))
+        mocker.patch(
+            'app.routes_cells._get_rna_genes', side_effect=Exception('RNA genes API error')
+        )
 
         test_genes = ['ACTB']
-        response = client.post('/cells/genes/validate',
-                               json={'genes': test_genes, 'modality': 'rna'})
+        response = client.post(
+            '/cells/genes/validate', json={'genes': test_genes, 'modality': 'rna'}
+        )
 
         assert response.status_code == 500
         data = response.get_json()
@@ -309,8 +304,7 @@ class TestGenesValidate:
 
     def test_genes_validate_error_handling(self, client, mocker):
         """Test gene validation error handling."""
-        mocker.patch('app.routes_cells._get_gene_symbols',
-                     side_effect=Exception("API error"))
+        mocker.patch('app.routes_cells._get_gene_symbols', side_effect=Exception('API error'))
 
         response = client.post('/cells/genes/validate', json={'genes': ['ACTB']})
         assert response.status_code == 500
@@ -327,9 +321,11 @@ class TestDatasetsEndpoints:
         mock_client = create_mock_client()
         mocker.patch('app.routes_cells._get_client', return_value=mock_client)
 
-        response = client.post('/cells/datasets-selected-by-gene.json'
-                               '?cell_variable_name=ACTB&modality=rna'
-                               '&min_expression=5&min_cell_percentage=0.1')
+        response = client.post(
+            '/cells/datasets-selected-by-gene.json'
+            '?cell_variable_name=ACTB&modality=rna'
+            '&min_expression=5&min_cell_percentage=0.1'
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -341,8 +337,9 @@ class TestDatasetsEndpoints:
         mocker.patch('app.routes_cells._get_client', return_value=mock_client)
         mocker.patch('app.routes_cells.translate_label', return_value='CL:0000066')
 
-        response = client.post('/cells/datasets-selected-by-cell-type.json'
-                               '?cell_variable_name=epithelial%20cell')
+        response = client.post(
+            '/cells/datasets-selected-by-cell-type.json?cell_variable_name=epithelial%20cell'
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -351,12 +348,14 @@ class TestDatasetsEndpoints:
     def test_datasets_selected_client_error(self, client, mocker):
         """Test datasets endpoint with client error."""
         mock_client = Mock()
-        mock_client.select_datasets.side_effect = ClientError("API error")
+        mock_client.select_datasets.side_effect = ClientError('API error')
         mocker.patch('app.routes_cells._get_client', return_value=mock_client)
 
-        response = client.post('/cells/datasets-selected-by-gene.json'
-                               '?cell_variable_name=INVALID&modality=rna'
-                               '&min_expression=5&min_cell_percentage=0.1')
+        response = client.post(
+            '/cells/datasets-selected-by-gene.json'
+            '?cell_variable_name=INVALID&modality=rna'
+            '&min_expression=5&min_cell_percentage=0.1'
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -367,8 +366,10 @@ class TestDatasetsEndpoints:
         mock_client = create_mock_client()
         mocker.patch('app.routes_cells._get_client', return_value=mock_client)
 
-        response = client.post('/cells/cell-percentages-for-datasets.json'
-                               '?uuid=dataset1&gene_name=ACTB&min_gene_expression=5')
+        response = client.post(
+            '/cells/cell-percentages-for-datasets.json'
+            '?uuid=dataset1&gene_name=ACTB&min_gene_expression=5'
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -380,8 +381,9 @@ class TestDatasetsEndpoints:
         mocker.patch('app.routes_cells._get_client', return_value=mock_client)
         mocker.patch('app.routes_cells.translate_clid', return_value='epithelial cell')
 
-        response = client.post('/cells/cell-expression-in-dataset.json'
-                               '?uuid=dataset1&cell_variable_names=ACTB')
+        response = client.post(
+            '/cells/cell-expression-in-dataset.json?uuid=dataset1&cell_variable_names=ACTB'
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -403,8 +405,10 @@ class TestDatasetsEndpoints:
         mock_client = create_mock_client()
         mocker.patch('app.routes_cells._get_client', return_value=mock_client)
 
-        response = client.post('/cells/cells-in-dataset-clusters.json'
-                               '?uuid=dataset1&cell_variable_name=ACTB&min_expression=5')
+        response = client.post(
+            '/cells/cells-in-dataset-clusters.json'
+            '?uuid=dataset1&cell_variable_name=ACTB&min_expression=5'
+        )
 
         assert response.status_code == 200
         data = response.get_json()
@@ -428,11 +432,12 @@ class TestCellTypeUtilities:
     def test_all_names_for_cell_type(self, client, mocker):
         """Test getting all names for a cell type."""
         mocker.patch('app.routes_cells.translate_label', return_value='CL:0000066')
-        mocker.patch('app.routes_cells._get_all_names_for_clid',
-                     return_value=['epithelial cell', 'epithelium'])
+        mocker.patch(
+            'app.routes_cells._get_all_names_for_clid',
+            return_value=['epithelial cell', 'epithelium'],
+        )
 
-        response = client.post('/cells/all-names-for-cell-type.json'
-                               '?cell_type=epithelial%20cell')
+        response = client.post('/cells/all-names-for-cell-type.json?cell_type=epithelial%20cell')
 
         assert response.status_code == 200
         data = response.get_json()
@@ -452,14 +457,8 @@ class TestUtilityFunctions:
     def test_get_cluster_cells(self, client):
         """Test cluster cells processing."""
         cells = [
-            {
-                "clusters": ["cluster-method-a-1", "cluster-method-b-1"],
-                "values": {"VIM": 21.0}
-            },
-            {
-                "clusters": ["cluster-method-a-1"],
-                "values": {"VIM": 7.0}
-            }
+            {'clusters': ['cluster-method-a-1', 'cluster-method-b-1'], 'values': {'VIM': 21.0}},
+            {'clusters': ['cluster-method-a-1'], 'values': {'VIM': 7.0}},
         ]
 
         with client.application.test_request_context('/test'):
@@ -478,14 +477,14 @@ class TestUtilityFunctions:
                 'modality': 'rna',
                 'cluster_name': 'cluster-method-a',
                 'cluster_number': '1',
-                'meets_minimum_expression': True
+                'meets_minimum_expression': True,
             },
             {
                 'modality': 'rna',
                 'cluster_name': 'cluster-method-a',
                 'cluster_number': '1',
-                'meets_minimum_expression': False
-            }
+                'meets_minimum_expression': False,
+            },
         ]
 
         with client.application.test_request_context('/test'):
@@ -502,24 +501,21 @@ class TestTranslationFunctions:
 
     def test_translate_clid(self, client, mocker):
         """Test CLID to label translation."""
-        mocker.patch('app.routes_cells._get_cell_ids',
-                     return_value=mock_cell_labels)
+        mocker.patch('app.routes_cells._get_cell_ids', return_value=mock_cell_labels)
 
         result = routes_cells.translate_clid('CL:0000066')
         assert result == 'epithelial cell'
 
     def test_translate_label(self, client, mocker):
         """Test label to CLID translation."""
-        mocker.patch('app.routes_cells._get_cell_ids',
-                     return_value=mock_cell_labels)
+        mocker.patch('app.routes_cells._get_cell_ids', return_value=mock_cell_labels)
 
         result = routes_cells.translate_label('epithelial cell')
         assert result == 'CL:0000066'
 
     def test_translate_lookup_label(self, client, mocker):
         """Test lookup label to CLID translation."""
-        mocker.patch('app.routes_cells._get_cell_ids',
-                     return_value=mock_cell_labels)
+        mocker.patch('app.routes_cells._get_cell_ids', return_value=mock_cell_labels)
 
         result = routes_cells.translate_label('epithelial cell (CL:0000066)')
         assert result == 'CL:0000066'
@@ -529,10 +525,9 @@ class TestTranslationFunctions:
         mock_all_labels = [
             {'Label': 'epithelial cell', 'CL_ID': 'CL:0000066'},
             {'Label': 'epithelium', 'CL_ID': 'CL:0000066'},
-            {'Label': 'cardiomyocyte', 'CL_ID': 'CL:0000746'}
+            {'Label': 'cardiomyocyte', 'CL_ID': 'CL:0000746'},
         ]
-        mocker.patch('app.routes_cells._get_all_labels',
-                     return_value=mock_all_labels)
+        mocker.patch('app.routes_cells._get_all_labels', return_value=mock_all_labels)
 
         result = routes_cells._get_all_names_for_clid('CL:0000066')
         assert isinstance(result, tuple)
@@ -557,7 +552,7 @@ class TestTranslationFunctions:
         ('/cells/cells-in-dataset-clusters.json', 'POST', 200),
         ('/cells/all-names-for-cell-type.json', 'POST', 200),
         ('/cells/total-datasets.json', 'GET', 200),
-    ]
+    ],
 )
 def test_endpoint_accessibility(client, mocker, endpoint, method, expected_status):
     """Test that all endpoints are accessible and return expected status codes."""

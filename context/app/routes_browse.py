@@ -1,16 +1,29 @@
 from functools import cache
 import json
 from urllib.parse import urlparse, quote
-from .utils import get_organs
+from .utils import get_organs, get_valid_tutorial_routes
 
 from flask import (
-    current_app, render_template, jsonify,
-    abort, request, redirect, url_for, Response)
+    current_app,
+    render_template,
+    jsonify,
+    abort,
+    request,
+    redirect,
+    url_for,
+    Response,
+)
 
 from .utils import (
-    find_sibling_datasets, get_default_flask_data, make_blueprint, get_client,
-    get_url_base_from_request, entity_types, find_raw_dataset_ancestor,
-    should_redirect_entity)
+    find_sibling_datasets,
+    get_default_flask_data,
+    make_blueprint,
+    get_client,
+    get_url_base_from_request,
+    entity_types,
+    find_raw_dataset_ancestor,
+    should_redirect_entity,
+)
 
 
 blueprint = make_blueprint(__name__)
@@ -24,15 +37,15 @@ def hbm_redirect(possible_hbm_id):
     client = get_client()
     entity = client.get_entity(hbm_id=uppercase_possible_hmb_id)
     return redirect(
-        url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
+        url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid'])
+    )
 
 
 @blueprint.route('/browse/latest/<type>/<uuid>')
 def latest_redirect(type, uuid):
     client = get_client()
     latest_entity_uuid = client.get_latest_entity_uuid(uuid, type)
-    return redirect(
-        url_for('routes_browse.details', type=type.lower(), uuid=latest_entity_uuid))
+    return redirect(url_for('routes_browse.details', type=type.lower(), uuid=latest_entity_uuid))
 
 
 @blueprint.route('/browse/<type>/<uuid>.<unknown_ext>')
@@ -51,7 +64,7 @@ def details(type, uuid):
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
 
-    if (should_redirect_entity(entity)):
+    if should_redirect_entity(entity):
         raw_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
@@ -64,14 +77,17 @@ def details(type, uuid):
 
         # Redirect to the primary dataset
         return redirect(
-            url_for('routes_browse.details',
-                    type='dataset',
-                    uuid=raw_dataset[0].get('uuid'),
-                    _anchor=anchor,
-                    redirected=True,
-                    redirectedFromId=entity.get('hubmap_id'),
-                    redirectedFromPipeline=entity.get('pipeline'),
-                    marker=marker))
+            url_for(
+                'routes_browse.details',
+                type='dataset',
+                uuid=raw_dataset[0].get('uuid'),
+                _anchor=anchor,
+                redirected=True,
+                redirectedFromId=entity.get('hubmap_id'),
+                redirectedFromPipeline=entity.get('pipeline'),
+                marker=marker,
+            )
+        )
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
@@ -89,7 +105,7 @@ def details(type, uuid):
         'redirected': redirected,
         'redirectedFromId': request.args.get('redirectedFromId'),
         'redirectedFromPipeline': request.args.get('redirectedFromPipeline'),
-        'siblingIds': sibling_ids
+        'siblingIds': sibling_ids,
     }
 
     if type == 'publication':
@@ -103,7 +119,7 @@ def details(type, uuid):
         uuid=uuid,
         title=_get_entity_title(entity),
         description=_get_entity_description(entity),
-        flask_data=flask_data
+        flask_data=flask_data,
     )
 
 
@@ -127,8 +143,7 @@ def details_vitessce(type, uuid):
     minimal = request.args.get('minimal') == 'True'
     parent = client.get_entity(parent_uuid) if parent_uuid else None
     epic_uuid = None
-    if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get(
-            'status') != 'Error':
+    if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get('status') != 'Error':
         if parent is None:
             ancestors = entity.get('immediate_ancestor_ids')
             if len(ancestors) > 0:
@@ -137,15 +152,11 @@ def details_vitessce(type, uuid):
             epic_uuid = uuid
 
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
-        entity,
-        marker=marker,
-        parent=parent,
-        epic_uuid=epic_uuid,
-        minimal=minimal
+        entity, marker=marker, parent=parent, epic_uuid=epic_uuid, minimal=minimal
     ).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
-    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 
@@ -169,6 +180,7 @@ def details_rui_json(type, uuid):
 def sitemap_txt():
     template_keys = _get_all_template_keys()
     organ_keys = list(get_organs().keys())
+    tutorial_routes = list(get_valid_tutorial_routes())
     dataset_uuids = _get_all_primary_dataset_uuids()
     sample_uuids = _get_all_sample_uuids()
     donor_uuids = _get_all_donor_uuids()
@@ -177,22 +189,25 @@ def sitemap_txt():
 
     url_base = get_url_base_from_request()
     return Response(
-        '\n'.join([
-            # Landing pages
-            f'{url_base}/workspaces',
-            f'{url_base}/tutorials',
-            f'{url_base}/templates',
-            f'{url_base}/organs',
-            # Detail pages
-            *[f'{url_base}/templates/{key}' for key in template_keys],
-            *[f'{url_base}/organs/{key}' for key in organ_keys],
-            *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
-            *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
-            *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],
-            *[f'{url_base}/browse/collection/{uuid}' for uuid in collection_uuids],
-            *[f'{url_base}/browse/publication/{uuid}' for uuid in publication_uuids],
-        ]),
-        mimetype='text/plain'
+        '\n'.join(
+            [
+                # Landing pages
+                f'{url_base}/workspaces',
+                f'{url_base}/tutorials',
+                f'{url_base}/templates',
+                f'{url_base}/organs',
+                # Detail pages
+                *[f'{url_base}/templates/{key}' for key in template_keys],
+                *[f'{url_base}/organs/{key}' for key in organ_keys],
+                *[f'{url_base}/tutorials/{route}' for route in tutorial_routes],
+                *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
+                *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
+                *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],
+                *[f'{url_base}/browse/collection/{uuid}' for uuid in collection_uuids],
+                *[f'{url_base}/browse/publication/{uuid}' for uuid in publication_uuids],
+            ]
+        ),
+        mimetype='text/plain',
     )
 
 
@@ -202,14 +217,15 @@ def robots_txt():
     hostname = urlparse(request.base_url).hostname
     disallow = '/search' if hostname == allowed_hostname else '/'
     return Response(
-        f'''
+        f"""
 # This host: {hostname}
 # Allowed host: {allowed_hostname}
 User-agent: *
 Disallow: {disallow}
 Sitemap: {get_url_base_from_request()}/sitemap.txt
-''',
-        mimetype='text/plain')
+""",
+        mimetype='text/plain',
+    )
 
 
 def _format_donor_title(metadata):
@@ -268,10 +284,10 @@ def _format_dataset_title(entity):
     ... })
     'Sample Title'
     """
-    if (entity is None):
+    if entity is None:
         return 'unknown assay of unknown organ of unknown donor'
-    if (entity.get('title') is not None):
-        return entity["title"]
+    if entity.get('title') is not None:
+        return entity['title']
     else:
         assay = entity.get('raw_dataset_type', 'unknown assay')
         origin_organs = entity.get('origin_samples_unique_mapped_organs')
@@ -279,7 +295,8 @@ def _format_dataset_title(entity):
 
         donor = entity.get('donor')
         donor_description = _format_donor_title(
-            donor.get('mapped_metadata') if donor is not None else None)
+            donor.get('mapped_metadata') if donor is not None else None
+        )
         components = [assay, organ, donor_description]
         return ' of '.join(c for c in components if c)  # Filter out empty strings
 
@@ -304,7 +321,7 @@ def _format_sample_title(entity):
     ... })
     'Section from Kidney of 70 years old White Male'
     """
-    if (entity is None):
+    if entity is None:
         return 'unknown sample type from unknown organ of unknown donor'
     sample_category = entity.get('mapped_sample_category', 'Unknown sample type')
     origin_organs = entity.get('origin_samples_unique_mapped_organs')
@@ -314,7 +331,8 @@ def _format_sample_title(entity):
         organ = 'unknown organ'
     donor = entity.get('donor')
     donor_description = _format_donor_title(
-        donor.get('mapped_metadata') if donor is not None else None)
+        donor.get('mapped_metadata') if donor is not None else None
+    )
     return f'{sample_category} from {organ} of {donor_description}'
 
 
@@ -346,7 +364,7 @@ def _get_entity_title(entity):
             title = _truncate_title(entity.get('title', entity.get('hubmap_id')))
             return f'{title} | Collection'
         case 'donor':
-            title = _format_donor_title(entity.get("mapped_metadata"))
+            title = _format_donor_title(entity.get('mapped_metadata'))
             return f'{title} | Donor'
         case _:
             return f'{entity["hubmap_id"]} | {entity_type.title()}'
@@ -360,30 +378,42 @@ def _get_publication_data_types_and_organs(uuid: str):
     """
     client = get_client()
 
-    elasticsearch_url = current_app.config['ELASTICSEARCH_ENDPOINT'] + \
-        current_app.config['PORTAL_INDEX_PATH']
+    elasticsearch_url = (
+        current_app.config['ELASTICSEARCH_ENDPOINT'] + current_app.config['PORTAL_INDEX_PATH']
+    )
 
     # TODO: the search API client does not currently support aggs, so this is
     # an inline definition for the time being.
     request = {
-        "query": {
-            "bool": {"must": [
-                {"bool": {"filter": [{"term": {"descendant_ids": uuid}}]}},
-                {"bool": {"must_not": [{"exists": {"field": "next_revision_uuid"}},
-                                       {"exists": {"field": "sub_status"}}]}}]}},
-        "aggs": {
-            "data_types": {"terms": {"field": "mapped_data_types.keyword", "size": 10000}},
-            "organs": {"terms": {"field": "origin_samples.mapped_organ.keyword", "size": 10000}},
+        'query': {
+            'bool': {
+                'must': [
+                    {'bool': {'filter': [{'term': {'descendant_ids': uuid}}]}},
+                    {
+                        'bool': {
+                            'must_not': [
+                                {'exists': {'field': 'next_revision_uuid'}},
+                                {'exists': {'field': 'sub_status'}},
+                            ]
+                        }
+                    },
+                ]
+            }
         },
-        "size": 0
+        'aggs': {
+            'data_types': {'terms': {'field': 'mapped_data_types.keyword', 'size': 10000}},
+            'organs': {'terms': {'field': 'origin_samples.mapped_organ.keyword', 'size': 10000}},
+        },
+        'size': 0,
     }
 
     data_types, organs = [[], []]
     try:
         response = client._request(elasticsearch_url, request)
         aggregations = response.get('aggregations')
-        data_types = [bucket.get('key')
-                      for bucket in aggregations.get('data_types').get('buckets')]
+        data_types = [
+            bucket.get('key') for bucket in aggregations.get('data_types').get('buckets')
+        ]
         organs = [bucket.get('key') for bucket in aggregations.get('organs').get('buckets')]
     except Exception as e:
         current_app.logger.error(f'Error retrieving publication data types and organs: {e}')
@@ -397,22 +427,19 @@ def get_uuids(query):
     """
     client = get_client()
 
-    elasticsearch_url = current_app.config['ELASTICSEARCH_ENDPOINT'] + \
-        current_app.config['PORTAL_INDEX_PATH']
+    elasticsearch_url = (
+        current_app.config['ELASTICSEARCH_ENDPOINT'] + current_app.config['PORTAL_INDEX_PATH']
+    )
 
-    request = {
-        "size": 10000,
-        "query": query,
-        "_source": False
-    }
+    request = {'size': 10000, 'query': query, '_source': False}
 
     uuids = []
 
     try:
         response_json = client._request(elasticsearch_url, request)
-        uuids = [hit["_id"] for hit in response_json.get("hits", {}).get("hits", [])]
+        uuids = [hit['_id'] for hit in response_json.get('hits', {}).get('hits', [])]
         if len(uuids) == 10000:
-            raise Exception("At least 10k entities: need to make multiple requests")
+            raise Exception('At least 10k entities: need to make multiple requests')
     except Exception as e:
         current_app.logger.error(f'Error retrieving uuids: {e}')
     finally:
@@ -427,42 +454,36 @@ def _get_all_primary_dataset_uuids():
     are excluded here to avoid including redirects to the primary dataset).
     """
 
-    return get_uuids({
-        "bool": {
-            "filter": [
-                {"term": {"entity_type.keyword": "Dataset"}},
-                {"term": {"processing.keyword": "raw"}}
-            ]
+    return get_uuids(
+        {
+            'bool': {
+                'filter': [
+                    {'term': {'entity_type.keyword': 'Dataset'}},
+                    {'term': {'processing.keyword': 'raw'}},
+                ]
+            }
         }
-    })
+    )
 
 
 @cache
 def _get_all_sample_uuids():
-    return get_uuids({
-        "term": {"entity_type.keyword": "Sample"}
-    })
+    return get_uuids({'term': {'entity_type.keyword': 'Sample'}})
 
 
 @cache
 def _get_all_donor_uuids():
-    return get_uuids({
-        "term": {"entity_type.keyword": "Donor"}
-    })
+    return get_uuids({'term': {'entity_type.keyword': 'Donor'}})
 
 
 @cache
 def _get_all_publication_uuids():
-    return get_uuids({
-        "term": {"entity_type.keyword": "Publication"}
-    })
+    return get_uuids({'term': {'entity_type.keyword': 'Publication'}})
 
 
 @cache
 def _get_all_collection_uuids():
-    return get_uuids({
-        "term": {"entity_type.keyword": "Collection"}
-    })
+    return get_uuids({'term': {'entity_type.keyword': 'Collection'}})
 
 
 @cache
@@ -480,7 +501,7 @@ def _get_all_template_keys():
     except Exception as e:
         current_app.logger.error(f'Error retrieving uuids: {e}')
     finally:
-        return list(response_json["data"].keys())
+        return list(response_json['data'].keys())
 
 
 def _get_entity_description(entity):
