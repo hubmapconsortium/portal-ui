@@ -89,6 +89,7 @@ echo "Version: $VERSION"
 git add context/package*.json
 git add pyproject.toml
 git add context/app/markdown/dependencies.md
+git add uv.lock
 git commit -m "Version bump to $VERSION"
 
 if ls CHANGELOG-*.md; then
