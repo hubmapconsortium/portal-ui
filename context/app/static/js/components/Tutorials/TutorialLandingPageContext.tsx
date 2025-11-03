@@ -24,9 +24,7 @@ function matchSearchAndFilter(tutorials: Tutorial[], search: string, filterCateg
   return tutorials.filter(({ title, description, tags, category }) => {
     const matchesSearch =
       search === '' ||
-      title.toLowerCase().includes(search.toLowerCase()) ||
-      description.toLowerCase().includes(search.toLowerCase()) ||
-      tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
+      [title, description, ...tags].some((field) => field.toLowerCase().includes(search.toLowerCase()));
     const matchesCategory = filterCategory ? category === filterCategory : true;
     return matchesSearch && matchesCategory;
   });
