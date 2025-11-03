@@ -29,7 +29,7 @@ function HeroTabAction({ title, icon, tabTitle, onClick, href }: HeroTabActionPr
   });
 
   const chip = (
-    <Chip borderRadius="halfRound" sx={{ px: 1 }} variant="elevated" icon={icon} label={title} onClick={handleClick} />
+    <Chip $borderRadius="halfRound" sx={{ px: 1 }} variant="elevated" icon={icon} label={title} onClick={handleClick} />
   );
 
   if (href) {
