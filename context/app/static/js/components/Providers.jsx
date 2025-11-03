@@ -40,6 +40,10 @@ export default function Providers({
   isWorkspacesUser,
   isHubmapUser,
   flaskData,
+  userFirstName,
+  userLastName,
+  userGlobusId,
+  userGlobusAffiliation,
 }) {
   const appContext = useMemo(
     () => ({
@@ -49,9 +53,25 @@ export default function Providers({
       isHubmapUser,
       isAuthenticated,
       userEmail,
+      userFirstName,
+      userLastName,
+      userGlobusId,
+      userGlobusAffiliation,
       ...endpoints,
     }),
-    [groupsToken, workspacesToken, isWorkspacesUser, isHubmapUser, isAuthenticated, userEmail, endpoints],
+    [
+      groupsToken,
+      workspacesToken,
+      isWorkspacesUser,
+      isHubmapUser,
+      isAuthenticated,
+      userEmail,
+      userFirstName,
+      userLastName,
+      userGlobusId,
+      userGlobusAffiliation,
+      endpoints,
+    ],
   );
 
   const protocolsContext = useMemo(
