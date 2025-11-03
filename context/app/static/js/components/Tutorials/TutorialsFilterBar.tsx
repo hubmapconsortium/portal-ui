@@ -5,7 +5,10 @@ import { TUTORIAL_CATEGORIES, TutorialCategory } from './types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { FilterListRounded } from '@mui/icons-material';
-import { useTutorialLandingPageSearchActions, useTutorialLandingPageSearchData } from './TutorialLandingPageContext';
+import {
+  useTutorialLandingPageFilterCategory,
+  useSetTutorialLandingPageFilterCategory,
+} from './TutorialLandingPageContext';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -14,7 +17,7 @@ interface FilterChipProps {
   isSelected: boolean;
 }
 function FilterChip({ category, isSelected }: FilterChipProps) {
-  const { setFilterCategory } = useTutorialLandingPageSearchActions();
+  const setFilterCategory = useSetTutorialLandingPageFilterCategory();
   const onClick = useEventCallback(() => {
     if (isSelected) {
       setFilterCategory(undefined);
@@ -26,7 +29,7 @@ function FilterChip({ category, isSelected }: FilterChipProps) {
 }
 
 export default function TutorialsFilterBar() {
-  const { filterCategory } = useTutorialLandingPageSearchData();
+  const filterCategory = useTutorialLandingPageFilterCategory();
 
   return (
     <Stack spacing={1} justifyContent="start" alignItems="start">

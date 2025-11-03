@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2';
 import {
   useTutorialsByCategory,
   useFeaturedTutorials,
-  useTutorialLandingPageSearchData,
+  useTutorialLandingPageTutorials,
 } from './TutorialLandingPageContext';
 import { Tutorial, TutorialCategory, TUTORIAL_CATEGORY_DATA, TutorialCategoryData, TUTORIAL_CATEGORIES } from './types';
 import Stack from '@mui/material/Stack';
@@ -134,7 +134,7 @@ function TutorialCategoryContainer({ category }: TutorialCategoryDisplayProps) {
 }
 
 export default function TutorialsList() {
-  const { tutorials } = useTutorialLandingPageSearchData();
+  const tutorials = useTutorialLandingPageTutorials();
 
   // If no tutorials to show, don't render anything
   if (tutorials.length === 0) {

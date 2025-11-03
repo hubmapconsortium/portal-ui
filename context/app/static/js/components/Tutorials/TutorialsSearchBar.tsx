@@ -1,14 +1,14 @@
 import React from 'react';
 import SearchBar from 'js/shared-styles/inputs/SearchBar';
 import { trackEvent } from 'js/helpers/trackers';
-import { useTutorialLandingPageSearchActions, useTutorialLandingPageSearchData } from './TutorialLandingPageContext';
+import { useTutorialLandingPageSearch, useSetTutorialLandingPageSearch } from './TutorialLandingPageContext';
 import { useEventCallback } from '@mui/material/utils';
 
 const searchbarPlaceholder = 'Search tutorials by title or keyword.';
 
 export default function TutorialsSearchBar() {
-  const { search } = useTutorialLandingPageSearchData();
-  const { setSearch } = useTutorialLandingPageSearchActions();
+  const search = useTutorialLandingPageSearch();
+  const setSearch = useSetTutorialLandingPageSearch();
 
   const onChange = useEventCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);

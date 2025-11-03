@@ -50,19 +50,16 @@ const [TutorialLandingPageContextProvider, useTutorialLandingPageStore] = create
 
 export { TutorialLandingPageContextProvider };
 
-// Convenience hooks for accessing specific parts of the store
-export const useTutorialLandingPageSearchData = () =>
-  useTutorialLandingPageStore((state) => ({
-    search: state.search,
-    filterCategory: state.filterCategory,
-    tutorials: state.tutorials,
-  }));
+export const useTutorialLandingPageSearch = () => useTutorialLandingPageStore((state) => state.search);
 
-export const useTutorialLandingPageSearchActions = () =>
-  useTutorialLandingPageStore((state) => ({
-    setSearch: state.setSearch,
-    setFilterCategory: state.setFilterCategory,
-  }));
+export const useTutorialLandingPageFilterCategory = () => useTutorialLandingPageStore((state) => state.filterCategory);
+
+export const useTutorialLandingPageTutorials = () => useTutorialLandingPageStore((state) => state.tutorials);
+
+export const useSetTutorialLandingPageSearch = () => useTutorialLandingPageStore((state) => state.setSearch);
+
+export const useSetTutorialLandingPageFilterCategory = () =>
+  useTutorialLandingPageStore((state) => state.setFilterCategory);
 
 export const useTutorialsByCategory = (category: TutorialCategory) => {
   const tutorials = useTutorialLandingPageStore((state) => state.tutorials);

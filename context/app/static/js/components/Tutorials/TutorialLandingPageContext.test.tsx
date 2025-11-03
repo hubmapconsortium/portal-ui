@@ -2,10 +2,13 @@ import React from 'react';
 import { render, screen, fireEvent } from 'test-utils/functions';
 import {
   TutorialLandingPageContextProvider,
-  useTutorialLandingPageSearchData,
-  useTutorialLandingPageSearchActions,
   useTutorialsByCategory,
   useFeaturedTutorials,
+  useTutorialLandingPageFilterCategory,
+  useTutorialLandingPageSearch,
+  useTutorialLandingPageTutorials,
+  useSetTutorialLandingPageFilterCategory,
+  useSetTutorialLandingPageSearch,
 } from './TutorialLandingPageContext';
 
 // Mock the TUTORIALS constant
@@ -51,21 +54,25 @@ jest.mock('./types', () => ({
 
 // Test component to access hooks
 const TestComponent = () => {
-  const data = useTutorialLandingPageSearchData();
-  const actions = useTutorialLandingPageSearchActions();
+  const search = useTutorialLandingPageSearch();
+  const filterCategory = useTutorialLandingPageFilterCategory();
+  const tutorials = useTutorialLandingPageTutorials();
+
+  const setSearch = useSetTutorialLandingPageSearch();
+  const setFilterCategory = useSetTutorialLandingPageFilterCategory();
 
   return (
     <div>
-      <div data-testid="search">{data.search}</div>
-      <div data-testid="filter-category">{data.filterCategory || 'none'}</div>
-      <div data-testid="tutorials-count">{data.tutorials.length}</div>
-      <button data-testid="set-search" onClick={() => actions.setSearch('data')}>
+      <div data-testid="search">{search}</div>
+      <div data-testid="filter-category">{filterCategory || 'none'}</div>
+      <div data-testid="tutorials-count">{tutorials.length}</div>
+      <button data-testid="set-search" onClick={() => setSearch('data')}>
         Set Search
       </button>
-      <button data-testid="set-filter" onClick={() => actions.setFilterCategory('Visualization')}>
+      <button data-testid="set-filter" onClick={() => setFilterCategory('Visualization')}>
         Set Filter
       </button>
-      <button data-testid="clear-filter" onClick={() => actions.setFilterCategory(undefined)}>
+      <button data-testid="clear-filter" onClick={() => setFilterCategory(undefined)}>
         Clear Filter
       </button>
     </div>
