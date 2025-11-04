@@ -8,10 +8,10 @@ import { type DrawerSection } from 'js/shared-styles/Drawer';
 import {
   AsctBIcon,
   EUIIcon,
-  InfoIcon,
   OrganIcon,
   SearchIcon,
   SupportIcon,
+  TutorialIcon,
   DonorIcon as UserIcon,
   VerifiedIcon,
 } from 'js/shared-styles/icons';
@@ -32,7 +32,7 @@ export const resourceLinks: DrawerSection[] = [
       {
         label: 'Tutorials',
         description: 'Learn more about how to explore the data portal.',
-        icon: <InfoIcon color="primary" />,
+        icon: <TutorialIcon color="primary" />,
         href: '/tutorials',
       },
     ],
