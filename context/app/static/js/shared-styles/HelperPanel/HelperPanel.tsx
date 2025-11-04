@@ -9,6 +9,7 @@ import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfCon
 import { LineClampWithTooltip } from 'js/shared-styles/text';
 
 import { HelperPanelPortal } from 'js/components/detailPage/DetailLayout/DetailLayout';
+import { useTotalHeaderOffset } from 'js/components/detailPage/entityHeader/EntityHeader/hooks';
 
 export function HelperPanelHeader({ children, ...rest }: TypographyProps) {
   return (
@@ -39,9 +40,28 @@ interface HelperPanelProps extends PropsWithChildren {
   shouldDisplay?: boolean;
 }
 
+function useHelperPanelPosition() {
+  const isDesktop = useIsLargeDesktop();
+  const originalStyle = useAnimatedSidebarPosition();
+
+  const headerOffset = useTotalHeaderOffset();
+
+  if (!isDesktop || !originalStyle) {
+    return originalStyle;
+  }
+
+  // For fixed positioning, we want to position relative to the viewport
+  // Use the original horizontal positioning but set a fixed vertical position
+  return {
+    ...originalStyle,
+    top: headerOffset + 24, // Fixed position from top of viewport (below header)
+    // right: 20, // Fixed position from right edge
+  };
+}
+
 export default function HelperPanelBase({ shouldDisplay, children }: HelperPanelProps) {
   const isDesktop = useIsLargeDesktop();
-  const style = useAnimatedSidebarPosition();
+  const style = useHelperPanelPosition();
 
   return (
     <HelperPanelPortal>
@@ -61,7 +81,10 @@ export default function HelperPanelBase({ shouldDisplay, children }: HelperPanel
           bgcolor="secondaryContainer.main"
           boxShadow={2}
           style={style!}
-          position="sticky"
+          position="fixed"
+          sx={{
+            zIndex: 1000,
+          }}
         >
           {children}
         </AnimatedStack>
