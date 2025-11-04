@@ -21,7 +21,7 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import useHyperQueryCellTypes, { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { percent } from 'js/helpers/number-format';
-import { CellTypeLink, CLIDLink } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
+import { CellTypeLink } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
 import { SortState, useSortState } from 'js/hooks/useSortState';
 import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
@@ -41,6 +41,7 @@ import { cellTypes as cellTypesSection } from '../constants';
 import Stack from '@mui/material/Stack';
 import { LineClamp } from 'js/shared-styles/text';
 import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 
 const downloadLabels = ['Cell Type', 'Cells Hit', 'Total Cells', 'Percentage', 'p-value', 'Description'];
 
@@ -136,10 +137,7 @@ const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
 
 function CellTypesRow({ cellType, isLoadingDescriptions }: { cellType: CellTypeRow; isLoadingDescriptions: boolean }) {
   const formattedCellName = useMemo(() => cellType.cell_type.split('.').slice(1).join('.'), [cellType.cell_type]);
-  const trackCLIDClick = useTrackGeneDetailPage({
-    action: 'Cell Types / Select CLID',
-    label: formattedCellName,
-  });
+
   const trackCellTypeClick = useTrackGeneDetailPage({
     action: 'Cell Types / Select Cell Type',
     label: formattedCellName,
@@ -150,9 +148,16 @@ function CellTypesRow({ cellType, isLoadingDescriptions }: { cellType: CellTypeR
         {cellType.clid ? (
           <Stack spacing={1}>
             <CellTypeLink cellType={formattedCellName} clid={cellType.clid} onClick={trackCellTypeClick} />
-            <div>
-              <CLIDLink onClick={trackCLIDClick} clid={cellType.clid} cellType={cellType.cell_type} />
-            </div>
+            <Typography
+              variant="caption"
+              sx={{
+                display: 'block',
+                color: 'text.secondary',
+                fontSize: '0.75rem',
+              }}
+            >
+              {cellType.clid}
+            </Typography>
           </Stack>
         ) : (
           formattedCellName

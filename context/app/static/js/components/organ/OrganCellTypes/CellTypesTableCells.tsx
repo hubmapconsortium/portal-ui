@@ -1,11 +1,14 @@
 import React, { MouseEventHandler } from 'react';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Skeleton from '@mui/material/Skeleton';
+import { LineClamp } from 'js/shared-styles/text';
 import ViewEntitiesButton from '../ViewEntitiesButton';
-import { useCLID, useUUIDsFromHubmapIds } from '../hooks';
-import { CellTypeProps, CellTypeRowProps, CLIDCellProps } from './types';
+import { useUUIDsFromHubmapIds } from '../hooks';
+import { CellTypeRowProps, CLIDCellProps } from './types';
 
 interface CellTypeLinkProps {
   clid: string;
@@ -21,11 +24,28 @@ export function CellTypeLink({ clid, cellType, onClick }: CellTypeLinkProps) {
   );
 }
 
-export function OrganCellTypeCell({ cellType }: CellTypeProps) {
-  const clid = useCLID(cellType);
-
-  if (!clid) return cellType;
-  return <CellTypeLink clid={clid} cellType={cellType} />;
+export function CellTypeWithCLIDCell({ cellType, clid }: { cellType: string; clid?: string | null }) {
+  return (
+    <Stack spacing={1}>
+      {clid ? (
+        <>
+          <CellTypeLink clid={clid} cellType={cellType} />
+          <Typography
+            variant="caption"
+            sx={{
+              display: 'block',
+              color: 'text.secondary',
+              fontSize: '0.75rem',
+            }}
+          >
+            {clid}
+          </Typography>
+        </>
+      ) : (
+        cellType
+      )}
+    </Stack>
+  );
 }
 
 interface CLIDCellPropsWithTracking extends CLIDCellProps {
@@ -66,4 +86,16 @@ export function ViewDatasetsCell({ matchedDatasets }: Pick<CellTypeRowProps, 'ma
   }
 
   return <ViewEntitiesButton entityType="Dataset" filters={{ datasetUUIDs }} />;
+}
+
+export function DescriptionCell({
+  description,
+  isLoadingDescriptions,
+}: {
+  description: string;
+  isLoadingDescriptions: boolean;
+}) {
+  return (
+    <LineClamp lines={2}>{isLoadingDescriptions ? <Skeleton /> : description || 'No description available'}</LineClamp>
+  );
 }
