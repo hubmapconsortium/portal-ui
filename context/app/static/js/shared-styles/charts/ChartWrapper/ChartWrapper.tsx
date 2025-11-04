@@ -23,6 +23,7 @@ interface ChartWrapperProps extends PropsWithChildren {
   caption?: React.ReactNode;
   sx?: BoxProps['sx'];
   fullWidthGraph?: boolean;
+  chartHeight?: number;
 }
 
 const pullUpMultiple = (a: string, b: string) => {
@@ -63,6 +64,7 @@ function ChartWrapper(
     caption,
     sx,
     fullWidthGraph = false,
+    chartHeight = 500,
   }: ChartWrapperProps,
   ref: React.Ref<HTMLDivElement>,
 ) {
@@ -77,7 +79,7 @@ function ChartWrapper(
         gridTemplateAreas: fullWidthGraph ? fullWidthGraphTemplateAreas : defaultGridTemplateAreas,
         overflow: 'none',
         gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',
-        gridTemplateRows: 'auto auto minmax(0, auto) 500px minmax(0, auto)',
+        gridTemplateRows: `auto auto minmax(0, auto) ${chartHeight}px minmax(0, auto)`,
         ...sx,
       }}
       ref={ref}
@@ -97,14 +99,14 @@ function ChartWrapper(
         {yAxisDropdown}
       </Stack>
       <Box sx={{ gridArea: 'chart' }}>{children}</Box>
-      <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid', maxHeight: '100%', overflow: 'none' }}>
+      <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid', maxHeight: '100%' }}>
         <Stack direction="column" pl={1}>
           {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}
           <Box sx={{ flex: 1, overflowY: 'auto', gridArea: 'legend', mt: dropdown ? 0 : 2 }} tabIndex={0}>
             {colorScale && (
               <LegendOrdinal scale={colorScale} domain={domain}>
                 {(labels) => (
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <Stack flexDirection="column" height="100%" maxHeight={chartHeight}>
                     {labels.map((label, idx) => {
                       const isMultiple = label.text === 'Multiple';
                       return (
@@ -167,7 +169,7 @@ function ChartWrapper(
                         </React.Fragment>
                       );
                     })}
-                  </div>
+                  </Stack>
                 )}
               </LegendOrdinal>
             )}
