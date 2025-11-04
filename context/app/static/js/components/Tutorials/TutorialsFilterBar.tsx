@@ -6,8 +6,8 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import { FilterListRounded } from '@mui/icons-material';
 import {
-  useTutorialLandingPageFilterCategory,
-  useSetTutorialLandingPageFilterCategory,
+  useTutorialLandingPageFilterCategories,
+  useToggleTutorialLandingPageFilterCategory,
 } from './TutorialLandingPageContext';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useEventCallback } from '@mui/material/utils';
@@ -17,19 +17,15 @@ interface FilterChipProps {
   isSelected: boolean;
 }
 function FilterChip({ category, isSelected }: FilterChipProps) {
-  const setFilterCategory = useSetTutorialLandingPageFilterCategory();
+  const toggleFilterCategory = useToggleTutorialLandingPageFilterCategory();
   const onClick = useEventCallback(() => {
-    if (isSelected) {
-      setFilterCategory(undefined);
-    } else {
-      setFilterCategory(category);
-    }
+    toggleFilterCategory(category);
   });
   return <SelectableChip isSelected={isSelected} label={category} onClick={onClick} />;
 }
 
 export default function TutorialsFilterBar() {
-  const filterCategory = useTutorialLandingPageFilterCategory();
+  const filterCategories = useTutorialLandingPageFilterCategories();
 
   return (
     <Stack spacing={1} justifyContent="start" alignItems="start">
@@ -41,7 +37,7 @@ export default function TutorialsFilterBar() {
       </Stack>
       <Stack direction="row" gap={1} useFlexGap id="tutorial-category-filters">
         {TUTORIAL_CATEGORIES.map((category) => (
-          <FilterChip key={category} category={category} isSelected={filterCategory === category} />
+          <FilterChip key={category} category={category} isSelected={filterCategories.includes(category)} />
         ))}
       </Stack>
     </Stack>

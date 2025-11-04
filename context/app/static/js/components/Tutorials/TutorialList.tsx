@@ -4,6 +4,8 @@ import {
   useTutorialsByCategory,
   useFeaturedTutorials,
   useTutorialLandingPageTutorials,
+  useTutorialLandingPageSearch,
+  useTutorialLandingPageFilterCategories,
 } from './TutorialLandingPageContext';
 import { Tutorial, TutorialCategory, TUTORIAL_CATEGORY_DATA, TutorialCategoryData, TUTORIAL_CATEGORIES } from './types';
 import Stack from '@mui/material/Stack';
@@ -133,12 +135,58 @@ function TutorialCategoryContainer({ category }: TutorialCategoryDisplayProps) {
   return <TutorialCategoryDisplay {...TUTORIAL_CATEGORY_DATA[category]} tutorials={tutorials} />;
 }
 
+function NoTutorialsMessage() {
+  const search = useTutorialLandingPageSearch();
+  const filterCategories = useTutorialLandingPageFilterCategories();
+
+  const hasActiveFilters = search.length > 0 || filterCategories.length > 0;
+
+  if (!hasActiveFilters) {
+    return (
+      <Box component={Paper} p={3} textAlign="center">
+        <Typography variant="h6" color="text.secondary" gutterBottom>
+          No Tutorials Available
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          There are currently no tutorials available.
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box component={Paper} p={3} textAlign="center">
+      <Typography variant="h6" color="text.secondary" gutterBottom>
+        No Tutorials Found
+      </Typography>
+      <Typography variant="body1" color="text.secondary" gutterBottom>
+        No tutorials match your current search and filter criteria.
+      </Typography>
+      <Stack spacing={1} alignItems="center">
+        {search.length > 0 && (
+          <Typography variant="body2" color="text.secondary">
+            Search: <strong>&ldquo;{search}&rdquo;</strong>
+          </Typography>
+        )}
+        {filterCategories.length > 0 && (
+          <Typography variant="body2" color="text.secondary">
+            Categories: <strong>{filterCategories.join(', ')}</strong>
+          </Typography>
+        )}
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          Try adjusting your search terms or removing some filters.
+        </Typography>
+      </Stack>
+    </Box>
+  );
+}
+
 export default function TutorialsList() {
   const tutorials = useTutorialLandingPageTutorials();
 
-  // If no tutorials to show, don't render anything
+  // If no tutorials to show, show helpful message
   if (tutorials.length === 0) {
-    return null;
+    return <NoTutorialsMessage />;
   }
 
   return (

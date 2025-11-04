@@ -4,23 +4,24 @@ import { Tutorial, TutorialCategory, TUTORIALS } from './types';
 
 interface TutorialLandingPageState {
   search: string;
-  filterCategory?: TutorialCategory;
+  filterCategories: TutorialCategory[];
   tutorials: Tutorial[];
 }
 
 interface TutorialLandingPageActions {
   setSearch: (search: string) => void;
-  setFilterCategory: (filterCategory?: TutorialCategory) => void;
+  setFilterCategories: (filterCategories: TutorialCategory[]) => void;
+  toggleFilterCategory: (category: TutorialCategory) => void;
 }
 
 type TutorialLandingPageStore = TutorialLandingPageState & TutorialLandingPageActions;
 
-function matchSearchAndFilter(tutorials: Tutorial[], search: string, filterCategory: TutorialCategory | undefined) {
+function matchSearchAndFilter(tutorials: Tutorial[], search: string, filterCategories: TutorialCategory[]) {
   return tutorials.filter(({ title, description, tags, category }) => {
     const matchesSearch =
       search === '' ||
       [title, description, ...tags].some((field) => field.toLowerCase().includes(search.toLowerCase()));
-    const matchesCategory = filterCategory ? category === filterCategory : true;
+    const matchesCategory = filterCategories.length === 0 || filterCategories.includes(category);
     return matchesSearch && matchesCategory;
   });
 }
@@ -28,18 +29,29 @@ function matchSearchAndFilter(tutorials: Tutorial[], search: string, filterCateg
 function createTutorialLandingPageStore() {
   return createStore<TutorialLandingPageStore>((set) => ({
     search: '',
-    filterCategory: undefined,
+    filterCategories: [],
     tutorials: TUTORIALS,
     setSearch: (search: string) =>
       set((state) => ({
         search,
-        tutorials: matchSearchAndFilter(TUTORIALS, search, state.filterCategory),
+        tutorials: matchSearchAndFilter(TUTORIALS, search, state.filterCategories),
       })),
-    setFilterCategory: (filterCategory?: TutorialCategory) =>
+    setFilterCategories: (filterCategories: TutorialCategory[]) =>
       set((state) => ({
-        filterCategory,
-        tutorials: matchSearchAndFilter(TUTORIALS, state.search, filterCategory),
+        filterCategories,
+        tutorials: matchSearchAndFilter(TUTORIALS, state.search, filterCategories),
       })),
+    toggleFilterCategory: (category: TutorialCategory) =>
+      set((state) => {
+        const isSelected = state.filterCategories.includes(category);
+        const newFilterCategories = isSelected
+          ? state.filterCategories.filter((c) => c !== category)
+          : [...state.filterCategories, category];
+        return {
+          filterCategories: newFilterCategories,
+          tutorials: matchSearchAndFilter(TUTORIALS, state.search, newFilterCategories),
+        };
+      }),
   }));
 }
 
@@ -52,14 +64,18 @@ export { TutorialLandingPageContextProvider };
 
 export const useTutorialLandingPageSearch = () => useTutorialLandingPageStore((state) => state.search);
 
-export const useTutorialLandingPageFilterCategory = () => useTutorialLandingPageStore((state) => state.filterCategory);
+export const useTutorialLandingPageFilterCategories = () =>
+  useTutorialLandingPageStore((state) => state.filterCategories);
 
 export const useTutorialLandingPageTutorials = () => useTutorialLandingPageStore((state) => state.tutorials);
 
 export const useSetTutorialLandingPageSearch = () => useTutorialLandingPageStore((state) => state.setSearch);
 
-export const useSetTutorialLandingPageFilterCategory = () =>
-  useTutorialLandingPageStore((state) => state.setFilterCategory);
+export const useSetTutorialLandingPageFilterCategories = () =>
+  useTutorialLandingPageStore((state) => state.setFilterCategories);
+
+export const useToggleTutorialLandingPageFilterCategory = () =>
+  useTutorialLandingPageStore((state) => state.toggleFilterCategory);
 
 export const useTutorialsByCategory = (category: TutorialCategory) => {
   const tutorials = useTutorialLandingPageStore((state) => state.tutorials);
