@@ -49,7 +49,7 @@ export function TableOfContentsPortal({
     return null;
   }
   return createPortal(
-    <Stack alignItems="end" alignSelf="flex-start">
+    <Stack width="100%">
       <TableOfContents
         items={items}
         isLoading={isLoading}
