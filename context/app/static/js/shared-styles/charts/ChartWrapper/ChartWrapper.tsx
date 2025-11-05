@@ -99,7 +99,7 @@ function ChartWrapper(
         {yAxisDropdown}
       </Stack>
       <Box sx={{ gridArea: 'chart' }}>{children}</Box>
-      <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid', maxHeight: '100%' }}>
+      <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid' }}>
         <Stack direction="column" pl={1}>
           {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}
           <Box sx={{ flex: 1, overflowY: 'auto', gridArea: 'legend', mt: dropdown ? 0 : 2 }} tabIndex={0}>

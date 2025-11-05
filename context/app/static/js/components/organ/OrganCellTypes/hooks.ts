@@ -4,7 +4,7 @@ import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes
 import { percent } from 'js/helpers/number-format';
 import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
-import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
+import { stripCLIDPrefix, useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import { useFormattedCellTypeNames } from '../hooks';
 
 export function useMatchedDatasets(cellTypes: string[]) {
@@ -40,7 +40,7 @@ export function useCellTypeRows(cellTypes: string[]) {
           const matchedDatasetsCount = matches.length;
           const percentage = percent.format(matchedDatasetsCount / totalIndexedDatasets.length);
           const clid = clids?.[index].CLIDs?.[0];
-          const description = (clid && cellTypeDetails?.[clid.replace(/\D/g, '')]?.definition) ?? '';
+          const description = (clid && cellTypeDetails?.[stripCLIDPrefix(clid)]?.definition) ?? '';
 
           return {
             cellType,

@@ -3,12 +3,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Skeleton from '@mui/material/Skeleton';
 import { LineClamp } from 'js/shared-styles/text';
 import ViewEntitiesButton from '../ViewEntitiesButton';
 import { useUUIDsFromHubmapIds } from '../hooks';
-import { CellTypeRowProps, CLIDCellProps } from './types';
+import { CellTypeRowProps } from './types';
 
 interface CellTypeLinkProps {
   clid: string;
@@ -45,22 +44,6 @@ export function CellTypeWithCLIDCell({ cellType, clid }: { cellType: string; cli
         cellType
       )}
     </Stack>
-  );
-}
-
-interface CLIDCellPropsWithTracking extends CLIDCellProps {
-  onClick?: MouseEventHandler;
-}
-
-export function CLIDLink({ clid, onClick }: CLIDCellPropsWithTracking) {
-  if (!clid) return <Skeleton variant="text" width={100} />;
-  return (
-    <OutboundIconLink
-      onClick={onClick}
-      href={`https://www.ebi.ac.uk/ols4/search?q=${clid}&ontology=cl&exactMatch=true`}
-    >
-      {clid}
-    </OutboundIconLink>
   );
 }
 
