@@ -108,22 +108,6 @@ describe('TutorialsFilterBar', () => {
     expect(dataChip).not.toHaveTextContent('(selected)');
   });
 
-  it('should only allow one category to be selected at a time', () => {
-    renderWithProvider();
-
-    const dataChip = screen.getByTestId('filter-chip-Data');
-    const vizChip = screen.getByTestId('filter-chip-Visualization');
-
-    // Select Data category
-    fireEvent.click(dataChip);
-    expect(dataChip).toHaveAttribute('aria-pressed', 'true');
-
-    // Select Visualization category
-    fireEvent.click(vizChip);
-    expect(vizChip).toHaveAttribute('aria-pressed', 'true');
-    expect(dataChip).toHaveAttribute('aria-pressed', 'false');
-  });
-
   it('should have proper accessibility structure', () => {
     renderWithProvider();
 

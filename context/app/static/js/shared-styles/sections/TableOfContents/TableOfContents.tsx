@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import List from '@mui/material/List';
 import IconButton from '@mui/material/IconButton';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -14,13 +14,14 @@ import { trackEvent } from 'js/helpers/trackers';
 
 import { animated } from '@react-spring/web';
 
-import { StickyNav, TableTitle, StyledItemLink, StyledIconContainer } from './style';
+import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
+import { TableTitle, StyledItemLink, StyledIconContainer } from './style';
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
 import { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition } from './hooks';
 import { useEventCallback } from '@mui/material/utils';
 
-const AnimatedNav = animated(StickyNav);
+const AnimatedNav = animated(Box) as typeof Box;
 
 interface LinkProps {
   currentSection: string;
@@ -155,15 +156,30 @@ function TableOfContents({
   titleHref,
 }: TableOfContentsProps) {
   const [currentSection, setCurrentSection] = useState(initialCurrentSection || items[0]?.hash || '');
+  const [boundaryWidth, setBoundaryWidth] = useState<number | null>(null);
 
-  const itemsWithNodeRef = React.useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
+  const itemsWithNodeRef = useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     itemsWithNodeRef.current = getItemsClient(items);
   }, [items]);
 
-  const clickedRef = React.useRef(false);
-  const unsetClickedRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track the width of the left route boundary
+  useEffect(() => {
+    const updateWidth = () => {
+      const element = document.getElementById(leftRouteBoundaryID);
+      if (element) {
+        setBoundaryWidth(element.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  const clickedRef = useRef(false);
+  const unsetClickedRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const findActiveIndex = useFindActiveIndex({ clickedRef, itemsWithNodeRef, currentSection, setCurrentSection });
 
@@ -214,13 +230,13 @@ function TableOfContents({
     return null;
   }
 
-  if (!position) {
+  if (!position || boundaryWidth === null) {
     return null;
   }
 
   return (
-    <Box data-testid="table-of-contents" height="100%" mr={1}>
-      <AnimatedNav style={position}>
+    <Box data-testid="table-of-contents" height="100%">
+      <AnimatedNav component="nav" style={position} width={boundaryWidth} mr={2} position="fixed">
         <TableTitle variant="h5" component={titleHref ? 'a' : 'div'} href={titleHref}>
           {title}
         </TableTitle>

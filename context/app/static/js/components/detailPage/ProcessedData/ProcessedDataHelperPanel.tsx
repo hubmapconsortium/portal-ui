@@ -110,11 +110,11 @@ function Actions() {
   );
 }
 
-export default function DatasetHelperPanel() {
+export default function DatasetHelperPanel({ sectionInView }: { sectionInView?: boolean }) {
   const currentDataset = useCurrentDataset();
 
   return (
-    <HelperPanel shouldDisplay={Boolean(currentDataset)}>
+    <HelperPanel shouldDisplay={Boolean(currentDataset && sectionInView)}>
       <Header />
       <Divider />
       <Status />

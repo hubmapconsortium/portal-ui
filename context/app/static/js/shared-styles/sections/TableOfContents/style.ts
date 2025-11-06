@@ -3,10 +3,6 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 
-const StickyNav = styled('nav')({
-  position: 'sticky',
-});
-
 const TableTitle = styled(Typography)(({ theme }) => ({
   marginLeft: theme.spacing(1),
 })) as typeof Typography;
@@ -39,4 +35,4 @@ const StyledIconContainer = styled(Box)({
   },
 });
 
-export { StickyNav, TableTitle, StyledItemLink, StyledIconContainer };
+export { TableTitle, StyledItemLink, StyledIconContainer };

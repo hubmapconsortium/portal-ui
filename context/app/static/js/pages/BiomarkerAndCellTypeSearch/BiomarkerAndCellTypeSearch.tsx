@@ -9,10 +9,11 @@ import MolecularDataQueryForm from 'js/components/cells/MolecularDataQueryForm/M
 import QueryType from 'js/components/cells/MolecularDataQueryForm/QueryType';
 import QueryParametersFieldset from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 import MolecularDataQueryFormTrackingProvider from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
+import Box from '@mui/material/Box';
 
 function BiomarkerAndCellTypeSearch() {
   return (
-    <>
+    <Box pb={2}>
       <PageTitle data-testid="molecular-data-queries-title" color="primary">
         Biomarker and Cell Type Search
       </PageTitle>
@@ -38,7 +39,7 @@ function BiomarkerAndCellTypeSearch() {
           <QueryParametersFieldset />
         </MolecularDataQueryForm>
       </MolecularDataQueryFormTrackingProvider>
-    </>
+    </Box>
   );
 }
 

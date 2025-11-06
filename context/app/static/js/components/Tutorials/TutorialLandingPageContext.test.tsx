@@ -4,10 +4,11 @@ import {
   TutorialLandingPageContextProvider,
   useTutorialsByCategory,
   useFeaturedTutorials,
-  useTutorialLandingPageFilterCategory,
+  useTutorialLandingPageFilterCategories,
   useTutorialLandingPageSearch,
   useTutorialLandingPageTutorials,
-  useSetTutorialLandingPageFilterCategory,
+  useSetTutorialLandingPageFilterCategories,
+  useToggleTutorialLandingPageFilterCategory,
   useSetTutorialLandingPageSearch,
 } from './TutorialLandingPageContext';
 
@@ -55,24 +56,31 @@ jest.mock('./types', () => ({
 // Test component to access hooks
 const TestComponent = () => {
   const search = useTutorialLandingPageSearch();
-  const filterCategory = useTutorialLandingPageFilterCategory();
+  const filterCategories = useTutorialLandingPageFilterCategories();
   const tutorials = useTutorialLandingPageTutorials();
 
   const setSearch = useSetTutorialLandingPageSearch();
-  const setFilterCategory = useSetTutorialLandingPageFilterCategory();
+  const setFilterCategories = useSetTutorialLandingPageFilterCategories();
+  const toggleFilterCategory = useToggleTutorialLandingPageFilterCategory();
 
   return (
     <div>
       <div data-testid="search">{search}</div>
-      <div data-testid="filter-category">{filterCategory || 'none'}</div>
+      <div data-testid="filter-categories">{filterCategories.join(', ') || 'none'}</div>
       <div data-testid="tutorials-count">{tutorials.length}</div>
       <button data-testid="set-search" onClick={() => setSearch('data')}>
         Set Search
       </button>
-      <button data-testid="set-filter" onClick={() => setFilterCategory('Visualization')}>
+      <button data-testid="set-filter" onClick={() => setFilterCategories(['Visualization'])}>
         Set Filter
       </button>
-      <button data-testid="clear-filter" onClick={() => setFilterCategory(undefined)}>
+      <button data-testid="toggle-data" onClick={() => toggleFilterCategory('Data')}>
+        Toggle Data
+      </button>
+      <button data-testid="toggle-visualization" onClick={() => toggleFilterCategory('Visualization')}>
+        Toggle Visualization
+      </button>
+      <button data-testid="clear-filter" onClick={() => setFilterCategories([])}>
         Clear Filter
       </button>
     </div>
@@ -99,7 +107,7 @@ describe('TutorialLandingPageContext', () => {
       renderWithProvider(<TestComponent />);
 
       expect(screen.getByTestId('search')).toHaveTextContent('');
-      expect(screen.getByTestId('filter-category')).toHaveTextContent('none');
+      expect(screen.getByTestId('filter-categories')).toHaveTextContent('none');
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('4');
     });
 
@@ -113,13 +121,32 @@ describe('TutorialLandingPageContext', () => {
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('2'); // Only tutorials with 'data' in title/description/tags
     });
 
-    it('should filter by category', () => {
+    it('should filter by single category', () => {
       renderWithProvider(<TestComponent />);
 
       // Use fireEvent for more reliable event handling
       fireEvent.click(screen.getByTestId('set-filter'));
 
-      expect(screen.getByTestId('filter-category')).toHaveTextContent('Visualization');
+      expect(screen.getByTestId('filter-categories')).toHaveTextContent('Visualization');
+      expect(screen.getByTestId('tutorials-count')).toHaveTextContent('1');
+    });
+
+    it('should toggle categories for multiple selection', () => {
+      renderWithProvider(<TestComponent />);
+
+      // Toggle Data category
+      fireEvent.click(screen.getByTestId('toggle-data'));
+      expect(screen.getByTestId('filter-categories')).toHaveTextContent('Data');
+      expect(screen.getByTestId('tutorials-count')).toHaveTextContent('2');
+
+      // Toggle Visualization category (should now have both)
+      fireEvent.click(screen.getByTestId('toggle-visualization'));
+      expect(screen.getByTestId('filter-categories')).toHaveTextContent('Data, Visualization');
+      expect(screen.getByTestId('tutorials-count')).toHaveTextContent('3'); // Data (2) + Visualization (1)
+
+      // Toggle Data category off (should only have Visualization)
+      fireEvent.click(screen.getByTestId('toggle-data'));
+      expect(screen.getByTestId('filter-categories')).toHaveTextContent('Visualization');
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('1');
     });
 
@@ -132,7 +159,7 @@ describe('TutorialLandingPageContext', () => {
 
       // Clear filter
       fireEvent.click(screen.getByTestId('clear-filter'));
-      expect(screen.getByTestId('filter-category')).toHaveTextContent('none');
+      expect(screen.getByTestId('filter-categories')).toHaveTextContent('none');
       expect(screen.getByTestId('tutorials-count')).toHaveTextContent('4');
     });
   });

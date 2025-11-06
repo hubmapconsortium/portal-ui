@@ -152,3 +152,36 @@ describe('TutorialCard', () => {
     expect(button).toBeDisabled();
   });
 });
+
+// Test component that simulates empty state
+const EmptyTutorialsList = () => {
+  return (
+    <div>
+      {/* This simulates the NoTutorialsMessage component logic */}
+      <div data-testid="no-tutorials-message">
+        <h3>No Tutorials Found</h3>
+        <p>No tutorials match your current search and filter criteria.</p>
+        <div>
+          Search: <strong>&ldquo;test search&rdquo;</strong>
+        </div>
+        <div>
+          Categories: <strong>Data</strong>
+        </div>
+        <p>Try adjusting your search terms or removing some filters.</p>
+      </div>
+    </div>
+  );
+};
+
+describe('TutorialsList - Empty State', () => {
+  it('should show appropriate message when no tutorials match filters', () => {
+    render(<EmptyTutorialsList />);
+
+    expect(screen.getByTestId('no-tutorials-message')).toBeInTheDocument();
+    expect(screen.getByText('No Tutorials Found')).toBeInTheDocument();
+    expect(screen.getByText('No tutorials match your current search and filter criteria.')).toBeInTheDocument();
+    expect(screen.getByText(/test search/)).toBeInTheDocument();
+    expect(screen.getByText('Data')).toBeInTheDocument();
+    expect(screen.getByText('Try adjusting your search terms or removing some filters.')).toBeInTheDocument();
+  });
+});

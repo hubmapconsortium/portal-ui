@@ -49,7 +49,7 @@ export function TableOfContentsPortal({
     return null;
   }
   return createPortal(
-    <Stack alignItems="end" alignSelf="flex-start" height="100%">
+    <Stack width="100%">
       <TableOfContents
         items={items}
         isLoading={isLoading}
@@ -69,7 +69,16 @@ export function HelperPanelPortal({ children }: PropsWithChildren) {
     return null;
   }
   return createPortal(
-    <Stack alignItems="start" alignSelf="flex-start" height="100%">
+    <Stack
+      alignItems="start"
+      position="relative"
+      sx={{
+        pointerEvents: 'none',
+        '& > *': {
+          pointerEvents: 'auto',
+        },
+      }}
+    >
       {children}
     </Stack>,
     element,

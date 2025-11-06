@@ -58,7 +58,11 @@ export default function QueryParametersLabel({ activeStep, handleBackToParameter
           {activeStep !== 0 && <VariableText />}
         </Stack>
         {activeStep !== 0 && (
-          <Button variant="contained" onClick={handleBackToParameters} sx={{ maxWidth: 'fit-content' }}>
+          <Button
+            variant="contained"
+            onClick={handleBackToParameters}
+            sx={{ maxWidth: 'fit-content', minWidth: 'fit-content' }}
+          >
             Edit Parameters
           </Button>
         )}
