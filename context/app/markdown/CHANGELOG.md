@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.35.1 - 2025-11-06
+
+- Tutorial landing page allows multiple chips to be selected for tutorial category filtering.
+- Tutorial icon in navigation is corrected.
+- File browser allows multiple chips to be selected for file filtering.
+- External CLID links in cell types tables removed in favor of directing users towards internal cell types pages.
+- Fixed unnecessary additional page length on cell type detail page.
+- Added space between bottom of Biomarker and Cell Type Search page and footer.
+- Prevented content shift when Table of Contents' children's names were longer than their parents' names.
+- Fixed large gene pathways breaking display of pathway result charts.
+
+
+
 ## v1.35.0 - 2025-11-03
 
 - Hide "multiple" keys from single-gene queries' result charts.
