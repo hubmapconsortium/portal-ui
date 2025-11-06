@@ -74,7 +74,6 @@ export function HelperPanelPortal({ children }: PropsWithChildren) {
       position="relative"
       sx={{
         pointerEvents: 'none',
-        zIndex: 1000,
         '& > *': {
           pointerEvents: 'auto',
         },

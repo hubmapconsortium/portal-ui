@@ -55,7 +55,7 @@ describe('useFilesStore', () => {
       });
 
       expect(result.current.selectedFileFilters).toEqual(['qa/qc', 'data products']);
-      expect(result.current.filesToDisplay).toBe('qa/qc'); // Uses first filter to keep folders expanded
+      expect(result.current.filesToDisplay).toBe('both');
     });
 
     it('should toggle individual filters independently', () => {

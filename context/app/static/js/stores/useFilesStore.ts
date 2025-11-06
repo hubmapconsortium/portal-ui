@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type FileDisplayOption = 'all' | 'qa/qc' | 'data products';
+export type FileDisplayOption = 'all' | 'qa/qc' | 'data products' | 'both';
 export type FileFilter = 'qa/qc' | 'data products';
 
 export interface FilesStore {
@@ -27,9 +27,7 @@ const useFilesStore = create<FilesStore>((set) => ({
       if (newFilters.length === 1) {
         filesToDisplay = newFilters[0];
       } else if (newFilters.length > 1) {
-        // When multiple filters are selected, use the first one for display purposes
-        // This ensures folders stay expanded (since filesToDisplay !== 'all')
-        filesToDisplay = newFilters[0];
+        filesToDisplay = 'both';
       }
 
       return {

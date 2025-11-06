@@ -29,14 +29,7 @@ export function CellTypeWithCLIDCell({ cellType, clid }: { cellType: string; cli
       {clid ? (
         <>
           <CellTypeLink clid={clid} cellType={cellType} />
-          <Typography
-            variant="caption"
-            sx={{
-              display: 'block',
-              color: 'text.secondary',
-              fontSize: '0.75rem',
-            }}
-          >
+          <Typography variant="caption" fontSize="0.75rem" color="secondary">
             {clid}
           </Typography>
         </>

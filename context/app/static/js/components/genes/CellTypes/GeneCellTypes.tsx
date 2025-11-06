@@ -148,14 +148,7 @@ function CellTypesRow({ cellType, isLoadingDescriptions }: { cellType: CellTypeR
         {cellType.clid ? (
           <Stack spacing={1}>
             <CellTypeLink cellType={formattedCellName} clid={cellType.clid} onClick={trackCellTypeClick} />
-            <Typography
-              variant="caption"
-              sx={{
-                display: 'block',
-                color: 'text.secondary',
-                fontSize: '0.75rem',
-              }}
-            >
+            <Typography variant="caption" fontSize="0.75rem" color="secondary">
               {cellType.clid}
             </Typography>
           </Stack>

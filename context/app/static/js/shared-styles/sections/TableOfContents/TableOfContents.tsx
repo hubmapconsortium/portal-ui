@@ -236,7 +236,7 @@ function TableOfContents({
 
   return (
     <Box data-testid="table-of-contents" height="100%">
-      <AnimatedNav component="nav" style={position} zIndex={1000} width={boundaryWidth} mr={2} position="fixed">
+      <AnimatedNav component="nav" style={position} width={boundaryWidth} mr={2} position="fixed">
         <TableTitle variant="h5" component={titleHref ? 'a' : 'div'} href={titleHref}>
           {title}
         </TableTitle>

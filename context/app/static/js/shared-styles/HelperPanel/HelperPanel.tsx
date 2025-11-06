@@ -62,9 +62,6 @@ export default function HelperPanelBase({ shouldDisplay, children }: HelperPanel
           boxShadow={2}
           style={style!}
           position="fixed"
-          sx={{
-            zIndex: 1000,
-          }}
         >
           {children}
         </AnimatedStack>

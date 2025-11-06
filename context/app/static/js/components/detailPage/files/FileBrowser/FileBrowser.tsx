@@ -18,7 +18,7 @@ import { ChipWrapper } from './style';
 import { FileTree, UnprocessedFile } from '../types';
 
 const filesStoreSelector = (state: FilesStore) => ({
-  selectedFileFilters: state.selectedFileFilters,
+  filesToDisplay: state.filesToDisplay,
   toggleFileFilter: state.toggleFileFilter,
   displayOnlyQaQc: state.selectedFileFilters.includes('qa/qc'),
   displayOnlyDataProducts: state.selectedFileFilters.includes('data products'),
@@ -29,7 +29,7 @@ interface FileBrowserProps {
 }
 
 function FileBrowser({ files }: FileBrowserProps) {
-  const { selectedFileFilters, toggleFileFilter, displayOnlyQaQc, displayOnlyDataProducts } =
+  const { filesToDisplay, toggleFileFilter, displayOnlyQaQc, displayOnlyDataProducts } =
     useFilesStore(filesStoreSelector);
   const {
     entity: { entity_type },
@@ -40,29 +40,12 @@ function FileBrowser({ files }: FileBrowserProps) {
       all: relativeFilePathsToTree(files),
       'qa/qc': relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
       'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
+      both: relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc || file?.is_data_product)),
     }),
     [files],
   );
 
-  // Calculate the files to display based on selected filters
-  const filteredFiles = useMemo(() => {
-    if (selectedFileFilters.length === 0) {
-      return files;
-    }
-
-    return files.filter((file) => {
-      const isQaQc = file?.is_qa_qc && selectedFileFilters.includes('qa/qc');
-      const isDataProduct = file?.is_data_product && selectedFileFilters.includes('data products');
-      return isQaQc || isDataProduct;
-    });
-  }, [files, selectedFileFilters]);
-
-  const currentFileTree = useMemo(() => {
-    if (selectedFileFilters.length === 0) {
-      return fileTrees.all;
-    }
-    return relativeFilePathsToTree(filteredFiles);
-  }, [fileTrees.all, filteredFiles, selectedFileFilters.length]);
+  const currentFileTree = fileTrees[filesToDisplay];
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
