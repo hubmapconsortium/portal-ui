@@ -53,6 +53,7 @@ import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarsRounded from '@mui/icons-material/StarsRounded';
+import DataThresholdingRounded from '@mui/icons-material/DataThresholdingRounded';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -175,6 +176,8 @@ const FeaturedIcon = withIconStyles(StarsRounded);
 
 const TutorialIcon = withIconStyles(MenuBookRounded);
 
+const DataProductsIcon = withIconStyles(DataThresholdingRounded);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -226,6 +229,7 @@ export {
   SummaryIcon,
   ProcessedDataIcon,
   MetadataIcon,
+  DataProductsIcon,
   BulkDataIcon,
   ProvenanceIcon,
   AttributionIcon,
