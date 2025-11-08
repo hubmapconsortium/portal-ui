@@ -8,6 +8,7 @@ import { type DrawerSection } from 'js/shared-styles/Drawer';
 import {
   AsctBIcon,
   EUIIcon,
+  DataProductsIcon,
   OrganIcon,
   SearchIcon,
   SupportIcon,
@@ -24,6 +25,7 @@ import { buildSearchLink } from 'js/components/search/store';
 import { CenteredAlert } from 'js/components/style';
 import { trackEvent } from 'js/helpers/trackers';
 import AuthButton from '../AuthButton';
+import { DATA_PRODUCTS_DESCRIPTION_SHORT } from 'js/global-constants';
 
 export const resourceLinks: DrawerSection[] = [
   {
@@ -215,6 +217,12 @@ export const toolsAndAppsLinks: DrawerSection[] = [
           'Explore, visualize and download consortium-generated spatial and single cell data for the human body.',
         href: '/',
         icon: <ExternalImageIcon icon="dataPortal" />,
+      },
+      {
+        label: 'HuBMAP Data Products',
+        description: DATA_PRODUCTS_DESCRIPTION_SHORT,
+        href: 'https://data-products.hubmapconsortium.org/data_products/',
+        icon: <DataProductsIcon color="primary" />,
       },
     ],
   },

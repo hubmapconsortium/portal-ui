@@ -12,9 +12,10 @@ interface ExternalLinkProps {
   linkText: string;
   linkHref: string;
   description: string;
+  icon?: React.ReactNode;
 }
 
-function ExternalLink({ img, title, linkText, linkHref, description }: ExternalLinkProps) {
+function ExternalLink({ img, title, linkText, linkHref, description, icon }: ExternalLinkProps) {
   const handleTrack = useEventCallback(() => {
     trackEvent({
       category: 'Homepage',
@@ -26,7 +27,7 @@ function ExternalLink({ img, title, linkText, linkHref, description }: ExternalL
   return (
     <ExternalLinkContainer alignItems="center" direction="row">
       <ImageWrapper justifyContent="center" flexShrink={0}>
-        {img}
+        {icon ?? img}
       </ImageWrapper>
       <div>
         <OutboundIconLink onClick={handleTrack} href={linkHref} variant="subtitle1">
