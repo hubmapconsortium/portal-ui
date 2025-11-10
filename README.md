@@ -273,6 +273,7 @@ General-purpose tools:
 - [`viv`](https://github.com/hms-dbmi/viv): JavaScript library for rendering OME-TIFF and OME-NGFF (Zarr) directly in the browser. Packaged as [deck.gl](https://deck.gl/) layers.
 - [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
 - [`vitessce-python`](https://github.com/vitessce/vitessce-python): Python wrapper classes which make it easier to build configurations.
+- [`scellop`](https://github.com/hms-dbmi/scellop): Cell Type Composition Explorer for exploration of cell populations.
 
 Particular to HuBMAP:
 
