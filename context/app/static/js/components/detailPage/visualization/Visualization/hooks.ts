@@ -11,7 +11,7 @@ const FEATURE_SELECTION = 'featureSelection';
 const OBS_COLOR_ENCODING = 'obsColorEncoding';
 
 function handleMarkerGene(vData: object, markerGene?: string) {
-  if ('layout' in vData && vData.layout && markerGene) {
+  if ('layout' in vData && vData.layout && markerGene && 'name' in vData && vData.name !== 'Error') {
     const vc = VitessceConfig.fromJSON(vData);
     const [featureSelection, obsColorEncoding] = vc.addCoordination(FEATURE_SELECTION, OBS_COLOR_ENCODING);
     // @ts-expect-error VitessceConfig's layout property is not properly typed, so treat this section as JS

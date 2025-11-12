@@ -8,10 +8,11 @@ import { type DrawerSection } from 'js/shared-styles/Drawer';
 import {
   AsctBIcon,
   EUIIcon,
-  InfoIcon,
+  DataProductsIcon,
   OrganIcon,
   SearchIcon,
   SupportIcon,
+  TutorialIcon,
   DonorIcon as UserIcon,
   VerifiedIcon,
 } from 'js/shared-styles/icons';
@@ -24,6 +25,7 @@ import { buildSearchLink } from 'js/components/search/store';
 import { CenteredAlert } from 'js/components/style';
 import { trackEvent } from 'js/helpers/trackers';
 import AuthButton from '../AuthButton';
+import { DATA_PRODUCTS_DESCRIPTION_SHORT } from 'js/global-constants';
 
 export const resourceLinks: DrawerSection[] = [
   {
@@ -32,7 +34,7 @@ export const resourceLinks: DrawerSection[] = [
       {
         label: 'Tutorials',
         description: 'Learn more about how to explore the data portal.',
-        icon: <InfoIcon color="primary" />,
+        icon: <TutorialIcon color="primary" />,
         href: '/tutorials',
       },
     ],
@@ -216,6 +218,12 @@ export const toolsAndAppsLinks: DrawerSection[] = [
         href: '/',
         icon: <ExternalImageIcon icon="dataPortal" />,
       },
+      {
+        label: 'HuBMAP Data Products',
+        description: DATA_PRODUCTS_DESCRIPTION_SHORT,
+        href: 'https://data-products.hubmapconsortium.org/data_products/',
+        icon: <DataProductsIcon color="primary" />,
+      },
     ],
   },
   {
@@ -265,7 +273,7 @@ export const toolsAndAppsLinks: DrawerSection[] = [
         label: 'Antibody Validation Reports',
         description:
           'Provide antibody details for multiplex imaging assays and capture data requested by journals for manuscript submission.',
-        href: 'https://avr.hubmapconsortium.org/',
+        href: 'https://avr.xconsortia.org/',
         icon: <ExternalImageIcon icon="avr" />,
       },
     ],

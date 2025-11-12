@@ -1,10 +1,42 @@
 # Changelog
 
+## v1.35.1 - 2025-11-06
+
+- Tutorial landing page allows multiple chips to be selected for tutorial category filtering.
+- Tutorial icon in navigation is corrected.
+- File browser allows multiple chips to be selected for file filtering.
+- External CLID links in cell types tables removed in favor of directing users towards internal cell types pages.
+- Fixed unnecessary additional page length on cell type detail page.
+- Added space between bottom of Biomarker and Cell Type Search page and footer.
+- Prevented content shift when Table of Contents' children's names were longer than their parents' names.
+- Fixed large gene pathways breaking display of pathway result charts.
+
+
+
+## v1.35.0 - 2025-11-03
+
+- Hide "multiple" keys from single-gene queries' result charts.
+- Add link to directly sign up for HuBMAP Workspaces access.
+- Update name for Cell Population Plot library (scellop).
+- Add Donor ID and group name to scellop metadata.
+- Enhanced [cell types](/cell-types) table, moving from expandable rows to a dedicated "Description" column for immediate visibility.
+- Enhanced [gene detail page's](/genes/MMRN1) cell types table to display descriptions by default.
+- Update AVR links to point to [updated cross-consortium link](https://avr.xconsortia.org/).
+- Updated python dependency management to rely entirely on `uv` for consistency across all environments.
+- Updated project structure to use `pyproject.toml` file for configuration.
+- Implement [updated Tutorial pages](/tutorials).
+
+
+
+## v1.34.1 - 2025-10-15
+
+- Fix regression with form submissions not executing as expected.
+
+
+
 ## v1.34.0 - 2025-10-08
 
 - Disable preloading indices to prevent Portal UI server from hanging after deploy in case of outage.
-
-
 
 ## v1.33.2 - 2025-10-07
 
@@ -22,14 +54,10 @@
 - Fix incorrect icon being displayed for Visualizations section of publication pages.
 - Fix publication accordions not displaying titles when expanded.
 
-
-
 ## v1.33.1 - 2025-10-02
 
 - Adjust specificity of TypeScript config to improve developer experience.
 - Disable display of provenance on publication pages with excessive ancestors.
-
-
 
 ## v1.33.0 - 2025-09-24
 
@@ -41,8 +69,6 @@
 - Update Storybook and swc.
 - Added entity header to organ detail pages.
 - Added breadcrumb links from detail pages to their respective landing pages.
-
-
 
 ## v1.32.4 - 2025-09-18
 
@@ -62,14 +88,10 @@
 - Display dataset overview graph and table descriptions as captions.
 - Remove remaining references to legacy `/organ` route in favor of `/organs`.
 
-
-
 ## v1.32.3 - 2025-09-12
 
 - Fix outdated `/organ` links.
 - Fix broken cell type distribution charts.
-
-
 
 ## v1.32.2 - 2025-09-11
 
@@ -82,13 +104,9 @@
 - Add object by analyte visualization builder.
 - Update multiomic builder to support pan-azimuth annotations.
 
-
-
 ## v1.32.1 - 2025-09-08
 
 - Add page for HuBMAP Portal paper figures.
-
-
 
 ## v1.32.0 - 2025-09-05
 
@@ -104,8 +122,6 @@
 - Removed searchkit and related dependencies.
 - Update portal-viz to version 0.4.12 that fixes a bug with GeoMx configuration filepaths.
 
-
-
 ## v1.31.2 - 2025-08-15
 
 - Display grouped stacked bar charts with stripes to indicate matched values.
@@ -120,16 +136,12 @@
 - Updated portal-visualization (0.4.11) to support Xenium assay visualization using SpatialData object.
 - Updated Vitessce (JS) package to the latest version - 3.6.16.
 
-
-
 ## v1.31.1 - 2025-08-13
 
 - Fix missing "matching gene" information.
 - Fix crashes on organ pages.
 - Fix protected datasets analytics tracking bug.
 - Update What's New homepage section with July changes.
-
-
 
 ## v1.31.0 - 2025-08-12
 
@@ -140,14 +152,10 @@
 - Add multi-value filter chips to search page.
 - Add "view datasets" links to biomarkers landing page.
 
-
-
 ## v1.30.2 - 2025-08-08
 
 - Support scFind results with both UUID and HBM ID outputs.
 - Update portal viz to support granular annotations in Vitessce from Pan-Azimuth pipeline.
-
-
 
 ## v1.30.1 - 2025-08-07
 
@@ -159,15 +167,11 @@
 - Improve autocomplete instruction text when there are no options loaded.
 - Remove "beta" from biomarker landing page and molecular data query page.
 
-
-
 ## v1.30.0 - 2025-07-29
 
 - Fix misalignment visible in expandable tables.
 - Fix export of grouped stacked bar chart with long x axis labels.
 - Fix orientation of cell types landing page expand icons.
-
-
 
 ## v1.29.3 - 2025-07-24
 
@@ -367,9 +371,9 @@ Fix typo on Workspaces Sharing dialog.
 
 ## v1.20.0 - 2025-02-05
 
-- Fix overlap between expanded rows and violins when there are few datasets in cellpop visualization.
-- Fix cellpop control position breaking on scroll.
-- Fix cellpop expanded rows handling when data is being normalized.
+- Fix overlap between expanded rows and violins when there are few datasets in scellop visualization.
+- Fix scellop control position breaking on scroll.
+- Fix scellop expanded rows handling when data is being normalized.
 - Updated portal-viz version to address the scaling issue on kaggle datasets visualizations.
 
 ## v1.19.5 - 2025-02-04

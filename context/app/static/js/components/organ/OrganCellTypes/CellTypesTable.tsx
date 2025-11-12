@@ -5,53 +5,58 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
-import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
 import { useCellTypeRows } from './hooks';
 import { CellTypeRowProps, CellTypesTableProps } from './types';
-import { OrganCellTypeCell, CLIDCell, MatchedDatasetsCell, ViewDatasetsCell } from './CellTypesTableCells';
+import { CellTypeWithCLIDCell, MatchedDatasetsCell, ViewDatasetsCell, DescriptionCell } from './CellTypesTableCells';
 import { useOrganContext } from '../contexts';
-import CellTypeDescription from './CellTypeDescription';
 
-function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexedDatasets }: CellTypeRowProps) {
+function CellTypeRow({
+  cellType,
+  clid,
+  matchedDatasets,
+  percentage,
+  totalIndexedDatasets,
+  description,
+  isLoadingDescriptions,
+}: CellTypeRowProps & { isLoadingDescriptions: boolean }) {
   return (
-    <ExpandableRow numCells={5} expandedContent={<CellTypeDescription cellType={cellType} clid={clid} />} reverse>
-      <ExpandableRowCell>
-        <OrganCellTypeCell cellType={cellType} />
-      </ExpandableRowCell>
-      <ExpandableRowCell>
-        <CLIDCell clid={clid} cellType={cellType} />
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+    <TableRow>
+      <TableCell>
+        <CellTypeWithCLIDCell cellType={cellType} clid={clid} />
+      </TableCell>
+      <TableCell>
+        <DescriptionCell description={description || ''} isLoadingDescriptions={isLoadingDescriptions} />
+      </TableCell>
+      <TableCell width={150}>
         <MatchedDatasetsCell
           matchedDatasets={matchedDatasets}
           totalIndexedDatasets={totalIndexedDatasets}
           percentage={percentage}
         />
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+      </TableCell>
+      <TableCell>
         <ViewDatasetsCell matchedDatasets={matchedDatasets} />
-      </ExpandableRowCell>
-    </ExpandableRow>
+      </TableCell>
+    </TableRow>
   );
 }
 
 function CellTypesTable({ cellTypes }: CellTypesTableProps) {
-  const { rows, isLoading } = useCellTypeRows(cellTypes);
+  const { rows, isLoading, isLoadingDescriptions } = useCellTypeRows(cellTypes);
 
   const { organ } = useOrganContext();
 
   const { sortState, setSort } = useSortState(
     {
       cellType: 'cellType',
-      clid: 'clid',
+      description: 'description',
       matchedDatasets: 'matchedDatasets',
     },
     {
@@ -65,8 +70,8 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
       switch (sortState.columnId) {
         case 'cellType':
           return a.cellType.localeCompare(b.cellType) * (sortState.direction === 'asc' ? 1 : -1);
-        case 'clid':
-          return (a.clid ?? '').localeCompare(b.clid ?? '') * (sortState.direction === 'asc' ? 1 : -1);
+        case 'description':
+          return (a.description ?? '').localeCompare(b.description ?? '') * (sortState.direction === 'asc' ? 1 : -1);
         case 'matchedDatasets':
           return (
             (a.matchedDatasets?.length ?? 0) -
@@ -80,13 +85,23 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
 
   const download = useDownloadTable({
     fileName: `cell_types_${organ?.name ?? 'unknown'}.tsv`,
-    columnNames: ['Cell Type', 'Cell Ontology ID', 'Matched Datasets', 'Percentage', 'Total Indexed Datasets'],
+    columnNames: [
+      'Cell Type',
+      'Cell Ontology ID',
+      'Description',
+      'Matched Datasets',
+      'Percentage',
+      'Total Indexed Datasets',
+      'Matched Dataset IDs',
+    ],
     rows: sortedRows.map((row) => [
       row.cellType,
       row.clid ?? '',
+      row.description || 'No description available',
       row.matchedDatasets?.length.toString() ?? '0',
       row.percentage?.toString() ?? '0',
       row.totalIndexedDatasets?.toString() ?? '0',
+      (row.matchedDatasets ?? []).join(', '),
     ]),
   });
 
@@ -95,22 +110,21 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ backgroundColor: 'background.paper' }}>&nbsp; {/* Expansion cell column */} </TableCell>
             <EntityHeaderCell
               column={{
                 id: 'cellType',
                 label: 'Cell Type',
-                cellContent: OrganCellTypeCell,
+                cellContent: () => null,
               }}
               setSort={setSort}
               sortState={sortState}
             />
-
             <EntityHeaderCell
               column={{
-                id: 'clid',
-                label: 'Cell Ontology ID',
-                cellContent: CLIDCell,
+                id: 'description',
+                label: 'Description',
+                cellContent: () => null,
+                tooltipText: 'Cell type description from the Cell Ontology.',
               }}
               setSort={setSort}
               sortState={sortState}
@@ -119,12 +133,13 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
               column={{
                 id: 'matchedDatasets',
                 label: 'Matched Datasets',
-                cellContent: MatchedDatasetsCell,
+                cellContent: () => null,
+                width: 150,
               }}
               setSort={setSort}
               sortState={sortState}
             />
-            <TableCell sx={{ backgroundColor: 'background.paper' }}>
+            <TableCell sx={{ backgroundColor: 'background.paper' }} width={200}>
               <Stack alignItems="end">
                 <DownloadButton
                   disabled={isLoading}
@@ -138,7 +153,7 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
         </TableHead>
         <TableBody>
           {sortedRows.map((row) => (
-            <CellTypeRow key={row.cellType} {...row} />
+            <CellTypeRow key={row.cellType} {...row} isLoadingDescriptions={isLoadingDescriptions} />
           ))}
         </TableBody>
       </Table>

@@ -8,6 +8,8 @@ export interface TableOfContentsItem {
   icon?: typeof SvgIcon;
   externalIcon?: ExternalIcons;
   items?: TableOfContentsItem[];
+  isRoute?: boolean; // Indicates if this should navigate to a route instead of scrolling to a section
+  initiallyClosed?: boolean;
 }
 
 export interface TableOfContentsItemWithNode extends TableOfContentsItem {

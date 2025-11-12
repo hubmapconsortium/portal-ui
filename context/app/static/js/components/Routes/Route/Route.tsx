@@ -30,13 +30,13 @@ function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{
 
   return (
     <Stack direction="row" width="100%" flexGrow={1}>
+      <RouteBoundary id={leftRouteBoundaryID} showBoundary={shouldShowBoundaries} />
       <Suspense fallback={<RouteLoader />}>
-        <RouteBoundary id={leftRouteBoundaryID} showBoundary={shouldShowBoundaries} />
         <StyledContainer {...constrainWidthProps} component="div">
           {children}
         </StyledContainer>
-        <RouteBoundary id={rightRouteBoundaryID} showBoundary={shouldShowBoundaries} />
       </Suspense>
+      <RouteBoundary id={rightRouteBoundaryID} showBoundary={shouldShowBoundaries} />
     </Stack>
   );
 }

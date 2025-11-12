@@ -47,6 +47,10 @@ interface AppContextType {
   isWorkspacesUser: boolean;
   isHubmapUser: boolean;
   userEmail: string;
+  userFirstName?: string;
+  userLastName?: string;
+  userGlobusId?: string;
+  userGlobusAffiliation?: string;
   [key: string]: unknown;
 }
 

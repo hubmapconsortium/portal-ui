@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import List from '@mui/material/List';
 import IconButton from '@mui/material/IconButton';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -14,12 +14,14 @@ import { trackEvent } from 'js/helpers/trackers';
 
 import { animated } from '@react-spring/web';
 
-import { StickyNav, TableTitle, StyledItemLink, StyledIconContainer } from './style';
+import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
+import { TableTitle, StyledItemLink, StyledIconContainer } from './style';
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
 import { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition } from './hooks';
+import { useEventCallback } from '@mui/material/utils';
 
-const AnimatedNav = animated(StickyNav);
+const AnimatedNav = animated(Box) as typeof Box;
 
 interface LinkProps {
   currentSection: string;
@@ -27,8 +29,32 @@ interface LinkProps {
   isNested?: boolean;
 }
 
-function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkProps & { item: TableOfContentsItem }) {
-  const { icon: Icon, externalIcon } = item;
+const trackRouteNavigation = (text: string, trackingInfo: EventInfo | undefined) => {
+  if (trackingInfo) {
+    trackEvent({
+      ...trackingInfo,
+      action: 'Navigate with Table of Contents',
+      label: `${trackingInfo.label} ${text}`,
+    });
+  }
+};
+
+function ItemLink({
+  item,
+  currentSection,
+  handleClick,
+  isNested = false,
+  trackingInfo,
+}: LinkProps & { item: TableOfContentsItem; trackingInfo?: EventInfo }) {
+  const { icon: Icon, externalIcon, isRoute } = item;
+
+  const handleClickInternal = useEventCallback(() => {
+    if (isRoute) {
+      trackRouteNavigation(item.text, trackingInfo);
+    } else {
+      handleClick(item.hash, item.text);
+    }
+  });
 
   return (
     <StyledItemLink
@@ -36,8 +62,8 @@ function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkP
       alignItems="center"
       gap={0.5}
       color={currentSection === item.hash ? 'textPrimary' : 'textSecondary'}
-      href={`#${item.hash}`}
-      onClick={handleClick(item.hash, item.text)}
+      href={isRoute ? item.hash : `#${item.hash}`}
+      onClick={handleClickInternal}
       $isCurrentSection={currentSection === item.hash}
       $isNested={isNested}
     >
@@ -59,8 +85,9 @@ function ItemLinks({
 }: LinkProps & {
   level: number;
   item: TableOfContentsItem;
+  trackingInfo?: EventInfo;
 }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(!item.initiallyClosed);
 
   const { items: subItems } = item;
 
@@ -111,25 +138,48 @@ function ItemSkeleton() {
   );
 }
 
+interface TableOfContentsProps {
+  items: TableOfContentsItems;
+  isLoading?: boolean;
+  trackingInfo?: EventInfo;
+  initialCurrentSection?: string;
+  title?: string;
+  titleHref?: string;
+}
+
 function TableOfContents({
   items,
   isLoading = false,
   trackingInfo,
-}: {
-  items: TableOfContentsItems;
-  isLoading?: boolean;
-  trackingInfo?: EventInfo;
-}) {
-  const [currentSection, setCurrentSection] = useState(items[0].hash);
+  initialCurrentSection,
+  title = 'Contents',
+  titleHref,
+}: TableOfContentsProps) {
+  const [currentSection, setCurrentSection] = useState(initialCurrentSection || items[0]?.hash || '');
+  const [boundaryWidth, setBoundaryWidth] = useState<number | null>(null);
 
-  const itemsWithNodeRef = React.useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
+  const itemsWithNodeRef = useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     itemsWithNodeRef.current = getItemsClient(items);
   }, [items]);
 
-  const clickedRef = React.useRef(false);
-  const unsetClickedRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track the width of the left route boundary
+  useEffect(() => {
+    const updateWidth = () => {
+      const element = document.getElementById(leftRouteBoundaryID);
+      if (element) {
+        setBoundaryWidth(element.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  const clickedRef = useRef(false);
+  const unsetClickedRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const findActiveIndex = useFindActiveIndex({ clickedRef, itemsWithNodeRef, currentSection, setCurrentSection });
 
@@ -180,14 +230,16 @@ function TableOfContents({
     return null;
   }
 
-  if (!position) {
+  if (!position || boundaryWidth === null) {
     return null;
   }
 
   return (
-    <Box data-testid="table-of-contents" height="100%" mr={1}>
-      <AnimatedNav style={position}>
-        <TableTitle variant="h5">Contents</TableTitle>
+    <Box data-testid="table-of-contents" height="100%">
+      <AnimatedNav component="nav" style={position} width={boundaryWidth} mr={2} position="fixed">
+        <TableTitle variant="h5" component={titleHref ? 'a' : 'div'} href={titleHref}>
+          {title}
+        </TableTitle>
         {isLoading ? (
           <>
             <ItemSkeleton />
@@ -205,6 +257,7 @@ function TableOfContents({
                 handleClick={handleClick}
                 key={`${item.hash}-${item.text}`}
                 level={0}
+                trackingInfo={trackingInfo}
               />
             ))}
           </List>

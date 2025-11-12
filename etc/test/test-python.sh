@@ -5,20 +5,17 @@ set -o errexit
 
 copy_conf
 
-start flake8
-EXCLUDE=node_modules,etc/dev/organ-utils
-# The organ-utils script uses the walrus operator (:=).
-# Latest pycodestyle does support that syntax,
-# but latest flake8 doesn't support the latest pycodestyle,
-# or something like that.
-# ¯\_(ツ)_/¯
-flake8 --exclude=$EXCLUDE \
-  || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"
-end flake8
+
+start ruff
+# Ruff is a fast Python linter that replaces flake8
+# It supports Python 3.12 syntax including match statements
+uv run ruff check context \
+  || die "Try: uv run ruff check --fix context"
+uv run ruff format --check context \
+  || die "Try: uv run ruff format context"
+end ruff
 
 
 start pytest
-cd context
-pytest app
-cd -
+uv run pytest context/app
 end pytest

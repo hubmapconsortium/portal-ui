@@ -26,7 +26,7 @@ interface OrganProps {
   organ: OrganFile;
 }
 
-const { summaryId, hraId, cellpopId, cellTypesId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
+const { summaryId, hraId, scellopId, cellTypesId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
   const setOrganFile = useEntityStore((state) => state.setOrganFile);
@@ -51,7 +51,7 @@ function Organ({ organ }: OrganProps) {
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
     [hraId]: Boolean(organ.has_iu_component),
-    [cellpopId]: labeledDatasetUuids.length > 0,
+    [scellopId]: labeledDatasetUuids.length > 0,
     [cellTypesId]: cellTypes.length > 0,
     [referenceId]: false, // TODO: Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
     [assaysId]: assayBuckets.length > 0,
@@ -72,7 +72,7 @@ function Organ({ organ }: OrganProps) {
         <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[hraId]} />
         <CellPopulationPlot
           uuids={labeledDatasetUuids}
-          shouldDisplay={shouldDisplaySection[cellpopId]}
+          shouldDisplay={shouldDisplaySection[scellopId]}
           organ={organ.name}
         />
         <CellTypes shouldDisplay={shouldDisplaySection[cellTypesId]} cellTypes={cellTypes} />

@@ -5,12 +5,15 @@ import ExternalLink from 'js/components/home/ExternalLink';
 import Stack from '@mui/material/Stack';
 import { SectionHeader } from 'js/pages/Home/style';
 import { externalIconMap } from 'js/shared-styles/icons/externalImageIcons';
+import { DataProductsIcon } from 'js/shared-styles/icons';
+import { DATA_PRODUCTS_DESCRIPTION_SHORT } from 'js/global-constants';
 
 const { avr, azimuth, fusion, googleScholar, hra, hubmapConsortium, nih, protocols } = externalIconMap;
 
 interface ExternalLinkPropsAdapter {
   src: string;
   alt: string;
+  icon?: React.ReactNode;
   linkText: string;
   linkHref: string;
   description: string;
@@ -48,6 +51,13 @@ const relatedResources: ExternalLinkPropsAdapter[] = [
 
 const relatedTools: ExternalLinkPropsAdapter[] = [
   {
+    linkText: 'HuBMAP Data Products',
+    ...hubmapConsortium,
+    icon: <DataProductsIcon color="primary" sx={{ width: 56, height: 56 }} />,
+    linkHref: 'https://data-products.hubmapconsortium.org/data_products/',
+    description: DATA_PRODUCTS_DESCRIPTION_SHORT,
+  },
+  {
     linkText: 'Human Reference Atlas',
     ...hra,
     linkHref: 'https://humanatlas.io/',
@@ -70,7 +80,7 @@ const relatedTools: ExternalLinkPropsAdapter[] = [
   {
     linkText: 'Antibody Validation Reports',
     ...avr,
-    linkHref: 'https://avr.hubmapconsortium.org/',
+    linkHref: 'https://avr.xconsortia.org/',
     description:
       'Provide antibody details for multiplex imaging assays and capture data requested by journals for manuscript submission.',
   },

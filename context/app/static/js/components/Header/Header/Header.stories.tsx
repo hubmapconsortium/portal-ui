@@ -3,6 +3,12 @@ import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import Providers from 'js/components/Providers';
 import Header from './Header';
 
+const dummyUserData = {
+  userFirstName: '',
+  userLastName: '',
+  userGlobusId: '',
+  userGlobusAffiliation: '',
+};
 interface HeaderStoryComponent {
   isAuthenticated: boolean;
   userEmail: string;
@@ -14,7 +20,12 @@ interface HeaderStoryComponent {
 
 function HeaderStoryComponent(props: HeaderStoryComponent) {
   return (
-    <Providers flaskData={{}} endpoints={{ assetsEndpoint: 'https://assets.hubmapconsortium.org' }} {...props}>
+    <Providers
+      flaskData={{}}
+      {...dummyUserData}
+      endpoints={{ assetsEndpoint: 'https://assets.hubmapconsortium.org' }}
+      {...props}
+    >
       <Header />
     </Providers>
   );

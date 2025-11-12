@@ -5,15 +5,12 @@ from pathlib import Path
 import sys
 from datetime import datetime
 from dataclasses import dataclass
-import csv
-from itertools import groupby
 import re
 from typing import DefaultDict
 
 from jsonschema import validate
 import requests
 from yaml import dump, safe_load
-import json
 
 
 def main():
@@ -23,19 +20,23 @@ def main():
         '--target',
         type=dir_path,
         default=repo_path / 'context/app/organ',
-        help='Target directory for markdown files')
+        help='Target directory for markdown files',
+    )
     parser.add_argument(
         '--elasticsearch_url',
         default='https://search.api.hubmapconsortium.org/v3/portal/search',
-        help='ES endpoint to query for organs')
+        help='ES endpoint to query for organs',
+    )
     parser.add_argument(
         '--azimuth_url',
         default='https://raw.githubusercontent.com/satijalab/azimuth_website/master/data/azimuth_references.yaml',
-        help='Azimuth references')
+        help='Azimuth references',
+    )
     parser.add_argument(
         '--ccf_url',
         default='https://grlc.io/api-git/hubmapconsortium/ccf-grlc/subdir/ccf/ref-organ-terms',
-        help='CCF references')
+        help='CCF references',
+    )
     args = parser.parse_args()
 
     global cache_path
@@ -47,11 +48,12 @@ def main():
 
     search_organs_by_uberon = rekey_search(
         get_search_organs(get_search_response(args.elasticsearch_url)),
-        uberon_names=uberon_names)
-    azimuth_organs_by_uberon = rekey_azimuth(
-        add_vitessce(get_azimuth_yaml(args.azimuth_url)))
+        uberon_names=uberon_names,
+    )
+    azimuth_organs_by_uberon = rekey_azimuth(add_vitessce(get_azimuth_yaml(args.azimuth_url)))
     ccf_organs_by_uberon = rekey_ccf(
-        requests.get(args.ccf_url, headers={"accept": "application/json"}).json())
+        requests.get(args.ccf_url, headers={'accept': 'application/json'}).json()
+    )
     onto_by_uberon = get_ontology_info(descriptions.keys())
 
     def small_dict(big_dict, k):
@@ -62,44 +64,50 @@ def main():
         uberon_short={uberon_id: uberon_id.split('/')[-1] for uberon_id in descriptions.keys()},
         name=small_dict(descriptions, 'name'),
         asctb=small_dict(descriptions, 'asctb'),
-        description={uberon_id: onto_info['annotation']['definition'][0]
-                     for (uberon_id, onto_info) in onto_by_uberon.items()},
+        description={
+            uberon_id: onto_info['annotation']['definition'][0]
+            for (uberon_id, onto_info) in onto_by_uberon.items()
+        },
         icon=small_dict(descriptions, 'icon'),
         has_iu_component={uberon_id: True for uberon_id in ccf_organs_by_uberon.keys()},
         search=search_organs_by_uberon,
-        azimuth=azimuth_organs_by_uberon
+        azimuth=azimuth_organs_by_uberon,
     )
 
-    unmatched = {u.split("/")[-1] for u in merged_data.keys() - descriptions.keys()}
+    unmatched = {u.split('/')[-1] for u in merged_data.keys() - descriptions.keys()}
     expected_unmatched = {
         # This list should be empty when https://github.com/hubmapconsortium/portal-ui/issues/2945
         # and https://github.com/hubmapconsortium/portal-ui/issues/2943 are resolved.
-
         # Why FMA? Resolve paired organs:
-        'fma7214', 'fma7213',
-        'fma24977', 'fma24978',
-        'fma57991', 'fma57987',
+        'fma7214',
+        'fma7213',
+        'fma24977',
+        'fma24978',
+        'fma57991',
+        'fma57987',
         'fma323951',
-
         # Just resolve paired organs:
-        'UBERON_0004549', 'UBERON_0004548',
-        'UBERON_0001222', 'UBERON_0001223',
-        'UBERON_0004539', 'UBERON_0004538',
-        'UBERON_0001303', 'UBERON_0001302',
-
+        'UBERON_0004549',
+        'UBERON_0004548',
+        'UBERON_0001222',
+        'UBERON_0001223',
+        'UBERON_0004539',
+        'UBERON_0004538',
+        'UBERON_0001303',
+        'UBERON_0001302',
         # Other data soures are higher or lower level:
-        'UBERON_0002509', 'UBERON_0000079', 'UBERON_0001004', 'UBERON_0001465'
+        'UBERON_0002509',
+        'UBERON_0000079',
+        'UBERON_0001004',
+        'UBERON_0001465',
     }
     unexpected_unmatched = unmatched - expected_unmatched
     if unexpected_unmatched:
-        as_string = ", ".join(sorted(unexpected_unmatched))
+        as_string = ', '.join(sorted(unexpected_unmatched))
         raise Exception(f'Unexpected unmatched IDs: {as_string}')
 
     organs = [
-        Organ(
-            name=data.get('name'),
-            data=data)
-        for data in merged_data.values() if 'name' in data
+        Organ(name=data.get('name'), data=data) for data in merged_data.values() if 'name' in data
     ]
 
     DirectoryWriter(args.target, organs).write()
@@ -110,7 +118,7 @@ def main():
 
 
 def merge_data(**kwargs):
-    '''
+    """
     >>> merged = merge_data(
     ...     capital={
     ...         'USA': 'Washington',
@@ -123,12 +131,13 @@ def merge_data(**kwargs):
     {'USA': {'capital': 'Washington', 'population': 300000000.0},
      'UK': {'capital': 'London'},
      'China': {'population': 1000000000.0}}
-    '''
+    """
     merged = DefaultDict(dict)
     for source, data in kwargs.items():
         for key, value in data.items():
             merged[key][source] = value
     return dict(merged)
+
 
 ###### Ontology ######
 
@@ -138,7 +147,7 @@ def get_ontology_info(ids):
     url_base = 'https://www.ebi.ac.uk/ols/api/ontologies/uberon/terms/'
     for id in ids:
         # Plain ASCII encoding ("%2F") doesn't work with this service.
-        url = f"{url_base}{id.replace('/', '%252F')}"
+        url = f'{url_base}{id.replace("/", "%252F")}'
         response = requests.get(url)
         response.raise_for_status()
         ontology_info[id] = response.json()
@@ -147,12 +156,14 @@ def get_ontology_info(ids):
 
 ###### Descriptions ######
 
+
 def get_descriptions():
     descriptions_path = Path(__file__).parent / 'descriptions.yaml'
     return safe_load(descriptions_path.read_text())
 
 
 ###### Azimuth #######
+
 
 def get_azimuth_yaml(url):
     response = requests.get(url)
@@ -163,9 +174,9 @@ def get_azimuth_yaml(url):
 
 
 def add_vitessce(azimuth_organs):
-    '''
+    """
     Given the azimuth references, fetch and integrate the vitessce config for each.
-    '''
+    """
     for organ in azimuth_organs:
         url = organ.get('vitessce_conf_url')
         if not url:
@@ -189,16 +200,17 @@ def get_search_response(es_url):
     return requests.post(
         es_url,
         json={
-            "size": 0,
-            "aggs": {
+            'size': 0,
+            'aggs': {
                 agg_name: {
-                    "terms": {
-                        "field": "origin_samples.mapped_organ.keyword",
-                        "size": 100
+                    'terms': {
+                        'field': 'origin_samples.mapped_organ.keyword',
+                        'size': 100,
                     }
                 }
-            }
-        }).json()
+            },
+        },
+    ).json()
 
 
 def get_search_organs(response):
@@ -206,7 +218,7 @@ def get_search_organs(response):
 
 
 def rekey_search(search_organs, uberon_names):
-    '''
+    """
     >>> search_organs = ['Kidney (Left)', 'Kidney (Right)', 'Spleen', 'Lung (Right)']
     >>> uberon_names = {'UBERON_0002113': 'Kidney',
     ...                 'UBERON_0002106': 'Spleen',
@@ -216,14 +228,16 @@ def rekey_search(search_organs, uberon_names):
     {'UBERON_0002113': ['Kidney (Left)', 'Kidney (Right)'],
      'UBERON_0002106': ['Spleen'],
      'UBERON_0002048': ['Lung (Right)']}
-    '''
+    """
     return {
         uberon_id: [
-            name for name in search_organs
-            if uberon_name in name
-            or uberon_name.rstrip('s') in name]
+            name
+            for name in search_organs
+            if uberon_name in name or uberon_name.rstrip('s') in name
+        ]
         for uberon_id, uberon_name in uberon_names.items()
     }
+
 
 ###### CCF ######
 
@@ -231,27 +245,26 @@ def rekey_search(search_organs, uberon_names):
 def rekey_ccf(api_response):
     return {organ['representation_of']: organ for organ in api_response}
 
+
 ###### Utils #######
 
 
 @dataclass
 class Organ:
-    '''
+    """
     >>> organ = Organ(name='Small Intestine', data={'foo': 'bar'})
     >>> print(organ.yaml())
     name: Small Intestine
     foo: bar
     >>> print(organ.filename())
     small-intestine.yaml
-    '''
+    """
+
     name: str
     data: dict
 
     def yaml(self):
-        return dump(
-            {'name': self.name, **self.data},
-            sort_keys=False
-        ).strip()
+        return dump({'name': self.name, **self.data}, sort_keys=False).strip()
 
     def filename(self):
         return re.sub(r'\W+', ' ', self.name.lower()).strip().replace(' ', '-') + '.yaml'
@@ -265,7 +278,7 @@ def dir_path(s):
         raise ValueError(f'"{s}" is not a directory')
 
 
-class DirectoryWriter():
+class DirectoryWriter:
     def __init__(self, dir, organs):
         self.dir = dir
         self.organs = organs
@@ -273,9 +286,9 @@ class DirectoryWriter():
     def write(self):
         for f in self.dir.glob('*'):
             f.unlink()
-        note = f'Do not hand edit! Generated by {
-            Path(__file__).name} on {
-            datetime.now().isoformat()}.'
+        note = f'Do not hand edit! Generated by {Path(__file__).name} on {
+            datetime.now().isoformat()
+        }.'
         for organ in self.organs:
             self.write_organ(organ, note)
 
@@ -285,5 +298,5 @@ class DirectoryWriter():
         file.write_text(f'# {note}\n\n' + organ.yaml())
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())  # pragma: no cover

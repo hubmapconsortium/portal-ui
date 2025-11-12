@@ -18,11 +18,10 @@ import { ChipWrapper } from './style';
 import { FileTree, UnprocessedFile } from '../types';
 
 const filesStoreSelector = (state: FilesStore) => ({
-  displayOnlyQaQc: state.filesToDisplay === 'qa/qc',
-  displayOnlyDataProducts: state.filesToDisplay === 'data products',
   filesToDisplay: state.filesToDisplay,
-  toggleDisplayOnlyQaQc: state.toggleDisplayOnlyQaQc,
-  toggleDisplayOnlyDataProducts: state.toggleDisplayOnlyDataProducts,
+  toggleFileFilter: state.toggleFileFilter,
+  displayOnlyQaQc: state.selectedFileFilters.includes('qa/qc'),
+  displayOnlyDataProducts: state.selectedFileFilters.includes('data products'),
 });
 
 interface FileBrowserProps {
@@ -30,13 +29,8 @@ interface FileBrowserProps {
 }
 
 function FileBrowser({ files }: FileBrowserProps) {
-  const {
-    displayOnlyQaQc,
-    displayOnlyDataProducts,
-    filesToDisplay,
-    toggleDisplayOnlyQaQc,
-    toggleDisplayOnlyDataProducts,
-  } = useFilesStore(filesStoreSelector);
+  const { filesToDisplay, toggleFileFilter, displayOnlyQaQc, displayOnlyDataProducts } =
+    useFilesStore(filesStoreSelector);
   const {
     entity: { entity_type },
   } = useFlaskDataContext();
@@ -46,9 +40,12 @@ function FileBrowser({ files }: FileBrowserProps) {
       all: relativeFilePathsToTree(files),
       'qa/qc': relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
       'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
+      both: relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc || file?.is_data_product)),
     }),
     [files],
   );
+
+  const currentFileTree = fileTrees[filesToDisplay];
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
@@ -59,7 +56,7 @@ function FileBrowser({ files }: FileBrowserProps) {
           <SelectableChip
             label="Show QA Files"
             onClick={() => {
-              toggleDisplayOnlyQaQc();
+              toggleFileFilter('qa/qc');
               trackEntityPageEvent({ action: 'File Browser / Toggle Show QA QC Files' });
             }}
             isSelected={displayOnlyQaQc}
@@ -68,7 +65,7 @@ function FileBrowser({ files }: FileBrowserProps) {
           <SelectableChip
             label="Show Data Products Files"
             onClick={() => {
-              toggleDisplayOnlyDataProducts();
+              toggleFileFilter('data products');
               trackEntityPageEvent({ action: 'File Browser / Toggle Show Data Products Files' });
             }}
             isSelected={displayOnlyDataProducts}
@@ -86,7 +83,7 @@ function FileBrowser({ files }: FileBrowserProps) {
             </TableRow>
           </TableHead>
           <TableBody>
-            <FileBrowserNode fileSubTree={fileTrees[filesToDisplay]} depth={0} />
+            <FileBrowserNode fileSubTree={currentFileTree} depth={0} />
           </TableBody>
         </Table>
       </TableContainer>

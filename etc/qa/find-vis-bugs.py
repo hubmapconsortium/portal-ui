@@ -19,27 +19,29 @@ from context.app.default_config import DefaultConfig  # noqa: E402
 def get_parser():
     parser = argparse.ArgumentParser(
         description='Scan all datasets for visualization bugs. Exits with status 0 if no errors.',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
         '--search_url',
         default='https://search.api.hubmapconsortium.org',
-        help='Search API endpoint')
+        help='Search API endpoint',
+    )
     parser.add_argument(
         '--portal_index_path',
         default=DefaultConfig.PORTAL_INDEX_PATH,
-        help='Under the Search API endpoint, the particular index to use')
+        help='Under the Search API endpoint, the particular index to use',
+    )
     parser.add_argument(
         '--types_url',
         default='https://ingest.api.hubmapconsortium.org/assaytype',
-        help='Soft Assay endpoint')
+        help='Soft Assay endpoint',
+    )
     parser.add_argument(
-        '--assets_url',
-        default='https://assets.hubmapconsortium.org',
-        help='Assets endpoint')
+        '--assets_url', default='https://assets.hubmapconsortium.org', help='Assets endpoint'
+    )
     parser.add_argument(
-        '--uuids',
-        nargs='*',
-        help='Instead of querying all public datasets, use given UUIDs')
+        '--uuids', nargs='*', help='Instead of querying all public datasets, use given UUIDs'
+    )
     return parser
 
 
@@ -50,12 +52,14 @@ def get_context(args):
     portal_index_path = args.portal_index_path
 
     app = Flask(__name__)
-    app.config.from_mapping({
-        'TYPE_SERVICE_ENDPOINT': types_url,
-        'ASSETS_ENDPOINT': assets_url,
-        'ELASTICSEARCH_ENDPOINT': search_url,
-        'PORTAL_INDEX_PATH': portal_index_path
-    })
+    app.config.from_mapping(
+        {
+            'TYPE_SERVICE_ENDPOINT': types_url,
+            'ASSETS_ENDPOINT': assets_url,
+            'ELASTICSEARCH_ENDPOINT': search_url,
+            'PORTAL_INDEX_PATH': portal_index_path,
+        }
+    )
 
     return app.app_context()
 
@@ -66,7 +70,7 @@ def get_errors(override_uuids):
     uuids = override_uuids or client.get_all_dataset_uuids()
     waiting_for_json = 0
     waiting_for_conf = 0
-    for (i, uuid) in enumerate(uuids):
+    for i, uuid in enumerate(uuids):
         before_json = perf_counter()
         dataset = client.get_entity(uuid=uuid)
         waiting_for_json += perf_counter() - before_json
@@ -76,7 +80,8 @@ def get_errors(override_uuids):
             conf_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
             warn(
                 f'\tVis: {conf_uuid.vitessce_conf.conf is not None}; '
-                f'Lifted: {conf_uuid.vis_lifted_uuid} ')
+                f'Lifted: {conf_uuid.vis_lifted_uuid} '
+            )
             waiting_for_conf += perf_counter() - before_conf
         except Exception as e:
             warn(f'\tERROR: {e}')
@@ -103,5 +108,5 @@ def warn(s):
     print(s, file=sys.stderr)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())

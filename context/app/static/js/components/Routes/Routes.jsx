@@ -330,7 +330,7 @@ function Routes({ flaskData } = {}) {
     if (tutorialName) {
       return (
         <Route>
-          <Tutorial tutorialName={tutorialName} />
+          <Tutorial tutorialRoute={tutorialName} />
         </Route>
       );
     }

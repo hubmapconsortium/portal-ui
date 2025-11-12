@@ -8,6 +8,7 @@ export interface CellTypeRowProps {
   matchedDatasets?: string[];
   percentage?: string;
   totalIndexedDatasets?: number;
+  description?: string;
 }
 
 export type CellTypeProps = Pick<CellTypeRowProps, 'cellType'>;

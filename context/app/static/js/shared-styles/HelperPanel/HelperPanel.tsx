@@ -61,7 +61,7 @@ export default function HelperPanelBase({ shouldDisplay, children }: HelperPanel
           bgcolor="secondaryContainer.main"
           boxShadow={2}
           style={style!}
-          position="sticky"
+          position="fixed"
         >
           {children}
         </AnimatedStack>

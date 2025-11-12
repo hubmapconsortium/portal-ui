@@ -1,0 +1,110 @@
+[project]
+name = "hubmap-portal-ui"
+version = "1.35.1"
+description = "HuBMAP Data Portal - Flask app with React frontend"
+readme = "README.md"
+# Note: keep in sync with .python-version, which is needed for `uv` to automatically
+# pick up the correct Python version without additional config.
+requires-python = ">=3.12.8"
+license = "MIT"
+authors = [{ name = "HuBMAP Consortium", email = "help@hubmapconsortium.org" }]
+keywords = ["hubmap", "portal", "bioinformatics", "flask", "react"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+dependencies = [
+    "Flask>=3.1.1",
+    "Flask[async]>=3.1.1",
+    "globus-sdk>=3.59.0",
+    "requests>=2.32.5",
+    "pyyaml>=6.0.2",
+    "python-frontmatter>=1.1.0",
+    "hubmap-api-py-client>=0.0.11",
+    "hubmap-commons>=2.1.20",
+    "portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip",
+]
+
+[project.urls]
+Homepage = "https://portal.hubmapconsortium.org/"
+Repository = "https://github.com/hubmapconsortium/portal-ui"
+Documentation = "https://github.com/hubmapconsortium/portal-ui/blob/main/README.md"
+"Bug Tracker" = "https://github.com/hubmapconsortium/portal-ui/issues"
+
+[build-system]
+requires = ["setuptools>=78.1.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+constraint-dependencies = []
+
+[tool.uv.sources]
+portal-visualization = { url = "https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip" }
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--strict-markers --strict-config"
+
+[tool.ruff]
+line-length = 99
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".eggs",
+    "*.egg-info",
+    ".tox",
+    ".venv",
+    "venv",
+    "env",
+    ".env",
+    "node_modules",
+    "etc/dev/organ-utils",
+    "*.ipynb",
+]
+
+[tool.ruff.lint]
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
+select = ["E", "F"]
+ignore = [
+    "E203", # whitespace before ':'
+    "E501", # line length handled by ruff
+    # W503 doesn't exist in ruff - it uses a different approach to line breaks
+]
+
+[tool.ruff.format]
+# Use single quotes for strings
+quote-style = "single"
+# Indent with spaces, not tabs
+indent-style = "space"
+# Respect magic trailing comma
+skip-magic-trailing-comma = false
+# Automatically detect the appropriate line ending
+line-ending = "auto"
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.setuptools.package-data]
+app = ["*.csv", "*.json", "*.yml", "*.yaml"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-mock>=3.15.1",
+    "ruff>=0.14.0",
+    "papermill>=2.6.0",
+    # used in `test_routes_main.py`, nowhere else
+    "lxml>=6.0.0",
+    # used in `qa/query-portal-logs.py`, nowhere else
+    "boto3>=1.39.3",
+    "matplotlib>=3.10.5",
+]

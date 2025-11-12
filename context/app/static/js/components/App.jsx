@@ -22,7 +22,18 @@ enableMapSet();
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 function App(props) {
-  const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken, userGroups = [] } = props;
+  const {
+    flaskData,
+    groupsToken,
+    isAuthenticated,
+    userEmail,
+    workspacesToken,
+    userGroups = [],
+    userFirstName,
+    userLastName,
+    userGlobusId,
+    userGlobusAffiliation,
+  } = props;
 
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
@@ -41,6 +52,10 @@ function App(props) {
         isWorkspacesUser={isWorkspacesUser}
         isHubmapUser={isHubmapUser}
         flaskData={flaskData}
+        userFirstName={userFirstName}
+        userLastName={userLastName}
+        userGlobusId={userGlobusId}
+        userGlobusAffiliation={userGlobusAffiliation}
       >
         <Header />
         {globalAlertMd && (

@@ -17,28 +17,33 @@ ENV NPM_CONFIG_PROGRESS=false
 ENV NPM_CONFIG_LOGLEVEL=warn
 
 # COPY only what is needed so layers can be cached.
-COPY package.json .
-COPY package-lock.json .
-COPY .npmrc .
+COPY context/package.json .
+COPY context/package-lock.json .
+COPY context/.npmrc .
 
 RUN npm ci
 
-COPY tsconfig.json tsconfig.json
-COPY .swcrc .swcrc
-COPY build-utils build-utils
-COPY app app
+COPY context/tsconfig.json tsconfig.json
+COPY context/.swcrc .swcrc
+COPY context/build-utils build-utils
+COPY context/app app
 # portal-visualization is python-only, and not needed for the npm build.
 
 RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
 
-# Use a constraints file to force pip to use correct versions of numpy/pandas/frozenlist that are compatible with python 3.12.
-COPY requirements.txt /app
-# Legacy resolver is used to avoid issues with a non-pinned subdependency which causes build failures in CI
-# https://github.com/hubmapconsortium/portal-ui/actions/runs/6087458665/job/16516023950
-COPY constraints.txt /tmp
-RUN PIP_CONSTRAINT=/tmp/constraints.txt pip install -r /app/requirements.txt
+# Install uv for faster dependency management
+RUN pip install uv
+
+# Copy project configuration to /app (where the base image expects the app)
+WORKDIR /app
+COPY pyproject.toml .
+COPY uv.lock .
+COPY context/app ./app
+
+# Install dependencies using uv into system Python
+RUN uv pip install --system --no-cache-dir -e .
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path
@@ -48,7 +53,7 @@ ENV STATIC_PATH=/app/app/static
 # Be sure not to clobber nginx.conf from base image!
 # Docs:   https://github.com/tiangolo/uwsgi-nginx-flask-docker#customizing-nginx-additional-configurations
 # Source: https://github.com/tiangolo/uwsgi-nginx-docker/blob/c1e6eb2/docker-images/entrypoint.sh#L37
-COPY portal.nginx.conf /etc/nginx/conf.d/
+COPY context/portal.nginx.conf /etc/nginx/conf.d/
 
 COPY --from=frontend /work/app/static/public ${STATIC_PATH}/public
-COPY . /app
+COPY context/ /app

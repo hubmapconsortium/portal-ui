@@ -15,6 +15,10 @@
     const isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
     const groupsToken = '{{ groups_token }}';
     const userEmail = '{{ user_email }}';
+    const userFirstName = '{{ user_first_name }}';
+    const userLastName = '{{ user_last_name }}';
+    const userGlobusId = '{{ user_globus_id }}';
+    const userGlobusAffiliation = '{{ user_globus_affiliation }}';
     const workspacesToken = '{{ workspaces_token }}';
     const userGroups = {{ user_groups | tojson  }};
     const sentryEnv = '{{ sentry_env }}';

@@ -67,7 +67,7 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
       title={title}
       maxWidth="lg"
       content={
-        <form id={formId} onSubmit={void handleSubmit(submit)}>
+        <form id={formId} onSubmit={(e) => void handleSubmit(submit)(e)}>
           {children}
         </form>
       }

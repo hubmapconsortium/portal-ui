@@ -3,9 +3,9 @@ import Button from '@mui/material/Button';
 import { AlertProps } from '@mui/material/Alert';
 
 import { trackEvent } from 'js/helpers/trackers';
-import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { EventInfo } from 'js/components/types';
 import { Alert } from './Alert';
+import SignUpForWorkspacesLink from '../Links/SignUpForWorkspacesLink';
 
 interface LoginAlertBaseProps {
   trackingInfo?: EventInfo;
@@ -34,7 +34,7 @@ function buildDefaultMessage({ featureName }: { featureName?: string }) {
       {featureName === 'workspaces' ? (
         <>
           {' '}
-          You can request access to workspaces by contacting the <ContactUsLink>HuBMAP Help Desk.</ContactUsLink>
+          You can request access to workspaces by <SignUpForWorkspacesLink>signing up</SignUpForWorkspacesLink>.
         </>
       ) : (
         ` Access to ${featureName} is restricted to HuBMAP members at present.`

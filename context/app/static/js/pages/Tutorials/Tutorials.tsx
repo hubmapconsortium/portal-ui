@@ -1,49 +1,42 @@
 import React from 'react';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 
 import PageTitle from 'js/shared-styles/pages/PageTitle';
-import SectionPaper from 'js/shared-styles/sections/SectionPaper';
-import SelectableCard from 'js/shared-styles/cards/SelectableCard';
+import { TutorialLandingPageContextProvider, TutorialsFilterBar, TutorialsList } from 'js/components/Tutorials';
+import Description from 'js/shared-styles/sections/Description';
+import TutorialsSearchBar from 'js/components/Tutorials/TutorialsSearchBar';
+import { TUTORIAL_CATEGORY_DATA, TUTORIAL_CATEGORY_SECTIONS } from 'js/components/Tutorials/types';
+import DetailLayout from 'js/components/detailPage/DetailLayout/DetailLayout';
+import { TutorialIcon } from 'js/shared-styles/icons';
 
-const tutorials = {
-  workspaces: {
-    title: 'Workspaces',
-    route: 'workspaces',
-    description:
-      'Learn how to set up workspaces that allows you to run analysis on HuBMAP data with Jupyter notebooks.',
-    tags: ['Workspaces', 'Data Analysis'],
+const tableOfContentsSections: Record<string, boolean> = TUTORIAL_CATEGORY_SECTIONS.reduce<Record<string, boolean>>(
+  (acc, section) => {
+    acc[TUTORIAL_CATEGORY_DATA[section].id] = true;
+    return acc;
   },
+  {} as Record<string, boolean>,
+);
+
+const trackingInfo = {
+  category: 'Tutorials Landing Page',
 };
-
-const StyledLink = styled('a')(({ theme }) => ({
-  h6: {
-    color: theme.palette.common.link,
-  },
-}));
 
 function Tutorials() {
   return (
-    <Stack spacing={2}>
-      <PageTitle data-testid="tutorials-title">Tutorials</PageTitle>
-      <SectionPaper>Browse tutorials of how to navigate the HuBMAP Data Portal for your specific needs.</SectionPaper>
-      <Grid container alignItems="stretch">
-        {Object.values(tutorials).map(({ title, description, tags, route }) => (
-          <Grid item xs={4} key={title} aria-label={`${title} tutorial`}>
-            <StyledLink href={`/tutorials/${route}`}>
-              <SelectableCard
-                title={title}
-                description={description}
-                cardKey={title}
-                tags={tags}
-                data-testid="tutorial-card"
-              />
-            </StyledLink>
-          </Grid>
-        ))}
-      </Grid>
-    </Stack>
+    <DetailLayout sections={tableOfContentsSections} trackingInfo={trackingInfo}>
+      <Stack spacing={2} pb={2}>
+        <PageTitle data-testid="tutorials-title" display="flex" flexDirection="row" alignItems="center" gap={1}>
+          <TutorialIcon color="info" fontSize="2rem" />
+          Tutorials
+        </PageTitle>
+        <Description>Step-by-step guides to HuBMAP features and workflows.</Description>
+        <TutorialLandingPageContextProvider>
+          <TutorialsSearchBar />
+          <TutorialsFilterBar />
+          <TutorialsList />
+        </TutorialLandingPageContextProvider>
+      </Stack>
+    </DetailLayout>
   );
 }
 

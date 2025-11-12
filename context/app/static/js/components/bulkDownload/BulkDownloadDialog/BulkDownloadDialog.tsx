@@ -190,7 +190,7 @@ function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
       title="Bulk Download Files"
       maxWidth="lg"
       content={
-        <form id={formId} onSubmit={void handleSubmit(onSubmit)}>
+        <form id={formId} onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
           <Stack spacing={2}>
             <DownloadDescription />
             <DownloadOptionsSection

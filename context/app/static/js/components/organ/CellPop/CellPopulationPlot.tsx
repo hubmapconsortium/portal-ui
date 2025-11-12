@@ -31,7 +31,7 @@ function visualizationSelector(store: VisualizationStore) {
   };
 }
 
-const { cellpopId } = OrganPageIds;
+const { scellopId } = OrganPageIds;
 
 type CellPopProps = ComponentProps<typeof CellPop>;
 type CellPopData = CellPopProps['data'];
@@ -92,7 +92,16 @@ const useCellPopDataForOrgan = (
         values: datasets || [],
       },
     },
-    _source: ['hubmap_id', 'title', 'donor.mapped_metadata', 'assay_display_name', 'anatomy_1', 'anatomy_2'],
+    _source: [
+      'hubmap_id',
+      'title',
+      'group_name',
+      'donor.hubmap_id',
+      'donor.mapped_metadata',
+      'assay_display_name',
+      'anatomy_1',
+      'anatomy_2',
+    ],
     size: 10000,
   });
 
@@ -126,6 +135,9 @@ const useCellPopDataForOrgan = (
         title,
         assay: getFirstValue(assay_display_name),
         anatomy: getFirstAnatomyValue(anatomy_1, anatomy_2),
+        donor_id: getFirstValue(donor?.hubmap_id),
+        group_name: getFirstValue(source.group_name),
+        // Donor metadata fields
         donor_age: getFirstValue(dmm?.age_value),
         donor_sex: getFirstValue(dmm?.sex),
         donor_height: getFirstValue(dmm?.height_value),
@@ -267,7 +279,7 @@ function CellPopSkeleton() {
 
 function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
   const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
-  const vizIsFullscreen = fullscreenVizId === cellpopId;
+  const vizIsFullscreen = fullscreenVizId === scellopId;
 
   const trackEvent = useTrackCellpop();
 
@@ -277,9 +289,9 @@ function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
   const { data, isLoading } = useCellPopDataForOrgan(uuids);
 
   return (
-    <OrganDetailSection title="Cell Population Plot" id={cellpopId} icon={CellTypeIcon}>
+    <OrganDetailSection title="Cell Population Plot" id={scellopId} icon={CellTypeIcon}>
       <CellPopDescription organ={organ} />
-      <CellPopActions id={cellpopId} />
+      <CellPopActions id={scellopId} />
       <Paper>
         <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={theme} $nonExpandedHeight={1000}>
           {isLoading ? (
@@ -297,7 +309,7 @@ function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
               trackEvent={trackEvent}
             />
           )}
-          <BodyExpandedCSS id={cellpopId} />
+          <BodyExpandedCSS id={scellopId} />
         </ExpandableDiv>
       </Paper>
     </OrganDetailSection>

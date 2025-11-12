@@ -9,20 +9,39 @@ import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/
 import { SectionOrder, getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import { EventInfo } from 'js/components/types';
 
-interface DetailLayoutProps extends PropsWithChildren {
-  sections: SectionOrder;
-  isLoading?: boolean;
+type DetailLayoutProps = {
   trackingInfo?: EventInfo;
-}
+  isLoading?: boolean;
+  tableOfContentsTitle?: string;
+  tableOfContentsTitleHref?: string;
+} & PropsWithChildren &
+  (
+    | {
+        sections: SectionOrder;
+        customTableOfContents?: never;
+        customCurrentSection?: never;
+      }
+    | {
+        sections?: never;
+        customTableOfContents: TableOfContentsItems;
+        customCurrentSection: string;
+      }
+  );
 
-function TableOfContentsPortal({
+export function TableOfContentsPortal({
   items,
   isLoading = false,
   trackingInfo,
+  initialCurrentSection,
+  tableOfContentsTitle,
+  tableOfContentsTitleHref,
 }: {
   items: TableOfContentsItems;
   isLoading: boolean;
   trackingInfo?: EventInfo;
+  initialCurrentSection?: string;
+  tableOfContentsTitle?: string;
+  tableOfContentsTitleHref?: string;
 }) {
   const element = document.getElementById(leftRouteBoundaryID);
 
@@ -30,8 +49,15 @@ function TableOfContentsPortal({
     return null;
   }
   return createPortal(
-    <Stack alignItems="end" alignSelf="flex-start" height="100%">
-      <TableOfContents items={items} isLoading={isLoading} trackingInfo={trackingInfo} />
+    <Stack width="100%">
+      <TableOfContents
+        items={items}
+        isLoading={isLoading}
+        trackingInfo={trackingInfo}
+        initialCurrentSection={initialCurrentSection}
+        title={tableOfContentsTitle}
+        titleHref={tableOfContentsTitleHref}
+      />
     </Stack>,
     element,
   );
@@ -43,20 +69,46 @@ export function HelperPanelPortal({ children }: PropsWithChildren) {
     return null;
   }
   return createPortal(
-    <Stack alignItems="start" alignSelf="flex-start" height="100%">
+    <Stack
+      alignItems="start"
+      position="relative"
+      sx={{
+        pointerEvents: 'none',
+        '& > *': {
+          pointerEvents: 'auto',
+        },
+      }}
+    >
       {children}
     </Stack>,
     element,
   );
 }
 
-function DetailLayout({ sections, children, isLoading = false, trackingInfo }: DetailLayoutProps) {
-  const items = getSections(sections);
+function DetailLayout({
+  sections,
+  children,
+  isLoading = false,
+  trackingInfo,
+  customTableOfContents,
+  customCurrentSection,
+  tableOfContentsTitle,
+  tableOfContentsTitleHref,
+}: DetailLayoutProps) {
+  const items = customTableOfContents || getSections(sections);
 
   return (
     <>
       <SavedListsSuccessAlert />
-      <TableOfContentsPortal items={items} isLoading={isLoading} trackingInfo={trackingInfo} />
+      <TableOfContentsPortal
+        items={items}
+        isLoading={isLoading}
+        trackingInfo={trackingInfo}
+        initialCurrentSection={customCurrentSection}
+        tableOfContentsTitle={tableOfContentsTitle}
+        tableOfContentsTitleHref={tableOfContentsTitleHref}
+      />
+      <HelperPanelPortal />
       {children}
     </>
   );
