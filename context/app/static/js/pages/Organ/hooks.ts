@@ -97,39 +97,6 @@ export function useAssayBucketsQuery(searchItems: string[]) {
   return assayBuckets;
 }
 
-export function useLabelledDatasetsQuery(searchItems: string[]) {
-  const datasetsQuery = useMemo(
-    () => ({
-      query: {
-        bool: {
-          filter: [
-            {
-              term: {
-                'entity_type.keyword': 'Dataset',
-              },
-            },
-            {
-              term: {
-                'calculated_metadata.annotation_tools.keyword': 'Azimuth',
-              },
-            },
-            {
-              terms: {
-                'origin_samples_unique_mapped_organs.keyword': searchItems,
-              },
-            },
-          ],
-        },
-      },
-      _source: false,
-      size: 10000,
-    }),
-    [searchItems],
-  );
-  const { searchHits: datasetsHits } = useSearchHits<never>(datasetsQuery, { useDefaultQuery: false });
-  return datasetsHits.map((hit) => hit._id);
-}
-
 export function useDataProducts(organ: OrganFile) {
   const { name, search } = organ;
   const { dataProductsEndpoint } = useAppContext();
@@ -178,13 +145,7 @@ interface IndexedDatasetsForOrganAggs {
   };
 }
 
-/**
- * Returns a list of the dataset IDs indexed in scFind for the current organ.
- * @param organ
- * @returns
- */
-export function useIndexedDatasetsForOrgan() {
-  const searchItems = useSearchItemsFromContext();
+export function useIndexedDatasetsForOrgan(searchItems: string[], organName: string) {
   const { data = { datasets: [] }, isLoading: isLoadingIndexed, ...rest } = useIndexedDatasets();
 
   const ids = useSCFindIDAdapter(data?.datasets);
@@ -225,8 +186,6 @@ export function useIndexedDatasetsForOrgan() {
 
   const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
 
-  const { organ } = useOrganContext();
-
   const isLoading = isLoadingIndexed || isLoadingDatasets;
 
   return {
@@ -239,7 +198,18 @@ export function useIndexedDatasetsForOrgan() {
     scFindParams: {
       scFindOnly: true,
     },
-    organs: !isLoading ? [{ key: organ.name, doc_count: datasetUUIDs.length }] : [],
+    organs: !isLoading ? [{ key: organName, doc_count: datasetUUIDs.length }] : [],
     ...rest,
   };
+}
+
+/**
+ * Returns a list of the dataset IDs indexed in scFind for the current organ.
+ * @param organ
+ * @returns
+ */
+export function useIndexedDatasetsForCurrentOrgan() {
+  const { organ } = useOrganContext();
+  const searchItems = useSearchItems(organ);
+  return useIndexedDatasetsForOrgan(searchItems, organ.name);
 }
