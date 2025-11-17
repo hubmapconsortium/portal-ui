@@ -5,7 +5,7 @@ description = "HuBMAP Data Portal - Flask app with React frontend"
 readme = "README.md"
 # Note: keep in sync with .python-version, which is needed for `uv` to automatically
 # pick up the correct Python version without additional config.
-requires-python = ">=3.12.8"
+requires-python = ">=3.13.9"
 license = "MIT"
 authors = [{ name = "HuBMAP Consortium", email = "help@hubmapconsortium.org" }]
 keywords = ["hubmap", "portal", "bioinformatics", "flask", "react"]
