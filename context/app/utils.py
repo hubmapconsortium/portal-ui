@@ -195,14 +195,14 @@ def find_sibling_datasets(client, dataset):
     return sibling_ids
 
 
-def get_allowed_cors_origin(request_origin, allowed_origins=None, allowed_patterns=None):
+def get_allowed_cors_origin(request_origin, allowed_origins=None, allowed_domain_suffixes=None):
     """
     Validate a request origin against allowed origins and patterns.
 
     Args:
         request_origin: The origin from the request header
         allowed_origins: List of exact origin strings to match
-        allowed_patterns: List of domain patterns (e.g., '.hubmapconsortium.org')
+        allowed_domain_suffixes: List of domain suffixes (e.g., '.hubmapconsortium.org')
 
     Returns:
         The request origin if it matches an allowed origin or pattern, None otherwise.
@@ -218,14 +218,14 @@ def get_allowed_cors_origin(request_origin, allowed_origins=None, allowed_patter
         return None
 
     allowed_origins = allowed_origins or []
-    allowed_patterns = allowed_patterns or []
+    allowed_domain_suffixes = allowed_domain_suffixes or []
 
     # Check exact matches
     if request_origin in allowed_origins:
         return request_origin
 
     # Check pattern matches
-    for pattern in allowed_patterns:
+    for pattern in allowed_domain_suffixes:
         if request_origin.endswith(pattern):
             return request_origin
 

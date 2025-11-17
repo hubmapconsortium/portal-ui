@@ -107,7 +107,7 @@ def entities_plain_tsv(entity_type):
     cors_origin = get_allowed_cors_origin(
         request_origin,
         allowed_origins=['https://hms-dbmi.github.io'],
-        allowed_patterns=['.hubmapconsortium.org'],
+        allowed_domain_suffixes=['.hubmapconsortium.org'],
     )
 
     return _generate_tsv_response(entity_type, with_descriptions=False, cors_origin=cors_origin)
