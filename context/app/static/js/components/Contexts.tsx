@@ -13,6 +13,7 @@ export interface FlaskDataContextType {
   redirectedFromId?: string | null;
   redirectedFromPipeline?: string | null;
   siblingIds?: string[];
+  integrated?: boolean; // true if the entity is an integrated dataset
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');

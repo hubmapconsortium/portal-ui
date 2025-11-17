@@ -75,6 +75,8 @@ export interface Entity {
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
   mapped_metadata?: Record<string, unknown>;
+  immediate_ancestor_ids: string[];
+  immediate_descendant_ids: string[];
   [key: string]: unknown;
 }
 
