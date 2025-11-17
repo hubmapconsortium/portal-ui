@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
 import { percent } from 'js/helpers/number-format';
-import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
+import { useIndexedDatasetsForCurrentOrgan } from 'js/pages/Organ/hooks';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { stripCLIDPrefix, useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import { useFormattedCellTypeNames } from '../hooks';
@@ -23,7 +23,8 @@ export function useCellTypeRows(cellTypes: string[]) {
   const formattedCellNames = useFormattedCellTypeNames(cellTypes);
   const { results: clids, isLoading: isLoadingClids } = useLabelsToCLIDs(formattedCellNames);
   const { matchedDatasets, isLoading: isLoadingMatchedDatasets } = useMatchedDatasets(formattedCellNames);
-  const { datasets: totalIndexedDatasets, isLoadingDatasets: isLoadingTotalDatasets } = useIndexedDatasetsForOrgan();
+  const { datasets: totalIndexedDatasets, isLoadingDatasets: isLoadingTotalDatasets } =
+    useIndexedDatasetsForCurrentOrgan();
 
   const cellTypeIds = useMemo(
     () => clids?.map((clid) => clid?.CLIDs?.[0]).filter((id): id is string => id != null) ?? [],
