@@ -1,0 +1,1 @@
+- Fix Table of Contents positioning to enable scrolling when contents are longer than screen size and avoid overflowing into main page.

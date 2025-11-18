@@ -12,9 +12,6 @@ function MuiGlobalStyles() {
         body: {
           '-webkit-font-smoothing': 'antialiased',
           '-moz-osx-font-smoothing': 'grayscale',
-          display: 'flex',
-          'min-height': '100vh',
-          'flex-direction': 'column',
         },
         li: {
           'list-style': 'none',
