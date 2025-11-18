@@ -8,7 +8,7 @@ import requests
 
 from flask import Response, abort, request, render_template, jsonify, current_app, make_response
 
-from .utils import make_blueprint, get_client, get_default_flask_data
+from .utils import make_blueprint, get_client, get_default_flask_data, get_allowed_cors_origin
 
 
 blueprint = make_blueprint(__name__)
@@ -102,9 +102,15 @@ def entities_tsv(entity_type):
 # removes CORS block.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
-    return _generate_tsv_response(
-        entity_type, with_descriptions=False, cors_origin='https://hms-dbmi.github.io'
+    # Dynamically set CORS origin based on request origin
+    request_origin = request.headers.get('Origin', '')
+    cors_origin = get_allowed_cors_origin(
+        request_origin,
+        allowed_origins=['https://hms-dbmi.github.io'],
+        allowed_domain_suffixes=['.hubmapconsortium.org'],
     )
+
+    return _generate_tsv_response(entity_type, with_descriptions=False, cors_origin=cors_origin)
 
 
 @blueprint.route('/lineup/<entity_type>')
