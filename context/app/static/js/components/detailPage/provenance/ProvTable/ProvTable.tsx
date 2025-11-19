@@ -79,7 +79,7 @@ function ProvEntityColumnContent({
       })),
   );
 
-  const sortedEntities = useMemo(() => entities.sort(entitySorter), [entities]);
+  const sortedEntities = useMemo(() => [...entities].sort(entitySorter), [entities]);
 
   if (noDisplayedContent) {
     return (
