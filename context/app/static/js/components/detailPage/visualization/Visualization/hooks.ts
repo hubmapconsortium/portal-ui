@@ -12,6 +12,15 @@ interface UseVitessceConfigProps {
   markerGene?: string;
 }
 
+function formatVitessceConf(vData: object) {
+  if ('layout' in vData && vData.layout && 'name' in vData && vData.name !== 'Error') {
+    const vc = VitessceConfig.fromJSON(vData);
+    return vc.toJSON();
+  }
+  console.error("Vitessce config missing 'layout' or 'name' field.");
+  return vData;
+}
+
 export function useVitessceConfig({ vitData, setVitessceState, markerGene }: UseVitessceConfigProps) {
   const [vitessceSelection, setVitessceSelection] = useState<number>(0);
   const [vitessceConfig, setVitessceConfig] = useState<object | null>(null);
@@ -40,10 +49,16 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
 
   useEffect(() => {
     function setVitessceDefaults(vData: object | object[]) {
-      const vDataArray = (Array.isArray(vData) ? vData : [vData]) as VitessceConfig[];
+      if (Array.isArray(vData)) {
+        const processedVData: object[] = vData.map((v: object) => formatVitessceConf(v));
+        setVitessceState(processedVData[0]);
+        setVitessceConfig(processedVData);
+      } else {
+        const processedVData = formatVitessceConf(vData);
+        setVitessceState(processedVData);
+        setVitessceConfig(processedVData);
+      }
       setVitessceSelection(0);
-      setVitessceConfig(vDataArray[0]);
-      setVitessceState(vDataArray[0]);
     }
 
     if (setVitessceState && vitData) {
