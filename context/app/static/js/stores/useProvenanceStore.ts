@@ -1,19 +1,20 @@
+import type { Node, Edge } from '@xyflow/react';
 import { createImmer } from 'js/helpers/zustand';
-import { Step } from 'js/components/detailPage/provenance/types';
 
 interface ProvenanceStoreState {
   uuid: string;
   hasRendered: boolean;
-  steps: Step[];
+  nodes: Node[];
+  edges: Edge[];
+  selectedNodeId: string | null;
 }
 
 interface ProvenanceStoreActions {
   setHasRendered: () => void;
   setUUID: (uuid: string) => void;
-  setSteps: (steps: Step[]) => void;
-  addSteps: (steps: Step[]) => void;
-  stitchEntityDescendantSteps: (descendantSteps: Step[]) => void;
-  addDescendantSteps: (descendantSteps: Step[]) => void;
+  setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void;
+  addDescendantNodesAndEdges: (newNodes: Node[], newEdges: Edge[]) => void;
+  setSelectedNodeId: (nodeId: string | null) => void;
 }
 
 export type ProvenanceStore = ProvenanceStoreState & ProvenanceStoreActions;
@@ -21,6 +22,9 @@ export type ProvenanceStore = ProvenanceStoreState & ProvenanceStoreActions;
 const useProvenanceStore = createImmer<ProvenanceStore>((set, get) => ({
   uuid: '',
   hasRendered: false,
+  nodes: [],
+  edges: [],
+  selectedNodeId: null,
   setHasRendered: () => {
     if (!get().hasRendered) {
       set((state) => {
@@ -33,37 +37,45 @@ const useProvenanceStore = createImmer<ProvenanceStore>((set, get) => ({
       state.uuid = uuid;
     });
   },
-  steps: [],
-  setSteps: (steps) => {
+  setNodesAndEdges: (nodes, edges) => {
     set((state) => {
-      state.steps = steps;
+      state.nodes = nodes;
+      state.edges = edges;
     });
   },
-  addSteps: (steps) => {
+  setSelectedNodeId: (nodeId) => {
     set((state) => {
-      state.steps = [...state.steps, ...steps];
+      state.selectedNodeId = nodeId;
     });
   },
-  stitchEntityDescendantSteps: (descendantSteps) => {
-    // check new steps inputs to see if they exist in current steps
-    descendantSteps.forEach((descendantStep) => {
-      descendantStep.inputs.forEach((input) => {
-        get().steps.forEach((step, stepIndex) => {
-          const outputIndex = step.outputs.findIndex((output) => output.name === input.name);
-          // if input exists as an output of an existing step add new step as target
-          if (outputIndex >= 0) {
-            const output = { step: descendantStep.name, name: input.name };
-            set((state) => {
-              state.steps[stepIndex].outputs[outputIndex].target.push(output);
-            });
-          }
-        });
+  addDescendantNodesAndEdges: (newNodes, newEdges) => {
+    set((state) => {
+      // Get existing node and edge IDs for deduplication
+      const existingNodeIds = new Set(state.nodes.map((n) => n.id));
+      const existingEdgeIds = new Set(state.edges.map((e) => e.id));
+
+      // Add only new nodes that don't already exist
+      const nodesToAdd = newNodes.filter((n) => !existingNodeIds.has(n.id));
+      state.nodes = [...state.nodes, ...nodesToAdd];
+
+      // Add only new edges that don't already exist
+      const edgesToAdd = newEdges.filter((e) => !existingEdgeIds.has(e.id));
+
+      // Also create connecting edges between existing and new nodes
+      // Find new nodes that have edges to existing nodes
+      newEdges.forEach((edge) => {
+        const sourceExists = existingNodeIds.has(edge.source);
+        const targetExists = existingNodeIds.has(edge.target);
+        const edgeExists = existingEdgeIds.has(edge.id);
+
+        // Add edge if it connects new and existing nodes and doesn't already exist
+        if (!edgeExists && (sourceExists || targetExists)) {
+          edgesToAdd.push(edge);
+        }
       });
+
+      state.edges = [...state.edges, ...edgesToAdd];
     });
-  },
-  addDescendantSteps: (descendantSteps) => {
-    get().stitchEntityDescendantSteps(descendantSteps);
-    get().addSteps(descendantSteps);
   },
 }));
 

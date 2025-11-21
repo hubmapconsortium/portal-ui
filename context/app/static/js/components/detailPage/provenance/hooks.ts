@@ -25,7 +25,7 @@ async function getCombinedProvData(
   entityEndpoint: string,
   groupsToken: string,
   elasticsearchEndpoint: string,
-) {
+): Promise<ProvData> {
   const topLevelDatasets = await fetchSearchData<{ uuid: string }, unknown>(
     getAncestorsQuery(uuid),
     elasticsearchEndpoint,
@@ -77,6 +77,17 @@ async function getCombinedProvData(
   return combinedProvenance;
 }
 
+type ProvDataFetcherKey = [string, string, boolean] | null;
+const createProvDataFetcherKey = (
+  uuid: string,
+  groupsToken: string,
+  combined: boolean,
+  shouldFetch?: boolean,
+): ProvDataFetcherKey => {
+  if (!shouldFetch) return null;
+  return [uuid, groupsToken, combined];
+};
+
 /**
  * Fetches provenance data for an entity
  * @param uuid UUID of the entity to fetch
@@ -86,16 +97,18 @@ async function getCombinedProvData(
 function useProvData(uuid: string, combined = false, shouldFetch = true) {
   const { entityEndpoint, groupsToken, elasticsearchEndpoint } = useAppContext();
 
-  const { data: provData, isLoading } = useSWR<ProvData, unknown, [string, string, boolean]>(
-    // @ts-expect-error - SWR suggests disabling fetching by providing a null key
-    shouldFetch ? [uuid, groupsToken, combined] : null,
-    ([idToFetch, authToken, useCombinedFetcher]) =>
-      useCombinedFetcher
+  const { data: provData, isLoading } = useSWR<ProvData, unknown, ProvDataFetcherKey>(
+    createProvDataFetcherKey(uuid, groupsToken, combined, shouldFetch),
+    (key: ProvDataFetcherKey) => {
+      if (!key) throw new Error('Invalid SWR key');
+      const [idToFetch, authToken, useCombinedFetcher] = key;
+      return useCombinedFetcher
         ? getCombinedProvData(idToFetch, entityEndpoint, authToken, elasticsearchEndpoint)
-        : fetcher({
+        : fetcher<ProvData>({
             url: createProvDataURL(idToFetch, entityEndpoint),
             requestInit: { headers: getAuthHeader(authToken) },
-          }),
+          });
+    },
   );
 
   return { provData, isLoading };

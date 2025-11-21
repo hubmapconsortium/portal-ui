@@ -12,8 +12,10 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
 
 const maxGraphHeight = 500;
 const StyledDiv = styled('div')({
-  '& .scroll-container-wrapper': {
-    maxHeight: maxGraphHeight,
+  height: maxGraphHeight,
+  width: '100%',
+  '& .react-flow': {
+    background: 'transparent',
   },
 });
 
