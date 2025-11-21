@@ -1,3 +1,5 @@
+const order = ['organ', 'block', 'section', 'suspension'];
+
 /**
  * Compares two sample categories for sorting purposes.
  * The order is: Organ > Block > Section > Suspension
@@ -5,7 +7,6 @@
 export function compareSampleCategory(a: string, b: string) {
   const normalizedA = a.toLowerCase();
   const normalizedB = b.toLowerCase();
-  const order = ['organ', 'block', 'section', 'suspension'];
   const indexA = order.indexOf(normalizedA);
   const indexB = order.indexOf(normalizedB);
 
