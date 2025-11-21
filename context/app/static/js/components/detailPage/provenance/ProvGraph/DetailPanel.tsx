@@ -6,7 +6,6 @@ import { InternalLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/detailPage/provenance/ShowDerivedEntitiesButton';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { StyledPaper, StyledTypography } from './style';
-import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 import { ProvData } from '../types';
 
 interface DetailPanelProps {
@@ -17,8 +16,8 @@ interface DetailPanelProps {
   uuid: string;
   typeKey: string;
   idKey: string;
-  getNameForActivity: (id: string, prov: ProvData) => string;
-  getNameForEntity: (id: string, prov: ProvData) => string;
+  getNameForActivity: (id: string, prov?: ProvData) => string;
+  getNameForEntity: (id: string, prov?: ProvData) => string;
 }
 
 const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support'];

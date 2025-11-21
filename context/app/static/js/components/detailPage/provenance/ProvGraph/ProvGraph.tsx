@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
+import { Node } from '@xyflow/react';
 
 import useProvenanceStore, { ProvenanceStore } from 'js/stores/useProvenanceStore';
 import { ESEntityType } from 'js/components/types';
 import ProvVis from '../ProvVis';
-import { StyledDiv, maxGraphHeight } from './style';
-import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
+import { StyledDiv } from './style';
 import DetailPanel from './DetailPanel';
-import { ProvData, ProvNode } from '../types';
+import { ProvData } from '../types';
 
-const setUUIDSelector = (state: ProvenanceStore) => state.setUUID;
-const hasRenderedSelector = (state: ProvenanceStore) => state.hasRendered;
+const useProvenanceStoreSelector = (state: ProvenanceStore) => ({
+  setUUID: state.setUUID,
+  selectedNodeId: state.selectedNodeId,
+  nodes: state.nodes,
+});
 
 const getNameForActivity = (idKey: string) => (id: string, prov?: ProvData) => {
   if (!prov) return id;
@@ -37,43 +40,15 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
 
-  const setUUID = useProvenanceStore(setUUIDSelector);
-  const hasRendered = useProvenanceStore(hasRenderedSelector);
+  const { setUUID, selectedNodeId, nodes } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {
     setUUID(uuid);
   }, [setUUID, uuid]);
 
-  function renderDetailPane(node: ProvNode) {
-    if (node?.meta?.prov) {
-      return (
-        <DetailPanel
-          getNameForActivity={getNameForActivity(idKey)}
-          getNameForEntity={getNameForEntity(typeKey, idKey)}
-          prov={node.meta.prov}
-          timeKey={timeKey}
-          uuid={uuid}
-          idKey={idKey}
-          typeKey={typeKey}
-        />
-      );
-    }
-    return null;
-  }
-
-  // Set vertical scroll position to halfway.
-  useEffect(() => {
-    if (hasRendered) {
-      const scrollEl = document.getElementsByClassName('scroll-container-wrapper')[0];
-      // Prevent crash when switching between ProvTabs quickly
-      if (scrollEl) {
-        scrollEl.scroll({
-          top: Math.floor((scrollEl.scrollHeight - maxGraphHeight) / 2),
-          behavior: 'instant',
-        });
-      }
-    }
-  }, [hasRendered]);
+  // Find the selected node to display in detail panel
+  const selectedNode: Node | undefined = selectedNodeId ? nodes.find((n) => n.id === selectedNodeId) : undefined;
+  const selectedNodeProv = selectedNode?.data?.prov as Record<string, string> | undefined;
 
   return (
     <StyledDiv>
@@ -81,9 +56,19 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
         provData={provData}
         getNameForActivity={getNameForActivity(idKey)}
         getNameForEntity={getNameForEntity(typeKey, idKey)}
-        renderDetailPane={renderDetailPane}
         entity_type={entity_type}
       />
+      {selectedNodeProv && (
+        <DetailPanel
+          getNameForActivity={getNameForActivity(idKey)}
+          getNameForEntity={getNameForEntity(typeKey, idKey)}
+          prov={selectedNodeProv}
+          timeKey={timeKey}
+          uuid={uuid}
+          idKey={idKey}
+          typeKey={typeKey}
+        />
+      )}
     </StyledDiv>
   );
 }
