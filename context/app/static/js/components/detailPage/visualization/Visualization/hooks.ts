@@ -6,25 +6,6 @@ import useVisualizationStore from 'js/stores/useVisualizationStore';
 
 import { isFirefox } from 'react-device-detect';
 
-// These constants should be in the CoordinationType import from Vitessce, but the types are not properly resolving.
-const FEATURE_SELECTION = 'featureSelection';
-const OBS_COLOR_ENCODING = 'obsColorEncoding';
-
-function handleMarkerGene(vData: object, markerGene?: string) {
-  if ('layout' in vData && vData.layout && markerGene && 'name' in vData && vData.name !== 'Error') {
-    const vc = VitessceConfig.fromJSON(vData);
-    const [featureSelection, obsColorEncoding] = vc.addCoordination(FEATURE_SELECTION, OBS_COLOR_ENCODING);
-    // @ts-expect-error VitessceConfig's layout property is not properly typed, so treat this section as JS
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return
-    vc.config.layout.forEach((v) => v.useCoordination(featureSelection, obsColorEncoding));
-    featureSelection.setValue([markerGene]);
-    obsColorEncoding.setValue('geneSelection');
-    return vc.toJSON();
-  }
-  return vData;
-}
-
 interface UseVitessceConfigProps {
   vitData?: object | object[];
   setVitessceState: (v: object) => void;
@@ -59,16 +40,10 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
 
   useEffect(() => {
     function setVitessceDefaults(vData: object | object[]) {
-      if (Array.isArray(vData)) {
-        const processedVData: object[] = vData.map((v: object) => handleMarkerGene(v, markerGene));
-        setVitessceState(processedVData[0]);
-        setVitessceConfig(processedVData);
-      } else {
-        const processedVData = handleMarkerGene(vData, markerGene);
-        setVitessceState(processedVData);
-        setVitessceConfig(processedVData);
-      }
+      const vDataArray = (Array.isArray(vData) ? vData : [vData]) as VitessceConfig[];
       setVitessceSelection(0);
+      setVitessceConfig(vDataArray[0]);
+      setVitessceState(vDataArray[0]);
     }
 
     if (setVitessceState && vitData) {
