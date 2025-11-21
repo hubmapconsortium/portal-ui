@@ -63,12 +63,16 @@ function Description() {
   );
 }
 
-function ProvSection() {
+interface ProvSectionProps {
+  combineProvenance?: boolean;
+}
+
+function ProvSection({ combineProvenance = false }: ProvSectionProps) {
   const {
     entity: { uuid, entity_type },
   } = useFlaskDataContext();
   // Load combined provenance data for datasets only for now
-  const { provData, isLoading } = useProvData(uuid, entity_type === 'Dataset');
+  const { provData, isLoading } = useProvData(uuid, combineProvenance);
 
   if (isLoading) {
     return <ProvSectionLoading />;
