@@ -56,9 +56,19 @@ function useWorkspacesPleaseWait(workspaceId) {
         },
         { workspaceId, jobUrl: jobLocation.url },
       );
+
+      const currentURLParams = new URLSearchParams(window.location.search);
+      const directJobType = currentURLParams.get('direct');
+
+      if (directJobType) {
+        document.location = jobLocation.url;
+        return;
+      }
       const [urlBase, urlQuery] = jobLocation.url.split('?');
-      const workspacePath = new URLSearchParams(document.location.search).get('notebook_path');
-      const jupyterUrl = `${urlBase}/tree/${workspacePath}?${urlQuery}`;
+
+      const workspacePath = currentURLParams.get('notebook_path');
+      const jupyterUrl = urlQuery ? `${urlBase}/tree/${workspacePath}?${urlQuery}` : `${urlBase}/tree/${workspacePath}`;
+
       document.location = jupyterUrl;
     }
 
