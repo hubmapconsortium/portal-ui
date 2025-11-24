@@ -1,1 +1,0 @@
-- Improve visibility of OpenKeyNav switch's focus state.

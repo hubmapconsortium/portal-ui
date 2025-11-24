@@ -1,1 +1,0 @@
-- Directly use URLs provided by Workspaces API for certain environments.
