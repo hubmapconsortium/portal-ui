@@ -3,11 +3,12 @@ import Paper from '@mui/material/Paper';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import { useProvContext } from '../ProvContext';
+import useProvData from '../hooks';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import { hasDataTypes } from './utils';
 import { filterTabsToDisplay } from './filterTabsToDisplay';
-import { ProvData } from '../types';
 import ProvGraphErrorBoundary from '../ProvGraph/ProvGraphErrorBoundary';
 
 const availableTabDetails = {
@@ -15,14 +16,13 @@ const availableTabDetails = {
   graph: { label: 'Graph', 'data-testid': 'prov-graph-tab' },
 };
 
-interface ProvTabsProps {
-  provData: ProvData;
-}
-
-function ProvTabs({ provData }: ProvTabsProps) {
+function ProvTabs() {
   const {
     entity: { uuid, entity_type, data_types },
   } = useFlaskDataContext();
+
+  const { uuids } = useProvContext();
+  const { provData } = useProvData(uuids);
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const [open, setOpen] = React.useState(0);
@@ -36,7 +36,7 @@ function ProvTabs({ provData }: ProvTabsProps) {
         'TMT-LC-MS',
         'salmon_rnaseq_snareseq',
       ]),
-    graph: provData && Object.keys(provData).length > 0,
+    graph: Boolean(provData && Object.keys(provData).length > 0),
   };
 
   const filteredTabs = filterTabsToDisplay({ availableTabDetails, tabsToDisplay });
@@ -61,7 +61,7 @@ function ProvTabs({ provData }: ProvTabsProps) {
       {filteredTabs?.graph && (
         <TabPanel value={open} index={filteredTabs.graph.index}>
           <ProvGraphErrorBoundary>
-            <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
+            {provData && <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />}
           </ProvGraphErrorBoundary>
         </TabPanel>
       )}

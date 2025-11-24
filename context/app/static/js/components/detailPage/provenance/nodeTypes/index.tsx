@@ -1,7 +1,7 @@
 import React from 'react';
 import { Node, NodeProps, NodeTypes } from '@xyflow/react';
-import { DatasetIcon } from 'js/shared-styles/icons';
-import { PlayArrowRounded } from '@mui/icons-material';
+import { DatasetIcon, DonorIcon, SampleIcon } from 'js/shared-styles/icons';
+import { SvgIconComponent } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { NodeTemplate } from './NodeTemplate';
 
@@ -10,62 +10,80 @@ interface EntityNodeData extends Record<string, unknown> {
   displayName: string;
   prov: Record<string, string>;
   isCurrentEntity?: boolean;
+  isSelected?: boolean;
 }
 
 interface ActivityNodeData extends Record<string, unknown> {
   name: string;
   displayName: string;
   prov: Record<string, string>;
+  isSelected?: boolean;
 }
 
 type EntityNodeType = Node<EntityNodeData, 'entity'>;
 type ActivityNodeType = Node<ActivityNodeData, 'activity'>;
 
-export function useNodeColors() {
+export function useNodeEntityType(prov: Record<string, string>): ProvNodeType {
+  if ('hubmap:entity_type' in prov) {
+    return prov['hubmap:entity_type'].toLowerCase() as ProvNodeType;
+  }
+  throw new Error('Entity node is missing hubmap:entity_type property');
+}
+
+type ProvNodeType = 'donor' | 'sample' | 'dataset' | 'activity';
+
+export function useNodeColors(): Record<ProvNodeType, string> {
   const theme = useTheme();
   return {
-    entity: theme.palette.accent.info90,
-    activity: theme.palette.accent.primary90,
+    donor: theme.palette.provenance.input,
+    sample: theme.palette.provenance.output,
+    dataset: theme.palette.provenance.output,
+    activity: theme.palette.provenance.step,
   };
 }
 
-export const nodeIcons = {
-  entity: DatasetIcon,
-  activity: PlayArrowRounded,
+export const nodeIcons: Record<ProvNodeType, SvgIconComponent | undefined> = {
+  donor: DonorIcon,
+  sample: SampleIcon,
+  dataset: DatasetIcon,
+  activity: undefined, // No icon for activity nodes
 };
 
 export const nodeHeight = 70;
 
 function EntityNode({ data }: NodeProps<EntityNodeType>) {
   const colors = useNodeColors();
-  const { displayName, isCurrentEntity } = data;
+  const { displayName, isCurrentEntity, isSelected, prov } = data;
+
+  const entityType = useNodeEntityType(prov);
 
   return (
     <NodeTemplate
       source
       target
       rounded
-      icon={nodeIcons.entity}
+      icon={nodeIcons[entityType]}
       displayName={displayName}
-      bgColor={colors.entity}
+      bgColor={colors[entityType]}
       showAsterisk={isCurrentEntity}
       tooltipText={data.name}
+      isSelected={isSelected}
     />
   );
 }
 
 function ActivityNode({ data }: NodeProps<ActivityNodeType>) {
   const colors = useNodeColors();
-  const { displayName } = data;
+  const { displayName, isSelected } = data;
 
   return (
     <NodeTemplate
       source
       target
-      icon={nodeIcons.activity}
       displayName={displayName}
       bgColor={colors.activity}
       tooltipText={data.name}
+      isSelected={isSelected}
     />
   );
 }

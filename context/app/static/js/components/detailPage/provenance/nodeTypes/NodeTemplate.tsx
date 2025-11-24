@@ -23,9 +23,9 @@ interface NodeTemplateProps extends PropsWithChildren {
   bgColor?: string;
   showAsterisk?: boolean;
   tooltipText?: string;
+  height?: string;
+  isSelected?: boolean;
 }
-
-const nodeHeightRem = 4.375;
 
 /**
  * Template component for provenance graph nodes
@@ -41,9 +41,11 @@ export function NodeTemplate({
   bgColor,
   showAsterisk,
   tooltipText,
+  height = '4.375rem',
+  isSelected,
 }: NodeTemplateProps) {
   const contents = (
-    <Box height={`${nodeHeightRem}rem`} display="flex" alignItems="center">
+    <Box height={height} display="flex" alignItems="center">
       <Stack
         direction="column"
         px={2}
@@ -53,13 +55,18 @@ export function NodeTemplate({
         maxWidth="20rem"
         bgcolor={bgColor}
         boxShadow="0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)"
+        sx={{
+          outline: isSelected ? '3px solid' : 'none',
+          outlineColor: isSelected ? 'primary.main' : 'transparent',
+          outlineOffset: '2px',
+        }}
       >
         <Stack direction="row" gap={1} my="auto" alignItems="center">
           {Icon && <Icon color="primary" fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
-          <Typography variant="subtitle2" noWrap>
+          <Typography variant="subtitle2" noWrap mx={Icon ? '0' : 'auto'}>
             {displayName}
           </Typography>
-          {showAsterisk && <AsteriskWrapper aria-label="Current entity">*</AsteriskWrapper>}
+          {showAsterisk && <AsteriskWrapper aria-label="Current entity">✻</AsteriskWrapper>}
         </Stack>
         {children && <Typography variant="body2">{children}</Typography>}
         {target && <Handle style={{ opacity: 0 }} type="target" position={Position.Left} />}
@@ -69,8 +76,9 @@ export function NodeTemplate({
   );
 
   if (tooltipText) {
+    const fullTooltipText = showAsterisk ? `${tooltipText} (Current Entity)` : tooltipText;
     return (
-      <SecondaryBackgroundTooltip title={tooltipText} placement="top">
+      <SecondaryBackgroundTooltip title={fullTooltipText} placement="top">
         {contents}
       </SecondaryBackgroundTooltip>
     );

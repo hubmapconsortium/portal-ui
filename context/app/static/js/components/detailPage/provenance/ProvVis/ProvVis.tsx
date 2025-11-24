@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { ReactFlow, Controls, Node, ReactFlowProps } from '@xyflow/react';
+import React, { useMemo, useEffect, useRef } from 'react';
+import { ReactFlow, Controls, Node, ReactFlowProps, useReactFlow, ReactFlowProvider } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -22,14 +22,19 @@ const reactFlowConfig: Partial<ReactFlowProps> = {
   nodesConnectable: false,
   edgesFocusable: false,
   nodeTypes,
-  fitView: true,
   minZoom: 0.1,
   maxZoom: 2,
+  fitView: true,
 } as const;
 
-export default function ProvVis({ provData, getNameForActivity, getNameForEntity, entity_type }: ProvVisProps) {
+function ProvVisInner({ provData, getNameForActivity, getNameForEntity, entity_type }: ProvVisProps) {
   const uuid = useProvenanceStore((state) => state.uuid);
+  const selectedNodeId = useProvenanceStore((state) => state.selectedNodeId);
   const setSelectedNodeId = useProvenanceStore((state) => state.setSelectedNodeId);
+  const hasRendered = useProvenanceStore((state) => state.hasRendered);
+  const setHasRendered = useProvenanceStore((state) => state.setHasRendered);
+  const { fitView } = useReactFlow();
+  const hasFocusedRef = useRef(false);
 
   // Convert PROV data to nodes and edges, then apply layout
   const { nodes: layoutNodes, edges: layoutEdges } = useMemo(() => {
@@ -39,8 +44,34 @@ export default function ProvVis({ provData, getNameForActivity, getNameForEntity
       getNameForEntity,
       entityType: entity_type,
     });
-    return applyLayout(rawNodes, rawEdges);
-  }, [provData, getNameForActivity, getNameForEntity, entity_type, uuid]);
+    // Mark selected node
+    const nodesWithSelection = rawNodes.map((node) => ({
+      ...node,
+      data: { ...node.data, isSelected: node.id === selectedNodeId },
+    }));
+    return applyLayout(nodesWithSelection, rawEdges);
+  }, [provData, getNameForActivity, getNameForEntity, entity_type, uuid, selectedNodeId]);
+
+  // Focus on the current entity node on initial load
+  useEffect(() => {
+    if (layoutNodes.length > 0 && !hasFocusedRef.current) {
+      const currentEntityNode = layoutNodes.find((node) => node.data?.isCurrentEntity);
+      if (currentEntityNode) {
+        // Wait for ReactFlow to be ready, then focus on the current entity
+        setTimeout(() => {
+          void fitView({
+            nodes: [currentEntityNode],
+            duration: 300,
+            padding: 0.75,
+          });
+          hasFocusedRef.current = true;
+          if (!hasRendered) {
+            setHasRendered();
+          }
+        }, 100);
+      }
+    }
+  }, [layoutNodes, fitView, hasRendered, setHasRendered]);
 
   const handleNodeClick = useEventCallback((_event: React.MouseEvent, node: Node) => {
     setSelectedNodeId(node.id);
@@ -54,5 +85,13 @@ export default function ProvVis({ provData, getNameForActivity, getNameForEntity
     <ReactFlow {...reactFlowConfig} nodes={layoutNodes} edges={layoutEdges} onNodeClick={handleNodeClick}>
       <Controls showInteractive={false} />
     </ReactFlow>
+  );
+}
+
+export default function ProvVis(props: ProvVisProps) {
+  return (
+    <ReactFlowProvider>
+      <ProvVisInner {...props} />
+    </ReactFlowProvider>
   );
 }

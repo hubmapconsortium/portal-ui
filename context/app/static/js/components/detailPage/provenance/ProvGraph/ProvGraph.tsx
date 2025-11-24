@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Node } from '@xyflow/react';
 
 import useProvenanceStore, { ProvenanceStore } from 'js/stores/useProvenanceStore';
 import { ESEntityType } from 'js/components/types';
@@ -40,15 +39,14 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
 
-  const { setUUID, selectedNodeId, nodes } = useProvenanceStore(useProvenanceStoreSelector);
+  const { setUUID, selectedNodeId } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {
     setUUID(uuid);
   }, [setUUID, uuid]);
 
   // Find the selected node to display in detail panel
-  const selectedNode: Node | undefined = selectedNodeId ? nodes.find((n) => n.id === selectedNodeId) : undefined;
-  const selectedNodeProv = selectedNode?.data?.prov as Record<string, string> | undefined;
+  const selectedNode = selectedNodeId ? provData?.entity?.[selectedNodeId] : undefined;
 
   return (
     <StyledDiv>
@@ -58,11 +56,11 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
         getNameForEntity={getNameForEntity(typeKey, idKey)}
         entity_type={entity_type}
       />
-      {selectedNodeProv && (
+      {selectedNode && (
         <DetailPanel
           getNameForActivity={getNameForActivity(idKey)}
           getNameForEntity={getNameForEntity(typeKey, idKey)}
-          prov={selectedNodeProv}
+          prov={selectedNode}
           timeKey={timeKey}
           uuid={uuid}
           idKey={idKey}

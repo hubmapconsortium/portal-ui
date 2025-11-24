@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -118,10 +118,11 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   const { sections, isLoading } = useProcessedDatasetsSections();
   const { searchHits: processedDatasets } = useProcessedDatasets();
+  const processedDatasetUuids = useMemo(() => processedDatasets.map((ds) => ds._id), [processedDatasets]);
 
   // Top level request for collections data to determine if there are any collections for any of the datasets
-  const collectionsData = useDatasetsCollections([uuid, ...processedDatasets.map((ds) => ds._id)]);
-  const publicationsData = useDatasetsPublications([uuid, ...processedDatasets.map((ds) => ds._id)]);
+  const collectionsData = useDatasetsCollections([uuid, ...processedDatasetUuids]);
+  const publicationsData = useDatasetsPublications([uuid, ...processedDatasetUuids]);
 
   const shouldDisplaySection = {
     summary: true,
@@ -173,7 +174,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
           <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
-          <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
+          <ProvSection shouldDisplay={shouldDisplaySection.provenance} additionalUuids={processedDatasetUuids} />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>

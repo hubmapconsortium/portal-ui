@@ -3,6 +3,7 @@ import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore, { type ProvenanceStore } from 'js/stores/useProvenanceStore';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import { useProvContext } from '../ProvContext';
 import { convertProvDataToNodesAndEdges } from '../utils/provToNodesAndEdges';
 import { applyLayout } from '../utils/applyLayout';
 import { ProvData } from '../types';
@@ -34,8 +35,10 @@ interface ShowDerivedEntitiesButtonProps {
 
 function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }: ShowDerivedEntitiesButtonProps) {
   const { nodes, edges, uuid, addDescendantNodesAndEdges } = useProvenanceStore(useProvenanceStoreSelector);
+  const { addUuids } = useProvContext();
   const [newNodes, setNewNodes] = useState<Node[]>([]);
   const [newEdges, setNewEdges] = useState<Edge[]>([]);
+  const [descendantUuids, setDescendantUuids] = useState<string[]>([]);
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
@@ -46,6 +49,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
       // Convert each descendant's prov data to nodes and edges
       const allNewNodes: NodeWithoutPosition[] = [];
       const allNewEdges: Edge[] = [];
+      const uuidsToAdd: string[] = [];
 
       immediateDescendantsProvData.forEach((result) => {
         const { nodes: resultNodes, edges: resultEdges } = convertProvDataToNodesAndEdges(result, {
@@ -55,6 +59,13 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
         });
         allNewNodes.push(...resultNodes);
         allNewEdges.push(...resultEdges);
+
+        // Extract UUIDs from the entity data
+        Object.values(result.entity).forEach((entity) => {
+          if ('hubmap:uuid' in entity && typeof entity['hubmap:uuid'] === 'string') {
+            uuidsToAdd.push(entity['hubmap:uuid']);
+          }
+        });
       });
 
       // Apply layout to new nodes
@@ -66,11 +77,13 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
 
       setNewNodes(uniqueNodes);
       setNewEdges(uniqueEdges);
+      setDescendantUuids(uuidsToAdd);
     }
   }, [immediateDescendantsProvData, nodes, edges, uuid, getNameForActivity, getNameForEntity]);
 
   function handleShowDescendants() {
     addDescendantNodesAndEdges(newNodes, newEdges);
+    addUuids(descendantUuids);
     trackEntityPageEvent({ action: 'Provenance / Graph / View Derived' });
   }
 
