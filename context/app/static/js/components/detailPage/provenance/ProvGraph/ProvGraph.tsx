@@ -28,13 +28,13 @@ const getNameForEntity = (typeKey: string, idKey: string) => (id: string, prov?:
 };
 
 interface ProvGraphProps {
-  provData: ProvData;
+  provData?: ProvData;
   entity_type: ESEntityType;
   uuid: string;
 }
 
 function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
-  const isOld = 'ex' in provData.prefix;
+  const isOld = provData && 'ex' in provData?.prefix;
   const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
@@ -47,6 +47,10 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
 
   // Find the selected node to display in detail panel
   const selectedNode = selectedNodeId ? provData?.entity?.[selectedNodeId] : undefined;
+
+  if (!provData) {
+    return 'No provenance data available.';
+  }
 
   return (
     <StyledDiv>
