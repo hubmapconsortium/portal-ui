@@ -75,6 +75,9 @@ export interface Entity {
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
   mapped_metadata?: Record<string, unknown>;
+  organ_donor_data?: Record<string, unknown>;
+  living_donor_data?: Record<string, unknown>;
+  extra_metadata?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -92,6 +95,8 @@ export interface Donor extends Entity {
   }>;
   group_name: string;
   protocol_url: string;
+  organ_donor_data: Record<string, unknown>;
+  living_donor_data: Record<string, unknown>;
 }
 
 export interface Sample extends Entity {
@@ -102,6 +107,7 @@ export interface Sample extends Entity {
   origin_samples_unique_mapped_organs: string[];
   origin_samples: Sample[];
   protocol_url: string;
+  organ_donor_data: Record<string, unknown>;
 }
 
 export type CreationAction =
