@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
-import useProvenanceStore, { ProvenanceStore } from 'js/stores/useProvenanceStore';
+import { useProvenanceStore, ProvenanceStoreType } from '../ProvContext';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { AsteriskWrapper } from './style';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import { ProvNode } from '../types';
 
-const uuidSelector = (state: ProvenanceStore) => state.uuid;
-const setHasRenderedSelector = (state: ProvenanceStore) => state.setHasRendered;
+const uuidSelector = (state: ProvenanceStoreType) => state.uuid;
+const setHasRenderedSelector = (state: ProvenanceStoreType) => state.setHasRendered;
 
 // Hide the HuBMAP ID from the display title for non-entity nodes returned by provenance
 // e.g. "Create Dataset" instead of "Create Dataset - HBM789.1234.123"

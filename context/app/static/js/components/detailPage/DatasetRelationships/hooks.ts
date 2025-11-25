@@ -24,7 +24,7 @@ export function useDatasetTypes(nodes: NodeWithoutPosition[]) {
 
 export function useDatasetRelationships(uuid: string, processing = 'raw') {
   const shouldFetch = processing === 'raw';
-  const { provData, isLoading } = useProvData(uuid, true, shouldFetch);
+  const { provData, isLoading } = useProvData([uuid], shouldFetch);
   const { nodes, edges } = useMemo(() => convertProvDataToNodesAndEdges(uuid, provData), [uuid, provData]);
   const shouldDisplay = nodes.length > 1 && shouldFetch;
   return { isLoading, nodes, edges, shouldDisplay };

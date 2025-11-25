@@ -5,20 +5,19 @@ import SectionItem from 'js/components/detailPage/SectionItem';
 import { InternalLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/detailPage/provenance/ShowDerivedEntitiesButton';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { StyledPaper, StyledTypography } from './style';
-import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
+import { StyledPaper } from './style';
 import { ProvData } from '../types';
+import { format } from 'date-fns/format';
+import Typography from '@mui/material/Typography';
 
 interface DetailPanelProps {
   prov: Record<string, string>;
-
   timeKey: string;
-
   uuid: string;
   typeKey: string;
   idKey: string;
-  getNameForActivity: (id: string, prov: ProvData) => string;
-  getNameForEntity: (id: string, prov: ProvData) => string;
+  getNameForActivity: (id: string, prov?: ProvData) => string;
+  getNameForEntity: (id: string, prov?: ProvData) => string;
 }
 
 const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support'];
@@ -49,9 +48,12 @@ function ID({ prov, idKey, typeKey }: Pick<DetailPanelProps, 'prov' | 'idKey' | 
 
 function Created({ prov, timeKey }: Pick<DetailPanelProps, 'prov' | 'timeKey'>) {
   if (timeKey in prov) {
+    const date = new Date(prov[timeKey]);
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    const formattedTime = format(date, 'HH:mm:ss');
     return (
       <SectionItem label="Created" ml>
-        {prov[timeKey]}
+        {formattedDate} {formattedTime}
       </SectionItem>
     );
   }
@@ -74,6 +76,8 @@ function Actions({ idKey, typeKey, getNameForActivity, getNameForEntity, prov }:
 }
 
 export default function DetailPanel({ uuid, timeKey, idKey, prov, typeKey, ...actions }: DetailPanelProps) {
+  const isCurrentEntity = uuid === prov['hubmap:uuid'];
+
   return (
     <StyledPaper>
       <Stack direction="row">
@@ -82,7 +86,9 @@ export default function DetailPanel({ uuid, timeKey, idKey, prov, typeKey, ...ac
         <Created timeKey={timeKey} prov={prov} />
         <Actions uuid={uuid} prov={prov} typeKey={typeKey} idKey={idKey} timeKey={timeKey} {...actions} />
       </Stack>
-      {uuid === prov['hubmap:uuid'] && <StyledTypography>* Indicates Current Entity Node</StyledTypography>}
+      <Typography variant="caption" visibility={isCurrentEntity ? 'visible' : 'hidden'}>
+        ✻ Indicates Current Entity Node
+      </Typography>
     </StyledPaper>
   );
 }

@@ -1,20 +1,21 @@
 import { useState, useEffect } from 'react';
 import { debounce } from 'js/helpers/nodash';
 
+function getDimensions() {
+  return {
+    height: window.innerHeight,
+    width: window.innerWidth,
+  };
+}
+
 function useWindowSize() {
-  function getDimensions() {
-    return {
-      height: window.innerHeight,
-      width: window.innerWidth,
-    };
-  }
   const [dimensions, setDimensions] = useState(getDimensions);
 
   useEffect(() => {
     function handleResize() {
       setDimensions(getDimensions());
     }
-    const debouncedHandleResize = debounce(handleResize, 500, { trailing: true });
+    const debouncedHandleResize = debounce(handleResize, 500, true);
 
     window.addEventListener('resize', debouncedHandleResize);
 

@@ -10,7 +10,6 @@
     "@grafana/faro-react": "^1.5.0",
     "@grafana/faro-web-sdk": "^1.5.0",
     "@grafana/faro-web-tracing": "^1.5.0",
-    "@hms-dbmi-bgm/react-workflow-viz": "^0.1.11",
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^6.1.6",
     "@mui/lab": "^6.0.0-beta.14",
