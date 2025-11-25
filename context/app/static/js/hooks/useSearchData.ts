@@ -285,6 +285,41 @@ async function fetchAllIDs({
   return Array.from(ids);
 }
 
+/**
+ * Fetcher for useAllSearchHits
+ *
+ * @param args.query The search request to fetch
+ * @param args.elasticsearchEndpoint The endpoint to fetch the data from
+ * @param args.groupsToken The auth token to use for the request
+ * @param args.useDefaultQuery Whether to apply the default query restrictions
+ * @param args.numberOfPagesToRequest The number of pages to fetch
+ * @returns The fetched hits
+ */
+async function fetchAllHits<Documents>({
+  query: q,
+  elasticsearchEndpoint,
+  groupsToken,
+  useDefaultQuery,
+  numberOfPagesToRequest,
+}: {
+  query: SearchRequest;
+  elasticsearchEndpoint: string;
+  groupsToken: string;
+  useDefaultQuery: boolean;
+  numberOfPagesToRequest: number;
+}) {
+  const query = useDefaultQuery ? addRestrictionsToQuery(q) : q;
+  const hits: Required<SearchHit<Documents>>[] = [];
+  // For await loop is the clearest way to fetch all pages sequentially.
+
+  for await (const results of fetchAllPages(query, elasticsearchEndpoint, groupsToken, numberOfPagesToRequest)) {
+    const pageHits = (results?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
+    hits.push(...pageHits);
+  }
+
+  return hits;
+}
+
 // We do not want the query to revalidate when _source or sort change.
 const sharedIDsQueryClauses = { _source: false, sort: [{ _id: 'asc' }] };
 
@@ -338,6 +373,68 @@ export function useAllSearchIDs(
   });
 
   return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount, isLoading };
+}
+
+/**
+ * Retreieves all search hits for a given query.
+ *
+ * Prefer to use `useScrollSearchHits` for most cases; this approach is necessary
+ * only when you need all hits at once, e.g. for TSV download or visualizations.
+ *
+ * @param query The search request to fetch
+ * @param param1 Configuration options
+ * @returns The fetched hits, total hits count, and loading state
+ */
+export function useAllSearchHits<Documents>(
+  query: SearchRequest | null,
+  {
+    useDefaultQuery = defaultConfig.useDefaultQuery,
+    fetcher = defaultConfig.fetcher,
+    ...swrConfigRest
+  }: UseSearchDataConfig = defaultConfig,
+) {
+  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+
+  const shouldFetch = Boolean(query);
+
+  const { searchData } = useSearchData(
+    { ...query, track_total_hits: true, size: 0 },
+    {
+      useDefaultQuery,
+      shouldFetch,
+      fetcher,
+      ...swrConfigRest,
+    },
+  );
+
+  const totalHitsCount = getTotalHitsCount(searchData);
+
+  // Creates a key object for useSWR to fetch the hits
+  // The key is null if the totalHitsCount is undefined
+  // Otherwise, it returns an object with the query, endpoint, and token
+  const getKey = useCallback(() => {
+    if (totalHitsCount === undefined) {
+      return null;
+    }
+
+    const numberOfPagesToRequest = Math.ceil(totalHitsCount / 10_000);
+
+    const q = { ...query, size: 10_000, sort: [{ _id: 'asc' }] } as SearchRequest;
+    return {
+      query: q,
+      elasticsearchEndpoint,
+      groupsToken,
+      useDefaultQuery,
+      numberOfPagesToRequest,
+    };
+  }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
+
+  const { data, isLoading } = useSWR(getKey, (args) => fetchAllHits<Documents>(args), {
+    fallbackData: [],
+    ...swrConfigRest,
+  });
+
+  return { searchHits: data ?? [], totalHitsCount, isLoading };
 }
 
 export function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {

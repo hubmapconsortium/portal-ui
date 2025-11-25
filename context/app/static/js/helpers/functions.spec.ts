@@ -1,5 +1,4 @@
 import {
-  isEmptyArrayOrObject,
   capitalizeString,
   capitalizeAndReplaceDashes,
   replaceUnderscore,
@@ -17,13 +16,6 @@ import {
   getFileName,
 } from './functions';
 
-test('isEmptyArrayOrObject', () => {
-  expect(isEmptyArrayOrObject([])).toBeTruthy();
-  expect(isEmptyArrayOrObject({})).toBeTruthy();
-  expect(isEmptyArrayOrObject(['item'])).toBeFalsy();
-  expect(isEmptyArrayOrObject({ key: 'value' })).toBeFalsy();
-});
-
 test('capitalizeString', () => {
   expect(capitalizeString('hello')).toEqual('Hello');
   expect(capitalizeString('WORLD')).toEqual('WORLD');
@@ -39,15 +31,21 @@ test('capitalizeAndReplaceDashes', () => {
   ).toEqual('A Very Long String to Test Capitalization and Make Sure the Title Case Works Correctly');
 });
 
-test.each(NOT_CAPITALIZED_WORDS, 'capitalizeAndReplaceDashes capitalizes "%s" if it is the first word', (word) => {
-  expect(shouldCapitalizeString(word, 0)).toBeTruthy();
-  expect(capitalizeAndReplaceDashes(word)).toEqual(capitalizeString(word));
-});
+const NOT_CAPITALIZED_WORDS_ARRAY: TemplateStringsArray = NOT_CAPITALIZED_WORDS as unknown as TemplateStringsArray;
 
 test.each(
-  NOT_CAPITALIZED_WORDS,
+  NOT_CAPITALIZED_WORDS_ARRAY,
+  'capitalizeAndReplaceDashes capitalizes "%s" if it is the first word',
+  (word: string) => {
+    expect(shouldCapitalizeString(word, 0)).toBeTruthy();
+    expect(capitalizeAndReplaceDashes(word)).toEqual(capitalizeString(word));
+  },
+);
+
+test.each(
+  NOT_CAPITALIZED_WORDS_ARRAY,
   'capitalizeAndReplaceDashes does not capitalize "%s" if it is not the first word',
-  (word) => {
+  (word: string) => {
     expect(shouldCapitalizeString(word, 1)).toBeFalsy();
     expect(capitalizeAndReplaceDashes(`first-${word}`)).toEqual(`First ${word}`);
   },

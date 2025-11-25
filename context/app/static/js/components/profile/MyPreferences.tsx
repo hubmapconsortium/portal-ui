@@ -62,7 +62,16 @@ function OpenKeyNavSection() {
         <OutboundIconLink href="https://openkeynav.com/">OpenKeyNav</OutboundIconLink> or read the{' '}
         <OutboundIconLink href="https://osf.io/preprints/osf/3wjsa">research preprint</OutboundIconLink>.
       </Typography>
-      <LabeledPrimarySwitch checked={initialize} onChange={handleChange} ariaLabel="OpenKeyNav" />
+      <LabeledPrimarySwitch
+        checked={initialize}
+        onChange={handleChange}
+        ariaLabel="OpenKeyNav"
+        sx={{
+          '&:focus-within': {
+            '.MuiSwitch-root': { outline: '2px solid', outlineColor: 'primary.main' },
+          },
+        }}
+      />
       <DetailsAccordion
         sx={{ '.MuiAccordionSummary-root': { flexDirection: 'row' } }}
         expanded={accordionIsOpen}
