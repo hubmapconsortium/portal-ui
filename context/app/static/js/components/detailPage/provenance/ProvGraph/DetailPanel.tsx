@@ -53,8 +53,7 @@ function Created({ prov, timeKey }: Pick<DetailPanelProps, 'prov' | 'timeKey'>) 
     const formattedTime = format(date, 'HH:mm:ss');
     return (
       <SectionItem label="Created" ml>
-        {formattedDate}
-        {formattedTime}
+        {formattedDate} {formattedTime}
       </SectionItem>
     );
   }
