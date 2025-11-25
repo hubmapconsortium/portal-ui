@@ -206,6 +206,7 @@ describe('entitiesToTableData', () => {
       const result = entitiesToTableData([], ['uuid', 'hubmap_id'], true, {}, 'donors');
 
       expect(result).toEqual({
+        isReady: false,
         columnNames: [],
         rows: [],
         fileName: 'hubmap-donors-metadata-2025-10-15T10-30-00.tsv',
@@ -231,6 +232,7 @@ describe('entitiesToTableData', () => {
 
       expect(result.columnNames).toEqual(['uuid', 'hubmap_id']);
       expect(result.rows[0]).toEqual(['test-uuid', 'HBM123']);
+      expect(result.isReady).toBe(true);
     });
   });
 
@@ -264,6 +266,7 @@ describe('entitiesToTableData', () => {
       expect(entityRow[columnNames.indexOf('null_field')]).toBe('N/A');
       expect(entityRow[columnNames.indexOf('undefined_field')]).toBe('N/A');
       expect(entityRow[columnNames.indexOf('empty_string')]).toBe('N/A');
+      expect(result.isReady).toBe(true);
     });
 
     it('should fill missing fields with N/A', () => {
@@ -279,6 +282,7 @@ describe('entitiesToTableData', () => {
         ['uuid-1', 'value1', 'N/A'],
         ['uuid-2', 'N/A', 'value2'],
       ]);
+      expect(result.isReady).toBe(true);
     });
   });
 
@@ -296,6 +300,7 @@ describe('entitiesToTableData', () => {
       expect(result.rows).toHaveLength(2); // descriptions + data
       expect(result.rows[0]).toEqual(['Unique identifier', 'HuBMAP identifier']);
       expect(result.rows[1]).toEqual(['test-uuid', 'HBM123']);
+      expect(result.isReady).toBe(true);
     });
 
     it('should not include descriptions row when withDescriptions is false', () => {
@@ -310,6 +315,7 @@ describe('entitiesToTableData', () => {
 
       expect(result.rows).toHaveLength(1); // only data
       expect(result.rows[0]).toEqual(['test-uuid', 'HBM123']);
+      expect(result.isReady).toBe(true);
     });
 
     it('should use empty string for missing descriptions', () => {
@@ -324,6 +330,7 @@ describe('entitiesToTableData', () => {
 
       expect(result.rows[0]).toEqual(['Unique identifier', '']); // descriptions row
       expect(result.rows[1]).toEqual(['test-uuid', 'value']); // data row
+      expect(result.isReady).toBe(true);
     });
   });
 
@@ -332,12 +339,14 @@ describe('entitiesToTableData', () => {
       const result = entitiesToTableData([], [], false, {}, 'samples');
 
       expect(result.fileName).toBe('hubmap-samples-metadata-2025-10-15T10-30-00.tsv');
+      expect(result.isReady).toBe(false);
     });
 
     it('should default to "entities" for entity type', () => {
       const result = entitiesToTableData([], [], false);
 
       expect(result.fileName).toBe('hubmap-entities-metadata-2025-10-15T10-30-00.tsv');
+      expect(result.isReady).toBe(false);
     });
   });
 
@@ -370,6 +379,7 @@ describe('entitiesToTableData', () => {
         ['uuid-1', 'HBM001', 'true', '1000', 'RNA-seq, scRNA-seq', '{"protocol":"v1"}'],
         ['uuid-2', 'HBM002', 'false', '500', 'ATAC-seq', 'N/A'],
       ]);
+      expect(result.isReady).toBe(true);
     });
   });
 });
