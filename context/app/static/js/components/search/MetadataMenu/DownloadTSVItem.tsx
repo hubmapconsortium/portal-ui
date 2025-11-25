@@ -15,18 +15,26 @@ interface DownloadTSVItemProps {
 
 export function DownloadTSVItem({ lcPluralType, analyticsCategory }: DownloadTSVItemProps) {
   const { toastError } = useSnackbarActions();
-  const [shouldFetchData, setShouldFetchData] = useState(false);
-
   const queryParams = useSharedEntityLogic(lcPluralType);
+
+  // Since download is a multistep process (fetch data, format, download),
+  // we use this state to track whether the user has initiated a download
+  // to avoid automatic re-fetching when query params change
+  const [hasClickedDownload, setHasClickedDownload] = useState(false);
+
+  useEffect(() => {
+    setHasClickedDownload(false);
+  }, [queryParams]);
+
   const { data: metadataFieldDescriptions } = useMetadataFieldDescriptions();
 
   const { entities, allKeys, isLoading } = useLineupEntities({
     ...queryParams,
-    shouldFetchData,
+    shouldFetchData: hasClickedDownload,
   });
 
   // Convert entities to table format for download
-  const tableData = React.useMemo(() => {
+  const { isReady: dataIsReady, ...tableData } = React.useMemo(() => {
     return entitiesToTableData(entities, allKeys, true, metadataFieldDescriptions, lcPluralType);
   }, [entities, allKeys, metadataFieldDescriptions, lcPluralType]);
 
@@ -49,21 +57,16 @@ export function DownloadTSVItem({ lcPluralType, analyticsCategory }: DownloadTSV
     }
   });
 
-  // Reset shouldFetchData when queryParams change to allow re-fetching with new params
-  useEffect(() => {
-    setShouldFetchData(false);
-  }, [queryParams]);
-
   // Automatically trigger download when data is ready
   useEffect(() => {
-    if (entities.length > 0) {
+    if (dataIsReady) {
       download();
     }
-  }, [entities, download]);
+  }, [dataIsReady, download]);
 
   const handleClick = useEventCallback(() => {
     // First click: trigger loading the data
-    setShouldFetchData(true);
+    setHasClickedDownload(true);
 
     // Subsequent clicks: if data is already loaded, trigger download
     if (entities.length > 0) {

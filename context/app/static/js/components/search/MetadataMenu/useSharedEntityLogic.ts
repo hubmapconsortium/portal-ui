@@ -89,6 +89,7 @@ export function entitiesToTableData(
       columnNames: [],
       rows: [],
       fileName,
+      isReady: false,
     };
   }
 
@@ -148,5 +149,6 @@ export function entitiesToTableData(
     columnNames,
     rows,
     fileName,
+    isReady: true,
   };
 }
