@@ -23,11 +23,11 @@ interface ActivityNodeData extends Record<string, unknown> {
 type EntityNodeType = Node<EntityNodeData, 'entity'>;
 type ActivityNodeType = Node<ActivityNodeData, 'activity'>;
 
-export function useNodeEntityType(prov: Record<string, string>): ProvNodeType {
+export function useNodeEntityType(prov: Record<string, string>): ProvNodeType | null {
   if ('hubmap:entity_type' in prov) {
     return prov['hubmap:entity_type'].toLowerCase() as ProvNodeType;
   }
-  throw new Error('Entity node is missing hubmap:entity_type property');
+  return null;
 }
 
 type ProvNodeType = 'donor' | 'sample' | 'dataset' | 'activity';
@@ -62,9 +62,9 @@ function EntityNode({ data }: NodeProps<EntityNodeType>) {
       source
       target
       rounded
-      icon={nodeIcons[entityType]}
+      icon={entityType ? nodeIcons[entityType] : undefined}
       displayName={displayName}
-      bgColor={colors[entityType]}
+      bgColor={colors && entityType ? colors[entityType] : undefined}
       showAsterisk={isCurrentEntity}
       tooltipText={data.name}
       isSelected={isSelected}

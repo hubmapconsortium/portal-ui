@@ -48,7 +48,7 @@ function ProvTabs() {
   const tabsToDisplay = {
     table:
       entity_type !== 'Publication' &&
-      !hasDataTypes(data_types, [
+      !hasDataTypes(data_types as string[], [
         'sc_rna_seq_snare_lab',
         'sc_atac_seq_snare_lab',
         'TMT-LC-MS',

@@ -49,10 +49,12 @@ function ID({ prov, idKey, typeKey }: Pick<DetailPanelProps, 'prov' | 'idKey' | 
 function Created({ prov, timeKey }: Pick<DetailPanelProps, 'prov' | 'timeKey'>) {
   if (timeKey in prov) {
     const date = new Date(prov[timeKey]);
-    const formattedDate = format(date, 'Pp');
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    const formattedTime = format(date, 'HH:mm:ss');
     return (
       <SectionItem label="Created" ml>
         {formattedDate}
+        {formattedTime}
       </SectionItem>
     );
   }

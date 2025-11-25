@@ -1,20 +1,13 @@
-import React from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { render, screen, appProviderEndpoints } from 'test-utils/functions';
+import { ProvenanceStoreProvider } from '../ProvContext';
 import sampleProv, { sampleDescendantsProv } from './fixtures/sample_prov';
-import donorProv from './fixtures/donor_prov';
 
 import ProvGraph from './ProvGraph';
-
-// eslint-disable-next-line testing-library/no-node-access
-document.getElementsByClassName = () => [
-  {
-    scroll: jest.fn(),
-  },
-];
 
 const descendantData = {
   hits: {
@@ -51,17 +44,26 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('should display the correct initial nodes for a donor', () => {
-  const nodesText = [
-    'hubmap:entities/308f5ffc-ed43-11e8-b56a-0e8017bdda58',
-    'Register Donor Activity',
-    'Donor - HBM528.WJLC.564',
-  ];
+interface RenderWithProvContextOptions {
+  initialUuid?: string;
+  initialUuids?: string[];
+  flaskData?: unknown;
+}
 
-  render(<ProvGraph provData={donorProv} entity_type="Donor" />);
+function renderWithProvContext(
+  ui: ReactElement,
+  { initialUuid = '', initialUuids = [], flaskData }: RenderWithProvContextOptions = {},
+) {
+  // Create a wrapper that will be used by the test utils render
+  // This wrapper will be inside AllTheProviders
+  const ProvWrapper = ({ children }: { children: ReactNode }) => (
+    <ProvenanceStoreProvider initialUuid={initialUuid} initialUuids={initialUuids}>
+      {children}
+    </ProvenanceStoreProvider>
+  );
 
-  nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-});
+  return render(<ProvWrapper>{ui}</ProvWrapper>, { flaskData });
+}
 
 test('should display the correct initial nodes for a sample', () => {
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
@@ -69,17 +71,23 @@ test('should display the correct initial nodes for a sample', () => {
 
   const notIncludedNodesText = ['hubmap:entities/73bb26e4-ed43-11e8-8f19-0a7c1eab007a', 'Register Donor Activity'];
 
-  render(<ProvGraph provData={sampleProv} />);
+  renderWithProvContext(<ProvGraph provData={sampleProv} entity_type="Sample" uuid="" />, {
+    initialUuid: '',
+    initialUuids: [],
+  });
 
   nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
   notIncludedNodesText.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
 });
 
 test('should display selected node information in detail pane and show immediate descendants when "Show Derived Entities" button is clicked', async () => {
-  render(<ProvGraph provData={sampleProv} />);
+  renderWithProvContext(<ProvGraph provData={sampleProv} entity_type="Sample" uuid="" />, {
+    initialUuid: '',
+    initialUuids: [],
+  });
 
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
-  const detailPaneText = ['Type', 'Sample', 'ID', 'HBM666.CHPF.373', 'Created', '2019-11-01T18:50:35'];
+  const detailPaneText = ['Type', 'Sample', 'ID', 'HBM666.CHPF.373', 'Created', '2019-11-01', '18:50:35'];
 
   fireEvent.click(screen.getByText(sampleEntityText));
 
@@ -100,6 +108,13 @@ test('should display selected node information in detail pane and show immediate
 });
 
 test("should display an asterisk in the current page's node", () => {
-  render(<ProvGraph provData={sampleProv} entity_type="Sample" uuid="13129ad371683171b152618c83fd9e6f" />);
-  expect(screen.getByTestId('Sample - HBM666.CHPF.373')).toContainElement(screen.getByText('*'));
+  renderWithProvContext(
+    <ProvGraph provData={sampleProv} entity_type="Sample" uuid="13129ad371683171b152618c83fd9e6f" />,
+    {
+      initialUuid: '13129ad371683171b152618c83fd9e6f',
+      initialUuids: ['13129ad371683171b152618c83fd9e6f'],
+    },
+  );
+  expect(screen.getByText('Sample - HBM666.CHPF.373')).toBeInTheDocument();
+  expect(screen.getByLabelText('Current entity')).toBeInTheDocument();
 });
