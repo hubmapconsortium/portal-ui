@@ -61,32 +61,28 @@ export const createProvenanceStore = ({ initialUuid, initialUuids }: ProvenanceS
     },
     addDescendantNodesAndEdges: (newNodes, newEdges) => {
       set((state) => {
-        // Get existing node and edge IDs for deduplication
+        // Get existing node IDs for deduplication
         const existingNodeIds = new Set(state.nodes.map((n) => n.id));
-        const existingEdgeIds = new Set(state.edges.map((e) => e.id));
 
         // Add only new nodes that don't already exist
         const nodesToAdd = newNodes.filter((n) => !existingNodeIds.has(n.id));
 
-        // Add only new edges that don't already exist
-        const edgesToAdd = newEdges.filter((e) => !existingEdgeIds.has(e.id));
+        // Collect all edges to add, avoiding duplicates
+        const edgesToAddMap = new Map<string, Edge>();
 
-        // Also create connecting edges between existing and new nodes
-        // Find new nodes that have edges to existing nodes
+        // First, add existing edges to the map
+        state.edges.forEach((edge) => {
+          edgesToAddMap.set(edge.id, edge);
+        });
+
+        // Then, add new edges (this will naturally deduplicate by ID)
         newEdges.forEach((edge) => {
-          const sourceExists = existingNodeIds.has(edge.source);
-          const targetExists = existingNodeIds.has(edge.target);
-          const edgeExists = existingEdgeIds.has(edge.id);
-
-          // Add edge if it connects new and existing nodes and doesn't already exist
-          if (!edgeExists && (sourceExists || targetExists)) {
-            edgesToAdd.push(edge);
-          }
+          edgesToAddMap.set(edge.id, edge);
         });
 
         // Combine all nodes and edges
         const allNodes = [...state.nodes, ...nodesToAdd];
-        const allEdges = [...state.edges, ...edgesToAdd];
+        const allEdges = Array.from(edgesToAddMap.values());
 
         // Re-apply layout to all nodes to prevent overlaps
         // Strip position from nodes to force recalculation
