@@ -4,6 +4,8 @@ export const JUPYTER_LAB_R_JOB_TYPE = 'jupyter_lab_r';
 export const JUPYTER_LAB_GPU_JOB_TYPE = 'jupyter_lab_gpu_common_packages';
 export const JUPYTER_LAB_NON_GPU_JOB_TYPE = 'jupyter_lab_non_gpu_common_packages';
 
+export const YAC_JOB_TYPE = 'yac';
+
 /* Workspace defaults */
 export const DEFAULT_JOB_TYPE = JUPYTER_LAB_JOB_TYPE;
 export const DEFAULT_PYTHON_TEMPLATE_KEY = 'blank';
@@ -32,3 +34,6 @@ export const MIN_TIME_LIMIT_MINUTES = 60;
 export const MAX_TIME_LIMIT_MINUTES = 720;
 
 export const MAX_NUM_CONCURRENT_WORKSPACES = 1000;
+
+/* Workspace job types that should directly use the URL from `job.location` on redirect */
+export const DIRECT_URL_JOB_TYPES = [YAC_JOB_TYPE];

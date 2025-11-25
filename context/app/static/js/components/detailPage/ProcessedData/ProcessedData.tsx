@@ -19,7 +19,7 @@ function ProcessedDataSection() {
   );
 
   const { ref: intersectionRef, inView } = useInView({
-    threshold: 0.3,
+    threshold: 0.1,
     initialInView: false,
   });
 
