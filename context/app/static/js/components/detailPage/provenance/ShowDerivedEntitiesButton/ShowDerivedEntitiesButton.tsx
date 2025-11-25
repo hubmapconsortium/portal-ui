@@ -63,7 +63,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
         });
       });
 
-      // Apply layout to new nodes
+      // Convert to positioned nodes (layout will be applied when added to store)
       const { nodes: layoutNodes, edges: layoutEdges } = applyLayout(allNewNodes, allNewEdges);
 
       // Filter out nodes and edges that already exist

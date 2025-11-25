@@ -1,5 +1,7 @@
 import type { Node, Edge } from '@xyflow/react';
 import { createStoreContext, createStoreImmer } from 'js/helpers/zustand';
+import { applyLayout } from './utils/applyLayout';
+import { NodeWithoutPosition } from './utils/provToNodesAndEdges';
 
 interface ProvenanceStoreState {
   uuid: string;
@@ -65,7 +67,6 @@ export const createProvenanceStore = ({ initialUuid, initialUuids }: ProvenanceS
 
         // Add only new nodes that don't already exist
         const nodesToAdd = newNodes.filter((n) => !existingNodeIds.has(n.id));
-        state.nodes = [...state.nodes, ...nodesToAdd];
 
         // Add only new edges that don't already exist
         const edgesToAdd = newEdges.filter((e) => !existingEdgeIds.has(e.id));
@@ -83,7 +84,25 @@ export const createProvenanceStore = ({ initialUuid, initialUuids }: ProvenanceS
           }
         });
 
-        state.edges = [...state.edges, ...edgesToAdd];
+        // Combine all nodes and edges
+        const allNodes = [...state.nodes, ...nodesToAdd];
+        const allEdges = [...state.edges, ...edgesToAdd];
+
+        // Re-apply layout to all nodes to prevent overlaps
+        // Strip position from nodes to force recalculation
+        const nodesWithoutPosition = allNodes.map(
+          (n) =>
+            ({
+              id: n.id,
+              type: n.type,
+              data: n.data,
+            }) as NodeWithoutPosition,
+        );
+
+        const { nodes: layoutNodes, edges: layoutEdges } = applyLayout(nodesWithoutPosition, allEdges);
+
+        state.nodes = layoutNodes;
+        state.edges = layoutEdges;
       });
     },
     addUuids: (newUuids) => {
