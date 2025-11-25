@@ -94,7 +94,7 @@ function ProvSection({ additionalUuids = [] }: ProvSectionProps) {
         <Description />
       </SectionDescription>
 
-      <ProvenanceStoreProvider initialUuids={initialUuids}>
+      <ProvenanceStoreProvider initialUuid={uuid} initialUuids={initialUuids}>
         <ProvTabs />
       </ProvenanceStoreProvider>
     </CollapsibleDetailPageSection>

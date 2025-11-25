@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import { useProvenanceStore, type ProvenanceStoreType } from '../ProvContext';
-import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { convertProvDataToNodesAndEdges } from '../utils/provToNodesAndEdges';
 import { applyLayout } from '../utils/applyLayout';
 import { ProvData } from '../types';
 import type { Edge, Node } from '@xyflow/react';
 import { NodeWithoutPosition } from '../utils/provToNodesAndEdges';
+import { useEventCallback } from '@mui/material/utils';
+import Button from '@mui/material/Button';
 
-function getUniqueNewNodes(existingNodes: Node[], newNodes: Node[]) {
-  const idSet = new Set(existingNodes.map((node) => node.id));
-  return newNodes.filter((node) => !idSet.has(node.id));
-}
-
-function getUniqueNewEdges(existingEdges: Edge[], newEdges: Edge[]) {
-  const idSet = new Set(existingEdges.map((edge) => edge.id));
-  return newEdges.filter((edge) => !idSet.has(edge.id));
+export function getUniques<T extends { id: string }>(existingItems: T[], newItems: T[]) {
+  const idSet = new Set(existingItems.map((item) => item.id));
+  return newItems.filter((item) => !idSet.has(item.id));
 }
 
 const useProvenanceStoreSelector = (state: ProvenanceStoreType) => ({
@@ -41,7 +37,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
-  const { immediateDescendantsProvData } = useImmediateDescendantProv(id);
+  const { immediateDescendantsProvData, isLoading } = useImmediateDescendantProv(id);
 
   useEffect(() => {
     if (immediateDescendantsProvData) {
@@ -71,8 +67,8 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
       const { nodes: layoutNodes, edges: layoutEdges } = applyLayout(allNewNodes, allNewEdges);
 
       // Filter out nodes and edges that already exist
-      const uniqueNodes = getUniqueNewNodes(nodes, layoutNodes);
-      const uniqueEdges = getUniqueNewEdges(edges, layoutEdges);
+      const uniqueNodes = getUniques(nodes, layoutNodes);
+      const uniqueEdges = getUniques(edges, layoutEdges);
 
       setNewNodes(uniqueNodes);
       setNewEdges(uniqueEdges);
@@ -80,23 +76,23 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
     }
   }, [immediateDescendantsProvData, nodes, edges, uuid, getNameForActivity, getNameForEntity]);
 
-  function handleShowDescendants() {
+  const handleShowDescendants = useEventCallback(() => {
     addDescendantNodesAndEdges(newNodes, newEdges);
     addUuids(descendantUuids);
     trackEntityPageEvent({ action: 'Provenance / Graph / View Derived' });
-  }
+  });
 
   return (
-    <OptDisabledButton
+    <Button
+      loading={isLoading}
       color="primary"
       variant="contained"
       onClick={handleShowDescendants}
       disabled={newNodes.length === 0}
     >
       Show Derived Entities
-    </OptDisabledButton>
+    </Button>
   );
 }
 
-export { getUniqueNewNodes, getUniqueNewEdges };
 export default ShowDerivedEntitiesButton;

@@ -22,12 +22,13 @@ interface ProvenanceStoreActions {
 export type ProvenanceStoreType = ProvenanceStoreState & ProvenanceStoreActions;
 
 interface ProvenanceStoreInput {
+  initialUuid: string;
   initialUuids: string[];
 }
 
-export const createProvenanceStore = ({ initialUuids }: ProvenanceStoreInput) =>
+export const createProvenanceStore = ({ initialUuid, initialUuids }: ProvenanceStoreInput) =>
   createStoreImmer<ProvenanceStoreType>((set, get) => ({
-    uuid: '',
+    uuid: initialUuid,
     hasRendered: false,
     nodes: [],
     edges: [],

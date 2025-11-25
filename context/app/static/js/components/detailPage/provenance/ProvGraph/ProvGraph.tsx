@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { useProvenanceStore, ProvenanceStoreType } from '../ProvContext';
 import { ESEntityType } from 'js/components/types';
@@ -8,7 +8,6 @@ import DetailPanel from './DetailPanel';
 import { ProvData } from '../types';
 
 const useProvenanceStoreSelector = (state: ProvenanceStoreType) => ({
-  setUUID: state.setUUID,
   selectedNodeId: state.selectedNodeId,
   nodes: state.nodes,
 });
@@ -39,11 +38,7 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
 
-  const { setUUID, selectedNodeId, nodes } = useProvenanceStore(useProvenanceStoreSelector);
-
-  useEffect(() => {
-    setUUID(uuid);
-  }, [setUUID, uuid]);
+  const { selectedNodeId, nodes } = useProvenanceStore(useProvenanceStoreSelector);
 
   // Find the selected node to display in detail panel
   const selectedNode = nodes.find((node) => node.id === selectedNodeId);
