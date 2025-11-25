@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 
-import useProvenanceStore, { ProvenanceStore } from 'js/stores/useProvenanceStore';
+import { useProvenanceStore, ProvenanceStoreType } from '../ProvContext';
 import { ESEntityType } from 'js/components/types';
 import ProvVis from '../ProvVis';
 import { StyledDiv } from './style';
 import DetailPanel from './DetailPanel';
 import { ProvData } from '../types';
 
-const useProvenanceStoreSelector = (state: ProvenanceStore) => ({
+const useProvenanceStoreSelector = (state: ProvenanceStoreType) => ({
   setUUID: state.setUUID,
   selectedNodeId: state.selectedNodeId,
   nodes: state.nodes,
@@ -39,14 +39,15 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
 
-  const { setUUID, selectedNodeId } = useProvenanceStore(useProvenanceStoreSelector);
+  const { setUUID, selectedNodeId, nodes } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {
     setUUID(uuid);
   }, [setUUID, uuid]);
 
   // Find the selected node to display in detail panel
-  const selectedNode = selectedNodeId ? provData?.entity?.[selectedNodeId] : undefined;
+  const selectedNode = nodes.find((node) => node.id === selectedNodeId);
+  const selectedNodeProv = selectedNode?.data?.prov as Record<string, string> | undefined;
 
   if (!provData) {
     return 'No provenance data available.';
@@ -60,11 +61,11 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
         getNameForEntity={getNameForEntity(typeKey, idKey)}
         entity_type={entity_type}
       />
-      {selectedNode && (
+      {selectedNodeProv && (
         <DetailPanel
           getNameForActivity={getNameForActivity(idKey)}
           getNameForEntity={getNameForEntity(typeKey, idKey)}
-          prov={selectedNode}
+          prov={selectedNodeProv}
           timeKey={timeKey}
           uuid={uuid}
           idKey={idKey}

@@ -5,7 +5,7 @@ import { useEventCallback } from '@mui/material/utils';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useProvContext } from '../ProvContext';
+import { useProvenanceStore } from '../ProvContext';
 import useProvData from '../hooks';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
@@ -26,7 +26,7 @@ function ProvTabs() {
     entity: { uuid, entity_type, data_types },
   } = useFlaskDataContext();
 
-  const { uuids } = useProvContext();
+  const uuids = useProvenanceStore((state) => state.uuids);
   const { provData } = useProvData(uuids);
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
@@ -87,7 +87,7 @@ function ProvTabs() {
             {shouldShowWarning ? (
               <LargeGraphWarning entityCount={entityCount} onConfirm={handleConfirm} />
             ) : (
-              provData && <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
+              <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
             )}
           </ProvGraphErrorBoundary>
         </TabPanel>

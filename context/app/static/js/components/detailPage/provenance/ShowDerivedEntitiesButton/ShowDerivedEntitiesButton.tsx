@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
-import useProvenanceStore, { type ProvenanceStore } from 'js/stores/useProvenanceStore';
+import { useProvenanceStore, type ProvenanceStoreType } from '../ProvContext';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useProvContext } from '../ProvContext';
 import { convertProvDataToNodesAndEdges } from '../utils/provToNodesAndEdges';
 import { applyLayout } from '../utils/applyLayout';
 import { ProvData } from '../types';
@@ -20,11 +19,12 @@ function getUniqueNewEdges(existingEdges: Edge[], newEdges: Edge[]) {
   return newEdges.filter((edge) => !idSet.has(edge.id));
 }
 
-const useProvenanceStoreSelector = (state: ProvenanceStore) => ({
+const useProvenanceStoreSelector = (state: ProvenanceStoreType) => ({
   nodes: state.nodes,
   edges: state.edges,
   uuid: state.uuid,
   addDescendantNodesAndEdges: state.addDescendantNodesAndEdges,
+  addUuids: state.addUuids,
 });
 
 interface ShowDerivedEntitiesButtonProps {
@@ -34,8 +34,7 @@ interface ShowDerivedEntitiesButtonProps {
 }
 
 function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }: ShowDerivedEntitiesButtonProps) {
-  const { nodes, edges, uuid, addDescendantNodesAndEdges } = useProvenanceStore(useProvenanceStoreSelector);
-  const { addUuids } = useProvContext();
+  const { nodes, edges, uuid, addDescendantNodesAndEdges, addUuids } = useProvenanceStore(useProvenanceStoreSelector);
   const [newNodes, setNewNodes] = useState<Node[]>([]);
   const [newEdges, setNewEdges] = useState<Edge[]>([]);
   const [descendantUuids, setDescendantUuids] = useState<string[]>([]);

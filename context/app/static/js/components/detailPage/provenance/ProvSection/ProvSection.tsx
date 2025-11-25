@@ -8,7 +8,7 @@ import Skeleton from '@mui/material/Skeleton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
-import { ProvContextProvider } from '../ProvContext';
+import { ProvenanceStoreProvider } from '../ProvContext';
 import useProvData from '../hooks';
 import ProvTabs from '../ProvTabs';
 import { SectionDescription } from '../../../../shared-styles/sections/SectionDescription';
@@ -94,9 +94,9 @@ function ProvSection({ additionalUuids = [] }: ProvSectionProps) {
         <Description />
       </SectionDescription>
 
-      <ProvContextProvider initialUuids={initialUuids}>
+      <ProvenanceStoreProvider initialUuids={initialUuids}>
         <ProvTabs />
-      </ProvContextProvider>
+      </ProvenanceStoreProvider>
     </CollapsibleDetailPageSection>
   );
 }
