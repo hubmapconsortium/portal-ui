@@ -35,7 +35,11 @@ function useAncestorSearchHits(descendantUUID: string) {
     [descendantUUID],
   );
 
-  return useSearchHits<Donor | Sample | Dataset>(query);
+  return useSearchHits<Donor | Sample | Dataset>(query, {
+    // Publications reference specific dataset versions,
+    // so we want to make sure that we don't skip ones that are not the latest.
+    useDefaultQuery: false,
+  });
 }
 
 function usePublicationsRelatedEntities(uuid: string) {

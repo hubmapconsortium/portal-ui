@@ -1,0 +1,1 @@
+- Ensure that all referenced ancestors datasets are loaded on Publication pages, even if they are not the latest version of the dataset.
