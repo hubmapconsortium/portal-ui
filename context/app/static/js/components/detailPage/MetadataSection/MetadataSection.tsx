@@ -15,6 +15,7 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { DownloadIcon } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
 interface TableRow {
   key: string;
@@ -28,6 +29,17 @@ type MetadataWrapperProps = PropsWithChildren<{
   allTableRows: TableRows;
   tsvColumns?: Columns;
 }>;
+
+function DatasetDescriptionNote() {
+  return (
+    <>
+      &nbsp;Metadata from the donor or sample of this dataset may also be included in this list.
+      <br />
+      Additional information about the metadata available for each type of dataset can be found in the&nbsp;
+      <OutboundIconLink href="https://docs.hubmapconsortium.org/metadata">HuBMAP documentation.</OutboundIconLink>
+    </>
+  );
+}
 
 function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, children }: MetadataWrapperProps) {
   const {
@@ -69,7 +81,7 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
     >
       <SectionDescription>
         This is the list of metadata that was provided by the data provider.
-        {entityIsDataset && ' Metadata from the donor or sample of this dataset may also be included in this list.'}
+        {entityIsDataset && <DatasetDescriptionNote />}
       </SectionDescription>
       {children}
     </CollapsibleDetailPageSection>
