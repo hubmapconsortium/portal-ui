@@ -32,7 +32,7 @@ interface ProvGraphProps {
   uuid: string;
 }
 
-function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
+function ProvGraph({ provData, entity_type, uuid: currentPageUuid }: ProvGraphProps) {
   const isOld = provData && 'ex' in provData?.prefix;
   const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
@@ -62,7 +62,7 @@ function ProvGraph({ provData, entity_type, uuid }: ProvGraphProps) {
           getNameForEntity={getNameForEntity(typeKey, idKey)}
           prov={selectedNodeProv}
           timeKey={timeKey}
-          uuid={uuid}
+          uuid={currentPageUuid}
           idKey={idKey}
           typeKey={typeKey}
         />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -36,14 +36,7 @@ function ProvTabs() {
   const entityCount = provData?.entity ? Object.keys(provData.entity).length : 0;
   const isLargeGraph = entityCount > LARGE_GRAPH_THRESHOLD;
 
-  // Handle case where UUIDs are added after initial load via "Show Derived Entities"
-  useEffect(() => {
-    if (uuids.length > 1 && !hasConfirmedLargeGraph) {
-      setHasConfirmedLargeGraph(true);
-    }
-  }, [uuids.length, hasConfirmedLargeGraph]);
-
-  const shouldShowWarning = isLargeGraph && !hasConfirmedLargeGraph;
+  const shouldShowWarning = isLargeGraph && !hasConfirmedLargeGraph && uuids.length === 1;
 
   const tabsToDisplay = {
     table:
@@ -95,7 +88,5 @@ function ProvTabs() {
     </Paper>
   );
 }
-
-// ProvTabs.propTypes = {};
 
 export default ProvTabs;
