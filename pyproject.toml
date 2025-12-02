@@ -26,7 +26,7 @@ dependencies = [
     "python-frontmatter>=1.1.0",
     "hubmap-api-py-client>=0.0.11",
     "hubmap-commons>=2.1.20",
-    "portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip",
+    "portal-visualization>=0.4.20",
 ]
 
 [project.urls]
@@ -41,9 +41,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.uv]
 constraint-dependencies = []
-
-[tool.uv.sources]
-portal-visualization = { url = "https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip" }
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
