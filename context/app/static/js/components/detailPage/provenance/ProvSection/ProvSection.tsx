@@ -78,7 +78,8 @@ function ProvSection({ additionalUuids = [] }: ProvSectionProps) {
   // Combine the current page UUID with any additional UUIDs (e.g., processed datasets)
   const initialUuids = useMemo(() => [uuid, ...additionalUuids], [uuid, additionalUuids]);
 
-  const { provData, isLoading } = useProvData(initialUuids);
+  const { data, isLoading } = useProvData(initialUuids, uuid, entity_type);
+  const provData = data?.provData;
 
   if (isLoading) {
     return <ProvSectionLoading />;

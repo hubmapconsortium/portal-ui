@@ -1,6 +1,6 @@
 import React from 'react';
 import { Node, NodeProps, NodeTypes } from '@xyflow/react';
-import { DatasetIcon, DonorIcon, SampleIcon } from 'js/shared-styles/icons';
+import { DatasetIcon, DonorIcon, PublicationIcon, SampleIcon } from 'js/shared-styles/icons';
 import { SvgIconComponent } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { NodeTemplate } from './NodeTemplate';
@@ -30,7 +30,7 @@ export function useNodeEntityType(prov: Record<string, string>): ProvNodeType | 
   return null;
 }
 
-type ProvNodeType = 'donor' | 'sample' | 'dataset' | 'activity';
+type ProvNodeType = 'donor' | 'sample' | 'dataset' | 'publication' | 'activity';
 
 export function useNodeColors(): Record<ProvNodeType, string> {
   const theme = useTheme();
@@ -38,6 +38,7 @@ export function useNodeColors(): Record<ProvNodeType, string> {
     donor: theme.palette.provenance.input,
     sample: theme.palette.provenance.output,
     dataset: theme.palette.provenance.output,
+    publication: theme.palette.provenance.output,
     activity: theme.palette.provenance.step,
   };
 }
@@ -46,6 +47,7 @@ export const nodeIcons: Record<ProvNodeType, SvgIconComponent | undefined> = {
   donor: DonorIcon,
   sample: SampleIcon,
   dataset: DatasetIcon,
+  publication: PublicationIcon,
   activity: undefined, // No icon for activity nodes
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -27,7 +27,17 @@ function ProvTabs() {
   } = useFlaskDataContext();
 
   const uuids = useProvenanceStore((state) => state.uuids);
-  const { provData } = useProvData(uuids);
+  const setNodesAndEdges = useProvenanceStore((state) => state.setNodesAndEdges);
+  const storedNodes = useProvenanceStore((state) => state.nodes);
+  const { data } = useProvData(uuids, uuid, entity_type);
+  const provData = data?.provData;
+
+  // Initialize store with nodes and edges when data is fetched
+  useEffect(() => {
+    if (data && storedNodes.length === 0) {
+      setNodesAndEdges(data.nodes, data.edges);
+    }
+  }, [data, storedNodes.length, setNodesAndEdges]);
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const [open, setOpen] = useState(0);

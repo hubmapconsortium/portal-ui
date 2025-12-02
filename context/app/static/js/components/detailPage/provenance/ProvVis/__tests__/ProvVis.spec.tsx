@@ -1,6 +1,8 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, useEffect } from 'react';
 import { render, screen } from 'test-utils/functions';
-import { ProvenanceStoreProvider } from '../../ProvContext';
+import { ProvenanceStoreProvider, useProvenanceStore } from '../../ProvContext';
+import { convertProvDataToNodesAndEdges } from '../../utils/provToNodesAndEdges';
+import { applyLayout } from '../../utils/applyLayout';
 
 import ProvVis from '../ProvVis';
 
@@ -10,17 +12,49 @@ interface RenderWithProvContextOptions {
   initialUuid?: string;
   initialUuids?: string[];
   flaskData?: unknown;
+  provData?: typeof simple.prov;
+  getNameForActivity?: typeof simple.getNameForActivity;
+  getNameForEntity?: typeof simple.getNameForEntity;
+  entityType?: string;
 }
 
 function renderWithProvContext(
   ui: ReactElement,
-  { initialUuid = '', initialUuids = [], flaskData }: RenderWithProvContextOptions = {},
+  {
+    initialUuid = '',
+    initialUuids = [],
+    flaskData,
+    provData,
+    getNameForActivity,
+    getNameForEntity,
+    entityType = 'Dataset',
+  }: RenderWithProvContextOptions = {},
 ) {
+  // Component that initializes the store with nodes/edges
+  function StoreInitializer({ children }: { children: ReactNode }) {
+    const setNodesAndEdges = useProvenanceStore((state) => state.setNodesAndEdges);
+
+    useEffect(() => {
+      if (provData && getNameForActivity && getNameForEntity) {
+        const { nodes: rawNodes, edges: rawEdges } = convertProvDataToNodesAndEdges(provData, {
+          currentUuid: initialUuid,
+          getNameForActivity,
+          getNameForEntity,
+          entityType,
+        });
+        const { nodes, edges } = applyLayout(rawNodes, rawEdges);
+        setNodesAndEdges(nodes, edges);
+      }
+    }, [setNodesAndEdges]);
+
+    return <>{children}</>;
+  }
+
   // Create a wrapper that will be used by the test utils render
   // This wrapper will be inside AllTheProviders
   const ProvWrapper = ({ children }: { children: ReactNode }) => (
     <ProvenanceStoreProvider initialUuid={initialUuid} initialUuids={initialUuids}>
-      {children}
+      <StoreInitializer>{children}</StoreInitializer>
     </ProvenanceStoreProvider>
   );
 
@@ -29,18 +63,14 @@ function renderWithProvContext(
 
 describe('ProvVis', () => {
   it('renders React component with svg', () => {
-    renderWithProvContext(
-      <ProvVis
-        provData={simple.prov}
-        getNameForActivity={simple.getNameForActivity}
-        getNameForEntity={simple.getNameForEntity}
-        entity_type="Dataset"
-      />,
-      {
-        initialUuid: '',
-        initialUuids: [],
-      },
-    );
+    renderWithProvContext(<ProvVis />, {
+      initialUuid: '',
+      initialUuids: [],
+      provData: simple.prov,
+      getNameForActivity: simple.getNameForActivity,
+      getNameForEntity: simple.getNameForEntity,
+      entityType: 'Dataset',
+    });
 
     // React Flow renders, but nodes may not be visible immediately
     // Just check that it doesn't crash

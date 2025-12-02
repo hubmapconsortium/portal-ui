@@ -20,7 +20,7 @@ interface DetailPanelProps {
   getNameForEntity: (id: string, prov?: ProvData) => string;
 }
 
-const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support'];
+const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support', 'Publication'];
 
 function Type({ prov, typeKey }: Pick<DetailPanelProps, 'prov' | 'typeKey'>) {
   const content = typeKey in prov ? prov[typeKey] : prov['prov:type'];
