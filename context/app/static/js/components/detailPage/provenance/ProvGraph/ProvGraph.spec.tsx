@@ -1,10 +1,13 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, useEffect } from 'react';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { render, screen, appProviderEndpoints } from 'test-utils/functions';
-import { ProvenanceStoreProvider } from '../ProvContext';
+import { ProvenanceStoreProvider, useProvenanceStore } from '../ProvContext';
+import { convertProvDataToNodesAndEdges } from '../utils/provToNodesAndEdges';
+import { applyLayout } from '../utils/applyLayout';
+import { createGetNameForActivity, createGetNameForEntity } from '../utils/nameFormatters';
 import sampleProv, { sampleDescendantsProv } from './fixtures/sample_prov';
 
 import ProvGraph from './ProvGraph';
@@ -48,17 +51,50 @@ interface RenderWithProvContextOptions {
   initialUuid?: string;
   initialUuids?: string[];
   flaskData?: unknown;
+  provData?: typeof sampleProv;
+  entityType?: string;
 }
 
 function renderWithProvContext(
   ui: ReactElement,
-  { initialUuid = '', initialUuids = [], flaskData }: RenderWithProvContextOptions = {},
+  {
+    initialUuid = '',
+    initialUuids = [],
+    flaskData,
+    provData,
+    entityType = 'Sample',
+  }: RenderWithProvContextOptions = {},
 ) {
+  // Determine if this is old or new provenance format
+  const isOld = provData && 'ex' in provData?.prefix;
+  const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
+  const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
+
+  // Component that initializes the store with nodes/edges
+  function StoreInitializer({ children }: { children: ReactNode }) {
+    const setNodesAndEdges = useProvenanceStore((state) => state.setNodesAndEdges);
+
+    useEffect(() => {
+      if (provData) {
+        const { nodes: rawNodes, edges: rawEdges } = convertProvDataToNodesAndEdges(provData, {
+          currentUuid: initialUuid,
+          getNameForActivity: createGetNameForActivity(idKey),
+          getNameForEntity: createGetNameForEntity(typeKey, idKey),
+          entityType,
+        });
+        const { nodes, edges } = applyLayout(rawNodes, rawEdges);
+        setNodesAndEdges(nodes, edges);
+      }
+    }, [setNodesAndEdges]);
+
+    return <>{children}</>;
+  }
+
   // Create a wrapper that will be used by the test utils render
   // This wrapper will be inside AllTheProviders
   const ProvWrapper = ({ children }: { children: ReactNode }) => (
     <ProvenanceStoreProvider initialUuid={initialUuid} initialUuids={initialUuids}>
-      {children}
+      <StoreInitializer>{children}</StoreInitializer>
     </ProvenanceStoreProvider>
   );
 
@@ -74,6 +110,8 @@ test('should display the correct initial nodes for a sample', () => {
   renderWithProvContext(<ProvGraph provData={sampleProv} entity_type="Sample" uuid="" />, {
     initialUuid: '',
     initialUuids: [],
+    provData: sampleProv,
+    entityType: 'Sample',
   });
 
   nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
@@ -84,6 +122,8 @@ test('should display selected node information in detail pane and show immediate
   renderWithProvContext(<ProvGraph provData={sampleProv} entity_type="Sample" uuid="" />, {
     initialUuid: '',
     initialUuids: [],
+    provData: sampleProv,
+    entityType: 'Sample',
   });
 
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
@@ -113,6 +153,8 @@ test("should display an asterisk in the current page's node", () => {
     {
       initialUuid: '13129ad371683171b152618c83fd9e6f',
       initialUuids: ['13129ad371683171b152618c83fd9e6f'],
+      provData: sampleProv,
+      entityType: 'Sample',
     },
   );
   expect(screen.getByText('Sample - HBM666.CHPF.373')).toBeInTheDocument();
