@@ -2,7 +2,7 @@
 
 ## v1.36.1 - 2025-11-24
 
-Fix entity sorting in ProvTable and update sample category comparison order instantiation to occur outside of sort function.
+- Fix entity sorting in ProvTable and update sample category comparison order instantiation to occur outside of sort function.
 - Improve visibility of OpenKeyNav switch's focus state.
 - Directly use URLs provided by Workspaces API for certain environments.
 - Fix vitessce visualizations displaying incorrect expression levels.
