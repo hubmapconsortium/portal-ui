@@ -19,13 +19,10 @@ import {
 } from './utils';
 import { useDonorChartData, CompositeAggregations, CompositeBucket } from './hooks';
 import DonorChartTooltip from './DonorChartTooltip';
+import { capitalizeString } from 'js/helpers/functions';
 
-function ucFirst(str: string): string {
-  return `${str[0].toUpperCase()}${str.slice(1)}`;
-}
-
-function pretty(str: string): string {
-  return str.split('_').map(ucFirst).join(' ');
+function prettyPrintFieldName(str: string): string {
+  return str.split('_').map(capitalizeString).join(' ');
 }
 
 function BloodTypeDescription() {
@@ -56,26 +53,28 @@ interface LowLevelDonorChartProps {
   donorQuery: CompositeQuery;
   xKey: string;
   yKey: string;
-  colorKeys: string[];
   description: React.ReactNode;
   xAxisLabel: string;
 }
 
-function LowLevelDonorChart({
-  title,
-  donorQuery,
-  xKey,
-  yKey,
-  colorKeys,
-  description,
-  xAxisLabel,
-}: LowLevelDonorChartProps) {
+function LowLevelDonorChart({ title, donorQuery, xKey, yKey, description, xAxisLabel }: LowLevelDonorChartProps) {
   const { palette } = useTheme();
-  const colors = [palette.primary.main, palette.success.main, palette.error.main];
+  // Generate color palette - extend beyond 3 colors if needed
+  const baseColors = [palette.primary.main, palette.success.main, palette.error.main];
+  const extendedColors = [
+    ...baseColors,
+    palette.warning.main,
+    palette.info.main,
+    palette.secondary.main,
+    palette.primary.light,
+    palette.success.light,
+    palette.error.light,
+    palette.warning.light,
+  ];
 
   const { searchData } = useSearchData<Record<string, unknown>, CompositeAggregations>(donorQuery);
 
-  const { xAxisLabels, compareByKeys } = useMemo(() => {
+  const { xAxisLabels, compareByKeys } = useMemo((): { xAxisLabels: string[]; compareByKeys: string[] } => {
     if (!searchData.aggregations?.composite_data?.buckets) {
       return { xAxisLabels: [], compareByKeys: [] };
     }
@@ -84,11 +83,19 @@ function LowLevelDonorChart({
     const labelFn = labelsMap[xKey] ?? getKeyValues;
     const labels = labelFn(buckets, xKey).map(String);
 
+    // Dynamically extract unique comparison keys from the aggregation data
+    const uniqueValues = [...new Set(buckets.map((b) => b.key[yKey]))];
+    const dynamicCompareByKeys = uniqueValues.map(String).sort((a, b) => {
+      if (a === 'Multiple') return 1;
+      if (b === 'Multiple') return -1;
+      return a.localeCompare(b);
+    });
+
     return {
       xAxisLabels: labels,
-      compareByKeys: colorKeys,
+      compareByKeys: dynamicCompareByKeys,
     };
-  }, [searchData, xKey, colorKeys]);
+  }, [searchData, xKey, yKey]);
 
   const { data, maxCount } = useDonorChartData({
     searchData: { aggregations: searchData.aggregations },
@@ -103,7 +110,7 @@ function LowLevelDonorChart({
 
   const colorScale = useOrdinalScale(compareByKeys, {
     domain: compareByKeys,
-    range: colors.slice(0, compareByKeys.length),
+    range: extendedColors.slice(0, compareByKeys.length),
   });
 
   const graphMargin = { top: 40, right: 20, bottom: 80, left: 60 };
@@ -162,14 +169,8 @@ function DonorChart({ xAxis, groups }: DonorChartProps) {
   const xKey = `mapped_metadata.${xAxis}`;
   const yKey = `mapped_metadata.${groups}`;
 
-  const colorKeysMap: Record<GroupsOption, string[]> = {
-    race: ['White', 'Black or African American', 'Hispanic'],
-    sex: ['Male', 'Female'],
-  };
-
-  const colorKeys = colorKeysMap[groups];
-  const xAxisLabel = xAxisLabelMap[xKey] ?? pretty(xAxis);
-  const title = `${xAxisLabel} & ${pretty(groups)}`;
+  const xAxisLabel = xAxisLabelMap[xKey] ?? prettyPrintFieldName(xAxis);
+  const title = `${xAxisLabel} & ${prettyPrintFieldName(groups)}`;
   const description = [xAxis, groups].includes('abo_blood_group_system') ? <BloodTypeDescription /> : null;
 
   return (
@@ -177,7 +178,6 @@ function DonorChart({ xAxis, groups }: DonorChartProps) {
       donorQuery={donorQuery}
       xKey={xKey}
       yKey={yKey}
-      colorKeys={colorKeys}
       title={title}
       xAxisLabel={xAxisLabel}
       description={description}

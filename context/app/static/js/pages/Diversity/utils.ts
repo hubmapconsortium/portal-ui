@@ -12,6 +12,16 @@ export function getKeyValues(buckets: CompositeBucket[], key: string): (string |
   return [...new Set(buckets.map((b) => b.key[key]))];
 }
 
+export function getUniqueComparisonKeys(buckets: CompositeBucket[], key: string): string[] {
+  const uniqueValues = [...new Set(buckets.map((b) => b.key[key]))];
+  // Sort to ensure consistent ordering, with 'Multiple' at the end if present
+  return uniqueValues.map(String).sort((a, b) => {
+    if (a === 'Multiple') return 1;
+    if (b === 'Multiple') return -1;
+    return a.localeCompare(b);
+  });
+}
+
 interface TermSource {
   [key: string]: {
     terms: {
