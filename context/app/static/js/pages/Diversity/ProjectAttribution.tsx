@@ -13,11 +13,11 @@ function ProjectAttribution() {
       </ChartTitle>
       <StyledSectionPaper>
         <SectionItem label="Creator">Roselkis Morla-Adames</SectionItem>
-        <SectionItem label="PI" ml={1}>
+        <SectionItem label="PI" ml>
           Nils Gehlenborg
         </SectionItem>
-        <SectionItem label="Funding" ml={1}>
-          NIH HuBMAP Underepresented Student Internship
+        <SectionItem label="Funding" ml>
+          NIH HuBMAP Underrepresented Student Internship
         </SectionItem>
       </StyledSectionPaper>
     </SectionContainer>
