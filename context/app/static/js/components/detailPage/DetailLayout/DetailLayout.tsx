@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
-import Stack from '@mui/material/Stack';
 
 import { leftRouteBoundaryID, rightRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
@@ -49,16 +48,14 @@ export function TableOfContentsPortal({
     return null;
   }
   return createPortal(
-    <Stack width="100%">
-      <TableOfContents
-        items={items}
-        isLoading={isLoading}
-        trackingInfo={trackingInfo}
-        initialCurrentSection={initialCurrentSection}
-        title={tableOfContentsTitle}
-        titleHref={tableOfContentsTitleHref}
-      />
-    </Stack>,
+    <TableOfContents
+      items={items}
+      isLoading={isLoading}
+      trackingInfo={trackingInfo}
+      initialCurrentSection={initialCurrentSection}
+      title={tableOfContentsTitle}
+      titleHref={tableOfContentsTitleHref}
+    />,
     element,
   );
 }
@@ -68,21 +65,7 @@ export function HelperPanelPortal({ children }: PropsWithChildren) {
   if (!element) {
     return null;
   }
-  return createPortal(
-    <Stack
-      alignItems="start"
-      position="relative"
-      sx={{
-        pointerEvents: 'none',
-        '& > *': {
-          pointerEvents: 'auto',
-        },
-      }}
-    >
-      {children}
-    </Stack>,
-    element,
-  );
+  return createPortal(children, element);
 }
 
 function DetailLayout({

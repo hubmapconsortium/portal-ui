@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.37.0 - 2025-12-03
+
+- Add link to HuBMAP Metadata docs to Metadata section description for Dataset pages.
+- Ensure that all referenced ancestors datasets are loaded on Publication pages, even if they are not the latest version of the dataset.
+- Migrate provenance graph visualization from @hms-dbmi-bgm/react-workflow-viz to @xyflow/react
+- Add spacing between end of content and footer for tutorial detail page.
+- Update to Cypress 15.
+- Update to Vitessce 3.8.9.
+- Improve lineup visualization by loading data on front-end, improving selection/filtering of entities for lineup, and enabling selection of fields.
+- Improve TSV export of entities by loading data on front-end and pulling in more fields.
+
+
+
+## v1.36.1 - 2025-11-24
+
+- Fix entity sorting in ProvTable and update sample category comparison order instantiation to occur outside of sort function.
+- Improve visibility of OpenKeyNav switch's focus state.
+- Directly use URLs provided by Workspaces API for certain environments.
+- Fix vitessce visualizations displaying incorrect expression levels.
+
+
+
+## v1.36.0 - 2025-11-18
+
+- Ensure sample hierarchy in provenance tables properly handles edge cases where organs were registered after their descendants.
+- Add Data Products links to Tools & Applications's Data section in header and Related Tools on homepage.
+- Improve handling for looking up datasets to visualize in Scellop on the organs page.
+- Fix Table of Contents positioning to enable scrolling when contents are longer than screen size and avoid overflowing into main page.
+- Add CORS origin validation and update UDI TSV endpoint to use dynamic CORS.
+
+
+
 ## v1.35.1 - 2025-11-06
 
 - Tutorial landing page allows multiple chips to be selected for tutorial category filtering.

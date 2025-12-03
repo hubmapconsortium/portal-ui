@@ -77,6 +77,9 @@ export interface Entity {
   mapped_metadata?: Record<string, unknown>;
   immediate_ancestor_ids: string[];
   immediate_descendant_ids: string[];
+  organ_donor_data?: Record<string, unknown>;
+  living_donor_data?: Record<string, unknown>;
+  extra_metadata?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -94,6 +97,8 @@ export interface Donor extends Entity {
   }>;
   group_name: string;
   protocol_url: string;
+  organ_donor_data: Record<string, unknown>;
+  living_donor_data: Record<string, unknown>;
 }
 
 export interface Sample extends Entity {
@@ -104,6 +109,7 @@ export interface Sample extends Entity {
   origin_samples_unique_mapped_organs: string[];
   origin_samples: Sample[];
   protocol_url: string;
+  organ_donor_data: Record<string, unknown>;
 }
 
 export type CreationAction =
@@ -145,6 +151,7 @@ export interface Dataset extends Entity {
   dataset_type: string;
   visualization: boolean;
   source_samples: Sample[];
+  data_types: string[];
 }
 
 export interface Collection extends Entity {

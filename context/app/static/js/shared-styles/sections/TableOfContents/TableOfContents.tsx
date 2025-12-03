@@ -7,21 +7,19 @@ import Collapse from '@mui/material/Collapse';
 import ListItem from '@mui/material/ListItem';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
 
 import { animated } from '@react-spring/web';
 
-import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { TableTitle, StyledItemLink, StyledIconContainer } from './style';
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
 import { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition } from './hooks';
 import { useEventCallback } from '@mui/material/utils';
 
-const AnimatedNav = animated(Box) as typeof Box;
+const AnimatedNav = animated('nav');
 
 interface LinkProps {
   currentSection: string;
@@ -156,27 +154,12 @@ function TableOfContents({
   titleHref,
 }: TableOfContentsProps) {
   const [currentSection, setCurrentSection] = useState(initialCurrentSection || items[0]?.hash || '');
-  const [boundaryWidth, setBoundaryWidth] = useState<number | null>(null);
 
   const itemsWithNodeRef = useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
 
   useEffect(() => {
     itemsWithNodeRef.current = getItemsClient(items);
   }, [items]);
-
-  // Track the width of the left route boundary
-  useEffect(() => {
-    const updateWidth = () => {
-      const element = document.getElementById(leftRouteBoundaryID);
-      if (element) {
-        setBoundaryWidth(element.offsetWidth);
-      }
-    };
-
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
 
   const clickedRef = useRef(false);
   const unsetClickedRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -230,40 +213,54 @@ function TableOfContents({
     return null;
   }
 
-  if (!position || boundaryWidth === null) {
+  if (!position || !position.top) {
     return null;
   }
 
   return (
-    <Box data-testid="table-of-contents" height="100%">
-      <AnimatedNav component="nav" style={position} width={boundaryWidth} mr={2} position="fixed">
-        <TableTitle variant="h5" component={titleHref ? 'a' : 'div'} href={titleHref}>
-          {title}
-        </TableTitle>
-        {isLoading ? (
-          <>
-            <ItemSkeleton />
-            <ItemSkeleton />
-            <ItemSkeleton />
-            <ItemSkeleton />
-            <ItemSkeleton />
-          </>
-        ) : (
-          <List component="ul">
-            {items.map((item) => (
-              <ItemLinks
-                item={item}
-                currentSection={currentSection}
-                handleClick={handleClick}
-                key={`${item.hash}-${item.text}`}
-                level={0}
-                trackingInfo={trackingInfo}
-              />
-            ))}
-          </List>
-        )}
-      </AnimatedNav>
-    </Box>
+    <AnimatedNav
+      data-testid="table-of-contents"
+      style={{
+        ...position,
+        overflowX: 'hidden',
+        position: 'sticky',
+        width: '100%',
+      }}
+    >
+      <TableTitle variant="h5" component={titleHref ? 'a' : 'div'} href={titleHref}>
+        {title}
+      </TableTitle>
+      {isLoading ? (
+        <>
+          <ItemSkeleton />
+          <ItemSkeleton />
+          <ItemSkeleton />
+          <ItemSkeleton />
+          <ItemSkeleton />
+        </>
+      ) : (
+        <List
+          component="ul"
+          sx={{
+            overflowY: 'auto',
+            // Make the maxHeight account for the header and some padding
+            // This also makes the ToC scrollable if it exceeds the viewport height
+            maxHeight: `calc(100dvh - ${position.top.animation.to as number}px - 32px)`,
+          }}
+        >
+          {items.map((item) => (
+            <ItemLinks
+              item={item}
+              currentSection={currentSection}
+              handleClick={handleClick}
+              key={`${item.hash}-${item.text}`}
+              level={0}
+              trackingInfo={trackingInfo}
+            />
+          ))}
+        </List>
+      )}
+    </AnimatedNav>
   );
 }
 

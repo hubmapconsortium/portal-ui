@@ -49,7 +49,6 @@ function Routes({ flaskData } = {}) {
     markdown,
     errorCode,
     list_uuid,
-    entities,
     organs,
     organs_count,
     organ,
@@ -284,9 +283,17 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/lineup/')) {
+    const entityType = urlPath.split('/').pop().replace(/s$/, '').toLowerCase(); // remove trailing 's', e.g. 'samples' -> 'sample'
+
+    if (!['donor', 'sample', 'dataset'].includes(entityType)) {
+      return <Error errorCode={404} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
+    }
+
+    const uuids = new URLSearchParams(window.location.search).get('uuids');
+
     return (
       <Route>
-        <LineUpPage entities={entities} />
+        <LineUpPage entityType={entityType} uuids={uuids} />
       </Route>
     );
   }

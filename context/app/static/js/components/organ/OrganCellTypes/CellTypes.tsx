@@ -2,7 +2,7 @@ import React from 'react';
 
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import Description from 'js/shared-styles/sections/Description';
-import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
+import { useIndexedDatasetsForCurrentOrgan } from 'js/pages/Organ/hooks';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import OrganDetailSection from '../OrganDetailSection';
 import IndexedDatasetsSummary from './IndexedDatasetsSummary';
@@ -13,7 +13,7 @@ interface CellTypesProps {
 }
 
 function CellTypes({ cellTypes }: CellTypesProps) {
-  const indexedDatasetsInfo = useIndexedDatasetsForOrgan();
+  const indexedDatasetsInfo = useIndexedDatasetsForCurrentOrgan();
   return (
     <OrganDetailSection title="Cell Types" id="cell-types">
       <Description belowTheFold={<IndexedDatasetsSummary {...indexedDatasetsInfo} />}>

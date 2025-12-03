@@ -17,9 +17,9 @@ import {
   useAssayBucketsQuery,
   useDataProducts,
   useHasSamplesQuery,
-  useLabelledDatasetsQuery,
   useCellTypesOfOrgan,
   useSearchItems,
+  useIndexedDatasetsForOrgan,
 } from './hooks';
 
 interface OrganProps {
@@ -34,7 +34,7 @@ function Organ({ organ }: OrganProps) {
   const searchItems = useSearchItems(organ);
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
-  const labeledDatasetUuids = useLabelledDatasetsQuery(searchItems);
+  const scFind = useIndexedDatasetsForOrgan(searchItems, organ.name);
   const { dataProducts, isLoading, isLateral } = useDataProducts(organ);
   const cellTypes = useCellTypesOfOrgan(organ.name);
 
@@ -51,7 +51,7 @@ function Organ({ organ }: OrganProps) {
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
     [hraId]: Boolean(organ.has_iu_component),
-    [scellopId]: labeledDatasetUuids.length > 0,
+    [scellopId]: scFind.datasets.length > 0,
     [cellTypesId]: cellTypes.length > 0,
     [referenceId]: false, // TODO: Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
     [assaysId]: assayBuckets.length > 0,
@@ -71,7 +71,7 @@ function Organ({ organ }: OrganProps) {
         <Description shouldDisplay={shouldDisplaySection[summaryId]} />
         <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[hraId]} />
         <CellPopulationPlot
-          uuids={labeledDatasetUuids}
+          uuids={scFind.datasets}
           shouldDisplay={shouldDisplaySection[scellopId]}
           organ={organ.name}
         />

@@ -27,7 +27,7 @@ function usePublicationDatasetsAggs({ descendantUUID, aggsField, associatedColle
   const { searchHits: collectionDatasets } = useSearchHits(getCollectionDatasetsQuery(associatedCollectionUUID));
 
   const collectionDatasetsUUIDs =
-    collectionDatasets.length > 0 ? collectionDatasets[0]?._source?.datasets.map(({ uuid }) => uuid) : [];
+    collectionDatasets.length > 0 ? collectionDatasets[0]?._source?.datasets?.map(({ uuid }) => uuid) : [];
 
   const query = associatedCollectionUUID
     ? {
@@ -39,7 +39,9 @@ function usePublicationDatasetsAggs({ descendantUUID, aggsField, associatedColle
         ...getAggsClause(aggsField),
       };
 
-  return useSearchData(query);
+  return useSearchData(query, {
+    useDefaultQuery: false,
+  });
 }
 
 export { usePublicationDatasetsAggs };

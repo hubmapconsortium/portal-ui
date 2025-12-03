@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
 import { NodeWithoutPosition } from './types';
-import useProvData from '../provenance/hooks';
+import { useMultiAssayProvenance } from '../provenance/hooks';
 import { convertProvDataToNodesAndEdges } from './utils';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
@@ -24,7 +24,7 @@ export function useDatasetTypes(nodes: NodeWithoutPosition[]) {
 
 export function useDatasetRelationships(uuid: string, processing = 'raw') {
   const shouldFetch = processing === 'raw';
-  const { provData, isLoading } = useProvData(uuid, true, shouldFetch);
+  const { data: provData, isLoading } = useMultiAssayProvenance(uuid, shouldFetch);
   const { nodes, edges } = useMemo(() => convertProvDataToNodesAndEdges(uuid, provData), [uuid, provData]);
   const shouldDisplay = nodes.length > 1 && shouldFetch;
   return { isLoading, nodes, edges, shouldDisplay };

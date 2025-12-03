@@ -1,4 +1,4 @@
-const { tableToDelimitedString } = require('../functions');
+import { tableToDelimitedString } from '../functions';
 
 describe('Table to String', () => {
   const rowsInput = [

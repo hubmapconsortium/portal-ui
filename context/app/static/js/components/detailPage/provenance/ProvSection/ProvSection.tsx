@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Alert } from 'js/shared-styles/alerts';
@@ -7,6 +7,8 @@ import DetailPageSection, { CollapsibleDetailPageSection } from 'js/components/d
 import Skeleton from '@mui/material/Skeleton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { useDetailContext } from 'js/components/detailPage/DetailContext';
+import { ProvenanceStoreProvider } from '../ProvContext';
 import useProvData from '../hooks';
 import ProvTabs from '../ProvTabs';
 import { SectionDescription } from '../../../../shared-styles/sections/SectionDescription';
@@ -64,15 +66,20 @@ function Description() {
 }
 
 interface ProvSectionProps {
-  combineProvenance?: boolean;
+  additionalUuids?: string[];
 }
 
-function ProvSection({ combineProvenance = false }: ProvSectionProps) {
+function ProvSection({ additionalUuids = [] }: ProvSectionProps) {
   const {
-    entity: { uuid, entity_type },
+    entity: { entity_type },
   } = useFlaskDataContext();
-  // Load combined provenance data for datasets only for now
-  const { provData, isLoading } = useProvData(uuid, combineProvenance);
+  const { uuid } = useDetailContext();
+
+  // Combine the current page UUID with any additional UUIDs (e.g., processed datasets)
+  const initialUuids = useMemo(() => [uuid, ...additionalUuids], [uuid, additionalUuids]);
+
+  const { data, isLoading } = useProvData(initialUuids, uuid, entity_type);
+  const provData = data?.provData;
 
   if (isLoading) {
     return <ProvSectionLoading />;
@@ -88,7 +95,9 @@ function ProvSection({ combineProvenance = false }: ProvSectionProps) {
         <Description />
       </SectionDescription>
 
-      <ProvTabs provData={provData} />
+      <ProvenanceStoreProvider initialUuid={uuid} initialUuids={initialUuids}>
+        <ProvTabs />
+      </ProvenanceStoreProvider>
     </CollapsibleDetailPageSection>
   );
 }

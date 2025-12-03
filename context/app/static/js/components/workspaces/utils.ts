@@ -10,6 +10,7 @@ import {
   DEFAULT_PYTHON_TEMPLATE_KEY,
   DEFAULT_R_TEMPLATE_KEY,
   DEFAULT_TIME_LIMIT_MINUTES,
+  DIRECT_URL_JOB_TYPES,
   MAX_NUM_CONCURRENT_WORKSPACES,
 } from './constants';
 import {
@@ -291,9 +292,24 @@ async function locationIfJobRunning({
   return null;
 }
 
+function getDirectJobType(Workspace: Workspace) {
+  const jobType = Workspace.default_job_type;
+  return jobType && DIRECT_URL_JOB_TYPES.includes(jobType);
+}
+
 function getWorkspaceStartLink(workspace: Workspace, templatePath?: string) {
   const path = getNotebookPath(workspace);
-  return `/workspaces/start/${workspace.id}?notebook_path=${encodeURIComponent(templatePath ?? path)}`;
+  const directJobType = getDirectJobType(workspace);
+  const params = new URLSearchParams();
+  if (templatePath) {
+    params.append('notebook_path', templatePath);
+  } else if (path) {
+    params.append('notebook_path', path);
+  }
+  if (directJobType) {
+    params.append('direct', 'true');
+  }
+  return `/workspaces/start/${workspace.id}?${params.toString()}`;
 }
 
 function getWorkspaceLink(workspace: Workspace) {
