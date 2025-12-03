@@ -43,7 +43,7 @@ export function debounce<T extends (...args: unknown[]) => void>(callback: T, wa
   // so we'll use the ReturnType utility to cover both cases.
   let timeout: ReturnType<typeof setTimeout> | null;
 
-  return (...args: Parameters<typeof callback>) => {
+  const toReturn = (...args: Parameters<typeof callback>) => {
     // Creates the function that'll be called after a delay.
     const later = () => {
       timeout = null;
@@ -67,4 +67,13 @@ export function debounce<T extends (...args: unknown[]) => void>(callback: T, wa
       callback(...args);
     }
   };
+
+  toReturn.cancel = () => {
+    if (typeof timeout === 'number') {
+      clearTimeout(timeout);
+    }
+    timeout = null;
+  };
+
+  return toReturn;
 }
