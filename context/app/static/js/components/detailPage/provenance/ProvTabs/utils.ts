@@ -1,4 +1,4 @@
-export function hasDataTypes(dataTypes, typesToCheck) {
+export function hasDataTypes<T>(dataTypes: T[], typesToCheck: T[]) {
   if (!dataTypes) {
     return false;
   }

@@ -35,7 +35,7 @@ function Publication({ publication, vignette_json }: PublicationProps) {
 
   const associatedCollectionUUID = associated_collection?.uuid;
 
-  const shouldDisplayProvenance = !associatedCollectionUUID && ancestor_ids?.length < 400;
+  const shouldDisplayProvenance = !associatedCollectionUUID;
 
   const shouldDisplaySection = {
     summary: true,

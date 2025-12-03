@@ -1,1 +1,0 @@
-- Add spacing between end of content and footer for tutorial detail page.

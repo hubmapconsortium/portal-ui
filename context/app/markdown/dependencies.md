@@ -14,7 +14,7 @@ Flask[async]>=3.1.1
 globus-sdk>=3.59.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
-portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.18.zip
+portal-visualization[full]>=0.4.20
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
@@ -41,7 +41,6 @@ ruff>=0.14.0
 "@grafana/faro-react": "^1.5.0",
 "@grafana/faro-web-sdk": "^1.5.0",
 "@grafana/faro-web-tracing": "^1.5.0",
-"@hms-dbmi-bgm/react-workflow-viz": "^0.1.11",
 "@hookform/resolvers": "^3.3.4",
 "@mui/icons-material": "^6.1.6",
 "@mui/lab": "^6.0.0-beta.14",
@@ -99,7 +98,7 @@ ruff>=0.14.0
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.8.2",
+"vitessce": "^3.8.9",
 "zod": "^3.22.4",
 "zustand": "^4.5.2"
 }

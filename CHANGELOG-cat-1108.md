@@ -1,1 +1,0 @@
-- Add link to HuBMAP Metadata docs to Metadata section description for Dataset pages.
