@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.37.2 - 2025-12-04
+
+- Disable formatting check for Vitessce configurations due to dropped fields.
+
+
+
 ## v1.37.0 - 2025-12-03
 
 - Add link to HuBMAP Metadata docs to Metadata section description for Dataset pages.

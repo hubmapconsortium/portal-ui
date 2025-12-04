@@ -1,1 +1,0 @@
-- Disable formatting check for Vitessce configurations due to dropped fields.
