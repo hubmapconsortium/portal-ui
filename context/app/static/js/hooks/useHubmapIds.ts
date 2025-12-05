@@ -9,10 +9,7 @@ function useHubmapIds(uuids: string[]) {
     _source: ['hubmap_id'],
     size: 10000,
   };
-
-  const { searchHits, isLoading } = useSearchHits<Dataset>(datasetQuery, {
-    shouldFetch: uuids.length > 0,
-  });
+  const { searchHits, isLoading } = useSearchHits<Dataset>(datasetQuery);
   const hubmapIds = searchHits.map(({ _source }) => _source.hubmap_id);
 
   return {
