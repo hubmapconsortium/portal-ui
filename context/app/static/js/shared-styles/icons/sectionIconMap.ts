@@ -28,6 +28,7 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   summary: SummaryIcon,
   metadata: MetadataIcon,
   'processed-data': ProcessedDataIcon,
+  'integrated-datasets': ProcessedDataIcon,
   visualization: VisualizationIcon,
   visualizations: BarChartRounded, // Publications use this key
   files: FileIcon,
