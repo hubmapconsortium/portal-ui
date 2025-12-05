@@ -1,1 +1,0 @@
-- Fix empty IDs query breaking permission checks.

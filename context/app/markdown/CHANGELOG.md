@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.37.3 - 2025-12-05
+
+- Fix empty IDs query breaking permission checks.
+
+
+
 ## v1.37.2 - 2025-12-04
 
 - Disable formatting check for Vitessce configurations due to dropped fields.
