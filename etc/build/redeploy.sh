@@ -23,7 +23,7 @@ COMPOSE_CONFIG=hubmap.yml
 # hubmap.test.yml includes two portal instances.
 
 echo 'stopping...'
-docker-compose -f \$COMPOSE_CONFIG down
+docker compose -f \$COMPOSE_CONFIG down
 echo 'portal running?' \`docker ps | grep portal-ui\`
 
 echo 'removing old "latest"...'
@@ -31,7 +31,7 @@ echo 'removing old "latest"...'
 docker rmi hubmap/portal-ui:latest
 
 echo 'starting...'
-docker-compose -f \$COMPOSE_CONFIG up -d
+docker compose -f \$COMPOSE_CONFIG up -d
 
 # We don't understand why the prod-test instance is getting the wrong configuration.
 # We hope turning it off-and-on will help, but this is not a good situation.
