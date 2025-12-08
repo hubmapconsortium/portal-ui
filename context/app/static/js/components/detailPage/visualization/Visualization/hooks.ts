@@ -12,12 +12,14 @@ interface UseVitessceConfigProps {
   markerGene?: string;
 }
 
+// The `VitessceConfig.fromJSON` method clobbers the requestInit information for datasets, so this is temporarily disabled.
 function formatVitessceConf(vData: object) {
-  if ('layout' in vData && vData.layout && 'name' in vData && vData.name !== 'Error') {
-    const vc = VitessceConfig.fromJSON(vData);
-    return vc.toJSON();
-  }
-  console.error("Vitessce config missing 'layout' or 'name' field.");
+  // if ('layout' in vData && vData.layout && 'name' in vData && vData.name !== 'Error') {
+  //   const vc = VitessceConfig.fromJSON(vData);
+  //   console.log({ vc, vData });
+  //   return vc.toJSON();
+  // }
+  // console.error("Vitessce config missing 'layout' or 'name' field.");
   return vData;
 }
 
