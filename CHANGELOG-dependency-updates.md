@@ -1,2 +1,0 @@
-- Update to Cypress 15.
-- Update to Vitessce 3.8.9.

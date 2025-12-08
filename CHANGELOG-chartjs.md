@@ -1,0 +1,1 @@
+- Converted Diversity page to use visx chart components and removed chartjs.
