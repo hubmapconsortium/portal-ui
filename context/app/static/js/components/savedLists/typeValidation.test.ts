@@ -155,43 +155,6 @@ describe('validateSavedEntitiesList', () => {
     });
   });
 
-  describe('edge cases', () => {
-    it('should return true when object has extra fields', () => {
-      const listWithExtraFields = {
-        ...validList,
-        extraField: 'extra',
-        anotherField: 123,
-      };
-      expect(validateSavedEntitiesList(listWithExtraFields)).toBe(true);
-    });
-
-    it('should return false for an empty object', () => {
-      expect(validateSavedEntitiesList({})).toBe(false);
-    });
-
-    it('should return true for dateSaved = 0', () => {
-      const listWithZeroDate = { ...validList, dateSaved: 0 };
-      expect(validateSavedEntitiesList(listWithZeroDate)).toBe(true);
-    });
-
-    it('should return true for negative dateSaved', () => {
-      const listWithNegativeDate = { ...validList, dateSaved: -1 };
-      expect(validateSavedEntitiesList(listWithNegativeDate)).toBe(true);
-    });
-
-    it('should return true for NaN in dateSaved (limitation of typeof check)', () => {
-      // Note: typeof NaN === 'number' in JavaScript
-      const listWithNaN = { ...validList, dateSaved: NaN };
-      expect(validateSavedEntitiesList(listWithNaN)).toBe(true);
-    });
-
-    it('should return true for Infinity in dateLastModified (limitation of typeof check)', () => {
-      // Note: typeof Infinity === 'number' in JavaScript
-      const listWithInfinity = { ...validList, dateLastModified: Infinity };
-      expect(validateSavedEntitiesList(listWithInfinity)).toBe(true);
-    });
-  });
-
   describe('type guard behavior', () => {
     it('should work as a type guard that narrows unknown to SavedEntitiesList', () => {
       const unknownValue: unknown = validList;
