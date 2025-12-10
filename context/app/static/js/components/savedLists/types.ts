@@ -11,6 +11,43 @@ export interface SavedEntitiesList {
   savedEntities: Record<string, SavedEntity>;
 }
 
+export function validateSavedEntitiesList(obj: unknown): obj is SavedEntitiesList {
+  if (typeof obj !== 'object' || obj === null) {
+    return false;
+  }
+  const requiredKeys = ['title', 'description', 'dateSaved', 'dateLastModified', 'savedEntities'];
+  for (const key of requiredKeys) {
+    if (!(key in obj)) {
+      return false;
+    }
+  }
+
+  if ('title' in obj && typeof (obj as SavedEntitiesList).title !== 'string') {
+    return false;
+  }
+
+  if ('description' in obj && typeof (obj as SavedEntitiesList).description !== 'string') {
+    return false;
+  }
+
+  if ('dateSaved' in obj && typeof (obj as SavedEntitiesList).dateSaved !== 'number') {
+    return false;
+  }
+
+  if ('dateLastModified' in obj && typeof (obj as SavedEntitiesList).dateLastModified !== 'number') {
+    return false;
+  }
+
+  if ('savedEntities' in obj) {
+    const savedEntities = (obj as SavedEntitiesList).savedEntities;
+    if (typeof savedEntities !== 'object' || savedEntities === null) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export interface SavedPreferences {
   enableOpenKeyNav?: boolean;
 }
