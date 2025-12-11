@@ -12,9 +12,9 @@ function useSavedEntityCountsData(savedEntities: Record<string, SavedEntity>) {
   const query = useMemo(
     () => ({
       size: 0,
+      query: getIDsQuery(Object.keys(savedEntities)),
       aggs: {
         entity_counts: {
-          query: getIDsQuery(Object.keys(savedEntities)),
           terms: { field: 'entity_type.keyword', size: 10000 },
         },
       },
