@@ -7,6 +7,7 @@ import {
   SavedEntity,
   SavedListsEventCategories,
   SavedPreferences,
+  validateSavedEntitiesList,
 } from 'js/components/savedLists/types';
 import {
   RESERVED_KEYS,
@@ -185,7 +186,9 @@ function useListSavedListsAndEntities() {
   // Anything that is not a reserved key is a list key
   const savedLists = !isLoading
     ? (Object.fromEntries(
-        Object.entries(savedListsAndEntitiesRecord).filter(([key]) => !RESERVED_KEYS.includes(key)),
+        Object.entries(savedListsAndEntitiesRecord).filter(
+          ([key, value]) => !RESERVED_KEYS.includes(key) && validateSavedEntitiesList(value),
+        ),
       ) as Record<string, SavedEntitiesList>)
     : {};
 
