@@ -9,20 +9,23 @@ interface EntityCounts {
   };
 }
 function useSavedEntityCountsData(savedEntities: Record<string, SavedEntity>) {
+  const ids = useMemo(() => Object.keys(savedEntities), [savedEntities]);
   const query = useMemo(
     () => ({
       size: 0,
-      query: getIDsQuery(Object.keys(savedEntities)),
+      query: getIDsQuery(ids),
       aggs: {
         entity_counts: {
           terms: { field: 'entity_type.keyword', size: 10000 },
         },
       },
     }),
-    [savedEntities],
+    [ids],
   );
 
-  const { searchData, isLoading } = useSearchData<unknown, EntityCounts>(query);
+  const { searchData, isLoading } = useSearchData<unknown, EntityCounts>(query, {
+    shouldFetch: ids.length > 0,
+  });
   return { searchData, isLoading };
 }
 
