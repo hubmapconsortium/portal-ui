@@ -1,1 +1,0 @@
-- Add more explicit validation to confirm a value in UKV is a saved list before treating it as a list.

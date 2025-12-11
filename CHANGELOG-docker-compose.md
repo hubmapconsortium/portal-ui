@@ -1,1 +1,0 @@
-- Remove hyphen from `docker compose` commands.

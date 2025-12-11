@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.37.4 - 2025-12-11
+
+- Remove hyphen from `docker compose` commands.
+- Return empty lists of results for requests made with an empty list of IDs.
+- Add more explicit validation to confirm a value in UKV is a saved list before treating it as a list.
+
+
+
 ## v1.37.3 - 2025-12-05
 
 - Fix empty IDs query breaking permission checks.
