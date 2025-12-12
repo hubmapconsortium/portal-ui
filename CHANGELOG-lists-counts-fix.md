@@ -1,0 +1,1 @@
+- Fix list entity counts query.
