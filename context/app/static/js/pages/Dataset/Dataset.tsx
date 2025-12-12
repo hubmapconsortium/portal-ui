@@ -36,6 +36,7 @@ import PublicationsSection from 'js/components/detailPage/PublicationsSection';
 import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 import IntegratedDatasetPage from './IntegratedDataset';
+import SummaryDataChildren from './DatasetPageSummaryChildren';
 
 function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   if (!isExternal) {
@@ -162,7 +163,7 @@ function DetailPageWrapper({ assayMetadata, integrated, ...props }: DetailPageWr
   const { entity_type, hubmap_id } = assayMetadata;
   useTrackID({ entity_type, hubmap_id });
 
-  if (integrated) {
+  if (integrated && isDataset(assayMetadata)) {
     return <IntegratedDatasetPage assayMetadata={assayMetadata} {...props} />;
   }
 
