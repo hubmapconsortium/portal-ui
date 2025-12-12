@@ -23,7 +23,7 @@ const DescriptionPaper = styled(ChartPaper)(({ theme }) => ({
 
 const ChartTitle = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1.25),
-}));
+})) as typeof Typography;
 
 const StyledSectionPaper = styled(SectionPaper)({
   display: 'flex',

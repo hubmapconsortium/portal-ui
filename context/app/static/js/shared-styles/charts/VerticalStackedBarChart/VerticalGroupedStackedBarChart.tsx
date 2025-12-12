@@ -147,6 +147,7 @@ interface GroupedBarStackProps<StackKey extends string, CompareByKey extends str
   ) => (event: React.MouseEvent<SVGRectElement>) => void;
   handleMouseLeave: () => void;
   xAxisTickLabels: string[];
+  simpleGroupedMode?: boolean;
 }
 
 export function GroupedBarStacks<StackKey extends string, CompareByKey extends string, XAxisKey extends string>({
@@ -161,6 +162,7 @@ export function GroupedBarStacks<StackKey extends string, CompareByKey extends s
   handleMouseLeave,
   compareByKeys,
   xAxisTickLabels,
+  simpleGroupedMode = false,
 }: GroupedBarStackProps<StackKey, CompareByKey, XAxisKey>) {
   const xScaleBandwidth = xScale.bandwidth();
 
@@ -216,17 +218,19 @@ export function GroupedBarStacks<StackKey extends string, CompareByKey extends s
                     {(barStacks) =>
                       barStacks.map((barStack) => {
                         return barStack.bars.map((d) => {
-                          const key = `${bar.key} ${d.key}`;
+                          // In simple grouped mode, use just the compareByKey (e.g., "White")
+                          // Otherwise use composite key (e.g., "White count")
+                          const barKey = simpleGroupedMode ? String(bar.key) : `${bar.key} ${d.key}`;
                           return (
                             <StackedBar
                               key={`${barStackRenderKey}-${d.index}`}
                               bar={{
                                 ...d,
-                                color: barColorScale(key),
+                                color: barColorScale(barKey),
                               }}
                               colorScale={barColorScale}
                               direction="vertical"
-                              aria-label={`Stacked bar for ${key}`}
+                              aria-label={`Stacked bar for ${barKey}`}
                               hoverProps={{
                                 onMouseEnter: handleMouseEnter({
                                   bar: {
@@ -235,7 +239,7 @@ export function GroupedBarStacks<StackKey extends string, CompareByKey extends s
                                       group: actualBarGroup as XAxisKey,
                                     },
                                   },
-                                  key,
+                                  key: barKey,
                                 }),
                                 onMouseLeave: handleMouseLeave,
                               }}
@@ -279,6 +283,8 @@ interface GroupedBarStackChartProps<
   stackKeys: StackKey[];
   yTickFormat?: (value: number) => string;
   excludedKeys?: string[];
+  /** When true, uses simple grouped bar mode where colors represent compareByKeys instead of stackKeys */
+  simpleGroupedMode?: boolean;
 }
 
 function GroupedBarStackChart<
@@ -307,6 +313,7 @@ function GroupedBarStackChart<
   stackKeys,
   yTickFormat,
   excludedKeys,
+  simpleGroupedMode = false,
 }: GroupedBarStackChartProps<StackKey, CompareByKey, XAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin } = useVerticalChart({
     margin,
@@ -361,6 +368,15 @@ function GroupedBarStackChart<
     return summaryData;
   }, [data, stackKeys, compareByKeys]);
 
+  // Compute excludedKeys for tooltip: in simple grouped mode, exclude stack keys
+  const tooltipExcludedKeys = useMemo(() => {
+    const baseExcluded = excludedKeys ?? [];
+    if (simpleGroupedMode) {
+      return [...baseExcluded, ...stackKeys];
+    }
+    return baseExcluded;
+  }, [excludedKeys, simpleGroupedMode, stackKeys]);
+
   return (
     <svg width={parentWidth} height={parentHeight} ref={containerRef}>
       <AxisLeft<AxisScale<number>>
@@ -400,6 +416,7 @@ function GroupedBarStackChart<
           compareByKeys={compareByKeys}
           stackKeys={stackKeys}
           xAxisTickLabels={xAxisTickLabels}
+          simpleGroupedMode={simpleGroupedMode}
         />
       </VerticalChartGridRowsGroup>
       <AxisBottom
@@ -419,7 +436,7 @@ function GroupedBarStackChart<
       />
       {tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
+          <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={tooltipExcludedKeys} />
         </TooltipInPortal>
       )}
     </svg>
