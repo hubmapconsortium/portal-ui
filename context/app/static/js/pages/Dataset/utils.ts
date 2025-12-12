@@ -1,3 +1,4 @@
+import { Entity } from 'js/components/types';
 import { ProcessedDatasetInfo } from './hooks';
 
 export function datasetSectionId(dataset: Pick<ProcessedDatasetInfo, 'hubmap_id'>, prefix = '') {
@@ -26,4 +27,19 @@ export function processDatasetLabel(
   }
 
   return label;
+}
+
+export function combineContributors(entities: Entity[]) {
+  const seenContributorStrings = new Set();
+  const combinedContributors = [];
+  for (const entity of entities)
+    if (entity?.contributors)
+      for (const contributor of entity.contributors) {
+        const contributorString = `${contributor.first_name}|${contributor.middle_name_or_initial}|${contributor.last_name}|${contributor.affiliation}`;
+        if (!seenContributorStrings.has(contributorString)) {
+          seenContributorStrings.add(contributorString);
+          combinedContributors.push(contributor);
+        }
+      }
+  return combinedContributors;
 }

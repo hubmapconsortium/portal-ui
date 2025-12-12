@@ -27,6 +27,7 @@ import { EntityDetailProps } from './Dataset';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
 import IntegratedDatasets from 'js/components/detailPage/IntegratedDatasets/IntegratedDatasets';
+import { combineContributors } from './utils';
 
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
@@ -39,7 +40,6 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     sub_status,
     mapped_data_access_level,
     mapped_external_group_name,
-    contributors,
     contacts,
     ancestor_ids,
     // Parent dataset IDs for SnareSeq2 datasets are the components
@@ -127,8 +127,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>
-            {/* TODO: This needs to collect all of the contributors/contacts from parent datasets for snareseq2 */}
-            <ContributorsTable contributors={contributors} contacts={contacts} />
+            <ContributorsTable contributors={combineContributors(entities)} contacts={contacts} />
           </Attribution>
         </DetailLayout>
       </SelectedVersionStoreProvider>
