@@ -27,7 +27,7 @@ import { EntityDetailProps } from './Dataset';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
 import IntegratedDatasets from 'js/components/detailPage/IntegratedDatasets/IntegratedDatasets';
-import { combineContributors } from './utils';
+import { combinePeopleLists } from './utils';
 
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
@@ -40,7 +40,6 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     sub_status,
     mapped_data_access_level,
     mapped_external_group_name,
-    contacts,
     ancestor_ids,
     // Parent dataset IDs for SnareSeq2 datasets are the components
     immediate_ancestor_ids,
@@ -50,6 +49,14 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   const entitiesWithMetadata = entities.filter((e) =>
     hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
+  );
+
+  const contributors = combinePeopleLists(
+    entities.filter((entity) => entity?.contributors).map((entity) => entity.contributors)
+  );
+
+  const contacts = combinePeopleLists(
+    entities.filter((entity) => entity?.contacts).map((entity) => entity.contacts)
   );
 
   useRedirectAlert();
@@ -127,7 +134,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>
-            <ContributorsTable contributors={combineContributors(entities)} contacts={contacts} />
+            <ContributorsTable contributors={contributors} contacts={contacts} />
           </Attribution>
         </DetailLayout>
       </SelectedVersionStoreProvider>
