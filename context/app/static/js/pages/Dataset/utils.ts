@@ -29,33 +29,35 @@ export function processDatasetLabel(
   return label;
 }
 
-export function combinePeopleLists<T>(peopleLists: T[][]): T[] {
+type Person = ContactAPIResponse | ContributorAPIResponse;
+interface OrcidPerson {
+  orcid: string;
+}
+
+export function combinePeopleLists<T extends Person>(peopleLists: T[][]): T[] {
   // Use ORCiD to deduplicate the people if everyone has one; otherwise use name.
   const allHaveOrcid = peopleLists.every(
-    (list) => list.every((person) => person?.orcid)
+    (list) => list.every((person) => "orcid" in person)
   );
   const personIdFn = allHaveOrcid
-    ? (person) => person.orcid
-    : (person) => `${person.first_name}|${person.middle_name_or_initial}|${person.last_name}|${person.affiliation}`;
+    ? (person: Person) => (person as OrcidPerson).orcid
+    : (person: Person) => `${person.first_name}|${person.middle_name_or_initial}|${person.last_name}|${person.affiliation}`;
 
   // Deduplicate people, keeping track of the sum of the person's index in each list
   // and the total number of lists in which the person appears.
   const seenPersonIds = new Set();
-  const personIdxSum = new Map();
-  const personCount = new Map();
+  const personIdxSum: Map<string, number> = new Map();
+  const personCount: Map<string, number>  = new Map();
   const combinedPeople: T[] = [];
   for (const list of peopleLists)
     list.forEach((person, i) => {
       const personId = personIdFn(person);
-      if (seenPersonIds.has(personId)) {
-        personIdxSum[personId] += i;
-        personCount[personId] += 1;
-      } else {
+      if (!seenPersonIds.has(personId)) {
         seenPersonIds.add(personId);
         combinedPeople.push(person);
-        personIdxSum[personId] = i;
-        personCount[personId] = 1;
       }
+      personIdxSum.set(personId, (personIdxSum.get(personId) || 0) + i);
+      personCount.set(personId, (personCount.get(personId) || 0) + 1);
     });
 
   // Sort the deduplicated list by average index (ascending) and count (descending).
@@ -64,10 +66,10 @@ export function combinePeopleLists<T>(peopleLists: T[][]): T[] {
   combinedPeople.sort((a, b) => {
     const aId = personIdFn(a);
     const bId = personIdFn(b);
-    const aCount = personCount[aId];
-    const bCount = personCount[bId];
-    const aIdxAvg = personIdxSum[aId] / aCount;
-    const bIdxAvg = personIdxSum[bId] / bCount;
+    const aCount = personCount.get(aId) || 1;
+    const bCount = personCount.get(bId) || 1;
+    const aIdxAvg = (personIdxSum.get(aId) || 0) / aCount;
+    const bIdxAvg = (personIdxSum.get(bId) || 0) / bCount;
     if (aIdxAvg < bIdxAvg) return -1;
     if (bIdxAvg < aIdxAvg) return 1;
     if (aCount > bCount) return -1;
