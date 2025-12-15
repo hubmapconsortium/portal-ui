@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.37.5 - 2025-12-15
+
+- Fix list entity counts query.
+
+
+
 ## v1.37.4 - 2025-12-11
 
 - Remove hyphen from `docker compose` commands.
