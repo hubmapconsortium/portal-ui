@@ -26,7 +26,7 @@ export default function CollectionsPanelList() {
         noPadding: true,
         children: <CollectionPanel.Header />,
       },
-      ...filteredCollections.map(({ uuid, title, hubmap_id, created_timestamp, datasets }) => ({
+      ...filteredCollections.map(({ uuid, title, hubmap_id, created_timestamp, datasets = [] }) => ({
         key: uuid,
         noPadding: true,
         noHover: false,

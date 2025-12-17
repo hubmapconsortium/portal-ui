@@ -1,0 +1,1 @@
+- Support edge cases where collections don't have any datasets.
