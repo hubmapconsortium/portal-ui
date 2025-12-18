@@ -1,5 +1,5 @@
 import { ProcessedDatasetInfo } from './hooks';
-import { ContactAPIResponse, ContributorAPIResponse } from '../../components/detailPage/ContributorsTable/utils';
+import { ContactAPIResponse, ContributorAPIResponse } from 'js/components/detailPage/ContributorsTable/utils';
 
 export function datasetSectionId(dataset: Pick<ProcessedDatasetInfo, 'hubmap_id'>, prefix = '') {
   return `${prefix}-${encodeURIComponent(dataset.hubmap_id)}`.toLowerCase();
@@ -36,18 +36,17 @@ interface OrcidPerson {
 
 export function combinePeopleLists<T extends Person>(peopleLists: T[][]): T[] {
   // Use ORCiD to deduplicate the people if everyone has one; otherwise use name.
-  const allHaveOrcid = peopleLists.every(
-    (list) => list.every((person) => "orcid" in person)
-  );
+  const allHaveOrcid = peopleLists.every((list) => list.every((person) => 'orcid' in person));
   const personIdFn = allHaveOrcid
     ? (person: Person) => (person as OrcidPerson).orcid
-    : (person: Person) => `${person.first_name}|${person.middle_name_or_initial}|${person.last_name}|${person.affiliation}`;
+    : (person: Person) =>
+        `${person.first_name}|${person.middle_name_or_initial}|${person.last_name}|${person.affiliation}`;
 
   // Deduplicate people, keeping track of the sum of the person's index in each list
   // and the total number of lists in which the person appears.
   const seenPersonIds = new Set();
   const personIdxSum: Map<string, number> = new Map();
-  const personCount: Map<string, number>  = new Map();
+  const personCount: Map<string, number> = new Map();
   const combinedPeople: T[] = [];
   for (const list of peopleLists)
     list.forEach((person, i) => {

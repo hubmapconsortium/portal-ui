@@ -27,8 +27,8 @@ import { EntityDetailProps } from './Dataset';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
 import IntegratedDatasets from 'js/components/detailPage/IntegratedDatasets/IntegratedDatasets';
-import { combinePeopleLists } from './utils';
-import { Entity } from '../../components/types';
+import { combinePeopleLists } from 'js/pages/Dataset/utils';
+import { Entity } from 'js/components/types';
 
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
@@ -52,13 +52,8 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
   );
 
-  const contributors = combinePeopleLists(
-    entities.filter((entity: Entity) => entity?.contributors).map((entity: Entity) => entity.contributors)
-  );
-
-  const contacts = combinePeopleLists(
-    entities.filter((entity: Entity) => entity?.contacts).map((entity: Entity) => entity.contacts)
-  );
+  const contributors = combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
+  const contacts = combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
 
   useRedirectAlert();
 
