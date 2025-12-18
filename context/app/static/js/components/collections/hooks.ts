@@ -25,7 +25,7 @@ export function useCollections() {
   const downloadTable = useDownloadTable({
     fileName: 'collections.tsv',
     columnNames: ['Title', 'Number of Datasets', 'Creation Date'],
-    rows: collections.map(({ title, datasets, created_timestamp }) => {
+    rows: collections.map(({ title, datasets = [], created_timestamp }) => {
       const datasetCount = datasets.length.toString();
       const creationDate = created_timestamp ? format(new Date(created_timestamp), 'yyyy-MM-dd').toString() : '';
       return [title, datasetCount, creationDate];
