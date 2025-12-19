@@ -12,7 +12,7 @@ interface IntegratedDatasetsProps {
 
 function IntegratedDatasets({ datasets }: IntegratedDatasetsProps) {
   return (
-    <CollapsibleDetailPageSection id="integrated-datasets" title="Integrated Datasets">
+    <CollapsibleDetailPageSection id="integrated-datasets" title="Integrated Data">
       <EntityTable<Dataset>
         isSelectable={false}
         query={{
