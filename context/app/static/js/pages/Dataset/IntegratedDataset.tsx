@@ -74,6 +74,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     summary: true,
     metadata: true,
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
+    'integrated-datasets': true,
     'bulk-data-transfer': true,
     provenance: true,
     protocols: Boolean(protocol_url),
@@ -122,8 +123,11 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
               category: 'Integrated Dataset',
             }}
           />
-          <IntegratedDatasets datasets={immediate_ancestor_ids} />
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+          <IntegratedDatasets
+            datasets={immediate_ancestor_ids}
+            shouldDisplay={shouldDisplaySection['integrated-datasets']}
+          />
           {/* TODO: Should display the parent datasets as well */}
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
