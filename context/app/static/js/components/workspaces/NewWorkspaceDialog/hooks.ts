@@ -12,11 +12,16 @@ import {
   TemplatesTypes,
   WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
-import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
-import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
+import { useCreateAndLaunchWorkspace, useCreateTemplates, useRunningWorkspaces } from 'js/components/workspaces/hooks';
+import { buildDatasetSymlinks, findRunningWorkspaceByJobType } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useJobTypes } from 'js/components/workspaces/api';
-import { DEFAULT_JOB_TYPE, JUPYTER_LAB_R_JOB_TYPE, R_TEMPLATE_TITLE } from 'js/components/workspaces/constants';
+import {
+  DEFAULT_JOB_TYPE,
+  JUPYTER_LAB_R_JOB_TYPE,
+  R_TEMPLATE_TITLE,
+  YAC_JOB_TYPE,
+} from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -68,10 +73,11 @@ function useWorkspaceTemplates(tags: string[] = []) {
 function useTemplateNotebooks() {
   const { groupsToken } = useAppContext();
 
-  const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
+  const { createAndLaunchWorkspace, createWorkspaceOnly } = useCreateAndLaunchWorkspace();
   const { createTemplates } = useCreateTemplates();
   const { templates } = useWorkspaceTemplates();
   const { toastErrorWorkspaceTemplate } = useWorkspaceToasts();
+  const runningWorkspaces = useRunningWorkspaces();
 
   const createTemplateNotebooks = useCallback(
     async ({
@@ -124,22 +130,51 @@ function useTemplateNotebooks() {
         });
       }
 
+      const workspaceBody = {
+        name: workspaceName,
+        description: workspaceDescription,
+        default_job_type: workspaceJobTypeId,
+        workspace_details: {
+          globus_groups_token: groupsToken,
+          files: templatesDetails,
+          symlinks,
+        },
+      };
+
+      // Check if we're creating a YAC workspace and there's already a running YAC workspace
+      if (workspaceJobTypeId === YAC_JOB_TYPE) {
+        const runningYACWorkspace = findRunningWorkspaceByJobType(runningWorkspaces, YAC_JOB_TYPE);
+        if (runningYACWorkspace) {
+          // Create the workspace but don't launch it - use toast without launch message
+          const workspace = await createWorkspaceOnly({ body: workspaceBody, showLaunchMessage: false });
+          // Return conflict information with the newly created workspace
+          // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+          return Promise.reject({
+            isYACConflict: true,
+            runningWorkspace: runningYACWorkspace,
+            newWorkspace: workspace,
+            templatePath,
+            resourceOptions: workspaceResourceOptions,
+            message: `Workspace "${workspaceName}" created, but cannot launch while "${runningYACWorkspace.name}" is running.`,
+          });
+        }
+      }
+
       await createAndLaunchWorkspace({
         templatePath,
-        body: {
-          name: workspaceName,
-          description: workspaceDescription,
-          default_job_type: workspaceJobTypeId,
-          workspace_details: {
-            globus_groups_token: groupsToken,
-            files: templatesDetails,
-            symlinks,
-          },
-        },
+        body: workspaceBody,
         resourceOptions: workspaceResourceOptions,
       });
     },
-    [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates],
+    [
+      groupsToken,
+      createAndLaunchWorkspace,
+      createWorkspaceOnly,
+      createTemplates,
+      toastErrorWorkspaceTemplate,
+      templates,
+      runningWorkspaces,
+    ],
   );
 
   return createTemplateNotebooks;

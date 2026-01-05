@@ -92,6 +92,20 @@ export const useWorkspaceToasts = () => {
     toastSuccess('Workspace successfully created.');
   }, [toastSuccess]);
 
+  const toastSuccessCreateWorkspaceOnly = useCallback(
+    (id: idType) => {
+      toastSuccess(
+        <Stack spacing={1} maxWidth="22rem">
+          <Typography>Workspace successfully created.</Typography>
+          <Button href={`/workspaces/${id}`} variant="text" color="inherit" sx={{ alignSelf: 'flex-end' }}>
+            View Workspace Detail Page
+          </Button>
+        </Stack>,
+      );
+    },
+    [toastSuccess],
+  );
+
   const toastSuccessDeleteWorkspaces = useCallback(
     (names: string | React.ReactElement) => {
       toastSuccess(<Typography>Successfully deleted workspaces: {names}</Typography>);
@@ -173,6 +187,7 @@ export const useWorkspaceToasts = () => {
     toastSuccessRemoveRestrictedDatasets,
     toastSuccessUpdateWorkspace,
     toastSuccessCreateWorkspace,
+    toastSuccessCreateWorkspaceOnly,
     toastSuccessDeleteWorkspaces,
     toastSuccessAddDataset,
     toastSuccessLaunchWorkspace,

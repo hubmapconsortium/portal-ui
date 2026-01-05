@@ -21,6 +21,7 @@ import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { MAX_NUM_CONCURRENT_WORKSPACES } from 'js/components/workspaces/constants';
 import { tooManyWorkspacesRunning } from 'js/components/workspaces/utils';
 import WorkspaceEnvironmentDescription from '../WorkspaceEnvironmentDescription';
+import ConfirmStopYACWorkspaceDialog from '../ConfirmStopYACWorkspaceDialog';
 
 const formId = 'launch-workspace-form';
 
@@ -56,6 +57,10 @@ function LaunchWorkspaceDialog() {
     workspace,
     isSubmitting,
     dialogType,
+    showYACConflictDialog,
+    handleYACConflictClose,
+    handleYACConflictConfirm,
+    runningYACWorkspace,
   } = useLaunchWorkspaceDialog();
 
   const workspaceName = workspace?.name;
@@ -144,6 +149,15 @@ function LaunchWorkspaceDialog() {
         }
         withCloseButton
       />
+      {showYACConflictDialog && (
+        <ConfirmStopYACWorkspaceDialog
+          handleClose={handleYACConflictClose}
+          handleConfirm={() => {
+            void handleYACConflictConfirm();
+          }}
+          runningYACWorkspace={runningYACWorkspace}
+        />
+      )}
     </WorkspacesEventContextProvider>
   );
 }

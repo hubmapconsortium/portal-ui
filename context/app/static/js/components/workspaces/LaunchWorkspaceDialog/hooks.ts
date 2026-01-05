@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEventCallback } from '@mui/material/utils';
@@ -13,9 +13,15 @@ import {
   DEFAULT_MEMORY_MB,
   DEFAULT_NUM_CPUS,
   DEFAULT_TIME_LIMIT_MINUTES,
+  YAC_JOB_TYPE,
 } from 'js/components/workspaces/constants';
 import { MergedWorkspace, Workspace, WorkspaceResourceOptions } from 'js/components/workspaces/types';
-import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from 'js/components/workspaces/utils';
+import {
+  findBestJobType,
+  getWorkspaceResourceOptions,
+  isRunningWorkspace,
+  findRunningWorkspaceByJobType,
+} from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 export interface LaunchWorkspaceFormTypes {
@@ -74,6 +80,9 @@ function useLaunchWorkspaceDialog() {
 
   const { control, handleSubmit, isSubmitting, reset, setValue } = useLaunchWorkspaceForm();
 
+  const [showYACConflictDialog, setShowYACConflictDialog] = useState(false);
+  const [pendingLaunchData, setPendingLaunchData] = useState<LaunchWorkspaceFormTypes | null>(null);
+
   // The default value must be set as it will not update when passed to the form hook.
   useEffect(() => {
     if (workspace?.default_job_type) {
@@ -92,6 +101,17 @@ function useLaunchWorkspaceDialog() {
       if (!workspace) {
         console.error('No workspace to run found.');
         return;
+      }
+
+      // Check if we're launching a YAC workspace and there's already a running YAC workspace
+      if (workspaceJobTypeId === YAC_JOB_TYPE && runningWorkspaces) {
+        const runningYACWorkspace = findRunningWorkspaceByJobType(runningWorkspaces, YAC_JOB_TYPE);
+        if (runningYACWorkspace && runningYACWorkspace.id !== workspace.id) {
+          // Show confirmation dialog to stop the existing YAC workspace
+          setPendingLaunchData({ workspaceToLaunch, workspaceJobTypeId, workspaceResourceOptions });
+          setShowYACConflictDialog(true);
+          return;
+        }
       }
 
       await startAndOpenWorkspace({
@@ -119,6 +139,25 @@ function useLaunchWorkspaceDialog() {
     }
   });
 
+  const handleYACConflictClose = useCallback(() => {
+    setShowYACConflictDialog(false);
+    setPendingLaunchData(null);
+  }, []);
+
+  const handleYACConflictConfirm = useEventCallback(async () => {
+    setShowYACConflictDialog(false);
+    if (pendingLaunchData) {
+      await startAndOpenWorkspace({
+        jobTypeId: pendingLaunchData.workspaceJobTypeId,
+        workspace: pendingLaunchData.workspaceToLaunch,
+        resourceOptions: pendingLaunchData.workspaceResourceOptions,
+      });
+      setPendingLaunchData(null);
+    }
+  });
+
+  const runningYACWorkspace = runningWorkspaces ? findRunningWorkspaceByJobType(runningWorkspaces, YAC_JOB_TYPE) : null;
+
   return {
     currentWorkspaceIsRunning,
     runningWorkspaces,
@@ -134,6 +173,10 @@ function useLaunchWorkspaceDialog() {
     launchOrOpenDialog,
     dialogType,
     setDialogType,
+    showYACConflictDialog,
+    handleYACConflictClose,
+    handleYACConflictConfirm,
+    runningYACWorkspace,
   };
 }
 
