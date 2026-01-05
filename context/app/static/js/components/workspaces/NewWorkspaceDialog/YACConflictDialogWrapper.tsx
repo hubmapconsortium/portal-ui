@@ -4,7 +4,13 @@ import { useEventCallback } from '@mui/material/utils';
 import ConfirmStopYACWorkspaceDialog from 'js/components/workspaces/ConfirmStopYACWorkspaceDialog';
 import { useLaunchWorkspace, useWorkspacesList } from 'js/components/workspaces/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
-import { MergedWorkspace, Workspace, WorkspaceResourceOptions } from 'js/components/workspaces/types';
+import {
+  MergedWorkspace,
+  Workspace,
+  WorkspaceResourceOptions,
+  WorkspacesEventCategories,
+} from 'js/components/workspaces/types';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 
 interface YACConflictDialogWrapperProps {
   showDialog: boolean;
@@ -63,12 +69,18 @@ export default function YACConflictDialogWrapper({
   }
 
   return (
-    <ConfirmStopYACWorkspaceDialog
-      handleClose={handleClose}
-      handleConfirm={() => {
-        void handleConfirm();
-      }}
-      runningYACWorkspace={conflictData.runningWorkspace}
-    />
+    <WorkspacesEventContextProvider
+      currentEventCategory={WorkspacesEventCategories.WorkspaceDialog}
+      currentWorkspaceItemId={conflictData.runningWorkspace.id}
+      currentWorkspaceItemName={conflictData.runningWorkspace.name}
+    >
+      <ConfirmStopYACWorkspaceDialog
+        handleClose={handleClose}
+        handleConfirm={() => {
+          void handleConfirm();
+        }}
+        runningYACWorkspace={conflictData.runningWorkspace}
+      />
+    </WorkspacesEventContextProvider>
   );
 }
