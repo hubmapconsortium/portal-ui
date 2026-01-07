@@ -221,16 +221,14 @@ def determine_user_permissions(user_globus_groups, globus_groups, permission_gro
 def extract_safe_redirect_path(url_before_login):
     """
     Extract and validate a safe redirect path from a URL.
-    Handles both full URLs and relative paths by extracting only the path component.
+    Allows only relative paths from the cookie (path + query + hash).
 
     Args:
-        url_before_login: URL-encoded string from cookie
+        url_before_login: URL-encoded string from cookie (should be relative path only)
 
     Returns:
         str: Safe path to redirect to, or '/' if invalid
 
-    >>> extract_safe_redirect_path('http%3A%2F%2Flocalhost%3A5001%2Fbrowse%2Fdatasets')
-    '/browse/datasets'
     >>> extract_safe_redirect_path('/browse/datasets')
     '/browse/datasets'
     >>> extract_safe_redirect_path('/search?q=test')
@@ -239,26 +237,53 @@ def extract_safe_redirect_path(url_before_login):
     '/page#section'
     >>> extract_safe_redirect_path('//evil.com/path')
     '/'
+    >>> extract_safe_redirect_path('http://external.com/malicious')
+    '/'
+    >>> extract_safe_redirect_path('https://evil.com/phishing')
+    '/'
     >>> extract_safe_redirect_path('/..%2f..%2fetc%2fpasswd')
     '/'
     >>> extract_safe_redirect_path('')
     '/'
-    >>> extract_safe_redirect_path('http://external.com/malicious')
-    '/malicious'
+    >>> extract_safe_redirect_path('/page?injection=%0aSet-Cookie:malicious')
+    '/'
+    >>> extract_safe_redirect_path('/page#fragment%0d%0a')
+    '/'
     """
     if not url_before_login:
         return '/'
 
     decoded_url = unquote(url_before_login)
 
-    # Check for protocol-relative URLs (//domain/path) before parsing
-    if decoded_url.startswith('//'):
+    # Check for dangerous characters in the decoded URL before parsing
+    # This catches URL-encoded injection attempts like %0a, %0d, %00
+    dangerous_chars = ['\n', '\r', '\x00', '\x0a', '\x0d']
+    if any(char in decoded_url for char in dangerous_chars):
+        return '/'
+
+    # Reject any URLs that look like they have a scheme or are protocol-relative
+    # Since the cookie should only contain relative paths now
+    if '://' in decoded_url or decoded_url.startswith('//'):
         return '/'
 
     parsed = urlparse(decoded_url)
 
+    # Reject if parsed URL has a scheme or netloc (shouldn't happen with relative paths)
+    if parsed.scheme or parsed.netloc:
+        return '/'
+
+    # Additional validation on query and fragment components
+    # Check for URL-encoded variants that might not have been decoded
+    if parsed.query and any(encoded in parsed.query.lower() for encoded in ['%0a', '%0d', '%00']):
+        return '/'
+
+    if parsed.fragment and any(
+        encoded in parsed.fragment.lower() for encoded in ['%0a', '%0d', '%00']
+    ):
+        return '/'
+
     # Extract path, query, and fragment from the URL
-    safe_path = parsed.path if decoded_url else '/'
+    safe_path = parsed.path or '/'
     if parsed.query:
         safe_path += '?' + parsed.query
     if parsed.fragment:
@@ -299,7 +324,11 @@ def format_user_groups_cookie_value(user_globus_groups):
     """
     if not user_globus_groups:
         return 'none'
-    return '|'.join(g.get('name') for g in user_globus_groups)
+    # Collect valid, non-empty group names; ignore groups without a usable 'name'
+    names = [g.get('name') for g in user_globus_groups if isinstance(g, dict) and g.get('name')]
+    if not names:
+        return 'none'
+    return '|'.join(names)
 
 
 @blueprint.route('/login')
@@ -430,9 +459,9 @@ def logout():
     - Destroy the session state.
     - And when redirect returns, redirect again to the Globus Auth logout page.
     """
-    redirect_to_globus_param = 'redirect_to_globus'
+    redirect_to_globus = 'redirect_to_globus'
 
-    if redirect_to_globus_param in request.args:
+    if redirect_to_globus in request.args:
         redirect_uri = url_for('routes_main.index', _external=True)
         globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode(
             {
