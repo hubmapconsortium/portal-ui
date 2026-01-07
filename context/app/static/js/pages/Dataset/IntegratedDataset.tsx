@@ -44,7 +44,10 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     ancestor_ids,
     // Parent dataset IDs for SnareSeq2 datasets are the components
     immediate_ancestor_ids,
+    creation_action,
   } = assayMetadata;
+
+  const isExternal = creation_action === 'External Process';
 
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
 
@@ -72,7 +75,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   const shouldDisplaySection = {
     summary: true,
-    metadata: true,
+    metadata: isExternal,
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
     'bulk-data-transfer': true,
     provenance: true,
@@ -126,7 +129,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
           {/* TODO: Should display the parent datasets as well */}
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
-          <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
+          <ProvSection shouldDisplay={shouldDisplaySection.provenance} integratedDataset />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>

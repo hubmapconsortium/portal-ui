@@ -21,7 +21,11 @@ const availableTabDetails = {
 
 const LARGE_GRAPH_THRESHOLD = 400;
 
-function ProvTabs() {
+interface ProvTabsProps {
+  integratedDataset?: boolean;
+}
+
+function ProvTabs({ integratedDataset = false }: ProvTabsProps) {
   const {
     entity: { uuid, entity_type, data_types },
   } = useFlaskDataContext();
@@ -71,6 +75,23 @@ function ProvTabs() {
     setHasConfirmedLargeGraph(true);
     trackEntityPageEvent({ action: 'Provenance / Graph / Large Graph Confirmed' });
   });
+
+  if (integratedDataset) {
+    if (shouldShowWarning) {
+      return (
+        <Paper>
+          <LargeGraphWarning entityCount={entityCount} onConfirm={handleConfirm} />
+        </Paper>
+      );
+    }
+    return (
+      <Paper>
+        <ProvGraphErrorBoundary>
+          <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
+        </ProvGraphErrorBoundary>
+      </Paper>
+    );
+  }
 
   return (
     <Paper>
