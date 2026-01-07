@@ -136,7 +136,12 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           {/* TODO: Should display the parent datasets as well */}
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} integratedDataset />
-          <AnalysisDetailsSection isExternal={isExternal} protocolUrl={protocolUrl} dataset={assayMetadata} />
+          <AnalysisDetailsSection
+            isExternal={isExternal}
+            protocolUrl={protocolUrl}
+            dataset={assayMetadata}
+            shouldDisplay={Boolean(protocolUrl) || !isExternal}
+          />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>

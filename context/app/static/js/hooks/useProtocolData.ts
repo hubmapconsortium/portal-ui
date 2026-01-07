@@ -36,7 +36,10 @@ export function useFormattedProtocolUrls(protocolUrls: string, lastVersion: numb
     // If only one string is provided, it will be returned as an array
     // "dx.doi.org/10.17504/protocols.io.5qpvob93dl4o/v1, dx.doi.org/10.17504/protocols.io.dm6gpb7p5lzp/v1" ->
     // ["dx.doi.org/10.17504/protocols.io.5qpvob93dl4o/v1", "dx.doi.org/10.17504/protocols.io.dm6gpb7p5lzp/v1"]
-    const splitLinks = protocolUrls.split(',').map((url) => url.trim());
+    const splitLinks = protocolUrls
+      .split(',')
+      .map((url) => url.trim())
+      .filter((url) => url.length > 0);
 
     splitLinks.forEach((url) => {
       // Check if this is a GitHub URL

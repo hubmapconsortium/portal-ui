@@ -105,6 +105,36 @@ describe('useFormattedProtocolUrls', () => {
     expect(result).toEqual({ protocols: [], gitHub: [] });
   });
 
+  it('should filter out empty strings from trailing commas', () => {
+    const protocolUrls = 'https://dx.doi.org/10.17504/protocols.io.btnfnmbn,';
+    const lastVersion = 1;
+    const result = getResult(protocolUrls, lastVersion);
+    expect(result).toEqual({
+      protocols: ['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1'],
+      gitHub: [],
+    });
+  });
+
+  it('should filter out empty strings from multiple consecutive commas', () => {
+    const protocolUrls = 'https://dx.doi.org/10.17504/protocols.io.btnfnmbn,,https://github.com/user/repo';
+    const lastVersion = 1;
+    const result = getResult(protocolUrls, lastVersion);
+    expect(result).toEqual({
+      protocols: ['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1'],
+      gitHub: ['https://github.com/user/repo'],
+    });
+  });
+
+  it('should filter out empty strings from leading and trailing commas', () => {
+    const protocolUrls = ',https://dx.doi.org/10.17504/protocols.io.btnfnmbn,';
+    const lastVersion = 1;
+    const result = getResult(protocolUrls, lastVersion);
+    expect(result).toEqual({
+      protocols: ['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1'],
+      gitHub: [],
+    });
+  });
+
   describe('GitHub link detection', () => {
     it('should detect a GitHub URL', () => {
       const protocolUrls = 'https://github.com/user/repo';

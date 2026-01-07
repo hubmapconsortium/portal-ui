@@ -23,7 +23,7 @@ import { DatasetAttributionDescription } from 'js/components/detailPage/Attribut
 import Files from 'js/components/detailPage/files/Files';
 import DataProducts from 'js/components/detailPage/files/DataProducts';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
-import AnalysisDetailsProps from 'js/components/detailPage/AnalysisDetails';
+import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
 // import Protocol from 'js/components/detailPage/Protocol';
 import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
@@ -226,7 +226,7 @@ function AnalysisDetailsAccordion() {
       icon={<FactCheckRounded />}
     >
       {/* Boolean(protocol_url) && <Protocol protocol_url={protocol_url} /> */}
-      <AnalysisDetailsProps
+      <AnalysisDetails
         dagListData={dag_provenance_list}
         workflow_description={workflow_description}
         workflow_version={workflow_version}

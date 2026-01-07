@@ -22,7 +22,7 @@ function AnalysisDetailsWrapper({ isExternal, dataset }: Pick<AnalysisDetailsSec
   if (!dataset) {
     return <Skeleton variant="rectangular" height={200} />;
   }
-  const { ingest_metadata } = dataset || {};
+  const { ingest_metadata } = dataset;
   const { workflow_description, workflow_version, dag_provenance_list } = ingest_metadata || {};
 
   if (!dag_provenance_list) {
