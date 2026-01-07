@@ -249,6 +249,14 @@ def extract_safe_redirect_path(url_before_login):
     '/'
     >>> extract_safe_redirect_path('/page#fragment%0d%0a')
     '/'
+    >>> extract_safe_redirect_path('/valid/path/../../../etc/passwd')
+    '/'
+    >>> extract_safe_redirect_path('/legitimate/%2e%2e/etc/passwd')
+    '/'
+    >>> extract_safe_redirect_path('/path/./hidden')
+    '/'
+    >>> extract_safe_redirect_path('/path%5cwindows')
+    '/'
     """
     if not url_before_login:
         return '/'
@@ -289,16 +297,30 @@ def extract_safe_redirect_path(url_before_login):
     if parsed.fragment:
         safe_path += '#' + parsed.fragment
 
-    # Validate the path is safe: must be a relative path starting with '/' and not contain path traversal
+    # Get just the path component for validation
+    path_only = parsed.path or '/'
+    path_lower = path_only.lower()
+
+    # Validate the path is safe:
+    # - Must start with '/'
+    # - No spaces or backslashes
+    # - No path traversal sequences anywhere in the path (both literal and encoded)
+    # - No current directory references
     is_safe = (
         safe_path
         and safe_path.startswith('/')
         and (' ' not in safe_path)
-        and '\\' not in safe_path
-        and not any(
-            safe_path.startswith(prefix)
-            for prefix in ['/\\', '/..', '/../', '/./', '/%2e', '/%2f', '/%5c']
-        )
+        and ('\\' not in safe_path)
+        # Check for '..' anywhere in the path (path traversal)
+        and ('..' not in path_only)
+        # Check for encoded path traversal and directory separators anywhere
+        and '%2e' not in path_lower  # encoded '.'
+        and '%2f' not in path_lower  # encoded '/'
+        and '%5c' not in path_lower  # encoded '\'
+        # Check for current directory references
+        and '/./' not in path_only
+        # Check for explicit path traversal patterns at start (belt and suspenders)
+        and not path_only.startswith('/..')
     )
 
     return safe_path if is_safe else '/'
