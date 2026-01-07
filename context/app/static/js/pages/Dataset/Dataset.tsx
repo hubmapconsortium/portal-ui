@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import { DetailPageAlert } from 'js/components/detailPage/style';
@@ -19,15 +16,11 @@ import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert'
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Donor, Entity, Sample, isDataset } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
-import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
-import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
-import { InternalLink } from 'js/shared-styles/Links';
-import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { hasMetadata } from 'js/helpers/metadata';
 import SnareSeq2Alert from 'js/components/detailPage/multi-assay/SnareSeq2Alert';
