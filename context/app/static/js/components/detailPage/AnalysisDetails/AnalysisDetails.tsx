@@ -24,7 +24,7 @@ import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 
-interface AnalysisDetails {
+interface AnalysisDetailsProps {
   dagListData: DagProvenanceType[];
   workflow_description?: string;
   workflow_version?: string;
@@ -276,7 +276,7 @@ function dedupeSteps(steps: Pipeline[]) {
   return { dedupedSteps: Object.values(reducedSteps.uniqueSteps), hasInputParameters: reducedSteps.hasInputParameters };
 }
 
-function AnalysisDetails({ dagListData, workflow_description, workflow_version }: AnalysisDetails) {
+function AnalysisDetails({ dagListData, workflow_description, workflow_version }: AnalysisDetailsProps) {
   const { dedupedSteps, hasInputParameters } = dedupeSteps(dagListData);
 
   // Change the key of the workflow steps component to get around localized expandable row contexts.

@@ -29,10 +29,11 @@ import SummaryDataChildren from './DatasetPageSummaryChildren';
 import IntegratedDatasets from 'js/components/detailPage/IntegratedDatasets/IntegratedDatasets';
 import { combinePeopleLists } from 'js/pages/Dataset/utils';
 import { Entity } from 'js/components/types';
+import AnalysisDetailsSection from 'js/components/detailPage/AnalysisDetails/AnalysisDetailsSection';
 
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
-    protocol_url,
+    protocol_url: currentProtocolUrl,
     uuid,
     mapped_data_types,
     origin_samples,
@@ -45,9 +46,15 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     // Parent dataset IDs for SnareSeq2 datasets are the components
     immediate_ancestor_ids,
     creation_action,
+    metadata,
   } = assayMetadata;
 
   const isExternal = creation_action === 'External Process';
+
+  const protocolUrl = isExternal
+    ? // External datasets have their protocol URL in the metadata
+      ((metadata?.derived_dataset_protocol_doi as string) ?? currentProtocolUrl)
+    : currentProtocolUrl;
 
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
 
@@ -79,7 +86,6 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
     'bulk-data-transfer': true,
     provenance: true,
-    protocols: Boolean(protocol_url),
     collections: Boolean(collectionsData.length),
     publications: Boolean(publicationsData.length),
     attribution: true,
@@ -130,6 +136,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           {/* TODO: Should display the parent datasets as well */}
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} integratedDataset />
+          <AnalysisDetailsSection isExternal={isExternal} protocolUrl={protocolUrl} dataset={assayMetadata} />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>

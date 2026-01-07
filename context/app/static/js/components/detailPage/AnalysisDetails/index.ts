@@ -1,3 +1,3 @@
-import AnalysisDetails from './AnalysisDetails';
+import AnalysisDetailsProps from './AnalysisDetails';
 
-export default AnalysisDetails;
+export default AnalysisDetailsProps;
