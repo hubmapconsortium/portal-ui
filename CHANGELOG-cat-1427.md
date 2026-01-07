@@ -1,2 +1,3 @@
 - Add Search for Cell Types tutorial.
 - Add Search for Gene or Pathway tutorial.
+- Add Data Download tutorial.
