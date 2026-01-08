@@ -85,6 +85,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     metadata: isExternal,
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
     'bulk-data-transfer': true,
+    'protocols-&-workflow-details': Boolean(protocolUrl) || !isExternal,
     provenance: true,
     collections: Boolean(collectionsData.length),
     publications: Boolean(publicationsData.length),
@@ -140,7 +141,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             isExternal={isExternal}
             protocolUrl={protocolUrl}
             dataset={assayMetadata}
-            shouldDisplay={Boolean(protocolUrl) || !isExternal}
+            shouldDisplay={shouldDisplaySection['protocols-&-workflow-details']}
           />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
