@@ -31,7 +31,7 @@
     "tags": [
       "Data Download"
     ],
-    "iframeLink": ""
+    "iframeLink": "https://app.tango.us/app/embed/373beff8-5b4e-4f7f-90a3-f47634ab9fd2?skipCover=false&defaultListView=true&skipBranding=false"
   },
   {
     "title": "Navigating Workspaces",
@@ -51,7 +51,7 @@
     "tags": [
       "Cell Type"
     ],
-    "iframeLink": ""
+    "iframeLink": "https://app.tango.us/app/embed/dc7940b8-0d67-47de-9d1b-b3c3236d21fc?skipCover=false&defaultListView=true&skipBranding=false"
   },
   {
     "title": "Search for Gene or Pathway",
@@ -63,7 +63,7 @@
       "Gene",
       "Pathway"
     ],
-    "iframeLink": ""
+    "iframeLink": "https://app.tango.us/app/embed/95ab0181-46bf-4630-b6a7-736b0dc876e1?skipCover=false&defaultListView=true&skipBranding=false"
   },
   {
     "title": "Search for Proteins",
