@@ -68,6 +68,291 @@ GLOBUS_AUTH_SCOPE = ' '.join(
 )
 
 
+def extract_tokens_from_globus_response(tokens):
+    """
+    Extract groups and auth tokens from Globus OAuth2 token response.
+
+    Args:
+        tokens: Globus SDK token response object
+
+    Returns:
+        tuple: (groups_token, auth_token) - both strings, empty if not found
+
+    >>> class MockTokens:
+    ...     def __init__(self, by_resource_server):
+    ...         self.by_resource_server = by_resource_server
+    >>> mock_tokens = MockTokens({
+    ...     'groups.api.globus.org': {'access_token': 'groups_token_123'},
+    ...     'auth.globus.org': {'access_token': 'auth_token_456'}
+    ... })
+    >>> extract_tokens_from_globus_response(mock_tokens)
+    ('groups_token_123', 'auth_token_456')
+    >>> extract_tokens_from_globus_response(None)
+    ('', '')
+    """
+    if not tokens:
+        return '', ''
+
+    token_object = tokens.by_resource_server.get('groups.api.globus.org', {})
+    groups_token = token_object.get('access_token', '')
+
+    auth_token_object = tokens.by_resource_server.get('auth.globus.org', {})
+    auth_token = auth_token_object.get('access_token', '')
+
+    return groups_token, auth_token
+
+
+def parse_user_name(full_name):
+    """
+    Split full name into first and last names.
+
+    Args:
+        full_name: Full name string
+
+    Returns:
+        tuple: (first_name, last_name)
+
+    >>> parse_user_name('John Doe')
+    ('John', 'Doe')
+    >>> parse_user_name('Jane Mary Smith')
+    ('Jane', 'Mary Smith')
+    >>> parse_user_name('Madonna')
+    ('Madonna', '')
+    >>> parse_user_name('')
+    ('', '')
+    """
+    if not full_name:
+        return '', ''
+    parts = full_name.split(' ')
+    first_name = parts[0]
+    last_name = ' '.join(parts[1:])
+    return first_name, last_name
+
+
+def extract_user_info_from_globus(user_info):
+    """
+    Extract user information from Globus userinfo response.
+
+    Args:
+        user_info: Dict containing Globus user info
+
+    Returns:
+        dict: Extracted user information with keys: email, name, first_name, last_name, id, affiliation
+
+    >>> user_info = {
+    ...     'email': 'user@example.com',
+    ...     'name': 'John Doe',
+    ...     'sub': 'globus_id_123',
+    ...     'organization': 'Example Org'
+    ... }
+    >>> result = extract_user_info_from_globus(user_info)
+    >>> result['email']
+    'user@example.com'
+    >>> result['first_name']
+    'John'
+    >>> result['last_name']
+    'Doe'
+    >>> result['id']
+    'globus_id_123'
+    >>> extract_user_info_from_globus({})
+    {'email': '', 'name': '', 'first_name': '', 'last_name': '', 'id': '', 'affiliation': ''}
+    """
+    user_email = user_info.get('email', '')
+    user_name = user_info.get('name', '')
+    user_first_name, user_last_name = parse_user_name(user_name)
+    user_globus_id = user_info.get('sub', '')
+    user_globus_affiliation = user_info.get('organization', '')
+
+    return {
+        'email': user_email,
+        'name': user_name,
+        'first_name': user_first_name,
+        'last_name': user_last_name,
+        'id': user_globus_id,
+        'affiliation': user_globus_affiliation,
+    }
+
+
+def determine_user_permissions(user_globus_groups, globus_groups, permission_groups):
+    """
+    Determine user's internal status and permission groups.
+
+    Args:
+        user_globus_groups: List of user's Globus groups
+        globus_groups: List of all HuBMAP Globus groups
+        permission_groups: Dict mapping permission names to group IDs
+
+    Returns:
+        tuple: (is_internal_user, user_permission_groups, user_internal_hubmap_groups)
+
+    >>> user_groups = [{'id': 'group1', 'name': 'Team A'}, {'id': 'hubmap_group', 'name': 'HuBMAP'}]
+    >>> all_groups = [{'uuid': 'hubmap_group', 'name': 'HuBMAP Internal'}]
+    >>> perms = {'HuBMAP': 'hubmap_group', 'Workspaces': 'workspace_group'}
+    >>> is_internal, user_perms, internal_groups = determine_user_permissions(user_groups, all_groups, perms)
+    >>> is_internal
+    True
+    >>> 'HuBMAP' in user_perms
+    True
+    >>> len(internal_groups)
+    1
+    >>> determine_user_permissions([], [], {})
+    (False, [], [])
+    """
+    if not user_globus_groups:
+        return False, [], []
+
+    # Determine if the user belongs to any of the groups in the globus groups master list
+    user_internal_hubmap_groups = [
+        g for g in globus_groups if has_globus_group(user_globus_groups, g.get('uuid'))
+    ]
+
+    # If user belongs to any internal hubmap groups, they are an internal user
+    is_internal_user = len(user_internal_hubmap_groups) > 0
+
+    user_permission_groups = [
+        k
+        for k, group_id in permission_groups.items()
+        if has_globus_group(user_globus_groups, group_id)
+    ]
+
+    return is_internal_user, user_permission_groups, user_internal_hubmap_groups
+
+
+def extract_safe_redirect_path(url_before_login):
+    """
+    Extract and validate a safe redirect path from a URL.
+    Allows only relative paths from the cookie (path + query + hash).
+
+    Args:
+        url_before_login: URL-encoded string from cookie (should be relative path only)
+
+    Returns:
+        str: Safe path to redirect to, or '/' if invalid
+
+    >>> extract_safe_redirect_path('/browse/datasets')
+    '/browse/datasets'
+    >>> extract_safe_redirect_path('/search?q=test')
+    '/search?q=test'
+    >>> extract_safe_redirect_path('/page#section')
+    '/page#section'
+    >>> extract_safe_redirect_path('//evil.com/path')
+    '/'
+    >>> extract_safe_redirect_path('http://external.com/malicious')
+    '/'
+    >>> extract_safe_redirect_path('https://evil.com/phishing')
+    '/'
+    >>> extract_safe_redirect_path('/..%2f..%2fetc%2fpasswd')
+    '/'
+    >>> extract_safe_redirect_path('')
+    '/'
+    >>> extract_safe_redirect_path('/page?injection=%0aSet-Cookie:malicious')
+    '/'
+    >>> extract_safe_redirect_path('/page#fragment%0d%0a')
+    '/'
+    >>> extract_safe_redirect_path('/valid/path/../../../etc/passwd')
+    '/'
+    >>> extract_safe_redirect_path('/legitimate/%2e%2e/etc/passwd')
+    '/'
+    >>> extract_safe_redirect_path('/path/./hidden')
+    '/'
+    >>> extract_safe_redirect_path('/path%5cwindows')
+    '/'
+    """
+    if not url_before_login:
+        return '/'
+
+    decoded_url = unquote(url_before_login)
+
+    # Check for dangerous characters in the decoded URL before parsing
+    # This catches URL-encoded injection attempts like %0a, %0d, %00
+    dangerous_chars = ['\n', '\r', '\x00', '\x0a', '\x0d']
+    if any(char in decoded_url for char in dangerous_chars):
+        return '/'
+
+    # Reject any URLs that look like they have a scheme or are protocol-relative
+    # Since the cookie should only contain relative paths now
+    if '://' in decoded_url or decoded_url.startswith('//'):
+        return '/'
+
+    parsed = urlparse(decoded_url)
+
+    # Reject if parsed URL has a scheme or netloc (shouldn't happen with relative paths)
+    if parsed.scheme or parsed.netloc:
+        return '/'
+
+    # Additional validation on query and fragment components
+    # Check for URL-encoded variants that might not have been decoded
+    if parsed.query and any(encoded in parsed.query.lower() for encoded in ['%0a', '%0d', '%00']):
+        return '/'
+
+    if parsed.fragment and any(
+        encoded in parsed.fragment.lower() for encoded in ['%0a', '%0d', '%00']
+    ):
+        return '/'
+
+    # Extract path, query, and fragment from the URL
+    safe_path = parsed.path or '/'
+    if parsed.query:
+        safe_path += '?' + parsed.query
+    if parsed.fragment:
+        safe_path += '#' + parsed.fragment
+
+    # Get just the path component for validation
+    path_only = parsed.path or '/'
+    path_lower = path_only.lower()
+
+    # Validate the path is safe:
+    # - Must start with '/'
+    # - No spaces or backslashes
+    # - No path traversal sequences anywhere in the path (both literal and encoded)
+    # - No current directory references
+    is_safe = (
+        safe_path
+        and safe_path.startswith('/')
+        and (' ' not in safe_path)
+        and ('\\' not in safe_path)
+        # Check for '..' anywhere in the path (path traversal)
+        and ('..' not in path_only)
+        # Check for encoded path traversal and directory separators anywhere
+        and '%2e' not in path_lower  # encoded '.'
+        and '%2f' not in path_lower  # encoded '/'
+        and '%5c' not in path_lower  # encoded '\'
+        # Check for current directory references
+        and '/./' not in path_only
+        # Check for explicit path traversal patterns at start (belt and suspenders)
+        and not path_only.startswith('/..')
+    )
+
+    return safe_path if is_safe else '/'
+
+
+def format_user_groups_cookie_value(user_globus_groups):
+    """
+    Format user's Globus groups into a pipe-delimited string for cookie storage.
+
+    Args:
+        user_globus_groups: List of user's Globus group dicts
+
+    Returns:
+        str: Pipe-delimited group names or 'none' if no groups
+
+    >>> groups = [{'name': 'Team A'}, {'name': 'Team B'}]
+    >>> format_user_groups_cookie_value(groups)
+    'Team A|Team B'
+    >>> format_user_groups_cookie_value([])
+    'none'
+    >>> format_user_groups_cookie_value(None)
+    'none'
+    """
+    if not user_globus_groups:
+        return 'none'
+    # Collect valid, non-empty group names; ignore groups without a usable 'name'
+    names = [g.get('name') for g in user_globus_groups if isinstance(g, dict) and g.get('name')]
+    if not names:
+        return 'none'
+    return '|'.join(names)
+
+
 @blueprint.route('/login')
 def login():
     """
@@ -100,27 +385,19 @@ def login():
     code = request.args.get('code')
     log('5: oauth2_exchange_code_for_tokens')
     tokens = client.oauth2_exchange_code_for_tokens(code) if code else None
-    # The repr is deceptive: Looks like a dict, but direct access not possible.)
 
-    token_object = tokens.by_resource_server['groups.api.globus.org'] if tokens else {}
-    groups_token = token_object['access_token'] if token_object else ''
+    # Extract tokens from Globus response
+    groups_token, auth_token = extract_tokens_from_globus_response(tokens)
 
-    auth_token_object = tokens.by_resource_server['auth.globus.org'] if tokens else {}
-    auth_token = auth_token_object['access_token'] if auth_token_object else ''
-    user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
-
+    # Fetch user info from Globus
     log('6: userinfo')
+    user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get(
         'https://auth.globus.org/v2/oauth2/userinfo', headers=user_info_request_headers
     ).json()
 
-    user_email = user_info.get('email', '')
-    user_name = user_info.get('name', '')
-    # Best effort split of full name into first and last names
-    user_first_name = user_name.split(' ')[0] if user_name else ''
-    user_last_name = ' '.join(user_name.split(' ')[1:]) if user_name else ''
-    user_globus_id = user_info.get('sub', '')
-    user_globus_affiliation = user_info.get('organization', '')
+    # Extract user information
+    user_data = extract_user_info_from_globus(user_info)
     user_globus_groups = get_globus_groups(groups_token)
 
     log('7: HuBMAP globus groups')
@@ -159,58 +436,28 @@ def login():
             else:
                 current_app.logger.error(f'Workspaces auth token read failed: {e}')
 
-    # Determine if the user belongs to any of the groups in the globus groups master list
-    user_internal_hubmap_groups = [
-        g
-        for g in globus_groups
-        if user_globus_groups and has_globus_group(user_globus_groups, g.get('uuid'))
-    ]
+    # Determine user permissions and internal status
+    is_internal_user, user_permission_groups, _ = determine_user_permissions(
+        user_globus_groups, globus_groups, permission_groups
+    )
 
-    # If user belongs to any internal hubmap groups, they are an internal user
-    is_internal_user = len(user_internal_hubmap_groups) > 0
-
-    user_permission_groups = [
-        k
-        for k, group_id in permission_groups.items()
-        if has_globus_group(user_globus_groups, group_id)
-    ]
-
+    # Update session with user data
     session.update(
         groups_token=groups_token,
         is_authenticated=True,
-        user_email=user_email,
+        user_email=user_data['email'],
         workspaces_token=workspaces_token,
         user_groups=user_permission_groups,
-        user_first_name=user_first_name,
-        user_last_name=user_last_name,
-        user_globus_id=user_globus_id,
-        user_globus_affiliation=user_globus_affiliation,
+        user_first_name=user_data['first_name'],
+        user_last_name=user_data['last_name'],
+        user_globus_id=user_data['id'],
+        user_globus_affiliation=user_data['affiliation'],
     )
 
-    previous_url = unquote(request.cookies.get('urlBeforeLogin') or '')
-    # Validate previous_url before redirecting to it
-    safe_url = previous_url.replace('\\', '') if previous_url else '/'
-    parsed = urlparse(safe_url)
-
-    # Check if URL is safe: must be a relative path without netloc/scheme and not protocol-relative
-    # Must start with a single '/'
-    is_safe = (
-        safe_url
-        and not parsed.netloc
-        and not parsed.scheme
-        and not safe_url.startswith('//')
-        and safe_url.startswith('/')
-        and (' ' not in safe_url)
-        and not any(
-            safe_url.startswith(prefix)
-            for prefix in ['/\\', '\\', '/..', '/../', '/./', '/%2e', '/%2f', '/%5c']
-        )
-    )
-    if is_safe:
-        response = make_response(redirect(safe_url))
-    else:
-        # fallback to home page for unsafe URLs
-        response = make_response(redirect('/'))
+    # Extract safe redirect path from cookie
+    url_before_login = request.cookies.get('urlBeforeLogin') or ''
+    safe_path = extract_safe_redirect_path(url_before_login)
+    response = make_response(redirect(safe_path))
 
     # Set cookies used in trackers.js:
     if is_internal_user:
@@ -219,14 +466,9 @@ def login():
         # If the user is not internal, we don't want the last_login cookie to be set
         response.set_cookie(key='last_login', value='', expires=0)
 
-    # Using a pipe-delimited list of group names to avoid corruption from ascii encoding commas
-    user_groups = (
-        'none' if not user_globus_groups else '|'.join(g.get('name') for g in user_globus_groups)
-    )
-
-    # Always set this cookie, even if the user is not internal, so that we can
-    # more easily track engagement with the portal by institution
-    response.set_cookie(key='user_groups', value=user_groups, expires=2**31 - 1)
+    # Format and set user groups cookie
+    user_groups_value = format_user_groups_cookie_value(user_globus_groups)
+    response.set_cookie(key='user_groups', value=user_groups_value, expires=2**31 - 1)
 
     log('8: redirect to previous_url')
     return response
@@ -239,9 +481,9 @@ def logout():
     - Destroy the session state.
     - And when redirect returns, redirect again to the Globus Auth logout page.
     """
-    redirect_to_globus_param = 'redirect_to_globus'
+    redirect_to_globus = 'redirect_to_globus'
 
-    if redirect_to_globus_param in request.args:
+    if redirect_to_globus in request.args:
         redirect_uri = url_for('routes_main.index', _external=True)
         globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode(
             {
@@ -268,7 +510,7 @@ def logout():
     session.clear()
 
     response = make_response(
-        redirect(url_for('routes_auth.logout', _external=True, redirect_to_globus_param=True))
+        redirect(url_for('routes_auth.logout', _external=True, redirect_to_globus=True))
     )
     # Reset cookies used in trackers.js:
     response.set_cookie(key='last_login', value='', max_age=0)
