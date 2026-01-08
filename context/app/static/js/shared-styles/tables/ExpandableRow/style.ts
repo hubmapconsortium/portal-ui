@@ -19,7 +19,7 @@ interface ExpandableCellProps extends ExpandableComponentProps, TableCellProps {
 const ExpandedCell = styled(TableCell)<ExpandableCellProps>(({ $isExpanded }: ExpandableCellProps) => ({
   padding: 0,
   borderBottom: $isExpanded ? ' 1px solid rgba(224, 224, 224, 1)' : 'none', // border color taken from MUI table cell
-  maxWidth: 0,
+  maxWidth: 0, // This prevents the cell from affecting the width of the table
 }));
 
 const StyledExpandCollapseIcon = styled(ExpandCollapseIcon)({
