@@ -1,0 +1,1 @@
+- Update footer link to APIs page to point to HuBMAP Docs.

@@ -48,9 +48,9 @@ function Footer({ isMaintenancePage }: FooterProps) {
                   <InternalLink variant="body2" href="/services">
                     Services
                   </InternalLink>
-                  <InternalLink variant="body2" href="/apis">
+                  <OutboundIconLink variant="body2" href="https://docs.hubmapconsortium.org/apis.html">
                     APIs
-                  </InternalLink>
+                  </OutboundIconLink>
                 </>
               )}
               <OutboundIconLink
