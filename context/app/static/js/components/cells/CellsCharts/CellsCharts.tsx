@@ -31,7 +31,7 @@ function CellsCharts({ uuid }: Dataset) {
   }
 
   return (
-    <Box py={2} width="100%" minWidth={0} overflow="hidden">
+    <Box py={2} width="100%" overflow="hidden">
       <Box px={2}>
         <ChartWrapper>
           <ChartLoader isLoading={isLoading}>
