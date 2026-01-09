@@ -9,17 +9,22 @@ import {
   Workspace,
   WorkspaceResourceOptions,
   WorkspacesEventCategories,
+  CreateTemplateNotebooksTypes,
 } from 'js/components/workspaces/types';
 import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
+import { useTemplateNotebooks } from './hooks';
 
 interface YACConflictDialogWrapperProps {
   showDialog: boolean;
   setShowDialog: (show: boolean) => void;
   conflictData: {
-    runningWorkspace: MergedWorkspace;
-    newWorkspace: Workspace;
-    templatePath: string;
-    resourceOptions: WorkspaceResourceOptions;
+    existingYACWorkspace: MergedWorkspace;
+    // For new workspace creation - these fields are used to create the workspace after deletion
+    deferredCreation?: CreateTemplateNotebooksTypes;
+    // For launching existing workspace - these fields are provided
+    newWorkspace?: Workspace;
+    templatePath?: string;
+    resourceOptions?: WorkspaceResourceOptions;
   } | null;
 }
 
@@ -28,9 +33,10 @@ export default function YACConflictDialogWrapper({
   setShowDialog,
   conflictData,
 }: YACConflictDialogWrapperProps) {
-  const { handleStopWorkspace } = useWorkspacesList();
+  const { handleStopWorkspace, handleDeleteWorkspace } = useWorkspacesList();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
-  const { toastErrorStopWorkspace, toastSuccessStopWorkspace, toastErrorLaunchWorkspace } = useWorkspaceToasts();
+  const { toastSuccessStopWorkspace, toastErrorLaunchWorkspace, toastErrorDeleteWorkspaces } = useWorkspaceToasts();
+  const createTemplateNotebooks = useTemplateNotebooks();
 
   const handleClose = useCallback(() => {
     setShowDialog(false);
@@ -43,22 +49,39 @@ export default function YACConflictDialogWrapper({
     }
 
     try {
-      // Stop the running YAC workspace
-      await handleStopWorkspace(conflictData.runningWorkspace.id);
-      toastSuccessStopWorkspace(conflictData.runningWorkspace.name);
+      const { existingYACWorkspace } = conflictData;
 
-      // Launch the newly created workspace
-      await startAndOpenWorkspace({
-        workspace: conflictData.newWorkspace,
-        jobTypeId: conflictData.newWorkspace.default_job_type ?? 'jupyter_lab',
-        templatePath: conflictData.templatePath,
-        resourceOptions: conflictData.resourceOptions,
-      });
+      // Stop the workspace if it's running
+      const isRunning = existingYACWorkspace.jobs.some((job) => job.status === 'running' || job.status === 'pending');
+      if (isRunning) {
+        await handleStopWorkspace(existingYACWorkspace.id);
+        toastSuccessStopWorkspace(existingYACWorkspace.name);
+      }
+
+      // Delete the existing YAC workspace
+      await handleDeleteWorkspace(existingYACWorkspace.id);
+
+      // Now create and launch the new workspace
+      if (conflictData.deferredCreation) {
+        // This is a new workspace creation - create it now
+        // Skip YAC check since we just deleted the conflicting workspace
+        await createTemplateNotebooks({ ...conflictData.deferredCreation, skipYACCheck: true });
+      } else if (conflictData.newWorkspace && conflictData.templatePath && conflictData.resourceOptions) {
+        // This is launching an existing workspace
+        await startAndOpenWorkspace({
+          workspace: conflictData.newWorkspace,
+          jobTypeId: conflictData.newWorkspace.default_job_type ?? 'jupyter_lab',
+          templatePath: conflictData.templatePath,
+          resourceOptions: conflictData.resourceOptions,
+        });
+      }
 
       handleClose();
     } catch (error) {
-      console.error('Error stopping workspace or launching new one:', error);
-      toastErrorStopWorkspace(conflictData.runningWorkspace.name);
+      console.error('Error deleting existing YAC workspace:', error);
+      if (conflictData) {
+        toastErrorDeleteWorkspaces(conflictData.existingYACWorkspace.name);
+      }
       toastErrorLaunchWorkspace();
       handleClose();
     }
@@ -71,15 +94,15 @@ export default function YACConflictDialogWrapper({
   return (
     <WorkspacesEventContextProvider
       currentEventCategory={WorkspacesEventCategories.WorkspaceDialog}
-      currentWorkspaceItemId={conflictData.runningWorkspace.id}
-      currentWorkspaceItemName={conflictData.runningWorkspace.name}
+      currentWorkspaceItemId={conflictData.existingYACWorkspace.id}
+      currentWorkspaceItemName={conflictData.existingYACWorkspace.name}
     >
       <ConfirmStopYACWorkspaceDialog
         handleClose={handleClose}
         handleConfirm={() => {
           void handleConfirm();
         }}
-        runningYACWorkspace={conflictData.runningWorkspace}
+        runningYACWorkspace={conflictData.existingYACWorkspace}
       />
     </WorkspacesEventContextProvider>
   );

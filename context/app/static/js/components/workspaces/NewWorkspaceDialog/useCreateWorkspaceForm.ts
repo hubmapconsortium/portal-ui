@@ -78,10 +78,11 @@ function useCreateWorkspaceForm({
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [showYACConflictDialog, setShowYACConflictDialog] = useState(false);
   const [yacConflictData, setYacConflictData] = useState<{
-    runningWorkspace: MergedWorkspace;
-    newWorkspace: Workspace;
-    templatePath: string;
-    resourceOptions: WorkspaceResourceOptions;
+    existingYACWorkspace: MergedWorkspace;
+    deferredCreation?: CreateTemplateNotebooksTypes;
+    newWorkspace?: Workspace;
+    templatePath?: string;
+    resourceOptions?: WorkspaceResourceOptions;
   } | null>(null);
   const createTemplateNotebooks = useTemplateNotebooks();
   const { setDialogType } = useLaunchWorkspaceStore();
@@ -164,17 +165,13 @@ function useCreateWorkspaceForm({
       // Handle YAC conflict error
       if (error && typeof error === 'object' && 'isYACConflict' in error && error.isYACConflict) {
         const conflictError = error as unknown as {
-          runningWorkspace: MergedWorkspace;
-          newWorkspace: Workspace;
-          templatePath: string;
-          resourceOptions: WorkspaceResourceOptions;
+          existingYACWorkspace: MergedWorkspace;
+          deferredCreation: CreateTemplateNotebooksTypes;
         };
-        // Store conflict data and show dialog
+        // Store conflict data with deferred creation
         setYacConflictData({
-          runningWorkspace: conflictError.runningWorkspace,
-          newWorkspace: conflictError.newWorkspace,
-          templatePath: conflictError.templatePath,
-          resourceOptions: conflictError.resourceOptions,
+          existingYACWorkspace: conflictError.existingYACWorkspace,
+          deferredCreation: conflictError.deferredCreation,
         });
         setShowYACConflictDialog(true);
         // Close the new workspace dialog

@@ -23,12 +23,15 @@ export default function ConfirmStopYACWorkspaceDialog({
   const { handleStopWorkspace } = useWorkspacesList();
   const { currentEventCategory } = useWorkspacesEventContext();
 
+  const [pendingStopWorkspace, setPendingStopWorkspace] = React.useState(false);
+
   const handleStopAndConfirm = useEventCallback(() => {
     if (!runningYACWorkspace) {
       console.error('No running YAC workspace found');
       handleClose();
       return;
     }
+    setPendingStopWorkspace(true);
 
     trackEvent({
       category: currentEventCategory,
@@ -45,18 +48,24 @@ export default function ConfirmStopYACWorkspaceDialog({
         toastErrorStopWorkspace(runningYACWorkspace.name);
         console.error(e);
         handleClose();
+      })
+      .finally(() => {
+        setPendingStopWorkspace(false);
       });
   });
 
   return (
     <ConfirmationDialog
-      title="Stop Running YAC Workspace"
+      title="Delete Existing YAC Workspace"
       handleClose={handleClose}
       handleConfirmAndClose={handleStopAndConfirm}
-      buttonTitle="Stop and Continue"
+      buttonTitle="Delete and Continue"
+      buttonProps={{
+        loading: pendingStopWorkspace,
+      }}
     >
-      You currently have a YAC workspace running: <strong>{runningYACWorkspace?.name}</strong>. Only one YAC workspace
-      can run at a time. Do you want to stop the existing workspace and launch the new one?
+      You currently have a YAC workspace: <strong>{runningYACWorkspace?.name}</strong>. Only one YAC workspace can exist
+      at a time. The existing workspace will be deleted to create the new one. Do you want to continue?
     </ConfirmationDialog>
   );
 }

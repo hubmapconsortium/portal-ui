@@ -204,6 +204,7 @@ interface CreateTemplateNotebooksTypes {
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
   trackingInfo?: EventInfo;
+  skipYACCheck?: boolean; // Skip YAC conflict check (used during deferred creation)
 }
 
 export type {

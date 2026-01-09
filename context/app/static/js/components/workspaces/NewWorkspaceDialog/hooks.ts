@@ -12,8 +12,8 @@ import {
   TemplatesTypes,
   WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
-import { useCreateAndLaunchWorkspace, useCreateTemplates, useRunningWorkspaces } from 'js/components/workspaces/hooks';
-import { buildDatasetSymlinks, findRunningWorkspaceByJobType } from 'js/components/workspaces/utils';
+import { useCreateAndLaunchWorkspace, useCreateTemplates, useWorkspacesList } from 'js/components/workspaces/hooks';
+import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useJobTypes } from 'js/components/workspaces/api';
 import {
@@ -73,11 +73,11 @@ function useWorkspaceTemplates(tags: string[] = []) {
 function useTemplateNotebooks() {
   const { groupsToken } = useAppContext();
 
-  const { createAndLaunchWorkspace, createWorkspaceOnly } = useCreateAndLaunchWorkspace();
+  const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
   const { createTemplates } = useCreateTemplates();
   const { templates } = useWorkspaceTemplates();
   const { toastErrorWorkspaceTemplate } = useWorkspaceToasts();
-  const runningWorkspaces = useRunningWorkspaces();
+  const { workspacesList } = useWorkspacesList();
 
   const createTemplateNotebooks = useCallback(
     async ({
@@ -88,6 +88,7 @@ function useTemplateNotebooks() {
       workspaceJobTypeId,
       workspaceResourceOptions,
       trackingInfo,
+      skipYACCheck = false,
     }: CreateTemplateNotebooksTypes) => {
       let templatesDetails: {
         name: string;
@@ -141,21 +142,28 @@ function useTemplateNotebooks() {
         },
       };
 
-      // Check if we're creating a YAC workspace and there's already a running YAC workspace
-      if (workspaceJobTypeId === YAC_JOB_TYPE) {
-        const runningYACWorkspace = findRunningWorkspaceByJobType(runningWorkspaces, YAC_JOB_TYPE);
-        if (runningYACWorkspace) {
-          // Create the workspace but don't launch it - use toast without launch message
-          const workspace = await createWorkspaceOnly({ body: workspaceBody, showLaunchMessage: false });
-          // Return conflict information with the newly created workspace
+      // Check if we're creating a YAC workspace and there's already ANY YAC workspace (running or not)
+      if (!skipYACCheck && workspaceJobTypeId === YAC_JOB_TYPE) {
+        const existingYACWorkspace = workspacesList.find(
+          (ws) => ws.default_job_type === YAC_JOB_TYPE || ws.jobs.some((job) => job.job_type === YAC_JOB_TYPE),
+        );
+        if (existingYACWorkspace) {
+          // Don't create the workspace yet - defer until after deletion
+          // Return conflict information with deferred creation data
           // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
           return Promise.reject({
             isYACConflict: true,
-            runningWorkspace: runningYACWorkspace,
-            newWorkspace: workspace,
-            templatePath,
-            resourceOptions: workspaceResourceOptions,
-            message: `Workspace "${workspaceName}" created, but cannot launch while "${runningYACWorkspace.name}" is running.`,
+            existingYACWorkspace,
+            deferredCreation: {
+              templateKeys,
+              uuids,
+              workspaceName,
+              workspaceDescription,
+              workspaceJobTypeId,
+              workspaceResourceOptions,
+              trackingInfo,
+            },
+            message: `An existing YAC workspace "${existingYACWorkspace.name}" will be deleted to create the new one.`,
           });
         }
       }
@@ -166,15 +174,7 @@ function useTemplateNotebooks() {
         resourceOptions: workspaceResourceOptions,
       });
     },
-    [
-      groupsToken,
-      createAndLaunchWorkspace,
-      createWorkspaceOnly,
-      createTemplates,
-      toastErrorWorkspaceTemplate,
-      templates,
-      runningWorkspaces,
-    ],
+    [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates, workspacesList],
   );
 
   return createTemplateNotebooks;

@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { workspaceJobTypeIdField, workspaceResourceOptionsField } from 'js/components/workspaces/workspaceFormFields';
-import { useLaunchWorkspace, useRunningWorkspaces } from 'js/components/workspaces/hooks';
+import { useLaunchWorkspace, useRunningWorkspaces, useWorkspacesList } from 'js/components/workspaces/hooks';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
@@ -16,12 +16,7 @@ import {
   YAC_JOB_TYPE,
 } from 'js/components/workspaces/constants';
 import { MergedWorkspace, Workspace, WorkspaceResourceOptions } from 'js/components/workspaces/types';
-import {
-  findBestJobType,
-  getWorkspaceResourceOptions,
-  isRunningWorkspace,
-  findRunningWorkspaceByJobType,
-} from 'js/components/workspaces/utils';
+import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 export interface LaunchWorkspaceFormTypes {
@@ -72,16 +67,18 @@ function useLaunchWorkspaceForm() {
 function useLaunchWorkspaceDialog() {
   const runningWorkspaces = useRunningWorkspaces();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
+  const { handleStopWorkspace, handleDeleteWorkspace } = useWorkspacesList();
   const { isOpen, open, close, workspace, setWorkspace, dialogType, setDialogType } = useLaunchWorkspaceStore();
 
   const currentWorkspaceIsRunning = runningWorkspaces?.some((ws) => ws.id === workspace?.id);
 
-  const { toastErrorLaunchWorkspace } = useWorkspaceToasts();
+  const { toastErrorLaunchWorkspace, toastErrorDeleteWorkspaces, toastSuccessStopWorkspace } = useWorkspaceToasts();
 
   const { control, handleSubmit, isSubmitting, reset, setValue } = useLaunchWorkspaceForm();
 
   const [showYACConflictDialog, setShowYACConflictDialog] = useState(false);
   const [pendingLaunchData, setPendingLaunchData] = useState<LaunchWorkspaceFormTypes | null>(null);
+  const [existingYACWorkspace, setExistingYACWorkspace] = useState<MergedWorkspace | null>(null);
 
   // The default value must be set as it will not update when passed to the form hook.
   useEffect(() => {
@@ -103,12 +100,17 @@ function useLaunchWorkspaceDialog() {
         return;
       }
 
-      // Check if we're launching a YAC workspace and there's already a running YAC workspace
+      // Check if we're launching a YAC workspace and there's already ANY YAC workspace (different from current)
       if (workspaceJobTypeId === YAC_JOB_TYPE && runningWorkspaces) {
-        const runningYACWorkspace = findRunningWorkspaceByJobType(runningWorkspaces, YAC_JOB_TYPE);
-        if (runningYACWorkspace && runningYACWorkspace.id !== workspace.id) {
-          // Show confirmation dialog to stop the existing YAC workspace
+        const conflictingYACWorkspace = runningWorkspaces.find(
+          (ws) =>
+            ws.id !== workspace.id &&
+            (ws.default_job_type === YAC_JOB_TYPE || ws.jobs.some((job) => job.job_type === YAC_JOB_TYPE)),
+        );
+        if (conflictingYACWorkspace) {
+          // Show confirmation dialog to delete the existing YAC workspace
           setPendingLaunchData({ workspaceToLaunch, workspaceJobTypeId, workspaceResourceOptions });
+          setExistingYACWorkspace(conflictingYACWorkspace);
           setShowYACConflictDialog(true);
           return;
         }
@@ -142,21 +144,53 @@ function useLaunchWorkspaceDialog() {
   const handleYACConflictClose = useCallback(() => {
     setShowYACConflictDialog(false);
     setPendingLaunchData(null);
+    setExistingYACWorkspace(null);
   }, []);
 
   const handleYACConflictConfirm = useEventCallback(async () => {
-    setShowYACConflictDialog(false);
-    if (pendingLaunchData) {
+    if (!pendingLaunchData || !existingYACWorkspace) {
+      console.error('Missing pending launch data or existing workspace');
+      return;
+    }
+
+    try {
+      // Stop the workspace if it's running
+      const isRunning = existingYACWorkspace.jobs.some((job) => job.status === 'running' || job.status === 'pending');
+      if (isRunning) {
+        await handleStopWorkspace(existingYACWorkspace.id);
+        toastSuccessStopWorkspace(existingYACWorkspace.name);
+      }
+
+      // Delete the existing YAC workspace
+      await handleDeleteWorkspace(existingYACWorkspace.id);
+
+      // Now launch the new workspace
       await startAndOpenWorkspace({
         jobTypeId: pendingLaunchData.workspaceJobTypeId,
         workspace: pendingLaunchData.workspaceToLaunch,
         resourceOptions: pendingLaunchData.workspaceResourceOptions,
       });
+
+      setShowYACConflictDialog(false);
       setPendingLaunchData(null);
+      setExistingYACWorkspace(null);
+    } catch (error) {
+      console.error('Error deleting existing YAC workspace:', error);
+      toastErrorDeleteWorkspaces(existingYACWorkspace.name);
+      toastErrorLaunchWorkspace();
+      setShowYACConflictDialog(false);
+      setPendingLaunchData(null);
+      setExistingYACWorkspace(null);
     }
   });
 
-  const runningYACWorkspace = runningWorkspaces ? findRunningWorkspaceByJobType(runningWorkspaces, YAC_JOB_TYPE) : null;
+  const runningYACWorkspace =
+    existingYACWorkspace ??
+    (runningWorkspaces
+      ? (runningWorkspaces.find(
+          (ws) => ws.default_job_type === YAC_JOB_TYPE || ws.jobs.some((job) => job.job_type === YAC_JOB_TYPE),
+        ) ?? null)
+      : null);
 
   return {
     currentWorkspaceIsRunning,
