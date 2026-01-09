@@ -121,13 +121,13 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
           {/* TODO: This should be wrapped in a detail page section */}
-          {/*<VisualizationWrapper
+          <VisualizationWrapper
             uuid={uuid}
             vitData={vitessceConfig.data}
             trackingInfo={{
               category: 'Integrated Dataset',
             }}
-          />*/}
+          />
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
           <IntegratedData
             entities={entitesForImmediateAncestors}
