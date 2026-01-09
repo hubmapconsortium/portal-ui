@@ -11,6 +11,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 import RemoveRestrictedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
+import YACConflictDialogWrapper from './YACConflictDialogWrapper';
 
 function NewWorkspaceDialogFromSelections() {
   const {
@@ -24,7 +25,17 @@ function NewWorkspaceDialogFromSelections() {
 
   const { deselectRows } = useSelectableTableStore();
 
-  const { control, errors, setDialogIsOpen, removeDatasets, errorMessages, ...rest } = useCreateWorkspaceForm({
+  const {
+    control,
+    errors,
+    setDialogIsOpen,
+    removeDatasets,
+    errorMessages,
+    showYACConflictDialog,
+    setShowYACConflictDialog,
+    yacConflictData,
+    ...rest
+  } = useCreateWorkspaceForm({
     initialRestrictedDatasets: [...restrictedHubmapIds],
     initialSelectedDatasets: [...selectedRows],
   });
@@ -76,6 +87,11 @@ function NewWorkspaceDialogFromSelections() {
           />
         </Box>
       </NewWorkspaceDialog>
+      <YACConflictDialogWrapper
+        showDialog={showYACConflictDialog}
+        setShowDialog={setShowYACConflictDialog}
+        conflictData={yacConflictData}
+      />
     </>
   );
 }
