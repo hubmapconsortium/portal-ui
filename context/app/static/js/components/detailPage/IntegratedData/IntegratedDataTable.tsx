@@ -1,5 +1,6 @@
 import React from 'react';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
+import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { Dataset } from 'js/components/types';
 import {
   hubmapID,
@@ -18,92 +19,46 @@ interface IntegratedDataTableProps {
 }
 
 function IntegratedDataTable({ entityType, entityIds }: IntegratedDataTableProps) {
-  if (entityType === 'Dataset')
-    return (
-      <EntityTable<Dataset>
-        isSelectable={false}
-        query={{
-          query: {
-            bool: {
-              must: {
-                ids: {
-                  values: entityIds,
-                },
-              },
-            },
-          },
-          size: 10000,
-          _source: [
-            'hubmap_id',
-            'origin_samples_unique_mapped_organs',
-            'mapped_status',
-            'mapped_data_types',
-            'mapped_data_access_level',
-            'uuid',
-            'entity_type',
-            'description',
-          ],
-        }}
-        columns={[hubmapID, organCol, datasetDescription]}
-      />
-    );
+  const { selectedRows } = useSelectableTableStore();
 
-  if (entityType === 'Donor')
-    return (
-      <EntityTable<Dataset>
-        isSelectable={false}
-        query={{
-          query: {
-            bool: {
-              must: {
-                ids: {
-                  values: entityIds,
-                },
-              },
-            },
-          },
-          size: 10000,
-          _source: [
-            'hubmap_id',
-            'mapped_metadata',
-            'mapped_status',
-            'mapped_data_types',
-            'mapped_data_access_level',
-            'uuid',
-            'created_timestamp',
-          ],
-        }}
-        columns={[hubmapID, donorAge, donorBMI, donorSex, donorRace, createdTimestamp]}
-      />
-    );
+  const entityTypeAdditionalSources = {
+    Dataset: ['origin_samples_unique_mapped_organs', 'entity_type', 'description'],
+    Donor: ['mapped_metadata', 'created_timestamp'],
+    Sample: ['origin_samples_unique_mapped_organs', 'created_timestamp'],
+  };
+  const entityTypeAdditionalColumns = {
+    Dataset: [organCol, datasetDescription],
+    Donor: [donorAge, donorBMI, donorSex, donorRace, createdTimestamp],
+    Sample: [organCol, createdTimestamp],
+  };
 
-  if (entityType === 'Sample')
-    return (
-      <EntityTable<Dataset>
-        isSelectable={false}
-        query={{
-          query: {
-            bool: {
-              must: {
-                ids: {
-                  values: entityIds,
-                },
+  return (
+    <EntityTable<Dataset>
+      isSelectable={true}
+      query={{
+        query: {
+          bool: {
+            must: {
+              ids: {
+                values: entityIds,
               },
             },
           },
-          size: 10000,
-          _source: [
-            'hubmap_id',
-            'origin_samples_unique_mapped_organs',
-            'mapped_status',
-            'mapped_data_types',
-            'mapped_data_access_level',
-            'uuid',
-            'created_timestamp',
-          ],
-        }}
-        columns={[hubmapID, organCol, createdTimestamp]}
-      />
-    );
+        },
+        size: 10000,
+        _source: [
+          'hubmap_id',
+          'mapped_status',
+          'mapped_data_types',
+          'mapped_data_access_level',
+          'uuid',
+          ...entityTypeAdditionalSources[entityType],
+        ],
+      }}
+      columns={[hubmapID, ...entityTypeAdditionalColumns[entityType]]}
+      numSelected={selectedRows.size}
+    />
+  );
 }
-export default IntegratedDataTable;
+
+export default withSelectableTableProvider(IntegratedDataTable, 'integrated-data');
