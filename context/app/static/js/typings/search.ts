@@ -16,6 +16,8 @@ export interface EntityDocument {
 export interface DonorMappedMetadata {
   age_value: number;
   age_unit: string;
+  body_mass_index_unit: string;
+  body_mass_index_value: number;
   sex: string;
   race: string;
 }
@@ -39,6 +41,7 @@ export interface SampleDocument extends EntityDocument, SampleDatasetSharedField
 }
 
 export interface DatasetDocument extends EntityDocument, SampleDatasetSharedFields {
+  description: string;
   mapped_data_access_level: string;
   mapped_data_types: string[];
   mapped_status: string;

@@ -26,7 +26,7 @@ import { useProcessedDatasets, useRedirectAlert, useVitessceConf } from './hooks
 import { EntityDetailProps } from './Dataset';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
-import IntegratedDatasets from 'js/components/detailPage/IntegratedDatasets/IntegratedDatasets';
+import IntegratedData from 'js/components/detailPage/IntegratedData/IntegratedData';
 import { combinePeopleLists } from 'js/pages/Dataset/utils';
 import { Entity } from 'js/components/types';
 
@@ -47,6 +47,11 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   } = assayMetadata;
 
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
+
+  // Is this filtering necessary? I'm not sure if there will ever be datasets that are not immediate ancestors.
+  const entitesForImmediateAncestors = entities.filter(
+    (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
+  );
 
   const entitiesWithMetadata = entities.filter((e) =>
     hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
@@ -74,7 +79,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     summary: true,
     metadata: true,
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
-    'integrated-datasets': true,
+    'integrated-data': Boolean(entitesForImmediateAncestors.length),
     'bulk-data-transfer': true,
     provenance: true,
     protocols: Boolean(protocol_url),
@@ -116,17 +121,17 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
           {/* TODO: This should be wrapped in a detail page section */}
-          <VisualizationWrapper
+          {/*<VisualizationWrapper
             uuid={uuid}
             vitData={vitessceConfig.data}
             trackingInfo={{
               category: 'Integrated Dataset',
             }}
-          />
+          />*/}
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
-          <IntegratedDatasets
-            datasets={immediate_ancestor_ids}
-            shouldDisplay={shouldDisplaySection['integrated-datasets']}
+          <IntegratedData
+            entities={entitesForImmediateAncestors}
+            shouldDisplay={shouldDisplaySection['integrated-data']}
           />
           {/* TODO: Should display the parent datasets as well */}
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
