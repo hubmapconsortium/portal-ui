@@ -72,6 +72,14 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
   );
 }
 
+function GitHubProtocolLink({ url }: { url: string }) {
+  return (
+    <SectionItem label="GitHub Repository">
+      <OutboundIconLink href={url}>{url}</OutboundIconLink>
+    </SectionItem>
+  );
+}
+
 interface ProtocolProps {
   protocol_url: string;
   showHeader?: boolean;
@@ -82,8 +90,11 @@ function Protocol({ protocol_url, showHeader }: ProtocolProps) {
 
   const contents = (
     <>
-      {protocolUrls.map((url, index) => (
+      {protocolUrls.protocols.map((url, index) => (
         <ProtocolLink key={url} url={url} index={index} />
+      ))}
+      {protocolUrls.gitHub.map((url) => (
+        <GitHubProtocolLink key={url} url={url} />
       ))}
     </>
   );
