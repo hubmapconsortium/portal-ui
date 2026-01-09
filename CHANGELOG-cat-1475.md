@@ -1,1 +1,0 @@
-- Fix infinite expansion of Cells API results graphs.
