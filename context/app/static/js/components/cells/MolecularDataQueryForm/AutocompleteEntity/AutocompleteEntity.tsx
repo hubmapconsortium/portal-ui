@@ -225,7 +225,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       />
       {targetEntity === 'gene' && invalidGenes.length > 0 && (
         <Alert severity="info" sx={{ mt: 1 }}>
-          The following genes from the selected pathway are available in the{' '}
+          The following genes from the selected pathway are not available in the{' '}
           {isCellsAPI ? 'selected modality in the Cells API' : 'scFind'} Query Method and were excluded:{' '}
           <strong>{invalidGenes.join(', ')}</strong>
         </Alert>
