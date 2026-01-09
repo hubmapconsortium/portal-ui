@@ -1,15 +1,13 @@
 [
   {
-    "title": "Exploring Organs, Cell Types, and Biomarkers",
-    "route": "exploring-organs-cell-types-biomarkers",
-    "description": "Learn how to explore organs, cell types and biomarkers available in HuBMAP data.",
+    "title": "Exploring Organs",
+    "route": "exploring-organs",
+    "description": "Learn how to explore organs across HuBMAP datasets.",
     "category": "Data",
     "tags": [
-      "Biomarker",
-      "Cell Type",
       "Organ"
     ],
-    "iframeLink": ""
+    "iframeLink": "https://app.tango.us/app/embed/8a274455-1665-4700-b897-de9ac34a387b?skipCover=false&defaultListView=true&skipBranding=false"
   },
   {
     "title": "Getting Started with HuBMAP Data",
