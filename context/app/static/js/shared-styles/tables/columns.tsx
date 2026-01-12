@@ -100,6 +100,7 @@ export const createdTimestamp = {
   id: 'created_timestamp',
   label: 'Creation Date',
   cellContent: CreatedTimestampCell,
+  width: 150,
 };
 
 function AssayTypesCell({ hit: { mapped_data_types } }: CellContentProps<DatasetDocument>) {
@@ -161,6 +162,26 @@ export const parentDonorAge = {
   filterable: true,
 };
 
+export const donorAge = {
+  ...parentDonorAge,
+  id: 'mapped_metadata.age_value',
+  cellContent: DonorAge,
+  sort: 'mapped_metadata.age_value',
+};
+
+function DonorBMI({ hit }: CellContentProps<DonorDocument>) {
+  return hit?.mapped_metadata?.body_mass_index_value;
+}
+
+export const donorBMI = {
+  id: 'mapped_metadata.body_mass_index_value',
+  label: 'Donor BMI',
+  sort: 'mapped_metadata.body_mass_index_value',
+  cellContent: DonorBMI,
+  width: 150,
+  filterable: true,
+};
+
 function DonorSex({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.sex;
 }
@@ -174,6 +195,13 @@ export const parentDonorSex = {
   filterable: true,
 };
 
+export const donorSex = {
+  ...parentDonorAge,
+  id: 'mapped_metadata.sex',
+  cellContent: DonorSex,
+  sort: 'mapped_metadata.sex.keyword',
+};
+
 function DonorRace({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.race;
 }
@@ -185,6 +213,13 @@ export const parentDonorRace = {
   cellContent: withParentDonor(DonorRace),
   width: 150,
   filterable: true,
+};
+
+export const donorRace = {
+  ...parentDonorRace,
+  id: 'mapped_metadata.race',
+  cellContent: DonorRace,
+  sort: 'mapped_metadata.race.keyword',
 };
 
 export const datasetDescendants = {
@@ -204,4 +239,11 @@ export const anatomy = {
     (Array.isArray(anatomy_1) ? anatomy_1.join(', ') : anatomy_1) ||
     '—',
   width: 150,
+};
+
+export const datasetDescription = {
+  id: 'description',
+  label: 'Description',
+  cellContent: ({ hit: { description } }: CellContentProps<DatasetDocument>) => description,
+  width: 600,
 };
