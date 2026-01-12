@@ -1,1 +1,0 @@
-- Prevent users without Workspaces access from creating new workspaces from the dataset detail page.
