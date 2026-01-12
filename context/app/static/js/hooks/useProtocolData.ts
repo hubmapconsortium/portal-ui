@@ -17,7 +17,15 @@ export function isGithubUrl(url: string): boolean {
     const urlToParse =
       lowerUrl.startsWith('http://') || lowerUrl.startsWith('https://') ? lowerUrl : `https://${lowerUrl}`;
     const parsedUrl = new URL(urlToParse);
-    return parsedUrl.hostname.endsWith('github.com');
+    const hostName = parsedUrl.hostname.toLowerCase().split('.');
+    // Check for github domain and common TLDs
+    if (hostName.length < 2) {
+      return false;
+    }
+    if (hostName[hostName.length - 2] !== 'github') {
+      return false;
+    }
+    return ['com', 'io', 'org'].includes(hostName[hostName.length - 1]);
   } catch {
     return false;
   }
