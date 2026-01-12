@@ -13,7 +13,10 @@ interface FormattedProtocolUrls {
 export function isGithubUrl(url: string): boolean {
   const lowerUrl = url.toLowerCase();
   try {
-    const parsedUrl = new URL(lowerUrl);
+    // If the URL doesn't have a protocol, prepend https:// for parsing
+    const urlToParse =
+      lowerUrl.startsWith('http://') || lowerUrl.startsWith('https://') ? lowerUrl : `https://${lowerUrl}`;
+    const parsedUrl = new URL(urlToParse);
     return parsedUrl.hostname.endsWith('github.com');
   } catch {
     return false;

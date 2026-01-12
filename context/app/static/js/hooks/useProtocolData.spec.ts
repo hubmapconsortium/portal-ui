@@ -235,8 +235,9 @@ describe('isGithubUrl', () => {
     expect(isGithubUrl('https://raw.github.com/user/repo/main/file.txt')).toBe(true);
   });
 
-  it('should return false for URLs without protocol', () => {
-    expect(isGithubUrl('github.com/user/repo')).toBe(false);
+  it('should return true for URLs without protocol', () => {
+    expect(isGithubUrl('github.com/user/repo')).toBe(true);
+    expect(isGithubUrl('gist.github.com/user/gist-id')).toBe(true);
   });
 
   it('should return false for non-GitHub URLs', () => {
@@ -245,7 +246,7 @@ describe('isGithubUrl', () => {
   });
 
   it('should return false for URLs containing "github.com" but not as hostname', () => {
-    expect(isGithubUrl('https://example.com/path/github.com')).toBe(false);
+    expect(isGithubUrl('https://example.com/path/to/github.com')).toBe(false);
   });
 
   it('should return false for invalid URLs', () => {
