@@ -1,6 +1,6 @@
 [project]
 name = "hubmap-portal-ui"
-version = "1.37.3"
+version = "1.38.0"
 description = "HuBMAP Data Portal - Flask app with React frontend"
 readme = "README.md"
 # Note: keep in sync with .python-version, which is needed for `uv` to automatically
@@ -26,7 +26,7 @@ dependencies = [
     "python-frontmatter>=1.1.0",
     "hubmap-api-py-client>=0.0.11",
     "hubmap-commons>=2.1.20",
-    "portal-visualization[full]>=0.4.20",
+    "portal-visualization[full]>=0.4.21",
 ]
 
 [project.urls]

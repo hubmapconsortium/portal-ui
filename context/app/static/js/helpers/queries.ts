@@ -6,6 +6,12 @@ export const getAllCollectionsQuery = {
 };
 
 export function getIDsQuery(ids: Ids): QueryDslQueryContainer {
+  if (!ids) {
+    // Return a match_none query if no ids are provided so that no results are returned
+    return {
+      match_none: {},
+    };
+  }
   return {
     ids: {
       values: ids,

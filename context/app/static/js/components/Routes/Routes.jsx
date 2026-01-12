@@ -60,10 +60,9 @@ function Routes({ flaskData } = {}) {
     integrated,
   } = flaskData;
   const urlPath = window.location.pathname;
-  const url = window.location.href;
 
   useSendPageView(urlPath);
-  useSetUrlBeforeLogin(url);
+  useSetUrlBeforeLogin();
 
   const { isAuthenticated } = useAppContext();
 

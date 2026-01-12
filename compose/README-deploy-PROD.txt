@@ -10,7 +10,7 @@ To deploy to production follow the following:
     run command: "docker stop <container id>"
   
   - download the new image and instantiate/run the container
-    run command: "docker-compose -f hubmap.yml up -d --no-build"
+    run command: "docker compose -f hubmap.yml up -d --no-build"
   
   - clean up/remove the old image
     run command: "docker image ls | grep portal", record the id of the old/previous version image

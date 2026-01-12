@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.38.0 - 2026-01-08
+
+- Update footer link to APIs page to point to HuBMAP Docs.
+- Add Search for Cell Types tutorial.
+- Add Search for Gene or Pathway tutorial.
+- Add Data Download tutorial.
+- Added Exploring Organs tutorial.
+- Fix issues with redirect on login.
+- Update portal-visualization to 0.4.21.
+- Fix infinite expansion of Cells API results graphs.
+- Converted Diversity page to use visx chart components and removed chartjs.
+- Support edge cases where collections don't have any datasets.
+- Fix typo in biomarker and cell type search display of unavailable genes on pathway selection.
+
+
+
+## v1.37.5 - 2025-12-15
+
+- Fix list entity counts query.
+
+
+
+## v1.37.4 - 2025-12-11
+
+- Remove hyphen from `docker compose` commands.
+- Return empty lists of results for requests made with an empty list of IDs.
+- Add more explicit validation to confirm a value in UKV is a saved list before treating it as a list.
+
+
+
 ## v1.37.3 - 2025-12-05
 
 - Fix empty IDs query breaking permission checks.

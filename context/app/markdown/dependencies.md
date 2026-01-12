@@ -14,7 +14,7 @@ Flask[async]>=3.1.1
 globus-sdk>=3.59.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
-portal-visualization[full]>=0.4.20
+portal-visualization[full]>=0.4.21
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
@@ -63,7 +63,6 @@ ruff>=0.14.0
 "@visx/tooltip": "^3.3.0",
 "@xyflow/react": "^12.0.3",
 "cellpop": "^0.0.15",
-"chart.js": "^4.4.2",
 "d3": "^7.9.0",
 "d3-array": "^3.2.4",
 "date-fns": "^3.6.0",
@@ -81,7 +80,6 @@ ruff>=0.14.0
 "pretty-bytes": "^6.1.1",
 "prop-types": "^15.8.1",
 "react": "^18.3.1",
-"react-chartjs-2": "^5.2.0",
 "react-device-detect": "^2.2.3",
 "react-dom": "^18.3.1",
 "react-ga4": "^2.1.0",
