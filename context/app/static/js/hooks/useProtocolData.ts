@@ -10,6 +10,16 @@ interface FormattedProtocolUrls {
   gitHub: string[];
 }
 
+export function isGithubUrl(url: string): boolean {
+  const lowerUrl = url.toLowerCase();
+  try {
+    const parsedUrl = new URL(lowerUrl);
+    return parsedUrl.hostname.endsWith('github.com');
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Protocol URLs formatter
  * There are currently inconsistencies in how protocol URLs are stored in the metadata.
@@ -43,7 +53,7 @@ export function useFormattedProtocolUrls(protocolUrls: string, lastVersion: numb
 
     splitLinks.forEach((url) => {
       // Check if this is a GitHub URL
-      if (url.toLowerCase().includes('github.com')) {
+      if (isGithubUrl(url)) {
         links.gitHub.push(url);
       } else {
         // Process as a protocol.io URL
