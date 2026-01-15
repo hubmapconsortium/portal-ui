@@ -4,7 +4,7 @@
   "dependencies": {
     "@dagrejs/dagre": "^1.1.5",
     "@datapunt/matomo-tracker-js": "^0.5.1",
-    "@elastic/elasticsearch": "^8.13.0",
+    "@elastic/elasticsearch": "^8.19.1",
     "@fontsource-variable/inter": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@grafana/faro-react": "^1.5.0",
