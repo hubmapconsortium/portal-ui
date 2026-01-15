@@ -30,6 +30,7 @@ import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 import IntegratedDatasetPage from './IntegratedDataset';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
+import ProcessedData from 'js/components/detailPage/ProcessedData';
 
 function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   if (!isExternal) {
@@ -134,6 +135,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+          <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} additionalUuids={processedDatasetUuids} />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />

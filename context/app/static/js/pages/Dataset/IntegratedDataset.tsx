@@ -20,12 +20,12 @@ import PublicationsSection from 'js/components/detailPage/PublicationsSection';
 import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useRedirectAlert, useVitessceConf } from './hooks';
 import { EntityDetailProps } from './Dataset';
-import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
 import IntegratedData from 'js/components/detailPage/IntegratedData/IntegratedData';
 import { combinePeopleLists } from 'js/pages/Dataset/utils';
 import { Entity } from 'js/components/types';
 import AnalysisDetailsSection from 'js/components/detailPage/AnalysisDetails/AnalysisDetailsSection';
+import IntegratedDatasetVisualizationSection from 'js/components/detailPage/visualization/IntegratedDatasetVisualizationSection';
 
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
@@ -85,10 +85,11 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     summary: true,
     metadata: isExternal,
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
-    'integrated-data': Boolean(entitesForImmediateAncestors.length),
+    files: true,
     'bulk-data-transfer': true,
-    'protocols-&-workflow-details': Boolean(protocolUrl) || !isExternal,
+    'integrated-data': Boolean(entitesForImmediateAncestors.length),
     provenance: true,
+    'protocols-&-workflow-details': Boolean(protocolUrl) || !isExternal,
     collections: Boolean(collectionsData.length),
     publications: Boolean(publicationsData.length),
     attribution: true,
@@ -106,21 +107,14 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           >
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
-          {/* TODO: This should be wrapped in a detail page section */}
-          <VisualizationWrapper
-            uuid={uuid}
-            vitData={vitessceConfig.data}
-            trackingInfo={{
-              category: 'Integrated Dataset',
-            }}
-          />
+          <IntegratedDatasetVisualizationSection uuid={uuid} vitessceConfig={vitessceConfig.data} />
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+          {/* TODO: Pull out Files from processed data */}
+          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <IntegratedData
             entities={entitesForImmediateAncestors}
             shouldDisplay={shouldDisplaySection['integrated-data']}
           />
-          {/* TODO: Should display the parent datasets as well */}
-          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} integratedDataset />
           <AnalysisDetailsSection
             isExternal={isExternal}
