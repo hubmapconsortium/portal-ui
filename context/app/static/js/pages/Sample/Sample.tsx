@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
@@ -10,7 +10,7 @@ import Protocol from 'js/components/detailPage/Protocol';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
-import { DetailContext } from 'js/components/detailPage/DetailContext';
+import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { hasMetadata } from 'js/helpers/metadata';
 
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
@@ -61,17 +61,17 @@ function SampleDetail() {
 
   useTrackID({ entity_type, hubmap_id });
 
-  const detailContext = useMemo(
-    () => ({ hubmap_id, uuid, mapped_data_access_level }),
-    [hubmap_id, uuid, mapped_data_access_level],
-  );
-
   if (loadingEntities) {
     return null;
   }
 
   return (
-    <DetailContext.Provider value={detailContext}>
+    <DetailContextProvider
+      hubmap_id={hubmap_id}
+      uuid={uuid}
+      mapped_data_access_level={mapped_data_access_level}
+      entityType="Sample"
+    >
       <DetailLayout sections={shouldDisplaySection}>
         <Summary>
           <SummaryItem>
@@ -90,7 +90,7 @@ function SampleDetail() {
         <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
         <Attribution />
       </DetailLayout>
-    </DetailContext.Provider>
+    </DetailContextProvider>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
@@ -7,10 +7,10 @@ import PublicationSummary from 'js/components/publications/PublicationSummary';
 import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 import Files from 'js/components/detailPage/files/Files';
-import { DetailContext } from 'js/components/detailPage/DetailContext';
+import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
-import PublicationBulkDataTransfer from 'js/components/detailPage/BulkDataTransfer/PublicationBulkDataTransfer';
 import { Publication as PublicationType } from 'js/components/types';
+import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 
 interface PublicationProps {
   publication: PublicationType;
@@ -47,18 +47,8 @@ function Publication({ publication, vignette_json }: PublicationProps) {
     provenance: shouldDisplayProvenance,
   };
 
-  const detailContext = useMemo(
-    () => ({
-      uuid,
-      hubmap_id,
-      // Default to `Public` for publication page DUA
-      mapped_data_access_level: 'Public',
-    }),
-    [uuid, hubmap_id],
-  );
-
   return (
-    <DetailContext.Provider value={detailContext}>
+    <DetailContextProvider uuid={uuid} hubmap_id={hubmap_id} mapped_data_access_level="Public" entityType="Publication">
       <DetailLayout sections={shouldDisplaySection}>
         <PublicationSummary />
         <PublicationsDataSection
@@ -70,11 +60,13 @@ function Publication({ publication, vignette_json }: PublicationProps) {
           <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
         )}
         {shouldDisplaySection.files && <Files files={files} includeAccordion />}
-        {shouldDisplaySection['bulk-data-transfer'] && <PublicationBulkDataTransfer uuid={uuid} label={hubmap_id} />}
+        {shouldDisplaySection['bulk-data-transfer'] && (
+          <BulkDataTransfer customUUIDs={new Set(ancestor_ids)} integratedEntityUUID={uuid} />
+        )}
         <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
         {shouldDisplaySection.provenance && <ProvSection />}
       </DetailLayout>
-    </DetailContext.Provider>
+    </DetailContextProvider>
   );
 }
 

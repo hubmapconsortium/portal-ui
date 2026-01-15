@@ -190,7 +190,7 @@ function getProcessedDatasetSection({
     summary: true,
     visualization: visualization || conf,
     files: Boolean(files?.length),
-    'protocols-&-workflow-details': Boolean(ingest_metadata?.dag_provenance_list),
+    'protocols-and-workflow-details': Boolean(ingest_metadata?.dag_provenance_list),
     attribution: creation_action !== 'Central Process' && Boolean(contributors?.length),
   };
 

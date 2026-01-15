@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import { DetailContext } from 'js/components/detailPage/DetailContext';
+import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
@@ -30,13 +30,13 @@ function DonorDetail() {
 
   useTrackID({ entity_type, hubmap_id });
 
-  const detailContext = useMemo(
-    () => ({ hubmap_id, uuid, mapped_data_access_level }),
-    [hubmap_id, uuid, mapped_data_access_level],
-  );
-
   return (
-    <DetailContext.Provider value={detailContext}>
+    <DetailContextProvider
+      hubmap_id={hubmap_id}
+      uuid={uuid}
+      mapped_data_access_level={mapped_data_access_level}
+      entityType="Donor"
+    >
       <DetailLayout sections={shouldDisplaySection}>
         <Summary title={hubmap_id} />
         <MetadataSection entities={[entity]} shouldDisplay={shouldDisplaySection.metadata} />
@@ -44,7 +44,7 @@ function DonorDetail() {
         <Protocol protocol_url={protocol_url} showHeader shouldDisplay={shouldDisplaySection.protocols} />
         <Attribution />
       </DetailLayout>
-    </DetailContext.Provider>
+    </DetailContextProvider>
   );
 }
 

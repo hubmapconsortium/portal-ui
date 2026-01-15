@@ -110,7 +110,12 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const datasetRelationshipsContainerHeight = assay_modality === 'multiple' ? 500 : 400;
 
   return (
-    <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
+    <DetailContextProvider
+      hubmap_id={hubmap_id}
+      uuid={uuid}
+      entityType="Dataset"
+      mapped_data_access_level={mapped_data_access_level}
+    >
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
         <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
         {Boolean(is_component) && <ComponentAlert />}

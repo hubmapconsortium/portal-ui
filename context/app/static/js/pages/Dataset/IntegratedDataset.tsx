@@ -26,6 +26,9 @@ import { combinePeopleLists } from 'js/pages/Dataset/utils';
 import { Entity } from 'js/components/types';
 import AnalysisDetailsSection from 'js/components/detailPage/AnalysisDetails/AnalysisDetailsSection';
 import IntegratedDatasetVisualizationSection from 'js/components/detailPage/visualization/IntegratedDatasetVisualizationSection';
+import IntegratedDatasetFiles from 'js/components/detailPage/files/IntegratedDatasetFiles/IntegratedDatasetFiles';
+import { useEventCallback } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
@@ -42,6 +45,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     // Parent dataset IDs for SnareSeq2 datasets are the components
     immediate_ancestor_ids,
     creation_action,
+    files,
     metadata,
   } = assayMetadata;
 
@@ -55,7 +59,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
 
   // Is this filtering necessary? I'm not sure if there will ever be datasets that are not immediate ancestors.
-  const entitesForImmediateAncestors = entities.filter(
+  const entitiesForImmediateAncestors = entities.filter(
     (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
   );
 
@@ -85,18 +89,33 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     summary: true,
     metadata: isExternal,
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
-    files: true,
+    files: Boolean(files),
     'bulk-data-transfer': true,
-    'integrated-data': Boolean(entitesForImmediateAncestors.length),
+    'integrated-data': Boolean(entitiesForImmediateAncestors.length),
     provenance: true,
-    'protocols-&-workflow-details': Boolean(protocolUrl) || !isExternal,
+    'protocols-and-workflow-details': Boolean(protocolUrl) || !isExternal,
     collections: Boolean(collectionsData.length),
     publications: Boolean(publicationsData.length),
     attribution: true,
   };
 
+  const uuidsForBulkDataTransfer = new Set<string>([...entitiesForImmediateAncestors.map((ds) => ds.uuid), uuid]);
+
+  const trackFilesSectionEvents = useEventCallback((info: { action: string; label: string }) => {
+    trackEvent({
+      category: 'Integrated Dataset Detail Page',
+      action: `Files / ${info.action}`,
+      label: info.label,
+    });
+  });
+
   return (
-    <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
+    <DetailContextProvider
+      hubmap_id={hubmap_id}
+      uuid={uuid}
+      entityType="Integrated Dataset"
+      mapped_data_access_level={mapped_data_access_level}
+    >
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
         <DetailLayout sections={shouldDisplaySection} isLoading={false}>
           <Summary
@@ -109,10 +128,14 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           </Summary>
           <IntegratedDatasetVisualizationSection uuid={uuid} vitessceConfig={vitessceConfig.data} />
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
-          {/* TODO: Pull out Files from processed data */}
-          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
+          {shouldDisplaySection.files && <IntegratedDatasetFiles files={files} track={trackFilesSectionEvents} />}
+          <BulkDataTransfer
+            shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])}
+            integratedEntityUUID={uuid}
+            customUUIDs={uuidsForBulkDataTransfer}
+          />
           <IntegratedData
-            entities={entitesForImmediateAncestors}
+            entities={entitiesForImmediateAncestors}
             shouldDisplay={shouldDisplaySection['integrated-data']}
           />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} integratedDataset />
@@ -120,7 +143,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             isExternal={isExternal}
             protocolUrl={protocolUrl}
             dataset={assayMetadata}
-            shouldDisplay={shouldDisplaySection['protocols-&-workflow-details']}
+            shouldDisplay={shouldDisplaySection['protocols-and-workflow-details']}
           />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />

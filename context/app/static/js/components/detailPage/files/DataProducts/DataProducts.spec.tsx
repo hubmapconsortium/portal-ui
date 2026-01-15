@@ -36,6 +36,7 @@ const detailContext = {
   uuid: 'test-uuid',
   hubmap_id: 'test-hubmap-id',
   mapped_data_access_level: 'test-mapped-data-access-level',
+  entityType: 'Dataset',
 };
 
 const flaskDataContextEdited = { ...flaskDataContext, entity: { ...flaskDataContext.entity, metadata } };
