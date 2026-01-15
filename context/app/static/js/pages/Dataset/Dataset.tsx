@@ -74,9 +74,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   useRedirectAlert();
 
-  const origin_sample = origin_samples[0];
-  const { mapped_organ } = origin_sample;
-
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
   const { sections, isLoading } = useProcessedDatasetsSections();
@@ -137,7 +134,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               ) : null
             }
           >
-            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
+            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
           </Summary>
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
           <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />

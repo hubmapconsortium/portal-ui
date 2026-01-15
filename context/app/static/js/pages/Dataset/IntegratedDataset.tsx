@@ -15,7 +15,6 @@ import { Dataset, Donor, Sample } from 'js/components/types';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import { useEntitiesData } from 'js/hooks/useEntityData';
-import { hasMetadata } from 'js/helpers/metadata';
 import PublicationsSection from 'js/components/detailPage/PublicationsSection';
 import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useRedirectAlert, useVitessceConf } from './hooks';
@@ -63,18 +62,10 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
   );
 
-  const entitiesWithMetadata = entities.filter((e) =>
-    hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
-  );
-
   const contributors = combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
   const contacts = combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
 
   useRedirectAlert();
-
-  // TODO: Origin sample needs to be fetched from the parent dataset for SnareSeq2 integrated datasets
-  const origin_sample = origin_samples[0];
-  const { mapped_organ } = origin_sample;
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
@@ -124,10 +115,10 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             mapped_data_access_level={mapped_data_access_level}
             mapped_external_group_name={mapped_external_group_name}
           >
-            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
+            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
           </Summary>
           <IntegratedDatasetVisualizationSection uuid={uuid} vitessceConfig={vitessceConfig.data} />
-          <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+          <MetadataSection entities={[assayMetadata]} shouldDisplay={shouldDisplaySection.metadata} />
           {shouldDisplaySection.files && <IntegratedDatasetFiles files={files} track={trackFilesSectionEvents} />}
           <BulkDataTransfer
             shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])}

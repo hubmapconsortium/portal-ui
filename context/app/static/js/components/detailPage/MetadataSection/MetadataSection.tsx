@@ -16,6 +16,7 @@ import { DownloadIcon } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import MetadataTable from '../MetadataTable';
 
 interface TableRow {
   key: string;
@@ -43,7 +44,7 @@ function DatasetDescriptionNote() {
 
 function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, children }: MetadataWrapperProps) {
   const {
-    entity: { hubmap_id, ...entity },
+    entity: { hubmap_id, is_integrated, ...entity },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
@@ -81,7 +82,7 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
     >
       <SectionDescription>
         This is the list of metadata that was provided by the data provider.
-        {entityIsDataset && <DatasetDescriptionNote />}
+        {entityIsDataset && !is_integrated && <DatasetDescriptionNote />}
       </SectionDescription>
       {children}
     </CollapsibleDetailPageSection>
@@ -106,7 +107,11 @@ function Metadata({ entities }: MetadataProps) {
       allTableRows={allTableRows}
       tsvColumns={[{ id: 'hubmap_id', label: 'HuBMAP ID' }, { id: 'label', label: 'Entity' }, ...defaultTSVColumns]}
     >
-      <MetadataTabs entities={tableEntities} />
+      {tableEntities.length > 1 ? (
+        <MetadataTabs entities={tableEntities} />
+      ) : (
+        <MetadataTable tableRows={tableEntities[0].tableRows} />
+      )}
     </MetadataWrapper>
   );
 }
