@@ -1,4 +1,4 @@
-import { ComponentType, ElementType } from 'react';
+import React, { ComponentType, ElementType } from 'react';
 import { SearchRequest, SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { Entity } from 'js/components/types';
 
@@ -21,4 +21,5 @@ export interface EntitiesTabTypes<Doc extends Entity> {
   expandedContent?: React.ComponentType<Doc>;
   estimatedExpandedRowHeight?: number;
   reverseExpandIndicator?: boolean;
+  headerActions?: React.ReactNode;
 }

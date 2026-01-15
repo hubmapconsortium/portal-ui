@@ -3,7 +3,7 @@ import React from 'react';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { CollapsibleDetailPageSection } from '../DetailPageSection';
 import { Dataset, Donor, Sample } from 'js/components/types';
-import IntegratedDataTabs from './IntegratedDataTabs';
+import IntegratedDataTables from './IntegratedDataTables';
 
 interface IntegratedDatasetsProps {
   entities: (Donor | Dataset | Sample)[];
@@ -12,7 +12,7 @@ interface IntegratedDatasetsProps {
 function IntegratedDatasets({ entities }: IntegratedDatasetsProps) {
   return (
     <CollapsibleDetailPageSection id="integrated-data" title="Integrated Data">
-      <IntegratedDataTabs entities={entities} />
+      <IntegratedDataTables entities={entities} />
     </CollapsibleDetailPageSection>
   );
 }

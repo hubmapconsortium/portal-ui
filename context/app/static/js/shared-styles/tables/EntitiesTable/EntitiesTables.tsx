@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
@@ -10,6 +10,7 @@ import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
 import { StyledPaper } from './style';
+import { useSelectableTableStore } from '../SelectableTableProvider';
 
 interface EntitiesTablesProps<Doc extends Entity> {
   isSelectable?: boolean;
@@ -22,6 +23,20 @@ interface EntitiesTablesProps<Doc extends Entity> {
   maxHeight?: number;
   onSelectChange?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
   onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  resetSelectionOnTabChange?: boolean;
+}
+
+/**
+ * Workaround to reset selected entities after tab change
+ */
+function TabChangeSelectionHandler({ openTabIndex }: { openTabIndex: number }) {
+  const deselectAllRows = useSelectableTableStore((s) => s.deselectAllRows);
+
+  useEffect(() => {
+    deselectAllRows();
+  }, [deselectAllRows, openTabIndex]);
+
+  return <></>;
 }
 
 function EntitiesTables<Doc extends Entity>({
@@ -35,6 +50,7 @@ function EntitiesTables<Doc extends Entity>({
   maxHeight,
   onSelectAllChange,
   onSelectChange,
+  resetSelectionOnTabChange = false,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -43,7 +59,7 @@ function EntitiesTables<Doc extends Entity>({
     isLoading: boolean;
   };
 
-  const tableIsEmpty = entities[0].query.query?.ids?.values?.length === 0;
+  const tableIsEmpty = entities[openTabIndex].query.query?.ids?.values?.length === 0;
 
   return (
     <>
@@ -66,9 +82,20 @@ function EntitiesTables<Doc extends Entity>({
         <StyledPaper sx={{ padding: '1rem' }}>{emptyAlert}</StyledPaper>
       ) : (
         entities.map(
-          ({ query, columns, entityType, expandedContent, estimatedExpandedRowHeight, reverseExpandIndicator }, i) => (
+          (
+            {
+              query,
+              columns,
+              entityType,
+              expandedContent,
+              estimatedExpandedRowHeight,
+              reverseExpandIndicator,
+              headerActions,
+            },
+            i,
+          ) => (
             <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
-              <EntityTable<Doc>
+              <EntityTable
                 query={query}
                 columns={columns}
                 isSelectable={isSelectable}
@@ -81,11 +108,13 @@ function EntitiesTables<Doc extends Entity>({
                 onSelectChange={onSelectChange}
                 estimatedExpandedRowHeight={estimatedExpandedRowHeight}
                 reverseExpandIndicator={reverseExpandIndicator}
+                headerActions={headerActions}
               />
             </TabPanel>
           ),
         )
       )}
+      {resetSelectionOnTabChange && <TabChangeSelectionHandler openTabIndex={openTabIndex} />}
     </>
   );
 }

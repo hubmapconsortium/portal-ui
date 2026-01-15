@@ -101,6 +101,7 @@ export const createdTimestamp = {
   label: 'Creation Date',
   cellContent: CreatedTimestampCell,
   width: 150,
+  sort: 'created_timestamp',
 };
 
 function AssayTypesCell({ hit: { mapped_data_types } }: CellContentProps<DatasetDocument>) {
