@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import Button from '@mui/material/Button';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -11,7 +12,6 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { getTableEntities } from 'js/components/detailPage/MetadataSection/utils';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { DownloadIcon } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
@@ -67,16 +67,19 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
       icon={sectionIconMap.metadata}
       action={
         <SecondaryBackgroundTooltip title="Download">
-          <a href={downloadUrl} download={`${hubmap_id}.tsv`}>
-            <WhiteBackgroundIconButton
-              aria-label="Download TSV of selected items' metadata"
-              onClick={() => {
-                trackEntityPageEvent({ action: `Metadata / Download Metadata` });
-              }}
-            >
-              <DownloadIcon color="primary" />
-            </WhiteBackgroundIconButton>
-          </a>
+          <Button
+            aria-label="Download TSV of selected items' metadata"
+            onClick={() => {
+              trackEntityPageEvent({ action: `Metadata / Download Metadata` });
+            }}
+            LinkComponent={'a'}
+            href={downloadUrl}
+            download={`${hubmap_id}.tsv`}
+            variant="contained"
+            startIcon={<DownloadIcon color="white" />}
+          >
+            Download
+          </Button>
         </SecondaryBackgroundTooltip>
       }
     >
