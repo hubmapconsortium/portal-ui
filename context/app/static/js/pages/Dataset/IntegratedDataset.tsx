@@ -1,6 +1,5 @@
 import React from 'react';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
 
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -13,13 +12,10 @@ import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Donor, Sample } from 'js/components/types';
-import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
-import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { hasMetadata } from 'js/helpers/metadata';
-import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import PublicationsSection from 'js/components/detailPage/PublicationsSection';
 import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useRedirectAlert, useVitessceConf } from './hooks';
@@ -92,16 +88,6 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     attribution: true,
   };
 
-  // TODO: The dataset relationships functionality needs to use the ancestor datasets for SnareSeq2 integrated datasets
-  // For now, we just use the first immediate ancestor ID, but this should be updated to show relationships all ancestors of the integrated dataset
-  const { shouldDisplay: shouldDisplayRelationships } = useDatasetRelationships(immediate_ancestor_ids[0], 'raw');
-
-  if (loadingEntities) {
-    return null;
-  }
-
-  const datasetRelationshipsContainerHeight = 500;
-
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
@@ -111,16 +97,6 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
             mapped_external_group_name={mapped_external_group_name}
-            bottomFold={
-              shouldDisplayRelationships && (
-                <>
-                  <MultiAssayRelationship />
-                  <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
-                    <DatasetRelationships uuid={immediate_ancestor_ids[0]} processing={'raw'} />
-                  </Box>
-                </>
-              )
-            }
           >
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
@@ -146,7 +122,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>
-            <ContributorsTable contributors={contributors} contacts={contacts} />
+            {loadingEntities ? <Skeleton /> : <ContributorsTable contributors={contributors} contacts={contacts} />}
           </Attribution>
         </DetailLayout>
       </SelectedVersionStoreProvider>
