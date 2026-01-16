@@ -26,6 +26,7 @@ function useEffectiveDatasetUUIDs({
 
   const { searchHits: collections = [], isLoading } = useSearchHits<Collection>(collectionQuery, {
     shouldFetch: Boolean(associatedCollectionUUID),
+    useDefaultQuery: false,
   });
 
   if (collections) {
@@ -63,6 +64,7 @@ function useAllAncestors(datasetUUIDs: string[], isLoadingDatasetUUIDs: boolean)
 
   const { searchHits: datasets, isLoading: isLoadingAncestorIds } = useSearchHits<Dataset>(datasetsQuery, {
     shouldFetch: !isLoadingDatasetUUIDs,
+    useDefaultQuery: false,
   });
 
   const allAncestorIds = useMemo(() => {
@@ -91,17 +93,20 @@ function PublicationsDataSection({ datasetUUIDs, associatedCollectionUUID }: Pub
 
   const { allAncestorIds, isLoading: isLoadingAncestorIds } = useAllAncestors(
     effectiveDatasetUUIDs.filter(Boolean), // remove any nulls
-    isLoadingEffectiveDatasetUUIDs || effectiveDatasetUUIDs?.length > 0,
+    isLoadingEffectiveDatasetUUIDs || effectiveDatasetUUIDs.length === 0,
   );
 
   // Fetch ancestor entities (samples and donors)
-  const [allEntities, isLoadingEntities] = useEntitiesData(allAncestorIds, undefined, !isLoadingAncestorIds);
+  const [allEntities, isLoadingEntities] = useEntitiesData(allAncestorIds, undefined, {
+    shouldFetch: !isLoadingAncestorIds,
+    useDefaultQuery: false,
+  });
 
-  const finishedLoading = !isLoadingEntities && allEntities.length > 0;
+  const loadingTableEntities = isLoadingEntities || allEntities.length === 0;
 
   return (
     <CollapsibleDetailPageSection id="data" title="Data">
-      <IntegratedDataTables entities={allEntities} isLoading={!finishedLoading} />
+      <IntegratedDataTables entities={allEntities} isLoading={loadingTableEntities} />
       {associatedCollectionUUID && <PublicationCollections collectionsData={collections} isCollectionPublication />}
     </CollapsibleDetailPageSection>
   );
