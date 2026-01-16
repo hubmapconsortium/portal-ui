@@ -5,18 +5,15 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
-import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { Dataset, Donor, Sample, isDataset } from 'js/components/types';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
-import { getTableEntities } from 'js/components/detailPage/MetadataSection/utils';
 import { DownloadIcon } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
-import { Columns, defaultTSVColumns } from './columns';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import MetadataTable from '../MetadataTable';
+import { useMetadataEntityDownloads } from './hooks';
 
 interface TableRow {
   key: string;
@@ -26,10 +23,9 @@ interface TableRow {
 
 export type TableRows = TableRow[];
 
-type MetadataWrapperProps = PropsWithChildren<{
-  allTableRows: TableRows;
-  tsvColumns?: Columns;
-}>;
+interface MetadataWrapperProps extends PropsWithChildren {
+  downloadUrl: string;
+}
 
 function DatasetDescriptionNote() {
   return (
@@ -42,23 +38,19 @@ function DatasetDescriptionNote() {
   );
 }
 
-function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, children }: MetadataWrapperProps) {
+const nonIntegratedTooltip = 'Download all TSV metadata for the current dataset and related entities.';
+const integratedTooltip = 'Download all TSV metadata for the current and the entities it was derived from.';
+
+function MetadataWrapper({ downloadUrl, children }: MetadataWrapperProps) {
   const {
     entity: { hubmap_id, is_integrated, ...entity },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
-  const downloadUrl = createDownloadUrl(
-    tableToDelimitedString(
-      allTableRows,
-      tsvColumns.map((col) => col.label),
-      '\t',
-    ),
-    'text/tab-separated-values',
-  );
-
   const entityIsDataset = isDataset(entity);
+
+  const tooltip = is_integrated ? integratedTooltip : nonIntegratedTooltip;
 
   return (
     <CollapsibleDetailPageSection
@@ -66,9 +58,9 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
       title="Metadata"
       icon={sectionIconMap.metadata}
       action={
-        <SecondaryBackgroundTooltip title="Download">
+        <SecondaryBackgroundTooltip title={tooltip}>
           <Button
-            aria-label="Download TSV of selected items' metadata"
+            aria-label={tooltip}
             onClick={() => {
               trackEntityPageEvent({ action: `Metadata / Download Metadata` });
             }}
@@ -97,19 +89,10 @@ interface MetadataProps {
 }
 
 function Metadata({ entities }: MetadataProps) {
-  const { data: fieldDescriptions } = useMetadataFieldDescriptions();
-  const {
-    entity: { uuid },
-  } = useFlaskDataContext();
-
-  const tableEntities = getTableEntities({ entities, uuid, fieldDescriptions });
-  const allTableRows = tableEntities.map((d) => d.tableRows).flat();
+  const { tableEntities, downloadUrl } = useMetadataEntityDownloads(entities);
 
   return (
-    <MetadataWrapper
-      allTableRows={allTableRows}
-      tsvColumns={[{ id: 'hubmap_id', label: 'HuBMAP ID' }, { id: 'label', label: 'Entity' }, ...defaultTSVColumns]}
-    >
+    <MetadataWrapper downloadUrl={downloadUrl}>
       {tableEntities.length > 1 ? (
         <MetadataTabs entities={tableEntities} />
       ) : (

@@ -22,4 +22,5 @@ export interface EntitiesTabTypes<Doc extends Entity> {
   estimatedExpandedRowHeight?: number;
   reverseExpandIndicator?: boolean;
   headerActions?: React.ReactNode;
+  initialSortState?: { columnId: string; direction: 'desc' | 'asc' };
 }

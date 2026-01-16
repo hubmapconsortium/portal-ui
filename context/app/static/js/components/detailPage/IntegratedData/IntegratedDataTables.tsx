@@ -18,6 +18,10 @@ import {
   parentDonorAge,
   anatomy,
 } from 'js/shared-styles/tables/columns';
+import { Copy } from 'js/shared-styles/tables/actions';
+import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
+import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
+import DownloadsDropdownMenu from 'js/components/downloads/DownloadsDropdownMenu';
 
 const datasetColumns = [
   hubmapID,
@@ -30,6 +34,22 @@ const datasetColumns = [
 ];
 const donorColumns = [hubmapID, donorAge, donorSex, donorBMI, donorRace, createdTimestamp];
 const sampleColumns = [hubmapID, organCol, anatomy, parentDonorAge, parentDonorRace, parentDonorSex, createdTimestamp];
+
+// Sorting by creation date ensures the current entity is at the top of its table if present
+const initialSortState = { columnId: createdTimestamp.id, direction: 'desc' } as const;
+
+type IntegratedEntity = 'Donor' | 'Sample' | 'Dataset';
+
+function getHeaderActions(entityType: IntegratedEntity, entityIdsByType: Record<IntegratedEntity, string[]>) {
+  return (
+    <>
+      <SaveEntitiesButtonFromSearch entity_type={entityType} />
+      <Copy />
+      <WorkspacesDropdownMenu type={entityType} />
+      <DownloadsDropdownMenu type={entityType} defaultUUIDs={entityIdsByType[entityType]} />
+    </>
+  );
+}
 
 function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dataset | Sample)[] }) {
   const entitiesTableConfig: EntitiesTabTypes<Entity>[] = useMemo(() => {
@@ -59,6 +79,8 @@ function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dat
           },
         },
         columns: datasetColumns,
+        headerActions: getHeaderActions('Dataset', entityIdsByType),
+        initialSortState,
       },
       {
         entityType: 'Sample',
@@ -74,6 +96,8 @@ function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dat
           },
         },
         columns: sampleColumns,
+        headerActions: getHeaderActions('Sample', entityIdsByType),
+        initialSortState,
       },
       {
         entityType: 'Donor',
@@ -89,6 +113,8 @@ function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dat
           },
         },
         columns: donorColumns,
+        headerActions: getHeaderActions('Donor', entityIdsByType),
+        initialSortState,
       },
     ];
     return entities;
@@ -97,7 +123,13 @@ function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dat
   const numSelected = useSelectableTableStore((s) => s.selectedRows.size);
 
   return (
-    <EntitiesTables entities={entitiesTableConfig} isSelectable numSelected={numSelected} resetSelectionOnTabChange />
+    <EntitiesTables
+      entities={entitiesTableConfig}
+      isSelectable
+      numSelected={numSelected}
+      resetSelectionOnTabChange
+      maxHeight={600}
+    />
   );
 }
 

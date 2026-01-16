@@ -9,10 +9,28 @@ import { EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/CurrentGeneContext';
 import { SecondaryBackgroundTooltip } from '../tooltips';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { useDatasetAccess } from 'js/hooks/useDatasetPermissions';
 
 export interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
 }
+
+type DatasetAccessWarningProps = Pick<EntityDocument, 'uuid' | 'mapped_status' | 'mapped_data_access_level'>;
+const DatasetAccessWarning = ({ uuid, mapped_status, mapped_data_access_level }: DatasetAccessWarningProps) => {
+  const { accessAllowed, isLoading } = useDatasetAccess(uuid);
+
+  if (accessAllowed || isLoading) {
+    return null;
+  }
+  return (
+    <SecondaryBackgroundTooltip title="This is a protected dataset that cannot be accessed with your current permissions.">
+      <Typography variant="caption" color="error" sx={{ display: 'block', mt: 1 }}>
+        {mapped_status} ({mapped_data_access_level})
+      </Typography>
+    </SecondaryBackgroundTooltip>
+  );
+};
 
 function HubmapIDCell({
   hit: { uuid, hubmap_id, mapped_status, mapped_data_access_level, entity_type },
@@ -22,45 +40,54 @@ function HubmapIDCell({
   const isDataset = entity_type === 'Dataset';
   const markerGene = useOptionalGeneContext();
 
-  const isPublished = mapped_status && mapped_status.toLowerCase() === 'published';
-  const isPublic = mapped_data_access_level && mapped_data_access_level.toLowerCase() === 'public';
+  const flaskData = useFlaskDataContext();
 
-  const accessAllowed = isPublished && isPublic;
+  const isCurrentEntity = flaskData?.entity?.uuid === uuid;
 
   const href = useMemo(() => {
-    const url = new URL(`/browse/dataset/${uuid}`, window.location.origin);
+    const url = new URL(`/browse/${entity_type}/${uuid}`, window.location.origin);
     if (markerGene) {
       url.searchParams.set('marker', markerGene);
     }
     return url.toString();
-  }, [uuid, markerGene]);
+  }, [uuid, markerGene, entity_type]);
 
   return (
     <>
-      <InternalLink
-        target={openLinksInNewTab ? '_blank' : '_self'}
-        href={href}
-        onClick={() => {
-          if (trackingInfo) {
-            trackEvent({
-              ...trackingInfo,
-              action: trackingInfo.action
-                ? `${trackingInfo.action} / Select ${trackingInfo.action}`
-                : 'Navigate to Dataset from Table',
-              label: `${trackingInfo.label} ${hubmap_id}`,
-            });
-          }
-        }}
-        variant="body2"
-      >
-        {hubmap_id}
-      </InternalLink>
-      {isDataset && !accessAllowed && (
-        <SecondaryBackgroundTooltip title="This is a protected dataset that cannot be accessed with your current permissions.">
-          <Typography variant="caption" color="error" sx={{ display: 'block', mt: 1 }}>
-            {mapped_status} ({mapped_data_access_level})
+      {isCurrentEntity ? (
+        <>
+          <div>{hubmap_id}</div>
+          <Typography variant="caption" color="grey.500">
+            (Current {entity_type})
           </Typography>
-        </SecondaryBackgroundTooltip>
+        </>
+      ) : (
+        <InternalLink
+          target={openLinksInNewTab ? '_blank' : '_self'}
+          href={href}
+          onClick={() => {
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: trackingInfo.action
+                  ? `${trackingInfo.action} / Select ${trackingInfo.action}`
+                  : 'Navigate to Dataset from Table',
+                label: `${trackingInfo.label} ${hubmap_id}`,
+              });
+            }
+          }}
+          variant="body2"
+        >
+          {hubmap_id}
+        </InternalLink>
+      )}
+
+      {isDataset && (
+        <DatasetAccessWarning
+          uuid={uuid}
+          mapped_data_access_level={mapped_data_access_level}
+          mapped_status={mapped_status}
+        />
       )}
     </>
   );

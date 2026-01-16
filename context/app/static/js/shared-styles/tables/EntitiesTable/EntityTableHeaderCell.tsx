@@ -69,7 +69,7 @@ export default function EntityHeaderCell<Doc>({
   if (!isSortable) {
     return (
       <HeaderCell key={id} sx={{ backgroundColor: 'background.paper' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'start', whiteSpace: 'nowrap' }}>
           {label}
           {isFilterable && onToggleFilterValue && onClearFilter && (
             <ColumnFilterDropdown
@@ -100,7 +100,7 @@ export default function EntityHeaderCell<Doc>({
         },
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
         <TableSortLabel
           active={active}
           direction={active ? sortState.direction : undefined}
@@ -109,6 +109,7 @@ export default function EntityHeaderCell<Doc>({
             '> .MuiTableSortLabel-icon': {
               opacity: 0.25,
             },
+            whiteSpace: 'nowrap',
           }}
         >
           {label}

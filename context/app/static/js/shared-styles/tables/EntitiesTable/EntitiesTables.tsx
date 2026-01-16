@@ -91,6 +91,7 @@ function EntitiesTables<Doc extends Entity>({
               estimatedExpandedRowHeight,
               reverseExpandIndicator,
               headerActions,
+              initialSortState,
             },
             i,
           ) => (
@@ -109,6 +110,7 @@ function EntitiesTables<Doc extends Entity>({
                 estimatedExpandedRowHeight={estimatedExpandedRowHeight}
                 reverseExpandIndicator={reverseExpandIndicator}
                 headerActions={headerActions}
+                initialSortState={initialSortState}
               />
             </TabPanel>
           ),

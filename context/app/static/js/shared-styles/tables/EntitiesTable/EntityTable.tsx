@@ -18,6 +18,7 @@ import { EntitiesTabTypes } from './types';
 import ExpandableRow from '../ExpandableRow';
 import ExpandableRowCell from '../ExpandableRowCell';
 import EntityHeaderCell from './EntityTableHeaderCell';
+import Stack from '@mui/material/Stack';
 
 function TablePaddingRow({ padding }: { padding: number }) {
   return (
@@ -47,7 +48,7 @@ interface EntityTableProps<Doc extends Entity>
 }
 
 const headerRowHeight = 60;
-const extraHeaderRowHeight = 40;
+const extraHeaderRowHeight = 48;
 
 const expandableHeaderCell = (
   <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />
@@ -133,11 +134,27 @@ function EntityTable<Doc extends Entity>({
         <TableHead sx={{ position: 'relative' }}>
           {showExtraHeader && (
             <TableRow
-              sx={{ height: extraHeaderRowHeight, p: 0, position: 'sticky', top: 0, zIndex: 3, borderBottom: 0 }}
+              sx={{
+                height: extraHeaderRowHeight,
+                p: 0,
+                position: 'sticky',
+                top: 0,
+                zIndex: 3,
+                borderBottom: 0,
+                background: 'white',
+              }}
             >
-              <TableCell colSpan={fullWidthColSpan} sx={{ p: 0 }}>
-                {isSelectable && numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
-                {headerActions}
+              <TableCell colSpan={fullWidthColSpan} sx={{ p: 0, background: 'white' }}>
+                <Stack direction="row" alignItems="space-between" justifyContent="center">
+                  {isSelectable && numSelected !== undefined && (
+                    <NumSelectedHeader numSelected={numSelected} $noBorderBottom />
+                  )}
+                  {headerActions && (
+                    <Stack direction="row" spacing={1} flexWrap="nowrap" pr={2}>
+                      {headerActions}
+                    </Stack>
+                  )}
+                </Stack>
               </TableCell>
             </TableRow>
           )}

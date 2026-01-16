@@ -20,7 +20,7 @@ import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useRedirectAlert, useVitessceConf } from './hooks';
 import { EntityDetailProps } from './Dataset';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
-import IntegratedData from 'js/components/detailPage/IntegratedData/IntegratedData';
+import IntegratedDataSection from 'js/components/detailPage/IntegratedData/IntegratedData';
 import { combinePeopleLists } from 'js/pages/Dataset/utils';
 import { Entity } from 'js/components/types';
 import AnalysisDetailsSection from 'js/components/detailPage/AnalysisDetails/AnalysisDetailsSection';
@@ -46,6 +46,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     creation_action,
     files,
     metadata,
+    ingest_metadata: { dag_provenance_list },
   } = assayMetadata;
 
   const isExternal = creation_action === 'External Process';
@@ -84,7 +85,8 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     'bulk-data-transfer': true,
     'integrated-data': Boolean(entitiesForImmediateAncestors.length),
     provenance: true,
-    'protocols-and-workflow-details': Boolean(protocolUrl) || !isExternal,
+    // External datasets have protocol URLs, internal datasets should have workflow details
+    'protocols-and-workflow-details': Boolean(protocolUrl || (!isExternal && dag_provenance_list)),
     collections: Boolean(collectionsData.length),
     publications: Boolean(publicationsData.length),
     attribution: true,
@@ -125,9 +127,10 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             integratedEntityUUID={uuid}
             customUUIDs={uuidsForBulkDataTransfer}
           />
-          <IntegratedData
+          <IntegratedDataSection
             entities={entitiesForImmediateAncestors}
             shouldDisplay={shouldDisplaySection['integrated-data']}
+            includeCurrentEntity
           />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} integratedDataset />
           <AnalysisDetailsSection
