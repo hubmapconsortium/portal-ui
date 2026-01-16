@@ -21,7 +21,7 @@ import {
 import { Copy } from 'js/shared-styles/tables/actions';
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
-import DownloadsDropdownMenu from 'js/components/downloads/DownloadsDropdownMenu';
+import DownloadsDropdownMenu from 'js/components/data-transfer/DownloadsDropdownMenu';
 
 const datasetColumns = [
   hubmapID,
