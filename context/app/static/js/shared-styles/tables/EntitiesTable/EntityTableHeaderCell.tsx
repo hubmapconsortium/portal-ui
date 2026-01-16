@@ -109,7 +109,6 @@ export default function EntityHeaderCell<Doc>({
             '> .MuiTableSortLabel-icon': {
               opacity: 0.25,
             },
-            whiteSpace: 'nowrap',
           }}
         >
           {label}
