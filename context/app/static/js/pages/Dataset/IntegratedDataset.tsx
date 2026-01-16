@@ -25,7 +25,7 @@ import { combinePeopleLists } from 'js/pages/Dataset/utils';
 import { Entity } from 'js/components/types';
 import AnalysisDetailsSection from 'js/components/detailPage/AnalysisDetails/AnalysisDetailsSection';
 import IntegratedDatasetVisualizationSection from 'js/components/detailPage/visualization/IntegratedDatasetVisualizationSection';
-import IntegratedDatasetFiles from 'js/components/detailPage/files/IntegratedDatasetFiles/IntegratedDatasetFiles';
+import IntegratedDatasetFiles from 'js/components/detailPage/files/IntegratedDatasetFiles';
 import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 
