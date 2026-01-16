@@ -119,7 +119,7 @@ function EntityTable<Doc extends Entity>({
 
   const fullWidthColSpan = columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0);
 
-  const showExtraHeader = headerActions || isSelectable;
+  const showExtraHeader = headerActions || (isSelectable && numSelected !== undefined);
 
   return (
     <StyledTableContainer
