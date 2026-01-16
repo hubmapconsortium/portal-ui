@@ -38,9 +38,10 @@ const sampleColumns = [hubmapID, organCol, anatomy, parentDonorAge, parentDonorR
 // Sorting by creation date ensures the current entity is at the top of its table if present
 const initialSortState = { columnId: createdTimestamp.id, direction: 'desc' } as const;
 
-type IntegratedEntity = 'Donor' | 'Sample' | 'Dataset';
+type IntegratedEntityTypes = 'Donor' | 'Sample' | 'Dataset';
+type IntegratedEntity = Donor | Sample | Dataset;
 
-function getHeaderActions(entityType: IntegratedEntity, entityIdsByType: Record<IntegratedEntity, string[]>) {
+function getHeaderActions(entityType: IntegratedEntityTypes, entityIdsByType: Record<IntegratedEntityTypes, string[]>) {
   return (
     <>
       <SaveEntitiesButtonFromSearch entity_type={entityType} />
@@ -51,9 +52,14 @@ function getHeaderActions(entityType: IntegratedEntity, entityIdsByType: Record<
   );
 }
 
-function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dataset | Sample)[] }) {
+interface IntegratedDataTablesProps {
+  entities: IntegratedEntity[];
+  tableTooltips?: Partial<Record<IntegratedEntityTypes, string>>;
+}
+
+function IntegratedDataTables({ entities: entityList, tableTooltips }: IntegratedDataTablesProps) {
   const entitiesTableConfig: EntitiesTabTypes<Entity>[] = useMemo(() => {
-    const entityIdsByType = entityList.reduce<Record<'Donor' | 'Sample' | 'Dataset', string[]>>(
+    const entityIdsByType = entityList.reduce<Record<IntegratedEntityTypes, string[]>>(
       (acc, curr) => {
         acc[curr.entity_type].push(curr.uuid);
         return acc;
@@ -81,6 +87,7 @@ function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dat
         columns: datasetColumns,
         headerActions: getHeaderActions('Dataset', entityIdsByType),
         initialSortState,
+        tabTooltipText: tableTooltips?.Dataset,
       },
       {
         entityType: 'Sample',
@@ -98,6 +105,7 @@ function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dat
         columns: sampleColumns,
         headerActions: getHeaderActions('Sample', entityIdsByType),
         initialSortState,
+        tabTooltipText: tableTooltips?.Sample,
       },
       {
         entityType: 'Donor',
@@ -115,10 +123,11 @@ function IntegratedDataTables({ entities: entityList }: { entities: (Donor | Dat
         columns: donorColumns,
         headerActions: getHeaderActions('Donor', entityIdsByType),
         initialSortState,
+        tabTooltipText: tableTooltips?.Donor,
       },
     ];
     return entities;
-  }, [entityList]);
+  }, [entityList, tableTooltips]);
 
   const numSelected = useSelectableTableStore((s) => s.selectedRows.size);
 

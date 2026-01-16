@@ -58,7 +58,12 @@ function IntegratedDataSection({ entities, includeCurrentEntity }: IntegratedDat
         </SecondaryBackgroundTooltip>
       }
     >
-      <IntegratedDataTables entities={fullEntities} />
+      <IntegratedDataTables
+        entities={fullEntities}
+        tableTooltips={{
+          Dataset: 'Dataset count includes current dataset.',
+        }}
+      />
     </CollapsibleDetailPageSection>
   );
 }

@@ -11,6 +11,7 @@ import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
 import { StyledPaper } from './style';
 import { useSelectableTableStore } from '../SelectableTableProvider';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 interface EntitiesTablesProps<Doc extends Entity> {
   isSelectable?: boolean;
@@ -64,13 +65,23 @@ function EntitiesTables<Doc extends Entity>({
   return (
     <>
       <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
-        {entities.map(({ entityType }, i) => {
+        {entities.map(({ entityType, tabTooltipText }, i) => {
           const Icon = entityIconMap?.[entityType];
+          const label = `${entityType}s (${totalHitsCounts[i] ?? 0})`;
+
           return (
             <Tab
-              label={`${entityType}s (${totalHitsCounts[i] ?? 0})`}
               key={`${entityType}-tab`}
               index={i}
+              label={
+                tabTooltipText ? (
+                  <SecondaryBackgroundTooltip title={tabTooltipText}>
+                    <span>{label}</span>
+                  </SecondaryBackgroundTooltip>
+                ) : (
+                  label
+                )
+              }
               icon={Icon ? <SvgIcon component={Icon} sx={{ fontSize: '1.5rem', color: 'primary' }} /> : undefined}
               iconPosition="start"
               isSingleTab={entities.length === 0}

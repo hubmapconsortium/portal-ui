@@ -23,4 +23,5 @@ export interface EntitiesTabTypes<Doc extends Entity> {
   reverseExpandIndicator?: boolean;
   headerActions?: React.ReactNode;
   initialSortState?: { columnId: string; direction: 'desc' | 'asc' };
+  tabTooltipText?: string;
 }
