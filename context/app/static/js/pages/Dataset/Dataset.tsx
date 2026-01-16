@@ -30,6 +30,7 @@ import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 import IntegratedDatasetPage from './IntegratedDataset';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
+import ProcessedData from 'js/components/detailPage/ProcessedData';
 
 function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   if (!isExternal) {
@@ -73,9 +74,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   useRedirectAlert();
 
-  const origin_sample = origin_samples[0];
-  const { mapped_organ } = origin_sample;
-
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
   const { sections, isLoading } = useProcessedDatasetsSections();
@@ -109,7 +107,12 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const datasetRelationshipsContainerHeight = assay_modality === 'multiple' ? 500 : 400;
 
   return (
-    <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
+    <DetailContextProvider
+      hubmap_id={hubmap_id}
+      uuid={uuid}
+      entityType="Dataset"
+      mapped_data_access_level={mapped_data_access_level}
+    >
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
         <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
         {Boolean(is_component) && <ComponentAlert />}
@@ -131,9 +134,10 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               ) : null
             }
           >
-            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
+            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
           </Summary>
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+          <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} additionalUuids={processedDatasetUuids} />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />

@@ -152,6 +152,7 @@ export interface Dataset extends Entity {
   visualization: boolean;
   source_samples: Sample[];
   data_types: string[];
+  is_integrated: boolean;
 }
 
 export interface Collection extends Entity {

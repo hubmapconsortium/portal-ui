@@ -8,7 +8,14 @@ interface DetailContextType {
   // Currently set from real data on Dataset pages,
   // defaults to `Public` on publication pages
   mapped_data_access_level: string;
+  entityType: string;
 }
+
+type Props = PropsWithChildren<
+  Omit<DetailContextType, 'entityType'> & {
+    entityType?: string;
+  }
+>;
 
 export const DetailContext = createContext<DetailContextType>('DetailContext');
 
@@ -19,13 +26,15 @@ export function DetailContextProvider({
   uuid,
   hubmap_id,
   mapped_data_access_level,
-}: PropsWithChildren<DetailContextType>) {
+  entityType = 'Dataset',
+}: Props) {
   const value = useMemo(() => {
     return {
       uuid,
       hubmap_id,
       mapped_data_access_level,
+      entityType,
     };
-  }, [uuid, hubmap_id, mapped_data_access_level]);
+  }, [uuid, hubmap_id, mapped_data_access_level, entityType]);
   return <DetailContext.Provider value={value}>{children}</DetailContext.Provider>;
 }

@@ -10,4 +10,9 @@ export const defaultColumns = [
   { id: 'value', label: 'Value' },
 ];
 
-export const defaultTSVColumns = [...defaultColumns, { id: 'description', label: 'Description' }];
+export const defaultTSVColumns = [
+  { id: 'hubmap_id', label: 'HuBMAP ID' },
+  { id: 'label', label: 'Entity' },
+  ...defaultColumns,
+  { id: 'description', label: 'Description' },
+];

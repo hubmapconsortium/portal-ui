@@ -169,6 +169,7 @@ function EntityHeaderActionButtons({
   entity_type?: AllEntityTypes;
 }) {
   const isLargeDesktop = useIsLargeDesktop();
+  const { isWorkspacesUser } = useAppContext();
 
   const {
     entity: { uuid, hubmap_id },
@@ -187,7 +188,7 @@ function EntityHeaderActionButtons({
       )}
       <SaveEditEntityButton uuid={uuid} />
       <JSONButton entity_type={entity_type} uuid={uuid} />
-      {isDataset && (
+      {isDataset && isWorkspacesUser && (
         <ProcessedDataWorkspaceMenu
           button={
             <ActionButton

@@ -15,7 +15,6 @@ import { FilesContextProvider } from '../FilesContext';
 import { FileSize } from './FileSize';
 import { DataProduct } from './DataProduct';
 import MultiFileDownloader from '../MultiFileDownloader';
-import { useFileLinks } from './hooks';
 import { DownloadAllButton } from './DownloadAllButton';
 
 interface DataProductsProps {
@@ -28,8 +27,6 @@ function DataProducts({ files }: DataProductsProps) {
   const totalFileSize = dataProducts.reduce((acc, file) => acc + file.size, 0);
 
   const [downloadAllClicked, setDownloadAllClicked] = useState(false);
-
-  const downloadLinks = useFileLinks(dataProducts);
 
   const onDownloadAll = useCallback(() => {
     setDownloadAllClicked(true);
@@ -58,7 +55,7 @@ function DataProducts({ files }: DataProductsProps) {
             <FileSize size={totalFileSize} variant="body1" color="secondary.main" />
           </Box>
           <DownloadAllButton onDownloadAll={onDownloadAll} disabled={downloadAllClicked} />
-          {downloadAllClicked && <MultiFileDownloader files={downloadLinks} />}
+          {downloadAllClicked && <MultiFileDownloader files={dataProducts} />}
         </Box>
         <Stack divider={<Divider />} maxHeight={600} overflow="auto">
           {dataProducts.map((file) => (
