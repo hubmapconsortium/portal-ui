@@ -30,7 +30,7 @@ function TablePaddingRow({ padding }: { padding: number }) {
 
 interface EntityTableProps<Doc extends Entity>
   extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns' | 'expandedContent'> {
-  isSelectable: boolean;
+  isSelectable?: boolean;
   numSelected?: number;
   disabledIDs?: Set<string>;
   trackingInfo?: EventInfo;

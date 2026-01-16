@@ -45,7 +45,7 @@ function HubmapIDCell({
   const isCurrentEntity = flaskData?.entity?.uuid === uuid;
 
   const href = useMemo(() => {
-    const url = new URL(`/browse/${entity_type}/${uuid}`, window.location.origin);
+    const url = new URL(`/browse/${entity_type.toLowerCase()}/${uuid}`, window.location.origin);
     if (markerGene) {
       url.searchParams.set('marker', markerGene);
     }
@@ -132,7 +132,7 @@ export const createdTimestamp = {
 };
 
 function AssayTypesCell({ hit: { mapped_data_types } }: CellContentProps<DatasetDocument>) {
-  return mapped_data_types.join(', ');
+  return mapped_data_types?.join(', ') ?? '';
 }
 
 export const assayTypes = {
@@ -159,7 +159,7 @@ export const status = {
 function OrganCell({
   hit: { origin_samples_unique_mapped_organs },
 }: CellContentProps<DatasetDocument | SampleDocument>) {
-  return origin_samples_unique_mapped_organs.join(', ');
+  return origin_samples_unique_mapped_organs?.join(', ') ?? '';
 }
 
 export const organCol = {

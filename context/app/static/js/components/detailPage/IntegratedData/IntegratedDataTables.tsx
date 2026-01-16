@@ -41,6 +41,10 @@ const initialSortState = { columnId: createdTimestamp.id, direction: 'desc' } as
 type IntegratedEntityTypes = 'Donor' | 'Sample' | 'Dataset';
 type IntegratedEntity = Donor | Sample | Dataset;
 
+const isIntegratedEntity = (e: Entity): e is IntegratedEntity => {
+  return ['Donor', 'Sample', 'Dataset'].includes(e.entity_type);
+};
+
 function getHeaderActions(entityType: IntegratedEntityTypes, entityIdsByType: Record<IntegratedEntityTypes, string[]>) {
   return (
     <>
@@ -53,13 +57,16 @@ function getHeaderActions(entityType: IntegratedEntityTypes, entityIdsByType: Re
 }
 
 interface IntegratedDataTablesProps {
-  entities: IntegratedEntity[];
+  entities: Entity[];
   tableTooltips?: Partial<Record<IntegratedEntityTypes, string>>;
+  isLoading?: boolean;
 }
 
-function IntegratedDataTables({ entities: entityList, tableTooltips }: IntegratedDataTablesProps) {
+function IntegratedDataTables({ entities: entityList, tableTooltips, isLoading }: IntegratedDataTablesProps) {
   const entitiesTableConfig: EntitiesTabTypes<Entity>[] = useMemo(() => {
-    const entityIdsByType = entityList.reduce<Record<IntegratedEntityTypes, string[]>>(
+    const integratedEntityList = entityList.filter(isIntegratedEntity);
+
+    const entityIdsByType = integratedEntityList.reduce<Record<IntegratedEntityTypes, string[]>>(
       (acc, curr) => {
         acc[curr.entity_type].push(curr.uuid);
         return acc;
@@ -138,6 +145,7 @@ function IntegratedDataTables({ entities: entityList, tableTooltips }: Integrate
       numSelected={numSelected}
       resetSelectionOnTabChange
       maxHeight={600}
+      isLoading={isLoading}
     />
   );
 }

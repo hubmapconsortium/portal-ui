@@ -51,11 +51,7 @@ function Publication({ publication, vignette_json }: PublicationProps) {
     <DetailContextProvider uuid={uuid} hubmap_id={hubmap_id} mapped_data_access_level="Public" entityType="Publication">
       <DetailLayout sections={shouldDisplaySection}>
         <PublicationSummary />
-        <PublicationsDataSection
-          uuid={uuid}
-          datasetUUIDs={ancestor_ids}
-          associatedCollectionUUID={associatedCollectionUUID}
-        />
+        <PublicationsDataSection datasetUUIDs={ancestor_ids} associatedCollectionUUID={associatedCollectionUUID} />
         {shouldDisplaySection.visualizations && (
           <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
         )}

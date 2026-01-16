@@ -21,10 +21,14 @@ export function useEntityData(uuid: string, source?: string[]): [Entity, boolean
   return [searchHits[0]?._source, isLoading];
 }
 
-export function useEntitiesData<T extends Entity = Entity>(uuids: string[], source?: string[]): [T[], boolean] {
+export function useEntitiesData<T extends Entity = Entity>(
+  uuids: string[],
+  source?: string[],
+  shouldFetch?: boolean,
+): [T[], boolean] {
   const query = useEntityQuery(uuids, source);
 
-  const { searchHits, isLoading } = useSearchHits<T>(query);
+  const { searchHits, isLoading } = useSearchHits<T>(query, { shouldFetch });
 
   return [searchHits.map((hit) => hit._source), isLoading];
 }
