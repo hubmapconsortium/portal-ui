@@ -10,6 +10,7 @@ import DataProducts from './DataProducts';
 import { flaskDataContext } from '../file-fixtures.spec';
 import { ProcessedDatasetContextProvider } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
 import { ProcessedDatasetDetails } from '../../ProcessedData/ProcessedDataset/hooks';
+import { DataProductProvider } from './DataProductContext';
 
 const files = {
   get all() {
@@ -48,11 +49,13 @@ function TestDataProducts({ files: passedFiles = files.all }) {
       defaultExpanded
       sectionDataset={{ uuid: 'fakeparentuuid' } as unknown as ProcessedDatasetInfo}
     >
-      <FlaskDataContext.Provider value={flaskDataContextEdited}>
-        <DetailContext.Provider value={detailContext}>
-          <DataProducts files={passedFiles} />
-        </DetailContext.Provider>
-      </FlaskDataContext.Provider>
+      <DataProductProvider value={'fakeuuid'}>
+        <FlaskDataContext.Provider value={flaskDataContextEdited}>
+          <DetailContext.Provider value={detailContext}>
+            <DataProducts files={passedFiles} />
+          </DetailContext.Provider>
+        </FlaskDataContext.Provider>
+      </DataProductProvider>
     </ProcessedDatasetContextProvider>
   );
 }
