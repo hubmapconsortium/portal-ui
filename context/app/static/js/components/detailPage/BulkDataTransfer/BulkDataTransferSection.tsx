@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useEventCallback } from '@mui/material/utils';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
@@ -88,14 +89,16 @@ function RegularBulkDataTransfer() {
 
   const [openTabIndex, setOpenTabIndex] = useState(0);
 
+  const onChange = useEventCallback((_, newValue) => {
+    setOpenTabIndex(newValue as number);
+  });
+
   return (
     <>
       <BulkDataTransferDescription isIntegratedEntity={false} uuids={uuids} />
       <Tabs
         value={openTabIndex}
-        onChange={(_, newValue) => {
-          setOpenTabIndex(newValue as number);
-        }}
+        onChange={onChange}
         variant={tabs.length > 4 ? 'scrollable' : 'fullWidth'}
         scrollButtons="auto"
       >

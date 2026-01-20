@@ -49,6 +49,50 @@ interface EntitiesTableTabsProps<Doc extends Entity>
   isLoading?: boolean;
 }
 
+interface EntitiesTableTabProps<Doc extends Entity> extends EntitiesTabTypes<Doc> {
+  totalHitsCount: number;
+  index: number;
+  entities: EntitiesTabTypes<Doc>[];
+  isLoading?: boolean;
+}
+
+function EntitiesTableTab<Doc extends Entity>({
+  entityType,
+  tabTooltipText,
+  totalHitsCount,
+  index,
+  isLoading,
+  entities,
+}: EntitiesTableTabProps<Doc>) {
+  const Icon = entityIconMap?.[entityType];
+  const hitsIndicator = isLoading ? <Skeleton variant="text" width={16} /> : (totalHitsCount ?? 0);
+  const entityLabel = `${entityType}s `;
+  const label = (
+    <>
+      {entityLabel}({hitsIndicator})
+    </>
+  );
+
+  return (
+    <Tab
+      key={`${entityType}-tab`}
+      index={index}
+      label={
+        tabTooltipText ? (
+          <SecondaryBackgroundTooltip title={tabTooltipText}>
+            <span>{label}</span>
+          </SecondaryBackgroundTooltip>
+        ) : (
+          label
+        )
+      }
+      icon={Icon ? <SvgIcon component={Icon} sx={{ fontSize: '1.5rem', color: 'primary' }} /> : undefined}
+      iconPosition="start"
+      isSingleTab={entities.length === 0}
+    />
+  );
+}
+
 function EntitiesTablesTabs<Doc extends Entity>({
   openTabIndex,
   handleTabChange,
@@ -64,36 +108,16 @@ function EntitiesTablesTabs<Doc extends Entity>({
 
   return (
     <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
-      {entities.map(({ entityType, tabTooltipText }, i) => {
-        const Icon = entityIconMap?.[entityType];
-        const hitsIndicator =
-          isLoading || isLoadingHitCounts ? <Skeleton variant="text" width={16} /> : (totalHitsCounts[i] ?? 0);
-        const entityLabel = `${entityType}s `;
-        const label = (
-          <>
-            {entityLabel}({hitsIndicator})
-          </>
-        );
-
-        return (
-          <Tab
-            key={`${entityType}-tab`}
-            index={i}
-            label={
-              tabTooltipText ? (
-                <SecondaryBackgroundTooltip title={tabTooltipText}>
-                  <span>{label}</span>
-                </SecondaryBackgroundTooltip>
-              ) : (
-                label
-              )
-            }
-            icon={Icon ? <SvgIcon component={Icon} sx={{ fontSize: '1.5rem', color: 'primary' }} /> : undefined}
-            iconPosition="start"
-            isSingleTab={entities.length === 0}
-          />
-        );
-      })}
+      {entities.map((entity, i) => (
+        <EntitiesTableTab
+          key={`${entity.entityType}-tab`}
+          index={i}
+          totalHitsCount={totalHitsCounts[i]}
+          entities={entities}
+          isLoading={isLoading || isLoadingHitCounts}
+          {...entity}
+        />
+      ))}
     </Tabs>
   );
 }
@@ -123,6 +147,7 @@ function EntitiesTablesBodies<Doc extends Entity>({
       {entities.map(({ query, entityType, ...entityTableProps }, i) => {
         const must = query.query?.bool?.must;
         const idsQuery = Array.isArray(must) ? must.find((item) => item?.ids?.values) : must;
+        // The number of query items generally corresponds to the number of items in the "ids" query, if present
         const queryItems = idsQuery?.ids?.values?.length ?? 0;
 
         const tableIsEmpty = queryItems === 0;

@@ -10,6 +10,10 @@ interface IntegratedDatasetVisualizationProps {
   vitessceConfig?: object;
 }
 
+const trackingInfo = {
+  category: 'Integrated Dataset',
+};
+
 function IntegratedDatasetVisualizationSection({ uuid, vitessceConfig }: IntegratedDatasetVisualizationProps) {
   return (
     <CollapsibleDetailPageSection title="Visualization" icon={VisualizationIcon}>
@@ -19,9 +23,7 @@ function IntegratedDatasetVisualizationSection({ uuid, vitessceConfig }: Integra
             <VisualizationWrapper
               uuid={uuid}
               vitData={vitessceConfig}
-              trackingInfo={{
-                category: 'Integrated Dataset',
-              }}
+              trackingInfo={trackingInfo}
               shouldDisplayHeader={false}
             />
           </Box>

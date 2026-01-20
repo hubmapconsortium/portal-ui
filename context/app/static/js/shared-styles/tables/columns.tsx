@@ -11,6 +11,7 @@ import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/Curren
 import { SecondaryBackgroundTooltip } from '../tooltips';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useDatasetAccess } from 'js/hooks/useDatasetPermissions';
+import { useEventCallback } from '@mui/material/utils';
 
 export interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
@@ -52,6 +53,18 @@ function HubmapIDCell({
     return url.toString();
   }, [uuid, markerGene, entity_type]);
 
+  const handleLinkClick = useEventCallback(() => {
+    if (trackingInfo) {
+      trackEvent({
+        ...trackingInfo,
+        action: trackingInfo.action
+          ? `${trackingInfo.action} / Select ${trackingInfo.action}`
+          : 'Navigate to Dataset from Table',
+        label: `${trackingInfo.label} ${hubmap_id}`,
+      });
+    }
+  });
+
   return (
     <>
       {isCurrentEntity ? (
@@ -65,17 +78,7 @@ function HubmapIDCell({
         <InternalLink
           target={openLinksInNewTab ? '_blank' : '_self'}
           href={href}
-          onClick={() => {
-            if (trackingInfo) {
-              trackEvent({
-                ...trackingInfo,
-                action: trackingInfo.action
-                  ? `${trackingInfo.action} / Select ${trackingInfo.action}`
-                  : 'Navigate to Dataset from Table',
-                label: `${trackingInfo.label} ${hubmap_id}`,
-              });
-            }
-          }}
+          onClick={handleLinkClick}
           variant="body2"
         >
           {hubmap_id}

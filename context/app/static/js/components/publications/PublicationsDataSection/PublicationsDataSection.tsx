@@ -69,8 +69,7 @@ function useAllAncestors(datasetUUIDs: string[], isLoadingDatasetUUIDs: boolean)
 
   const allAncestorIds = useMemo(() => {
     if (!datasets) return [];
-    const ancestorIds = new Set(datasets.flatMap((ds) => ds._source.ancestor_ids));
-    return [...ancestorIds, ...datasets.map((ds) => ds._id)].filter(Boolean);
+    return [...new Set(datasets.flatMap((ds) => [ds._id, ...ds._source.ancestor_ids]))];
   }, [datasets]);
 
   return {

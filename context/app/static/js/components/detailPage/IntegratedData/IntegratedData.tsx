@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useEventCallback } from '@mui/material/utils';
 
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { CollapsibleDetailPageSection } from '../DetailPageSection';
@@ -21,20 +22,24 @@ function IntegratedDataSection({ entities, includeCurrentEntity }: IntegratedDat
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
-  const fullEntities = useMemo(() => {
+  const [fullEntities, entityUUIDs] = useMemo(() => {
     const ents = [...entities];
     if (includeCurrentEntity) {
       ents.push(entity as Donor | Dataset | Sample);
     }
-    return ents;
+    const uuids = ents.map((e) => e.uuid);
+    return [ents, uuids];
   }, [entities, entity, includeCurrentEntity]);
-
-  const entityUUIDs = fullEntities.map((e) => e.uuid);
 
   const { initiateDownload, isLoading } = useDownloadTSV({
     lcPluralType: 'entities',
     uuids: entityUUIDs,
     analyticsCategory: 'Integrated Data',
+  });
+
+  const handleDownloadClick = useEventCallback(() => {
+    trackEntityPageEvent({ action: `Integrated Data / Download All Metadata` });
+    initiateDownload();
   });
 
   return (
@@ -45,10 +50,7 @@ function IntegratedDataSection({ entities, includeCurrentEntity }: IntegratedDat
         <SecondaryBackgroundTooltip title="Download all metadata as TSV.">
           <Button
             aria-label="Download all entities' metadata as TSV file."
-            onClick={() => {
-              trackEntityPageEvent({ action: `Integrated Data / Download All Metadata` });
-              initiateDownload();
-            }}
+            onClick={handleDownloadClick}
             disabled={isLoading}
             variant="contained"
             startIcon={<DownloadIcon color="white" />}

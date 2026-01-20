@@ -17,18 +17,18 @@ function FilesTabs({ files, uuid, hubmap_id, track }: FilesTabsProps) {
 
   const hasDataProducts = Boolean(files.filter((file) => file.is_data_product).length);
   const fileBrowserIndex = hasDataProducts ? 1 : 0;
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+    setOpenTabIndex(newValue);
+    track({
+      action: `Change to ${newValue === fileBrowserIndex ? 'File Browser' : 'Data Products'} Tab`,
+      label: hubmap_id,
+    });
+  };
+
   return (
     <DataProductProvider value={uuid}>
-      <Tabs
-        value={openTabIndex}
-        onChange={(_, newValue) => {
-          setOpenTabIndex(newValue as number);
-          track({
-            action: `Change to ${newValue === fileBrowserIndex ? 'File Browser' : 'Data Products'} Tab`,
-            label: hubmap_id,
-          });
-        }}
-      >
+      <Tabs value={openTabIndex} onChange={handleTabChange}>
         {hasDataProducts && <Tab label="Data Products" index={0} />}
         <Tab label="File Browser" index={fileBrowserIndex} />
       </Tabs>
