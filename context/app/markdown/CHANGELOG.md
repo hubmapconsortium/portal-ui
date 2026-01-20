@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.38.1 - 2026-01-12
+
+- Prevent users without Workspaces access from creating new workspaces from the dataset detail page.
+
+
+
 ## v1.38.0 - 2026-01-08
 
 - Update footer link to APIs page to point to HuBMAP Docs.
