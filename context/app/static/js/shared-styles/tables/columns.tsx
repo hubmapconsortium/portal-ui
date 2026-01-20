@@ -224,7 +224,7 @@ export const parentDonorSex = {
 };
 
 export const donorSex = {
-  ...parentDonorAge,
+  ...parentDonorSex,
   id: 'mapped_metadata.sex',
   cellContent: DonorSex,
   sort: 'mapped_metadata.sex.keyword',

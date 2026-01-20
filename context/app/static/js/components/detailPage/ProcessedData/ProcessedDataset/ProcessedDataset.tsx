@@ -28,7 +28,6 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import FilesTabs from 'js/components/detailPage/files/FilesTabs';
 import { getEntityCreationInfo } from 'js/helpers/functions';
-import { trackEvent } from 'js/helpers/trackers';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 
 import useProcessedDataStore from '../store';
@@ -97,7 +96,7 @@ function FilesAccordion() {
   } = useProcessedDatasetContext();
   const track = useTrackEntityPageEvent();
 
-  const handleTrack = useEventCallback(() => {
+  const handleBulkDownloadTrack = useEventCallback(() => {
     track({
       action: 'Navigate to Bulk Download',
       label: hubmap_id,
@@ -109,7 +108,7 @@ function FilesAccordion() {
       <Subsection title="Files" icon={<InsertDriveFileRounded />}>
         <SectionDescription subsection>
           Files are available via{' '}
-          <InternalLink onClick={handleTrack} href="#bulk-data-transfer">
+          <InternalLink onClick={handleBulkDownloadTrack} href="#bulk-data-transfer">
             bulk data transfer.
           </InternalLink>
         </SectionDescription>
@@ -117,7 +116,7 @@ function FilesAccordion() {
           startIcon={<CloudDownloadRounded />}
           variant="contained"
           href="#bulk-data-transfer"
-          onClick={handleTrack}
+          onClick={handleBulkDownloadTrack}
         >
           Scroll to Bulk Data Transfer
         </Button>
@@ -132,7 +131,7 @@ function FilesAccordion() {
         a comprehensive list of available files is displayed in the file browser. To download data in bulk from either
         the processed or the primary dataset, navigate to the bulk data transfer section.
       </SectionDescription>
-      <FilesTabs files={files} uuid={uuid} hubmap_id={hubmap_id} track={trackEvent} />
+      <FilesTabs files={files} uuid={uuid} hubmap_id={hubmap_id} track={track} />
     </Subsection>
   );
 }

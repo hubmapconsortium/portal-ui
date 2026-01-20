@@ -29,7 +29,7 @@ function useEffectiveDatasetUUIDs({
     useDefaultQuery: false,
   });
 
-  if (collections) {
+  if (collections && collections.length > 0) {
     return {
       collections,
       datasetUUIDs: collections.flatMap((c) => c._source.datasets.map((d) => d.uuid)).filter(Boolean),

@@ -91,6 +91,10 @@ interface MetadataProps {
 function Metadata({ entities }: MetadataProps) {
   const { tableEntities, downloadUrl } = useMetadataEntityDownloads(entities);
 
+  if (tableEntities.length === 0) {
+    return null;
+  }
+
   return (
     <MetadataWrapper downloadUrl={downloadUrl}>
       {tableEntities.length > 1 ? (

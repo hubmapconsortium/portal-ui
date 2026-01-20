@@ -188,7 +188,7 @@ export function useMultiSearchData<Documents, Aggs>(
 
   const inlineFetcher = () =>
     fetcher({
-      urls: Array.from({ length: requestInits.length }).fill(elasticsearchEndpoint),
+      urls: requestInits.map((_) => elasticsearchEndpoint),
       requestInits,
     }) as Promise<SearchResponseBody<Documents, Aggs>[]>;
 

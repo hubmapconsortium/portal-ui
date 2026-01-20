@@ -145,7 +145,7 @@ function EntityTable<Doc extends Entity>({
               }}
             >
               <TableCell colSpan={fullWidthColSpan} sx={{ p: 0, background: 'white' }}>
-                <Stack direction="row" alignItems="space-between" justifyContent="center">
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
                   {isSelectable && numSelected !== undefined && (
                     <NumSelectedHeader numSelected={numSelected} $noBorderBottom />
                   )}

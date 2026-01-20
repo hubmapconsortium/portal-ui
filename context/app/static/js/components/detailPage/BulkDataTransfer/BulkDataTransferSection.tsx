@@ -116,7 +116,7 @@ function RegularBulkDataTransfer() {
 }
 
 function BulkDataTransfer({ integratedEntityUUID, customUUIDs }: BulkDataTransferProps) {
-  const isIntegratedEntity = Boolean(integratedEntityUUID || customUUIDs);
+  const isIntegratedEntity = Boolean(integratedEntityUUID || (customUUIDs && customUUIDs.size > 0));
 
   return (
     <CollapsibleDetailPageSection
