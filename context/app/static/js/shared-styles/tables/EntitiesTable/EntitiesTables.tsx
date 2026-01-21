@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 
 import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
@@ -47,25 +47,21 @@ interface EntitiesTableTabsProps<Doc extends Entity>
   extends Pick<ReturnType<typeof useTabs>, 'openTabIndex' | 'handleTabChange'> {
   entities: EntitiesTabTypes<Doc>[];
   isLoading?: boolean;
+  totalHitsCounts?: number[];
 }
 
 interface EntitiesTableTabProps<Doc extends Entity> extends EntitiesTabTypes<Doc> {
-  totalHitsCount: number;
+  totalHitsCount?: number;
   index: number;
   entities: EntitiesTabTypes<Doc>[];
   isLoading?: boolean;
 }
-
-function EntitiesTableTab<Doc extends Entity>({
-  entityType,
-  tabTooltipText,
-  totalHitsCount,
-  index,
-  isLoading,
-  entities,
-}: EntitiesTableTabProps<Doc>) {
+function EntitiesTableTabInternal<Doc extends Entity>(
+  { entityType, tabTooltipText, totalHitsCount = 0, index, isLoading, entities, ...rest }: EntitiesTableTabProps<Doc>,
+  ref: React.Ref<HTMLDivElement>,
+) {
   const Icon = entityIconMap?.[entityType];
-  const hitsIndicator = isLoading ? <Skeleton variant="text" width={16} /> : (totalHitsCount ?? 0);
+  const hitsIndicator = isLoading ? <Skeleton variant="text" width={16} /> : totalHitsCount;
   const entityLabel = `${entityType}s `;
   const label = (
     <>
@@ -75,6 +71,7 @@ function EntitiesTableTab<Doc extends Entity>({
 
   return (
     <Tab
+      ref={ref}
       key={`${entityType}-tab`}
       index={index}
       label={
@@ -89,32 +86,32 @@ function EntitiesTableTab<Doc extends Entity>({
       icon={Icon ? <SvgIcon component={Icon} sx={{ fontSize: '1.5rem', color: 'primary' }} /> : undefined}
       iconPosition="start"
       isSingleTab={entities.length === 0}
+      {...rest}
     />
   );
 }
+
+// React doesn't support generic forwardRef, so we need to cast it
+const EntitiesTableTab = forwardRef(EntitiesTableTabInternal) as <Doc extends Entity>(
+  props: EntitiesTableTabProps<Doc> & { ref?: React.Ref<HTMLDivElement> },
+) => React.ReactElement;
 
 function EntitiesTablesTabs<Doc extends Entity>({
   openTabIndex,
   handleTabChange,
   entities,
   isLoading,
+  totalHitsCounts,
 }: EntitiesTableTabsProps<Doc>) {
-  const { totalHitsCounts, isLoading: isLoadingHitCounts } = useSearchTotalHitsCounts(
-    entities.map(({ query }) => query),
-  ) as {
-    totalHitsCounts: number[];
-    isLoading: boolean;
-  };
-
   return (
     <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
       {entities.map((entity, i) => (
-        <EntitiesTableTab
+        <EntitiesTableTab<Doc>
           key={`${entity.entityType}-tab`}
           index={i}
-          totalHitsCount={totalHitsCounts[i]}
+          totalHitsCount={totalHitsCounts?.[i]}
           entities={entities}
-          isLoading={isLoading || isLoadingHitCounts}
+          isLoading={isLoading}
           {...entity}
         />
       ))}
@@ -140,17 +137,13 @@ function EntitiesTablesBodies<Doc extends Entity>({
   openTabIndex,
   emptyAlert,
   isLoading,
+  totalHitsCounts,
   ...restSharedProps
 }: EntitiesTablesBodiesProps<Doc>) {
   return (
     <>
       {entities.map(({ query, entityType, ...entityTableProps }, i) => {
-        const must = query.query?.bool?.must;
-        const idsQuery = Array.isArray(must) ? must.find((item) => item?.ids?.values) : must;
-        // The number of query items generally corresponds to the number of items in the "ids" query, if present
-        const queryItems = idsQuery?.ids?.values?.length ?? 0;
-
-        const tableIsEmpty = queryItems === 0;
+        const queryItems = totalHitsCounts?.[i] ?? 0;
 
         if (isLoading) {
           const minRows = 3;
@@ -168,7 +161,7 @@ function EntitiesTablesBodies<Doc extends Entity>({
           );
         }
 
-        if (tableIsEmpty) {
+        if (queryItems === 0) {
           return (
             <TabPanel key={entityType} value={openTabIndex} index={i}>
               <StyledPaper key={entityType} sx={{ padding: '1rem', width: '100%' }}>
@@ -197,19 +190,27 @@ function EntitiesTables<Doc extends Entity>({
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
+  const { totalHitsCounts, isLoading: isLoadingHitCounts } = useSearchTotalHitsCounts(
+    entities.map(({ query }) => query),
+  ) as {
+    totalHitsCounts: number[];
+    isLoading: boolean;
+  };
   return (
     <>
       <EntitiesTablesTabs
         entities={entities}
         openTabIndex={openTabIndex}
         handleTabChange={handleTabChange}
-        isLoading={isLoading}
+        totalHitsCounts={totalHitsCounts}
+        isLoading={isLoading || isLoadingHitCounts}
       />
       <EntitiesTablesBodies
         entities={entities}
         openTabIndex={openTabIndex}
         handleTabChange={handleTabChange}
-        isLoading={isLoading}
+        isLoading={isLoading || isLoadingHitCounts}
+        totalHitsCounts={totalHitsCounts}
         {...rest}
       />
       {resetSelectionOnTabChange && <TabChangeSelectionHandler openTabIndex={openTabIndex} />}
