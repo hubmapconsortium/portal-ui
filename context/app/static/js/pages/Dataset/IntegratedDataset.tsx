@@ -92,7 +92,10 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     attribution: true,
   };
 
-  const uuidsForBulkDataTransfer = new Set<string>([...entitiesForImmediateAncestors.map((ds) => ds.uuid), uuid]);
+  const uuidsForBulkDataTransfer = new Set<string>([
+    ...entitiesForImmediateAncestors.filter((e) => e.entity_type === 'Dataset').map((ds) => ds.uuid),
+    uuid,
+  ]);
 
   const trackFilesSectionEvents = useEventCallback((info: { action: string; label: string }) => {
     trackEvent({
