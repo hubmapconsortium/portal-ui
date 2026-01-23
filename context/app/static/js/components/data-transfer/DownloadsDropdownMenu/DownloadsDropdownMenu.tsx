@@ -13,6 +13,8 @@ import { trackEvent } from 'js/helpers/trackers';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 import { useDownloadTSV } from 'js/hooks/useDownloadTSV';
+import { useGetRestrictedDatasets } from 'js/hooks/useRestrictedDatasets';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 const menuID = 'downloads-menu';
 
@@ -22,9 +24,20 @@ interface DownloadsDropdownMenuProps {
   defaultUUIDs: string[];
 }
 
-function BulkDownloadMenuItem({ analyticsCategory }: Pick<DownloadsDropdownMenuProps, 'analyticsCategory'>) {
+function BulkDownloadMenuItem({ defaultUUIDs, analyticsCategory }: Omit<DownloadsDropdownMenuProps, 'type'>) {
   const { openDialog, isOpen } = useBulkDownloadDialog();
   const { selectedRows, deselectRows } = useSelectableTableStore();
+
+  const actualSelection = useMemo(
+    () => (selectedRows.size > 0 ? selectedRows : new Set(defaultUUIDs)),
+    [selectedRows, defaultUUIDs],
+  );
+
+  const restrictedRows = useGetRestrictedDatasets(actualSelection);
+
+  const allRestricted = useMemo(() => {
+    return actualSelection.size > 0 && actualSelection.size === restrictedRows.length;
+  }, [actualSelection, restrictedRows]);
 
   const onClick = useEventCallback(() => {
     if (analyticsCategory) {
@@ -33,19 +46,29 @@ function BulkDownloadMenuItem({ analyticsCategory }: Pick<DownloadsDropdownMenuP
         action: 'Open Bulk Download Dialog from Dropdown',
       });
     }
-    openDialog(selectedRows);
+    openDialog(actualSelection);
   });
 
-  const label = selectedRows.size === 1 ? 'Dataset' : 'Datasets';
+  const label = actualSelection.size === 1 ? 'Dataset' : 'Datasets';
+
+  const menuItem = (
+    <MenuItem onClick={onClick} disabled={allRestricted}>
+      <ListItemIcon>
+        <Download fontSize="small" color="primary" />
+      </ListItemIcon>
+      Download {label}
+    </MenuItem>
+  );
 
   return (
     <>
-      <MenuItem onClick={onClick}>
-        <ListItemIcon>
-          <Download fontSize="small" color="primary" />
-        </ListItemIcon>
-        Download {label}
-      </MenuItem>
+      {allRestricted ? (
+        <SecondaryBackgroundTooltip title="You do not have permission to download any of the selected datasets.">
+          <span>{menuItem}</span>
+        </SecondaryBackgroundTooltip>
+      ) : (
+        menuItem
+      )}
       {isOpen && <BulkDownloadDialog deselectRows={deselectRows} />}
     </>
   );
@@ -96,7 +119,7 @@ function DownloadsDropdownMenu({ type, analyticsCategory, defaultUUIDs }: Downlo
         Download
       </StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
-        {isDatasetSearch && <BulkDownloadMenuItem analyticsCategory={analyticsCategory} />}
+        {isDatasetSearch && <BulkDownloadMenuItem defaultUUIDs={defaultUUIDs} analyticsCategory={analyticsCategory} />}
         <DownloadTSVMenuItem
           lcPluralType={lcPluralType}
           type={type}
