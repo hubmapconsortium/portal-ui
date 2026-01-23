@@ -1,3 +1,3 @@
-import DataProducts from './DataProducts';
+import IntegratedMaps from './DataProducts';
 
-export default DataProducts;
+export default IntegratedMaps;

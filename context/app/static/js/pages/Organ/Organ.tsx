@@ -9,7 +9,7 @@ import Samples from 'js/components/organ/Samples';
 import { OrganFile, OrganPageIds } from 'js/components/organ/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import CellPopulationPlot from 'js/components/organ/CellPop';
-import DataProducts from 'js/components/organ/DataProducts';
+import IntegratedMaps from 'js/components/organ/DataProducts';
 import { OrganContextProvider } from 'js/components/organ/contexts';
 import useEntityStore from 'js/stores/useEntityStore';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
@@ -26,7 +26,7 @@ interface OrganProps {
   organ: OrganFile;
 }
 
-const { summaryId, hraId, scellopId, cellTypesId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
+const { summaryId, hraId, scellopId, cellTypesId, referenceId, assaysId, integratedMapsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
   const setOrganFile = useEntityStore((state) => state.setOrganFile);
@@ -55,7 +55,7 @@ function Organ({ organ }: OrganProps) {
     [cellTypesId]: cellTypes.length > 0,
     [referenceId]: false, // TODO: Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
     [assaysId]: assayBuckets.length > 0,
-    [dataProductsId]: dataProducts.length > 0,
+    [integratedMapsId]: dataProducts.length > 0,
     [samplesId]: samplesHits.length > 0,
   };
 
@@ -77,11 +77,11 @@ function Organ({ organ }: OrganProps) {
         />
         <CellTypes shouldDisplay={shouldDisplaySection[cellTypesId]} cellTypes={cellTypes} />
         <Assays organTerms={searchItems} bucketData={assayBuckets} shouldDisplay={shouldDisplaySection[assaysId]} />
-        <DataProducts
+        <IntegratedMaps
           dataProducts={dataProducts}
           isLateral={isLateral}
           isLoading={isLoading}
-          shouldDisplay={shouldDisplaySection[dataProductsId]}
+          shouldDisplay={shouldDisplaySection[integratedMapsId]}
         />
         <Samples organTerms={searchItems} shouldDisplay={shouldDisplaySection[samplesId]} />
       </DetailLayout>

@@ -23,8 +23,8 @@ import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import { trackEvent } from 'js/helpers/trackers';
 
 const description = [
-  'Download HuBMAP-wide data products that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each data product.',
-  'Both raw and processed data products may be available. Raw data products are the concatenated results of HIVE processing without filtering or normalization. Processed data products have undergone clustering and other analytical processes.',
+  'Download HuBMAP-wide integrated maps that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each integrated map.',
+  'Both raw and processed integrated maps may be available. Raw integrated maps are the concatenated results of HIVE processing without filtering or normalization. Processed integrated maps have undergone clustering and other analytical processes.',
 ];
 
 const headerCells = [
@@ -47,7 +47,7 @@ interface DataProductsProps {
   isLoading?: boolean;
 }
 
-function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps) {
+function IntegratedMaps({ dataProducts, isLateral, isLoading }: DataProductsProps) {
   const {
     organ: { name },
   } = useOrganContext();
@@ -80,14 +80,14 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
 
   if (isLoading) {
     return (
-      <OrganDetailSection id={OrganPageIds.dataProductsId} title="Data Products">
+      <OrganDetailSection id={OrganPageIds.integratedMapsId} title="Integrated Maps">
         <Skeleton variant="rectangular" height={400} />
       </OrganDetailSection>
     );
   }
 
   return (
-    <OrganDetailSection id={OrganPageIds.dataProductsId} title="Data Products">
+    <OrganDetailSection id={OrganPageIds.integratedMapsId} title="Integrated Maps">
       <Stack spacing={1}>
         <Description>
           <Stack spacing={1} direction="column">
@@ -171,4 +171,4 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
   );
 }
 
-export default withShouldDisplay(DataProducts);
+export default withShouldDisplay(IntegratedMaps);
