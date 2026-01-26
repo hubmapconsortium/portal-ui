@@ -23,7 +23,6 @@ from .utils import (
     entity_types,
     find_raw_dataset_ancestor,
     should_redirect_entity,
-    is_integrated,
 )
 
 
@@ -64,7 +63,7 @@ def details(type, uuid):
     client = get_client()
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
-    integrated = is_integrated(entity)
+    integrated = entity.get('is_integrated')
 
     if should_redirect_entity(entity):
         raw_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))

@@ -4,12 +4,10 @@ import { render, screen } from 'test-utils/functions';
 
 import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
-import { ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import FileBrowser from './FileBrowser';
 import { FilesContext } from '../FilesContext';
 import { detailContext, filesContext, flaskDataContext, testFiles } from '../file-fixtures.spec';
-import { ProcessedDatasetContextProvider } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
-import { ProcessedDatasetDetails } from '../../ProcessedData/ProcessedDataset/hooks';
+import { DataProductProvider } from '../DataProducts/DataProductContext';
 
 const expectArrayOfStringsToExist = (arr: string[]) => {
   arr.forEach((text) => {
@@ -24,11 +22,7 @@ const expectArrayOfStringsToNotExist = (arr: string[]) => {
 
 function FilesBrowserTest() {
   return (
-    <ProcessedDatasetContextProvider
-      dataset={{ uuid: 'fakeuuid' } as unknown as ProcessedDatasetDetails}
-      defaultExpanded
-      sectionDataset={{ uuid: 'fakeparentuuid' } as unknown as ProcessedDatasetInfo}
-    >
+    <DataProductProvider value="fakeparentuuid">
       <FlaskDataContext.Provider value={flaskDataContext}>
         <DetailContext.Provider value={detailContext}>
           <FilesContext.Provider value={filesContext}>
@@ -36,7 +30,7 @@ function FilesBrowserTest() {
           </FilesContext.Provider>
         </DetailContext.Provider>
       </FlaskDataContext.Provider>
-    </ProcessedDatasetContextProvider>
+    </DataProductProvider>
   );
 }
 

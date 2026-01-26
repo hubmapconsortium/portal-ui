@@ -18,6 +18,7 @@ import { EntitiesTabTypes } from './types';
 import ExpandableRow from '../ExpandableRow';
 import ExpandableRowCell from '../ExpandableRowCell';
 import EntityHeaderCell from './EntityTableHeaderCell';
+import Stack from '@mui/material/Stack';
 
 function TablePaddingRow({ padding }: { padding: number }) {
   return (
@@ -29,7 +30,7 @@ function TablePaddingRow({ padding }: { padding: number }) {
 
 interface EntityTableProps<Doc extends Entity>
   extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns' | 'expandedContent'> {
-  isSelectable: boolean;
+  isSelectable?: boolean;
   numSelected?: number;
   disabledIDs?: Set<string>;
   trackingInfo?: EventInfo;
@@ -43,9 +44,15 @@ interface EntityTableProps<Doc extends Entity>
   onExpand?: (id: string) => (isExpanded: boolean) => void;
   estimatedExpandedRowHeight?: number;
   initialSortState?: { columnId: string; direction: 'asc' | 'desc' };
+  headerActions?: React.ReactNode;
 }
 
 const headerRowHeight = 60;
+const extraHeaderRowHeight = 48;
+
+const expandableHeaderCell = (
+  <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />
+);
 
 function EntityTable<Doc extends Entity>({
   query,
@@ -65,6 +72,7 @@ function EntityTable<Doc extends Entity>({
   onExpand,
   estimatedExpandedRowHeight,
   initialSortState = { columnId: 'last_modified_timestamp', direction: 'desc' },
+  headerActions,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -98,10 +106,6 @@ function EntityTable<Doc extends Entity>({
     estimatedExpandedRowHeight,
   });
 
-  const expandableHeaderCell = (
-    <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />
-  );
-
   // Create a combined onExpand handler that tracks expansion state and calls the external callback
   const handleRowExpansion = useCallback(
     (id: string) => (isExpanded: boolean) => {
@@ -113,6 +117,10 @@ function EntityTable<Doc extends Entity>({
     [toggleRowExpansion, onExpand],
   );
 
+  const fullWidthColSpan = columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0);
+
+  const showExtraHeader = headerActions || (isSelectable && numSelected !== undefined);
+
   return (
     <StyledTableContainer
       component={Paper}
@@ -122,10 +130,42 @@ function EntityTable<Doc extends Entity>({
       }}
       maxHeight={maxHeight}
     >
-      {isSelectable && numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
-          <TableRow sx={{ height: headerRowHeight }}>
+          {showExtraHeader && (
+            <TableRow
+              sx={{
+                height: extraHeaderRowHeight,
+                p: 0,
+                position: 'sticky',
+                top: 0,
+                zIndex: 3,
+                borderBottom: 0,
+                background: 'white',
+              }}
+            >
+              <TableCell colSpan={fullWidthColSpan} sx={{ p: 0, background: 'white' }}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  {isSelectable && numSelected !== undefined && (
+                    <NumSelectedHeader numSelected={numSelected} $noBorderBottom />
+                  )}
+                  {headerActions && (
+                    <Stack direction="row" spacing={1} flexWrap="nowrap" pr={2}>
+                      {headerActions}
+                    </Stack>
+                  )}
+                </Stack>
+              </TableCell>
+            </TableRow>
+          )}
+          <TableRow
+            sx={{
+              height: headerRowHeight,
+              position: 'sticky',
+              top: showExtraHeader ? extraHeaderRowHeight : 0,
+              zIndex: 2,
+            }}
+          >
             {isExpandable && reverseExpandIndicator && expandableHeaderCell}
             {isSelectable && (
               <SelectableHeaderCell
@@ -161,8 +201,13 @@ function EntityTable<Doc extends Entity>({
           </TableRow>
           <TableRow aria-hidden="true">
             <TableCell
-              colSpan={columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0)}
-              sx={{ top: headerRowHeight, border: 'none' }}
+              colSpan={fullWidthColSpan}
+              sx={{
+                position: 'sticky',
+                top: showExtraHeader ? extraHeaderRowHeight + headerRowHeight : headerRowHeight,
+                border: 'none',
+                zIndex: 1,
+              }}
               padding="none"
               component="td"
             >

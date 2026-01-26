@@ -1,21 +1,19 @@
 import React, { PropsWithChildren } from 'react';
+import Button from '@mui/material/Button';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
-import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { Dataset, Donor, Sample, isDataset } from 'js/components/types';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
-import { getTableEntities } from 'js/components/detailPage/MetadataSection/utils';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { DownloadIcon } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
-import { Columns, defaultTSVColumns } from './columns';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import MetadataTable from '../MetadataTable';
+import { useMetadataEntityDownloads } from './hooks';
 
 interface TableRow {
   key: string;
@@ -25,10 +23,9 @@ interface TableRow {
 
 export type TableRows = TableRow[];
 
-type MetadataWrapperProps = PropsWithChildren<{
-  allTableRows: TableRows;
-  tsvColumns?: Columns;
-}>;
+interface MetadataWrapperProps extends PropsWithChildren {
+  downloadUrl: string;
+}
 
 function DatasetDescriptionNote() {
   return (
@@ -41,23 +38,19 @@ function DatasetDescriptionNote() {
   );
 }
 
-function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, children }: MetadataWrapperProps) {
+const nonIntegratedTooltip = 'Download all TSV metadata for the current dataset and related entities.';
+const integratedTooltip = 'Download all TSV metadata for the current and the entities it was derived from.';
+
+function MetadataWrapper({ downloadUrl, children }: MetadataWrapperProps) {
   const {
-    entity: { hubmap_id, ...entity },
+    entity: { hubmap_id, is_integrated, ...entity },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
-  const downloadUrl = createDownloadUrl(
-    tableToDelimitedString(
-      allTableRows,
-      tsvColumns.map((col) => col.label),
-      '\t',
-    ),
-    'text/tab-separated-values',
-  );
-
   const entityIsDataset = isDataset(entity);
+
+  const tooltip = is_integrated ? integratedTooltip : nonIntegratedTooltip;
 
   return (
     <CollapsibleDetailPageSection
@@ -65,23 +58,26 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
       title="Metadata"
       icon={sectionIconMap.metadata}
       action={
-        <SecondaryBackgroundTooltip title="Download">
-          <a href={downloadUrl} download={`${hubmap_id}.tsv`}>
-            <WhiteBackgroundIconButton
-              aria-label="Download TSV of selected items' metadata"
-              onClick={() => {
-                trackEntityPageEvent({ action: `Metadata / Download Metadata` });
-              }}
-            >
-              <DownloadIcon color="primary" />
-            </WhiteBackgroundIconButton>
-          </a>
+        <SecondaryBackgroundTooltip title={tooltip}>
+          <Button
+            aria-label={tooltip}
+            onClick={() => {
+              trackEntityPageEvent({ action: `Metadata / Download Metadata` });
+            }}
+            LinkComponent={'a'}
+            href={downloadUrl}
+            download={`${hubmap_id}.tsv`}
+            variant="contained"
+            startIcon={<DownloadIcon color="white" />}
+          >
+            Download
+          </Button>
         </SecondaryBackgroundTooltip>
       }
     >
       <SectionDescription>
         This is the list of metadata that was provided by the data provider.
-        {entityIsDataset && <DatasetDescriptionNote />}
+        {entityIsDataset && !is_integrated && <DatasetDescriptionNote />}
       </SectionDescription>
       {children}
     </CollapsibleDetailPageSection>
@@ -93,20 +89,19 @@ interface MetadataProps {
 }
 
 function Metadata({ entities }: MetadataProps) {
-  const { data: fieldDescriptions } = useMetadataFieldDescriptions();
-  const {
-    entity: { uuid },
-  } = useFlaskDataContext();
+  const { tableEntities, downloadUrl } = useMetadataEntityDownloads(entities);
 
-  const tableEntities = getTableEntities({ entities, uuid, fieldDescriptions });
-  const allTableRows = tableEntities.map((d) => d.tableRows).flat();
+  if (tableEntities.length === 0) {
+    return null;
+  }
 
   return (
-    <MetadataWrapper
-      allTableRows={allTableRows}
-      tsvColumns={[{ id: 'hubmap_id', label: 'HuBMAP ID' }, { id: 'label', label: 'Entity' }, ...defaultTSVColumns]}
-    >
-      <MetadataTabs entities={tableEntities} />
+    <MetadataWrapper downloadUrl={downloadUrl}>
+      {tableEntities.length > 1 ? (
+        <MetadataTabs entities={tableEntities} />
+      ) : (
+        <MetadataTable tableRows={tableEntities[0].tableRows} />
+      )}
     </MetadataWrapper>
   );
 }

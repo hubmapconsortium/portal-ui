@@ -113,7 +113,7 @@ def should_redirect_entity(entity):
 
     # Do not redirect integrated datasets
     # the front-end handles these via the IntegratedDataset page variant.
-    if is_integrated(entity):
+    if entity.get('is_integrated'):
         return False
 
     actual_type = entity.get('entity_type').lower()
@@ -125,18 +125,6 @@ def should_redirect_entity(entity):
         return True
 
     return False
-
-
-# A dataset is integrated if:
-# - it is an Externally Processed Integrated Collection (EPIC)
-# - it is a SNARE-seq2 processed dataset, as these are an integration of multiple
-#   component datasets.
-def is_integrated(entity):
-    is_snareseq_2 = (
-        entity.get('raw_dataset_type') == 'SNARE-seq2' and entity.get('processing') == 'processed'
-    )
-    is_epic = entity.get('creation_action') == 'External Process'
-    return is_snareseq_2 or is_epic
 
 
 def find_raw_dataset_ancestor(client, ancestor_ids):

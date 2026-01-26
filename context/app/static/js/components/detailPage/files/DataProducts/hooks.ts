@@ -4,7 +4,7 @@ import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { DagProvenanceType, isDataset } from 'js/components/types';
 import { getTokenParam } from 'js/helpers/functions';
 import { UnprocessedFile } from '../types';
-import { useProcessedDatasetContext } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
+import { useDataProductContext } from './DataProductContext';
 
 interface PipelineInfo {
   origin: string;
@@ -82,10 +82,7 @@ function formatFileLink(assetsEndpoint: string, uuid: string, relPath: string, t
 function useFileLinkParameters() {
   const { assetsEndpoint, groupsToken } = useAppContext();
   const token = getTokenParam(groupsToken);
-  const {
-    dataset: { uuid },
-  } = useProcessedDatasetContext();
-  return { assetsEndpoint, uuid, token };
+  return { assetsEndpoint, token };
 }
 
 /**
@@ -94,7 +91,8 @@ function useFileLinkParameters() {
  * @returns A list of links to the files on the assets server
  */
 function useFileLinks(files: UnprocessedFile[]) {
-  const { assetsEndpoint, uuid, token } = useFileLinkParameters();
+  const { assetsEndpoint, token } = useFileLinkParameters();
+  const uuid = useDataProductContext();
 
   const fileLinks = useMemo(
     () => files.map((file) => formatFileLink(assetsEndpoint, uuid, file.rel_path, token)),

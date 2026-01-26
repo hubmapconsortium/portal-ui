@@ -1,5 +1,4 @@
 import SvgIcon from '@mui/material/SvgIcon';
-import BarChartRounded from '@mui/icons-material/BarChartRounded';
 import {
   AnalysisDetailsIcon,
   AttributionIcon,
@@ -28,12 +27,12 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   summary: SummaryIcon,
   metadata: MetadataIcon,
   'processed-data': ProcessedDataIcon,
-  'integrated-datasets': ProcessedDataIcon,
+  'integrated-data': ProcessedDataIcon,
   visualization: VisualizationIcon,
-  visualizations: BarChartRounded, // Publications use this key
+  visualizations: VisualizationIcon, // Publications use this key
   files: FileIcon,
   'data-products': FileIcon,
-  'protocols-&-workflow-details': AnalysisDetailsIcon,
+  'protocols-and-workflow-details': AnalysisDetailsIcon,
   protocols: AnalysisDetailsIcon, // Donors/Samples use this key
   tissue: OrganIcon, // Samples use this key
   organs: OrganIcon, // Genes use this key

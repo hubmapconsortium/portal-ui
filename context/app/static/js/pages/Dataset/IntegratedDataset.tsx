@@ -1,6 +1,5 @@
 import React from 'react';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
 
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -13,23 +12,22 @@ import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Donor, Sample } from 'js/components/types';
-import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
-import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import { useEntitiesData } from 'js/hooks/useEntityData';
-import { hasMetadata } from 'js/helpers/metadata';
-import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import PublicationsSection from 'js/components/detailPage/PublicationsSection';
 import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useRedirectAlert, useVitessceConf } from './hooks';
 import { EntityDetailProps } from './Dataset';
-import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
-import IntegratedDatasets from 'js/components/detailPage/IntegratedDatasets/IntegratedDatasets';
+import IntegratedDataSection from 'js/components/detailPage/IntegratedData/IntegratedData';
 import { combinePeopleLists } from 'js/pages/Dataset/utils';
 import { Entity } from 'js/components/types';
 import AnalysisDetailsSection from 'js/components/detailPage/AnalysisDetails/AnalysisDetailsSection';
+import IntegratedDatasetVisualizationSection from 'js/components/detailPage/visualization/IntegratedDatasetVisualizationSection';
+import IntegratedDatasetFiles from 'js/components/detailPage/files/IntegratedDatasetFiles';
+import { useEventCallback } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
@@ -46,7 +44,9 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     // Parent dataset IDs for SnareSeq2 datasets are the components
     immediate_ancestor_ids,
     creation_action,
+    files,
     metadata,
+    ingest_metadata: { dag_provenance_list },
   } = assayMetadata;
 
   const isExternal = creation_action === 'External Process';
@@ -58,18 +58,15 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
 
-  const entitiesWithMetadata = entities.filter((e) =>
-    hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
+  // Is this filtering necessary? I'm not sure if there will ever be datasets that are not immediate ancestors.
+  const entitiesForImmediateAncestors = entities.filter(
+    (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
   );
 
   const contributors = combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
   const contacts = combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
 
   useRedirectAlert();
-
-  // TODO: Origin sample needs to be fetched from the parent dataset for SnareSeq2 integrated datasets
-  const origin_sample = origin_samples[0];
-  const { mapped_organ } = origin_sample;
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
@@ -84,26 +81,37 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     summary: true,
     metadata: isExternal,
     visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
+    files: Boolean(files),
     'bulk-data-transfer': true,
-    'protocols-&-workflow-details': Boolean(protocolUrl) || !isExternal,
+    'integrated-data': Boolean(entitiesForImmediateAncestors.length),
     provenance: true,
+    // External datasets have protocol URLs, internal datasets should have workflow details
+    'protocols-and-workflow-details': Boolean(protocolUrl || (!isExternal && dag_provenance_list)),
     collections: Boolean(collectionsData.length),
     publications: Boolean(publicationsData.length),
     attribution: true,
   };
 
-  // TODO: The dataset relationships functionality needs to use the ancestor datasets for SnareSeq2 integrated datasets
-  // For now, we just use the first immediate ancestor ID, but this should be updated to show relationships all ancestors of the integrated dataset
-  const { shouldDisplay: shouldDisplayRelationships } = useDatasetRelationships(immediate_ancestor_ids[0], 'raw');
+  const uuidsForBulkDataTransfer = new Set<string>([
+    ...entitiesForImmediateAncestors.filter((e) => e.entity_type === 'Dataset').map((ds) => ds.uuid),
+    uuid,
+  ]);
 
-  if (loadingEntities) {
-    return null;
-  }
-
-  const datasetRelationshipsContainerHeight = 500;
+  const trackFilesSectionEvents = useEventCallback((info: { action: string; label: string }) => {
+    trackEvent({
+      category: 'Integrated Dataset Detail Page',
+      action: `Files / ${info.action}`,
+      label: info.label,
+    });
+  });
 
   return (
-    <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
+    <DetailContextProvider
+      hubmap_id={hubmap_id}
+      uuid={uuid}
+      entityType="Integrated Dataset"
+      mapped_data_access_level={mapped_data_access_level}
+    >
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
         <DetailLayout sections={shouldDisplaySection} isLoading={false}>
           <Summary
@@ -111,42 +119,33 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
             mapped_external_group_name={mapped_external_group_name}
-            bottomFold={
-              shouldDisplayRelationships && (
-                <>
-                  <MultiAssayRelationship />
-                  <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
-                    <DatasetRelationships uuid={immediate_ancestor_ids[0]} processing={'raw'} />
-                  </Box>
-                </>
-              )
-            }
           >
-            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
+            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
           </Summary>
-          {/* TODO: This should be wrapped in a detail page section */}
-          <VisualizationWrapper
-            uuid={uuid}
-            vitData={vitessceConfig.data}
-            trackingInfo={{
-              category: 'Integrated Dataset',
-            }}
+          <IntegratedDatasetVisualizationSection uuid={uuid} vitessceConfig={vitessceConfig.data} />
+          <MetadataSection entities={[assayMetadata]} shouldDisplay={shouldDisplaySection.metadata} />
+          {shouldDisplaySection.files && <IntegratedDatasetFiles files={files} track={trackFilesSectionEvents} />}
+          <BulkDataTransfer
+            shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])}
+            integratedEntityUUID={uuid}
+            customUUIDs={uuidsForBulkDataTransfer}
           />
-          <IntegratedDatasets datasets={immediate_ancestor_ids} />
-          <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
-          {/* TODO: Should display the parent datasets as well */}
-          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
+          <IntegratedDataSection
+            entities={entitiesForImmediateAncestors}
+            shouldDisplay={shouldDisplaySection['integrated-data']}
+            includeCurrentEntity
+          />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} integratedDataset />
           <AnalysisDetailsSection
             isExternal={isExternal}
             protocolUrl={protocolUrl}
             dataset={assayMetadata}
-            shouldDisplay={shouldDisplaySection['protocols-&-workflow-details']}
+            shouldDisplay={shouldDisplaySection['protocols-and-workflow-details']}
           />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>
-            <ContributorsTable contributors={contributors} contacts={contacts} />
+            {loadingEntities ? <Skeleton /> : <ContributorsTable contributors={contributors} contacts={contacts} />}
           </Attribution>
         </DetailLayout>
       </SelectedVersionStoreProvider>

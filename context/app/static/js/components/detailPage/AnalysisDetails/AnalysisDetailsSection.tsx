@@ -41,9 +41,9 @@ function AnalysisDetailsWrapper({ isExternal, dataset }: Pick<AnalysisDetailsSec
 function AnalysisDetailsSection({ isExternal, protocolUrl, dataset }: AnalysisDetailsSectionProps) {
   return (
     <CollapsibleDetailPageSection
-      id="protocols-&-workflow-details"
+      id="protocols-and-workflow-details"
       title="Protocols & Workflow Details"
-      icon={sectionIconMap['protocols-&-workflow-details']}
+      icon={sectionIconMap['protocols-and-workflow-details']}
     >
       <Paper sx={{ px: 2, py: 1 }}>
         {protocolUrl && <Protocol protocol_url={protocolUrl} />}

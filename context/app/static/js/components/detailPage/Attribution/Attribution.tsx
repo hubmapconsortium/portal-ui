@@ -23,6 +23,34 @@ export const DatasetAttributionDescription = (
   </SectionDescription>
 );
 
+const IntegratedDatasetAttributionDescription = (
+  <SectionDescription>
+    Below is the information for the individuals who provided this dataset. For questions about this dataset, reach out
+    to the individuals listed as contacts, either via the email address listed in the table or via contact information
+    provided on their ORCID profile page. Analysis for the processed dataset output was conducted by standardized HIVE
+    pipelines.
+  </SectionDescription>
+);
+
+const ExternalDatasetAttributionDescription = (
+  <SectionDescription>
+    Below is the information for the individuals who provided and analyzed this dataset. For questions about this
+    dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or via
+    contact information provided on their ORCID profile page.
+  </SectionDescription>
+);
+
+function AttributionDescription() {
+  const {
+    entity: { is_integrated, creation_action },
+  } = useFlaskDataContext();
+
+  const isExternal = creation_action === 'External Process';
+  if (isExternal) return ExternalDatasetAttributionDescription;
+  if (is_integrated) return IntegratedDatasetAttributionDescription;
+  return DatasetAttributionDescription;
+}
+
 function Attribution({ children }: PropsWithChildren) {
   const {
     entity: { group_name, created_by_user_displayname, created_by_user_email, entity_type },
@@ -43,7 +71,7 @@ function Attribution({ children }: PropsWithChildren) {
   return (
     <CollapsibleDetailPageSection id="attribution" title="Attribution" icon={sectionIconMap.attribution}>
       <Stack spacing={1}>
-        {isDataset && DatasetAttributionDescription}
+        {isDataset && <AttributionDescription />}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (
