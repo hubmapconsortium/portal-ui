@@ -31,7 +31,7 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   visualization: VisualizationIcon,
   visualizations: VisualizationIcon, // Publications use this key
   files: FileIcon,
-  'data-products': FileIcon,
+  'integrated-maps': FileIcon,
   'protocols-and-workflow-details': AnalysisDetailsIcon,
   protocols: AnalysisDetailsIcon, // Donors/Samples use this key
   tissue: OrganIcon, // Samples use this key
