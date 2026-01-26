@@ -11,10 +11,11 @@ interface HeaderButtonProps {
   icon: React.ReactNode;
   tooltip?: string;
   'data-testid'?: string;
+  disableTextTransform?: boolean;
 }
 
 function HeaderButton(
-  { title, onClick, altOnlyTitle, icon, tooltip, 'data-testid': testId }: HeaderButtonProps,
+  { title, onClick, altOnlyTitle, icon, tooltip, 'data-testid': testId, disableTextTransform }: HeaderButtonProps,
   ref: Ref<HTMLButtonElement>,
 ) {
   const isMobile = useIsMobile();
@@ -28,7 +29,7 @@ function HeaderButton(
   };
 
   const button = showTitle ? (
-    <StyledHeaderButton startIcon={icon} {...commonProps}>
+    <StyledHeaderButton startIcon={icon} $disableTextTransform={disableTextTransform} {...commonProps}>
       {title}
     </StyledHeaderButton>
   ) : (

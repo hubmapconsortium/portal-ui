@@ -38,8 +38,8 @@ function DesktopHeader() {
       <HubmapLogoLink />
       <DataLinks />
       <ResourcesLinks />
-      <Spacer />
       <ToolsAndApplicationLinks />
+      <Spacer />
       <UserLinks />
     </>
   );

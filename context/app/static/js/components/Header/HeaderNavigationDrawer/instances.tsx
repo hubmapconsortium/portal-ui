@@ -23,9 +23,8 @@ export function ToolsAndApplicationLinks() {
       title="Tools and Applications"
       sections={toolsAndAppsLinks}
       icon={<AppsRounded />}
-      direction="right"
-      altOnlyTitle
-      tooltipText="HuBMAP Tools & Applications"
+      direction="left"
+      disableTextTransform
     />
   );
 }
