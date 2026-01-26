@@ -25,8 +25,8 @@ function MobileHeader() {
     <>
       <MobileMenu />
       <HubmapLogoLink />
-      <Spacer />
       <ToolsAndApplicationLinks />
+      <Spacer />
       <UserLinks />
     </>
   );
@@ -38,8 +38,8 @@ function DesktopHeader() {
       <HubmapLogoLink />
       <DataLinks />
       <ResourcesLinks />
-      <Spacer />
       <ToolsAndApplicationLinks />
+      <Spacer />
       <UserLinks />
     </>
   );
