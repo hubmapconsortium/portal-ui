@@ -25,7 +25,7 @@ import { buildSearchLink } from 'js/components/search/store';
 import { CenteredAlert } from 'js/components/style';
 import { trackEvent } from 'js/helpers/trackers';
 import AuthButton from '../AuthButton';
-import { DATA_PRODUCTS_DESCRIPTION_SHORT } from 'js/global-constants';
+import { INTEGRATED_MAPS_DESCRIPTION_SHORT } from 'js/global-constants';
 
 export const resourceLinks: DrawerSection[] = [
   {
@@ -219,8 +219,8 @@ export const toolsAndAppsLinks: DrawerSection[] = [
         icon: <ExternalImageIcon icon="dataPortal" />,
       },
       {
-        label: 'HuBMAP Data Products',
-        description: DATA_PRODUCTS_DESCRIPTION_SHORT,
+        label: 'HuBMAP Integrated Maps',
+        description: INTEGRATED_MAPS_DESCRIPTION_SHORT,
         href: 'https://data-products.hubmapconsortium.org/data_products/',
         icon: <DataProductsIcon color="primary" />,
       },

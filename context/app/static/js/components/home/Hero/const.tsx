@@ -108,10 +108,10 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     img: <WorkspacesIcon {...timelineIconProps} />,
   },
   {
-    title: 'Global Data Products Now Available on Organ Pages',
+    title: 'Global Integrated Maps Now Available on Organ Pages',
     titleHref: '/organs',
     description:
-      'Download HuBMAP-wide data products for an organ of interest that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. Both raw and processed data products may be available.',
+      'Download HuBMAP-wide integrated maps for an organ of interest that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. Both raw and processed data products may be available.',
     date: 'March 2025',
     img: <OrganIcon {...timelineIconProps} />,
   },
