@@ -25,8 +25,8 @@ function MobileHeader() {
     <>
       <MobileMenu />
       <HubmapLogoLink />
-      <ToolsAndApplicationLinks />
       <Spacer />
+      <ToolsAndApplicationLinks />
       <UserLinks />
     </>
   );
