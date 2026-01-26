@@ -92,6 +92,22 @@ git add context/app/markdown/dependencies.md
 git add uv.lock
 git commit -m "Version bump to $VERSION"
 
+# Regenerate figure SVGs and commit separately for easy rollback
+echo "Regenerating figure SVGs..."
+# Ensure figure dependencies are installed and kernel is registered
+uv sync --group figure
+uv run --group figure python -m ipykernel install --user --name python3
+
+# Run figure generation with the registered kernel
+PM_KERNEL=python3 uv run --group figure context/app/figure/build_figure.py
+
+if git diff --quiet context/app/static/assets/svg/figure/; then
+  echo "No changes to figure assets"
+else
+  git add context/app/static/assets/svg/figure/
+  git commit -m "Regenerate figure assets for $VERSION"
+fi
+
 if ls CHANGELOG-*.md; then
   (
     echo '# Changelog'
