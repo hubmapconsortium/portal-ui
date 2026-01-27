@@ -1,1 +1,0 @@
-- Rename global data products to integrated maps.

@@ -1,1 +1,0 @@
-- Add "Copy Visualization Configuration" and "Download Visualization Configuration" actions to Vitessce containers.

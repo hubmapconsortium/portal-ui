@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.39.0 - 2026-01-27
+
+- Revise route layout to use grid instead of flex to prevent overflows.
+- Add text to Tools and Applications button and colocate it with other header buttons.
+- Rename global data products to integrated maps.
+- Add tracking for successful bulk data transfer manifest downloads.
+- Add "Copy Visualization Configuration" and "Download Visualization Configuration" actions to Vitessce containers.
+- Add link to data overview page to footer.
+- Add title/description to data overview figure.
+- Moved data overview regeneration action to be done on-build.
+- Update data overview figures for HuBMAP paper.
+- Update Bulk Data Transfer functionality on Publication and Integrated dataset pages to pull in all relevant datasets.
+- Update Publication Data section to display related entities even when there's an intermediate associated collection.
+- Add integrated dataset pages to display datasets derived from multiple ancestors.
+- Update Vitessce to v3.9.1.
+
+
+
 ## v1.38.1 - 2026-01-12
 
 - Prevent users without Workspaces access from creating new workspaces from the dataset detail page.

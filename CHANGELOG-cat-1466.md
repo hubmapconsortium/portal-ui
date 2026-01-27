@@ -1,1 +1,0 @@
-- Add text to Tools and Applications button and colocate it with other header buttons.

@@ -1,1 +1,0 @@
-- Moved data overview regeneration action to be done on-build.

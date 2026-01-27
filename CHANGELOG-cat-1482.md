@@ -1,1 +1,0 @@
-- Add tracking for successful bulk data transfer manifest downloads.

@@ -1,2 +1,0 @@
-- Update Bulk Data Transfer functionality on Publication and Integrated dataset pages to pull in all relevant datasets.
-- Update Publication Data section to display related entities even when there's an intermediate associated collection.
