@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import { DetailPageAlert } from 'js/components/detailPage/style';
@@ -19,15 +16,11 @@ import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert'
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Donor, Entity, Sample, isDataset } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
-import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
-import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
-import { InternalLink } from 'js/shared-styles/Links';
-import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { hasMetadata } from 'js/helpers/metadata';
 import SnareSeq2Alert from 'js/components/detailPage/multi-assay/SnareSeq2Alert';
@@ -35,39 +28,9 @@ import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAs
 import PublicationsSection from 'js/components/detailPage/PublicationsSection';
 import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
-
-interface SummaryDataChildrenProps {
-  mapped_data_types: string[];
-  mapped_organ: string;
-}
-
-function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChildrenProps) {
-  const trackEntityPageEvent = useTrackEntityPageEvent();
-  const dataTypes = mapped_data_types.join(', ');
-  return (
-    <>
-      <SummaryItem>
-        <InternalLink
-          href="https://docs.hubmapconsortium.org/assays"
-          underline="none"
-          onClick={() => {
-            trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: dataTypes });
-          }}
-        >
-          {dataTypes}
-        </InternalLink>
-      </SummaryItem>
-      <SummaryItem showDivider={false}>
-        <InternalLink href={`/organs/${mapped_organ}`} underline="none">
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <OrganIcon organName={mapped_organ} />
-            <Typography fontSize="inherit">{mapped_organ}</Typography>
-          </Stack>
-        </InternalLink>
-      </SummaryItem>
-    </>
-  );
-}
+import IntegratedDatasetPage from './IntegratedDataset';
+import SummaryDataChildren from './DatasetPageSummaryChildren';
+import ProcessedData from 'js/components/detailPage/ProcessedData';
 
 function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   if (!isExternal) {
@@ -81,7 +44,7 @@ function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   );
 }
 
-interface EntityDetailProps<T extends Entity> {
+export interface EntityDetailProps<T extends Entity> {
   assayMetadata: T;
 }
 
@@ -110,9 +73,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   );
 
   useRedirectAlert();
-
-  const origin_sample = origin_samples[0];
-  const { mapped_organ } = origin_sample;
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
@@ -147,7 +107,12 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const datasetRelationshipsContainerHeight = assay_modality === 'multiple' ? 500 : 400;
 
   return (
-    <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
+    <DetailContextProvider
+      hubmap_id={hubmap_id}
+      uuid={uuid}
+      entityType="Dataset"
+      mapped_data_access_level={mapped_data_access_level}
+    >
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
         <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
         {Boolean(is_component) && <ComponentAlert />}
@@ -169,10 +134,10 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               ) : null
             }
           >
-            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
+            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
           </Summary>
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
-          <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
+          <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} additionalUuids={processedDatasetUuids} />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
@@ -186,10 +151,18 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   );
 }
 
+interface DetailPageWrapperProps extends EntityDetailProps<Entity> {
+  integrated?: boolean;
+}
+
 // Shared logic for the Dataset and Support cases
-function DetailPageWrapper({ assayMetadata, ...props }: EntityDetailProps<Entity>) {
+function DetailPageWrapper({ assayMetadata, integrated, ...props }: DetailPageWrapperProps) {
   const { entity_type, hubmap_id } = assayMetadata;
   useTrackID({ entity_type, hubmap_id });
+
+  if (integrated && isDataset(assayMetadata)) {
+    return <IntegratedDatasetPage assayMetadata={assayMetadata} {...props} />;
+  }
 
   if (isDataset(assayMetadata)) {
     return <DatasetDetail assayMetadata={assayMetadata} {...props} />;

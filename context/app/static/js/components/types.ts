@@ -75,6 +75,8 @@ export interface Entity {
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
   mapped_metadata?: Record<string, unknown>;
+  immediate_ancestor_ids: string[];
+  immediate_descendant_ids: string[];
   organ_donor_data?: Record<string, unknown>;
   living_donor_data?: Record<string, unknown>;
   extra_metadata?: Record<string, unknown>;
@@ -150,6 +152,7 @@ export interface Dataset extends Entity {
   visualization: boolean;
   source_samples: Sample[];
   data_types: string[];
+  is_integrated: boolean;
 }
 
 export interface Collection extends Entity {

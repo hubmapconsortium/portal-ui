@@ -22,14 +22,9 @@ import { EventWithOptionalCategory } from 'js/components/types';
 
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
-import {
-  ExpandButton,
-  ExpandableDiv,
-  SelectionButton,
-  StyledDetailPageSection,
-  StyledSectionHeader,
-  vitessceFixedHeight,
-} from './style';
+import { ExpandButton, ExpandableDiv, SelectionButton, StyledDetailPageSection, StyledSectionHeader } from './style';
+import { vitessceFixedHeight } from '../style';
+import VisualizationSkeleton from '../VitessceSkeleton/VisualizationSkeleton';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
   fullscreenVizId: state.fullscreenVizId,
@@ -129,7 +124,7 @@ function Visualization({
   }, [expandViz, id, trackEntityPageEvent, trackingInfo]);
 
   if (!vitessceConfig) {
-    return null;
+    return <VisualizationSkeleton />;
   }
 
   return (

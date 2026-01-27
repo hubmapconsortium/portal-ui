@@ -106,9 +106,15 @@ def get_organ_name_mapping():
 # - non-existent
 # - a support entity (e.g. an image pyramid)
 # - a processed or component dataset
+# The exceptions are for integrated datasets, which have their own page and are not redirected.
 def should_redirect_entity(entity):
     if not entity:
         return True
+
+    # Do not redirect integrated datasets
+    # the front-end handles these via the IntegratedDataset page variant.
+    if entity.get('is_integrated'):
+        return False
 
     actual_type = entity.get('entity_type').lower()
     is_support_type = actual_type == 'support'

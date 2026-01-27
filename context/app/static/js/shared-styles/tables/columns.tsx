@@ -9,10 +9,29 @@ import { EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/CurrentGeneContext';
 import { SecondaryBackgroundTooltip } from '../tooltips';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { useDatasetAccess } from 'js/hooks/useDatasetPermissions';
+import { useEventCallback } from '@mui/material/utils';
 
 export interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
 }
+
+type DatasetAccessWarningProps = Pick<EntityDocument, 'uuid' | 'mapped_status' | 'mapped_data_access_level'>;
+const DatasetAccessWarning = ({ uuid, mapped_status, mapped_data_access_level }: DatasetAccessWarningProps) => {
+  const { accessAllowed, isLoading } = useDatasetAccess(uuid);
+
+  if (accessAllowed || isLoading) {
+    return null;
+  }
+  return (
+    <SecondaryBackgroundTooltip title="This is a protected dataset that cannot be accessed with your current permissions.">
+      <Typography variant="caption" color="error" sx={{ display: 'block', mt: 1 }}>
+        {mapped_status} ({mapped_data_access_level})
+      </Typography>
+    </SecondaryBackgroundTooltip>
+  );
+};
 
 function HubmapIDCell({
   hit: { uuid, hubmap_id, mapped_status, mapped_data_access_level, entity_type },
@@ -22,45 +41,56 @@ function HubmapIDCell({
   const isDataset = entity_type === 'Dataset';
   const markerGene = useOptionalGeneContext();
 
-  const isPublished = mapped_status && mapped_status.toLowerCase() === 'published';
-  const isPublic = mapped_data_access_level && mapped_data_access_level.toLowerCase() === 'public';
+  const flaskData = useFlaskDataContext();
 
-  const accessAllowed = isPublished && isPublic;
+  const isCurrentEntity = flaskData?.entity?.uuid === uuid;
 
   const href = useMemo(() => {
-    const url = new URL(`/browse/dataset/${uuid}`, window.location.origin);
+    const url = new URL(`/browse/${entity_type.toLowerCase()}/${uuid}`, window.location.origin);
     if (markerGene) {
       url.searchParams.set('marker', markerGene);
     }
     return url.toString();
-  }, [uuid, markerGene]);
+  }, [uuid, markerGene, entity_type]);
+
+  const handleLinkClick = useEventCallback(() => {
+    if (trackingInfo) {
+      trackEvent({
+        ...trackingInfo,
+        action: trackingInfo.action
+          ? `${trackingInfo.action} / Select ${trackingInfo.action}`
+          : 'Navigate to Dataset from Table',
+        label: `${trackingInfo.label} ${hubmap_id}`,
+      });
+    }
+  });
 
   return (
     <>
-      <InternalLink
-        target={openLinksInNewTab ? '_blank' : '_self'}
-        href={href}
-        onClick={() => {
-          if (trackingInfo) {
-            trackEvent({
-              ...trackingInfo,
-              action: trackingInfo.action
-                ? `${trackingInfo.action} / Select ${trackingInfo.action}`
-                : 'Navigate to Dataset from Table',
-              label: `${trackingInfo.label} ${hubmap_id}`,
-            });
-          }
-        }}
-        variant="body2"
-      >
-        {hubmap_id}
-      </InternalLink>
-      {isDataset && !accessAllowed && (
-        <SecondaryBackgroundTooltip title="This is a protected dataset that cannot be accessed with your current permissions.">
-          <Typography variant="caption" color="error" sx={{ display: 'block', mt: 1 }}>
-            {mapped_status} ({mapped_data_access_level})
+      {isCurrentEntity ? (
+        <>
+          <div>{hubmap_id}</div>
+          <Typography variant="caption" color="grey.500">
+            (Current {entity_type})
           </Typography>
-        </SecondaryBackgroundTooltip>
+        </>
+      ) : (
+        <InternalLink
+          target={openLinksInNewTab ? '_blank' : '_self'}
+          href={href}
+          onClick={handleLinkClick}
+          variant="body2"
+        >
+          {hubmap_id}
+        </InternalLink>
+      )}
+
+      {isDataset && (
+        <DatasetAccessWarning
+          uuid={uuid}
+          mapped_data_access_level={mapped_data_access_level}
+          mapped_status={mapped_status}
+        />
       )}
     </>
   );
@@ -100,10 +130,12 @@ export const createdTimestamp = {
   id: 'created_timestamp',
   label: 'Creation Date',
   cellContent: CreatedTimestampCell,
+  width: 150,
+  sort: 'created_timestamp',
 };
 
 function AssayTypesCell({ hit: { mapped_data_types } }: CellContentProps<DatasetDocument>) {
-  return mapped_data_types.join(', ');
+  return mapped_data_types?.join(', ') ?? '';
 }
 
 export const assayTypes = {
@@ -130,7 +162,7 @@ export const status = {
 function OrganCell({
   hit: { origin_samples_unique_mapped_organs },
 }: CellContentProps<DatasetDocument | SampleDocument>) {
-  return origin_samples_unique_mapped_organs.join(', ');
+  return origin_samples_unique_mapped_organs?.join(', ') ?? '';
 }
 
 export const organCol = {
@@ -161,6 +193,26 @@ export const parentDonorAge = {
   filterable: true,
 };
 
+export const donorAge = {
+  ...parentDonorAge,
+  id: 'mapped_metadata.age_value',
+  cellContent: DonorAge,
+  sort: 'mapped_metadata.age_value',
+};
+
+function DonorBMI({ hit }: CellContentProps<DonorDocument>) {
+  return hit?.mapped_metadata?.body_mass_index_value;
+}
+
+export const donorBMI = {
+  id: 'mapped_metadata.body_mass_index_value',
+  label: 'Donor BMI',
+  sort: 'mapped_metadata.body_mass_index_value',
+  cellContent: DonorBMI,
+  width: 150,
+  filterable: true,
+};
+
 function DonorSex({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.sex;
 }
@@ -174,6 +226,13 @@ export const parentDonorSex = {
   filterable: true,
 };
 
+export const donorSex = {
+  ...parentDonorSex,
+  id: 'mapped_metadata.sex',
+  cellContent: DonorSex,
+  sort: 'mapped_metadata.sex.keyword',
+};
+
 function DonorRace({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.race;
 }
@@ -185,6 +244,13 @@ export const parentDonorRace = {
   cellContent: withParentDonor(DonorRace),
   width: 150,
   filterable: true,
+};
+
+export const donorRace = {
+  ...parentDonorRace,
+  id: 'mapped_metadata.race',
+  cellContent: DonorRace,
+  sort: 'mapped_metadata.race.keyword',
 };
 
 export const datasetDescendants = {
@@ -204,4 +270,11 @@ export const anatomy = {
     (Array.isArray(anatomy_1) ? anatomy_1.join(', ') : anatomy_1) ||
     '—',
   width: 150,
+};
+
+export const datasetDescription = {
+  id: 'description',
+  label: 'Description',
+  cellContent: ({ hit: { description } }: CellContentProps<DatasetDocument>) => description,
+  width: 600,
 };

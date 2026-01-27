@@ -67,9 +67,10 @@ function Description() {
 
 interface ProvSectionProps {
   additionalUuids?: string[];
+  integratedDataset?: boolean;
 }
 
-function ProvSection({ additionalUuids = [] }: ProvSectionProps) {
+function ProvSection({ additionalUuids = [], integratedDataset = false }: ProvSectionProps) {
   const {
     entity: { entity_type },
   } = useFlaskDataContext();
@@ -96,7 +97,7 @@ function ProvSection({ additionalUuids = [] }: ProvSectionProps) {
       </SectionDescription>
 
       <ProvenanceStoreProvider initialUuid={uuid} initialUuids={initialUuids}>
-        <ProvTabs />
+        <ProvTabs integratedDataset={integratedDataset} />
       </ProvenanceStoreProvider>
     </CollapsibleDetailPageSection>
   );

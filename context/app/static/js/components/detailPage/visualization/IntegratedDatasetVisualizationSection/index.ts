@@ -1,0 +1,3 @@
+import IntegratedDatasetVisualizationSection from './IntegratedDatasetVisualizationSection';
+
+export default IntegratedDatasetVisualizationSection;

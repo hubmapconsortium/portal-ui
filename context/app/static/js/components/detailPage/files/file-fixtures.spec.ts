@@ -6,7 +6,12 @@ export const fakeOpenDUA = jest.fn();
 
 export const uuid = 'fakeuuid';
 
-export const detailContext = { uuid, hubmap_id: 'f4ke.hmp.1234', mapped_data_access_level: 'Public' };
+export const detailContext = {
+  uuid,
+  hubmap_id: 'f4ke.hmp.1234',
+  mapped_data_access_level: 'Public',
+  entityType: 'Dataset',
+};
 export const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: true };
 export const flaskDataContext = { entity: { entity_type: 'Dataset' } } as FlaskDataContextType;
 

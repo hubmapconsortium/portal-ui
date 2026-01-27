@@ -1,8 +1,12 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import { HeaderWrapper } from 'js/shared-styles/tables/NumSelectedHeader/style';
+import { HeaderWrapper, HeaderWrapperProps } from 'js/shared-styles/tables/NumSelectedHeader/style';
 
-function NumSelectedHeader({ numSelected, ...props }: { numSelected: number } & React.HTMLAttributes<HTMLDivElement>) {
+interface NumSelectedHeaderProps extends HeaderWrapperProps {
+  numSelected: number;
+}
+
+function NumSelectedHeader({ numSelected, ...props }: NumSelectedHeaderProps) {
   return (
     <HeaderWrapper {...props}>
       <Typography
