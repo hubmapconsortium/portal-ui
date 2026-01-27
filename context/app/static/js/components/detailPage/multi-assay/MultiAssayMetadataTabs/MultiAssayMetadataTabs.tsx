@@ -37,14 +37,20 @@ type MultiAssayEntityWithTableRows = Pick<MultiAssayEntity, 'uuid' | 'hubmap_id'
 function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] }) {
   const { openTabIndex, handleTabChange } = useTabs();
 
-  // If multiple entities share the same label, append the entity.
-  const deduplicatedEntities = useMemo(() => {
-    const labelCounts: Record<string, number> = {};
-    entities.forEach(({ label }) => {
-      labelCounts[label] = (labelCounts[label] || 0) + 1;
-    });
+  // If multiple entities share the same label, append the entity's HuBMAP ID.
+  // e.g. if there are multiple "SNARE-seq" entities, the tabs will be labeled
+  // "SNARE-seq (HBM.XXX.XXXX.XXX)" to disambiguate them.
+  const disambiguatedEntities = useMemo(() => {
+    const labelCounts = entities.reduce<Record<string, number>>((acc, { label }) => {
+      if (!acc[label]) {
+        acc[label] = 1;
+      } else {
+        acc[label] += 1;
+      }
+      return acc;
+    }, {});
 
-    const deduplicated = entities.map(({ label, hubmap_id, tableRows, ...rest }) => {
+    const disambiguatedLabelEntities = entities.map(({ label, hubmap_id, tableRows, ...rest }) => {
       const count = labelCounts[label];
       return {
         hubmap_id,
@@ -61,17 +67,17 @@ function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] 
         ...rest,
       };
     });
-    return deduplicated;
+    return disambiguatedLabelEntities;
   }, [entities]);
 
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange} variant={entities.length > 4 ? 'scrollable' : 'fullWidth'}>
-        {deduplicatedEntities.map(({ label, uuid, icon }, index) => (
+        {disambiguatedEntities.map(({ label, uuid, icon }, index) => (
           <MetadataTab label={label} uuid={uuid} index={index} key={uuid} icon={icon} />
         ))}
       </Tabs>
-      {deduplicatedEntities.map(({ uuid, tableRows }, index) => (
+      {disambiguatedEntities.map(({ uuid, tableRows }, index) => (
         <TabPanel value={openTabIndex} index={index} key={uuid}>
           <MetadataTable tableRows={tableRows} />
         </TabPanel>
