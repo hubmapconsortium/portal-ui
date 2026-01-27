@@ -98,10 +98,15 @@ dev = [
     "pytest>=8.4.2",
     "pytest-mock>=3.15.1",
     "ruff>=0.14.0",
-    "papermill>=2.6.0",
     # used in `test_routes_main.py`, nowhere else
     "lxml>=6.0.0",
     # used in `qa/query-portal-logs.py`, nowhere else
     "boto3>=1.39.3",
+]
+figure = [
+    "papermill>=2.6.0",
+    "ipykernel>=6.29.5",
     "matplotlib>=3.10.5",
+    "numpy>=2.2.3",
+    "pandas>=2.2.4",
 ]
