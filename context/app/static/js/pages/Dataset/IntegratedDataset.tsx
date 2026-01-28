@@ -47,6 +47,8 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     files,
     metadata,
     ingest_metadata: { dag_provenance_list },
+    contacts: _contacts,
+    contributors: _contributors,
   } = assayMetadata;
 
   const isExternal = creation_action === 'External Process';
@@ -63,8 +65,12 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
   );
 
-  const contributors = combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
-  const contacts = combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
+  const contributors = isExternal
+    ? _contributors
+    : combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
+  const contacts = isExternal
+    ? _contacts
+    : combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
 
   useRedirectAlert();
 
