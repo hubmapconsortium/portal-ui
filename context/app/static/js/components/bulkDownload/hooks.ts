@@ -38,7 +38,7 @@ function useBulkDownloadForm() {
     trigger,
   } = useForm<BulkDownloadFormTypes>({
     defaultValues: {
-      bulkDownloadOptions: [],
+      bulkDownloadOptions: ALL_BULK_DOWNLOAD_OPTIONS.map((option) => option.key),
       bulkDownloadMetadata: false,
     },
     mode: 'onChange',

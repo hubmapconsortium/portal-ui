@@ -4,6 +4,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import LinkIcon from '@mui/icons-material/Link';
 import EmailIcon from '@mui/icons-material/Email';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
+import Download from '@mui/icons-material/Download';
 
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
@@ -12,6 +13,8 @@ import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { WhiteBackgroundIconDropdownMenuButton } from 'js/shared-styles/buttons';
 import { EventWithOptionalCategory } from 'js/components/types';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
+import { postAndDownloadFile } from 'js/helpers/download';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { createEmailWithUrl, getUrl } from './utils';
@@ -23,10 +26,18 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
   vitessceState: state.vitessceState,
 });
 
-function VisualizationShareButton({ trackingInfo }: { trackingInfo: EventWithOptionalCategory }) {
+interface VisualizationShareButtonProps {
+  trackingInfo: EventWithOptionalCategory;
+  uuid?: string;
+  hasNotebook?: boolean;
+  parentUuid?: string;
+}
+
+function VisualizationShareButton({ trackingInfo, uuid, hasNotebook, parentUuid }: VisualizationShareButtonProps) {
   const { vitessceState } = useVisualizationStore(visualizationStoreSelector);
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const handleCopyClick = useHandleCopyClick();
+  const { toastError } = useSnackbarActions();
 
   const copyLink = useEventCallback(() => {
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
@@ -71,6 +82,18 @@ function VisualizationShareButton({ trackingInfo }: { trackingInfo: EventWithOpt
     createEmailWithUrl(vitessceState as object);
   });
 
+  const downloadNotebook = useEventCallback(() => {
+    trackEntityPageEvent({ action: `Vitessce / Download Jupyter Notebook` });
+    postAndDownloadFile({
+      url: `/notebooks/entities/dataset/${parentUuid ?? uuid}.ws.ipynb`,
+      body: {},
+    })
+      .then()
+      .catch(() => {
+        toastError('Failed to download Jupyter Notebook');
+      });
+  });
+
   const options = [
     {
       children: 'Copy Visualization Link',
@@ -87,6 +110,15 @@ function VisualizationShareButton({ trackingInfo }: { trackingInfo: EventWithOpt
       onClick: downloadConf,
       icon: FileIcon,
     },
+    ...(uuid && hasNotebook
+      ? [
+          {
+            children: 'Download Jupyter Notebook',
+            onClick: downloadNotebook,
+            icon: Download,
+          },
+        ]
+      : []),
     {
       children: 'Email',
       onClick: emailConf,

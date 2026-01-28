@@ -48,20 +48,22 @@ export default function InlineFigures() {
   const jsDate = new Date(MANIFEST.generated_at * 1000);
 
   return (
-    <Stack>
+    <Stack gap={1} mb={1}>
       <PageTitle>Data Overview</PageTitle>
       <Description>
-        This page provides an overview of the data available in the HuBMAP Data Portal through a series of summary
-        charts, including:
-        <br />
-        <strong>(a)</strong> Total counts of HuBMAP data entities: datasets, samples and donors.
-        <br />
-        <strong>(b-c)</strong> Donor demographics grouped by age range and race.
-        <br />
-        <strong>(d-g)</strong> Summary of organ distributions by dataset count, sample count, unique donor organ count
-        and average number of samples per donor organ.
-        <br />
-        <strong>(h-i)</strong> Data types distributions by dataset count and by associated Vitessce visualizations.
+        <Box mb={1}>
+          This page provides an overview of the data available in the HuBMAP Data Portal through a series of summary
+          charts, including:
+          <br />
+          <strong>(a)</strong> Total counts of HuBMAP data entities: datasets, samples and donors.
+          <br />
+          <strong>(b-c)</strong> Donor demographics grouped by age range and race.
+          <br />
+          <strong>(d-g)</strong> Summary of organ distributions by dataset count, sample count, unique donor organ count
+          and average number of samples per donor organ.
+          <br />
+          <strong>(h-i)</strong> Data types distributions by dataset count and by associated Vitessce visualizations.
+        </Box>
         <LabelledSectionText label="Last Updated">
           {jsDate.toLocaleDateString(undefined, {
             year: 'numeric',

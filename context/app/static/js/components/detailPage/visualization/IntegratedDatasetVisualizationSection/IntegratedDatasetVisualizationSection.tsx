@@ -25,6 +25,7 @@ function IntegratedDatasetVisualizationSection({ uuid, vitessceConfig }: Integra
               vitData={vitessceConfig}
               trackingInfo={trackingInfo}
               shouldDisplayHeader={false}
+              hasNotebook
             />
           </Box>
         }

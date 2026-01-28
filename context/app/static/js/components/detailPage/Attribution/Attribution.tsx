@@ -23,12 +23,14 @@ export const DatasetAttributionDescription = (
   </SectionDescription>
 );
 
-const IntegratedDatasetAttributionDescription = (
+interface IntegratedDatasetAttributionDescriptionProps {
+  group: string;
+}
+
+const IntegratedDatasetAttributionDescription = ({ group }: IntegratedDatasetAttributionDescriptionProps) => (
   <SectionDescription>
-    Below is the information for the individuals who provided this dataset. For questions about this dataset, reach out
-    to the individuals listed as contacts, either via the email address listed in the table or via contact information
-    provided on their ORCID profile page. Analysis for the processed dataset output was conducted by standardized HIVE
-    pipelines.
+    The data provided by the {group} Group was centrally processed by HuBMAP. The results of this processing are
+    independent of analyses conducted by the data providers or third parties.
   </SectionDescription>
 );
 
@@ -42,12 +44,12 @@ const ExternalDatasetAttributionDescription = (
 
 function AttributionDescription() {
   const {
-    entity: { is_integrated, creation_action },
+    entity: { is_integrated, creation_action, group_name },
   } = useFlaskDataContext();
 
   const isExternal = creation_action === 'External Process';
   if (isExternal) return ExternalDatasetAttributionDescription;
-  if (is_integrated) return IntegratedDatasetAttributionDescription;
+  if (is_integrated) return <IntegratedDatasetAttributionDescription group={group_name} />;
   return DatasetAttributionDescription;
 }
 
