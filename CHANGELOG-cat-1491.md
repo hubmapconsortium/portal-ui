@@ -1,4 +1,0 @@
-- Add spacing to the data overview page.
-- Move the "Download Jupyter Notebook" action into the visualization's "share" menu.
-- Streamline the bulk download manifest download by opting in to every dataset type by default once no restricted datasets are present.
-- Update the attribution text for integrated datasets.

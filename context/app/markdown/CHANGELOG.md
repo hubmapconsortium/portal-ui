@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.39.1 - 2026-01-28
+
+- Add spacing to the data overview page.
+- Move the "Download Jupyter Notebook" action into the visualization's "share" menu.
+- Streamline the bulk download manifest download by opting in to every dataset type by default once no restricted datasets are present.
+- Update the attribution text for integrated datasets.
+
+
+
 ## v1.39.0 - 2026-01-27
 
 - Revise route layout to use grid instead of flex to prevent overflows.
