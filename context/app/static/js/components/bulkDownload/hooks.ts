@@ -38,7 +38,7 @@ function useBulkDownloadForm() {
     trigger,
   } = useForm<BulkDownloadFormTypes>({
     defaultValues: {
-      bulkDownloadOptions: [],
+      bulkDownloadOptions: ALL_BULK_DOWNLOAD_OPTIONS.map((option) => option.key),
       bulkDownloadMetadata: false,
     },
     mode: 'onChange',
@@ -57,7 +57,7 @@ function useBulkDownloadForm() {
 
 function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   const { isOpen, uuids, open, close, setUuids, setDownloadSuccess } = useBulkDownloadStore();
-  const { control, handleSubmit, errors, reset, trigger, setValue } = useBulkDownloadForm();
+  const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
 
   // Fetch datasets for the selected uuids
@@ -100,20 +100,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     deselectRows: removeUuidsOrRows,
     restrictedDatasetsErrorMessage,
   });
-
-  // Set all download options as selected by default when options are loaded and no restricted IDs are present
-  useEffect(() => {
-    if (downloadOptions.length > 0 && isOpen && restrictedDatasetsFields.restrictedHubmapIds.length === 0) {
-      setValue(
-        'bulkDownloadOptions',
-        downloadOptions.map((option) => option.key),
-      );
-      // Re-trigger validation after setting default values
-      trigger('bulkDownloadOptions').catch((e) => {
-        console.error(e);
-      });
-    }
-  }, [downloadOptions, isOpen, restrictedDatasetsFields.restrictedHubmapIds.length, setValue, trigger]);
 
   const downloadMetadata = useCallback(
     (datasetsToDownload: BulkDownloadDataset[]) => {
