@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.39.2 - 2026-01-28
+
+- Fix display of contributors to externally processed datasets.
+
+
+
 ## v1.39.1 - 2026-01-28
 
 - Add spacing to the data overview page.
