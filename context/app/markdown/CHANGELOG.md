@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.39.3 - 2026-01-29
+
+- Add HuBMAP Help Desk contact link to internal integrated datasets.
+
+
+
 ## v1.39.2 - 2026-01-28
 
 - Fix display of contributors to externally processed datasets.
