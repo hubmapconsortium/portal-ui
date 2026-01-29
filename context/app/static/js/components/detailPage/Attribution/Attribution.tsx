@@ -15,6 +15,11 @@ const tooltips = {
   contact: 'This is the contact for this data.',
 };
 
+const tooltipsIntegrated = {
+  ...tooltips,
+  contact: 'Contact the HuBMAP Help Desk with any questions about the analysis of this data.',
+};
+
 export const DatasetAttributionDescription = (
   <SectionDescription>
     Below is the information for the individuals who provided this dataset. For questions about this dataset, reach out
@@ -55,10 +60,11 @@ function AttributionDescription() {
 
 function Attribution({ children }: PropsWithChildren) {
   const {
-    entity: { group_name, created_by_user_displayname, created_by_user_email, entity_type },
+    entity: { group_name, created_by_user_displayname, creation_action, created_by_user_email, entity_type },
   } = useFlaskDataContext();
 
   const isDataset = entity_type === 'Dataset';
+  const isInternalIntegrated = isDataset && creation_action !== 'External Process';
 
   const showRegisteredBy = !isDataset;
 
@@ -66,8 +72,9 @@ function Attribution({ children }: PropsWithChildren) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
-    tooltips,
+    isInternalIntegrated ? tooltipsIntegrated : tooltips,
     showRegisteredBy,
+    isInternalIntegrated,
   );
 
   return (
