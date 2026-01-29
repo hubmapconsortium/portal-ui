@@ -14,6 +14,7 @@ import { StyledPaper } from './style';
 import { useSelectableTableStore } from '../SelectableTableProvider';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import Skeleton from '@mui/material/Skeleton';
+import Box from '@mui/material/Box';
 
 interface EntitiesTablesProps<Doc extends Entity> {
   isSelectable?: boolean;
@@ -77,7 +78,7 @@ function EntitiesTableTabInternal<Doc extends Entity>(
       label={
         tabTooltipText ? (
           <SecondaryBackgroundTooltip title={tabTooltipText}>
-            <span>{label}</span>
+            <Box display="contents">{label}</Box>
           </SecondaryBackgroundTooltip>
         ) : (
           label

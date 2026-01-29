@@ -29,9 +29,32 @@ import IntegratedDatasetFiles from 'js/components/detailPage/files/IntegratedDat
 import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 
+const useContributorsAndContacts = (
+  { contacts: _contacts, contributors: _contributors, creation_action }: Dataset,
+  entities: (Donor | Dataset | Sample)[],
+) => {
+  const isExternal = creation_action === 'External Process';
+  if (isExternal) {
+    return { contributors: _contributors, contacts: _contacts };
+  }
+  const contributors = combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
+  const contacts = combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
+  return { contributors, contacts };
+};
+
+const useProtocolURL = (dataset: Dataset, isExternal: boolean) => {
+  const { protocol_url: currentProtocolUrl, metadata } = dataset;
+
+  const protocolUrl = isExternal
+    ? // External datasets have their protocol URL in the metadata
+      ((metadata?.derived_dataset_protocol_doi as string) ?? currentProtocolUrl)
+    : currentProtocolUrl;
+
+  return protocolUrl;
+};
+
 function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
-    protocol_url: currentProtocolUrl,
     uuid,
     mapped_data_types,
     origin_samples,
@@ -45,18 +68,12 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     immediate_ancestor_ids,
     creation_action,
     files,
-    metadata,
     ingest_metadata: { dag_provenance_list },
-    contacts: _contacts,
-    contributors: _contributors,
   } = assayMetadata;
 
   const isExternal = creation_action === 'External Process';
 
-  const protocolUrl = isExternal
-    ? // External datasets have their protocol URL in the metadata
-      ((metadata?.derived_dataset_protocol_doi as string) ?? currentProtocolUrl)
-    : currentProtocolUrl;
+  const protocolUrl = useProtocolURL(assayMetadata, isExternal);
 
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
 
@@ -65,12 +82,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
   );
 
-  const contributors = isExternal
-    ? _contributors
-    : combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
-  const contacts = isExternal
-    ? _contacts
-    : combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
+  const { contributors, contacts } = useContributorsAndContacts(assayMetadata, entitiesForImmediateAncestors);
 
   useRedirectAlert();
 
