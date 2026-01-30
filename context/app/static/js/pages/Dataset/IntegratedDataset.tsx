@@ -64,8 +64,14 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     immediate_ancestor_ids,
     creation_action,
     files,
-    ingest_metadata: { dag_provenance_list },
+    visualization,
+    // Some lab processed datasets don't have ingest metadata, using this as a default prevents error
+    ingest_metadata = {
+      dag_provenance_list: [],
+    },
   } = assayMetadata;
+
+  const dag_provenance_list = ingest_metadata?.dag_provenance_list;
 
   const isExternal = creation_action === 'External Process';
 
@@ -94,7 +100,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
   const shouldDisplaySection = {
     summary: true,
     metadata: isExternal,
-    visualization: Boolean(vitessceConfig.data || vitessceConfig.isLoading),
+    visualization: Boolean(visualization || vitessceConfig.data || vitessceConfig.isLoading),
     files: Boolean(files),
     'bulk-data-transfer': true,
     'integrated-data': Boolean(entitiesForImmediateAncestors.length),
@@ -136,7 +142,11 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           >
             <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
           </Summary>
-          <IntegratedDatasetVisualizationSection uuid={uuid} vitessceConfig={vitessceConfig.data} />
+          <IntegratedDatasetVisualizationSection
+            uuid={uuid}
+            vitessceConfig={vitessceConfig.data}
+            shouldDisplay={shouldDisplaySection.visualization}
+          />
           <MetadataSection entities={[assayMetadata]} shouldDisplay={shouldDisplaySection.metadata} />
           {shouldDisplaySection.files && <IntegratedDatasetFiles files={files} track={trackFilesSectionEvents} />}
           <BulkDataTransfer
