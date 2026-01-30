@@ -21,25 +21,21 @@ import { useProcessedDatasets, useRedirectAlert, useVitessceConf } from './hooks
 import { EntityDetailProps } from './Dataset';
 import SummaryDataChildren from './DatasetPageSummaryChildren';
 import IntegratedDataSection from 'js/components/detailPage/IntegratedData/IntegratedData';
-import { combinePeopleLists } from 'js/pages/Dataset/utils';
-import { Entity } from 'js/components/types';
 import AnalysisDetailsSection from 'js/components/detailPage/AnalysisDetails/AnalysisDetailsSection';
 import IntegratedDatasetVisualizationSection from 'js/components/detailPage/visualization/IntegratedDatasetVisualizationSection';
 import IntegratedDatasetFiles from 'js/components/detailPage/files/IntegratedDatasetFiles';
 import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 
-const useContributorsAndContacts = (
-  { contacts: _contacts, contributors: _contributors, creation_action }: Dataset,
-  entities: (Donor | Dataset | Sample)[],
-) => {
+const useContributorsAndContacts = ({ contacts, contributors, creation_action }: Dataset) => {
   const isExternal = creation_action === 'External Process';
   if (isExternal) {
-    return { contributors: _contributors, contacts: _contacts };
+    return { contributors, contacts };
   }
-  const contributors = combinePeopleLists(entities.map((entity: Entity) => entity?.contributors ?? []));
-  const contacts = combinePeopleLists(entities.map((entity: Entity) => entity?.contacts ?? []));
-  return { contributors, contacts };
+  return {
+    contributors: [],
+    contacts: [],
+  };
 };
 
 const useProtocolURL = (dataset: Dataset, isExternal: boolean) => {
@@ -82,7 +78,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
   );
 
-  const { contributors, contacts } = useContributorsAndContacts(assayMetadata, entitiesForImmediateAncestors);
+  const { contributors, contacts } = useContributorsAndContacts(assayMetadata);
 
   useRedirectAlert();
 

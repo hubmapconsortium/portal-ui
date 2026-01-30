@@ -1,0 +1,1 @@
+- Remove contributors table for internally processed integrated datasets.
