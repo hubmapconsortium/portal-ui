@@ -4,6 +4,7 @@ import VisualizationWrapper from '../VisualizationWrapper';
 import Description from 'js/shared-styles/sections/Description';
 import { Box } from '@mui/system';
 import { VisualizationIcon } from 'js/shared-styles/icons';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 
 interface IntegratedDatasetVisualizationProps {
   uuid: string;
@@ -37,4 +38,4 @@ function IntegratedDatasetVisualizationSection({ uuid, vitessceConfig }: Integra
   );
 }
 
-export default IntegratedDatasetVisualizationSection;
+export default withShouldDisplay(IntegratedDatasetVisualizationSection);
