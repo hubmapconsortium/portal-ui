@@ -28,7 +28,7 @@ import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 
 const useContributorsAndContacts = ({ contacts, contributors, creation_action }: Dataset) => {
-  const isExternal = creation_action === 'External Process';
+  const isExternal = creation_action === 'External Process' || creation_action === 'Lab Process';
   if (isExternal) {
     return { contributors, contacts };
   }
