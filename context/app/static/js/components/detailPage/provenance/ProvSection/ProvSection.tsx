@@ -42,20 +42,33 @@ function ProvSectionNoData({ entity_type }: { entity_type: string }) {
   );
 }
 
-const DatasetDescription = (
+const DatasetDescription = (isIntegrated: boolean) => (
   <>
-    The provenance displays the sequence of events and actions that led to the creation of this dataset. The table view
-    provides a basic overview of the dataset&apos;s origin, from donor to sample level, and any processing that has been
-    done to the dataset. The graph view offers a comprehensive overview of the data&apos;s provenance.
+    The provenance displays the sequence of events and actions that led to the creation of this dataset.
+    {!isIntegrated ? (
+      // Integrated datasets don't have a table view.
+      <>
+        The table view provides a basic overview of the dataset&apos;s origin, from donor to sample level, and any
+        processing that has been done to the dataset.
+      </>
+    ) : (
+      ' '
+    )}
+    The graph view offers a comprehensive overview of the dataset&apos;s provenance.
   </>
 );
 
-function Description() {
+interface ProvSectionProps {
+  additionalUuids?: string[];
+  integratedDataset?: boolean;
+}
+
+function Description({ integratedDataset }: Pick<ProvSectionProps, 'integratedDataset'>) {
   const {
     entity: { entity_type },
   } = useFlaskDataContext();
   if (entity_type === 'Dataset') {
-    return DatasetDescription;
+    return DatasetDescription(!!integratedDataset);
   }
   return (
     <>
@@ -63,11 +76,6 @@ function Description() {
       {entity_type.toLowerCase()}.
     </>
   );
-}
-
-interface ProvSectionProps {
-  additionalUuids?: string[];
-  integratedDataset?: boolean;
 }
 
 function ProvSection({ additionalUuids = [], integratedDataset = false }: ProvSectionProps) {
@@ -93,7 +101,7 @@ function ProvSection({ additionalUuids = [], integratedDataset = false }: ProvSe
   return (
     <CollapsibleDetailPageSection id="provenance" title="Provenance" icon={sectionIconMap.provenance}>
       <SectionDescription>
-        <Description />
+        <Description integratedDataset={integratedDataset} />
       </SectionDescription>
 
       <ProvenanceStoreProvider initialUuid={uuid} initialUuids={initialUuids}>

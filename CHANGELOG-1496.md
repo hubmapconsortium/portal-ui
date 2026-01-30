@@ -1,0 +1,2 @@
+- Adjust description for integrated dataset provenance to exclude references to table view.
+- Add description to Integrated Data section.
