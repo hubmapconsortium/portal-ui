@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.39.4 - 2026-01-30
+
+- Remove contributors table for internally processed integrated datasets.
+
+
+
 ## v1.39.3 - 2026-01-29
 
 - Add HuBMAP Help Desk contact link to internal integrated datasets.
