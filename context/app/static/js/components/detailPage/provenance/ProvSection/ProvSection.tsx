@@ -54,7 +54,7 @@ const DatasetDescription = (isIntegrated: boolean) => (
     ) : (
       ' '
     )}
-    The graph view offers a comprehensive overview of the data&apos;s provenance.
+    The graph view offers a comprehensive overview of the dataset&apos;s provenance.
   </>
 );
 
