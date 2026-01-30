@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.39.5 - 2026-01-30
+
+- Adjust description for integrated dataset provenance to exclude references to table view.
+- Add description to Integrated Data section.
+- Handle externally processed datasets without visualizations and ingest metadata.
+
+
+
 ## v1.39.4 - 2026-01-30
 
 - Remove contributors table for internally processed integrated datasets.
