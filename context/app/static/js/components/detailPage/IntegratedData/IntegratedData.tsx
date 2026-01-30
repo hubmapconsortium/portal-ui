@@ -11,6 +11,7 @@ import { DownloadIcon } from 'js/shared-styles/icons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 import { useDownloadTSV } from 'js/hooks/useDownloadTSV';
+import Description from 'js/shared-styles/sections/Description';
 
 interface IntegratedDataSectionProps {
   entities: (Donor | Dataset | Sample)[];
@@ -60,6 +61,10 @@ function IntegratedDataSection({ entities, includeCurrentEntity }: IntegratedDat
         </SecondaryBackgroundTooltip>
       }
     >
+      <Description sx={{ mb: 1 }}>
+        This table displays the datasets that were integrated to generate the currently viewed dataset, along with the
+        associated samples and donors.
+      </Description>
       <IntegratedDataTables
         entities={fullEntities}
         tableTooltips={{
