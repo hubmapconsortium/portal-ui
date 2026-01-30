@@ -1,0 +1,1 @@
+- Adjust description for integrated dataset provenance to exclude references to table view.
