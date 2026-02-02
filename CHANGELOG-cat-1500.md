@@ -1,0 +1,1 @@
+- Prevent page crashes when an entity's metadata is `null`.

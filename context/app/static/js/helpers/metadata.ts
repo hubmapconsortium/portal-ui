@@ -63,7 +63,12 @@ function getMetadata({ targetEntityType, currentEntity }: GetMetadataTypes) {
     return {};
   }
 
-  return get(currentEntity, path, {});
+  // Add extra safety in case metadata is `null` or another non-object type.
+  const metadata = get(currentEntity, path, {});
+  if (typeof metadata === 'object' && metadata !== null) {
+    return metadata as Record<string, string | object | unknown[]>;
+  }
+  return {};
 }
 
 function hasMetadata(args: GetMetadataTypes) {
