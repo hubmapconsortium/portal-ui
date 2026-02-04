@@ -1,0 +1,3 @@
+- Update homepage design.
+- Add icons to homepage section headers.
+- Combine Related Tools and Related Resources.

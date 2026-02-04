@@ -7,6 +7,7 @@ const ExternalLinkContainer = styled(Stack)(({ theme }) => ({
   '&:hover': {
     backgroundColor: theme.palette.common.hoverShadow,
   },
+  paddingRight: theme.spacing(2),
 }));
 
 const ImageWrapper = styled(Stack)(({ theme }) => ({

@@ -7,12 +7,14 @@ import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import Title from 'js/components/home/Title';
 import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
-import ExternalLinks from 'js/components/home/ExternalLinks';
 import RecentEntities from 'js/components/home/RecentEntities';
 import ExploreTools from 'js/components/home/ExploreTools';
 
 import Hero from 'js/components/home/Hero';
 import { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader, UpperGrid, GridAreaContainer } from './style';
+import { PrivacyTipRounded } from '@mui/icons-material';
+import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 interface HomeProps {
   organsCount: number;
@@ -44,7 +46,13 @@ function Home({ organsCount }: HomeProps) {
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
           <Box gridArea="bar-chart">
-            <OffsetDatasetsHeader variant="h4" component="h3" id="hubmap-datasets" ref={scrollToBarChart}>
+            <OffsetDatasetsHeader
+              variant="h2"
+              component="h3"
+              id="hubmap-datasets"
+              ref={scrollToBarChart}
+              icon={entityIconMap.Dataset}
+            >
               HuBMAP Datasets
             </OffsetDatasetsHeader>
             <HuBMAPDatasetsChart />
@@ -52,19 +60,19 @@ function Home({ organsCount }: HomeProps) {
         )}
         <RecentEntities />
         <Box gridArea="explore-tools">
-          <SectionHeader variant="h4" component="h3">
+          <SectionHeader variant="h2" component="h3">
             Explore Tools and Resources for Data Visualization & Analysis
           </SectionHeader>
           <ExploreTools />
         </Box>
         <Box gridArea="guidelines">
-          <SectionHeader variant="h4" component="h3">
+          <SectionHeader variant="h2" component="h3" icon={PrivacyTipRounded}>
             Data Use Guidelines
           </SectionHeader>
           <DataUseGuidelines />
         </Box>
-        <Box gridArea="external-links">
-          <ExternalLinks />
+        <Box gridArea="related-tools-and-resources">
+          <RelatedToolsAndResources />
         </Box>
       </LowerContainerGrid>
     </>
