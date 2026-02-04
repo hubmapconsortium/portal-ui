@@ -30,7 +30,7 @@ function HomepageRelatedLink({ img, title, linkText, linkHref, description, icon
         {icon ?? img}
       </ImageWrapper>
       <div>
-        <OutboundIconLink onClick={handleTrack} href={linkHref} variant="subtitle1">
+        <OutboundIconLink onClick={handleTrack} href={linkHref} variant="subtitle1" noWrap>
           {linkText}
         </OutboundIconLink>
         <Typography variant="body2">{description}</Typography>
