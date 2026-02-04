@@ -69,10 +69,15 @@ type CustomIconProps<T extends ElementType> = {
   fontSize?: string;
 } & SvgIconProps<T>;
 
+const muiSizes = ['small', 'medium', 'large', 'inherit'];
+
 const withIconStyles = (Icon: typeof SvgIcon) =>
-  styled(Icon)(({ fontSize }: CustomIconProps<ElementType<'svg'>>) => ({
-    fontSize: fontSize ?? '1rem',
-  })) as unknown as typeof SvgIcon;
+  styled(Icon)(({ fontSize }: CustomIconProps<ElementType<'svg'>>) => {
+    if (fontSize && muiSizes.includes(fontSize)) {
+      return {}; // Let MUI handle standard size values
+    }
+    return { fontSize: fontSize ?? '1rem' };
+  }) as unknown as typeof SvgIcon;
 
 const CenterIcon = withIconStyles(AccountBalanceIcon);
 

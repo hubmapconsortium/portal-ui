@@ -11,9 +11,10 @@ interface IconLinkProps extends LinkProps {
   iconOnLeft?: boolean;
   href?: string;
   isOutbound?: boolean;
+  noWrap?: boolean;
 }
 
-function IconLink({ children, icon, iconOnLeft, isOutbound, ...rest }: IconLinkProps) {
+function IconLink({ children, icon, iconOnLeft, isOutbound, noWrap, ...rest }: IconLinkProps) {
   const LinkComponent = isOutbound ? OutboundLink : InternalLink;
 
   return (
@@ -24,6 +25,7 @@ function IconLink({ children, icon, iconOnLeft, isOutbound, ...rest }: IconLinkP
         alignItems: 'center',
         flexDirection: iconOnLeft ? 'row-reverse' : 'row',
         gap: 0.5,
+        whiteSpace: noWrap ? 'nowrap' : 'normal',
       }}
     >
       <span>{children}</span>
