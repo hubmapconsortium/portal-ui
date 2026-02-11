@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.40.0 - 2026-02-11
+
+- Prevent page crashes when an entity's metadata is `null`.
+
+
+
 ## v1.39.5 - 2026-01-30
 
 - Adjust description for integrated dataset provenance to exclude references to table view.
