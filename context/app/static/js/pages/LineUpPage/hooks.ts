@@ -12,6 +12,9 @@ import { useMemo } from 'react';
  */
 const getValueFromObjects = (objects: Record<string, unknown>[], key: string) => {
   for (const obj of objects) {
+    if (!obj) {
+      continue;
+    }
     if (key in obj) {
       return obj[key];
     }

@@ -1,0 +1,1 @@
+- Add null safety to metadata export functionalities.
