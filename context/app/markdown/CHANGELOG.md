@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.40.1 - 2026-02-11
+
+- Add null safety to metadata export functionalities.
+
+
+
 ## v1.40.0 - 2026-02-11
 
 - Prevent page crashes when an entity's metadata is `null`.
