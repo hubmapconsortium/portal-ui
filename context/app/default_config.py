@@ -57,3 +57,6 @@ class DefaultConfig(object):
     PROTOCOLS_IO_CLIENT_AUTH_TOKEN = 'should-be-overridden'
 
     SENTRY_ENV = 'should-be-overridden'
+
+    # Comma-separated UUIDs of publications to pin on the homepage
+    PINNED_PUBLICATION_UUIDS = ''

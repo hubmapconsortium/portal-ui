@@ -3,11 +3,9 @@ import Paper from '@mui/material/Paper';
 
 import HomepageRelatedLink from 'js/components/home/HomepageRelatedLink';
 import Stack from '@mui/material/Stack';
-import { SectionHeader } from 'js/pages/Home/style';
 import { externalIconMap } from 'js/shared-styles/icons/externalImageIcons';
 import { DataProductsIcon } from 'js/shared-styles/icons';
 import { INTEGRATED_MAPS_DESCRIPTION_SHORT } from 'js/global-constants';
-import { BuildRounded } from '@mui/icons-material';
 
 const { avr, azimuth, fusion, googleScholar, hra, hubmapConsortium, nih, protocols } = externalIconMap;
 
@@ -119,10 +117,6 @@ function LinkSectionContainer({ links, title }: LinkSectionContainerProps) {
 function RelatedToolsAndResources() {
   return (
     <Stack>
-      <SectionHeader variant="h2" component="h3" icon={BuildRounded}>
-        Related Tools & Resources
-      </SectionHeader>
-
       <Stack
         direction={{
           xs: 'column',
