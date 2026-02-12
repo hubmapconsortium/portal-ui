@@ -1,0 +1,1 @@
+- Adjust homepage entity counts to display donors, samples, datasets, collections, and publications.

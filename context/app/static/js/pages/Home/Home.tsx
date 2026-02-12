@@ -16,11 +16,7 @@ import { PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
-interface HomeProps {
-  organsCount: number;
-}
-
-function Home({ organsCount }: HomeProps) {
+function Home() {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -40,7 +36,7 @@ function Home({ organsCount }: HomeProps) {
           <Hero />
         </GridAreaContainer>
         <Box gridArea="counts">
-          <EntityCounts organsCount={organsCount} />
+          <EntityCounts />
         </Box>
       </UpperGrid>
       <LowerContainerGrid maxWidth="lg">
