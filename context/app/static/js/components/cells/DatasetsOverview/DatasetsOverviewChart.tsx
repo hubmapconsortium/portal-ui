@@ -168,7 +168,10 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
     }
   });
 
-  const download = useDownloadImage(chartRef, `${xAxis} vs ${compareBy} - Datasets Overview`);
+  const download = useDownloadImage(
+    chartRef,
+    `${xAxis} vs ${compareBy} - Datasets Overview - ${new Date().toISOString().slice(0, 10)}`,
+  );
 
   const downloadImage = useEventCallback(() => {
     download();
