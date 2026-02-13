@@ -5,6 +5,7 @@ import { fetcher } from 'js/helpers/swr';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { Dataset } from 'js/components/types';
 import { useSearchHits } from './useSearchData';
+import { useMemo } from 'react';
 
 type DatasetAccessLevelHit = Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>;
 
@@ -22,9 +23,11 @@ function useGetNonPublicDatasets(ids: string[]) {
 
   const { searchHits } = useSearchHits<DatasetAccessLevelHit>(query);
 
-  const protectedUUIDs = searchHits.map((s) => s._id);
-
-  return protectedUUIDs;
+  return useMemo(() => {
+    const nonPublicUUIDs = searchHits.map((s) => s._id);
+    const publicUUIDs = ids.filter((i) => !nonPublicUUIDs.includes(i));
+    return { nonPublicUUIDs, publicUUIDs };
+  }, [searchHits, ids]);
 }
 
 interface DatasetPermissionsRequest {
@@ -63,14 +66,25 @@ interface UseDatasetAccessReturn {
   isLoading: boolean;
 }
 
+function makePermissionObject(allowed: boolean, uuid: string) {
+  return {
+    access_allowed: allowed,
+    valid_id: true,
+    uuid,
+    hubmap_id: '',
+    entity_type: 'dataset',
+    file_system_path: '',
+  };
+}
+
 function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
   const { groupsToken, softAssayEndpoint } = useAppContext();
 
-  const nonPublicUUIDs = useGetNonPublicDatasets(uuids);
+  const { nonPublicUUIDs, publicUUIDs } = useGetNonPublicDatasets(uuids);
 
   const shouldFetch = Boolean(nonPublicUUIDs.length && softAssayEndpoint && groupsToken);
 
-  const { data, isLoading } = useSWR(
+  const { data = {}, isLoading } = useSWR(
     shouldFetch ? ['dataset-access', [...nonPublicUUIDs].sort(), groupsToken] : null,
     () =>
       fetchDatasetPermissions({
@@ -80,29 +94,18 @@ function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
       }),
   );
 
-  if (shouldFetch) {
+  const accessibleDatasets = useMemo(() => {
     return {
-      accessibleDatasets: data ?? {},
-      isLoading,
+      // Default to hiding non-public datasets
+      ...Object.fromEntries(nonPublicUUIDs.map((uuid) => [uuid, makePermissionObject(false, uuid)])),
+      // If user has access to any of the non-public datasets, this spread overwrites the defaults
+      ...data,
+      // Default to showing public datasets
+      ...Object.fromEntries(publicUUIDs.map((uuid) => [uuid, makePermissionObject(true, uuid)])),
     };
-  }
+  }, [data, nonPublicUUIDs, publicUUIDs]);
 
-  return {
-    accessibleDatasets: Object.fromEntries(
-      uuids.map((uuid) => [
-        uuid,
-        {
-          access_allowed: !nonPublicUUIDs.includes(uuid),
-          valid_id: true,
-          uuid,
-          hubmap_id: '',
-          entity_type: 'dataset',
-          file_system_path: '',
-        },
-      ]),
-    ),
-    isLoading,
-  };
+  return { accessibleDatasets, isLoading };
 }
 
 export function useDatasetsAccess(uuids: string[]) {
