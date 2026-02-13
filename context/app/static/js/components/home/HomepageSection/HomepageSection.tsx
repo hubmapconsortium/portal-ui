@@ -11,16 +11,29 @@ interface HomepageSectionProps extends PropsWithChildren {
   useOffset?: boolean;
   id?: string;
   headerRef?: Ref<HTMLElement>;
+  actionButtons?: React.ReactNode;
 }
 
-function HomepageSection({ title, icon, gridArea, useOffset = false, id, headerRef, children }: HomepageSectionProps) {
+function HomepageSection({
+  title,
+  icon,
+  gridArea,
+  useOffset = false,
+  id,
+  headerRef,
+  actionButtons,
+  children,
+}: HomepageSectionProps) {
   const Header = useOffset ? OffsetDatasetsHeader : SectionHeader;
 
   return (
     <Box gridArea={gridArea}>
-      <Header variant="h2" component="h3" icon={icon} id={id} ref={headerRef}>
-        {title}
-      </Header>
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Header variant="h2" component="h3" icon={icon} id={id} ref={headerRef}>
+          {title}
+        </Header>
+        {actionButtons}
+      </Box>
       {children}
     </Box>
   );
