@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.40.2 - 2026-02-17
+
+- Improve permission handling for datasets to consistently handle public data and keep protected data inaccessible by default until API response indicates otherwise.
+
+
+
 ## v1.40.1 - 2026-02-11
 
 - Add null safety to metadata export functionalities.

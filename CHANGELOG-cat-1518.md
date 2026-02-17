@@ -1,1 +1,0 @@
-- Improve permission handling for datasets to consistently handle public data and keep protected data inaccessible by default until API response indicates otherwise.
