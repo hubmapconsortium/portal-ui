@@ -1,1 +1,0 @@
-- Handle cases where integrated maps are only available for one organ laterality.

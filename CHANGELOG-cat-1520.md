@@ -1,1 +1,0 @@
-- Fix gene detail page cell types section.
