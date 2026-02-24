@@ -25,7 +25,7 @@ type HyperQueryCellTypesKey = string;
 
 export function createCellTypeNamesKey(
   scFindEndpoint: string,
-  { geneList, organName, includePrefix }: HyperQueryCellTypesParams,
+  { geneList, organName, includePrefix = true }: HyperQueryCellTypesParams,
   scFindIndexVersion?: string,
 ): HyperQueryCellTypesKey {
   return createScFindKey(

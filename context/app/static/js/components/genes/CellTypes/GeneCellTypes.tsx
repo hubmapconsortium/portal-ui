@@ -218,13 +218,11 @@ function CellTypesTable() {
   const { data: allCellTypesForGene, isLoading: isLoadingAllCellTypes } = useHyperQueryCellTypes({
     geneList: geneSymbol,
     organName: undefined, // Fetch all datasets
-    includePrefix: true, // Include organ prefixes to enable organ-based filtering
   });
 
   const { data: cellTypes, isLoading: isLoadingCurrentCellTypes } = useHyperQueryCellTypes({
     geneList: geneSymbol,
     organName: selectedOrgan,
-    includePrefix: true,
   });
 
   const cellTypeOrgans = useMemo(
