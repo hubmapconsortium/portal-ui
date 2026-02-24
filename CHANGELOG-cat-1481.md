@@ -1,0 +1,2 @@
+- Improve handling for gene pathways with no genes in the index.
+- Improve handling for cases when user removes all genes in pathway.

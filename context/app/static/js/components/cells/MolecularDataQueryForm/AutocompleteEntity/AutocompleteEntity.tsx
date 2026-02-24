@@ -12,6 +12,7 @@ import { useEventCallback } from '@mui/material/utils';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { CloseFilledIcon, CloseIcon } from 'js/shared-styles/icons';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useAutocompleteQuery, useSelectedPathwayParticipants } from './hooks';
 import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
@@ -70,7 +71,8 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
   const { entityFieldName: fieldName } = useQueryType();
   const { track } = useMolecularDataQueryFormTracking();
 
-  const { control } = useMolecularDataQueryFormState();
+  const { control, setValue } = useMolecularDataQueryFormState();
+  const { toastInfo } = useSnackbarActions();
   const { field } = useController({
     name: fieldName,
     control,
@@ -86,6 +88,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
   const pathwayState = useSelectedPathwayParticipants();
   const isLoadingFromPathway = targetEntity === 'gene' ? pathwayState.isLoadingPathwayGenes : false;
   const invalidGenes = targetEntity === 'gene' ? pathwayState.invalidGenes : [];
+  const allGenesExcludedPathway = targetEntity === 'gene' ? pathwayState.allGenesExcludedPathway : null;
 
   const chipColors = useCellTypeOrgansColorMap();
 
@@ -125,6 +128,17 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
     );
 
     field.onChange(formattedValue);
+
+    // If all pathway genes have been removed, clear the pathway selection
+    if (targetEntity === 'gene' && pathwayState.participants.length > 0) {
+      const selectedGeneNames = formattedValue.map((v) => v.full);
+      const hasAnyPathwayGene = pathwayState.participants.some((p) => selectedGeneNames.includes(p));
+      if (!hasAnyPathwayGene) {
+        setValue('pathway', null);
+        const name = pathwayState.pathwayName ?? 'The selected pathway';
+        toastInfo(`${name} has been deselected because all of its genes were removed.`);
+      }
+    }
   });
 
   const limitTags = targetEntity === 'gene' ? 3 : 5;
@@ -228,6 +242,12 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           The following genes from the selected pathway are not available in the{' '}
           {isCellsAPI ? 'selected modality in the Cells API' : 'scFind'} Query Method and were excluded:{' '}
           <strong>{invalidGenes.join(', ')}</strong>
+        </Alert>
+      )}
+      {allGenesExcludedPathway && (
+        <Alert severity="warning" sx={{ mt: 1 }}>
+          All genes in <strong>{allGenesExcludedPathway}</strong> are not present in the{' '}
+          {isCellsAPI ? 'selected modality in the Cells API' : 'scFind'} index. The pathway has been deselected.
         </Alert>
       )}
     </Box>

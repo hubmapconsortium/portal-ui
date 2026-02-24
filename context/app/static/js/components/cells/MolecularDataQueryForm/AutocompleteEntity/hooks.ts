@@ -186,6 +186,7 @@ export function useSelectedPathwayParticipants() {
   const { watch, setValue, getValues, formState } = useMolecularDataQueryFormState();
   const [isLoadingPathwayGenes, setIsLoadingPathwayGenes] = useState(false);
   const [invalidGenes, setInvalidGenes] = useState<string[]>([]);
+  const [allGenesExcludedPathway, setAllGenesExcludedPathway] = useState<string | null>(null);
 
   const selectedPathway = watch('pathway');
   const queryMethod = watch('queryMethod'); // Watch the query method
@@ -224,8 +225,9 @@ export function useSelectedPathwayParticipants() {
           previousSelectedPathway.current = pathway;
           let pathwayGenes = getParticipantsFromPathway(pathway);
 
-          // Clear previous invalid genes when starting a new pathway
+          // Clear previous invalid genes and exclusion warning when starting a new pathway
           setInvalidGenes([]);
+          setAllGenesExcludedPathway(null);
 
           // Filter genes through validation only if query type is "gene" and we have genes
           if (queryType === 'gene' && pathwayGenes.length > 0) {
@@ -261,6 +263,13 @@ export function useSelectedPathwayParticipants() {
                 abortControllerRef.current = null;
               }
             }
+          }
+
+          // If validation removed all pathway genes, clear the pathway selection and show a warning
+          if (pathwayGenes.length === 0) {
+            setAllGenesExcludedPathway(pathwayName ?? 'the selected pathway');
+            setValue('pathway', null);
+            return;
           }
 
           const genes = pathwayGenes.map((gene) => ({
@@ -338,5 +347,6 @@ export function useSelectedPathwayParticipants() {
     participants,
     isLoadingPathwayGenes,
     invalidGenes,
+    allGenesExcludedPathway,
   };
 }
