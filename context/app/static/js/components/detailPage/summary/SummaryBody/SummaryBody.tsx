@@ -12,6 +12,7 @@ import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
 import { getEntityCreationInfo } from 'js/helpers/functions';
+import AnnotationSummary from 'js/components/detailPage/AnnotationSummary';
 import PublicationSummaryBody from './PublicationSummaryBody';
 import SummaryDescription from './SummaryDescription';
 
@@ -86,6 +87,26 @@ function DatasetGroup() {
   }
 
   return <LabelledSectionText label="Group">{group_name}</LabelledSectionText>;
+}
+
+function DatasetAnnotations() {
+  const { entity } = useFlaskDataContext();
+
+  if (!isDataset(entity)) {
+    return null;
+  }
+
+  const { calculated_metadata } = entity;
+
+  if (!calculated_metadata?.object_types?.length || !calculated_metadata?.annotation_tools?.length) {
+    return null;
+  }
+
+  return (
+    <LabelledSectionText label="Annotations">
+      <AnnotationSummary calculatedMetadata={calculated_metadata} />
+    </LabelledSectionText>
+  );
 }
 
 function CollectionCitation() {
@@ -170,6 +191,7 @@ function SummaryBodyContent({
         <SummaryDescription description={description} clamp={isEntityHeader} />
         <DatasetGroup />
         <DatasetConsortium />
+        <DatasetAnnotations />
         <DatasetCitation />
         <CollectionCitation />
         <SummaryDates creationDate={creationDate} creationLabel={creationLabel} />

@@ -65,7 +65,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     assay_modality,
     processing,
     ancestor_ids,
-    calculated_metadata,
   } = assayMetadata;
 
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
@@ -135,11 +134,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               ) : null
             }
           >
-            <SummaryDataChildren
-              mapped_data_types={mapped_data_types}
-              origin_samples={origin_samples}
-              calculated_metadata={calculated_metadata}
-            />
+            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
           </Summary>
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
           <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />

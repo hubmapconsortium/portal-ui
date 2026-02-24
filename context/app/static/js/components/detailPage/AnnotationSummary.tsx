@@ -1,28 +1,35 @@
 import React, { Fragment } from 'react';
 
-import { OutboundLink } from 'js/shared-styles/Links';
-import { mapObjectType, annotationToolLinks } from 'js/helpers/annotations';
+import { annotationToolLinks, mapPluralObjectType } from 'js/helpers/annotations';
 import { Dataset } from 'js/components/types';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
 type CalculatedMetadata = Dataset['calculated_metadata'];
 
 function AnnotationToolLink({ tool }: { tool: string }) {
   const href = annotationToolLinks[tool];
   if (href) {
-    return <OutboundLink href={href}>{tool}</OutboundLink>;
+    return <OutboundIconLink href={href}>{tool}</OutboundIconLink>;
   }
   return <>{tool}</>;
 }
 
-export default function AnnotationSummary({ calculatedMetadata }: { calculatedMetadata?: CalculatedMetadata }) {
-  const objectTypes = calculatedMetadata?.object_types;
-  const annotationTools = calculatedMetadata?.annotation_tools;
+interface AnnotationSummaryProps {
+  calculatedMetadata?: CalculatedMetadata;
+}
+
+export default function AnnotationSummary({ calculatedMetadata }: AnnotationSummaryProps) {
+  if (!calculatedMetadata) {
+    return null;
+  }
+
+  const { object_types: objectTypes, annotation_tools: annotationTools } = calculatedMetadata;
 
   if (!objectTypes?.length || !annotationTools?.length) {
     return null;
   }
 
-  const objectTypeLabels = objectTypes.map(mapObjectType);
+  const objectTypeLabels = objectTypes.map(mapPluralObjectType);
 
   return (
     <>
