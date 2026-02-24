@@ -1,0 +1,2 @@
+- Add "Annotated Object Types" term facet to the dataset search page, displaying human-readable labels for annotated object ontology IDs (CL/UBERON).
+- Display annotation summary (object types and annotation tools with links) in dataset and processed dataset summaries.

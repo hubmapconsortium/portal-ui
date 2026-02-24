@@ -29,6 +29,7 @@ import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/Processed
 import FilesTabs from 'js/components/detailPage/files/FilesTabs';
 import { getEntityCreationInfo } from 'js/helpers/functions';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import AnnotationSummary from 'js/components/detailPage/AnnotationSummary';
 
 import useProcessedDataStore from '../store';
 import { DatasetTitle } from './DatasetTitle';
@@ -70,6 +71,22 @@ function Contact() {
   );
 }
 
+function AnnotationInfo() {
+  const {
+    dataset: { calculated_metadata },
+  } = useProcessedDatasetContext();
+
+  if (!calculated_metadata?.object_types?.length || !calculated_metadata?.annotation_tools?.length) {
+    return null;
+  }
+
+  return (
+    <LabelledSectionText label="Annotations">
+      <AnnotationSummary calculatedMetadata={calculated_metadata} />
+    </LabelledSectionText>
+  );
+}
+
 function SummaryAccordion() {
   const { dataset } = useProcessedDatasetContext();
   const { group_name, mapped_consortium, creation_action } = dataset;
@@ -85,6 +102,7 @@ function SummaryAccordion() {
         <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>
         <Contact />
         <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
+        <AnnotationInfo />
       </Stack>
     </Subsection>
   );

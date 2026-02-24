@@ -65,6 +65,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     creation_action,
     files,
     visualization,
+    calculated_metadata,
     // Some lab processed datasets don't have ingest metadata, using this as a default prevents error
     ingest_metadata = {
       dag_provenance_list: [],
@@ -140,7 +141,11 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             mapped_data_access_level={mapped_data_access_level}
             mapped_external_group_name={mapped_external_group_name}
           >
-            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
+            <SummaryDataChildren
+              mapped_data_types={mapped_data_types}
+              origin_samples={origin_samples}
+              calculated_metadata={calculated_metadata}
+            />
           </Summary>
           <IntegratedDatasetVisualizationSection
             uuid={uuid}
