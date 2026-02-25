@@ -108,7 +108,11 @@ function EntityTable<Doc extends Entity>({
 
   // Create a combined onExpand handler that tracks expansion state and calls the external callback
   const handleRowExpansion = useCallback(
-    (id: string) => (isExpanded: boolean) => {
+    (id?: string) => (isExpanded: boolean) => {
+      if (!id) {
+        console.warn('No ID passed to expansion handler.');
+        return;
+      }
       // Update internal expansion tracking
       toggleRowExpansion(id, isExpanded);
       // Call external callback if provided
@@ -226,8 +230,8 @@ function EntityTable<Doc extends Entity>({
           {tableBodyPadding.top > 0 && <TablePaddingRow padding={tableBodyPadding.top} />}
           {virtualRows.map((virtualRow) => {
             const hit = searchHits[virtualRow.index];
-            if (hit) {
-              const rowId = hit?._source?.hubmap_id ?? hit._id;
+            if (hit && hit?._id && hit?._source) {
+              const rowId = hit._source?.hubmap_id ?? hit._id;
               const isCurrentlyExpanded = isRowExpanded(rowId);
 
               // Include expansion state in key to force remount
@@ -240,7 +244,6 @@ function EntityTable<Doc extends Entity>({
                   key={key}
                   {...(ExpandedContent
                     ? {
-                        // @ts-expect-error the expanded content's props should be the same as the hit's _source
                         expandedContent: <ExpandedContent {...hit?._source} />,
                         isExpandedToStart: isCurrentlyExpanded,
                         numCells: columns.length + (isSelectable ? 2 : 1),
@@ -254,10 +257,10 @@ function EntityTable<Doc extends Entity>({
                 >
                   {isSelectable && (
                     <SelectableRowCell
-                      rowKey={hit?._id}
-                      rowName={hit?._source?.hubmap_id}
+                      rowKey={hit._id}
+                      rowName={hit._source?.hubmap_id}
                       onSelectChange={onSelectChange}
-                      disabled={disabledIDs?.has(hit?._id)}
+                      disabled={disabledIDs?.has(hit._id)}
                       cellComponent={TableCellComponent}
                     />
                   )}

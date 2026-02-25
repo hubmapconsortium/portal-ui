@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest } from 'js/typings/elasticsearch';
 import { format } from 'date-fns/format';
 import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
 import { Dataset, ESEntityType, Entity, isDataset } from 'js/components/types';

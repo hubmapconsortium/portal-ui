@@ -1,4 +1,4 @@
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest } from 'js/typings/elasticsearch';
 
 type CellsResults = { uuid?: string } | { hubmap_id?: string };
 

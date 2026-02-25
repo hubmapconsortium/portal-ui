@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { AggregationsAggregationContainer, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { AggregationsAggregationContainer, SearchRequest } from 'js/typings/elasticsearch';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import useSearchData from 'js/hooks/useSearchData';
 import { decimal, percent } from 'js/helpers/number-format';
@@ -282,7 +282,8 @@ export function useDatasetsOverview(scFindIds?: string[]): DatasetsOverviewDiges
   const ids = useSCFindIDAdapter(scFindIds);
 
   const query: SearchRequest = useMemo(() => {
-    if (ids && ids.length > 0) {
+    const allDefinedIds = ids.filter((i) => i != null);
+    if (allDefinedIds.length > 0) {
       return {
         size: 0,
         query: {
@@ -291,7 +292,7 @@ export function useDatasetsOverview(scFindIds?: string[]): DatasetsOverviewDiges
             must: [
               {
                 ids: {
-                  values: ids,
+                  values: allDefinedIds,
                 },
               },
             ],

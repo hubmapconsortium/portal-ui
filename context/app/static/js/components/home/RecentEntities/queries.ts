@@ -1,4 +1,4 @@
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest } from 'js/typings/elasticsearch';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 
 export const recentPublicationsQuery: SearchRequest = {

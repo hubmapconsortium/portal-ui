@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit } from 'js/typings/elasticsearch';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';

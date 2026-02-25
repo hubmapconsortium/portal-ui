@@ -6,7 +6,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
-import { AggregationsBuckets } from '@elastic/elasticsearch/lib/api/types';
+import { AggregationsBuckets } from 'js/typings/elasticsearch';
 
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { trackEvent } from 'js/helpers/trackers';

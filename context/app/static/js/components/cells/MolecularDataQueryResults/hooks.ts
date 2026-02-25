@@ -1,12 +1,14 @@
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit } from 'js/typings/elasticsearch';
 import { Dataset } from 'js/components/types';
 
 import { getSearchQuery } from './utils';
 
 function buildHitsMap<T>(hits: SearchHit<T>[]) {
   return hits.reduce<Record<string, SearchHit<T>>>((acc, hit) => {
-    acc[hit._id] = hit;
+    if (hit._id) {
+      acc[hit._id] = hit;
+    }
     return acc;
   }, {});
 }

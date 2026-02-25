@@ -1,7 +1,7 @@
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import { useState } from 'react';
 
-import type { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import type { SearchRequest } from 'js/typings/elasticsearch';
 
 // Query for looking up the list of organs for the Y axis
 const organTypesQuery = {
