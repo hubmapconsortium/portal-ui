@@ -1,0 +1,1 @@
+- Updated to Portal-Visualization 0.5.0 to improve Vitessce configuration generation logic maintainability.
