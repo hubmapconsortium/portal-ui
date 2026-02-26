@@ -28,3 +28,44 @@ test('should prepend ID before stringified label objects.', () => {
     name: '<HBM.123.456> {"animal":"dog","age":3}',
   });
 });
+
+test('should preserve number values.', () => {
+  expect(formatEvent({ category: 'test', value: 42 })).toEqual(
+    expect.objectContaining({ category: 'test', value: 42 }),
+  );
+});
+
+test('should preserve zero as a number.', () => {
+  expect(formatEvent({ category: 'test', value: 0 })).toEqual(expect.objectContaining({ category: 'test', value: 0 }));
+});
+
+test('should keep string values as strings.', () => {
+  expect(formatEvent({ category: 'test', action: 'click' })).toEqual(
+    expect.objectContaining({ category: 'test', action: 'click' }),
+  );
+});
+
+test('should JSON-stringify boolean values.', () => {
+  expect(formatEvent({ category: 'test', flag: true })).toEqual(
+    expect.objectContaining({ category: 'test', flag: 'true' }),
+  );
+});
+
+test('should JSON-stringify object values.', () => {
+  expect(formatEvent({ category: 'test', data: { key: 'val' } })).toEqual(
+    expect.objectContaining({ category: 'test', data: '{"key":"val"}' }),
+  );
+});
+
+test('should handle mixed value types with ID.', () => {
+  expect(formatEvent({ category: 'test', value: 5, action: 'click', flag: false }, 'HBM.1')).toEqual(
+    expect.objectContaining({
+      category: 'test',
+      value: 5,
+      action: 'click',
+      flag: 'false',
+      label: '<HBM.1>',
+      name: '<HBM.1>',
+    }),
+  );
+});
