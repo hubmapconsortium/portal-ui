@@ -12,11 +12,16 @@ import {
   TemplatesTypes,
   WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
-import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
+import { useCreateAndLaunchWorkspace, useCreateTemplates, useWorkspacesList } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useJobTypes } from 'js/components/workspaces/api';
-import { DEFAULT_JOB_TYPE, JUPYTER_LAB_R_JOB_TYPE, R_TEMPLATE_TITLE } from 'js/components/workspaces/constants';
+import {
+  DEFAULT_JOB_TYPE,
+  JUPYTER_LAB_R_JOB_TYPE,
+  R_TEMPLATE_TITLE,
+  YAC_JOB_TYPE,
+} from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -72,6 +77,7 @@ function useTemplateNotebooks() {
   const { createTemplates } = useCreateTemplates();
   const { templates } = useWorkspaceTemplates();
   const { toastErrorWorkspaceTemplate } = useWorkspaceToasts();
+  const { workspacesList } = useWorkspacesList();
 
   const createTemplateNotebooks = useCallback(
     async ({
@@ -82,6 +88,7 @@ function useTemplateNotebooks() {
       workspaceJobTypeId,
       workspaceResourceOptions,
       trackingInfo,
+      skipYACCheck = false,
     }: CreateTemplateNotebooksTypes) => {
       let templatesDetails: {
         name: string;
@@ -124,22 +131,50 @@ function useTemplateNotebooks() {
         });
       }
 
+      const workspaceBody = {
+        name: workspaceName,
+        description: workspaceDescription,
+        default_job_type: workspaceJobTypeId,
+        workspace_details: {
+          globus_groups_token: groupsToken,
+          files: templatesDetails,
+          symlinks,
+        },
+      };
+
+      // Check if we're creating a YAC workspace and there's already ANY YAC workspace (running or not)
+      if (!skipYACCheck && workspaceJobTypeId === YAC_JOB_TYPE) {
+        const existingYACWorkspace = workspacesList.find(
+          (ws) => ws.default_job_type === YAC_JOB_TYPE || ws.jobs.some((job) => job.job_type === YAC_JOB_TYPE),
+        );
+        if (existingYACWorkspace) {
+          // Don't create the workspace yet - defer until after deletion
+          // Return conflict information with deferred creation data
+          // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+          return Promise.reject({
+            isYACConflict: true,
+            existingYACWorkspace,
+            deferredCreation: {
+              templateKeys,
+              uuids,
+              workspaceName,
+              workspaceDescription,
+              workspaceJobTypeId,
+              workspaceResourceOptions,
+              trackingInfo,
+            },
+            message: `An existing YAC workspace "${existingYACWorkspace.name}" will be deleted to create the new one.`,
+          });
+        }
+      }
+
       await createAndLaunchWorkspace({
         templatePath,
-        body: {
-          name: workspaceName,
-          description: workspaceDescription,
-          default_job_type: workspaceJobTypeId,
-          workspace_details: {
-            globus_groups_token: groupsToken,
-            files: templatesDetails,
-            symlinks,
-          },
-        },
+        body: workspaceBody,
         resourceOptions: workspaceResourceOptions,
       });
     },
-    [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates],
+    [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates, workspacesList],
   );
 
   return createTemplateNotebooks;

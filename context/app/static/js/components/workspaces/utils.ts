@@ -467,6 +467,20 @@ function tooManyWorkspacesRunning(runningWorkspaces: MergedWorkspace[]) {
   return runningWorkspaces.length >= MAX_NUM_CONCURRENT_WORKSPACES;
 }
 
+/**
+ * Finds a running workspace with a specific job type
+ * @param workspaces The list of workspaces to search
+ * @param jobType The job type to search for
+ * @returns The first running workspace with the specified job type, or null if not found
+ */
+function findRunningWorkspaceByJobType(workspaces: MergedWorkspace[], jobType: string): MergedWorkspace | null {
+  return (
+    workspaces.find(
+      (workspace) => isRunningWorkspace(workspace) && workspace.jobs.some((job) => job.job_type === jobType),
+    ) ?? null
+  );
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -496,4 +510,5 @@ export {
   getSelectedWorkspaceNames,
   getSharerInfo,
   tooManyWorkspacesRunning,
+  findRunningWorkspaceByJobType,
 };

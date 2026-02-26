@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { CreateTemplateNotebooksTypes, WorkspaceResourceOptions } from '../types';
+import { CreateTemplateNotebooksTypes, WorkspaceResourceOptions, Workspace, MergedWorkspace } from '../types';
 import { useTemplateNotebooks } from './hooks';
 import {
   workspaceNameField,
@@ -76,6 +76,14 @@ function useCreateWorkspaceForm({
   initialSelectedDatasets = [],
 }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [showYACConflictDialog, setShowYACConflictDialog] = useState(false);
+  const [yacConflictData, setYacConflictData] = useState<{
+    existingYACWorkspace: MergedWorkspace;
+    deferredCreation?: CreateTemplateNotebooksTypes;
+    newWorkspace?: Workspace;
+    templatePath?: string;
+    resourceOptions?: WorkspaceResourceOptions;
+  } | null>(null);
   const createTemplateNotebooks = useTemplateNotebooks();
   const { setDialogType } = useLaunchWorkspaceStore();
 
@@ -141,17 +149,39 @@ function useCreateWorkspaceForm({
   }: CreateTemplateNotebooksTypes) {
     if (isSubmitting || isSubmitSuccessful) return;
     setDialogType('LAUNCH_NEW_WORKSPACE');
-    await createTemplateNotebooks({
-      templateKeys,
-      uuids,
-      workspaceName,
-      workspaceDescription,
-      workspaceJobTypeId,
-      workspaceResourceOptions,
-      trackingInfo,
-    });
-    reset();
-    handleClose();
+    try {
+      await createTemplateNotebooks({
+        templateKeys,
+        uuids,
+        workspaceName,
+        workspaceDescription,
+        workspaceJobTypeId,
+        workspaceResourceOptions,
+        trackingInfo,
+      });
+      reset();
+      handleClose();
+    } catch (error) {
+      // Handle YAC conflict error
+      if (error && typeof error === 'object' && 'isYACConflict' in error && error.isYACConflict) {
+        const conflictError = error as unknown as {
+          existingYACWorkspace: MergedWorkspace;
+          deferredCreation: CreateTemplateNotebooksTypes;
+        };
+        // Store conflict data with deferred creation
+        setYacConflictData({
+          existingYACWorkspace: conflictError.existingYACWorkspace,
+          deferredCreation: conflictError.deferredCreation,
+        });
+        setShowYACConflictDialog(true);
+        // Close the new workspace dialog
+        reset();
+        handleClose();
+      } else {
+        // Re-throw other errors
+        throw error;
+      }
+    }
   }
 
   useEffect(() => {
@@ -198,6 +228,9 @@ function useCreateWorkspaceForm({
     allDatasets,
     searchHits,
     resetAutocompleteState,
+    showYACConflictDialog,
+    setShowYACConflictDialog,
+    yacConflictData,
   };
 }
 
