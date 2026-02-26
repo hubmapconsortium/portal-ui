@@ -1,4 +1,4 @@
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest } from 'js/typings/elasticsearch';
 import useSearchData from 'js/hooks/useSearchData';
 import { ESEntityType } from 'js/components/types';
 import {

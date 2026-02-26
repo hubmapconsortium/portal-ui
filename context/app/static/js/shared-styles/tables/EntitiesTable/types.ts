@@ -1,5 +1,5 @@
 import React, { ComponentType, ElementType } from 'react';
-import { SearchRequest, SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest, SearchHit } from 'js/typings/elasticsearch';
 import { Entity } from 'js/components/types';
 
 export interface Column<Doc> {

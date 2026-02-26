@@ -52,7 +52,7 @@ async function getMultiAssayProvData(
     groupsToken,
   );
 
-  const topLevelDatasetIDs = topLevelDatasets.hits.hits.map((hit) => hit._id);
+  const topLevelDatasetIDs = topLevelDatasets.hits.hits.map((hit) => hit._id).filter((id) => id != null);
   const uuidsToFetch = topLevelDatasetIDs.length > 0 ? topLevelDatasetIDs : [uuid];
 
   const descendants = await fetchSearchData<{ uuid: string }, unknown>(
@@ -61,7 +61,7 @@ async function getMultiAssayProvData(
     groupsToken,
   );
 
-  const descendantIds = descendants.hits.hits.map((hit) => hit._id);
+  const descendantIds = descendants.hits.hits.map((hit) => hit._id).filter((id) => id != null);
 
   if (descendantIds.length === 0) {
     return fetcher({

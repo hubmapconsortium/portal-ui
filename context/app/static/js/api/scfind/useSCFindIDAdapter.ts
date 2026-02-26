@@ -8,7 +8,7 @@ import { useMemo } from 'react';
  * If the results are already in UUID format, they are returned as-is.
  * @param datasets
  */
-export default function useSCFindIDAdapter(datasets: string[] = []) {
+export default function useSCFindIDAdapter(datasets: string[] = []): string[] {
   const allAreUUIDs = datasets.every((id) => id.length === 32);
 
   const uuidQuery = useSearchData(
@@ -28,6 +28,6 @@ export default function useSCFindIDAdapter(datasets: string[] = []) {
     if (allAreUUIDs) {
       return datasets;
     }
-    return uuidQuery.searchData?.hits.hits.map((hit) => hit._id) ?? [];
+    return (uuidQuery.searchData?.hits.hits.map((hit) => hit._id) ?? []).filter((id) => id != null);
   }, [allAreUUIDs, datasets, uuidQuery.searchData]);
 }

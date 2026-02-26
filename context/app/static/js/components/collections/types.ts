@@ -1,4 +1,4 @@
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit } from 'js/typings/elasticsearch';
 
 interface Collection {
   uuid: string;

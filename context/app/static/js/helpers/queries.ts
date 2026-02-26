@@ -1,4 +1,4 @@
-import { Ids, QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
+import { Ids, QueryDslQueryContainer } from 'js/typings/elasticsearch';
 
 export const getAllCollectionsQuery = {
   post_filter: { term: { 'entity_type.keyword': 'Collection' } },

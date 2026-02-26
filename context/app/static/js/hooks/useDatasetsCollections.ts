@@ -1,7 +1,7 @@
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
 import { Collection, CollectionHit } from 'js/components/collections/types';
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest } from 'js/typings/elasticsearch';
 import { useMemo } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useProcessedDatasetTabs } from 'js/components/detailPage/ProcessedData/ProcessedDataset/hooks';

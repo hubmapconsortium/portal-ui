@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { styled } from '@mui/material/styles';
-import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
 import { TooltipIconButton, TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
 
 import { useAppContext } from 'js/components/Contexts';
@@ -11,7 +10,7 @@ import { fetchSearchData } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
 import { DeleteIcon } from 'js/shared-styles/icons';
 import { trackEvent } from 'js/helpers/trackers';
-import { EventInfo } from 'js/components/types';
+import { Entity, EventInfo } from 'js/components/types';
 import { useSnackbarActions } from '../snackbars';
 
 const TableIconButton = styled(TooltipIconButton)(({ theme }) => ({
@@ -46,9 +45,7 @@ export function Copy({ trackingInfo }: CopyProps) {
     async function fetchIDs() {
       const query = { query: getIDsQuery([...selectedRows]), _source: 'hubmap_id' };
       setLoading(true);
-      const searchResults = (await fetchSearchData(query, elasticsearchEndpoint, groupsToken)) as SearchResponse<{
-        hubmap_id: string;
-      }>;
+      const searchResults = await fetchSearchData<Entity, unknown>(query, elasticsearchEndpoint, groupsToken);
       return searchResults?.hits?.hits;
     }
 

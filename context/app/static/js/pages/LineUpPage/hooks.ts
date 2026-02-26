@@ -1,4 +1,4 @@
-import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit, SearchRequest } from 'js/typings/elasticsearch';
 import { Donor, Entity, ESEntityType } from 'js/components/types';
 import { useAllSearchHits } from 'js/hooks/useSearchData';
 import { useMemo } from 'react';

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit } from 'js/typings/elasticsearch';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
@@ -107,7 +107,7 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Enti
   );
 }
 
-function HighlightRow({ colSpan, highlight }: { colSpan: number } & Required<Pick<SearchHit, 'highlight'>>) {
+function HighlightRow({ colSpan, highlight }: { colSpan: number } & Required<Pick<SearchHit<Entity>, 'highlight'>>) {
   const sanitizedHighlight = DOMPurify.sanitize(Object.values(highlight).join(' ... '));
   return (
     <StyledTableRow $highlight>
@@ -148,10 +148,16 @@ function compareRowProps(oldProps: RowProps, newProps: RowProps) {
 }
 
 const ResultRow = React.memo(function ResultRow({ hit, tableFields }: RowProps) {
+  const id = hit._id;
+
+  if (!id) {
+    return null;
+  }
+
   return (
     <>
       <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>
-        <SelectableRowCell rowKey={hit._id} />
+        <SelectableRowCell rowKey={id} />
         {tableFields.map((field) => (
           <ResultCell hit={hit} field={field} key={field} />
         ))}

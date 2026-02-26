@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit } from 'js/typings/elasticsearch';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Entity } from 'js/components/types';
 import { SavedEntity } from 'js/components/savedLists/types';
