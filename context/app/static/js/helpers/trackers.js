@@ -83,7 +83,10 @@ function trackPageView(path) {
 
 const stringifyEventValues = (obj) =>
   Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [key, typeof value === 'string' ? value : `${JSON.stringify(value)}`]),
+    Object.entries(obj).map(([key, value]) => [
+      key,
+      typeof value === 'string' || typeof value === 'number' ? value : `${JSON.stringify(value)}`,
+    ]),
   );
 
 function prependIDToLabel(event, id) {

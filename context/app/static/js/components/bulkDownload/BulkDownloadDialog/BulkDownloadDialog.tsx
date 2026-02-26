@@ -113,6 +113,7 @@ interface DownloadOptionsSectionProps {
   }[];
   isLoading: boolean;
   errorMessages: string[];
+  warningMessages: string[];
   restrictedHubmapIds: string[];
   restrictedRows: string[];
   removeRestrictedDatasets: () => void;
@@ -122,6 +123,7 @@ function DownloadOptionsSection({
   downloadOptions,
   isLoading,
   errorMessages,
+  warningMessages,
   restrictedHubmapIds,
   restrictedRows,
   removeRestrictedDatasets,
@@ -154,6 +156,7 @@ function DownloadOptionsSection({
           restrictedRows={restrictedRows}
           removeRestrictedDatasets={removeRestrictedDatasets}
         />
+        <ErrorOrWarningMessages warningMessages={warningMessages} />
         <DownloadOptionsDescription />
         <SummaryPaper>
           <Stack direction="column" spacing={2}>
