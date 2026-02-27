@@ -1,20 +1,20 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
-import Title from 'js/components/home/Title';
-import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ResearchPoweredByHuBMAP from 'js/components/home/ResearchPoweredByHuBMAP';
 import { useDownloadImage } from 'js/hooks/useDownloadImage';
 import { trackEvent } from 'js/helpers/trackers';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
+import { VisualizationIcon } from 'js/shared-styles/icons';
 
-import Hero from 'js/components/home/Hero';
-import { LowerContainerGrid, UpperGrid, GridAreaContainer } from './style';
-import { BiotechRounded, BuildRounded, PrivacyTipRounded } from '@mui/icons-material';
+import EntityCounts from 'js/components/home/EntityCounts';
+import HeroV3 from 'js/components/home/HeroV3';
+import { LowerContainerGrid } from './style';
+import { BiotechRounded, BuildRounded, FormatQuoteRounded, PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import HomepageSection from 'js/components/home/HomepageSection';
@@ -46,17 +46,8 @@ function Home() {
 
   return (
     <>
-      <UpperGrid>
-        <GridAreaContainer maxWidth="lg" $gridArea="title">
-          <Title />
-        </GridAreaContainer>
-        <GridAreaContainer maxWidth="lg" $gridArea="carousel">
-          <Hero />
-        </GridAreaContainer>
-        <Box gridArea="counts">
-          <EntityCounts />
-        </Box>
-      </UpperGrid>
+      <HeroV3 />
+      <EntityCounts />
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
           <HomepageSection
@@ -77,8 +68,28 @@ function Home() {
             <HuBMAPDatasetsChart chartRef={chartRef} onSelectionChange={setSelectionLabel} />
           </HomepageSection>
         )}
-        <HomepageSection title="Research Powered by HuBMAP" icon={BiotechRounded} gridArea="explore-tools">
+        <HomepageSection
+          title="Analysis and Visualizations"
+          icon={VisualizationIcon}
+          gridArea="analysis-and-visualizations"
+          id="analysis-and-visualizations"
+        >
+          <Typography variant="body1" color="text.secondary">
+            Coming soon.
+          </Typography>
+        </HomepageSection>
+        <HomepageSection
+          title="Research Powered by HuBMAP"
+          icon={BiotechRounded}
+          gridArea="publications"
+          id="publications"
+        >
           <ResearchPoweredByHuBMAP />
+        </HomepageSection>
+        <HomepageSection title="Testimonials" icon={FormatQuoteRounded} gridArea="testimonials" id="testimonials">
+          <Typography variant="body1" color="text.secondary">
+            Coming soon.
+          </Typography>
         </HomepageSection>
         <HomepageSection title="Data Use Guidelines" icon={PrivacyTipRounded} gridArea="guidelines">
           <DataUseGuidelines />
