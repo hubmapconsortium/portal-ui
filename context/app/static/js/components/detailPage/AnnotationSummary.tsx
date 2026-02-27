@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { annotationToolLinks, mapPluralObjectType } from 'js/helpers/annotations';
 import { Dataset } from 'js/components/types';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 
 type CalculatedMetadata = Dataset['calculated_metadata'];
 
@@ -32,7 +33,7 @@ export default function AnnotationSummary({ calculatedMetadata }: AnnotationSumm
   const objectTypeLabels = objectTypes.map(mapPluralObjectType);
 
   return (
-    <>
+    <LabelledSectionText label="Annotations">
       {objectTypeLabels.join(', ')} annotated by{' '}
       {annotationTools.map((tool, i) => (
         <Fragment key={tool}>
@@ -40,6 +41,6 @@ export default function AnnotationSummary({ calculatedMetadata }: AnnotationSumm
           {i < annotationTools.length - 1 && ', '}
         </Fragment>
       ))}
-    </>
+    </LabelledSectionText>
   );
 }

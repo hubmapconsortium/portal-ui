@@ -102,11 +102,7 @@ function DatasetAnnotations() {
     return null;
   }
 
-  return (
-    <LabelledSectionText label="Annotations">
-      <AnnotationSummary calculatedMetadata={calculated_metadata} />
-    </LabelledSectionText>
-  );
+  return <AnnotationSummary calculatedMetadata={calculated_metadata} />;
 }
 
 function CollectionCitation() {
