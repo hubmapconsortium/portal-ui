@@ -8,25 +8,15 @@ import { MUIIcon } from 'js/shared-styles/icons/entityIconMap';
 const LowerContainerGrid = styled(Container)(({ theme }) => ({
   display: 'grid',
   gridGap: theme.spacing(3),
-  gridTemplateAreas: `
-    "analysis-and-visualizations"
-    "publications"
-    "testimonials"
-    "guidelines"
-    "related-tools-and-resources"
-  `,
-  marginBottom: theme.spacing(5),
+  gridTemplateAreas: '"bar-chart"',
+  marginBottom: theme.spacing(3),
+})) as typeof Container;
 
-  [theme.breakpoints.up('md')]: {
-    gridTemplateAreas: `
-      "bar-chart"
-      "analysis-and-visualizations"
-      "publications"
-      "testimonials"
-      "guidelines"
-      "related-tools-and-resources"
-    `,
-  },
+const BottomLowerGrid = styled(Container)(({ theme }) => ({
+  display: 'grid',
+  gridGap: theme.spacing(3),
+  gridTemplateAreas: '"research-powered-by-hubmap" "testimonials" "guidelines" "related-tools-and-resources"',
+  marginBottom: theme.spacing(5),
 })) as typeof Container;
 
 const SectionHeaderInternal = styled(Typography)(({ theme }) => ({
@@ -54,4 +44,4 @@ const OffsetDatasetsHeader = styled(SectionHeader)({
   scrollMarginTop: `${headerHeight + 10}px`,
 }) as typeof SectionHeader;
 
-export { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader };
+export { LowerContainerGrid, BottomLowerGrid, SectionHeader, OffsetDatasetsHeader };

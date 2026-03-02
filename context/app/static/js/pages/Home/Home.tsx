@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography';
 import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ResearchPoweredByHuBMAP from 'js/components/home/ResearchPoweredByHuBMAP';
+import AnalysisAndVisualizations from 'js/components/home/AnalysisAndVisualizations';
 import { useDownloadImage } from 'js/hooks/useDownloadImage';
 import { trackEvent } from 'js/helpers/trackers';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
-import { VisualizationIcon } from 'js/shared-styles/icons';
 
 import EntityCounts from 'js/components/home/EntityCounts';
 import Hero from 'js/components/home/Hero';
-import { LowerContainerGrid } from './style';
+import { LowerContainerGrid, BottomLowerGrid } from './style';
 import { BiotechRounded, BuildRounded, FormatQuoteRounded, PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -68,22 +68,10 @@ function Home() {
             <HuBMAPDatasetsChart chartRef={chartRef} onSelectionChange={setSelectionLabel} />
           </HomepageSection>
         )}
-        <HomepageSection
-          title="Analysis and Visualizations"
-          icon={VisualizationIcon}
-          gridArea="analysis-and-visualizations"
-          id="analysis-and-visualizations"
-        >
-          <Typography variant="body1" color="text.secondary">
-            Coming soon.
-          </Typography>
-        </HomepageSection>
-        <HomepageSection
-          title="Research Powered by HuBMAP"
-          icon={BiotechRounded}
-          gridArea="publications"
-          id="publications"
-        >
+      </LowerContainerGrid>
+      <AnalysisAndVisualizations />
+      <BottomLowerGrid maxWidth="lg">
+        <HomepageSection title="Research Powered by HuBMAP" icon={BiotechRounded} gridArea="research-powered-by-hubmap">
           <ResearchPoweredByHuBMAP />
         </HomepageSection>
         <HomepageSection title="Testimonials" icon={FormatQuoteRounded} gridArea="testimonials" id="testimonials">
@@ -97,7 +85,7 @@ function Home() {
         <HomepageSection title="Related Tools & Resources" icon={BuildRounded} gridArea="related-tools-and-resources">
           <RelatedToolsAndResources />
         </HomepageSection>
-      </LowerContainerGrid>
+      </BottomLowerGrid>
     </>
   );
 }
