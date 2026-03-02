@@ -1,9 +1,11 @@
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
+import globalTheme from 'js/theme';
 
-// max width for a lg container
-const routeContainerMaxWidth = 1232;
+// max width for the route container is based on the lg breakpoint
+const routeContainerMaxWidth = globalTheme.breakpoints.values.lg;
+// 16px padding on either side of the route container at the lg breakpoint and above
 const routeContainerPadding = 32;
 
 const GridWrapper = styled(Box)<{ $shouldShowBoundaries: boolean }>(({ $shouldShowBoundaries }) => ({
