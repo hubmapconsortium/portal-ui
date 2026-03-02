@@ -8,7 +8,7 @@ blueprint = make_blueprint(__name__)
 
 @blueprint.route('/')
 def index():
-    flask_data = {**get_default_flask_data(), 'organs_count': len(get_organs())}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,
