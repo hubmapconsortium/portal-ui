@@ -110,113 +110,11 @@ describe('useDatasetsAccess', () => {
     });
   });
 
-  test('returns empty swappedDatasets when UUIDs match response', async () => {
-    const { result } = renderHook(() => useDatasetsAccess(['uuid-1']), { wrapper: TestWrapper });
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.swappedDatasets).toEqual([]);
-  });
-
-  test('detects swapped datasets when response uuid differs from request key', async () => {
-    server.use(
-      http.post(`${softAssayEndpoint}/entities/accessible-data-directories`, async ({ request }) => {
-        const body = (await request.json()) as string[];
-        requestLog.push({
-          body,
-          headers: {
-            'content-type': request.headers.get('content-type'),
-            authorization: request.headers.get('authorization'),
-          },
-        });
-        return HttpResponse.json({
-          'uuid-old': {
-            valid_id: true,
-            access_allowed: true,
-            uuid: 'uuid-new',
-            hubmap_id: 'HBM.NEW',
-          },
-        });
-      }),
-    );
-
-    const { result } = renderHook(() => useDatasetsAccess(['uuid-old']), { wrapper: TestWrapper });
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.swappedDatasets).toEqual([
-      { originalUuid: 'uuid-old', actualUuid: 'uuid-new', actualHubmapId: 'HBM.NEW' },
-    ]);
-  });
-
-  test('does not flag swaps when access_allowed is false', async () => {
-    server.use(
-      http.post(`${softAssayEndpoint}/entities/accessible-data-directories`, async ({ request }) => {
-        const body = (await request.json()) as string[];
-        requestLog.push({
-          body,
-          headers: {
-            'content-type': request.headers.get('content-type'),
-            authorization: request.headers.get('authorization'),
-          },
-        });
-        return HttpResponse.json({
-          'uuid-old': {
-            valid_id: true,
-            access_allowed: false,
-            uuid: 'uuid-new',
-            hubmap_id: 'HBM.NEW',
-          },
-        });
-      }),
-    );
-
-    const { result } = renderHook(() => useDatasetsAccess(['uuid-old']), { wrapper: TestWrapper });
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.swappedDatasets).toEqual([]);
-  });
-
-  test('does not flag swaps when response uuid is undefined', async () => {
-    server.use(
-      http.post(`${softAssayEndpoint}/entities/accessible-data-directories`, async ({ request }) => {
-        const body = (await request.json()) as string[];
-        requestLog.push({
-          body,
-          headers: {
-            'content-type': request.headers.get('content-type'),
-            authorization: request.headers.get('authorization'),
-          },
-        });
-        return HttpResponse.json({
-          'uuid-1': { valid_id: true, access_allowed: true },
-        });
-      }),
-    );
-
-    const { result } = renderHook(() => useDatasetsAccess(['uuid-1']), { wrapper: TestWrapper });
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.swappedDatasets).toEqual([]);
-  });
-
   test('returns empty result and makes no HTTP request for empty UUID array', () => {
     const { result } = renderHook(() => useDatasetsAccess([]), { wrapper: TestWrapper });
 
-    // Should not be loading since there's nothing to fetch
     expect(result.current.isLoading).toBe(false);
     expect(result.current.accessibleDatasets).toEqual({});
-    expect(result.current.swappedDatasets).toEqual([]);
     expect(requestLog).toHaveLength(0);
   });
 

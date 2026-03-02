@@ -84,7 +84,6 @@ function useAddDatasetsFromSearchDialog() {
   const { selectedRows, deselectRows } = useSelectableTableStore();
   const {
     errorMessages: restrictedDatasetsErrorMessages,
-    warningMessages: restrictedDatasetsWarningMessages,
     restrictedHubmapIds,
     removeRestrictedDatasets: removeRestrictedDatasetsFromSearchSelections,
     ...restRestrictedDatasets
@@ -172,7 +171,7 @@ function useAddDatasetsFromSearchDialog() {
 
   const datasetsWarningMessages = buildErrorMessages({
     fieldState: datasetsFieldState,
-    otherErrors: [...restrictedDatasetsWarningMessages, ...tooManyDatasetsWarningMessages],
+    otherErrors: [...tooManyDatasetsWarningMessages],
   });
 
   const workspaceIdErrorMessages = buildErrorMessages({

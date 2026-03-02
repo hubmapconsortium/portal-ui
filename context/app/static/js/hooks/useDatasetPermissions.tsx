@@ -24,12 +24,6 @@ export interface DatasetPermission {
 
 export type DatasetPermissionsResponse = Record<string, DatasetPermission>;
 
-export interface DatasetSwap {
-  originalUuid: string;
-  actualUuid: string;
-  actualHubmapId: string;
-}
-
 export async function fetchDatasetPermissions({ url, data, groupsToken }: DatasetPermissionsRequest) {
   return fetcher<DatasetPermissionsResponse>({
     url: `${url}/entities/accessible-data-directories`,
@@ -80,7 +74,7 @@ function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
   const { data = {}, isLoading } = useSWR(shouldFetch ? ['dataset-access', sortedUuids, groupsToken] : null, () =>
     fetchBatchedDatasetPermissions({
       url: softAssayEndpoint,
-      data: uuids,
+      data: sortedUuids,
       groupsToken,
     }),
   );
@@ -89,24 +83,7 @@ function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
 }
 
 export function useDatasetsAccess(uuids: string[]) {
-  const { accessibleDatasets, isLoading } = useDatasetAccessInternal(uuids);
-
-  const swappedDatasets = useMemo(() => {
-    if (isLoading) return [];
-    return Object.entries(accessibleDatasets)
-      .filter(([key, value]) => value.access_allowed && value.uuid && value.uuid !== key)
-      .map(([key, value]) => ({
-        originalUuid: key,
-        actualUuid: value.uuid!,
-        actualHubmapId: value.hubmap_id!,
-      }));
-  }, [accessibleDatasets, isLoading]);
-
-  return {
-    accessibleDatasets,
-    isLoading,
-    swappedDatasets,
-  };
+  return useDatasetAccessInternal(uuids);
 }
 
 export function useDatasetAccess(uuid: string) {

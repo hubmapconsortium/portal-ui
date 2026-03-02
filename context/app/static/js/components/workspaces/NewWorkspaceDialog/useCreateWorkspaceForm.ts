@@ -172,7 +172,7 @@ function useCreateWorkspaceForm({
     }
   }, [dialogIsOpen, trigger]);
 
-  const { errorMessages, warningMessages } = useWorkspacesRestrictedDatasetsForm({
+  const { errorMessages } = useWorkspacesRestrictedDatasetsForm({
     selectedRows: new Set(allDatasets),
     deselectRows: (uuids) => {
       removeDatasets(uuids);
@@ -187,7 +187,6 @@ function useCreateWorkspaceForm({
     control,
     errors,
     errorMessages,
-    warningMessages,
     onSubmit,
     isSubmitting: isSubmitting || isSubmitSuccessful,
     inputValue,
@@ -204,11 +203,7 @@ function useCreateWorkspaceForm({
 
 function useCreateWorkspaceDatasets() {
   const { selectedRows, deselectRows } = useSelectableTableStore();
-  const {
-    errorMessages: restrictedDatasetsErrorMessages,
-    warningMessages: restrictedDatasetsWarningMessages,
-    ...rest
-  } = useWorkspacesRestrictedDatasetsForm({
+  const { errorMessages: restrictedDatasetsErrorMessages, ...rest } = useWorkspacesRestrictedDatasetsForm({
     selectedRows,
     deselectRows,
   });
@@ -218,7 +213,7 @@ function useCreateWorkspaceDatasets() {
 
   return {
     errorMessages: [...restrictedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
-    warningMessages: [...restrictedDatasetsWarningMessages, ...tooManyDatasetsWarningMessages],
+    warningMessages: [...tooManyDatasetsWarningMessages],
     ...rest,
   };
 }
