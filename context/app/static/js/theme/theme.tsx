@@ -350,6 +350,11 @@ const theme = createTheme({
       },
     },
     MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+        },
+      },
       variants: [
         {
           props: { variant: 'elevated' },
@@ -360,7 +365,7 @@ const theme = createTheme({
             '&:hover': {
               backgroundColor: grey[100],
             },
-            borderRadius: 8,
+            borderRadius: 4,
             fontWeight: 300,
           },
         },

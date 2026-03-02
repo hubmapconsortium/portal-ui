@@ -11,7 +11,6 @@ const GridWrapper = styled(Box)<{ $shouldShowBoundaries: boolean }>(({ $shouldSh
 }));
 
 const StyledContainer = styled(Container)(({ theme }) => ({
-  marginTop: theme.spacing(2),
   backgroundColor: theme.palette.background.default,
   flexDirection: 'column',
   display: 'flex',

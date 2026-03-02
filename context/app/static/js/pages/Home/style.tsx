@@ -1,33 +1,31 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import Container, { ContainerProps } from '@mui/material/Container';
+import Container from '@mui/material/Container';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { MUIIcon } from 'js/shared-styles/icons/entityIconMap';
 
-interface GridAreaContainerProps extends ContainerProps {
-  $gridArea: string;
-}
-
-const GridAreaContainer = styled(Container)<GridAreaContainerProps>(({ $gridArea }) => ({
-  gridArea: $gridArea,
-}));
-
-const UpperGrid = styled('div')(({ theme }) => ({
-  display: 'grid',
-  gridGap: theme.spacing(5),
-  gridTemplateAreas: '"title" "carousel" "counts"',
-  marginBottom: theme.spacing(5),
-}));
-
 const LowerContainerGrid = styled(Container)(({ theme }) => ({
   display: 'grid',
   gridGap: theme.spacing(3),
-  gridTemplateAreas: '"recent-entities" "explore-tools" "guidelines" "related-tools-and-resources"',
+  gridTemplateAreas: `
+    "analysis-and-visualizations"
+    "publications"
+    "testimonials"
+    "guidelines"
+    "related-tools-and-resources"
+  `,
   marginBottom: theme.spacing(5),
 
   [theme.breakpoints.up('md')]: {
-    gridTemplateAreas: '"bar-chart" "recent-entities" "explore-tools" "guidelines" "related-tools-and-resources"',
+    gridTemplateAreas: `
+      "bar-chart"
+      "analysis-and-visualizations"
+      "publications"
+      "testimonials"
+      "guidelines"
+      "related-tools-and-resources"
+    `,
   },
 })) as typeof Container;
 
@@ -56,4 +54,4 @@ const OffsetDatasetsHeader = styled(SectionHeader)({
   scrollMarginTop: `${headerHeight + 10}px`,
 }) as typeof SectionHeader;
 
-export { GridAreaContainer, UpperGrid, LowerContainerGrid, SectionHeader, OffsetDatasetsHeader };
+export { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader };
