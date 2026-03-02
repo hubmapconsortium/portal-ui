@@ -7,14 +7,14 @@ import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import Title from 'js/components/home/Title';
 import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
-import RecentEntities from 'js/components/home/RecentEntities';
-import ExploreTools from 'js/components/home/ExploreTools';
+import ResearchPoweredByHuBMAP from 'js/components/home/ResearchPoweredByHuBMAP';
 
 import Hero from 'js/components/home/Hero';
-import { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader, UpperGrid, GridAreaContainer } from './style';
-import { PrivacyTipRounded } from '@mui/icons-material';
+import { LowerContainerGrid, UpperGrid, GridAreaContainer } from './style';
+import { BiotechRounded, BuildRounded, PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import HomepageSection from 'js/components/home/HomepageSection';
 
 function Home() {
   const theme = useTheme();
@@ -41,35 +41,26 @@ function Home() {
       </UpperGrid>
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
-          <Box gridArea="bar-chart">
-            <OffsetDatasetsHeader
-              variant="h2"
-              component="h3"
-              id="hubmap-datasets"
-              ref={scrollToBarChart}
-              icon={entityIconMap.Dataset}
-            >
-              HuBMAP Datasets
-            </OffsetDatasetsHeader>
+          <HomepageSection
+            title="HuBMAP Datasets"
+            icon={entityIconMap.Dataset}
+            gridArea="bar-chart"
+            useOffset
+            id="hubmap-datasets"
+            headerRef={scrollToBarChart}
+          >
             <HuBMAPDatasetsChart />
-          </Box>
+          </HomepageSection>
         )}
-        <RecentEntities />
-        <Box gridArea="explore-tools">
-          <SectionHeader variant="h2" component="h3">
-            Explore Tools and Resources for Data Visualization & Analysis
-          </SectionHeader>
-          <ExploreTools />
-        </Box>
-        <Box gridArea="guidelines">
-          <SectionHeader variant="h2" component="h3" icon={PrivacyTipRounded}>
-            Data Use Guidelines
-          </SectionHeader>
+        <HomepageSection title="Research Powered by HuBMAP" icon={BiotechRounded} gridArea="explore-tools">
+          <ResearchPoweredByHuBMAP />
+        </HomepageSection>
+        <HomepageSection title="Data Use Guidelines" icon={PrivacyTipRounded} gridArea="guidelines">
           <DataUseGuidelines />
-        </Box>
-        <Box gridArea="related-tools-and-resources">
+        </HomepageSection>
+        <HomepageSection title="Related Tools & Resources" icon={BuildRounded} gridArea="related-tools-and-resources">
           <RelatedToolsAndResources />
-        </Box>
+        </HomepageSection>
       </LowerContainerGrid>
     </>
   );
