@@ -12,7 +12,7 @@ import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 
 import EntityCounts from 'js/components/home/EntityCounts';
-import HeroV3 from 'js/components/home/HeroV3';
+import Hero from 'js/components/home/Hero';
 import { LowerContainerGrid } from './style';
 import { BiotechRounded, BuildRounded, FormatQuoteRounded, PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
@@ -46,7 +46,7 @@ function Home() {
 
   return (
     <>
-      <HeroV3 />
+      <Hero />
       <EntityCounts />
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (

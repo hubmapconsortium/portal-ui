@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from 'test-utils/functions';
 import { trackEvent } from 'js/helpers/trackers';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import HeroV3 from './HeroV3';
+import Hero from './Hero';
 
 jest.mock('js/shared-styles/icons', () => {
   const MockIcon = () => null;
@@ -43,35 +43,35 @@ beforeEach(() => {
 
 describe('HeroV3', () => {
   it('renders the section with the correct aria-label', () => {
-    render(<HeroV3 />);
+    render(<Hero />);
     expect(screen.getByRole('region', { name: 'HuBMAP Data Portal Introduction' })).toBeInTheDocument();
   });
 
   it('renders the page title', () => {
-    render(<HeroV3 />);
+    render(<Hero />);
     expect(screen.getByTestId('home-page-title')).toHaveTextContent(
       'Explore Healthy Human Single-Cell and Spatial Data',
     );
   });
 
   it('renders all three hero card links', () => {
-    render(<HeroV3 />);
+    render(<Hero />);
     const hrefs = screen.getAllByRole('link').map((link) => link.getAttribute('href'));
     expect(hrefs).toEqual(expect.arrayContaining(['/organs', '/cell-types', '/biomarkers']));
   });
 
   it('renders the Explore All Datasets link pointing to /search/datasets', () => {
-    render(<HeroV3 />);
+    render(<Hero />);
     expect(screen.getByRole('link', { name: 'Explore All Datasets' })).toHaveAttribute('href', '/search/datasets');
   });
 
   it('renders the Launch Workspaces link pointing to /workspaces', () => {
-    render(<HeroV3 />);
+    render(<Hero />);
     expect(screen.getByRole('link', { name: 'Launch Workspaces' })).toHaveAttribute('href', '/workspaces');
   });
 
   it('fires trackEvent when Explore All Datasets is clicked', () => {
-    render(<HeroV3 />);
+    render(<Hero />);
     fireEvent.click(screen.getByRole('link', { name: 'Explore All Datasets' }));
     expect(mockTrackEvent).toHaveBeenCalledWith({
       category: 'Homepage',
@@ -80,7 +80,7 @@ describe('HeroV3', () => {
   });
 
   it('fires trackEvent when Launch Workspaces is clicked', () => {
-    render(<HeroV3 />);
+    render(<Hero />);
     fireEvent.click(screen.getByRole('link', { name: 'Launch Workspaces' }));
     expect(mockTrackEvent).toHaveBeenCalledWith({
       category: 'Homepage',
