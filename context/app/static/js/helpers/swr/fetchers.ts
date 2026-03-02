@@ -14,6 +14,7 @@ export type SingleFetchOptionsType = FetchOptionsType & {
 export type MultiFetchOptionsType = FetchOptionsType & {
   urls: (string | null)[];
   requestInits?: RequestInit[];
+  returnPartialResults?: boolean;
 };
 
 async function f({
@@ -64,6 +65,7 @@ async function f({
  * @param fetchOptions.requestInit - Optional RequestInit object to pass to fetch
  * @param fetchOptions.expectedStatusCodes - Optional array of status codes which reflect a succesful request
  * @param fetchOptions.errorMessages - Optional map of error messages to display for each URL
+ * @param fetchOptions.returnPartialResults - If true, will return results for successful fetches even if some fetches fail
  */
 
 export async function multiFetcher<T>({
@@ -72,6 +74,7 @@ export async function multiFetcher<T>({
   expectedStatusCodes = [200],
   errorMessages = {},
   returnResponse = false,
+  returnPartialResults = false,
 }: MultiFetchOptionsType) {
   if (urls.length === 0) {
     return Promise.resolve([] as T[]);
@@ -91,17 +94,24 @@ export async function multiFetcher<T>({
   const filteredUrls = filteredData.urls;
   const filteredRequestInits = filteredData.requestInits;
 
-  return Promise.all(
-    filteredUrls.map((url, i) =>
-      f({
-        url,
-        requestInit: filteredRequestInits.length === 1 ? filteredRequestInits[0] : filteredRequestInits[i],
-        expectedStatusCodes,
-        errorMessages,
-        returnResponse,
-      }),
-    ),
-  ) as Promise<T[]>;
+  const promiseList = filteredUrls.map((url, i) =>
+    f({
+      url,
+      requestInit: filteredRequestInits.length === 1 ? filteredRequestInits[0] : filteredRequestInits[i],
+      expectedStatusCodes,
+      errorMessages,
+      returnResponse,
+    }),
+  );
+
+  if (returnPartialResults) {
+    const results = await Promise.allSettled(promiseList);
+    return results
+      .filter((result): result is PromiseFulfilledResult<unknown> => result.status === 'fulfilled')
+      .map((result) => result.value) as T[];
+  }
+
+  return Promise.all(promiseList) as Promise<T[]>;
 }
 
 /**
