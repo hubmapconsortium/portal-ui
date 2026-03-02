@@ -1,4 +1,4 @@
-import React, { ComponentProps, useMemo } from 'react';
+import React, { ComponentProps, RefObject, useEffect, useMemo } from 'react';
 import Paper from '@mui/material/Paper';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
@@ -92,9 +92,11 @@ interface ColorOption {
 
 interface HuBMAPDatasetsChartProps {
   getBarHrefOverride?: ColorOption['getBarHref'];
+  chartRef?: RefObject<HTMLDivElement>;
+  onSelectionChange?: (label: string) => void;
 }
 
-function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
+function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }: HuBMAPDatasetsChartProps) {
   const colors = useChartPalette();
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
@@ -292,9 +294,13 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
   );
   const allKeysScale = useOrdinalScale(allKeys, { range: colors });
 
+  useEffect(() => {
+    onSelectionChange?.(`${selectedEntityType} vs ${selectedColor.dropdownLabel}`);
+  }, [selectedEntityType, selectedColor.dropdownLabel, onSelectionChange]);
+
   if (!selectedColor.data.length || !organOrder) return <Skeleton height="500px" />;
   return (
-    <Paper sx={{ px: 2 }}>
+    <Paper sx={{ px: 2 }} ref={chartRef}>
       <ChartArea>
         <ChartWrapper
           margin={margin}

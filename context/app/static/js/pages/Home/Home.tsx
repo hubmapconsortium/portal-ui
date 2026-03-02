@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
@@ -8,6 +8,9 @@ import Title from 'js/components/home/Title';
 import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ResearchPoweredByHuBMAP from 'js/components/home/ResearchPoweredByHuBMAP';
+import { useDownloadImage } from 'js/hooks/useDownloadImage';
+import { trackEvent } from 'js/helpers/trackers';
+import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 
 import Hero from 'js/components/home/Hero';
 import { LowerContainerGrid, UpperGrid, GridAreaContainer } from './style';
@@ -25,6 +28,21 @@ function Home() {
       node.scrollIntoView({ behavior: 'auto', block: 'start' });
     }
   }, []);
+
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [selectionLabel, setSelectionLabel] = useState('Dataset vs Assay Type');
+
+  const chartName = `HuBMAP Datasets - ${selectionLabel} - ${new Date().toISOString().slice(0, 10)}`;
+  const downloadPNG = useDownloadImage(chartRef, chartName);
+
+  const handleDownload = useCallback(() => {
+    downloadPNG();
+    trackEvent({
+      category: 'Homepage',
+      action: 'HuBMAP Datasets / Download Datasets Graph',
+      label: selectionLabel,
+    });
+  }, [downloadPNG, selectionLabel]);
 
   return (
     <>
@@ -48,8 +66,15 @@ function Home() {
             useOffset
             id="hubmap-datasets"
             headerRef={scrollToBarChart}
+            actionButtons={
+              <DownloadButton
+                onClick={handleDownload}
+                tooltip="Download chart as PNG"
+                aria-label="Download Chart as PNG"
+              />
+            }
           >
-            <HuBMAPDatasetsChart />
+            <HuBMAPDatasetsChart chartRef={chartRef} onSelectionChange={setSelectionLabel} />
           </HomepageSection>
         )}
         <HomepageSection title="Research Powered by HuBMAP" icon={BiotechRounded} gridArea="explore-tools">
