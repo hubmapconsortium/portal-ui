@@ -106,9 +106,13 @@ export function useDataProducts(organ: OrganFile) {
   const possibleNames = isLateral ? [`${name} (Right)`, `${name} (Left)`] : [name];
   const urls = possibleNames.map((n) => `${dataProductsEndpoint}/api/data_products/tissue/${n}`);
 
-  const { data, isLoading } = useSWR<OrganDataProducts[]>(urls, (u: string[]) => multiFetcher({ urls: u }), {
-    fallbackData: [],
-  });
+  const { data, isLoading } = useSWR<OrganDataProducts[]>(
+    urls,
+    (u: string[]) => multiFetcher({ urls: u, returnPartialResults: true }),
+    {
+      fallbackData: [],
+    },
+  );
 
   const dataProducts = (data ?? []).flat();
   const dataProductsWithUUIDs = dataProducts.map((product) => ({
@@ -182,7 +186,7 @@ export function useIndexedDatasetsForOrgan(searchItems: string[], organName: str
     _source: ['hubmap_id'],
   });
 
-  const datasetUUIDs = searchData?.hits?.hits.map((h) => h._id) ?? [];
+  const datasetUUIDs = (searchData?.hits?.hits.map((h) => h._id) ?? []).filter((id) => id != null);
 
   const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
 

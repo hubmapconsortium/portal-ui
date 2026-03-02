@@ -1,79 +1,167 @@
-import Box, { BoxProps } from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 
-interface HeroGridContainerProps extends BoxProps {
-  $activeSlide: number;
-}
-
-export const HeroGridContainer = styled(Box)<HeroGridContainerProps>(({ theme }) => ({
-  display: 'grid',
+export const HeroSection = styled('section')(({ theme }) => ({
+  position: 'relative',
   width: '100%',
-  // On mobile, the grid is a single column containing all the tabs
-  [theme.breakpoints.down('md')]: {
-    gridTemplateColumns: '1fr',
-    gridTemplateRows: 'auto',
-    gridTemplateAreas: `
-      'tab0'
-      'tab1'
-      'tab2'
-      'tab3'`,
-  },
-  // On desktop, the grid has a carousel panel on top and the tabs below
-  [theme.breakpoints.up('md')]: {
-    width: '100%',
-    position: 'relative',
-    overflow: 'hidden',
+  overflow: 'hidden',
+  // Extra bottom padding so the background extends behind the overlapping pill bar
+  paddingBottom: theme.spacing(5),
+}));
 
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gridTemplateRows: 'auto minmax(0, 1fr)',
-    gridTemplateAreas: `
-      'panel panel panel panel'
-      'tab0 tab1 tab2 tab3'
-    `,
-    transition: theme.transitions.create('grid-template-columns', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.shortest,
-    }),
+export const HeroContentContainer = styled(Container)(({ theme }) => ({
+  position: 'relative',
+  zIndex: 1,
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  gap: theme.spacing(4),
+  padding: theme.spacing(6, 2),
+  [theme.breakpoints.up('md')]: {
+    gridTemplateColumns: '1fr 1fr',
+    padding: theme.spacing(8, 2),
   },
 }));
 
-interface HeroSubContainerProps extends BoxProps {
-  $index: number;
-  $activeSlide: number;
-  $isImage?: boolean;
+export const BackgroundContainer = styled('div')({
+  position: 'absolute',
+  inset: 0,
+  zIndex: 0,
+});
+
+interface BackgroundImageLayerProps {
+  $active: boolean;
+  $transitionDuration: number;
 }
 
-export const HeroTabContainer = styled(Box)<HeroSubContainerProps>(({ $index, $activeSlide, theme, ...props }) => ({
-  gridArea: `tab${$index}`,
+export const BackgroundImageLayer = styled('div')<BackgroundImageLayerProps>(({ $active, $transitionDuration }) => ({
+  position: 'absolute',
+  inset: 0,
+  overflow: 'hidden',
+  opacity: $active ? 1 : 0,
+  transition: `opacity ${$transitionDuration}ms ease-out`,
+  '& picture, & img': {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+  '@media (prefers-reduced-motion: reduce)': {
+    transition: 'none',
+  },
+}));
 
-  [theme.breakpoints.up('md')]: {
-    backgroundColor: $activeSlide === $index ? props.bgcolor : theme.palette.common.white,
-    '&:not(:last-child)': {
-      borderRight: `1px solid ${theme.palette.grey[200]}`,
+export const BackgroundOverlay = styled('div')({
+  position: 'absolute',
+  inset: 0,
+  background: 'rgba(255, 255, 255, 0.4)',
+  zIndex: 1,
+});
+
+export const CardContainer = styled('a')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  padding: theme.spacing(2),
+  textDecoration: 'none',
+  color: 'inherit',
+  borderRadius: theme.spacing(1),
+  backgroundColor: theme.palette.common.white,
+  boxShadow: theme.shadows[1],
+  transition: theme.transitions.create(['box-shadow', 'transform'], {
+    duration: theme.transitions.duration.short,
+  }),
+  '&:hover': {
+    boxShadow: theme.shadows[4],
+  },
+}));
+
+export const CardVideoContainer = styled('div')({
+  width: 180,
+  height: 135,
+  borderRadius: 4,
+  overflow: 'hidden',
+  flexShrink: 0,
+  backgroundColor: '#f5f5f5',
+  '& video, & img': {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  },
+});
+
+export const PillBar = styled('nav')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  backgroundColor: theme.palette.common.white,
+  borderRadius: theme.spacing(1),
+  boxShadow: theme.shadows[1],
+  overflow: 'hidden',
+}));
+
+export const PillBarOuter = styled('div')(({ theme }) => ({
+  position: 'sticky',
+  top: 112, // headerHeight (appBarHeight 64 + bannerHeight 40)
+  zIndex: theme.zIndex.header - 1,
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: theme.spacing(-11.5), // overlap the hero section's extra bottom padding
+  paddingBottom: theme.spacing(3),
+  maxWidth: theme.breakpoints.values.lg,
+  width: '100%',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  // When not stuck, pill bar fills the container width
+  [`& ${PillBar}`]: {
+    maxWidth: '100%',
+    width: '100%',
+    py: 1,
+    transition: theme.transitions.create(['max-width', 'box-shadow', 'border-radius', 'padding', 'margin']),
+    margin: 0,
+
+    [`& ${BottomBarLink}`]: {
+      padding: theme.spacing(3, 2),
+    },
+  },
+  // When stuck, shrink via max-width
+  '&.stuck': {
+    padding: theme.spacing(0, 2),
+    [`& ${PillBar}`]: {
+      maxWidth: 700,
+      boxShadow: theme.shadows[3],
+      borderRadius: theme.spacing(0.5),
+      py: 0,
+      // Add margin to bar to compensate for reduced padding on the links
+      // This prevents scrolling from causing a layout shift due to the
+      // change in height when the bar becomes sticky
+      // 2 to make up for py reduction on pillbar, 2 to make up for padding reduction on links
+      marginBottom: theme.spacing(4),
+
+      [`& ${BottomBarLink}`]: {
+        padding: theme.spacing(1, 1.5),
+      },
     },
   },
 }));
 
-export const HeroPanelContainer = styled(Box)<HeroSubContainerProps>(({ theme, $index, $activeSlide, $isImage }) => ({
-  position: 'relative',
-  aspectRatio: '32 / 9',
-
-  [theme.breakpoints.up('md')]: {
-    gridArea: `panel`,
-    width: '100%',
-    opacity: $activeSlide === $index ? 1 : 0,
-    speak: $activeSlide === $index ? 'auto' : 'none',
-    left: $activeSlide === $index ? 0 : `${$activeSlide - $index}00%`,
-    overflowY: !$isImage ? 'auto' : 'hidden',
-    transition: theme.transitions.create(['max-width', 'opacity', 'left'], {
-      easing: theme.transitions.easing.easeInOut,
-      duration: theme.transitions.duration.shorter,
-    }),
-    borderBottom: `1px solid ${theme.palette.grey[200]}`,
+export const BottomBarLink = styled('button')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  flex: 1,
+  justifyContent: 'center',
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  color: theme.palette.text.primary,
+  transition: theme.transitions.create(['background-color', 'padding', 'margin']),
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
   },
 }));
 
-export const StyledImage = styled('img')(() => ({
-  maxWidth: '100%',
-  height: 'auto',
+export const BottomBarDivider = styled('div')(({ theme }) => ({
+  width: 1,
+  alignSelf: 'stretch',
+  backgroundColor: theme.palette.divider,
+  flexShrink: 0,
 }));

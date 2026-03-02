@@ -10,10 +10,11 @@ import { useDatasetsAccess } from 'js/hooks/useDatasetPermissions';
  */
 function useGetRestrictedDatasets(datasetUUIDs: Set<string>) {
   const uuidsArray = Array.from(datasetUUIDs);
-  const { accessibleDatasets, isLoading } = useDatasetsAccess(uuidsArray);
+  const { accessibleDatasets } = useDatasetsAccess(uuidsArray);
 
-  const protectedDatasetUUIDs =
-    isLoading || !accessibleDatasets ? [] : uuidsArray.filter((uuid) => !accessibleDatasets[uuid]?.access_allowed);
+  const protectedDatasetUUIDs = !accessibleDatasets
+    ? []
+    : uuidsArray.filter((uuid) => !accessibleDatasets[uuid]?.access_allowed);
 
   return protectedDatasetUUIDs;
 }
@@ -31,6 +32,7 @@ function useRestrictedDatasetsForm({
   const { toastSuccessRemoveRestrictedDatasets } = useWorkspaceToasts();
   // Restricted rows are those that the current user does not have access to in a workspace or bulk download.
   const restrictedRows = useGetRestrictedDatasets(selectedRows);
+
   const { hubmapIds: restrictedHubmapIds } = useHubmapIds(restrictedRows);
 
   const errorMessages = useMemo(() => {

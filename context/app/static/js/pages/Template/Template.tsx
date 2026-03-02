@@ -76,7 +76,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
   const assayToRawDatasetMap = useMemo(() => {
     const map: Record<string, string> = {};
     Object.keys(datasetTypeMap).forEach((key) => {
-      datasetTypeMap[key].forEach((name) => {
+      datasetTypeMap[key].forEach((name: string) => {
         map[name] = key;
       });
     });
