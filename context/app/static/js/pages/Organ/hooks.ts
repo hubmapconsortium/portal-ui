@@ -186,7 +186,7 @@ export function useIndexedDatasetsForOrgan(searchItems: string[], organName: str
     _source: ['hubmap_id'],
   });
 
-  const datasetUUIDs = searchData?.hits?.hits.map((h) => h._id) ?? [];
+  const datasetUUIDs = (searchData?.hits?.hits.map((h) => h._id) ?? []).filter((id) => id != null);
 
   const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
 

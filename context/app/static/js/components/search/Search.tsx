@@ -1,8 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  AggregationsTermsAggregateBase,
-  AggregationsSingleMetricAggregateBase,
-} from '@elastic/elasticsearch/lib/api/types';
+import { AggregationsTermsAggregateBase, AggregationsSingleMetricAggregateBase } from 'js/typings/elasticsearch';
 import { produce } from 'immer';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';

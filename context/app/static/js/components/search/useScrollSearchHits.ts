@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
-import { SearchRequest, SearchResponseBody, SortResults } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest, SearchResponseBody, SortResults } from 'js/typings/elasticsearch';
 
 import { fetcher } from 'js/helpers/swr';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -74,7 +74,7 @@ export function useScrollSearchHits<Doc, Aggs>({
   const mappings = useESmapping();
 
   const getKey: SWRInfiniteKeyLoader = useCallback(
-    (pageIndex: number, previousPageData: SearchResponseBody) => {
+    (pageIndex: number, previousPageData: SearchResponseBody<Doc, Aggs>) => {
       const previousPageHits = previousPageData?.hits?.hits ?? [];
 
       if (previousPageData && !previousPageHits.length) return null;
