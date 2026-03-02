@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.40.3 - 2026-02-24
+
+- Improve handling for gene pathways with no genes in the index.
+- Improve handling for cases when user removes all genes in pathway.
+- Handle cases where integrated maps are only available for one organ laterality.
+- Fix gene detail page cell types section.
+
+
+
 ## v1.40.2 - 2026-02-17
 
 - Improve permission handling for datasets to consistently handle public data and keep protected data inaccessible by default until API response indicates otherwise.
