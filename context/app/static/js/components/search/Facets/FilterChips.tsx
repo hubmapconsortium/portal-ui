@@ -353,6 +353,7 @@ function FilterChips() {
   const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
   const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
   const getFieldLabel = useGetFieldLabel();
+  const getTransformedFieldValue = useGetTransformedFieldValue();
 
   const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
     <>
@@ -364,7 +365,7 @@ function FilterChips() {
               return (
                 <FilterChip
                   key={field}
-                  label={`${getFieldLabel(field)}: ${values[0]}`}
+                  label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: values[0] })}`}
                   onDelete={() => {
                     filterTerm({ term: field, value: values[0] });
                   }}
