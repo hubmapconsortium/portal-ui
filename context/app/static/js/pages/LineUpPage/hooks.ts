@@ -1,4 +1,4 @@
-import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit, SearchRequest } from 'js/typings/elasticsearch';
 import { Donor, Entity, ESEntityType } from 'js/components/types';
 import { useAllSearchHits } from 'js/hooks/useSearchData';
 import { useMemo } from 'react';
@@ -12,6 +12,9 @@ import { useMemo } from 'react';
  */
 const getValueFromObjects = (objects: Record<string, unknown>[], key: string) => {
   for (const obj of objects) {
+    if (!obj) {
+      continue;
+    }
     if (key in obj) {
       return obj[key];
     }
