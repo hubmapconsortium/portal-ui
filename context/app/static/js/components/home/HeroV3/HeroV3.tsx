@@ -48,11 +48,18 @@ function HeroLeftColumn() {
   );
 }
 
-function HeroRightColumn() {
+// Left over from the "transition backgrounds on hover as well" experiment;
+// May be worth revisiting in the future if we want to add more interactivity
+interface HeroRightColumnProps {
+  onCardHover?: (index: number) => void;
+  onCardHoverEnd?: () => void;
+}
+
+function HeroRightColumn({ onCardHover, onCardHoverEnd }: HeroRightColumnProps) {
   return (
     <Stack spacing={2} justifyContent="center" maxWidth={{ lg: 420 }} ml="auto">
-      {HERO_CARDS.map((card) => (
-        <HeroCard key={card.title} {...card} />
+      {HERO_CARDS.map((card, index) => (
+        <HeroCard key={card.title} {...card} onCardHover={() => onCardHover?.(index)} onCardHoverEnd={onCardHoverEnd} />
       ))}
     </Stack>
   );

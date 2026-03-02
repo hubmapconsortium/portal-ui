@@ -16,6 +16,9 @@ interface HeroCardProps {
   href: string;
   videoSrc?: string;
   posterSrc?: string;
+  thumbnailName?: string;
+  onCardHover?: () => void;
+  onCardHoverEnd?: () => void;
 }
 
 export default function HeroCard({
@@ -24,17 +27,22 @@ export default function HeroCard({
   description,
   href,
   videoSrc,
-  posterSrc = 'https://unsplash.it/180/135',
+  posterSrc,
+  thumbnailName,
+  onCardHover,
+  onCardHoverEnd,
 }: HeroCardProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleMouseEnter = useEventCallback(() => {
+    onCardHover?.();
     void videoRef.current?.play()?.catch(() => {
       // Video play may be blocked by browser policy
     });
   });
 
   const handleMouseLeave = useEventCallback(() => {
+    onCardHoverEnd?.();
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
@@ -61,12 +69,17 @@ export default function HeroCard({
           {description}
         </Typography>
       </Stack>
-      {(videoSrc || posterSrc) && (
+      {(videoSrc || thumbnailName) && (
         <CardVideoContainer>
           {videoSrc ? (
             <video ref={videoRef} src={videoSrc} poster={posterSrc} muted loop playsInline preload="metadata" />
           ) : (
-            posterSrc && <img src={posterSrc} alt="" />
+            thumbnailName && (
+              <picture>
+                <source type="image/webp" srcSet={`${CDN_URL}/v3/thumbnail_${thumbnailName}-25.webp`} />
+                <img src={`${CDN_URL}/v3/thumbnail_${thumbnailName}-25.png`} alt="" />
+              </picture>
+            )
           )}
         </CardVideoContainer>
       )}

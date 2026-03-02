@@ -1,6 +1,5 @@
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
-import { BACKGROUND_FADE_DURATION_MS } from './const';
 
 export const HeroSection = styled('section')(({ theme }) => ({
   position: 'relative',
@@ -29,23 +28,34 @@ export const BackgroundContainer = styled('div')({
   zIndex: 0,
 });
 
-interface BackgroundLayerProps {
+interface BackgroundImageLayerProps {
   $active: boolean;
-  $color: string;
+  $transitionDuration: number;
 }
 
-export const BackgroundLayer = styled('div')<BackgroundLayerProps>(({ $active, $color }) => ({
+export const BackgroundImageLayer = styled('div')<BackgroundImageLayerProps>(({ $active, $transitionDuration }) => ({
   position: 'absolute',
   inset: 0,
+  overflow: 'hidden',
   opacity: $active ? 1 : 0,
-  transition: `opacity ${BACKGROUND_FADE_DURATION_MS}ms ease-out`,
-  background: `linear-gradient(135deg, ${$color} 0%, ${$color}88 50%, ${$color}44 100%)`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
+  transition: `opacity ${$transitionDuration}ms ease-out`,
+  '& picture, & img': {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
   '@media (prefers-reduced-motion: reduce)': {
     transition: 'none',
   },
 }));
+
+export const BackgroundOverlay = styled('div')({
+  position: 'absolute',
+  inset: 0,
+  background: 'rgba(255, 255, 255, 0.4)',
+  zIndex: 1,
+});
 
 export const CardContainer = styled('a')(({ theme }) => ({
   display: 'flex',

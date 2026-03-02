@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { BACKGROUND_COLORS, BACKGROUND_CYCLE_INTERVAL_MS } from './const';
-import { BackgroundContainer, BackgroundLayer } from './styles';
+import { BACKGROUND_CYCLE_INTERVAL_MS, BACKGROUND_FADE_DURATION_MS, HERO_CARDS } from './const';
+import { BackgroundContainer, BackgroundImageLayer, BackgroundOverlay } from './styles';
 
 function useReducedMotion() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -17,15 +17,25 @@ function useReducedMotion() {
   return prefersReducedMotion;
 }
 
+function buildSrcSet(imageName: string, ext: string): string {
+  return [
+    `${CDN_URL}/v3/${imageName}-25.${ext} 640w`,
+    `${CDN_URL}/v3/${imageName}-50.${ext} 1280w`,
+    `${CDN_URL}/v3/${imageName}-75.${ext} 1920w`,
+    `${CDN_URL}/v3/${imageName}-100.${ext} 2560w`,
+  ].join(', ');
+}
+
 export default function HeroBackground() {
   const [activeIndex, setActiveIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
 
+  // Auto-cycle — paused while any card is hovered
   useEffect(() => {
     if (prefersReducedMotion) return undefined;
 
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % BACKGROUND_COLORS.length);
+      setActiveIndex((prev) => (prev + 1) % HERO_CARDS.length);
     }, BACKGROUND_CYCLE_INTERVAL_MS);
 
     return () => clearInterval(interval);
@@ -33,9 +43,25 @@ export default function HeroBackground() {
 
   return (
     <BackgroundContainer aria-hidden="true">
-      {BACKGROUND_COLORS.map((color, index) => (
-        <BackgroundLayer key={color} $active={index === activeIndex} $color={color} />
+      {HERO_CARDS.map(({ imageName }, index) => (
+        <BackgroundImageLayer
+          key={imageName}
+          $active={index === activeIndex}
+          $transitionDuration={BACKGROUND_FADE_DURATION_MS}
+        >
+          <picture>
+            <source type="image/webp" srcSet={buildSrcSet(imageName, 'webp')} sizes="100vw" />
+            <img
+              srcSet={buildSrcSet(imageName, 'png')}
+              sizes="100vw"
+              src={`${CDN_URL}/v3/${imageName}-100.png`}
+              alt=""
+              loading="eager"
+            />
+          </picture>
+        </BackgroundImageLayer>
       ))}
+      <BackgroundOverlay />
     </BackgroundContainer>
   );
 }
