@@ -7,7 +7,7 @@ jest.mock('js/hooks/useSearchData', () => ({
 }));
 
 import { useAllSearchHits } from 'js/hooks/useSearchData';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit } from 'js/typings/elasticsearch';
 import { Entity } from 'js/components/types';
 
 // Type the mocked function
