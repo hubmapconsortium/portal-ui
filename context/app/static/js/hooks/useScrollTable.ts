@@ -1,6 +1,6 @@
 import { useRef, useCallback, UIEvent, useState, useEffect, useMemo } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchHit, SearchRequest } from 'js/typings/elasticsearch';
 
 import { useSortState, ColumnNameMapping, SortState } from 'js/hooks/useSortState';
 import { useScrollSearchHits, useAllSearchIDs, useSearchHits } from 'js/hooks/useSearchData';
@@ -123,8 +123,8 @@ function useScrollTable<Document>({
       const aId = a._id;
       const bId = b._id;
 
-      const aValue = customSortValues[aId];
-      const bValue = customSortValues[bId];
+      const aValue = aId && customSortValues[aId];
+      const bValue = bId && customSortValues[bId];
 
       // Handle undefined values (put them at the end)
       if (aValue === undefined && bValue === undefined) return 0;
@@ -184,8 +184,8 @@ function useScrollTable<Document>({
 
   // Function to check if a row is expanded
   const isRowExpanded = useCallback(
-    (rowId: string) => {
-      return expandedRows.has(rowId);
+    (rowId?: string) => {
+      return rowId && expandedRows.has(rowId);
     },
     [expandedRows],
   );

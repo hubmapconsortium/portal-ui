@@ -6,12 +6,7 @@ import { fetcher as fetch, multiFetcher as multiFetch } from 'js/helpers/swr';
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
-import {
-  AggregationsAggregate,
-  SearchHit,
-  SearchRequest,
-  SearchResponseBody,
-} from '@elastic/elasticsearch/lib/api/types';
+import { AggregationsAggregate, SearchHit, SearchRequest, SearchResponseBody } from 'js/typings/elasticsearch';
 import { SWRError } from 'js/helpers/swr/errors';
 
 export interface Hit<Doc extends object | Record<string, unknown>> {
@@ -212,7 +207,7 @@ function getTotalHitsCount(results?: SearchResponseBody<unknown, unknown>) {
 }
 
 function extractIDs(results?: SearchResponseBody<unknown, unknown>): string[] {
-  return results?.hits?.hits?.map((hit) => hit._id) ?? [];
+  return (results?.hits?.hits?.map((hit) => hit._id) ?? []).filter((id) => id != null);
 }
 
 // Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
@@ -451,7 +446,7 @@ export function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: Sea
   };
 }
 
-export function useScrollSearchHits(
+export function useScrollSearchHits<Doc, Aggs>(
   query: SearchRequest,
   { useDefaultQuery = false, fetcher = fetchSearchData, ...swrConfigRest }: UseSearchDataConfig = {
     useDefaultQuery: false,
@@ -461,7 +456,7 @@ export function useScrollSearchHits(
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
   const getKey: SWRInfiniteKeyLoader = useCallback(
-    (pageIndex: number, previousPageData: SearchResponseBody) => {
+    (pageIndex: number, previousPageData: SearchResponseBody<Doc, Aggs>) => {
       const sharedKeyItems = [elasticsearchEndpoint, groupsToken, useDefaultQuery];
 
       const previousPageHits = previousPageData?.hits?.hits ?? [];
@@ -477,9 +472,13 @@ export function useScrollSearchHits(
     [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
   );
 
-  const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<SearchResponseBody, SWRError>(
+  const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<
+    SearchResponseBody<Doc, Aggs>,
+    SWRError
+  >(
     getKey,
-    (args: [SearchRequest, string, string, boolean, number]) => fetcher(...args) as Promise<SearchResponseBody>,
+    (args: [SearchRequest, string, string, boolean, number]) =>
+      fetcher(...args) as Promise<SearchResponseBody<Doc, Aggs>>,
     {
       fallbackData: [],
       revalidateAll: false,
