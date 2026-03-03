@@ -7,9 +7,11 @@ import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
 import NewWorkspaceDialog from './NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from './useCreateWorkspaceForm';
+import YACConflictDialogWrapper from './YACConflictDialogWrapper';
 
 function NewWorkspaceDialogFromWorkspaceList() {
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({});
+  const { setDialogIsOpen, showYACConflictDialog, setShowYACConflictDialog, yacConflictData, ...rest } =
+    useCreateWorkspaceForm({});
 
   const handleClick = useEventCallback(() => {
     trackEvent({
@@ -28,6 +30,11 @@ function NewWorkspaceDialogFromWorkspaceList() {
         showDatasetsSearchBar
         trackingInfo={{ category: WorkspacesEventCategories.WorkspaceLandingPage }}
         {...rest}
+      />
+      <YACConflictDialogWrapper
+        showDialog={showYACConflictDialog}
+        setShowDialog={setShowYACConflictDialog}
+        conflictData={yacConflictData}
       />
     </>
   );

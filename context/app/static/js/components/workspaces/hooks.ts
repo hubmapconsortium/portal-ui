@@ -430,7 +430,30 @@ function useLaunchWorkspace() {
 export function useCreateAndLaunchWorkspace() {
   const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
   const { startNewWorkspace } = useLaunchWorkspace();
-  const { toastErrorCreateWorkspace, toastErrorLaunchWorkspace, toastSuccessLaunchWorkspace } = useWorkspaceToasts();
+  const {
+    toastErrorCreateWorkspace,
+    toastErrorLaunchWorkspace,
+    toastSuccessLaunchWorkspace,
+    toastSuccessCreateWorkspaceOnly,
+  } = useWorkspaceToasts();
+
+  const createWorkspaceOnly = useCallback(
+    async ({ body, showLaunchMessage = true }: { body: CreateWorkspaceBody; showLaunchMessage?: boolean }) => {
+      try {
+        const workspace = await createWorkspace(body);
+        if (showLaunchMessage) {
+          toastSuccessLaunchWorkspace(workspace.id);
+        } else {
+          toastSuccessCreateWorkspaceOnly(workspace.id);
+        }
+        return workspace;
+      } catch {
+        toastErrorCreateWorkspace();
+        throw new Error('Failed to create workspace');
+      }
+    },
+    [createWorkspace, toastSuccessLaunchWorkspace, toastSuccessCreateWorkspaceOnly, toastErrorCreateWorkspace],
+  );
 
   const createAndLaunchWorkspace = useCallback(
     async ({ body, templatePath, resourceOptions }: createAndLaunchWorkspaceProps) => {
@@ -465,7 +488,7 @@ export function useCreateAndLaunchWorkspace() {
     ],
   );
 
-  return { createAndLaunchWorkspace, isCreatingWorkspace, toastErrorLaunchWorkspace };
+  return { createAndLaunchWorkspace, createWorkspaceOnly, isCreatingWorkspace, toastErrorLaunchWorkspace };
 }
 
 function getWorkspaceTimeLeft(workspace: MergedWorkspace) {
