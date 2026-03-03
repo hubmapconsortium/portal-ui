@@ -153,6 +153,10 @@ export interface Dataset extends Entity {
   source_samples: Sample[];
   data_types: string[];
   is_integrated: boolean;
+  calculated_metadata?: {
+    annotation_tools?: string[];
+    object_types?: string[];
+  };
 }
 
 export interface Collection extends Entity {

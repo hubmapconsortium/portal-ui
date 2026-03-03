@@ -1,4 +1,5 @@
 import { capitalizeString } from 'js/helpers/functions';
+import { mapObjectType } from 'js/helpers/annotations';
 import { useCallback } from 'react';
 import { SearchStoreState, useSearchStore } from './store';
 
@@ -40,7 +41,8 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
       label: 'Annotation Tools',
     },
     'calculated_metadata.object_types': {
-      label: 'Annotations Available',
+      label: 'Annotated Object Types',
+      valueTransformations: [mapObjectType],
     },
     created_by_user_displayname: {
       label: 'Registered By',

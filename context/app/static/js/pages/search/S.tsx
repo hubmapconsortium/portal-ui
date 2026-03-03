@@ -174,9 +174,7 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
       },
       {
         field: 'calculated_metadata.object_types',
-        type: FACETS.exists,
-        invert: false,
-        default: false,
+        type: FACETS.term,
       },
       {
         field: 'calculated_metadata.annotation_tools',

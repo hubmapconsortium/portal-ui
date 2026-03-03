@@ -24,6 +24,7 @@ export type ProcessedDatasetDetails = ProcessedDatasetInfo &
     | 'dataset_type'
     | 'mapped_consortium'
     | 'mapped_data_access_level'
+    | 'calculated_metadata'
   >;
 
 export function useProcessedDatasetDetails(uuid: string) {
@@ -60,6 +61,7 @@ export function useProcessedDatasetDetails(uuid: string) {
       'contributors',
       'contacts',
       'mapped_data_access_level',
+      'calculated_metadata',
     ],
     size: 10000,
   };
