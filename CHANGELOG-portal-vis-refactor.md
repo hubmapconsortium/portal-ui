@@ -1,1 +1,0 @@
-- Updated Portal-Visualization to improve Vitessce configuration generation logic maintainability and restore malfunctioning visualizations.

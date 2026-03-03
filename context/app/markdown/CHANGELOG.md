@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.41.0 - 2026-03-03
+
+- Add "Annotated Object Types" term facet to the dataset search page, displaying human-readable labels for annotated object ontology IDs (CL/UBERON).
+- Display annotation summary (object types and annotation tools with links) in dataset and processed dataset summaries.
+- Limit users to one YAC environment workspace.
+- Ensure page content container size is consistent.
+- Enhance dataset permission handling to rely purely on `accessible-data-directories` endpoint for all users.
+- Updated Portal-Visualization to improve Vitessce configuration generation logic maintainability and restore malfunctioning visualizations.
+
+
+
 ## v1.40.3 - 2026-02-24
 
 - Improve handling for gene pathways with no genes in the index.

@@ -1,1 +1,0 @@
-- Limit users to one YAC environment workspace.
