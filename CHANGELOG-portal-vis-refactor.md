@@ -1,1 +1,1 @@
-- Updated to Portal-Visualization 0.5.0 to improve Vitessce configuration generation logic maintainability.
+- Updated Portal-Visualization to improve Vitessce configuration generation logic maintainability and restore malfunctioning visualizations.
