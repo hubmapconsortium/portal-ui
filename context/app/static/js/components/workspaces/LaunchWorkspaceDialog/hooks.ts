@@ -18,6 +18,7 @@ import {
 import { MergedWorkspace, Workspace, WorkspaceResourceOptions } from 'js/components/workspaces/types';
 import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceToLaunch: Workspace;
@@ -147,40 +148,61 @@ function useLaunchWorkspaceDialog() {
     setExistingYACWorkspace(null);
   }, []);
 
+  const { toastError } = useSnackbarActions();
+
   const handleYACConflictConfirm = useEventCallback(async () => {
     if (!pendingLaunchData || !existingYACWorkspace) {
       console.error('Missing pending launch data or existing workspace');
       return;
     }
 
+    const resetDialogState = () => {
+      setShowYACConflictDialog(false);
+      setPendingLaunchData(null);
+      setExistingYACWorkspace(null);
+    };
+
     try {
       // Stop the workspace if it's running
       const isRunning = existingYACWorkspace.jobs.some((job) => job.status === 'running' || job.status === 'pending');
       if (isRunning) {
-        await handleStopWorkspace(existingYACWorkspace.id);
-        toastSuccessStopWorkspace(existingYACWorkspace.name);
+        try {
+          await handleStopWorkspace(existingYACWorkspace.id);
+          toastSuccessStopWorkspace(existingYACWorkspace.name);
+        } catch (error) {
+          console.error('Error stopping existing YAC workspace:', error);
+          toastErrorDeleteWorkspaces(existingYACWorkspace.name);
+          return;
+        }
       }
 
       // Delete the existing YAC workspace
-      await handleDeleteWorkspace(existingYACWorkspace.id);
+      try {
+        await handleDeleteWorkspace(existingYACWorkspace.id);
+      } catch (error) {
+        console.error('Error deleting existing YAC workspace:', error);
+        toastErrorDeleteWorkspaces(existingYACWorkspace.name);
+        return;
+      }
 
       // Now launch the new workspace
-      await startAndOpenWorkspace({
-        jobTypeId: pendingLaunchData.workspaceJobTypeId,
-        workspace: pendingLaunchData.workspaceToLaunch,
-        resourceOptions: pendingLaunchData.workspaceResourceOptions,
-      });
+      try {
+        await startAndOpenWorkspace({
+          jobTypeId: pendingLaunchData.workspaceJobTypeId,
+          workspace: pendingLaunchData.workspaceToLaunch,
+          resourceOptions: pendingLaunchData.workspaceResourceOptions,
+        });
+      } catch (error) {
+        console.error('Error launching new workspace:', error);
+        toastErrorLaunchWorkspace();
+        return;
+      }
 
-      setShowYACConflictDialog(false);
-      setPendingLaunchData(null);
-      setExistingYACWorkspace(null);
-    } catch (error) {
-      console.error('Error deleting existing YAC workspace:', error);
-      toastErrorDeleteWorkspaces(existingYACWorkspace.name);
-      toastErrorLaunchWorkspace();
-      setShowYACConflictDialog(false);
-      setPendingLaunchData(null);
-      setExistingYACWorkspace(null);
+      resetDialogState();
+    } catch (e) {
+      console.error('Unexpected error during YAC workspace replacement:', e);
+      toastError('An unexpected error occurred while trying to replace the existing YAC workspace. Please try again.');
+      resetDialogState();
     }
   });
 

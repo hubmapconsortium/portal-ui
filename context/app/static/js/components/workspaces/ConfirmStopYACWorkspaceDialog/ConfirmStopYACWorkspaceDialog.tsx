@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEventCallback } from '@mui/material/utils';
 
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
@@ -23,7 +23,7 @@ export default function ConfirmStopYACWorkspaceDialog({
   const { handleStopWorkspace } = useWorkspacesList();
   const { currentEventCategory } = useWorkspacesEventContext();
 
-  const [pendingStopWorkspace, setPendingStopWorkspace] = React.useState(false);
+  const [pendingStopWorkspace, setPendingStopWorkspace] = useState(false);
 
   const handleStopAndConfirm = useEventCallback(() => {
     if (!runningYACWorkspace) {
@@ -48,9 +48,6 @@ export default function ConfirmStopYACWorkspaceDialog({
         toastErrorStopWorkspace(runningYACWorkspace.name);
         console.error(e);
         handleClose();
-      })
-      .finally(() => {
-        setPendingStopWorkspace(false);
       });
   });
 
