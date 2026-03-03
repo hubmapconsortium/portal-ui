@@ -49,7 +49,7 @@ const useUbkg = () => {
         return `${ubkgEndpoint}/proteins-info`;
       },
       cellTypeDetail(cellTypeId?: string | string[]) {
-        if (!cellTypeId) {
+        if (!cellTypeId || cellTypeId.length === 0) {
           return null;
         }
         const ids = Array.isArray(cellTypeId) ? cellTypeId : [cellTypeId];

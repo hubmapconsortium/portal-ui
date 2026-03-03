@@ -95,7 +95,7 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
   const cellTypes = useCellVariableNames();
 
   return (
-    <HelperPanel shouldDisplay={shouldDisplay}>
+    <HelperPanel shouldDisplay={shouldDisplay} sx={{ minWidth: shouldDisplay ? 192 : 0 }}>
       <HelperPanel.Header gap={1}>
         <OrganIcon organName={currentTissue} />
         {currentTissue && capitalize(currentTissue)}
@@ -166,7 +166,7 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
   const currentTissue = tissues[openTabIndex] || tissues[0];
 
   const { ref: intersectionRef } = useInView({
-    threshold: 0.5,
+    threshold: 0.1,
     initialInView: false,
     onChange: (inView) => {
       setDisplayHelper(inView);

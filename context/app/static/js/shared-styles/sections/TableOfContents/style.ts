@@ -29,6 +29,7 @@ const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boo
 const StyledIconContainer = styled(Box)({
   width: '1rem',
   display: 'flex',
+  flexShrink: 0,
   '& > *': {
     width: '100%',
     height: '100%',

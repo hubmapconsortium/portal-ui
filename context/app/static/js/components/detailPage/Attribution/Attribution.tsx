@@ -15,6 +15,11 @@ const tooltips = {
   contact: 'This is the contact for this data.',
 };
 
+const tooltipsIntegrated = {
+  ...tooltips,
+  contact: 'Contact the HuBMAP Help Desk with any questions about the analysis of this data.',
+};
+
 export const DatasetAttributionDescription = (
   <SectionDescription>
     Below is the information for the individuals who provided this dataset. For questions about this dataset, reach out
@@ -23,12 +28,50 @@ export const DatasetAttributionDescription = (
   </SectionDescription>
 );
 
+interface IntegratedDatasetAttributionDescriptionProps {
+  group: string;
+}
+
+const IntegratedDatasetAttributionDescription = ({ group }: IntegratedDatasetAttributionDescriptionProps) => (
+  <SectionDescription>
+    The data provided by the {group} Group was centrally processed by HuBMAP. The results of this processing are
+    independent of analyses conducted by the data providers or third parties.
+  </SectionDescription>
+);
+
+const ExternalDatasetAttributionDescription = (
+  <SectionDescription>
+    Below is the information for the individuals who provided and analyzed this dataset. For questions about this
+    dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or via
+    contact information provided on their ORCID profile page.
+  </SectionDescription>
+);
+
+function AttributionDescription() {
+  const {
+    entity: { is_integrated, creation_action, group_name },
+  } = useFlaskDataContext();
+
+  const isExternal = creation_action === 'External Process' || creation_action === 'Lab Process';
+  if (isExternal) return ExternalDatasetAttributionDescription;
+  if (is_integrated) return <IntegratedDatasetAttributionDescription group={group_name} />;
+  return DatasetAttributionDescription;
+}
+
 function Attribution({ children }: PropsWithChildren) {
   const {
-    entity: { group_name, created_by_user_displayname, created_by_user_email, entity_type },
+    entity: {
+      group_name,
+      created_by_user_displayname,
+      creation_action,
+      created_by_user_email,
+      entity_type,
+      is_integrated,
+    },
   } = useFlaskDataContext();
 
   const isDataset = entity_type === 'Dataset';
+  const isInternalIntegrated = Boolean(is_integrated && creation_action === 'Central Process');
 
   const showRegisteredBy = !isDataset;
 
@@ -36,14 +79,15 @@ function Attribution({ children }: PropsWithChildren) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
-    tooltips,
+    isInternalIntegrated ? tooltipsIntegrated : tooltips,
     showRegisteredBy,
+    isInternalIntegrated,
   );
 
   return (
     <CollapsibleDetailPageSection id="attribution" title="Attribution" icon={sectionIconMap.attribution}>
       <Stack spacing={1}>
-        {isDataset && DatasetAttributionDescription}
+        {isDataset && <AttributionDescription />}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (

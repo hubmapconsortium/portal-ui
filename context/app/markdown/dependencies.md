@@ -22,8 +22,6 @@ requests>=2.32.5
 # Development dependencies
 boto3>=1.39.3
 lxml>=6.0.0
-matplotlib>=3.10.5
-papermill>=2.6.0
 pytest-mock>=3.15.1
 pytest>=8.4.2
 ruff>=0.14.0
@@ -96,7 +94,7 @@ ruff>=0.14.0
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.8.9",
+"vitessce": "^3.9.1",
 "zod": "^3.22.4",
 "zustand": "^4.5.2"
 }

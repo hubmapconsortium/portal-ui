@@ -13,6 +13,7 @@ import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { getIDsQuery } from 'js/helpers/queries';
 import { restrictedDatasetsErrorMessage } from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
+import { trackEvent } from 'js/helpers/trackers';
 
 const schema = z
   .object({
@@ -37,7 +38,7 @@ function useBulkDownloadForm() {
     trigger,
   } = useForm<BulkDownloadFormTypes>({
     defaultValues: {
-      bulkDownloadOptions: [],
+      bulkDownloadOptions: ALL_BULK_DOWNLOAD_OPTIONS.map((option) => option.key),
       bulkDownloadMetadata: false,
     },
     mode: 'onChange',
@@ -109,6 +110,11 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
       })
         .then(() => {
           toastSuccessDownloadFile('Metadata');
+          trackEvent({
+            category: 'Bulk Download',
+            action: 'Bulk Download / Download Dataset Metadata',
+            label: `${datasetsToDownload.length} datasets`,
+          });
         })
         .catch((e) => {
           toastErrorDownloadFile('Metadata', () => {
@@ -129,6 +135,11 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
 
       checkAndDownloadFile({ url, fileName: 'manifest.txt' })
         .then(() => {
+          trackEvent({
+            category: 'Bulk Download',
+            action: 'Bulk Download / Download File Manifest',
+            label: `${datasetsToDownload.length} datasets`,
+          });
           setDownloadSuccess(true);
         })
         .catch((e) => {

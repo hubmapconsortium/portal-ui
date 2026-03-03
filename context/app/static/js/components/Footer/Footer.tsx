@@ -31,6 +31,9 @@ function Footer({ isMaintenancePage }: FooterProps) {
                   <InternalLink href="/docs" variant="body2">
                     Documentation
                   </InternalLink>
+                  <InternalLink href="/data-overview" variant="body2">
+                    Data Overview
+                  </InternalLink>
                   <InternalLink href="/diversity" variant="body2">
                     Diversity
                   </InternalLink>

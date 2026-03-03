@@ -14,6 +14,8 @@ import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import Skeleton from '@mui/material/Skeleton';
 import { CollectionHit } from 'js/components/collections/types';
 
+const tabPanelSx = { width: '100%', minWidth: 0, '> .MuiPaper-root': { width: '100%' } };
+
 function CollectionPanel({
   index,
   value,
@@ -26,13 +28,13 @@ function CollectionPanel({
   const panelsProps = buildCollectionsPanelsProps(collections);
   if (panelsProps.length === 0) {
     return (
-      <TabPanel value={value} index={index} sx={{ '> .MuiPaper-root': { width: '100%' } }}>
+      <TabPanel value={value} index={index} sx={tabPanelSx}>
         <OutlinedAlert severity="info">The raw dataset is not referenced in any existing collections.</OutlinedAlert>
       </TabPanel>
     );
   }
   return (
-    <TabPanel value={value} index={index}>
+    <TabPanel value={value} index={index} sx={tabPanelSx}>
       <PanelList panelsProps={panelsProps} key={index} />
     </TabPanel>
   );

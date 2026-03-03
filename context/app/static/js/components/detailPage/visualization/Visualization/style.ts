@@ -6,10 +6,9 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { initialEntityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { vitessceFixedHeight } from '../style';
 
 const totalHeightOffset = headerHeight + initialEntityHeaderHeight;
-
-const vitessceFixedHeight = 600;
 
 const StyledHeader = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(1),
@@ -67,12 +66,4 @@ const StyledDetailPageSection = styled(DetailPageSection)<StyledDetailPageSectio
   }),
 );
 
-export {
-  vitessceFixedHeight,
-  StyledHeader,
-  StyledSectionHeader,
-  ExpandButton,
-  ExpandableDiv,
-  SelectionButton,
-  StyledDetailPageSection,
-};
+export { StyledHeader, StyledSectionHeader, ExpandButton, ExpandableDiv, SelectionButton, StyledDetailPageSection };

@@ -12,7 +12,6 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import VisualizationDownloadButton from 'js/components/detailPage/visualization/VisualizationDownloadButton';
 import VisualizationWorkspaceButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
 import VisualizationShareButton from 'js/components/detailPage/visualization/VisualizationShareButton';
 import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
@@ -22,14 +21,9 @@ import { EventWithOptionalCategory } from 'js/components/types';
 
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
-import {
-  ExpandButton,
-  ExpandableDiv,
-  SelectionButton,
-  StyledDetailPageSection,
-  StyledSectionHeader,
-  vitessceFixedHeight,
-} from './style';
+import { ExpandButton, ExpandableDiv, SelectionButton, StyledDetailPageSection, StyledSectionHeader } from './style';
+import { vitessceFixedHeight } from '../style';
+import VisualizationSkeleton from '../VitessceSkeleton/VisualizationSkeleton';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
   fullscreenVizId: state.fullscreenVizId,
@@ -129,7 +123,7 @@ function Visualization({
   }, [expandViz, id, trackEntityPageEvent, trackingInfo]);
 
   if (!vitessceConfig) {
-    return null;
+    return <VisualizationSkeleton />;
   }
 
   return (
@@ -141,8 +135,13 @@ function Visualization({
           buttons={
             <Stack direction="row" spacing={1}>
               {hasNotebook && <VisualizationWorkspaceButton />}
-              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
-              <VisualizationShareButton trackingInfo={trackingInfo} shouldDisplay={!hideShare} />
+              <VisualizationShareButton
+                trackingInfo={trackingInfo}
+                uuid={uuid}
+                hasNotebook={hasNotebook}
+                parentUuid={parentUuid}
+                shouldDisplay={!hideShare}
+              />
               <VisualizationThemeSwitch trackingInfo={trackingInfo} shouldDisplay={!hideTheme} />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
                 <ExpandButton size="small" onClick={expandVisualization} variant="contained">

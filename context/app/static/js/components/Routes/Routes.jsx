@@ -57,6 +57,7 @@ function Routes({ flaskData } = {}) {
     cell_type: cellId,
     tutorialName,
     type,
+    integrated,
   } = flaskData;
   const urlPath = window.location.pathname;
 
@@ -87,7 +88,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/browse/dataset/') || urlPath.startsWith('/browse/support/')) {
     return (
       <Route>
-        <Dataset assayMetadata={entity} />
+        <Dataset assayMetadata={entity} integrated={integrated} />
       </Route>
     );
   }

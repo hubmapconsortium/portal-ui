@@ -1,9 +1,11 @@
 import React from 'react';
 
 import Box from '@mui/material/Box';
+import { useFileLinks } from '../DataProducts/hooks';
+import { UnprocessedFile } from '../types';
 
 interface MultiFileDownloaderProps {
-  files: string[];
+  files: UnprocessedFile[];
 }
 
 /**
@@ -14,12 +16,13 @@ interface MultiFileDownloaderProps {
  * @param props.files - Array of file URLs to download
  */
 function MultiFileDownloader({ files }: MultiFileDownloaderProps) {
-  if (files.length === 0) {
+  const downloadLinks = useFileLinks(files);
+  if (downloadLinks.length === 0) {
     return null;
   }
   return (
     <Box display="none">
-      {files.map((file) => (
+      {downloadLinks.map((file) => (
         <iframe title={file} src={file} key={file} />
       ))}
     </Box>

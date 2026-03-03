@@ -12,7 +12,6 @@ import { useFilesContext } from '../FilesContext';
 import { useFileLink } from './hooks';
 import DownloadFileButton from './DownloadFileButton';
 import { FileSize } from './FileSize';
-// import { PipelineInfo } from './PipelineInfo';
 
 interface DataProductProps {
   file: UnprocessedFile;

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { animated } from '@react-spring/web';
-import Stack from '@mui/material/Stack';
+import Stack, { StackProps } from '@mui/material/Stack';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import Fade from '@mui/material/Fade';
 
@@ -37,9 +37,10 @@ const AnimatedStack = animated(Stack);
 
 interface HelperPanelProps extends PropsWithChildren {
   shouldDisplay?: boolean;
+  sx?: StackProps['sx'];
 }
 
-export default function HelperPanelBase({ shouldDisplay, children }: HelperPanelProps) {
+export default function HelperPanelBase({ shouldDisplay, children, sx }: HelperPanelProps) {
   const isDesktop = useIsLargeDesktop();
   const style = useAnimatedSidebarPosition();
 
@@ -62,6 +63,7 @@ export default function HelperPanelBase({ shouldDisplay, children }: HelperPanel
           boxShadow={2}
           style={style!}
           position="sticky"
+          sx={sx}
         >
           {children}
         </AnimatedStack>

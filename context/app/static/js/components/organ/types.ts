@@ -71,7 +71,7 @@ export enum OrganPageIds {
   hraId = 'human-reference-atlas',
   referenceId = 'reference-based-analysis',
   assaysId = 'assays',
-  dataProductsId = 'data-products',
+  integratedMapsId = 'integrated-maps',
   samplesId = 'samples',
   scellopId = 'cell-population-plot',
   cellTypesId = 'cell-types',

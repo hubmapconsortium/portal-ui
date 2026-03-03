@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
@@ -12,7 +12,6 @@ import { useEventCallback } from '@mui/material/utils';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useVitessceConf } from 'js/pages/Dataset/hooks';
 import { isSupport } from 'js/components/types';
@@ -20,8 +19,6 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import { DatasetAttributionDescription } from 'js/components/detailPage/Attribution/Attribution';
-import Files from 'js/components/detailPage/files/Files';
-import DataProducts from 'js/components/detailPage/files/DataProducts';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
 // import Protocol from 'js/components/detailPage/Protocol';
@@ -29,13 +26,14 @@ import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
+import FilesTabs from 'js/components/detailPage/files/FilesTabs';
 import { getEntityCreationInfo } from 'js/helpers/functions';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 
+import useProcessedDataStore from '../store';
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
 import { Subsection } from './Subsection';
-import { SectionDescription } from '../../../../shared-styles/sections/SectionDescription';
-import useProcessedDataStore from '../store';
 import {
   ProcessedDatasetContextProvider,
   useProcessedDatasetContext,
@@ -94,12 +92,11 @@ function SummaryAccordion() {
 
 function FilesAccordion() {
   const {
-    dataset: { files, hubmap_id },
+    dataset: { files, hubmap_id, uuid },
   } = useProcessedDatasetContext();
-  const [openTabIndex, setOpenTabIndex] = useState(0);
   const track = useTrackEntityPageEvent();
 
-  const handleTrack = useEventCallback(() => {
+  const handleBulkDownloadTrack = useEventCallback(() => {
     track({
       action: 'Navigate to Bulk Download',
       label: hubmap_id,
@@ -111,7 +108,7 @@ function FilesAccordion() {
       <Subsection title="Files" icon={<InsertDriveFileRounded />}>
         <SectionDescription subsection>
           Files are available via{' '}
-          <InternalLink onClick={handleTrack} href="#bulk-data-transfer">
+          <InternalLink onClick={handleBulkDownloadTrack} href="#bulk-data-transfer">
             bulk data transfer.
           </InternalLink>
         </SectionDescription>
@@ -119,7 +116,7 @@ function FilesAccordion() {
           startIcon={<CloudDownloadRounded />}
           variant="contained"
           href="#bulk-data-transfer"
-          onClick={handleTrack}
+          onClick={handleBulkDownloadTrack}
         >
           Scroll to Bulk Data Transfer
         </Button>
@@ -127,8 +124,6 @@ function FilesAccordion() {
     );
   }
 
-  const hasDataProducts = Boolean(files.filter((file) => file.is_data_product).length);
-  const fileBrowserIndex = hasDataProducts ? 1 : 0;
   return (
     <Subsection title="Files" icon={<InsertDriveFileRounded />}>
       <SectionDescription subsection>
@@ -136,27 +131,7 @@ function FilesAccordion() {
         a comprehensive list of available files is displayed in the file browser. To download data in bulk from either
         the processed or the primary dataset, navigate to the bulk data transfer section.
       </SectionDescription>
-      <Tabs
-        value={openTabIndex}
-        onChange={(_, newValue) => {
-          setOpenTabIndex(newValue as number);
-          track({
-            action: `Change to ${newValue === fileBrowserIndex ? 'File Browser' : 'Data Products'} Tab`,
-            label: hubmap_id,
-          });
-        }}
-      >
-        {hasDataProducts && <Tab label="Data Products" index={0} />}
-        <Tab label="File Browser" index={fileBrowserIndex} />
-      </Tabs>
-      {hasDataProducts && (
-        <TabPanel value={openTabIndex} index={0}>
-          <DataProducts files={files} />
-        </TabPanel>
-      )}
-      <TabPanel value={openTabIndex} index={fileBrowserIndex}>
-        <Files files={files} />
-      </TabPanel>
+      <FilesTabs files={files} uuid={uuid} hubmap_id={hubmap_id} track={track} />
     </Subsection>
   );
 }
@@ -204,7 +179,7 @@ function AnalysisDetailsAccordion() {
     return (
       <Subsection
         title="Protocols & Workflow Details"
-        idTitleOverride="protocols-&-workflow-details"
+        idTitleOverride="protocols-and-workflow-details"
         icon={<FactCheckRounded />}
       >
         <SectionDescription subsection>
@@ -222,7 +197,7 @@ function AnalysisDetailsAccordion() {
   return (
     <Subsection
       title="Protocols & Workflow Details"
-      idTitleOverride="protocols-&-workflow-details"
+      idTitleOverride="protocols-and-workflow-details"
       icon={<FactCheckRounded />}
     >
       {/* Boolean(protocol_url) && <Protocol protocol_url={protocol_url} /> */}

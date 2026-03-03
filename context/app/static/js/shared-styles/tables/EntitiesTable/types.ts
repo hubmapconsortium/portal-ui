@@ -1,5 +1,5 @@
-import { ComponentType, ElementType } from 'react';
-import { SearchRequest, SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import React, { ComponentType, ElementType } from 'react';
+import { SearchRequest, SearchHit } from 'js/typings/elasticsearch';
 import { Entity } from 'js/components/types';
 
 export interface Column<Doc> {
@@ -21,4 +21,7 @@ export interface EntitiesTabTypes<Doc extends Entity> {
   expandedContent?: React.ComponentType<Doc>;
   estimatedExpandedRowHeight?: number;
   reverseExpandIndicator?: boolean;
+  headerActions?: React.ReactNode;
+  initialSortState?: { columnId: string; direction: 'desc' | 'asc' };
+  tabTooltipText?: string;
 }

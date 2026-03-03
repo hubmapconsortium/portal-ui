@@ -78,7 +78,7 @@ function ChartWrapper(
         display: 'grid',
         gridTemplateAreas: fullWidthGraph ? fullWidthGraphTemplateAreas : defaultGridTemplateAreas,
         overflow: 'none',
-        gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',
+        gridTemplateColumns: 'auto auto auto minmax(175px, auto)',
         gridTemplateRows: `auto auto minmax(0, auto) ${chartHeight}px minmax(0, auto)`,
         ...sx,
       }}
@@ -100,7 +100,7 @@ function ChartWrapper(
       </Stack>
       <Box sx={{ gridArea: 'chart' }}>{children}</Box>
       <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid' }}>
-        <Stack direction="column" pl={1}>
+        <Stack direction="column" px={1}>
           {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}
           <Box sx={{ flex: 1, overflowY: 'auto', gridArea: 'legend', mt: dropdown ? 0 : 2 }} tabIndex={0}>
             {colorScale && (

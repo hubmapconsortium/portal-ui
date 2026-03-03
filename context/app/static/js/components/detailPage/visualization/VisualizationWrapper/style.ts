@@ -1,14 +1,7 @@
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 
-import { vitessceFixedHeight } from '../Visualization/style';
-
-const VisualizationBackground = styled('div')({
-  height: vitessceFixedHeight,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-});
+import { vitessceFixedHeight } from '../style';
 
 const VisualizationErrorBoundaryBackground = styled(Paper)(({ theme }) => ({
   height: vitessceFixedHeight,
@@ -18,4 +11,4 @@ const VisualizationErrorBoundaryBackground = styled(Paper)(({ theme }) => ({
   fontSize: theme.typography.body1.fontSize,
 }));
 
-export { VisualizationBackground, VisualizationErrorBoundaryBackground };
+export { VisualizationErrorBoundaryBackground };

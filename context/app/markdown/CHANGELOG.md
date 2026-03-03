@@ -1,5 +1,91 @@
 # Changelog
 
+## v1.40.3 - 2026-02-24
+
+- Improve handling for gene pathways with no genes in the index.
+- Improve handling for cases when user removes all genes in pathway.
+- Handle cases where integrated maps are only available for one organ laterality.
+- Fix gene detail page cell types section.
+
+
+
+## v1.40.2 - 2026-02-17
+
+- Improve permission handling for datasets to consistently handle public data and keep protected data inaccessible by default until API response indicates otherwise.
+
+
+
+## v1.40.1 - 2026-02-11
+
+- Add null safety to metadata export functionalities.
+
+
+
+## v1.40.0 - 2026-02-11
+
+- Prevent page crashes when an entity's metadata is `null`.
+
+
+
+## v1.39.5 - 2026-01-30
+
+- Adjust description for integrated dataset provenance to exclude references to table view.
+- Add description to Integrated Data section.
+- Handle externally processed datasets without visualizations and ingest metadata.
+
+
+
+## v1.39.4 - 2026-01-30
+
+- Remove contributors table for internally processed integrated datasets.
+
+
+
+## v1.39.3 - 2026-01-29
+
+- Add HuBMAP Help Desk contact link to internal integrated datasets.
+
+
+
+## v1.39.2 - 2026-01-28
+
+- Fix display of contributors to externally processed datasets.
+
+
+
+## v1.39.1 - 2026-01-28
+
+- Add spacing to the data overview page.
+- Move the "Download Jupyter Notebook" action into the visualization's "share" menu.
+- Streamline the bulk download manifest download by opting in to every dataset type by default once no restricted datasets are present.
+- Update the attribution text for integrated datasets.
+
+
+
+## v1.39.0 - 2026-01-27
+
+- Revise route layout to use grid instead of flex to prevent overflows.
+- Add text to Tools and Applications button and colocate it with other header buttons.
+- Rename global data products to integrated maps.
+- Add tracking for successful bulk data transfer manifest downloads.
+- Add "Copy Visualization Configuration" and "Download Visualization Configuration" actions to Vitessce containers.
+- Add link to data overview page to footer.
+- Add title/description to data overview figure.
+- Moved data overview regeneration action to be done on-build.
+- Update data overview figures for HuBMAP paper.
+- Update Bulk Data Transfer functionality on Publication and Integrated dataset pages to pull in all relevant datasets.
+- Update Publication Data section to display related entities even when there's an intermediate associated collection.
+- Add integrated dataset pages to display datasets derived from multiple ancestors.
+- Update Vitessce to v3.9.1.
+
+
+
+## v1.38.1 - 2026-01-12
+
+- Prevent users without Workspaces access from creating new workspaces from the dataset detail page.
+
+
+
 ## v1.38.0 - 2026-01-08
 
 - Update footer link to APIs page to point to HuBMAP Docs.

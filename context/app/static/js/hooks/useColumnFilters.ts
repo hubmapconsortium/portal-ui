@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest } from 'js/typings/elasticsearch';
 import esb from 'elastic-builder';
 
 import { Column } from 'js/shared-styles/tables/EntitiesTable/types';

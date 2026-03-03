@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { ContributorAPIResponse, ContactAPIResponse, normalizeContributor, normalizeContact } from './utils';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 
 export function useNormalizedContributors(contributors: ContributorAPIResponse[] = []) {
   const normalizedContributors = useMemo(() => {
@@ -17,6 +18,12 @@ export function useNormalizedContacts(contacts: ContactAPIResponse[] = []) {
   return normalizedContacts;
 }
 
+interface AttributionSection {
+  label: string;
+  children: React.ReactNode;
+  tooltip?: string;
+}
+
 export function useAttributionSections(
   group_name: string,
   created_by_user_displayname: string,
@@ -26,13 +33,10 @@ export function useAttributionSections(
     contact: string;
   },
   showRegisteredBy: boolean,
+  isIntegrated = false,
 ) {
   return useMemo(() => {
-    const sections: {
-      label: string;
-      children: React.ReactNode;
-      tooltip?: string;
-    }[] = [
+    const sections: AttributionSection[] = [
       {
         label: 'Group',
         children: group_name,
@@ -54,6 +58,22 @@ export function useAttributionSections(
       });
     }
 
+    if (isIntegrated) {
+      sections.push({
+        label: 'Contact',
+        children: <ContactUsLink>HuBMAP Help Desk</ContactUsLink>,
+        tooltip: tooltips.contact,
+      });
+    }
+
     return sections;
-  }, [group_name, created_by_user_displayname, created_by_user_email, tooltips, showRegisteredBy]);
+  }, [
+    group_name,
+    showRegisteredBy,
+    tooltips.group,
+    tooltips.contact,
+    isIntegrated,
+    created_by_user_displayname,
+    created_by_user_email,
+  ]);
 }

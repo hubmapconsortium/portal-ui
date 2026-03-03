@@ -3,7 +3,7 @@ import React, { Suspense, useMemo } from 'react';
 import { EventWithOptionalCategory } from 'js/components/types';
 import VisualizationErrorBoundary from './VisualizationError';
 import { VizContainerStyleContext } from './ContainerStylingContext';
-import { VisualizationSuspenseFallback } from './VisualizationSuspenseFallback';
+import VisualizationSkeleton from '../VitessceSkeleton/VisualizationSkeleton';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
@@ -46,7 +46,7 @@ function VisualizationWrapper({
   return (
     <VizContainerStyleContext.Provider value={containerStyles}>
       <VisualizationErrorBoundary>
-        <Suspense fallback={<VisualizationSuspenseFallback />}>
+        <Suspense fallback={<VisualizationSkeleton />}>
           <Visualization
             vitData={vitData}
             uuid={uuid}
