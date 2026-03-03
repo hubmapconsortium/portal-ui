@@ -7,7 +7,10 @@ import { bulkDownloadOptionsField, bulkDownloadMetadataField } from 'js/componen
 import useBulkDownloadToasts from 'js/components/bulkDownload/toastHooks';
 import { ALL_BULK_DOWNLOAD_OPTIONS } from 'js/components/bulkDownload/constants';
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
-import { useSearchHits } from 'js/hooks/useSearchData';
+import useSWR from 'swr';
+import { fetchSearchData } from 'js/hooks/useSearchData';
+import { useAppContext } from 'js/components/Contexts';
+import { SearchHit } from 'js/typings/elasticsearch';
 import { useRestrictedDatasetsForm } from 'js/hooks/useRestrictedDatasets';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
@@ -55,18 +58,44 @@ function useBulkDownloadForm() {
   };
 }
 
+const ES_BATCH_SIZE = 10_000;
+
 function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   const { isOpen, uuids, open, close, setUuids, setDownloadSuccess } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
+  const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  // Fetch datasets for the selected uuids
-  const datasetQuery = {
-    query: getIDsQuery([...uuids]),
-    _source: ['hubmap_id', 'processing', 'uuid', 'processing_type'],
-    size: uuids.size,
-  };
-  const { searchHits, isLoading } = useSearchHits<BulkDownloadDataset>(datasetQuery);
+  // Fetch datasets for the selected uuids, batching to stay within ES limits
+  const sortedUuids = useMemo(() => [...uuids].sort(), [uuids]);
+  const shouldFetch = sortedUuids.length > 0;
+
+  const { data: searchHits = [], isLoading: isDatasetsLoading } = useSWR(
+    shouldFetch ? ['bulk-download-datasets', sortedUuids] : null,
+    async () => {
+      const allUuids = [...uuids];
+      const batches: string[][] = [];
+      for (let i = 0; i < allUuids.length; i += ES_BATCH_SIZE) {
+        batches.push(allUuids.slice(i, i + ES_BATCH_SIZE));
+      }
+
+      const results = await Promise.all(
+        batches.map((batch) =>
+          fetchSearchData<BulkDownloadDataset, unknown>(
+            {
+              query: getIDsQuery(batch),
+              _source: ['hubmap_id', 'processing', 'uuid', 'processing_type'],
+              size: batch.length,
+            },
+            elasticsearchEndpoint,
+            groupsToken,
+          ),
+        ),
+      );
+
+      return results.flatMap((r) => (r.hits?.hits ?? []) as Required<SearchHit<BulkDownloadDataset>>[]);
+    },
+  );
   const datasets = searchHits.map(({ _source }) => _source);
 
   // Which options and datasets to show in the dialog
@@ -191,8 +220,9 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   }, [isOpen, trigger]);
 
   return {
+    ...restrictedDatasetsFields,
     isOpen,
-    isLoading,
+    isLoading: isDatasetsLoading || restrictedDatasetsFields.isLoading,
     errors,
     control,
     downloadOptions,
@@ -202,7 +232,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     openDialog,
     downloadManifest,
     downloadMetadata,
-    ...restrictedDatasetsFields,
   };
 }
 

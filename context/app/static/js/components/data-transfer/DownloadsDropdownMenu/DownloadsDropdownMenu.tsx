@@ -33,11 +33,11 @@ function BulkDownloadMenuItem({ defaultUUIDs, analyticsCategory }: Omit<Download
     [selectedRows, defaultUUIDs],
   );
 
-  const restrictedRows = useGetRestrictedDatasets(actualSelection);
+  const { restrictedRows, isLoading } = useGetRestrictedDatasets(actualSelection);
 
   const allRestricted = useMemo(() => {
-    return actualSelection.size > 0 && actualSelection.size === restrictedRows.length;
-  }, [actualSelection, restrictedRows]);
+    return actualSelection.size > 0 && !isLoading && actualSelection.size === restrictedRows.length;
+  }, [actualSelection, restrictedRows, isLoading]);
 
   const onClick = useEventCallback(() => {
     if (analyticsCategory) {
@@ -52,7 +52,7 @@ function BulkDownloadMenuItem({ defaultUUIDs, analyticsCategory }: Omit<Download
   const label = actualSelection.size === 1 ? 'Dataset' : 'Datasets';
 
   const menuItem = (
-    <MenuItem onClick={onClick} disabled={allRestricted}>
+    <MenuItem onClick={onClick} disabled={allRestricted || isLoading}>
       <ListItemIcon>
         <Download fontSize="small" color="primary" />
       </ListItemIcon>

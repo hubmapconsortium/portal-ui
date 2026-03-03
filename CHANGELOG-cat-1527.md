@@ -1,0 +1,1 @@
+- Enhance dataset permission handling to rely purely on `accessible-data-directories` endpoint for all users.
