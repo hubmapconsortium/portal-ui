@@ -14,7 +14,6 @@ import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useVitessceConf } from 'js/pages/Dataset/hooks';
-import { isSupport } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
@@ -41,6 +40,7 @@ import {
 } from './ProcessedDatasetContext';
 import { useProcessedDatasetDetails } from './hooks';
 import { OldVersionAlert } from './OldVersionAlert';
+import { shouldIncludeParent } from './utils';
 
 function ProcessedDatasetDescription() {
   const {
@@ -238,7 +238,7 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
 
   const { data: conf, isLoading: loadingVitessceConf } = useVitessceConf(
     selectedDatasetVersionUUID,
-    isSupport(sectionDataset) ? parent.uuid : undefined,
+    shouldIncludeParent(sectionDataset) ? parent.uuid : undefined,
   );
 
   const defaultExpanded = sectionDataset.status === 'Published';
