@@ -1,0 +1,1 @@
+- Fix infinite loading for dataset permissions in Chrome.
