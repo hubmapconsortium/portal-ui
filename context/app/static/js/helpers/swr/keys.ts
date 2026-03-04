@@ -1,12 +1,20 @@
+const FNV_PRIME = 0x01000193;
+const FNV_OFFSET_BASIS = 0x811c9dc5;
+
 /**
  * FNV-1a hash for a single string.
- * Returns a 32-bit unsigned integer.
+ * Formal definition: https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
+ * Another explanation: https://compile7.org/hashing/how-to-use-fnv-1-in-javascript-in-browser/#encoding-strings-with-fnv-1-in-javascript
+ *
+ * Initializes a hash value to a fixed offset basis, then iterates over each byte of the input string,
+ * XORs it with the hash, and multiplies the result by a prime number. The final hash is a 32-bit unsigned integer.
  */
 function fnv1a(str: string): number {
-  let hash = 0x811c9dc5;
+  let hash = FNV_OFFSET_BASIS;
   for (let i = 0; i < str.length; i++) {
-    hash = Math.imul(hash ^ str.charCodeAt(i), 0x01000193);
+    hash = Math.imul(hash ^ str.charCodeAt(i), FNV_PRIME);
   }
+  // >>> 0 converts to unsigned 32-bit integer, ensuring a non-negative result and consistent hashing across platforms.
   return hash >>> 0;
 }
 
