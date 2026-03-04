@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { ButtonProps } from '@mui/material/Button';
-import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
+import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import BulkDownloadDialog from 'js/components/bulkDownload/BulkDownloadDialog';
 import OutlinedButton from 'js/shared-styles/buttons/OutlinedButton';
 
@@ -9,7 +9,7 @@ interface BulkDownloadTextButtonProps extends ButtonProps {
   uuids: Set<string>;
 }
 function BulkDownloadTextButton({ uuids, ...rest }: BulkDownloadTextButtonProps) {
-  const { openDialog, isOpen } = useBulkDownloadDialog();
+  const { openDialog, isOpen } = useBulkDownloadStore();
 
   return (
     <Box>

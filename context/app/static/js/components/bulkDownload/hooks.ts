@@ -17,6 +17,9 @@ import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { getIDsQuery } from 'js/helpers/queries';
 import { restrictedDatasetsErrorMessage } from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
 import { trackEvent } from 'js/helpers/trackers';
+import { hashUuidSet } from 'js/helpers/swr/keys';
+
+const EMPTY_SEARCH_HITS: Required<SearchHit<BulkDownloadDataset>>[] = [];
 
 const schema = z
   .object({
@@ -61,42 +64,42 @@ function useBulkDownloadForm() {
 const ES_BATCH_SIZE = 10_000;
 
 function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
-  const { isOpen, uuids, open, close, setUuids, setDownloadSuccess } = useBulkDownloadStore();
+  const { isOpen, uuids, close, setUuids, setDownloadSuccess } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  // Fetch datasets for the selected uuids, batching to stay within ES limits
-  const sortedUuids = useMemo(() => [...uuids].sort(), [uuids]);
-  const shouldFetch = sortedUuids.length > 0;
-
-  const { data: searchHits = [], isLoading: isDatasetsLoading } = useSWR(
-    shouldFetch ? ['bulk-download-datasets', sortedUuids] : null,
-    async () => {
-      const allUuids = [...uuids];
-      const batches: string[][] = [];
-      for (let i = 0; i < allUuids.length; i += ES_BATCH_SIZE) {
-        batches.push(allUuids.slice(i, i + ES_BATCH_SIZE));
-      }
-
-      const results = await Promise.all(
-        batches.map((batch) =>
-          fetchSearchData<BulkDownloadDataset, unknown>(
-            {
-              query: getIDsQuery(batch),
-              _source: ['hubmap_id', 'processing', 'uuid', 'processing_type'],
-              size: batch.length,
-            },
-            elasticsearchEndpoint,
-            groupsToken,
-          ),
-        ),
-      );
-
-      return results.flatMap((r) => (r.hits?.hits ?? []) as Required<SearchHit<BulkDownloadDataset>>[]);
-    },
+  // Fetch datasets for the selected uuids, batching to stay within ES limits.
+  // Use a hash for the SWR key to avoid creating a large key string from all UUIDs.
+  const shouldFetch = uuids.size > 0;
+  const swrKey = useMemo(
+    () => (shouldFetch ? `bulk-download-datasets:${hashUuidSet(uuids)}` : null),
+    [shouldFetch, uuids],
   );
-  const datasets = searchHits.map(({ _source }) => _source);
+  const { data: searchHits = EMPTY_SEARCH_HITS, isLoading: isDatasetsLoading } = useSWR(swrKey, async () => {
+    const allUuids = [...uuids];
+    const batches: string[][] = [];
+    for (let i = 0; i < allUuids.length; i += ES_BATCH_SIZE) {
+      batches.push(allUuids.slice(i, i + ES_BATCH_SIZE));
+    }
+
+    const results = await Promise.all(
+      batches.map((batch) =>
+        fetchSearchData<BulkDownloadDataset, unknown>(
+          {
+            query: getIDsQuery(batch),
+            _source: ['hubmap_id', 'processing', 'uuid', 'processing_type'],
+            size: batch.length,
+          },
+          elasticsearchEndpoint,
+          groupsToken,
+        ),
+      ),
+    );
+
+    return results.flatMap((r) => (r.hits?.hits ?? []) as Required<SearchHit<BulkDownloadDataset>>[]);
+  });
+  const datasets = useMemo(() => searchHits.map(({ _source }) => _source), [searchHits]);
 
   // Which options and datasets to show in the dialog
   const downloadOptions = useMemo(
@@ -124,8 +127,9 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     [deselectRows, setUuids, uuids],
   );
 
+  const selectedRowsSet = useMemo(() => new Set(uuids), [uuids]);
   const restrictedDatasetsFields = useRestrictedDatasetsForm({
-    selectedRows: new Set(uuids),
+    selectedRows: selectedRowsSet,
     deselectRows: removeUuidsOrRows,
     restrictedDatasetsErrorMessage,
   });
@@ -202,14 +206,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     [handleClose, downloadOptions, downloadMetadata, downloadManifest],
   );
 
-  const openDialog = useCallback(
-    (initialUuids: Set<string>) => {
-      setUuids(initialUuids);
-      open();
-    },
-    [setUuids, open],
-  );
-
   // Trigger error on initial load for required fields
   useEffect(() => {
     if (isOpen) {
@@ -229,7 +225,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     onSubmit,
     handleSubmit,
     handleClose,
-    openDialog,
     downloadManifest,
     downloadMetadata,
   };

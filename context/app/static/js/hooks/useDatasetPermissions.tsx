@@ -3,6 +3,7 @@ import useSWR from 'swr';
 
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
+import { hashUuidSet } from 'js/helpers/swr/keys';
 import { getAuthHeader } from 'js/helpers/functions';
 
 const BATCH_SIZE = 10_000;
@@ -64,17 +65,22 @@ interface UseDatasetAccessReturn {
   isLoading: boolean;
 }
 
+const EMPTY_PERMISSIONS: DatasetPermissionsResponse = {};
+
 function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
   const { groupsToken, softAssayEndpoint } = useAppContext();
 
-  const sortedUuids = useMemo(() => [...uuids].sort(), [uuids]);
+  // Use a fast hash for the SWR key instead of joining all UUIDs into a large string.
+  // For 15k UUIDs, this avoids creating a ~555KB key string and an O(N log N) sort.
+  const swrKey = useMemo(() => {
+    if (uuids.length === 0 || !softAssayEndpoint) return null;
+    return `dataset-access:${hashUuidSet(uuids)}`;
+  }, [uuids, softAssayEndpoint]);
 
-  const shouldFetch = sortedUuids.length > 0 && Boolean(softAssayEndpoint);
-
-  const { data = {}, isLoading } = useSWR(shouldFetch ? ['dataset-access', sortedUuids, groupsToken] : null, () =>
+  const { data = EMPTY_PERMISSIONS, isLoading } = useSWR(swrKey, () =>
     fetchBatchedDatasetPermissions({
       url: softAssayEndpoint,
-      data: sortedUuids,
+      data: uuids,
       groupsToken,
     }),
   );
