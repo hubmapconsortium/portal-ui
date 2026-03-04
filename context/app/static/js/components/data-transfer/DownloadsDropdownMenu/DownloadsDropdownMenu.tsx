@@ -7,7 +7,7 @@ import { useEventCallback } from '@mui/material/utils';
 
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
+import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import BulkDownloadDialog from 'js/components/bulkDownload/BulkDownloadDialog';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
@@ -25,7 +25,7 @@ interface DownloadsDropdownMenuProps {
 }
 
 function BulkDownloadMenuItem({ defaultUUIDs, analyticsCategory }: Omit<DownloadsDropdownMenuProps, 'type'>) {
-  const { openDialog, isOpen } = useBulkDownloadDialog();
+  const { openDialog, isOpen } = useBulkDownloadStore();
   const { selectedRows, deselectRows } = useSelectableTableStore();
 
   const actualSelection = useMemo(

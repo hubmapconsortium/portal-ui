@@ -8,6 +8,7 @@ import { useAppContext } from 'js/components/Contexts';
 
 import { AggregationsAggregate, SearchHit, SearchRequest, SearchResponseBody } from 'js/typings/elasticsearch';
 import { SWRError } from 'js/helpers/swr/errors';
+import { hashString } from 'js/helpers/swr/keys';
 
 export interface Hit<Doc extends object | Record<string, unknown>> {
   _source: Doc;
@@ -64,8 +65,10 @@ interface RequestInitArgs {
 }
 function useRequestInit({ query, useDefaultQuery }: RequestInitArgs) {
   const authHeader = useAuthHeader();
-  const body = createSearchRequestBody({ query, useDefaultQuery });
-  return buildSearchRequestInit({ body, authHeader });
+  return useMemo(() => {
+    const body = createSearchRequestBody({ query, useDefaultQuery });
+    return buildSearchRequestInit({ body, authHeader });
+  }, [query, useDefaultQuery, authHeader]);
 }
 
 interface UseSearchDataConfig extends SWRConfiguration {
@@ -112,16 +115,23 @@ export default function useSearchData<Documents, Aggs>(
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
     shouldFetch = true,
-    fetcher = defaultConfig.fetcher,
+    fetcher: fetchFn = defaultConfig.fetcher,
     ...swrConfig
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseSearchData<Documents, Aggs> {
   const requestInit = useRequestInit({ query, useDefaultQuery });
   const { elasticsearchEndpoint } = useAppContext();
 
+  // Use a hashed string key to avoid SWR's stableHash serialization and
+  // large string allocation when the query body contains many UUIDs.
+  const swrKey = useMemo(() => {
+    if (!shouldFetch) return null;
+    return `search:${elasticsearchEndpoint}:${hashString(requestInit.body as string)}`;
+  }, [shouldFetch, elasticsearchEndpoint, requestInit]);
+
   const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
-    shouldFetch ? { query, requestInit, url: elasticsearchEndpoint } : null,
-    fetcher,
+    swrKey,
+    () => fetchFn({ url: elasticsearchEndpoint, requestInit }) as Promise<SearchResponseBody<Documents, Aggs>>,
     swrConfig,
   );
 
@@ -129,6 +139,7 @@ export default function useSearchData<Documents, Aggs>(
   return { searchData: data!, isLoading };
 }
 
+const EMPTY_HITS: never[] = [];
 export function useSearchHits<Documents>(
   query: SearchRequest,
   {
@@ -139,7 +150,7 @@ export function useSearchHits<Documents>(
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseHitsData<Documents> {
   const { searchData, isLoading } = useSearchData(query, { useDefaultQuery, shouldFetch, fetcher, ...swrConfig });
-  const searchHits = (searchData?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
+  const searchHits = (searchData?.hits?.hits ?? EMPTY_HITS) as Required<SearchHit<Documents>>[];
   return { searchHits, isLoading };
 }
 

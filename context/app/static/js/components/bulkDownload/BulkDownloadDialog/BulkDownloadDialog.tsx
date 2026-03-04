@@ -110,6 +110,7 @@ interface DownloadOptionsSectionProps {
   downloadOptions: {
     key: string;
     label: string;
+    count: number;
   }[];
   isLoading: boolean;
   errorMessages: string[];
@@ -157,7 +158,7 @@ function DownloadOptionsSection({
         <DownloadOptionsDescription />
         <SummaryPaper>
           <Stack direction="column" spacing={2}>
-            <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" />
+            <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" downloadOptions={downloadOptions} />
             <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
           </Stack>
         </SummaryPaper>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -202,8 +202,9 @@ function useCreateWorkspaceForm({
     }
   }, [dialogIsOpen, trigger]);
 
+  const selectedRowsSet = useMemo(() => new Set(allDatasets), [allDatasets]);
   const { errorMessages } = useWorkspacesRestrictedDatasetsForm({
-    selectedRows: new Set(allDatasets),
+    selectedRows: selectedRowsSet,
     deselectRows: (uuids) => {
       removeDatasets(uuids);
     },
