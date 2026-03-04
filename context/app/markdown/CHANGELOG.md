@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.41.2 - 2026-03-04
+
+- Fix infinite loading for dataset permissions in Chrome.
+
+
+
 ## v1.41.1 - 2026-03-04
 
 - Remove duplicate "Annotations" section label from processed datasets' summaries.
