@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.41.1 - 2026-03-04
+
+- Remove duplicate "Annotations" section label from processed datasets' summaries.
+
+
+
 ## v1.41.0 - 2026-03-03
 
 - Add "Annotated Object Types" term facet to the dataset search page, displaying human-readable labels for annotated object ontology IDs (CL/UBERON).
