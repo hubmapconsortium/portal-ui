@@ -48,14 +48,17 @@ const titleLinkNames: Record<AllEntityTypes, string | undefined> = {
   Tutorial: 'Tutorials',
 };
 
-const useTitleLinkTooltipText = (entityType?: AllEntityTypes) => {
+const getTitleLinkTooltipText = (entityType?: AllEntityTypes, organIcon?: string) => {
+  if (organIcon) {
+    return 'Organs';
+  }
   if (!entityType || !titleLinkNames[entityType]) {
     return undefined;
   }
   return titleLinkNames[entityType];
 };
 
-const useSummaryHref = (entityIcon?: keyof typeof entityIconMap, organIcon?: string) => {
+const getSummaryHref = (entityIcon?: keyof typeof entityIconMap, organIcon?: string) => {
   if (organIcon) {
     return '/organs';
   }
@@ -82,8 +85,8 @@ function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon }: Summ
     }
   }, [setSummaryComponentObserver, entry, inView]);
 
-  const href = useSummaryHref(entityIcon, organIcon);
-  const tooltipText = useTitleLinkTooltipText(entityIcon);
+  const href = getSummaryHref(entityIcon, organIcon);
+  const tooltipText = getTitleLinkTooltipText(entityIcon, organIcon);
   const component = href ? 'a' : 'div';
 
   const summaryTitle = (
@@ -105,7 +108,7 @@ function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon }: Summ
     </Stack>
   );
 
-  if (!tooltipText) {
+  if (!tooltipText || !href) {
     return summaryTitle;
   }
 

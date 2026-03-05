@@ -1,4 +1,5 @@
 import React from 'react';
+import userEvent from '@testing-library/user-event';
 import { render, screen } from 'test-utils/functions';
 import SummaryTitle from './SummaryTitle';
 
@@ -42,10 +43,17 @@ describe('SummaryTitle', () => {
     expect(screen.getByText('Donor Search')).toBeInTheDocument();
   });
 
-  it('renders as a link to /organs when organIcon is provided', () => {
+  it('renders as a link to /organs with breadcrumb label when organIcon is provided', () => {
     render(<SummaryTitle organIcon="Kidney">Kidney</SummaryTitle>);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/organs');
+    expect(screen.getByText('Organs')).toBeInTheDocument();
+  });
+
+  it('shows navigation tooltip on hover for organ pages', async () => {
+    render(<SummaryTitle organIcon="Kidney">Kidney</SummaryTitle>);
+    await userEvent.hover(screen.getByRole('link'));
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Go to Organs');
   });
 
   it('does not render a link for entity types without a title link', () => {
@@ -68,5 +76,23 @@ describe('SummaryTitle', () => {
     render(<SummaryTitle entityIcon="Collection">My Collection</SummaryTitle>);
     expect(screen.getByText('Collections')).toBeInTheDocument();
     expect(screen.getByRole('link')).toHaveAttribute('href', '/collections');
+  });
+
+  it('shows navigation tooltip on hover when entity has both link and name', async () => {
+    render(<SummaryTitle entityIcon="Dataset">My Dataset</SummaryTitle>);
+    await userEvent.hover(screen.getByRole('link'));
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Go to Dataset Search');
+  });
+
+  it('does not show navigation tooltip when entity has no link', async () => {
+    render(<SummaryTitle entityIcon="VerifiedUser">User</SummaryTitle>);
+    await userEvent.hover(screen.getByRole('heading'));
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  it('does not show navigation tooltip when no entity icon is provided', async () => {
+    render(<SummaryTitle>Plain Title</SummaryTitle>);
+    await userEvent.hover(screen.getByRole('heading'));
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 });

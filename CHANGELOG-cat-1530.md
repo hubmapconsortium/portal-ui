@@ -1,1 +1,1 @@
-- Improve detail page breadcrumb clarity.
+- Improved detail page breadcrumb clarity.
