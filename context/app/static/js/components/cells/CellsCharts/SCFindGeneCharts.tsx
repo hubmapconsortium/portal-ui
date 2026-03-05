@@ -9,6 +9,7 @@ import { SCFindCellTypesChart } from './CellTypesChart';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMultiGeneHyperQueryCellTypes } from 'js/api/scfind/useHyperQueryCellTypes';
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
+import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 
 function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
   const { data: vitessceConf, isLoading } = useVitessceConf(uuid, undefined, gene, true);
@@ -43,10 +44,13 @@ export default function SCFindGeneCharts(dataset: Dataset) {
   // Extract organ name for hyperquery, remove laterality
   const organName = dataset.origin_samples_unique_mapped_organs?.[0].split(' (')[0];
 
+  const modality = useOptionalSCFindModality();
+
   // Fetch relevant cell types for each gene separately
   const { data: geneResults = {}, isLoading: hyperQueryLoading } = useMultiGeneHyperQueryCellTypes({
     genes: genesToQuery,
     organName,
+    modality,
   });
 
   // Process results to create gene highlights and cell type associations

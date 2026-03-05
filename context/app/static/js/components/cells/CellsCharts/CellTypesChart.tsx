@@ -6,6 +6,7 @@ import { TooltipData } from 'js/shared-styles/charts/types';
 import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import { Dataset } from 'js/components/types';
+import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 import Typography from '@mui/material/Typography';
 import { decimal, percent } from 'js/helpers/number-format';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
@@ -262,7 +263,8 @@ export function SCFindCellTypesChart({
   cellTypeGeneAssociations = [],
 }: SCFindCellTypesChartProps) {
   const cellVariableNames = useCellVariableNames();
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
+  const modality = useOptionalSCFindModality();
+  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid, modality });
   const isCellTypesQuery = useIsQueryType('cell-type');
   const cellNames = useMemo(() => {
     if (isCellTypesQuery) {

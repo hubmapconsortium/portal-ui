@@ -7,13 +7,16 @@ import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/Mol
 import { useSelectedPathwayParticipants } from '../MolecularDataQueryForm/AutocompleteEntity/hooks';
 import { categorizeCellTypes, mapDatasetsToCellTypeCategories, processGeneQueryResults } from './utils';
 import { getUnwrappedResult, CellTypeCategory } from './types';
+import { useSCFindModality } from './SCFindModalityContext';
 
 export function useSCFindCellTypeResults(cellTypes: string[] = []) {
   // The index of the dataset results matches the index of the cell types
   // in the original cellVariableNames array.
+  const modality = useSCFindModality();
 
   const datasetsWithCellTypes = useFindDatasetsForCellTypes({
     cellTypes,
+    modality,
   });
 
   const { data = [], countsMaps, ...rest } = datasetsWithCellTypes;
@@ -67,6 +70,7 @@ export function useSCFindCellTypeResults(cellTypes: string[] = []) {
 
 export function useSCFindGeneResults() {
   const genes = useCellVariableNames();
+  const modality = useSCFindModality();
 
   const { participants, pathwayName, isLoading: isLoadingPathwayGenes } = useSelectedPathwayParticipants();
 
@@ -77,6 +81,7 @@ export function useSCFindGeneResults() {
     ...results
   } = useFindDatasetForGenes({
     geneList: genes,
+    modality,
   });
 
   // Gene query results have the following categories:

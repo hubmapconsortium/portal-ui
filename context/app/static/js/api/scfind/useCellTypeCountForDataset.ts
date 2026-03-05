@@ -13,13 +13,14 @@ export interface CellTypeCountsForDataset {
 
 export interface CellTypeCountForDatasetParams {
   dataset: string;
+  modality?: string;
 }
 
 type CellTypeCountForDatasetKey = string;
 
 export function createCellTypeCountForDatasetKey(
   scFindEndpoint: string,
-  { dataset }: CellTypeCountForDatasetParams,
+  { dataset, modality }: CellTypeCountForDatasetParams,
   scFindIndexVersion?: string,
 ): CellTypeCountForDatasetKey {
   return createScFindKey(
@@ -27,6 +28,7 @@ export function createCellTypeCountForDatasetKey(
     'cellTypeCountForDataset',
     {
       dataset,
+      modality,
     },
     scFindIndexVersion,
   );
@@ -42,13 +44,14 @@ export default function useCellTypeCountForDataset(props: CellTypeCountForDatase
 
 interface CellTypeCountForDatasetsParams {
   datasets?: string[];
+  modality?: string;
 }
 
 type CellTypeCountForDatasetsKey = string[];
 
 export function createCellTypeCountForDatasetsKey(
   scFindEndpoint: string,
-  { datasets }: CellTypeCountForDatasetsParams,
+  { datasets, modality }: CellTypeCountForDatasetsParams,
   scFindIndexVersion?: string,
 ): CellTypeCountForDatasetsKey {
   if (!datasets) return [];
@@ -58,6 +61,7 @@ export function createCellTypeCountForDatasetsKey(
       'cellTypeCountForDataset',
       {
         dataset,
+        modality,
       },
       scFindIndexVersion,
     ),

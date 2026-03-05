@@ -27,11 +27,13 @@ import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import { CellTypeCategory } from './types';
+import { useSCFindModality } from './SCFindModalityContext';
 
 function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+  const modality = useSCFindModality();
 
-  const { data } = useIndexedDatasets();
+  const { data } = useIndexedDatasets(modality);
 
   const allCountsMap = data?.countsMap;
 
@@ -93,6 +95,8 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
     cellTypeStats: state.cellTypeStats,
   }));
   const cellTypes = useCellVariableNames();
+  const modality = useSCFindModality();
+  const modalityLabel = modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
 
   return (
     <HelperPanel shouldDisplay={shouldDisplay} sx={{ minWidth: shouldDisplay ? 192 : 0 }}>
@@ -103,7 +107,7 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
       <HelperPanel.BodyItem label="Cell Type Distribution">
         <div>
           This chart shows the distribution of cell types across {currentTissue} for the selected tissue. These results
-          are derived from RNAseq datasets that were indexed by the <SCFindLink />.
+          are derived from {modalityLabel} datasets that were indexed by the <SCFindLink />.
         </div>
         {/* For some reason, `py: 1` leads to the divider being vertically misaligned; pt:1 and mb: 1 are a workaround */}
         <Divider sx={{ pt: 1, mb: 1 }} />
@@ -126,6 +130,8 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
 function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: EventInfo }) {
   const { openTabIndex, handleTabChange } = useTabs();
   const cellTypes = useCellVariableNames();
+  const modality = useSCFindModality();
+  const modalityLabel = modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
   const tissues = useMemo(() => {
     const uniqueTissues = new Set<string>();
     cellTypes.forEach((cellType) => {
@@ -209,8 +215,9 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
           </>
         }
       >
-        These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP datasets
-        are currently compatible with this method due to data modalities or the availability of cell annotations.
+        These results are derived from {modalityLabel} datasets that were indexed by the <SCFindLink />. Not all HuBMAP
+        datasets are currently compatible with this method due to data modalities or the availability of cell
+        annotations.
       </DatasetsOverview>
       <ResultsHelperPanel shouldDisplay={displayHelper} currentTissue={currentTissue} />
     </div>

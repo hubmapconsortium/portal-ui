@@ -13,6 +13,7 @@ import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
 import DatasetsOverviewChart from './DatasetsOverviewChart';
+import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 
 interface DatasetsOverviewProps extends React.PropsWithChildren {
   datasets: string[];
@@ -28,7 +29,8 @@ export default function DatasetsOverview({
   trackingInfo,
   tableDescription,
 }: DatasetsOverviewProps) {
-  const { data: indexedDatasets, isLoading, error } = useIndexedDatasets();
+  const modality = useOptionalSCFindModality();
+  const { data: indexedDatasets, isLoading, error } = useIndexedDatasets(modality);
   const indexed = useDatasetsOverview(indexedDatasets?.datasets ?? []);
   const all = useDatasetsOverview();
   const matched = useDatasetsOverview(datasets);

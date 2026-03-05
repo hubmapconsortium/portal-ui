@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 
 export interface FindDatasetForCellTypeParams {
   cellType: string;
+  modality?: string;
 }
 
 type FindDatasetForCellTypeKey = string | null;
@@ -16,7 +17,7 @@ export interface FindDatasetForCellTypeResponse {
 
 export function createFindDatasetForCellTypeKey(
   scFindEndpoint: string,
-  { cellType }: FindDatasetForCellTypeParams,
+  { cellType, modality }: FindDatasetForCellTypeParams,
   scFindIndexVersion?: string,
 ): FindDatasetForCellTypeKey {
   if (typeof cellType !== 'string' || cellType.length === 0) return null;
@@ -25,6 +26,7 @@ export function createFindDatasetForCellTypeKey(
     'findDatasetForCellType',
     {
       cell_type: cellType,
+      modality,
     },
     scFindIndexVersion,
   );
@@ -32,6 +34,7 @@ export function createFindDatasetForCellTypeKey(
 
 export interface FindDatasetForCellTypesParams {
   cellTypes: string[];
+  modality?: string;
 }
 
 type FindDatasetForCellTypesKey = FindDatasetForCellTypeKey[];
@@ -41,10 +44,10 @@ type FindDatasetForCellTypesKey = FindDatasetForCellTypeKey[];
  * @param params.cellTypes The cell types to search for.
  * @returns A list of HBM dataset IDs that contain the given cell types.
  */
-export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetForCellTypesParams) {
+export default function useFindDatasetForCellTypes({ cellTypes, modality }: FindDatasetForCellTypesParams) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = cellTypes.map((cellType) =>
-    createFindDatasetForCellTypeKey(scFindEndpoint, { cellType }, scFindIndexVersion),
+    createFindDatasetForCellTypeKey(scFindEndpoint, { cellType, modality }, scFindIndexVersion),
   );
   const { data, ...rest } = useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(
     key,

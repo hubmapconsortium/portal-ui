@@ -10,13 +10,14 @@ export interface DatasetsForGenesResponse {
 
 export interface DatasetsForGenesParams {
   geneList: string | string[];
+  modality?: string;
 }
 
 type DatasetsForGenesKey = string | null;
 
 export function createFindDatasetForGenesKey(
   scFindEndpoint: string,
-  { geneList }: DatasetsForGenesParams,
+  { geneList, modality }: DatasetsForGenesParams,
   scFindIndexVersion?: string,
 ): DatasetsForGenesKey {
   if (
@@ -29,6 +30,7 @@ export function createFindDatasetForGenesKey(
     'findDatasets',
     {
       gene_list: stringOrArrayToString(geneList) || undefined, // Convert to string or return undefined if empty
+      modality,
     },
     scFindIndexVersion,
   );

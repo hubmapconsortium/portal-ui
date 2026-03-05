@@ -3,6 +3,7 @@ import useCellTypeCountForTissue from 'js/api/scfind/useCellTypeCountForTissue';
 
 import React from 'react';
 import Description from 'js/shared-styles/sections/Description';
+import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 import FractionGraph from './FractionGraph';
 
 interface CellTypeDistributionChartProps {
@@ -16,7 +17,8 @@ export default function CellTypeDistributionChart({
   cellTypes,
   skipDescription,
 }: CellTypeDistributionChartProps) {
-  const { data, isLoading } = useCellTypeCountForTissue({ tissue });
+  const modality = useOptionalSCFindModality();
+  const { data, isLoading } = useCellTypeCountForTissue({ tissue, modality });
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={300} />;

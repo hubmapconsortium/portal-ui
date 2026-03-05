@@ -10,6 +10,7 @@ import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrack
 const queryMethods = {
   gene: [
     { value: 'scFind', label: 'scFind - RNAseq experiments (gene expression)', disabled: false },
+    { value: 'scFindATAC', label: 'scFind - ATACseq experiments (DNA accessibility)', disabled: false },
     {
       value: 'crossModalityRNA',
       label: 'Cells Cross-Modality - RNAseq experiments (gene expression)',
@@ -23,6 +24,7 @@ const queryMethods = {
   ],
   'cell-type': [
     { value: 'scFind', label: 'scFind (RNASeq)', disabled: false },
+    { value: 'scFindATAC', label: 'scFind (ATACSeq)', disabled: false },
     { value: 'crossModality', label: 'Cells Cross-Modality', disabled: false },
   ],
   protein: undefined,
@@ -33,14 +35,14 @@ const scFindLink = <OutboundIconLink href="https://doi.org/10.1038/s41592-021-01
 const description = {
   gene: (
     <>
-      Choose the query method to retrieve data. {scFindLink} is tailored for RNAseq analyses, while Cells Cross-Modality
-      supports RNAseq and ATACseq datasets.
+      Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq analyses, while Cells
+      Cross-Modality supports RNAseq and ATACseq datasets.
     </>
   ),
   'cell-type': (
     <>
-      Choose the query method to retrieve data. {scFindLink} is tailored for RNAseq analyses, while Cells Cross-Modality
-      supports RNAseq, ATACseq and proteomic datasets.
+      Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq analyses, while Cells
+      Cross-Modality supports RNAseq, ATACseq and proteomic datasets.
     </>
   ),
   protein: undefined,

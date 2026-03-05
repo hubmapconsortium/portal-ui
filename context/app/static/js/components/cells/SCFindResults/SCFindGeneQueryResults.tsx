@@ -29,6 +29,7 @@ import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { GeneCountsContextProvider } from './GeneCountsContext';
 import { matchingGeneColumn, matchingGenesColumn, totalCellCountColumn } from './columns';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import { useSCFindModality } from './SCFindModalityContext';
 
 const columns = [hubmapID, organCol, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
@@ -56,8 +57,9 @@ function SCFindGeneQueryDatasetList({ datasetIds, countsMap, geneCountMap }: SCF
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
   const gene = useOptionalGeneContext();
   const hasIndividualGene = Boolean(gene);
+  const modality = useSCFindModality();
 
-  const { data } = useIndexedDatasets();
+  const { data } = useIndexedDatasets(modality);
 
   const allCountsMap = data?.countsMap;
 

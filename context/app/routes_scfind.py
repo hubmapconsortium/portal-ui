@@ -40,26 +40,38 @@ def _make_scfind_request(endpoint, params=None):
 
 
 @cache
-def _get_all_cell_type_names():
+def _get_all_cell_type_names(modality=None):
     """
     Fetch all cell type names from the SCFIND API.
+
+    Args:
+        modality: Optional modality filter (e.g., 'ATAC'). None for RNA (default).
 
     Returns:
         List of cell type names
     """
-    response = _make_scfind_request('cellTypeNames')
+    params = {}
+    if modality:
+        params['modality'] = modality
+    response = _make_scfind_request('cellTypeNames', params or None)
     return response.get('cellTypeNames', [])
 
 
 @cache
-def _get_all_genes():
+def _get_all_genes(modality=None):
     """
     Fetch all gene names from the SCFIND API.
+
+    Args:
+        modality: Optional modality filter (e.g., 'ATAC'). None for RNA (default).
 
     Returns:
         List of gene names
     """
-    response = _make_scfind_request('scfindGenes')
+    params = {}
+    if modality:
+        params['modality'] = modality
+    response = _make_scfind_request('scfindGenes', params or None)
     return response.get('genes', [])
 
 
@@ -213,6 +225,40 @@ def _get_complete_mappings():
     return label_to_clid_map, clid_to_label_map
 
 
+@cache
+def _fetch_pathway_participants(pathway_code):
+    """
+    Fetch pathway participants from the UBKG API.
+
+    Args:
+        pathway_code: The Reactome pathway code (e.g., 'R-HSA-12345')
+
+    Returns:
+        List of HGNC gene symbols from the pathway
+    """
+    ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
+    url = f'{ubkg_endpoint}/pathways/{pathway_code}/participants'
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+    except requests.RequestException as e:
+        current_app.logger.error(f'Error fetching pathway participants from UBKG: {e}')
+        raise
+
+    # Extract HGNC gene symbols (same logic as front-end getParticipantsFromPathway)
+    genes = []
+    for event in data.get('events', []):
+        for sab in event.get('sabs', []):
+            if sab.get('SAB') == 'HGNC':
+                for participant in sab.get('participants', []):
+                    symbol = participant.get('symbol')
+                    if symbol:
+                        genes.append(symbol)
+    return genes
+
+
 @blueprint.route('/scfind/label-to-clid-map.json')
 def label_to_clid_map():
     """
@@ -266,11 +312,15 @@ def cell_type_names():
     """
     Endpoint that returns all available cell type names.
 
+    Query parameters:
+        modality: Optional modality filter (e.g., 'ATAC')
+
     Returns:
         JSON object with a list of cell type names
     """
     try:
-        cell_types = _get_all_cell_type_names()
+        modality = request.args.get('modality')
+        cell_types = _get_all_cell_type_names(modality)
         return jsonify({'cell_types': cell_types})
     except Exception as e:
         current_app.logger.error(f'Error fetching cell type names: {e}')
@@ -282,11 +332,15 @@ def genes():
     """
     Endpoint that returns all available gene names.
 
+    Query parameters:
+        modality: Optional modality filter (e.g., 'ATAC')
+
     Returns:
         JSON object with a list of gene names
     """
     try:
-        gene_list = _get_all_genes()
+        modality = request.args.get('modality')
+        gene_list = _get_all_genes(modality)
         return jsonify({'genes': gene_list})
     except Exception as e:
         current_app.logger.error(f'Error fetching gene names: {e}')
@@ -301,6 +355,7 @@ def genes_autocomplete():
     Query parameters:
         q: Search query string
         limit: Maximum number of results to return (default: 10)
+        modality: Optional modality filter (e.g., 'ATAC')
 
     Returns:
         JSON object with formatted gene matches using highlighting
@@ -308,11 +363,12 @@ def genes_autocomplete():
     try:
         query = request.args.get('q', '').strip()
         limit = min(int(request.args.get('limit', 10)), 100)  # Cap at 100 results
+        modality = request.args.get('modality')
 
         if not query:
             return jsonify({'results': []})
 
-        all_genes = _get_all_genes()
+        all_genes = _get_all_genes(modality)
 
         results = first_n_matches(all_genes, query, limit)
 
@@ -330,6 +386,7 @@ def cell_types_autocomplete():
     Query parameters:
         q: Search query string
         limit: Maximum number of results to return (default: 10)
+        modality: Optional modality filter (e.g., 'ATAC')
 
     Returns:
         JSON object with formatted cell type matches using highlighting.
@@ -338,11 +395,12 @@ def cell_types_autocomplete():
     try:
         query = request.args.get('q', '').strip()
         limit = min(int(request.args.get('limit', 10)), 100)  # Cap at 100 results
+        modality = request.args.get('modality')
 
         if not query:
             return jsonify({'results': []})
 
-        all_cell_types = _get_all_cell_type_names()
+        all_cell_types = _get_all_cell_type_names(modality)
 
         # Group cell types by base name (without organ prefix) and collect organs
         cell_type_map = {}
@@ -412,7 +470,8 @@ def genes_validate():
 
     Expects JSON body:
         {
-            "genes": ["GENE1", "GENE2", ...]
+            "genes": ["GENE1", "GENE2", ...],
+            "modality": "ATAC" (optional)
         }
 
     Returns:
@@ -436,8 +495,10 @@ def genes_validate():
         if not isinstance(provided_genes, list):
             return jsonify({'error': '"genes" must be an array'}), 400
 
+        modality = data.get('modality')
+
         # Get all valid genes from SCFIND
-        all_genes = _get_all_genes()
+        all_genes = _get_all_genes(modality)
         all_genes_set = set(all_genes)
 
         # Validate provided genes
@@ -461,3 +522,63 @@ def genes_validate():
     except Exception as e:
         current_app.logger.error(f'Error in gene validation: {e}')
         return jsonify({'error': 'Failed to validate genes'}), 500
+
+
+@blueprint.route('/scfind/pathway-genes', methods=['POST'])
+def pathway_genes():
+    """
+    Endpoint to fetch pathway genes from UBKG and validate them against the scFind gene list.
+
+    Expects JSON body:
+        {
+            "pathway_code": "R-HSA-12345",
+            "modality": "ATAC" (optional)
+        }
+
+    Returns:
+        JSON object with validated pathway genes:
+        {
+            "valid_genes": ["GENE1", ...],
+            "invalid_genes": ["GENE2", ...],
+            "total_genes": 50,
+            "total_valid": 42
+        }
+    """
+    try:
+        if not request.is_json:
+            return jsonify({'error': 'Request must be JSON'}), 400
+
+        data = request.get_json()
+        if not data or 'pathway_code' not in data:
+            return jsonify({'error': 'Missing "pathway_code" in request body'}), 400
+
+        pathway_code = data['pathway_code']
+        modality = data.get('modality')
+
+        # Fetch pathway genes from UBKG
+        pathway_genes = _fetch_pathway_participants(pathway_code)
+
+        # Validate against scFind gene list for the given modality
+        all_genes = _get_all_genes(modality)
+        all_genes_set = set(all_genes)
+
+        valid_genes = []
+        invalid_genes = []
+
+        for gene in pathway_genes:
+            if gene in all_genes_set:
+                valid_genes.append(gene)
+            else:
+                invalid_genes.append(gene)
+
+        return jsonify(
+            {
+                'valid_genes': valid_genes,
+                'invalid_genes': invalid_genes,
+                'total_genes': len(pathway_genes),
+                'total_valid': len(valid_genes),
+            }
+        )
+    except Exception as e:
+        current_app.logger.error(f'Error in pathway gene validation: {e}')
+        return jsonify({'error': 'Failed to validate pathway genes'}), 500

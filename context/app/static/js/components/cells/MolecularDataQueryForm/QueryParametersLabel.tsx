@@ -3,7 +3,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useCellVariableNames, useMolecularDataQueryFormState } from './hooks';
+import { isScFindMethod, useCellVariableNames, useMolecularDataQueryFormState } from './hooks';
 import QuerySubtitle from './QuerySubtitle';
 
 function VariableText() {
@@ -18,7 +18,7 @@ function VariableText() {
   const variables = cellVariableNames.join(', ');
   switch (queryType) {
     case 'gene':
-      if (queryMethod === 'scFind') {
+      if (isScFindMethod(queryMethod)) {
         if (pathway) {
           return <QuerySubtitle additionalText={variables}>{`${queryMethod} | ${pathway.full}`}</QuerySubtitle>;
         }

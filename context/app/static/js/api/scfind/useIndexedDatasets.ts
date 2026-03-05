@@ -13,13 +13,17 @@ interface AugmentedIndexedDatasetsResponse extends IndexedDatasetsResponse {
   countsMap: Record<string, number>;
 }
 
-export function createIndexedDatasetsKey(scFindEndpoint: string, scFindIndexVersion?: string): IndexedDatasetsKey {
-  return createScFindKey(scFindEndpoint, 'getDatasets', {}, scFindIndexVersion);
+export function createIndexedDatasetsKey(
+  scFindEndpoint: string,
+  scFindIndexVersion?: string,
+  modality?: string,
+): IndexedDatasetsKey {
+  return createScFindKey(scFindEndpoint, 'getDatasets', { modality }, scFindIndexVersion);
 }
 
-export default function useIndexedDatasets() {
+export default function useIndexedDatasets(modality?: string) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createIndexedDatasetsKey(scFindEndpoint, scFindIndexVersion);
+  const key = createIndexedDatasetsKey(scFindEndpoint, scFindIndexVersion, modality);
   const swr = useSWR<AugmentedIndexedDatasetsResponse, Error, IndexedDatasetsKey>(key, (url) =>
     fetcher<IndexedDatasetsResponse>({ url }).then((d) => {
       const countsMap = d.counts.reduce<Record<string, number>>((acc, count, index) => {
