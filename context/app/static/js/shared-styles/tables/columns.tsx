@@ -60,7 +60,7 @@ function HubmapIDCell({
         action: trackingInfo.action
           ? `${trackingInfo.action} / Select ${trackingInfo.action}`
           : 'Navigate to Dataset from Table',
-        label: `${trackingInfo.label} ${hubmap_id}`,
+        label: `${trackingInfo?.label} ${hubmap_id}`,
       });
     }
   });

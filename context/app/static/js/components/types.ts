@@ -5,7 +5,7 @@ import { UnprocessedFile } from './detailPage/files/types';
 export interface EventInfo {
   category: string;
   action?: string;
-  label?: unknown;
+  label?: string;
   value?: unknown;
   [key: string]: unknown;
 }

@@ -116,7 +116,9 @@ function Routes({ flaskData }: RoutesProps) {
       <Route>
         <Publication
           publication={entity as PublicationType}
-          vignette_json={vignette_json as unknown as { vignettes: { name: string; directory_name: string }[] }}
+          vignette_json={
+            vignette_json as unknown as { vignettes: import('js/components/publications/types').PublicationVignette[] }
+          }
         />
       </Route>
     );

@@ -1,4 +1,4 @@
-import React, { ElementType, PropsWithChildren } from 'react';
+import React, { ComponentType, PropsWithChildren } from 'react';
 
 import SvgIcon from '@mui/icons-material/GetAppRounded';
 import MenuList from '@mui/material/MenuList';
@@ -31,7 +31,7 @@ export function IconDropdownMenuItem({ icon, onClick, disabled, children }: Icon
 
 interface IconDropdownMenuProps {
   tooltip: string;
-  button: ElementType<ButtonProps & { menuID: string; tooltip: string }>;
+  button: ComponentType<{ menuID: string; tooltip: string; children: React.ReactNode }>;
   icon: typeof SvgIcon;
 }
 

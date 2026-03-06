@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import PublicationVignette from 'js/components/publications/PublicationVignette';
+import { PublicationVignette as PublicationVignetteType } from 'js/components/publications/types';
 import { StyledAccordionDetails } from './style';
 
 const StyledAccordion = styled(Accordion)<{ $isExpanded: boolean }>(({ theme, $isExpanded }) => ({
@@ -23,7 +24,7 @@ const StyledAccordion = styled(Accordion)<{ $isExpanded: boolean }>(({ theme, $i
 
 interface PublicationsVisualizationSectionProps {
   vignette_json: {
-    vignettes: { name: string; directory_name: string }[];
+    vignettes: PublicationVignetteType[];
   };
   uuid: string;
 }

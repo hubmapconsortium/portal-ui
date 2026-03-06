@@ -15,7 +15,7 @@ import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 interface PublicationProps {
   publication: PublicationType;
   vignette_json: {
-    vignettes: { name: string; directory_name: string }[];
+    vignettes: import('js/components/publications/types').PublicationVignette[];
   };
 }
 

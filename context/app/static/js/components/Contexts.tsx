@@ -43,6 +43,8 @@ export interface AppContextType {
   scFindIndexVersion?: string;
   ukvEndpoint: string;
   dataProductsEndpoint: string;
+  xmodalityEndpoint: string;
+  gatewayEndpoint: string;
   protocolsClientToken: string;
   isAuthenticated: boolean;
   isWorkspacesUser: boolean;

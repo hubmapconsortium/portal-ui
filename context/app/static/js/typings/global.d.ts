@@ -61,6 +61,7 @@ declare namespace JSX {
 
 declare module 'package' {
   export const dependencies: Record<string, string>;
+  export const version: string;
 }
 
 declare module 'openkeynav' {
