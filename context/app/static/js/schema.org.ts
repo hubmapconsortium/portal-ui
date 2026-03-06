@@ -1,6 +1,27 @@
-function getDatasetLD(entity) {
+interface DonorMappedMetadata {
+  sex?: string;
+  age_value?: number;
+  age_unit?: string;
+  height_value?: number;
+  height_unit?: string;
+  weight_value?: number;
+  weight_unit?: string;
+  race?: string;
+  medicalHistory?: string[];
+}
+
+export interface DatasetForLD {
+  mapped_data_types: string[];
+  origin_samples_unique_mapped_organs: string[];
+  donor?: { mapped_metadata: DonorMappedMetadata };
+  created_by_user_displayname: string;
+  group_name: string;
+  description?: string;
+}
+
+function getDatasetLD(entity: DatasetForLD) {
   // Based on https://developers.google.com/search/docs/data-types/dataset#guidelines
-  const assayOrganString = `${entity.mapped_data_types} of ${entity.origin_samples_unique_mapped_organs.join(', ')}`;
+  const assayOrganString = `${String(entity.mapped_data_types)} of ${entity.origin_samples_unique_mapped_organs.join(', ')}`;
   let name = `${assayOrganString} from unknown donor`;
   let fallbackDescription = name;
 
@@ -18,8 +39,8 @@ function getDatasetLD(entity) {
   }
 
   return {
-    '@context': 'https://schema.org/',
-    '@type': 'Dataset',
+    '@context': 'https://schema.org/' as const,
+    '@type': 'Dataset' as const,
     name,
     description:
       entity.description && entity.description.length >= 50
@@ -27,12 +48,12 @@ function getDatasetLD(entity) {
         : `${fallbackDescription}. ${entity.description}`,
     creator: [
       {
-        '@type': 'Person',
+        '@type': 'Person' as const,
         // sameAs: 'http://orcid.org/0000-0000-0000-0001',
         name: entity.created_by_user_displayname,
       },
       {
-        '@type': 'Organization',
+        '@type': 'Organization' as const,
         // TODO: sameAs: 'http://ror.org/xxxxxxxxx',
         name: entity.group_name,
       },
@@ -40,7 +61,7 @@ function getDatasetLD(entity) {
   };
 }
 
-function setJsonLD(entity) {
+function setJsonLD(entity: DatasetForLD) {
   const ld = getDatasetLD(entity);
   const script = document.createElement('script');
   script.setAttribute('type', 'application/ld+json');
