@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import Iframe from './pages/Iframe';
 import initTrackers from './helpers/init-trackers';
-import { setJsonLD } from './schema.org';
+import { setJsonLD, DatasetForLD } from './schema.org';
 
 // TODO: Re-enable. https://github.com/hubmapconsortium/portal-ui/issues/1426
 
@@ -15,10 +15,10 @@ import { setJsonLD } from './schema.org';
 
 initTrackers();
 
-const root = ReactDOM.createRoot(document.getElementById('react-content'));
+const root = ReactDOM.createRoot(document.getElementById('react-content')!);
 root.render(
   window.location.pathname.startsWith('/iframe/') ? (
-    <Iframe flaskData={flaskData} />
+    <Iframe flaskData={flaskData as unknown as { endpoints: Record<string, string>; organs_count: number }} />
   ) : (
     <App
       flaskData={flaskData}
@@ -36,5 +36,5 @@ root.render(
 );
 
 if (flaskData?.entity?.entity_type === 'Dataset') {
-  setJsonLD(flaskData.entity);
+  setJsonLD(flaskData.entity as unknown as DatasetForLD);
 }

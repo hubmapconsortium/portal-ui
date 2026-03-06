@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { trackPageView } from 'js/helpers/trackers';
 
-function getOldEntityTypeParam(type) {
+function getOldEntityTypeParam(type: string) {
   switch (type) {
     case 'donors':
       return 'Donor';
@@ -14,10 +14,10 @@ function getOldEntityTypeParam(type) {
   }
 }
 
-function useSendPageView(path) {
+function useSendPageView(path: string) {
   useEffect(() => {
     if (path.startsWith('/browse')) {
-      const trackPath = path.match(/\/browse\/\w+/)[0];
+      const trackPath = path.match(/\/browse\/\w+/)![0];
       trackPageView(trackPath);
       return;
     }
@@ -30,7 +30,7 @@ function useSendPageView(path) {
     }
     if (path.startsWith('/search') || path.startsWith('/dev-search')) {
       const entityTypeKey = 'entity_type[0]';
-      const type = path.split('/').pop();
+      const type = path.split('/').pop() ?? '';
       const trackPath = `${path}?${entityTypeKey}=${getOldEntityTypeParam(type)}`;
       trackPageView(trackPath);
       return;

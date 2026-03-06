@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 import { SWRConfig } from 'swr';
 import { faro } from '@grafana/faro-web-sdk';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
+import type { AppContextType, FlaskDataContextType } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import { EntityStoreProvider } from 'js/stores/useEntityStore';
@@ -17,18 +18,33 @@ import { useEntityHeaderSprings } from './detailPage/entityHeader/EntityHeader/h
 
 const swrConfig = {
   revalidateOnFocus: false,
-  onError: (error, key) => {
+  onError: (error: Error, key: string) => {
     faro.api.pushError(error, {
       context: { key, type: 'SWR Error' },
     });
   },
-  onLoadingSlow: (key) => {
+  onLoadingSlow: (key: string) => {
     // By default, this is triggered if a request takes longer than 3000ms.
     faro.api.pushError(new Error(`Slow-loading query: ${key}`), {
       context: { key, type: 'SWR Slow Loading' },
     });
   },
 };
+
+interface ProvidersProps {
+  endpoints: Record<string, string>;
+  groupsToken?: string;
+  isAuthenticated?: boolean;
+  userEmail?: string;
+  workspacesToken?: string;
+  isWorkspacesUser?: boolean;
+  isHubmapUser?: boolean;
+  flaskData: FlaskData;
+  userFirstName?: string;
+  userLastName?: string;
+  userGlobusId?: string;
+  userGlobusAffiliation?: string;
+}
 
 export default function Providers({
   endpoints,
@@ -44,21 +60,22 @@ export default function Providers({
   userLastName,
   userGlobusId,
   userGlobusAffiliation,
-}) {
+}: PropsWithChildren<ProvidersProps>) {
   const appContext = useMemo(
-    () => ({
-      groupsToken,
-      workspacesToken,
-      isWorkspacesUser,
-      isHubmapUser,
-      isAuthenticated,
-      userEmail,
-      userFirstName,
-      userLastName,
-      userGlobusId,
-      userGlobusAffiliation,
-      ...endpoints,
-    }),
+    () =>
+      ({
+        groupsToken,
+        workspacesToken,
+        isWorkspacesUser,
+        isHubmapUser,
+        isAuthenticated,
+        userEmail,
+        userFirstName,
+        userLastName,
+        userGlobusId,
+        userGlobusAffiliation,
+        ...endpoints,
+      }) as AppContextType,
     [
       groupsToken,
       workspacesToken,
@@ -75,11 +92,17 @@ export default function Providers({
   );
 
   const protocolsContext = useMemo(
-    () => ({ clientId: flaskData?.protocolsClientId, clientAuthToken: flaskData?.protocolsClientToken }),
+    () => ({
+      clientId: (flaskData?.protocolsClientId as string) ?? '',
+      clientAuthToken: (flaskData?.protocolsClientToken as string) ?? '',
+    }),
     [flaskData],
   );
 
-  const flaskDataWithDefaults = useMemo(() => ({ entity: {}, ...flaskData }), [flaskData]);
+  const flaskDataWithDefaults = useMemo(
+    () => ({ entity: {}, ...flaskData }) as unknown as FlaskDataContextType,
+    [flaskData],
+  );
 
   const { springs } = useEntityHeaderSprings();
 
@@ -90,7 +113,7 @@ export default function Providers({
         <ThemeProvider theme={theme}>
           <AppContext.Provider value={appContext}>
             <FlaskDataContext.Provider value={flaskDataWithDefaults}>
-              <EntityStoreProvider springs={springs} assayMetadata={flaskData?.entity ?? {}}>
+              <EntityStoreProvider springs={springs}>
                 <OpenKeyNavStoreProvider initialize={readOpenKeyNavCookie()}>
                   <ProtocolAPIContext.Provider value={protocolsContext}>
                     <CssBaseline />

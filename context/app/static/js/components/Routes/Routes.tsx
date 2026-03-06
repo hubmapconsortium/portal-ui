@@ -1,7 +1,13 @@
 import React, { lazy } from 'react';
-import PropTypes from 'prop-types';
 import { useAppContext } from 'js/components/Contexts';
-import Error from 'js/pages/Error';
+import type {
+  Entity,
+  Collection as CollectionType,
+  Publication as PublicationType,
+  ESEntityType,
+} from 'js/components/types';
+import type { OrganFile } from 'js/components/organ/types';
+import ErrorPage from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
 import useSetUrlBeforeLogin from './useSetUrlBeforeLogin';
@@ -41,7 +47,11 @@ const Tutorial = lazy(() => import('js/pages/Tutorial'));
 const Profile = lazy(() => import('js/pages/Profile'));
 const Figure = lazy(() => import('js/pages/Figure'));
 
-function Routes({ flaskData } = {}) {
+interface RoutesProps {
+  flaskData: FlaskData;
+}
+
+function Routes({ flaskData }: RoutesProps) {
   const {
     entity,
     vitessce_conf,
@@ -67,7 +77,7 @@ function Routes({ flaskData } = {}) {
   const { isAuthenticated } = useAppContext();
 
   if (errorCode !== undefined) {
-    return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
+    return <ErrorPage errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
   }
 
   if (urlPath.startsWith('/browse/donor/')) {
@@ -88,7 +98,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/browse/dataset/') || urlPath.startsWith('/browse/support/')) {
     return (
       <Route>
-        <Dataset assayMetadata={entity} integrated={integrated} />
+        <Dataset assayMetadata={entity as Entity} integrated={integrated} />
       </Route>
     );
   }
@@ -96,7 +106,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/browse/collection/')) {
     return (
       <Route>
-        <Collection collection={entity} />
+        <Collection collection={entity as CollectionType} />
       </Route>
     );
   }
@@ -104,7 +114,10 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/browse/publication/')) {
     return (
       <Route>
-        <Publication publication={entity} vignette_json={vignette_json} />
+        <Publication
+          publication={entity as PublicationType}
+          vignette_json={vignette_json as unknown as { vignettes: { name: string; directory_name: string }[] }}
+        />
       </Route>
     );
   }
@@ -112,7 +125,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath === '/') {
     return (
       <Route disableWidthConstraint>
-        <Home organsCount={organs_count} />
+        <Home organsCount={organs_count!} />
       </Route>
     );
   }
@@ -128,7 +141,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/search')) {
     return (
       <Route>
-        <Search type={type} />
+        <Search type={type as 'donors' | 'samples' | 'datasets'} />
       </Route>
     );
   }
@@ -168,7 +181,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath === '/organs') {
     return (
       <Route>
-        <Organs organs={organs} />
+        <Organs organs={organs as unknown as Record<string, OrganFile>} />
       </Route>
     );
   }
@@ -176,7 +189,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/organs/')) {
     return (
       <Route>
-        <Organ organ={organ} />
+        <Organ organ={organ as unknown as OrganFile} />
       </Route>
     );
   }
@@ -208,7 +221,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/my-lists/')) {
     return (
       <Route>
-        <SavedList listUUID={list_uuid} />
+        <SavedList listUUID={list_uuid!} />
       </Route>
     );
   }
@@ -222,7 +235,7 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/workspaces/start/')) {
-    const workspaceId = parseInt(urlPath.split('/').pop(), 10);
+    const workspaceId = parseInt(urlPath.split('/').pop()!, 10);
     return (
       <Route>
         <WorkspacePleaseWait workspaceId={workspaceId} />
@@ -231,7 +244,7 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/workspaces/')) {
-    const workspaceId = parseInt(urlPath.split('/').pop(), 10);
+    const workspaceId = parseInt(urlPath.split('/').pop()!, 10);
     return (
       <Route>
         <Workspace workspaceId={workspaceId} />
@@ -240,7 +253,7 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/invitations/')) {
-    const invitationId = parseInt(urlPath.split('/').pop(), 10);
+    const invitationId = parseInt(urlPath.split('/').pop()!, 10);
     return (
       <Route>
         <Invitation invitationId={invitationId} />
@@ -257,7 +270,7 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/templates/')) {
-    const templateKey = urlPath.split('/').pop();
+    const templateKey = urlPath.split('/').pop()!;
     return (
       <Route>
         <Template templateKey={templateKey} />
@@ -282,17 +295,18 @@ function Routes({ flaskData } = {}) {
   }
 
   if (urlPath.startsWith('/lineup/')) {
-    const entityType = urlPath.split('/').pop().replace(/s$/, '').toLowerCase(); // remove trailing 's', e.g. 'samples' -> 'sample'
+    const entityType = urlPath.split('/').pop()!.replace(/s$/, '').toLowerCase(); // remove trailing 's', e.g. 'samples' -> 'sample'
 
     if (!['donor', 'sample', 'dataset'].includes(entityType)) {
-      return <Error errorCode={404} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
+      return <ErrorPage errorCode={404} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
     }
 
-    const uuids = new URLSearchParams(window.location.search).get('uuids');
+    const uuidsParam = new URLSearchParams(window.location.search).get('uuids');
+    const uuids = uuidsParam?.split(',');
 
     return (
       <Route>
-        <LineUpPage entityType={entityType} uuids={uuids} />
+        <LineUpPage entityType={entityType as ESEntityType} uuids={uuids} />
       </Route>
     );
   }
@@ -319,7 +333,7 @@ function Routes({ flaskData } = {}) {
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
-        <GeneDetails geneSymbol={geneSymbol} />
+        <GeneDetails geneSymbol={geneSymbol!} />
       </Route>
     );
   }
@@ -351,37 +365,12 @@ function Routes({ flaskData } = {}) {
   if ('markdown' in flaskData) {
     return (
       <Route>
-        <Markdown markdown={markdown} />
+        <Markdown markdown={markdown!} />
       </Route>
     );
   }
-}
 
-Routes.propTypes = {
-  flaskData: PropTypes.exact({
-    title: PropTypes.string,
-    publications: PropTypes.object,
-    entity: PropTypes.object,
-    entities: PropTypes.array,
-    vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-    markdown: PropTypes.string,
-    collection: PropTypes.object,
-    errorCode: PropTypes.number,
-    list_uuid: PropTypes.string,
-    has_notebook: PropTypes.bool,
-    vis_lifted_uuid: PropTypes.string,
-    organ: PropTypes.object,
-    organs: PropTypes.object,
-    metadata: PropTypes.object,
-    organs_count: PropTypes.number,
-    vignette_json: PropTypes.object,
-    geneSymbol: PropTypes.string,
-    redirected_from: PropTypes.string,
-    cell_type: PropTypes.string,
-    globusGroups: PropTypes.object,
-    redirected: PropTypes.bool,
-    type: PropTypes.string,
-  }),
-};
+  return undefined;
+}
 
 export default Routes;

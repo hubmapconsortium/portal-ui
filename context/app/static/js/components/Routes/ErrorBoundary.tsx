@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Error from 'js/pages/Error';
 import { FaroErrorBoundary, faro } from '@grafana/faro-react';
 
-function ErrorFallback(error) {
+function ErrorFallback(error: (Error & { status?: number }) | null) {
   // The default error message here is not very helpful,
   // but it prevents crashes when the error is purposely triggered by the browser.
   // In all other situations, `error` should be defined when we reach this.
@@ -15,7 +15,7 @@ function ErrorFallback(error) {
   );
 }
 
-function ErrorBoundary({ children }) {
+function ErrorBoundary({ children }: PropsWithChildren) {
   return (
     <FaroErrorBoundary
       fallback={ErrorFallback}

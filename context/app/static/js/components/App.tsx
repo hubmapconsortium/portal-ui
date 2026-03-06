@@ -21,7 +21,20 @@ enableMapSet();
 // Set up worker for react-pdf
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-function App(props) {
+interface AppProps {
+  flaskData: FlaskData;
+  groupsToken: string;
+  isAuthenticated: boolean;
+  userEmail: string;
+  workspacesToken: string;
+  userGroups?: string[];
+  userFirstName?: string;
+  userLastName?: string;
+  userGlobusId?: string;
+  userGlobusAffiliation?: string;
+}
+
+function App(props: AppProps) {
   const {
     flaskData,
     groupsToken,
@@ -35,9 +48,7 @@ function App(props) {
     userGlobusAffiliation,
   } = props;
 
-  const { endpoints, globalAlertMd } = flaskData;
-  delete flaskData.endpoints;
-  delete flaskData.globalAlertMd;
+  const { endpoints = {}, globalAlertMd, ...flaskDataWithoutEndpoints } = flaskData;
   const isHubmapUser = userGroups?.includes('HuBMAP');
   const isWorkspacesUser = userGroups?.includes('Workspaces') || isHubmapUser;
 
@@ -51,7 +62,7 @@ function App(props) {
         workspacesToken={workspacesToken}
         isWorkspacesUser={isWorkspacesUser}
         isHubmapUser={isHubmapUser}
-        flaskData={flaskData}
+        flaskData={flaskDataWithoutEndpoints as FlaskData}
         userFirstName={userFirstName}
         userLastName={userLastName}
         userGlobusId={userGlobusId}
