@@ -5,8 +5,9 @@ import { UnprocessedFile } from './detailPage/files/types';
 export interface EventInfo {
   category: string;
   action?: string;
-  label?: string | number;
-  value?: string | number;
+  label?: unknown;
+  value?: unknown;
+  [key: string]: unknown;
 }
 
 // Interface intended for use in tracking events via trackEntityPageEvent, which takes care of

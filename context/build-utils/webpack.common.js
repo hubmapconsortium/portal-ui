@@ -4,7 +4,7 @@ const { alias } = require('./alias');
 const { HuBMAPGlobals } = require('./webpack.plugins');
 
 const config = {
-  entry: { main: './app/static/js/index.jsx' },
+  entry: { main: './app/static/js/index.tsx' },
   output: {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,

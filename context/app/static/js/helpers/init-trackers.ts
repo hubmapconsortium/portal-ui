@@ -36,7 +36,7 @@ function initTrackers() {
       // Mandatory, overwriting the instrumentations array would cause the default instrumentations to be omitted
       ...getWebInstrumentations({
         captureConsole: true,
-        capturePerformanceTimeline: true,
+        enablePerformanceInstrumentation: true,
         // Only capture errors and warnings in grafana
         captureConsoleDisabledLevels: [LogLevel.INFO, LogLevel.DEBUG, LogLevel.LOG],
       }),
