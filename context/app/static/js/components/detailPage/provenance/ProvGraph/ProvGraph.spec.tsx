@@ -50,7 +50,7 @@ afterAll(() => server.close());
 interface RenderWithProvContextOptions {
   initialUuid?: string;
   initialUuids?: string[];
-  flaskData?: unknown;
+  flaskData?: FlaskData;
   provData?: typeof sampleProv;
   entityType?: string;
 }
