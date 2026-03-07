@@ -1,17 +1,19 @@
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import ExpandCollapseIconButton from './ExpandCollapseIconButton';
 
-export default {
+const meta = {
   title: 'Buttons/ExpandCollapseIconButton',
   component: ExpandCollapseIconButton,
+} satisfies Meta<typeof ExpandCollapseIconButton>;
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Expanded: Story = {
+  args: { isExpanded: true },
 };
 
-function Template(args: any) {
-  return <ExpandCollapseIconButton {...args} />;
-}
-export const Expanded = Template.bind({}) as any;
-Expanded.args = { isExpanded: true };
-
-export const Collapsed = Template.bind({}) as any;
-Collapsed.args = { isExpanded: false };
+export const Collapsed: Story = {
+  args: { isExpanded: false },
+};

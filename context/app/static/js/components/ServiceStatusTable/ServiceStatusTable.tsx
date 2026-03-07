@@ -12,16 +12,14 @@ import { HeaderCell } from 'js/shared-styles/tables';
 
 import StatusIcon from './StatusIcon';
 import { StyledExternalLinkIcon } from './style';
-import { useGatewayStatus } from './hooks';
+import { useGatewayStatus, ServiceResponse } from './hooks';
 
 interface BuildServiceStatusArgs {
   apiName: string;
   endpointUrl?: string;
   githubUrl?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  response?: Record<string, any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  noteFunction?: (response: Record<string, any>) => string;
+  response?: ServiceResponse;
+  noteFunction?: (response: ServiceResponse) => string;
 }
 
 interface ApiStatus {
@@ -87,14 +85,14 @@ function ServiceStatusTable({
           apiName: 'assets',
           endpointUrl: assetsEndpoint,
           response: gatewayStatus.file_assets,
-          noteFunction: (api) => `Status: ${api.file_assets_status}`,
+          noteFunction: (api) => `Status: ${String(api.file_assets_status)}`,
         }),
         buildServiceStatus({
           apiName: 'cells',
           githubUrl: 'https://github.com/hubmapconsortium/cross_modality_query',
           endpointUrl: xmodalityEndpoint,
           response: gatewayStatus.cells_api,
-          noteFunction: (api) => `Branch: ${api.branch}; Commit ${api.commit.slice(0, 12)}`,
+          noteFunction: (api) => `Branch: ${String(api.branch)}; Commit ${String(api.commit).slice(0, 12)}`,
         }),
         buildServiceStatus({
           apiName: 'data-products',
@@ -106,7 +104,8 @@ function ServiceStatusTable({
           apiName: 'entity-api',
           endpointUrl: entityEndpoint,
           response: gatewayStatus.entity_api,
-          noteFunction: (api) => `Neo4j: ${api.neo4j_connection} [Note: Internally, Entity API depends on UUID API.]`,
+          noteFunction: (api) =>
+            `Neo4j: ${String(api.neo4j_connection)} [Note: Internally, Entity API depends on UUID API.]`,
         }),
         buildServiceStatus({
           apiName: 'gateway',
@@ -116,7 +115,7 @@ function ServiceStatusTable({
         buildServiceStatus({
           apiName: 'ingest-api',
           response: gatewayStatus.ingest_api,
-          noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
+          noteFunction: (api) => `Neo4j: ${String(api.neo4j_connection)}`,
           endpointUrl: softAssayEndpoint.split('/assaytype')[0],
         }),
         {
@@ -136,12 +135,13 @@ function ServiceStatusTable({
           apiName: 'search-api',
           endpointUrl: elasticsearchEndpoint,
           response: gatewayStatus.search_api,
-          noteFunction: (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
+          noteFunction: (api) =>
+            `ES: ${String(api.elasticsearch_connection)}; ES Status: ${String(api.elasticsearch_status)}`,
         }),
         buildServiceStatus({
           apiName: 'uuid-api',
           response: gatewayStatus.uuid_api,
-          noteFunction: (api) => `MySQL: ${api.mysql_connection}`,
+          noteFunction: (api) => `MySQL: ${String(api.mysql_connection)}`,
         }),
         buildServiceStatus({
           apiName: 'workspaces-api',

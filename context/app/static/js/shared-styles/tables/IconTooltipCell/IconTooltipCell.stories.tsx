@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -8,12 +9,17 @@ import TableCell from '@mui/material/TableCell';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import IconTooltipCell from './IconTooltipCell';
 
-export default {
+const meta = {
   title: 'Tables/IconTooltipCell',
   component: IconTooltipCell,
-};
-function Template(args: any) {
-  return (
+} satisfies Meta<typeof IconTooltipCell>;
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: { tooltipTitle: 'More info', children: 'Hello' },
+  render: (args) => (
     <Table>
       <TableHead>
         <TableRow>
@@ -24,10 +30,21 @@ function Template(args: any) {
         <IconTooltipCell {...args}>Hello</IconTooltipCell>
       </TableBody>
     </Table>
-  );
-}
-export const Default = Template.bind({}) as any;
-Default.args = { tooltipTitle: 'More info' };
+  ),
+};
 
-export const CustomIcon = Template.bind({}) as any;
-CustomIcon.args = { tooltipTitle: 'Custom Icon', icon: DatasetIcon };
+export const CustomIcon: Story = {
+  args: { tooltipTitle: 'Custom Icon', icon: DatasetIcon, children: 'Hello' },
+  render: (args) => (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Col A</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <IconTooltipCell {...args}>Hello</IconTooltipCell>
+      </TableBody>
+    </Table>
+  ),
+};

@@ -6,7 +6,12 @@ import DatasetClusterTooltip from './DatasetClusterTooltip';
 test('should display correct text', () => {
   render(
     <DatasetClusterTooltip
-      tooltipData={{ key: 'matched', bar: { data: { matched: 20, unmatched: 30, cluster_number: 2 } } }}
+      tooltipData={{
+        key: 'matched',
+        bar: {
+          data: { matched: 20, unmatched: 30, cluster_number: '2', cluster_name: 'cluster_2', modality: 'rna' },
+        },
+      }}
     />,
   );
 

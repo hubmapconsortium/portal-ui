@@ -16,7 +16,7 @@ describe('SavedList component', () => {
     jest.clearAllMocks(); // Clear all mock instances and calls
   });
 
-  test('throws error when listUUID is not in savedLists', async () => {
+  test('throws error when listUUID is not in savedLists', () => {
     const listUUID = 'any-uuid';
 
     // Setup the mock to return savedLists as an empty object

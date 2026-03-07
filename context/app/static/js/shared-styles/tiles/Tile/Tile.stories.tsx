@@ -1,62 +1,70 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { StyledIcon } from 'js/components/entity-tile/EntityTile/style';
 import Tile from './Tile';
 
-export default {
+const meta = {
   title: 'Tiles/Tile',
   component: Tile,
-};
+} satisfies Meta<typeof Tile>;
+export default meta;
+
+type Story = StoryObj<typeof meta>;
 
 // @ts-expect-error - styled-components component prop typing issue with MUI SvgIcon
 const Icon = <StyledIcon component={DatasetIcon} />;
 
-function Template(args: any) {
-  return <Tile {...args} />;
-}
-export const Default = Template.bind({}) as any;
-Default.args = {
+const sharedArgs = {
   href: '',
   icon: Icon,
-  bodyContent: (
-    <>
-      <Tile.Title>Hello</Tile.Title>
-      <Tile.Text>World</Tile.Text>
-    </>
-  ),
-  footerContent: <Tile.Text>Footer</Tile.Text>,
+  tileWidth: 310,
+  ariaLabelText: 'Example tile',
 };
 
-export const Inverted = Template.bind({}) as any;
-Inverted.args = {
-  href: '',
-  icon: Icon,
-  bodyContent: (
-    <>
-      <Tile.Title>Hello</Tile.Title>
-      <Tile.Text>World</Tile.Text>
-    </>
-  ),
-  footerContent: <Tile.Text>Footer</Tile.Text>,
-  invertColors: true,
+export const Default: Story = {
+  args: {
+    ...sharedArgs,
+    bodyContent: (
+      <>
+        <Tile.Title>Hello</Tile.Title>
+        <Tile.Text>World</Tile.Text>
+      </>
+    ),
+    footerContent: <Tile.Text>Footer</Tile.Text>,
+  },
 };
 
-export const FooterDivider = Template.bind({}) as any;
-FooterDivider.args = {
-  href: '',
-  icon: Icon,
-  bodyContent: (
-    <>
-      <Tile.Title>Hello</Tile.Title>
-      <Tile.Text>World</Tile.Text>
-    </>
-  ),
-  footerContent: (
-    <>
-      <Tile.Text>Footer 1</Tile.Text>
-      <Tile.Divider />
-      <Tile.Text>Footer 1</Tile.Text>
-    </>
-  ),
+export const Inverted: Story = {
+  args: {
+    ...sharedArgs,
+    bodyContent: (
+      <>
+        <Tile.Title>Hello</Tile.Title>
+        <Tile.Text>World</Tile.Text>
+      </>
+    ),
+    footerContent: <Tile.Text>Footer</Tile.Text>,
+    invertColors: true,
+  },
+};
+
+export const FooterDivider: Story = {
+  args: {
+    ...sharedArgs,
+    bodyContent: (
+      <>
+        <Tile.Title>Hello</Tile.Title>
+        <Tile.Text>World</Tile.Text>
+      </>
+    ),
+    footerContent: (
+      <>
+        <Tile.Text>Footer 1</Tile.Text>
+        <Tile.Divider />
+        <Tile.Text>Footer 1</Tile.Text>
+      </>
+    ),
+  },
 };

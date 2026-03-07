@@ -11,9 +11,12 @@ export interface EventInfo {
 }
 
 // Interface intended for use in tracking events via trackEntityPageEvent, which takes care of
-// adding the category to the event.
-export interface EventWithOptionalCategory extends Omit<EventInfo, 'category'> {
+// adding the category to the event. `action` is required here since all call sites provide it.
+export interface EventWithOptionalCategory {
+  action: string;
   category?: string;
+  label?: string;
+  value?: unknown;
 }
 
 export type DonorEntityType = 'Donor';

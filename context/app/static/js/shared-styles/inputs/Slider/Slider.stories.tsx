@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
+import React, { ComponentProps, useState } from 'react';
+import type { Meta } from '@storybook/react';
 
 import SliderComponent from './Slider';
 
-export default {
+const meta = {
   title: 'inputs/Slider',
   component: SliderComponent,
-  argTypes: {
-    severity: {
-      options: ['warning', 'error', 'success', 'info'],
-      control: { type: 'select' },
-    },
-  },
-};
+} satisfies Meta<typeof SliderComponent>;
 
-export function Slider(args: any) {
+export default meta;
+
+export function Slider(args: ComponentProps<typeof SliderComponent>) {
   const [height, setHeight] = useState(1);
   return <SliderComponent value={height} onChange={(e, val) => setHeight(val as number)} {...args} />;
 }
-(Slider as any).args = {
+Slider.args = {
   label: 'Height inches',
   helperText: 'Set height in inches',
   min: 0,

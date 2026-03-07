@@ -1,21 +1,18 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
 import VerticalStackedBarChart from './VerticalStackedBarChart';
 
-export default {
+const meta: Meta = {
   title: 'Charts/VerticalStackedBarChart',
   component: VerticalStackedBarChart,
   excludeStories: ['colorScale'],
 };
+export default meta;
 
-function Template(args: any) {
-  return (
-    <div style={{ height: 500, width: 500 }}>
-      <VerticalStackedBarChart {...args} />
-    </div>
-  );
-}
+type Story = StoryObj<typeof meta>;
+
 const yScale = scaleLinear({
   domain: [0, 13],
   nice: true,
@@ -74,17 +71,23 @@ const sharedArgs = {
     left: 60,
     bottom: 200,
   },
-  getX: (d: any) => d.cluster,
+  getX: (d: { cluster: number }) => String(d.cluster),
   xAxisLabel: 'Cluster',
   xAxisTickLabels: ['1', '2', '3', '4', '5'],
   yAxisLabel: 'Cell Count',
   chartTitle: 'Cluster Membership',
 };
 
-export const Basic = Template.bind({}) as any;
-Basic.args = sharedArgs;
+export const Basic: Story = {
+  args: sharedArgs,
+  render: () => (
+    <div style={{ height: 500, width: 500 }}>
+      <VerticalStackedBarChart {...sharedArgs} />
+    </div>
+  ),
+};
 
-function Tooltip({ tooltipData }: { tooltipData: any }) {
+function Tooltip({ tooltipData }: { tooltipData: { key?: string } }) {
   return (
     <>
       <p>Key: {tooltipData.key}</p>
@@ -93,8 +96,14 @@ function Tooltip({ tooltipData }: { tooltipData: any }) {
   );
 }
 
-export const CustomTooltip = Template.bind({}) as any;
-CustomTooltip.args = {
-  ...sharedArgs,
-  TooltipContent: Tooltip,
+export const CustomTooltip: Story = {
+  args: {
+    ...sharedArgs,
+    TooltipContent: Tooltip,
+  },
+  render: () => (
+    <div style={{ height: 500, width: 500 }}>
+      <VerticalStackedBarChart {...sharedArgs} TooltipContent={Tooltip} />
+    </div>
+  ),
 };

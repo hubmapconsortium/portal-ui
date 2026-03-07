@@ -1,8 +1,8 @@
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { Alert } from './Alert';
 
-export default {
+const meta = {
   title: 'Alerts/OutlinedAlert',
   component: Alert,
   argTypes: {
@@ -11,13 +11,14 @@ export default {
       control: { type: 'select' },
     },
   },
-};
+} satisfies Meta<typeof Alert>;
 
-export function OutlinedAlert(args: any) {
-  return <Alert {...args} />;
-}
-(OutlinedAlert as any).args = {
-  severity: 'warning',
-  children: 'Alert, intruders!',
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const OutlinedAlert: Story = {
+  args: {
+    severity: 'warning',
+    children: 'Alert, intruders!',
+  },
 };
-OutlinedAlert.storyName = 'OutlinedAlert'; // needed for single story hoisting for multi word component names

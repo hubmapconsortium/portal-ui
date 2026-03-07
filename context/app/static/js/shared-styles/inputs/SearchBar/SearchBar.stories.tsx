@@ -1,22 +1,17 @@
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import SearchBarComponent from './SearchBar';
 
-export default {
+const meta = {
   title: 'inputs/SearchBar',
   component: SearchBarComponent,
-  argTypes: {
-    severity: {
-      options: ['warning', 'error', 'success', 'info'],
-      control: { type: 'select' },
-    },
+} satisfies Meta<typeof SearchBarComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const SearchBar: Story = {
+  args: {
+    onChange: () => {},
   },
 };
-
-export function SearchBar(args: any) {
-  return <SearchBarComponent {...args} />;
-}
-(SearchBar as any).args = {
-  onChange: () => {},
-};
-SearchBar.storyName = 'SearchBar'; // needed for single story hoisting for multi word component names

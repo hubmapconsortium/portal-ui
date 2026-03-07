@@ -5,7 +5,7 @@ import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPag
 import { buildCollectionsPanelsProps } from 'js/components/collections/utils';
 import { useDatasetsCollectionsTabs } from 'js/hooks/useDatasetsCollections';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
-import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
+import { Alert as OutlinedAlert } from 'js/shared-styles/alerts';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useTabs } from 'js/shared-styles/tabs';

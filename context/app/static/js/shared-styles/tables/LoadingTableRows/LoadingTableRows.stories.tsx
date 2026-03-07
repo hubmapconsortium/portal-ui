@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -7,13 +8,17 @@ import TableCell from '@mui/material/TableCell';
 
 import LoadingTableRowsComponent from './LoadingTableRows';
 
-export default {
+const meta = {
   title: 'Tables/LoadingTableRows',
   component: LoadingTableRowsComponent,
-};
+} satisfies Meta<typeof LoadingTableRowsComponent>;
 
-export function LoadingTableRows(args: any) {
-  return (
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const LoadingTableRows: Story = {
+  args: { numberOfRows: 3, numberOfCols: 3 },
+  render: (args) => (
     <Table>
       <TableHead>
         <TableRow>
@@ -26,8 +31,5 @@ export function LoadingTableRows(args: any) {
         <LoadingTableRowsComponent {...args} />
       </TableBody>
     </Table>
-  );
-}
-(LoadingTableRows as any).args = { numberOfRows: 3, numberOfCols: 3 };
-
-LoadingTableRows.storyName = 'LoadingTableRows'; // needed for single story hoisting for multi word component names
+  ),
+};

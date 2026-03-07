@@ -18,8 +18,8 @@ function AggsList({ uuid, field, associatedCollectionUUID }: AggsListProps) {
     associatedCollectionUUID,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const buckets = (searchData?.aggregations as any)?.[field]?.buckets as { key: string }[] | undefined;
+  const buckets = (searchData?.aggregations as Record<string, { buckets?: { key: string }[] }> | undefined)?.[field]
+    ?.buckets;
 
   if (!buckets) {
     return null;

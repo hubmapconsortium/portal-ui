@@ -1,18 +1,20 @@
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import PanelComponent from './Panel';
 
-export default {
+const meta = {
   title: 'Panels/Panel',
   component: PanelComponent,
-};
+} satisfies Meta<typeof PanelComponent>;
 
-export function Panel(args: any) {
-  return <PanelComponent {...args} />;
-}
-(Panel as any).args = {
-  title: 'Title',
-  secondaryText: 'Secondary Text',
-  rightText: 'Right Text',
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Panel: Story = {
+  args: {
+    title: 'Title',
+    href: '#',
+    secondaryText: 'Secondary Text',
+    rightText: 'Right Text',
+  },
 };
-Panel.storyName = 'Panel'; // needed for single story hoisting for multi word component names

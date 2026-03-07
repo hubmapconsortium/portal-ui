@@ -1,14 +1,18 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import ExpandableRow from './ExpandableRow';
 
-export default {
+const meta = {
   title: 'Tables/ExpandableRow',
   component: ExpandableRow,
-};
+} satisfies Meta<typeof ExpandableRow>;
+export default meta;
 
-function Content({ heightRef }: { heightRef: any }) {
+type Story = StoryObj<typeof meta>;
+
+function Content({ heightRef }: { heightRef: React.Ref<HTMLDivElement> }) {
   return (
     <div ref={heightRef}>
       Mollit irure sit fugiat eiusmod ullamco laborum. Deserunt aliqua nulla occaecat reprehenderit est cupidatat ex
@@ -17,34 +21,48 @@ function Content({ heightRef }: { heightRef: any }) {
     </div>
   );
 }
-function Template(args: any) {
-  return (
+
+const sharedArgs = {
+  numCells: 4,
+  expandedContent: <Content heightRef={null} />,
+};
+
+export const Default: Story = {
+  args: sharedArgs,
+  render: (args) => (
     <ExpandableRow {...args}>
       <ExpandableRowCell>A</ExpandableRowCell>
       <ExpandableRowCell>B</ExpandableRowCell>
       <ExpandableRowCell>C</ExpandableRowCell>
     </ExpandableRow>
-  );
-}
-
-const sharedArgs = {
-  numCells: 4,
-  expandedContent: <Content heightRef={undefined} />,
+  ),
 };
 
-export const Default = Template.bind({}) as any;
-Default.args = sharedArgs;
-
-export const Disabled = Template.bind({}) as any;
-
-Disabled.args = {
-  ...sharedArgs,
-  disabled: true,
+export const Disabled: Story = {
+  args: {
+    ...sharedArgs,
+    disabled: true,
+  },
+  render: (args) => (
+    <ExpandableRow {...args}>
+      <ExpandableRowCell>A</ExpandableRowCell>
+      <ExpandableRowCell>B</ExpandableRowCell>
+      <ExpandableRowCell>C</ExpandableRowCell>
+    </ExpandableRow>
+  ),
 };
 
-export const DisabledWithTooltip = Template.bind({}) as any;
-DisabledWithTooltip.args = {
-  ...sharedArgs,
-  disabled: true,
-  disabledTooltipTitle: "Can't open now.",
+export const DisabledWithTooltip: Story = {
+  args: {
+    ...sharedArgs,
+    disabled: true,
+    disabledTooltipTitle: "Can't open now.",
+  },
+  render: (args) => (
+    <ExpandableRow {...args}>
+      <ExpandableRowCell>A</ExpandableRowCell>
+      <ExpandableRowCell>B</ExpandableRowCell>
+      <ExpandableRowCell>C</ExpandableRowCell>
+    </ExpandableRow>
+  ),
 };

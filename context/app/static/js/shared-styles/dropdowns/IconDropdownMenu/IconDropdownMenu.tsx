@@ -8,7 +8,6 @@ import MenuItem from '@mui/material/MenuItem';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 
-import { ButtonProps } from '@mui/material/Button';
 import { StyledSvgIcon, StyledTypography } from './style';
 
 interface IconDropdownMenuItemProps {

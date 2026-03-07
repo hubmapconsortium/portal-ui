@@ -5,9 +5,12 @@ import Histogram from 'js/shared-styles/charts/Histogram';
 import { capitalizeString } from 'js/helpers/functions';
 import { queryTypes, QueryType } from 'js/components/cells/queryTypes';
 
+interface ExpressionDataItem {
+  values: Record<string, number>;
+}
+
 interface CellExpressionHistogramProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  expressionData: any[];
+  expressionData: ExpressionDataItem[];
   queryType: QueryType;
   cellVariableName: string;
 }
@@ -19,7 +22,7 @@ function CellExpressionHistogram({ expressionData, queryType, cellVariableName }
 
   return (
     <Histogram
-      visxData={expressionData}
+      visxData={expressionData as unknown as number[]}
       margin={{
         top: 25,
         right: 50,
@@ -30,7 +33,7 @@ function CellExpressionHistogram({ expressionData, queryType, cellVariableName }
       xAxisLabel={queryMeasurement}
       yAxisLabel="Frequency"
       chartTitle={`${capitalizeString(queryType)} ${queryMeasurement} Distribution`}
-      binMapFunction={(d: any) => d.values[cellVariableName]}
+      binMapFunction={(d) => (d as unknown as ExpressionDataItem).values[cellVariableName]}
     />
   );
 }

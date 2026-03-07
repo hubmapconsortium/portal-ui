@@ -1,27 +1,30 @@
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import LabelledSectionDate from './LabelledSectionDate';
 import LabelledSectionText from '../LabelledSectionText';
 
-export default {
+const meta = {
   title: 'Sections/LabelledSectionDate',
   component: LabelledSectionDate,
   subcomponents: { LabelledSectionText },
-};
+} satisfies Meta<typeof LabelledSectionDate>;
+export default meta;
+
+type Story = StoryObj<typeof meta>;
 
 const sharedArgs = {
   label: 'Date Section',
   timestamp: Date.now(),
 };
 
-function Template(args: any) {
-  return <LabelledSectionDate {...args} />;
-}
-export const Default = Template.bind({}) as any;
-Default.args = sharedArgs;
+export const Default: Story = {
+  args: sharedArgs,
+};
 
-export const DifferentDateFormat = Template.bind({}) as any;
-DifferentDateFormat.args = { ...sharedArgs, dateFormat: 'MMMM dd, yyyy' };
+export const DifferentDateFormat: Story = {
+  args: { ...sharedArgs, dateFormat: 'MMMM dd, yyyy' },
+};
 
-export const UndefinedTimestamp = Template.bind({}) as any;
-UndefinedTimestamp.args = { label: sharedArgs.label };
+export const UndefinedTimestamp: Story = {
+  args: { label: sharedArgs.label, timestamp: undefined as unknown as number },
+};

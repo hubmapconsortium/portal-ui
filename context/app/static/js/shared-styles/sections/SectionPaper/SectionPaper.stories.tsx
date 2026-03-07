@@ -1,21 +1,24 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import SectionPaper from './SectionPaper';
+import LabelledSectionText from '../LabelledSectionText/LabelledSectionText';
 import { Default as DefaultLabelledSectionText } from '../LabelledSectionText/LabelledSectionText.stories';
+import SectionPaper from './SectionPaper';
 
-export default {
+const meta = {
   title: 'Sections/SectionPaper',
   component: SectionPaper,
-};
+} satisfies Meta<typeof SectionPaper>;
 
-export function Default() {
-  return <SectionPaper />;
-}
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export function WithExampleText() {
-  return (
+export const Default: Story = {};
+
+export const WithExampleText: Story = {
+  render: () => (
     <SectionPaper>
-      <DefaultLabelledSectionText {...DefaultLabelledSectionText.args} />
+      <LabelledSectionText {...DefaultLabelledSectionText.args} />
     </SectionPaper>
-  );
-}
+  ),
+};

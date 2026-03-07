@@ -1,15 +1,11 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
 import EntitiesTableComponent from './EntitiesTable';
-
-export default {
-  title: 'Tables/EntitiesTable',
-  component: EntitiesTableComponent,
-};
 
 function HeaderCells() {
   return (
@@ -38,13 +34,17 @@ function TableRows() {
   );
 }
 
-export function EntitiesTable(args: any) {
-  return <EntitiesTableComponent {...args} />;
-}
+const meta = {
+  title: 'Tables/EntitiesTable',
+  component: EntitiesTableComponent,
+} satisfies Meta<typeof EntitiesTableComponent>;
 
-(EntitiesTable as any).args = {
-  headerCells: <HeaderCells />,
-  tableRows: <TableRows />,
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const EntitiesTable: Story = {
+  args: {
+    headerCells: <HeaderCells />,
+    tableRows: <TableRows />,
+  },
 };
-
-EntitiesTable.storyName = 'EntitiesTable'; // needed for single story hoisting for multi word component names

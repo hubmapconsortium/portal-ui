@@ -1,9 +1,9 @@
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import LinkButton from './LinkButton';
 
-export default {
+const meta = {
   title: 'Buttons/LinkButton',
   component: LinkButton,
   parameters: {
@@ -13,23 +13,23 @@ export default {
       },
     },
   },
-};
+} satisfies Meta<typeof LinkButton>;
+export default meta;
 
-function Template(args: any) {
-  return <LinkButton {...args} />;
-}
+type Story = StoryObj<typeof meta>;
 
 const sharedArgs = {
   onClick: () => {},
 };
 
-export const Default = Template.bind({}) as any;
-Default.args = { ...sharedArgs, children: 'Default Link Button' };
+export const Default: Story = {
+  args: { ...sharedArgs, children: 'Default Link Button' },
+};
 
-export const OutboundIconLinkButton = Template.bind({}) as any;
-
-OutboundIconLinkButton.args = {
-  ...sharedArgs,
-  children: 'Outbound Icon Link Button',
-  linkComponent: OutboundIconLink,
+export const OutboundIconLinkButton: Story = {
+  args: {
+    ...sharedArgs,
+    children: 'Outbound Icon Link Button',
+    linkComponent: OutboundIconLink,
+  },
 };

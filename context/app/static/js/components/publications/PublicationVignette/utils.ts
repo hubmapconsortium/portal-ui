@@ -1,16 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment*/
+
 /**
  * @param {object} config The "template" config containing URLs with "{{ base_url }}".
  * @param {function} handleUrl Function that takes in a (potentially template) URL string and returns a filled-in URL string.
  * @returns {object} The config with handleUrl having been called to process every URL.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { VitessceConfig } from 'vitessce';
+
 const fillUrls = (
-  config: any,
+  config: VitessceConfig,
   handleUrl: (url: string, isZarr: boolean) => string,
   handleRequestInit: () => RequestInit,
 ) => {
   return {
     ...config,
+    // @ts-expect-error - the config.datasets type is not well defined in the VitessceConfig type definition, so we have to use any here
     datasets: config.datasets.map((datasetDef: any) => {
       return {
         ...datasetDef,
@@ -52,7 +62,7 @@ const fillUrls = (
         }),
       };
     }),
-  };
+  } as unknown as VitessceConfig;
 };
 
 export { fillUrls };

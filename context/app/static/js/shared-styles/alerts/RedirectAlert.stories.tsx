@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { ComponentProps, useMemo } from 'react';
+import type { Meta } from '@storybook/react';
 
 import { FlaskDataContext, FlaskDataContextType } from 'js/components/Contexts';
 
@@ -13,7 +14,7 @@ const templates = {
 
 const templateOptions = Object.keys(templates);
 
-export default {
+const meta: Meta = {
   title: 'Alerts/RedirectAlert',
   component: RedirectAlert,
   argTypes: {
@@ -41,17 +42,21 @@ export default {
   },
 };
 
-export function RedirectAlertStory({ redirected_from, ...args }: any) {
+export default meta;
+
+export function RedirectAlertStory({
+  redirected_from,
+  ...args
+}: ComponentProps<typeof RedirectAlert> & { redirected_from: string }) {
   const value = useMemo(() => ({ entity: {}, redirected_from }) as unknown as FlaskDataContextType, [redirected_from]);
   return (
     <FlaskDataContext.Provider value={value}>
-      <RedirectAlert messageTemplate={(r: string) => `Redirected from ${r}`} {...args} />
+      <RedirectAlert {...args} messageTemplate={(r: string) => `Redirected from ${r}`} />
     </FlaskDataContext.Provider>
   );
 }
-(RedirectAlertStory as any).args = {
+RedirectAlertStory.args = {
   severity: 'info',
-  messageTemplate: templates.default,
   redirected_from: 'Test String',
 };
 RedirectAlertStory.storyName = 'RedirectAlert'; // needed for single story hoisting for multi word component names
