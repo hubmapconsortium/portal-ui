@@ -47,7 +47,7 @@ type Story = StoryObj<typeof CellTypeExpressionControl>;
 
 export const CellTypeMarkers: Story = {
   args: {
-    datasetName: 'HBM762.RPDR.282',
+    datasetName: 'fe0ded5fc0355c95239f9c040dd31e99',
     geneList: 'MMRN1',
   },
 };
