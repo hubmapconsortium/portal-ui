@@ -76,7 +76,6 @@ ruff>=0.14.0
 "lz-string": "^1.5.0",
 "openkeynav": "^0.1.229",
 "pretty-bytes": "^6.1.1",
-"prop-types": "^15.8.1",
 "react": "^18.3.1",
 "react-device-detect": "^2.2.3",
 "react-dom": "^18.3.1",
