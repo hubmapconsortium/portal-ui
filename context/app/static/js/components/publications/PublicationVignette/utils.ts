@@ -5,19 +5,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment*/
 
+import { VitessceConfig } from 'vitessce';
+// TODO: The VitessceConfig type is not well defined for these operations, so we have to use any here. We should consider improving the type definition for VitessceConfig in the future.
+
 /**
  * @param {object} config The "template" config containing URLs with "{{ base_url }}".
  * @param {function} handleUrl Function that takes in a (potentially template) URL string and returns a filled-in URL string.
  * @returns {object} The config with handleUrl having been called to process every URL.
  */
-
-import { VitessceConfig } from 'vitessce';
-
 const fillUrls = (
   config: VitessceConfig,
   handleUrl: (url: string, isZarr: boolean) => string,
   handleRequestInit: () => RequestInit,
-) => {
+): VitessceConfig => {
   return {
     ...config,
     // @ts-expect-error - the config.datasets type is not well defined in the VitessceConfig type definition, so we have to use any here

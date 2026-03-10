@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 export interface ServiceResponse {
   build?: string;
@@ -22,8 +22,8 @@ export interface GatewayStatusResponse {
 }
 
 function useGatewayStatus(gatewayUrl: string) {
-  const [gatewayStatus, setGatewayStatus] = React.useState<GatewayStatusResponse | undefined>(undefined);
-  React.useEffect(() => {
+  const [gatewayStatus, setGatewayStatus] = useState<GatewayStatusResponse | undefined>(undefined);
+  useEffect(() => {
     async function getAndSetGatewayStatus() {
       const response = await fetch(gatewayUrl);
       if (!response.ok) {

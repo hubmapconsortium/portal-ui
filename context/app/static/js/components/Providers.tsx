@@ -93,8 +93,8 @@ export default function Providers({
 
   const protocolsContext = useMemo(
     () => ({
-      clientId: (flaskData?.protocolsClientId as string) ?? '',
-      clientAuthToken: (flaskData?.protocolsClientToken as string) ?? '',
+      clientId: flaskData?.protocolsClientId ?? '',
+      clientAuthToken: flaskData?.protocolsClientToken ?? '',
     }),
     [flaskData],
   );
