@@ -1,0 +1,1 @@
+- Improved detail page breadcrumb clarity.
