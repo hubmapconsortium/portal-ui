@@ -12,7 +12,7 @@ export function useVitessceEventMetadata() {
   // Handle preview pages
   if (location.includes('preview')) {
     const { title } = flaskData;
-    return formatEventCategoryAndLabel('Preview', title);
+    return formatEventCategoryAndLabel('Preview', title ?? '');
   }
   // Handle dataset/publication pages
   if (location.includes('browse')) {

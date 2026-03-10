@@ -40,7 +40,10 @@ function VisualizationShareButton({ trackingInfo, uuid, hasNotebook, parentUuid 
   const { toastError } = useSnackbarActions();
 
   const copyLink = useEventCallback(() => {
-    trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
+    trackEntityPageEvent({
+      ...trackingInfo,
+      action: `${trackingInfo?.action ?? 'Visualization'} / Share Visualization`,
+    });
 
     let urlIsLong = false;
     const url = getUrl(vitessceState as object, () => {

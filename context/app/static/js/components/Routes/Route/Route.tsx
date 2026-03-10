@@ -19,7 +19,7 @@ function RouteBoundary({
   return <Box id={id} padding={2} display={!showBoundary ? 'none' : 'block'} />;
 }
 
-function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{ disableWidthConstraint: boolean }>) {
+function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{ disableWidthConstraint?: boolean }>) {
   const constrainWidthProps: Partial<ContainerProps> = disableWidthConstraint
     ? { maxWidth: false, disableGutters: true }
     : { maxWidth: 'lg' };

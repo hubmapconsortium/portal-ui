@@ -19,7 +19,7 @@ function DataCaptionWithTooltip() {
 }
 
 interface HubmapDataFooterProps {
-  items?: unknown[];
+  items?: { key: string; component: React.ReactNode }[];
 }
 
 function HubmapDataFooter({ items = [] }: HubmapDataFooterProps) {

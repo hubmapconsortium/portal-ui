@@ -1,0 +1,1 @@
+- Convert remaining JavaScript components/functions to TypeScript.

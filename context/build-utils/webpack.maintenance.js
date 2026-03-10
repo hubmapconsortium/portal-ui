@@ -8,7 +8,7 @@ const maintenancePath = './app/static/js/maintenance/';
 const config = {
   mode: 'production',
   devtool: 'cheap-source-map',
-  entry: { maintenance: `./app/static/js/maintenance/index.jsx` },
+  entry: { maintenance: `./app/static/js/maintenance/index.tsx` },
   output: {
     path: resolve('./app/static/js/maintenance/public'),
     filename: '[name].bundle.js',

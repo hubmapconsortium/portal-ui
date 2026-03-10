@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Tile from 'js/shared-styles/tiles/Tile/';
 import EntityTileFooter from 'js/components/entity-tile/EntityTileFooter';
@@ -40,17 +39,6 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path
     />
   );
 }
-
-OrganTile.propTypes = {
-  organ: PropTypes.shape({
-    name: PropTypes.string,
-    uberon_short: PropTypes.string,
-    icon: PropTypes.node,
-    descendantCounts: PropTypes.shape({
-      Dataset: PropTypes.number,
-    }),
-  }).isRequired,
-};
 
 export { tileWidth };
 export default OrganTile;

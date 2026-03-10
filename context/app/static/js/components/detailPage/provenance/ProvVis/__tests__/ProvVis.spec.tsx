@@ -11,7 +11,7 @@ import { simple } from './fixtures';
 interface RenderWithProvContextOptions {
   initialUuid?: string;
   initialUuids?: string[];
-  flaskData?: unknown;
+  flaskData?: FlaskData;
   provData?: typeof simple.prov;
   getNameForActivity?: typeof simple.getNameForActivity;
   getNameForEntity?: typeof simple.getNameForEntity;

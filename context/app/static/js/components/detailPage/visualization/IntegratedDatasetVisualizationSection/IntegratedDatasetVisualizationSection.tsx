@@ -12,6 +12,7 @@ interface IntegratedDatasetVisualizationProps {
 }
 
 const trackingInfo = {
+  action: 'Integrated Dataset Visualization',
   category: 'Integrated Dataset',
 };
 

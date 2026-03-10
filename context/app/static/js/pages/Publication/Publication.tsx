@@ -11,11 +11,12 @@ import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
 import { Publication as PublicationType } from 'js/components/types';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
+import { PublicationVignette } from 'js/components/publications/types';
 
 interface PublicationProps {
   publication: PublicationType;
   vignette_json: {
-    vignettes: { name: string; directory_name: string }[];
+    vignettes: PublicationVignette[];
   };
 }
 
