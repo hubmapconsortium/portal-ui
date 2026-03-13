@@ -46,6 +46,7 @@ const Tutorials = lazy(() => import('js/pages/Tutorials'));
 const Tutorial = lazy(() => import('js/pages/Tutorial'));
 const Profile = lazy(() => import('js/pages/Profile'));
 const Figure = lazy(() => import('js/pages/Figure'));
+const IntegratedMapsPage = lazy(() => import('js/pages/IntegratedMaps'));
 
 interface RoutesProps {
   flaskData: FlaskData;
@@ -176,6 +177,14 @@ function Routes({ flaskData }: RoutesProps) {
     return (
       <Route>
         <Publications />
+      </Route>
+    );
+  }
+
+  if (urlPath === '/integrated-maps') {
+    return (
+      <Route>
+        <IntegratedMapsPage />
       </Route>
     );
   }
