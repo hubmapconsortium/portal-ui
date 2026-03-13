@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useMemo } from 'react';
+import { NuqsAdapter } from 'nuqs/adapters/react';
 import { SWRConfig } from 'swr';
 import { faro } from '@grafana/faro-web-sdk';
 import { ThemeProvider } from '@mui/material/styles';
@@ -107,25 +108,27 @@ export default function Providers({
   const { springs } = useEntityHeaderSprings();
 
   return (
-    <SWRConfig value={swrConfig}>
-      <InitialHashContextProvider>
-        <GlobalFonts />
-        <ThemeProvider theme={theme}>
-          <AppContext.Provider value={appContext}>
-            <FlaskDataContext.Provider value={flaskDataWithDefaults}>
-              <EntityStoreProvider springs={springs}>
-                <OpenKeyNavStoreProvider initialize={readOpenKeyNavCookie()}>
-                  <ProtocolAPIContext.Provider value={protocolsContext}>
-                    <CssBaseline />
-                    <GlobalStyles />
-                    {children}
-                  </ProtocolAPIContext.Provider>
-                </OpenKeyNavStoreProvider>
-              </EntityStoreProvider>
-            </FlaskDataContext.Provider>
-          </AppContext.Provider>
-        </ThemeProvider>
-      </InitialHashContextProvider>
-    </SWRConfig>
+    <NuqsAdapter>
+      <SWRConfig value={swrConfig}>
+        <InitialHashContextProvider>
+          <GlobalFonts />
+          <ThemeProvider theme={theme}>
+            <AppContext.Provider value={appContext}>
+              <FlaskDataContext.Provider value={flaskDataWithDefaults}>
+                <EntityStoreProvider springs={springs}>
+                  <OpenKeyNavStoreProvider initialize={readOpenKeyNavCookie()}>
+                    <ProtocolAPIContext.Provider value={protocolsContext}>
+                      <CssBaseline />
+                      <GlobalStyles />
+                      {children}
+                    </ProtocolAPIContext.Provider>
+                  </OpenKeyNavStoreProvider>
+                </EntityStoreProvider>
+              </FlaskDataContext.Provider>
+            </AppContext.Provider>
+          </ThemeProvider>
+        </InitialHashContextProvider>
+      </SWRConfig>
+    </NuqsAdapter>
   );
 }
