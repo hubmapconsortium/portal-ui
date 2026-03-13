@@ -107,6 +107,16 @@ def publications():
     )
 
 
+@blueprint.route('/integrated-maps')
+def integrated_maps():
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        flask_data=flask_data,
+        title='Integrated Maps',
+    )
+
+
 @blueprint.route('/my-lists')
 def my_lists():
     flask_data = {**get_default_flask_data()}
