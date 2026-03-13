@@ -9,6 +9,7 @@ import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import LZString from 'lz-string';
 import merge from 'deepmerge';
 import history from 'history/browser';
+import { isLegacyCompressedURL, parseReadableParams } from './searchParams';
 
 import { useAppContext } from 'js/components/Contexts';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
@@ -349,9 +350,18 @@ function useInitialURLState() {
   });
 
   useEffect(() => {
-    const searchParams = history?.location?.search
-      ? parseURLState(LZString.decompressFromEncodedURIComponent(history?.location?.search?.slice(1)))
-      : {};
+    const locationSearch = history?.location?.search ?? '';
+    let searchParams: Partial<SearchURLState>;
+
+    if (!locationSearch) {
+      searchParams = {};
+    } else if (isLegacyCompressedURL(locationSearch)) {
+      // Old format: entire query string is a single LZString-compressed blob
+      searchParams = parseURLState(LZString.decompressFromEncodedURIComponent(locationSearch.slice(1)));
+    } else {
+      // New format: named readable params + optional compressed q param
+      searchParams = parseReadableParams(locationSearch);
+    }
 
     let isDoneLoading = true;
 
