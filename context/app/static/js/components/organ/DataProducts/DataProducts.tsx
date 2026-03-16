@@ -75,15 +75,15 @@ export function DataProductsTable({
 }) {
   const organNameMapping = useOrganNameMapping(organs);
 
-  const [sortField, setSortField] = useState<SortField>('creation_time');
-  const [sortDir, setSortDir] = useState<SortDir>('desc');
+  const [sortField, setSortField] = useState<SortField>('tissue');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
 
   const handleSort = useEventCallback((field: SortField) => {
     if (field === sortField) {
       setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortField(field);
-      setSortDir('desc');
+      setSortDir('asc');
     }
   });
 
@@ -141,7 +141,9 @@ export function DataProductsTable({
       const { assayName } = assay;
       const { tissuetype: tissueType } = tissue;
       const totalRawCells = sumCellCounts(raw_cell_type_counts);
+      const rawCellTypes = Object.keys(raw_cell_type_counts ?? {}).length;
       const totalProcessedCells = sumCellCounts(processed_cell_type_counts);
+      const processedCellTypes = Object.keys(processed_cell_type_counts ?? {}).length;
 
       const normalizedName = tissueType
         .replace(/\s*\((left|right)\)\s*/i, '')
@@ -183,7 +185,9 @@ export function DataProductsTable({
                     {raw_file_size_bytes > 0 ? prettyBytes(raw_file_size_bytes) : '—'}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    {totalRawCells > 0 ? `${totalRawCells.toLocaleString()} cells` : '—'}
+                    {totalRawCells > 0
+                      ? `${totalRawCells.toLocaleString()} cells, ${rawCellTypes.toLocaleString()} types`
+                      : '—'}
                   </Typography>
                 </>
               )}
@@ -206,7 +210,9 @@ export function DataProductsTable({
                     {processed_file_sizes_bytes > 0 ? prettyBytes(processed_file_sizes_bytes) : '—'}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    {totalProcessedCells > 0 ? `${totalProcessedCells.toLocaleString()} cells` : '—'}
+                    {totalProcessedCells > 0
+                      ? `${totalProcessedCells.toLocaleString()} cells, ${processedCellTypes.toLocaleString()} types`
+                      : '—'}
                   </Typography>
                 </>
               )}
@@ -230,6 +236,7 @@ export function DataProductsTable({
             <ViewEntitiesButton
               entityType="Dataset"
               filters={{ datasetUUIDs }}
+              count={datasetUUIDs?.length}
               onClick={() => {
                 onTrack?.({ action: 'View Datasets', assayName, tissueType });
               }}
