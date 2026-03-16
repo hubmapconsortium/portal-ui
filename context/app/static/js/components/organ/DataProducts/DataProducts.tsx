@@ -35,6 +35,9 @@ type SortField = 'tissue' | 'assay' | 'creation_time';
 type SortDir = 'asc' | 'desc';
 
 function formatCount(count: number): string {
+  if (count === 1) {
+    return 'View Dataset';
+  }
   return `View ${count.toLocaleString()} Datasets`;
 }
 
