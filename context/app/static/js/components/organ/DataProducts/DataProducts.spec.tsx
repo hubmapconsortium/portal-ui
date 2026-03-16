@@ -118,8 +118,8 @@ describe('DataProductsTable', () => {
 
   test('renders cell counts with types when available', () => {
     render(<DataProductsTable dataProducts={products} />);
-    expect(screen.getByText('300 cells, 2 types')).toBeInTheDocument();
-    expect(screen.getByText('275 cells, 3 types')).toBeInTheDocument();
+    expect(screen.getByText('300 cells, 2 cell types')).toBeInTheDocument();
+    expect(screen.getByText('275 cells, 3 cell types')).toBeInTheDocument();
   });
 
   test('does not render processed placeholders when no processed download exists', () => {
