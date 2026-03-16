@@ -109,7 +109,8 @@ def publications():
 
 @blueprint.route('/integrated-maps')
 def integrated_maps():
-    flask_data = {**get_default_flask_data()}
+    organs = get_organs()
+    flask_data = {**get_default_flask_data(), 'organs': organs}
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,

@@ -7,9 +7,14 @@ import { useEventCallback } from '@mui/material/utils';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
 import { trackEvent } from 'js/helpers/trackers';
 import { description, DataProductsTable } from 'js/components/organ/DataProducts/DataProducts';
+import { OrganFile } from 'js/components/organ/types';
 import { useAllDataProducts } from './hooks';
 
-function IntegratedMaps() {
+interface IntegratedMapsProps {
+  organs?: Record<string, OrganFile>;
+}
+
+function IntegratedMaps({ organs }: IntegratedMapsProps) {
   const { dataProducts, isLoading } = useAllDataProducts();
 
   const handleTrack = useEventCallback(
@@ -47,7 +52,7 @@ function IntegratedMaps() {
       {isLoading ? (
         <Skeleton variant="rectangular" height={400} />
       ) : (
-        <DataProductsTable dataProducts={dataProducts} standalone onTrack={handleTrack} />
+        <DataProductsTable dataProducts={dataProducts} standalone onTrack={handleTrack} organs={organs} />
       )}
     </PanelListLandingPage>
   );

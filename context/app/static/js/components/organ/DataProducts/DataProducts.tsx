@@ -19,10 +19,12 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
-import { OrganDataProducts, OrganPageIds } from 'js/components/organ/types';
+import { OrganDataProducts, OrganFile, OrganPageIds } from 'js/components/organ/types';
 import { useOrganContext } from 'js/components/organ/contexts';
 import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import { trackEvent } from 'js/helpers/trackers';
+import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
+import { useOrganNameMapping } from 'js/hooks/useOrgansApi';
 
 export const description = [
   'Download HuBMAP-wide integrated maps that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each integrated map.',
@@ -64,11 +66,15 @@ export function DataProductsTable({
   dataProducts,
   onTrack,
   standalone = false,
+  organs,
 }: {
   dataProducts: OrganDataProducts[];
   onTrack?: TrackHandler;
   standalone?: boolean;
+  organs?: Record<string, OrganFile>;
 }) {
+  const organNameMapping = useOrganNameMapping(organs);
+
   const [sortField, setSortField] = useState<SortField>('creation_time');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
 
@@ -137,20 +143,24 @@ export function DataProductsTable({
       const totalRawCells = sumCellCounts(raw_cell_type_counts);
       const totalProcessedCells = sumCellCounts(processed_cell_type_counts);
 
-      const organHref = `/organs/${encodeURIComponent(
-        tissueType
-          .replace(/\s*\((left|right)\)\s*/i, '')
-          .trim()
-          .toLowerCase(),
-      )}`;
+      const normalizedName = tissueType
+        .replace(/\s*\((left|right)\)\s*/i, '')
+        .trim()
+        .toLowerCase();
+      const organKey = organNameMapping[normalizedName] ?? normalizedName.replace(/\s+/g, '-');
+      const organHref = `/organs/${encodeURIComponent(organKey)}`;
+      const organIcon = organs?.[organKey]?.icon;
 
       return (
         <TableRow key={data_product_id}>
           <TableCell>
             {standalone ? (
-              <InternalLink href={organHref} variant="body2">
-                {tissue.tissuetype}
-              </InternalLink>
+              <Stack direction="row" spacing={1} alignItems="center">
+                {organIcon && <URLSvgIcon iconURL={organIcon} ariaLabel={`Icon for ${tissueType}`} />}
+                <InternalLink href={organHref} variant="body2">
+                  {tissue.tissuetype}
+                </InternalLink>
+              </Stack>
             ) : (
               tissue.tissuetype
             )}

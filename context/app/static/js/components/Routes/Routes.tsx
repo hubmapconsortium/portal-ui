@@ -184,7 +184,7 @@ function Routes({ flaskData }: RoutesProps) {
   if (urlPath === '/integrated-maps') {
     return (
       <Route>
-        <IntegratedMapsPage />
+        <IntegratedMapsPage organs={organs as Record<string, OrganFile>} />
       </Route>
     );
   }
