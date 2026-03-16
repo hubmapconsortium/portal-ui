@@ -5,7 +5,7 @@ import { fetcher } from 'js/helpers/swr/fetchers';
 import { useAppContext } from 'js/components/Contexts';
 import { OrganDataProducts } from 'js/components/organ/types';
 
-function keepLatestVersions(products: OrganDataProducts[]): OrganDataProducts[] {
+export function keepLatestVersions(products: OrganDataProducts[]): OrganDataProducts[] {
   const latest = new Map<string, OrganDataProducts>();
   for (const p of products) {
     const key = `${p.tissue.tissuetype}\0${p.assay.assayName}`;

@@ -34,7 +34,11 @@ export const description = [
 type SortField = 'tissue' | 'assay' | 'creation_time';
 type SortDir = 'asc' | 'desc';
 
-function sortProducts(products: OrganDataProducts[], field: SortField, dir: SortDir): OrganDataProducts[] {
+function formatCount(count: number): string {
+  return `View ${count.toLocaleString()} Datasets`;
+}
+
+export function sortProducts(products: OrganDataProducts[], field: SortField, dir: SortDir): OrganDataProducts[] {
   return [...products].sort((a, b) => {
     let aVal: string;
     let bVal: string;
@@ -55,7 +59,7 @@ function sortProducts(products: OrganDataProducts[], field: SortField, dir: Sort
   });
 }
 
-function sumCellCounts(counts: Record<string, number> | undefined): number {
+export function sumCellCounts(counts: Record<string, number> | undefined): number {
   if (!counts) return 0;
   return Object.values(counts).reduce((sum, n) => sum + n, 0);
 }
@@ -186,7 +190,7 @@ export function DataProductsTable({
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
                     {totalRawCells > 0
-                      ? `${totalRawCells.toLocaleString()} cells, ${rawCellTypes.toLocaleString()} types`
+                      ? `${totalRawCells.toLocaleString()} cells, ${rawCellTypes.toLocaleString()} cell types`
                       : '—'}
                   </Typography>
                 </>
@@ -211,7 +215,7 @@ export function DataProductsTable({
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
                     {totalProcessedCells > 0
-                      ? `${totalProcessedCells.toLocaleString()} cells, ${processedCellTypes.toLocaleString()} types`
+                      ? `${totalProcessedCells.toLocaleString()} cells, ${processedCellTypes.toLocaleString()} cell types`
                       : '—'}
                   </Typography>
                 </>
@@ -237,6 +241,7 @@ export function DataProductsTable({
               entityType="Dataset"
               filters={{ datasetUUIDs }}
               count={datasetUUIDs?.length}
+              formatCount={formatCount}
               onClick={() => {
                 onTrack?.({ action: 'View Datasets', assayName, tissueType });
               }}
