@@ -54,7 +54,7 @@ const relatedTools: ExternalLinkPropsAdapter[] = [
     linkText: 'HuBMAP Integrated Maps',
     ...hubmapConsortium,
     icon: <DataProductsIcon color="primary" sx={{ width: 56, height: 56 }} />,
-    linkHref: 'https://data-products.hubmapconsortium.org/data_products/',
+    linkHref: '/integrated-maps',
     description: INTEGRATED_MAPS_DESCRIPTION_SHORT,
   },
   {

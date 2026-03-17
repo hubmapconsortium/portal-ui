@@ -11,7 +11,27 @@ interface ViewEntitiesButtonProps extends ButtonProps {
   filters: Omit<SearchURLTypes, 'entityType'>;
   trackingInfo?: EventWithOptionalCategory;
   count?: number;
+  formatCount?: (count: number) => string;
 }
+
+function ViewEntitiesLabel({
+  entityType,
+  count,
+  formatCount,
+}: {
+  entityType: string;
+  count?: number;
+  formatCount?: (count: number) => string;
+}) {
+  if (!count) {
+    return `View ${entityType}s`;
+  }
+  if (count && formatCount) {
+    return formatCount(count);
+  }
+  return `${entityType}s: ${count.toLocaleString()}`;
+}
+
 function ViewEntitiesButton({
   entityType,
   filters,
@@ -20,6 +40,7 @@ function ViewEntitiesButton({
   variant = 'outlined',
   component = 'a',
   count,
+  formatCount,
   ...rest
 }: ViewEntitiesButtonProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent('Organ Page');
@@ -47,7 +68,7 @@ function ViewEntitiesButton({
       startIcon={<Icon color={color} />}
       {...rest}
     >
-      {count ? `${entityType}s: ${count.toLocaleString()}` : `View ${entityType}s`}
+      <ViewEntitiesLabel entityType={entityType} count={count} formatCount={formatCount} />
     </Button>
   );
 }
