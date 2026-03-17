@@ -1,1 +1,0 @@
-- Improve search state readability for sharing links.

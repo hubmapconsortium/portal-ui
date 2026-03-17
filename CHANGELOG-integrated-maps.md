@@ -1,1 +1,0 @@
-- Added a dedicated `/integrated-maps` page that displays the full list of HuBMAP-wide data products.

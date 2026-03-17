@@ -1,1 +1,0 @@
-- Add saved list validation to initial processing of received data.

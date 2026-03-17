@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.42.0 - 2026-03-17
+
+- Improve search state readability for sharing links.
+- Add saved list validation to initial processing of received data.
+- Added a dedicated `/integrated-maps` page that displays the full list of HuBMAP-wide data products.
+
+
+
 ## v1.41.3 - 2026-03-10
 
 - Convert remaining JavaScript components/functions to TypeScript.
