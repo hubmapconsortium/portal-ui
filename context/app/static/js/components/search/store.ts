@@ -6,6 +6,7 @@ import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
 import { SCFindParams } from '../organ/utils';
 import { SearchTypeProps } from './utils';
+import { READABLE_PARAM_FIELDS, encodeHierarchical, serializeReadableParams } from './searchParams';
 
 export interface SortField {
   field: string;
@@ -294,12 +295,46 @@ export function buildSearchLink({
   filters?: FiltersType<string[]>;
   scFindParams?: SCFindParams;
 }) {
-  const search =
-    filters || scFindParams
-      ? `?${LZString.compressToEncodedURIComponent(JSON.stringify({ filters, scFindParams }))}`
-      : '';
+  if (!filters && !Object.keys(scFindParams).length) {
+    return `/search/${entity_type.toLowerCase()}s`;
+  }
 
-  return `/search/${entity_type.toLowerCase()}s${search}`;
+  const readableParamValues: Record<string, string[]> = {};
+  const remainingFilters: FiltersType<string[]> = {};
+
+  if (filters) {
+    for (const [field, filter] of Object.entries(filters)) {
+      const paramName = READABLE_PARAM_FIELDS[field as keyof typeof READABLE_PARAM_FIELDS];
+      if (paramName) {
+        if (filter.type === 'TERM') {
+          readableParamValues[paramName] = filter.values;
+        } else if (filter.type === 'HIERARCHICAL') {
+          readableParamValues[paramName] = encodeHierarchical(
+            Object.fromEntries(Object.entries(filter.values).map(([k, v]) => [k, new Set(v)])),
+          );
+        } else {
+          remainingFilters[field] = filter;
+        }
+      } else {
+        remainingFilters[field] = filter;
+      }
+    }
+  }
+
+  const hasRemaining = Object.keys(remainingFilters).length > 0 || Object.keys(scFindParams).length > 0;
+  const qValue = hasRemaining
+    ? LZString.compressToEncodedURIComponent(JSON.stringify({ filters: remainingFilters, scFindParams }))
+    : null;
+
+  const urlParams = serializeReadableParams({
+    organ: readableParamValues['organ'] ?? [],
+    analyte: readableParamValues['analyte'] ?? [],
+    dataset_type: readableParamValues['dataset_type'] ?? [],
+    status: readableParamValues['status'] ?? [],
+    q: qValue,
+  });
+
+  return `/search/${entity_type.toLowerCase()}s${urlParams}`;
 }
 
 export function createDatasetSearchLink(values: Record<string, string[]>) {
@@ -317,23 +352,41 @@ export function createDatasetSearchLink(values: Record<string, string[]>) {
 function replaceURLSearchParams(state: SearchStoreState) {
   const { search, sortField, filters } = state;
 
-  const filtersWithValues = Object.fromEntries(
-    Object.entries(filters).filter(([, v]) => filterHasValues({ filter: v })),
-  );
+  const readableParamValues: Record<string, string[]> = {};
+  const remainingFilters: FiltersType = {};
 
-  const urlState = {
-    search,
-    sortField,
-    filters: filtersWithValues,
-  };
+  for (const [field, filter] of Object.entries(filters)) {
+    if (!filterHasValues({ filter })) continue;
+    const paramName = READABLE_PARAM_FIELDS[field as keyof typeof READABLE_PARAM_FIELDS];
+    if (paramName) {
+      if (isTermFilter(filter)) {
+        readableParamValues[paramName] = [...filter.values];
+      } else if (isHierarchicalFilter(filter)) {
+        readableParamValues[paramName] = encodeHierarchical(filter.values);
+      }
+    } else {
+      remainingFilters[field] = filter;
+    }
+  }
 
-  const urlStateWithArrays: string = JSON.stringify(urlState, (_key, value: unknown) =>
-    value instanceof Set ? [...value] : value,
-  );
+  const hasRemaining = search || Object.keys(remainingFilters).length > 0;
+  const qValue = hasRemaining
+    ? LZString.compressToEncodedURIComponent(
+        JSON.stringify({ search, sortField, filters: remainingFilters }, (_key, value: unknown) =>
+          value instanceof Set ? [...value] : value,
+        ),
+      )
+    : null;
 
-  const { pathname } = history.location;
+  const urlParams = serializeReadableParams({
+    organ: readableParamValues['organ'] ?? [],
+    analyte: readableParamValues['analyte'] ?? [],
+    dataset_type: readableParamValues['dataset_type'] ?? [],
+    status: readableParamValues['status'] ?? [],
+    q: qValue,
+  });
 
-  history.push(`${pathname}?${LZString.compressToEncodedURIComponent(urlStateWithArrays)}`);
+  history.push(`${history.location.pathname}${urlParams}`);
 }
 
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>
