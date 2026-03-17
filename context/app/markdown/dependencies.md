@@ -74,6 +74,7 @@ ruff>=0.14.0
 "isomorphic-dompurify": "^2.12.0",
 "lineupjsx": "^4.6.0",
 "lz-string": "^1.5.0",
+"nuqs": "^2.8.9",
 "openkeynav": "^0.1.229",
 "pretty-bytes": "^6.1.1",
 "react": "^18.3.1",
