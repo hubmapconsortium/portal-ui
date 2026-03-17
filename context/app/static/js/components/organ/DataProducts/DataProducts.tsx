@@ -186,7 +186,7 @@ export function DataProductsTable({
               >
                 {rawFileName}
               </InternalLink>
-              {rawFileName !== 'none' && (
+              {rawFileName && rawFileName !== 'none' && (
                 <>
                   <Typography variant="caption" color="text.secondary">
                     {raw_file_size_bytes > 0 ? prettyBytes(raw_file_size_bytes) : '—'}
@@ -194,7 +194,7 @@ export function DataProductsTable({
                   <Typography variant="caption" color="text.secondary">
                     {totalRawCells > 0
                       ? `${totalRawCells.toLocaleString()} cells, ${rawCellTypes.toLocaleString()} cell types`
-                      : '—'}
+                      : ''}
                   </Typography>
                 </>
               )}
@@ -219,7 +219,7 @@ export function DataProductsTable({
                   <Typography variant="caption" color="text.secondary">
                     {totalProcessedCells > 0
                       ? `${totalProcessedCells.toLocaleString()} cells, ${processedCellTypes.toLocaleString()} cell types`
-                      : '—'}
+                      : ''}
                   </Typography>
                 </>
               )}
