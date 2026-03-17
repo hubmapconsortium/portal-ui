@@ -14,6 +14,12 @@ export const READABLE_PARAM_FIELDS = {
   mapped_status: 'status',
 } as const;
 
+export const HIERARCHICAL_FIELDS = ['raw_dataset_type', 'mapped_status'] as const;
+
+export const isHierarchicalField = (field: string): field is (typeof HIERARCHICAL_FIELDS)[number] => {
+  return HIERARCHICAL_FIELDS.includes(field as (typeof HIERARCHICAL_FIELDS)[number]);
+};
+
 type ReadableParamField = keyof typeof READABLE_PARAM_FIELDS;
 type ReadableParamName = (typeof READABLE_PARAM_FIELDS)[ReadableParamField];
 
@@ -99,7 +105,7 @@ export function parseReadableParams(search: string): Partial<SearchURLState> {
 
     // Determine the facet type based on the field
     // raw_dataset_type and mapped_status are HIERARCHICAL; others are TERM
-    if (field === 'raw_dataset_type' || field === 'mapped_status') {
+    if (isHierarchicalField(field)) {
       const decoded = decodeHierarchical(values);
       filters[field] = { type: 'HIERARCHICAL', values: decoded };
     } else {
