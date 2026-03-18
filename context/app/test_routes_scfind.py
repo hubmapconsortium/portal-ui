@@ -110,7 +110,9 @@ def mock_scfind_get(url, **kwargs):
 
     # Determine response based on URL
     if 'cellTypeNames' in url:
-        return MockResponse(mock_atac_cell_type_names if has_atac_modality else mock_cell_type_names)
+        return MockResponse(
+            mock_atac_cell_type_names if has_atac_modality else mock_cell_type_names
+        )
     elif 'scfindGenes' in url:
         return MockResponse(mock_atac_gene_names if has_atac_modality else mock_gene_names)
     elif 'CellType2CLID' in url:
@@ -542,9 +544,7 @@ class TestRequestTimeouts:
             side_effect=requests.exceptions.Timeout('Read timed out'),
         )
 
-        response = client.post(
-            '/scfind/pathway-genes', json={'pathway_code': 'R-HSA-12345'}
-        )
+        response = client.post('/scfind/pathway-genes', json={'pathway_code': 'R-HSA-12345'})
         assert response.status_code == 504
         data = response.get_json()
         assert 'took too long' in data['error']
@@ -640,9 +640,7 @@ class TestPathwayGenes:
         """Test successful pathway gene validation."""
         mocker.patch('requests.get', side_effect=mock_scfind_get)
 
-        response = client.post(
-            '/scfind/pathway-genes', json={'pathway_code': 'R-HSA-12345'}
-        )
+        response = client.post('/scfind/pathway-genes', json={'pathway_code': 'R-HSA-12345'})
         assert response.status_code == 200
         data = response.get_json()
         assert 'valid_genes' in data
@@ -694,9 +692,7 @@ class TestPathwayGenes:
             side_effect=Exception('UBKG error'),
         )
 
-        response = client.post(
-            '/scfind/pathway-genes', json={'pathway_code': 'R-HSA-99999'}
-        )
+        response = client.post('/scfind/pathway-genes', json={'pathway_code': 'R-HSA-99999'})
         assert response.status_code == 500
         data = response.get_json()
         assert 'An error occurred' in data['error']
