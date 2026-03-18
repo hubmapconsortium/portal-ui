@@ -1,4 +1,5 @@
 import Skeleton from '@mui/material/Skeleton';
+import Alert from '@mui/material/Alert';
 import useCellTypeCountForTissue from 'js/api/scfind/useCellTypeCountForTissue';
 
 import React from 'react';
@@ -18,10 +19,14 @@ export default function CellTypeDistributionChart({
   skipDescription,
 }: CellTypeDistributionChartProps) {
   const modality = useOptionalSCFindModality();
-  const { data, isLoading } = useCellTypeCountForTissue({ tissue, modality });
+  const { data, isLoading, error } = useCellTypeCountForTissue({ tissue, modality });
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={300} />;
+  }
+
+  if (error) {
+    return <Alert severity="error">Failed to load cell type distribution data.</Alert>;
   }
 
   if (!data) {

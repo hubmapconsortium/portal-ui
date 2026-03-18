@@ -9,6 +9,20 @@ from .utils import first_n_matches, make_blueprint
 blueprint = make_blueprint(__name__)
 
 
+SCFIND_REQUEST_TIMEOUT = 30  # seconds
+
+TIMEOUT_ERROR_MESSAGE = 'The scFind server took too long to respond. Please try again.'
+
+
+def _handle_scfind_error(e, context):
+    """Return an appropriate error response for scFind endpoint failures."""
+    if isinstance(e, requests.exceptions.Timeout):
+        current_app.logger.error(f'Timeout in {context}: {e}')
+        return jsonify({'error': TIMEOUT_ERROR_MESSAGE}), 504
+    current_app.logger.error(f'Error in {context}: {e}')
+    return jsonify({'error': 'An error occurred while querying scFind. Please try again.'}), 500
+
+
 def _make_scfind_request(endpoint, params=None):
     """
     Helper function to make requests to the SCFIND endpoint.
@@ -31,9 +45,12 @@ def _make_scfind_request(endpoint, params=None):
         request_params.update(params)
 
     try:
-        response = requests.get(url, params=request_params)
+        response = requests.get(url, params=request_params, timeout=SCFIND_REQUEST_TIMEOUT)
         response.raise_for_status()
         return response.json()
+    except requests.exceptions.Timeout as e:
+        current_app.logger.error(f'Timeout making SCFIND request to {url}: {e}')
+        raise
     except requests.RequestException as e:
         current_app.logger.error(f'Error making SCFIND request to {url}: {e}')
         raise
@@ -240,9 +257,12 @@ def _fetch_pathway_participants(pathway_code):
     url = f'{ubkg_endpoint}/pathways/{pathway_code}/participants'
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=SCFIND_REQUEST_TIMEOUT)
         response.raise_for_status()
         data = response.json()
+    except requests.exceptions.Timeout as e:
+        current_app.logger.error(f'Timeout fetching pathway participants from UBKG: {e}')
+        raise
     except requests.RequestException as e:
         current_app.logger.error(f'Error fetching pathway participants from UBKG: {e}')
         raise
@@ -271,8 +291,7 @@ def label_to_clid_map():
         label_to_clid_map, _ = _get_complete_mappings()
         return jsonify(label_to_clid_map)
     except Exception as e:
-        current_app.logger.error(f'Error building label-to-CLID map: {e}')
-        return jsonify({'error': 'Failed to build label-to-CLID mapping'}), 500
+        return _handle_scfind_error(e, 'label-to-CLID map')
 
 
 @blueprint.route('/scfind/clid-to-label-map.json')
@@ -287,8 +306,7 @@ def clid_to_label_map():
         _, clid_to_label_map = _get_complete_mappings()
         return jsonify(clid_to_label_map)
     except Exception as e:
-        current_app.logger.error(f'Error building CLID-to-label map: {e}')
-        return jsonify({'error': 'Failed to build CLID-to-label mapping'}), 500
+        return _handle_scfind_error(e, 'CLID-to-label map')
 
 
 @blueprint.route('/scfind/combined-maps.json')
@@ -303,8 +321,7 @@ def combined_maps():
         label_to_clid_map, clid_to_label_map = _get_complete_mappings()
         return jsonify({'label_to_clid': label_to_clid_map, 'clid_to_label': clid_to_label_map})
     except Exception as e:
-        current_app.logger.error(f'Error building combined maps: {e}')
-        return jsonify({'error': 'Failed to build mappings'}), 500
+        return _handle_scfind_error(e, 'combined maps')
 
 
 @blueprint.route('/scfind/cell-type-names.json')
@@ -323,8 +340,7 @@ def cell_type_names():
         cell_types = _get_all_cell_type_names(modality)
         return jsonify({'cell_types': cell_types})
     except Exception as e:
-        current_app.logger.error(f'Error fetching cell type names: {e}')
-        return jsonify({'error': 'Failed to fetch cell type names'}), 500
+        return _handle_scfind_error(e, 'cell type names')
 
 
 @blueprint.route('/scfind/genes.json')
@@ -343,8 +359,7 @@ def genes():
         gene_list = _get_all_genes(modality)
         return jsonify({'genes': gene_list})
     except Exception as e:
-        current_app.logger.error(f'Error fetching gene names: {e}')
-        return jsonify({'error': 'Failed to fetch gene names'}), 500
+        return _handle_scfind_error(e, 'gene names')
 
 
 @blueprint.route('/scfind/genes/autocomplete')
@@ -374,8 +389,7 @@ def genes_autocomplete():
 
         return jsonify({'results': results})
     except Exception as e:
-        current_app.logger.error(f'Error in gene autocomplete: {e}')
-        return jsonify({'error': 'Failed to search genes'}), 500
+        return _handle_scfind_error(e, 'gene autocomplete')
 
 
 @blueprint.route('/scfind/cell-types/autocomplete')
@@ -459,8 +473,7 @@ def cell_types_autocomplete():
 
         return jsonify({'results': limited_results})
     except Exception as e:
-        current_app.logger.error(f'Error in cell type autocomplete: {e}')
-        return jsonify({'error': 'Failed to search cell types'}), 500
+        return _handle_scfind_error(e, 'cell type autocomplete')
 
 
 @blueprint.route('/scfind/genes/validate', methods=['POST'])
@@ -520,8 +533,7 @@ def genes_validate():
             }
         )
     except Exception as e:
-        current_app.logger.error(f'Error in gene validation: {e}')
-        return jsonify({'error': 'Failed to validate genes'}), 500
+        return _handle_scfind_error(e, 'gene validation')
 
 
 @blueprint.route('/scfind/pathway-genes', methods=['POST'])
@@ -580,5 +592,4 @@ def pathway_genes():
             }
         )
     except Exception as e:
-        current_app.logger.error(f'Error in pathway gene validation: {e}')
-        return jsonify({'error': 'Failed to validate pathway genes'}), 500
+        return _handle_scfind_error(e, 'pathway gene validation')

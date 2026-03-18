@@ -166,7 +166,7 @@ class TestSCFindEndpoints:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to fetch cell type names'
+        assert 'An error occurred' in data['error']
 
     def test_genes_success(self, client, mocker):
         """Test successful retrieval of gene names."""
@@ -186,7 +186,7 @@ class TestSCFindEndpoints:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to fetch gene names'
+        assert 'An error occurred' in data['error']
 
     def test_label_to_clid_map_success(self, client, mocker):
         """Test successful retrieval of label-to-CLID mapping."""
@@ -208,7 +208,7 @@ class TestSCFindEndpoints:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to build label-to-CLID mapping'
+        assert 'An error occurred' in data['error']
 
     def test_clid_to_label_map_success(self, client, mocker):
         """Test successful retrieval of CLID-to-label mapping."""
@@ -230,7 +230,7 @@ class TestSCFindEndpoints:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to build CLID-to-label mapping'
+        assert 'An error occurred' in data['error']
 
     def test_combined_maps_success(self, client, mocker):
         """Test successful retrieval of combined mappings."""
@@ -254,7 +254,7 @@ class TestSCFindEndpoints:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to build mappings'
+        assert 'An error occurred' in data['error']
 
 
 class TestGenesAutocomplete:
@@ -312,7 +312,7 @@ class TestGenesAutocomplete:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to search genes'
+        assert 'An error occurred' in data['error']
 
 
 class TestCellTypesAutocomplete:
@@ -375,7 +375,7 @@ class TestCellTypesAutocomplete:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to search cell types'
+        assert 'An error occurred' in data['error']
 
 
 class TestGenesValidate:
@@ -491,21 +491,74 @@ class TestGenesValidate:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
-        assert data['error'] == 'Failed to validate genes'
+        assert 'An error occurred' in data['error']
 
 
 class TestRequestTimeouts:
     """Test class for handling request timeouts."""
 
-    def test_timeout_handling(self, client, mocker):
-        """Test that timeout exceptions are properly handled."""
-        mocker.patch('app.routes_scfind._get_all_genes', side_effect=Exception('Request timeout'))
+    def test_timeout_returns_504(self, client, mocker):
+        """Test that timeout exceptions return 504 with a user-friendly message."""
+        mocker.patch(
+            'app.routes_scfind._get_all_genes',
+            side_effect=requests.exceptions.Timeout('Connection timed out'),
+        )
 
-        # Test with a simple endpoint
+        response = client.get('/scfind/genes.json')
+        assert response.status_code == 504
+        data = response.get_json()
+        assert 'error' in data
+        assert 'took too long' in data['error']
+
+    def test_generic_error_returns_500(self, client, mocker):
+        """Test that non-timeout exceptions return 500."""
+        mocker.patch(
+            'app.routes_scfind._get_all_genes',
+            side_effect=Exception('Something went wrong'),
+        )
+
         response = client.get('/scfind/genes.json')
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
+        assert 'An error occurred' in data['error']
+
+    def test_timeout_on_autocomplete(self, client, mocker):
+        """Test timeout handling on autocomplete endpoint."""
+        mocker.patch(
+            'app.routes_scfind._get_all_genes',
+            side_effect=requests.exceptions.Timeout('Read timed out'),
+        )
+
+        response = client.get('/scfind/genes/autocomplete?q=ACT')
+        assert response.status_code == 504
+        data = response.get_json()
+        assert 'took too long' in data['error']
+
+    def test_timeout_on_pathway_genes(self, client, mocker):
+        """Test timeout handling on pathway-genes endpoint."""
+        mocker.patch(
+            'app.routes_scfind._fetch_pathway_participants',
+            side_effect=requests.exceptions.Timeout('Read timed out'),
+        )
+
+        response = client.post(
+            '/scfind/pathway-genes', json={'pathway_code': 'R-HSA-12345'}
+        )
+        assert response.status_code == 504
+        data = response.get_json()
+        assert 'took too long' in data['error']
+
+    def test_make_scfind_request_has_timeout(self, client, mocker):
+        """Test that _make_scfind_request passes timeout to requests.get."""
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+
+        with client.application.app_context():
+            routes_scfind._make_scfind_request('scfindGenes')
+
+        mock_get.assert_called_once()
+        _, kwargs = mock_get.call_args
+        assert kwargs.get('timeout') == routes_scfind.SCFIND_REQUEST_TIMEOUT
 
 
 class TestModalitySupport:
@@ -646,7 +699,7 @@ class TestPathwayGenes:
         )
         assert response.status_code == 500
         data = response.get_json()
-        assert data['error'] == 'Failed to validate pathway genes'
+        assert 'An error occurred' in data['error']
 
 
 @pytest.mark.parametrize(

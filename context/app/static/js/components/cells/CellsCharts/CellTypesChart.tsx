@@ -7,6 +7,7 @@ import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import { Dataset } from 'js/components/types';
 import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
+import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { decimal, percent } from 'js/helpers/number-format';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
@@ -264,7 +265,7 @@ export function SCFindCellTypesChart({
 }: SCFindCellTypesChartProps) {
   const cellVariableNames = useCellVariableNames();
   const modality = useOptionalSCFindModality();
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid, modality });
+  const { data, isLoading, error } = useCellTypeCountForDataset({ dataset: uuid, modality });
   const isCellTypesQuery = useIsQueryType('cell-type');
   const cellNames = useMemo(() => {
     if (isCellTypesQuery) {
@@ -290,6 +291,10 @@ export function SCFindCellTypesChart({
     const total = data.cellTypeCounts.reduce((acc, result) => acc + result.count, 0);
     return [counts, total] as const;
   }, [data]);
+
+  if (error) {
+    return <Alert severity="error">Failed to load cell type distribution data.</Alert>;
+  }
 
   return (
     <CellTypesChart

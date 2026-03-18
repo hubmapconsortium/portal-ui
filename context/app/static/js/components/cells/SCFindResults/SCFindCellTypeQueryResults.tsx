@@ -6,6 +6,7 @@ import { Dataset, EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
+import Alert from '@mui/material/Alert';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import HelperPanel from 'js/shared-styles/HelperPanel';
 import { useInView } from 'react-intersection-observer';
@@ -253,11 +254,19 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
 
 function DatasetListSection() {
   const cellTypes = useCellVariableNames();
-  const { datasets, cellTypeCategories, isLoading, countsMaps } = useSCFindCellTypeResults(cellTypes);
+  const { datasets, cellTypeCategories, isLoading, error, countsMaps } = useSCFindCellTypeResults(cellTypes);
   const { openTabIndex, handleTabChange } = useTabs();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
+      </Alert>
+    );
   }
 
   if (!datasets) {
@@ -313,6 +322,14 @@ function SCFindCellTypeQueryResultsLoader({ trackingInfo }: SCFindCellTypeQueryR
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
+      </Alert>
+    );
   }
 
   if (!datasets) {

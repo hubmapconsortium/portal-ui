@@ -9,6 +9,7 @@ import { SCFindCellTypesChart } from './CellTypesChart';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMultiGeneHyperQueryCellTypes } from 'js/api/scfind/useHyperQueryCellTypes';
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
+import Alert from '@mui/material/Alert';
 import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 
 function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
@@ -47,7 +48,11 @@ export default function SCFindGeneCharts(dataset: Dataset) {
   const modality = useOptionalSCFindModality();
 
   // Fetch relevant cell types for each gene separately
-  const { data: geneResults = {}, isLoading: hyperQueryLoading } = useMultiGeneHyperQueryCellTypes({
+  const {
+    data: geneResults = {},
+    isLoading: hyperQueryLoading,
+    error: hyperQueryError,
+  } = useMultiGeneHyperQueryCellTypes({
     genes: genesToQuery,
     organName,
     modality,
@@ -102,6 +107,14 @@ export default function SCFindGeneCharts(dataset: Dataset) {
 
     return { geneHighlights: highlights, cellTypeGeneAssociations: associations };
   }, [geneResults, genesToQuery, chartColors]);
+
+  if (hyperQueryError) {
+    return (
+      <Box py={2}>
+        <Alert severity="error">Failed to load gene expression chart data.</Alert>
+      </Box>
+    );
+  }
 
   return (
     <Box py={2}>

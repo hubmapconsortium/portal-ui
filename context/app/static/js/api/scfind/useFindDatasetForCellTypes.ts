@@ -56,6 +56,8 @@ export default function useFindDatasetForCellTypes({ cellTypes, modality }: Find
         urls,
         errorMessages: {
           400: `No results found for ${stringOrArrayToString(cellTypes)}`,
+          500: 'The scFind server encountered an error. Please try again.',
+          504: 'The scFind server took too long to respond. Please try again.',
         },
       }),
     {

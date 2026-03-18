@@ -13,6 +13,7 @@ import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
 import DatasetsOverviewChart from './DatasetsOverviewChart';
+import Alert from '@mui/material/Alert';
 import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 
 interface DatasetsOverviewProps extends React.PropsWithChildren {
@@ -68,7 +69,7 @@ export default function DatasetsOverview({
     return <Skeleton variant="rectangular" width="100%" height={300} />;
   }
   if (error) {
-    return <div>Error: {error?.message}</div>;
+    return <Alert severity="error">Failed to load indexed datasets overview. {error?.message}</Alert>;
   }
 
   return (

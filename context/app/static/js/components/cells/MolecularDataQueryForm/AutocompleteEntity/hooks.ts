@@ -2,6 +2,7 @@ import useSWR from 'swr';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PathwayParticipantsResponse, useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
 import { fetcher } from 'js/helpers/swr';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import CellsService from '../../CellsService';
 import type { AutocompleteQueryKey, AutocompleteQueryResponse, AutocompleteResult } from './types';
 import { getScFindModality, isScFindMethod, useMolecularDataQueryFormState } from '../hooks';
@@ -212,6 +213,7 @@ async function validateGenesWithCellsAPI(
  */
 export function useSelectedPathwayParticipants() {
   const { watch, setValue, getValues, formState } = useMolecularDataQueryFormState();
+  const { toastError } = useSnackbarActions();
   const [isLoadingPathwayGenes, setIsLoadingPathwayGenes] = useState(false);
   const [invalidGenes, setInvalidGenes] = useState<string[]>([]);
   const [allGenesExcludedPathway, setAllGenesExcludedPathway] = useState<string | null>(null);
@@ -293,9 +295,10 @@ export function useSelectedPathwayParticipants() {
                 tags: [],
               }));
               setValue('genes', genes);
-            } catch (error) {
-              if (error instanceof Error && error.name === 'AbortError') return;
-              console.error('Failed to fetch pathway genes:', error);
+            } catch (err) {
+              if (err instanceof Error && err.name === 'AbortError') return;
+              console.error('Failed to fetch pathway genes:', err);
+              toastError('Failed to load pathway genes. Please try again.');
             } finally {
               if (!abortController.signal.aborted) {
                 setIsLoadingPathwayGenes(false);
@@ -323,9 +326,10 @@ export function useSelectedPathwayParticipants() {
 
                 pathwayGenes = validGenes;
                 setInvalidGenes(newInvalidGenes);
-              } catch (error) {
-                if (error instanceof Error && error.name === 'AbortError') return;
-                console.error('Failed to validate pathway genes:', error);
+              } catch (err) {
+                if (err instanceof Error && err.name === 'AbortError') return;
+                console.error('Failed to validate pathway genes:', err);
+                toastError('Failed to validate pathway genes. Please try again.');
               } finally {
                 if (!abortController.signal.aborted) {
                   setIsLoadingPathwayGenes(false);
@@ -397,6 +401,7 @@ export function useSelectedPathwayParticipants() {
     pathwayName,
     queryType,
     isScFind,
+    toastError,
   ]);
 
   const participants = useMemo(() => {

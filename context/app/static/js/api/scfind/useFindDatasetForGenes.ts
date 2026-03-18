@@ -46,6 +46,8 @@ export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
         url,
         errorMessages: {
           400: `No results found for ${Array.isArray(props.geneList) ? props.geneList.join(', ') : props.geneList}`,
+          500: 'The scFind server encountered an error. Please try again.',
+          504: 'The scFind server took too long to respond. Please try again.',
         },
       }),
     {
