@@ -72,7 +72,7 @@ export function useSCFindGeneResults() {
   const genes = useCellVariableNames();
   const modality = useSCFindModality();
 
-  const { participants, pathwayName, isLoading: isLoadingPathwayGenes } = useSelectedPathwayParticipants();
+  const { participants, pathwayName, isLoadingPathwayGenes } = useSelectedPathwayParticipants();
 
   const {
     isLoading: isLoadingDatasets,

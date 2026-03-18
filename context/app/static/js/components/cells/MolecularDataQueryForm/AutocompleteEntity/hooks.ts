@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { PathwayParticipantsResponse, useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
+import { useGenePathways } from 'js/hooks/useUBKG';
 import { fetcher } from 'js/helpers/swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import CellsService from '../../CellsService';
@@ -102,19 +102,6 @@ export function usePathwayAutocompleteQuery(substring: string) {
   return { pathways, options, isLoading };
 }
 
-function getParticipantsFromPathway(pathway?: PathwayParticipantsResponse): string[] {
-  if (!pathway) {
-    return [];
-  }
-  return pathway.events.flatMap((event) => {
-    const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC');
-    if (!hgncSab) {
-      return [];
-    }
-    return hgncSab.participants.map((participant) => participant.symbol).filter((gene) => gene !== undefined);
-  });
-}
-
 interface PathwayGenesResponse {
   valid_genes: string[];
   invalid_genes: string[];
@@ -160,49 +147,35 @@ async function fetchScFindPathwayGenes(
 }
 
 /**
- * Validates genes against the Cells API to check if they exist in the selected modality.
- * Used for crossModality query methods.
+ * Fetches pathway genes from the backend, which resolves pathway participants from UBKG
+ * and validates them against the Cells API gene list for the given modality.
+ * This collapses 2 network requests (UBKG fetch + Cells API validate) into 1.
  */
-async function validateGenesWithCellsAPI(
-  genes: string[],
+async function fetchCrossModalityPathwayGenes(
+  pathwayCode: string,
   queryMethod: string,
   abortSignal?: AbortSignal,
 ): Promise<{ validGenes: string[]; invalidGenes: string[] }> {
-  try {
-    const modality = queryMethod === 'crossModalityATAC' ? 'atac' : 'rna';
-    const requestBody = { genes, modality };
+  const modality = queryMethod === 'crossModalityATAC' ? 'atac' : 'rna';
 
-    const result = await fetcher<{
-      valid_genes: string[];
-      invalid_genes: string[];
-      total_provided: number;
-      total_valid: number;
-      error?: string;
-    }>({
-      url: '/cells/genes/validate',
-      requestInit: {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-        headers: { 'Content-Type': 'application/json' },
-        signal: abortSignal,
-      },
-    });
+  const result = await fetcher<PathwayGenesResponse>({
+    url: '/cells/pathway-genes',
+    requestInit: {
+      method: 'POST',
+      body: JSON.stringify({ pathway_code: pathwayCode, modality }),
+      headers: { 'Content-Type': 'application/json' },
+      signal: abortSignal,
+    },
+  });
 
-    if (result.error) {
-      throw new Error(result.error);
-    }
-
-    return {
-      validGenes: result.valid_genes,
-      invalidGenes: result.invalid_genes,
-    };
-  } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw error;
-    }
-    console.warn(`Failed to validate genes with ${queryMethod}:`, error);
-    return { validGenes: genes, invalidGenes: [] };
+  if (result.error) {
+    throw new Error(result.error);
   }
+
+  return {
+    validGenes: result.valid_genes,
+    invalidGenes: result.invalid_genes,
+  };
 }
 
 /**
@@ -233,13 +206,9 @@ export function useSelectedPathwayParticipants() {
       ? selectedPathway.values[0]
       : undefined;
 
-  // For crossModality methods, still fetch from UBKG directly
   const isScFind = isScFindMethod(queryMethod);
-  const { data: pathway, isLoading } = useGenePathwayParticipants(isScFind ? undefined : pathwayCode);
 
-  // Hold on to previous selected pathway to clear the genes when the pathway is removed
-  const previousSelectedPathway = useRef(pathway);
-  // Hold previous pathway code for scFind pathway clearing
+  // Hold previous pathway code for clearing genes when pathway is removed
   const previousPathwayCodeRef = useRef<string | undefined>(undefined);
   // Hold previous valid genes from scFind pathway for clearing
   const previousScFindGenesRef = useRef<string[]>([]);
@@ -305,53 +274,50 @@ export function useSelectedPathwayParticipants() {
                 abortControllerRef.current = null;
               }
             }
-          } else if (pathway) {
-            // For crossModality methods, use the existing UBKG fetch + Cells API validate flow
-            previousSelectedPathway.current = pathway;
-            let pathwayGenes = getParticipantsFromPathway(pathway);
+          } else {
+            // For crossModality methods, use the backend endpoint that handles UBKG + validation
+            setIsLoadingPathwayGenes(true);
+            const abortController = new AbortController();
+            abortControllerRef.current = abortController;
 
-            if (pathwayGenes.length > 0) {
-              setIsLoadingPathwayGenes(true);
-              const abortController = new AbortController();
-              abortControllerRef.current = abortController;
+            try {
+              const { validGenes, invalidGenes: newInvalidGenes } = await fetchCrossModalityPathwayGenes(
+                pathwayCode,
+                queryMethod,
+                abortController.signal,
+              );
 
-              try {
-                const { validGenes, invalidGenes: newInvalidGenes } = await validateGenesWithCellsAPI(
-                  pathwayGenes,
-                  queryMethod,
-                  abortController.signal,
-                );
+              if (abortController.signal.aborted) return;
 
-                if (abortController.signal.aborted) return;
+              setInvalidGenes(newInvalidGenes);
 
-                pathwayGenes = validGenes;
-                setInvalidGenes(newInvalidGenes);
-              } catch (err) {
-                if (err instanceof Error && err.name === 'AbortError') return;
-                console.error('Failed to validate pathway genes:', err);
-                toastError('Failed to validate pathway genes. Please try again.');
-              } finally {
-                if (!abortController.signal.aborted) {
-                  setIsLoadingPathwayGenes(false);
-                  abortControllerRef.current = null;
-                }
+              if (validGenes.length === 0) {
+                setAllGenesExcludedPathway(pathwayName ?? 'the selected pathway');
+                setValue('pathway', null);
+                return;
+              }
+
+              previousPathwayCodeRef.current = pathwayCode;
+              previousScFindGenesRef.current = validGenes;
+
+              const genes = validGenes.map((gene) => ({
+                full: gene,
+                pre: '',
+                match: gene,
+                post: '',
+                tags: [],
+              }));
+              setValue('genes', genes);
+            } catch (err) {
+              if (err instanceof Error && err.name === 'AbortError') return;
+              console.error('Failed to fetch pathway genes:', err);
+              toastError('Failed to load pathway genes. Please try again.');
+            } finally {
+              if (!abortController.signal.aborted) {
+                setIsLoadingPathwayGenes(false);
+                abortControllerRef.current = null;
               }
             }
-
-            if (pathwayGenes.length === 0) {
-              setAllGenesExcludedPathway(pathwayName ?? 'the selected pathway');
-              setValue('pathway', null);
-              return;
-            }
-
-            const genes = pathwayGenes.map((gene) => ({
-              full: gene,
-              pre: '',
-              match: gene,
-              post: '',
-              tags: [],
-            }));
-            setValue('genes', genes);
           }
         } else {
           // If the pathway was removed, clear the genes that were in that pathway.
@@ -361,17 +327,12 @@ export function useSelectedPathwayParticipants() {
             const currentGenes = getValues('genes');
             if (!currentGenes) return;
 
-            if (isScFind && previousScFindGenesRef.current.length > 0) {
-              // For scFind, use the stored previous genes
+            if (previousScFindGenesRef.current.length > 0) {
+              // Use the stored previous genes to remove only pathway genes
               const filteredGenes = currentGenes.filter((gene) => !previousScFindGenesRef.current.includes(gene.full));
               setValue('genes', filteredGenes);
               previousScFindGenesRef.current = [];
               previousPathwayCodeRef.current = undefined;
-            } else if (!isScFind && previousSelectedPathway.current) {
-              // For crossModality, use the UBKG pathway data
-              const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
-              const filteredGenes = currentGenes.filter((gene) => !previousParticipants.includes(gene.full));
-              setValue('genes', filteredGenes);
             }
           }
         }
@@ -390,11 +351,9 @@ export function useSelectedPathwayParticipants() {
       }
     };
   }, [
-    pathway,
     pathwayCode,
     selectedPathway,
     setValue,
-    isLoading,
     formState.isSubmitted,
     getValues,
     queryMethod,
@@ -404,27 +363,10 @@ export function useSelectedPathwayParticipants() {
     toastError,
   ]);
 
-  const participants = useMemo(() => {
-    // For scFind methods, return the previously fetched valid genes
-    if (isScFind) {
-      return previousScFindGenesRef.current;
-    }
-    // For crossModality, extract from the UBKG pathway data
-    if (!pathway) {
-      return [];
-    }
-    return pathway.events.flatMap((event) => {
-      // find the HUGO gene symbol sab in the event
-      const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC')!;
-      if (!hgncSab) {
-        return [];
-      }
-      return hgncSab.participants.map((participant) => participant.symbol).filter((gene) => gene !== undefined);
-    });
-  }, [pathway, isScFind]);
+  // Both scFind and crossModality paths store valid genes in previousScFindGenesRef
+  const participants = previousScFindGenesRef.current;
 
   return {
-    isLoading,
     pathwayName,
     pathwayCode,
     participants,

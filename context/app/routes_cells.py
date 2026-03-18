@@ -418,6 +418,73 @@ def genes_validate():
 
 
 @timeit
+@blueprint.route('/cells/pathway-genes', methods=['POST'])
+def pathway_genes():
+    """
+    Fetch pathway genes from UBKG and validate against the Cells API gene list.
+
+    Expects JSON body:
+        {
+            "pathway_code": "R-HSA-12345",
+            "modality": "rna" (optional, defaults to "rna")
+        }
+
+    Returns:
+        JSON object with validated pathway genes:
+        {
+            "valid_genes": ["GENE1", ...],
+            "invalid_genes": ["GENE2", ...],
+            "total_genes": 50,
+            "total_valid": 42
+        }
+    """
+    try:
+        if not request.is_json:
+            return {'error': 'Request must be JSON'}, 400
+
+        data = request.get_json()
+        if not data or 'pathway_code' not in data:
+            return {'error': 'Missing "pathway_code" in request body'}, 400
+
+        pathway_code = data['pathway_code']
+        modality = data.get('modality', 'rna')
+
+        if modality not in ('rna', 'atac'):
+            return {'error': 'Unsupported modality provided.'}, 400
+
+        # Fetch pathway genes from UBKG (shared helper)
+        from .utils import fetch_pathway_participants
+
+        genes = fetch_pathway_participants(pathway_code)
+
+        # Get the appropriate gene list based on modality
+        if modality == 'atac':
+            valid_gene_set = set(_get_atac_genes(current_app))
+        else:
+            valid_gene_set = set(_get_rna_genes(current_app))
+
+        # Validate pathway genes
+        valid_genes = []
+        invalid_genes = []
+
+        for gene in genes:
+            if gene in valid_gene_set:
+                valid_genes.append(gene)
+            else:
+                invalid_genes.append(gene)
+
+        return {
+            'valid_genes': valid_genes,
+            'invalid_genes': invalid_genes,
+            'total_genes': len(genes),
+            'total_valid': len(valid_genes),
+        }
+    except Exception as e:
+        current_app.logger.error(f'Error in pathway gene validation: {e}', exc_info=True)
+        return {'error': 'An error occurred while validating pathway genes. Please try again.'}, 500
+
+
+@timeit
 @blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
 def datasets_selected_by_level(target_entity):
     cell_variable_names = request.args.getlist('cell_variable_name')

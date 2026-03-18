@@ -3,13 +3,16 @@ import requests
 from flask import current_app, jsonify, request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from .utils import first_n_matches, make_blueprint
+from .utils import (
+    EXTERNAL_REQUEST_TIMEOUT,
+    fetch_pathway_participants,
+    first_n_matches,
+    make_blueprint,
+)
 
 
 blueprint = make_blueprint(__name__)
 
-
-SCFIND_REQUEST_TIMEOUT = 30  # seconds
 
 TIMEOUT_ERROR_MESSAGE = 'The scFind server took too long to respond. Please try again.'
 
@@ -45,7 +48,7 @@ def _make_scfind_request(endpoint, params=None):
         request_params.update(params)
 
     try:
-        response = requests.get(url, params=request_params, timeout=SCFIND_REQUEST_TIMEOUT)
+        response = requests.get(url, params=request_params, timeout=EXTERNAL_REQUEST_TIMEOUT)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.Timeout as e:
@@ -242,41 +245,7 @@ def _get_complete_mappings():
     return label_to_clid_map, clid_to_label_map
 
 
-@cache
-def _fetch_pathway_participants(pathway_code):
-    """
-    Fetch pathway participants from the UBKG API.
-
-    Args:
-        pathway_code: The Reactome pathway code (e.g., 'R-HSA-12345')
-
-    Returns:
-        List of HGNC gene symbols from the pathway
-    """
-    ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
-    url = f'{ubkg_endpoint}/pathways/{pathway_code}/participants'
-
-    try:
-        response = requests.get(url, timeout=SCFIND_REQUEST_TIMEOUT)
-        response.raise_for_status()
-        data = response.json()
-    except requests.exceptions.Timeout as e:
-        current_app.logger.error(f'Timeout fetching pathway participants from UBKG: {e}')
-        raise
-    except requests.RequestException as e:
-        current_app.logger.error(f'Error fetching pathway participants from UBKG: {e}')
-        raise
-
-    # Extract HGNC gene symbols (same logic as front-end getParticipantsFromPathway)
-    genes = []
-    for event in data.get('events', []):
-        for sab in event.get('sabs', []):
-            if sab.get('SAB') == 'HGNC':
-                for participant in sab.get('participants', []):
-                    symbol = participant.get('symbol')
-                    if symbol:
-                        genes.append(symbol)
-    return genes
+_fetch_pathway_participants = fetch_pathway_participants
 
 
 @blueprint.route('/scfind/label-to-clid-map.json')

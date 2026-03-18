@@ -3,6 +3,7 @@ import requests
 
 from .main import create_app
 from . import routes_scfind
+from . import utils as app_utils
 
 
 @pytest.fixture
@@ -29,8 +30,8 @@ def client():
             routes_scfind._build_clid_to_label_map.cache_clear()
         if hasattr(routes_scfind._get_complete_mappings, 'cache_clear'):
             routes_scfind._get_complete_mappings.cache_clear()
-        if hasattr(routes_scfind._fetch_pathway_participants, 'cache_clear'):
-            routes_scfind._fetch_pathway_participants.cache_clear()
+        if hasattr(app_utils.fetch_pathway_participants, 'cache_clear'):
+            app_utils.fetch_pathway_participants.cache_clear()
         yield client
 
 
@@ -558,7 +559,7 @@ class TestRequestTimeouts:
 
         mock_get.assert_called_once()
         _, kwargs = mock_get.call_args
-        assert kwargs.get('timeout') == routes_scfind.SCFIND_REQUEST_TIMEOUT
+        assert kwargs.get('timeout') == routes_scfind.EXTERNAL_REQUEST_TIMEOUT
 
 
 class TestModalitySupport:
