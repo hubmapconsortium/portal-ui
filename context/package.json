@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "1.41.2",
+  "version": "1.42.0",
   "dependencies": {
     "@dagrejs/dagre": "^1.1.5",
     "@datapunt/matomo-tracker-js": "^0.5.1",
@@ -45,9 +45,9 @@
     "isomorphic-dompurify": "^2.12.0",
     "lineupjsx": "^4.6.0",
     "lz-string": "^1.5.0",
+    "nuqs": "^2.8.9",
     "openkeynav": "^0.1.229",
     "pretty-bytes": "^6.1.1",
-    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.3.1",

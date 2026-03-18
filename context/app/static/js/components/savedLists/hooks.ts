@@ -162,20 +162,30 @@ function useListSavedListsAndEntities() {
 
   const { savedListsAndEntities, isLoading, mutate } = useFetchSavedListsAndEntities();
 
-  // Saved entities should always be first, then the rest should be sorted by date saved
-  savedListsAndEntities.sort((a, b) => {
-    if (a.key === 'savedEntities') return -1;
-    if (b.key === 'savedEntities') return 1;
-    return b.value.dateSaved - a.value.dateSaved;
-  });
+  // Filter out entries that don't conform to known shapes (e.g. arbitrary UKV data)
+  const validEntries = useMemo(
+    () =>
+      savedListsAndEntities
+        .filter((item) => {
+          if (item.key === SAVED_PREFERENCES_KEY) return true;
+          return validateSavedEntitiesList(item.value);
+        })
+        // Saved entities should always be first, then the rest should be sorted by date saved
+        .sort((a, b) => {
+          if (a.key === 'savedEntities') return -1;
+          if (b.key === 'savedEntities') return 1;
+          return b.value.dateSaved - a.value.dateSaved;
+        }),
+    [savedListsAndEntities],
+  );
 
   // Convert savedListsAndEntities to a record
   const savedListsAndEntitiesRecord = useMemo(() => {
-    return savedListsAndEntities.reduce<SavedListsAndEntitiesRecord>((acc, item) => {
+    return validEntries.reduce<SavedListsAndEntitiesRecord>((acc, item) => {
       acc[item.key] = item.value;
       return acc;
     }, {});
-  }, [savedListsAndEntities]);
+  }, [validEntries]);
 
   const savedPreferences = { ...(savedListsAndEntitiesRecord[SAVED_PREFERENCES_KEY] ?? {}) };
 

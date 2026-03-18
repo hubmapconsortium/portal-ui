@@ -36,7 +36,7 @@ type Story = StoryObj<typeof CellTypeCountsControl>;
 
 export const CellTypeCountForDataset: Story = {
   args: {
-    dataset: 'HBM444.DXLZ.643',
+    dataset: 'fe0ded5fc0355c95239f9c040dd31e99',
   },
 };
 

@@ -42,7 +42,7 @@ All `npm` commands run from the `context/` directory.
 
 ### Hybrid Flask-React Routing
 
-Flask handles server-side routing and renders a template (`react-content.html`) with embedded data. React picks up from there — it reads `window.location.pathname` to render the appropriate page component (no React Router library; manual pathname matching in `Routes.jsx`). The webpack dev server proxies non-static requests to Flask on port 5000.
+Flask handles server-side routing and renders a template (`react-content.html`) with embedded data. React picks up from there — it reads `window.location.pathname` to render the appropriate page component (no React Router library; manual pathname matching in `Routes.tsx`). The webpack dev server proxies non-static requests to Flask on port 5000.
 
 ### State Management (Three Tiers)
 

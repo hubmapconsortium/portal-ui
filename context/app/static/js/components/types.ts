@@ -5,14 +5,18 @@ import { UnprocessedFile } from './detailPage/files/types';
 export interface EventInfo {
   category: string;
   action?: string;
-  label?: string | number;
-  value?: string | number;
+  label?: string;
+  value?: unknown;
+  [key: string]: unknown;
 }
 
 // Interface intended for use in tracking events via trackEntityPageEvent, which takes care of
-// adding the category to the event.
-export interface EventWithOptionalCategory extends Omit<EventInfo, 'category'> {
+// adding the category to the event. `action` is required here since all call sites provide it.
+export interface EventWithOptionalCategory {
+  action: string;
   category?: string;
+  label?: string;
+  value?: unknown;
 }
 
 export type DonorEntityType = 'Donor';
