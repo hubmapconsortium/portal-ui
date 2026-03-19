@@ -121,6 +121,7 @@ describe('DataProductsTable', () => {
     expect(screen.getByText('300 cells, 2 cell types')).toBeInTheDocument();
     expect(screen.getByText('275 cells, 3 cell types')).toBeInTheDocument();
   });
+
   test('renders creation dates', () => {
     render(<DataProductsTable dataProducts={products} />);
     expect(screen.getByText('2025-09-02')).toBeInTheDocument();
