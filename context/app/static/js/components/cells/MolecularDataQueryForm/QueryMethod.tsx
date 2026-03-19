@@ -35,14 +35,14 @@ const scFindLink = <OutboundIconLink href="https://doi.org/10.1038/s41592-021-01
 const description = {
   gene: (
     <>
-      Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq analyses, while Cells
-      Cross-Modality supports RNAseq and ATACseq datasets.
+      Choose the query method to retrieve data. {scFindLink} and Cells Cross-Modality support RNAseq and ATACseq
+      analyses.
     </>
   ),
   'cell-type': (
     <>
-      Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq analyses, while Cells
-      Cross-Modality supports RNAseq, ATACseq and proteomic datasets.
+      Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq data. Cross-Modality supports
+      RNAseq, ATACseq and proteomic datasets.
     </>
   ),
   protein: undefined,
