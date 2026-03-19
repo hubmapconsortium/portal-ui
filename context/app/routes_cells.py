@@ -481,7 +481,9 @@ def pathway_genes():
         }
     except Exception as e:
         current_app.logger.error(f'Error in pathway gene validation: {e}', exc_info=True)
-        return {'error': 'An error occurred while validating pathway genes. Please try again.'}, 500
+        return {
+            'error': 'An error occurred while validating pathway genes. Please try again.'
+        }, 500
 
 
 @timeit
