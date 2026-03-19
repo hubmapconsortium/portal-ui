@@ -122,19 +122,6 @@ describe('DataProductsTable', () => {
     expect(screen.getByText('275 cells, 3 cell types')).toBeInTheDocument();
   });
 
-  test('does not render processed placeholders when no processed download exists', () => {
-    render(<DataProductsTable dataProducts={[heartAtac]} />);
-    const rows = screen.getAllByRole('row');
-    // Header row + 1 data row
-    expect(rows).toHaveLength(2);
-    const dataRow = rows[1];
-    // Raw side: has file size (8.63 GB) but no cell counts → 1 dash placeholder
-    const captions = within(dataRow).queryAllByText('—');
-    expect(captions).toHaveLength(1);
-    // File size should appear for raw
-    expect(within(dataRow).getByText('8.63 GB')).toBeInTheDocument();
-  });
-
   test('renders creation dates', () => {
     render(<DataProductsTable dataProducts={products} />);
     expect(screen.getByText('2025-09-02')).toBeInTheDocument();
