@@ -1,15 +1,18 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { decodeURLParamsToConf, VitessceConfig } from 'vitessce';
+import { useQueryState, parseAsString } from 'nuqs';
 
 import { useSnackbarActions, useSnackbarStore } from 'js/shared-styles/snackbars';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
+import { debounce } from 'js/helpers/nodash';
+import { useTotalHeaderOffset } from 'js/components/detailPage/entityHeader/EntityHeader/hooks';
 
 import { isFirefox } from 'react-device-detect';
 
 interface UseVitessceConfigProps {
   vitData?: object | object[];
-  setVitessceState: (v: object) => void;
   markerGene?: string;
+  hubmapId?: string;
 }
 
 // The `VitessceConfig.fromJSON` method clobbers the requestInit information for datasets, so this is temporarily disabled.
@@ -23,9 +26,23 @@ function formatVitessceConf(vData: object) {
   return vData;
 }
 
-export function useVitessceConfig({ vitData, setVitessceState, markerGene }: UseVitessceConfigProps) {
+export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessceConfigProps) {
   const [vitessceSelection, setVitessceSelection] = useState<number>(0);
   const [vitessceConfig, setVitessceConfig] = useState<object | null>(null);
+  const [localVitessceState, setLocalVitessceState] = useState<unknown>(null);
+
+  // Create a stable debounced setter for Vitessce's onConfigChange callback
+  const debouncedSetterRef = useRef(debounce((val: unknown) => setLocalVitessceState(val), 250));
+  const setLocalVitessceStateDebounced = useCallback((val: unknown) => debouncedSetterRef.current(val), []);
+
+  const [vizParam] = useQueryState('viz', parseAsString);
+  const isTargetViz = useMemo(() => !vizParam || vizParam === hubmapId?.toLowerCase(), [vizParam, hubmapId]);
+
+  const headerOffset = useTotalHeaderOffset();
+  const headerOffsetRef = useRef(headerOffset);
+  useEffect(() => {
+    headerOffsetRef.current = headerOffset;
+  }, [headerOffset]);
 
   const { toastError } = useSnackbarStore((store) => ({
     toastError: store.toastError,
@@ -53,20 +70,20 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
     function setVitessceDefaults(vData: object | object[]) {
       if (Array.isArray(vData)) {
         const processedVData: object[] = vData.map((v: object) => formatVitessceConf(v));
-        setVitessceState(processedVData[0]);
+        setLocalVitessceState(processedVData[0]);
         setVitessceConfig(processedVData);
       } else {
         const processedVData = formatVitessceConf(vData);
-        setVitessceState(processedVData);
+        setLocalVitessceState(processedVData);
         setVitessceConfig(processedVData);
       }
       setVitessceSelection(0);
     }
 
-    if (setVitessceState && vitData) {
-      const fragment = window.location.hash.substr(1);
-      if (!fragment.startsWith('vitessce_conf_')) {
-        // This is an anchor link like "#attribution", rather than a saved vitessce link.
+    if (vitData) {
+      const fragment = window.location.hash.substring(1);
+      if (!isTargetViz || !fragment.startsWith('vitessce_conf_')) {
+        // Not the target visualization, or this is an anchor link like "#attribution"
         setVitessceDefaults(vitData);
         return;
       }
@@ -79,10 +96,11 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
         setVitessceDefaults(vitData);
         return;
       }
-      let initializedVitDataFromUrl = vitData;
+
+      let initializedVitDataFromUrl: object | object[];
       let initialSelectionFromUrl;
-      // If these is a url conf and the we have a multidataset, use the url conf to find the initial selection of the multi-dataset.
-      if (Array.isArray(initializedVitDataFromUrl)) {
+      // If there is a url conf and we have a multidataset, use the url conf to find the initial selection of the multi-dataset.
+      if (Array.isArray(vitData)) {
         initialSelectionFromUrl = Math.max(
           0,
           (vitData as { name: string }[])
@@ -90,17 +108,33 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
             .indexOf((vitessceURLConf as unknown as { name: string })?.name),
         );
 
-        initializedVitDataFromUrl[initialSelectionFromUrl] =
-          vitessceURLConf ?? (vitData as object[])[initialSelectionFromUrl];
-        setVitessceState(initializedVitDataFromUrl[initialSelectionFromUrl] as object);
+        // Clone the array to avoid mutating the vitData prop
+        const clonedVitData = [...vitData];
+        clonedVitData[initialSelectionFromUrl] =
+          (vitessceURLConf as unknown as object) ?? vitData[initialSelectionFromUrl];
+        initializedVitDataFromUrl = clonedVitData;
+        setLocalVitessceState(clonedVitData[initialSelectionFromUrl] as object);
       } else {
         initializedVitDataFromUrl = (vitessceURLConf as unknown as object) ?? vitData;
-        setVitessceState(initializedVitDataFromUrl);
+        setLocalVitessceState(initializedVitDataFromUrl);
       }
       setVitessceSelection(initialSelectionFromUrl ?? 0);
       setVitessceConfig(initializedVitDataFromUrl);
+
+      // Scroll to the visualization section when loaded from a shared URL with ?viz=
+      if (vizParam && hubmapId) {
+        const sectionId = `visualization-${hubmapId.toLowerCase()}`;
+        setTimeout(() => {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            const sectionTop = section.getBoundingClientRect().top;
+            const scrollPosition = window.scrollY + sectionTop - headerOffsetRef.current;
+            window.scrollTo({ top: Math.max(scrollPosition, 0), behavior: 'smooth' });
+          }
+        }, 1000);
+      }
     }
-  }, [setVitessceState, vitData, toastError, markerGene]);
+  }, [vitData, toastError, markerGene, isTargetViz, vizParam, hubmapId]);
 
   const currentConfig = useMemo(() => {
     if (isMultiDataset && Array.isArray(vitessceConfig) && Number.isInteger(vitessceSelection)) {
@@ -109,7 +143,17 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
     return vitessceConfig as VitessceConfig;
   }, [isMultiDataset, vitessceConfig, vitessceSelection]);
 
-  return { vitessceConfig, vitessceSelection, setVitessceSelection, isMultiDataset, parentUuid, currentConfig };
+  return {
+    vitessceConfig,
+    vitessceSelection,
+    setVitessceSelection,
+    isMultiDataset,
+    parentUuid,
+    currentConfig,
+    localVitessceState,
+    isTargetViz,
+    setLocalVitessceStateDebounced,
+  };
 }
 
 // Collapse the visualization when the user presses the escape key.

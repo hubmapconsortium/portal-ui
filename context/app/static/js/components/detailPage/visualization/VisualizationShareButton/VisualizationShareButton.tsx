@@ -24,17 +24,39 @@ import { useEventCallback } from '@mui/material/utils';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
   vitessceState: state.vitessceState,
+  vizHubmapId: state.vizHubmapId,
+  fullscreenVizId: state.fullscreenVizId,
 });
 
 interface VisualizationShareButtonProps {
   trackingInfo: EventWithOptionalCategory;
   uuid?: string;
+  hubmapId?: string;
   hasNotebook?: boolean;
   parentUuid?: string;
+  vitessceState?: unknown;
+  isFullscreen?: boolean;
 }
 
-function VisualizationShareButton({ trackingInfo, uuid, hasNotebook, parentUuid }: VisualizationShareButtonProps) {
-  const { vitessceState } = useVisualizationStore(visualizationStoreSelector);
+function VisualizationShareButton({
+  trackingInfo,
+  uuid,
+  hubmapId,
+  hasNotebook,
+  parentUuid,
+  vitessceState: vitessceStateProp,
+  isFullscreen: isFullscreenProp,
+}: VisualizationShareButtonProps) {
+  const {
+    vitessceState: vitessceStateFromStore,
+    vizHubmapId,
+    fullscreenVizId,
+  } = useVisualizationStore(visualizationStoreSelector);
+
+  // Use local state from prop when available (inline usage); fall back to global store (fullscreen header usage)
+  const vitessceState = vitessceStateProp ?? vitessceStateFromStore;
+  const effectiveHubmapId = hubmapId ?? vizHubmapId ?? undefined;
+  const isFullscreen = isFullscreenProp ?? Boolean(fullscreenVizId);
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const handleCopyClick = useHandleCopyClick();
   const { toastError } = useSnackbarActions();
@@ -46,9 +68,14 @@ function VisualizationShareButton({ trackingInfo, uuid, hasNotebook, parentUuid 
     });
 
     let urlIsLong = false;
-    const url = getUrl(vitessceState as object, () => {
-      urlIsLong = true;
-    });
+    const urlOptions = { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen };
+    const url = getUrl(
+      vitessceState as object,
+      () => {
+        urlIsLong = true;
+      },
+      urlOptions,
+    );
 
     const message = urlIsLong ? DEFAULT_LONG_URL_WARNING : '';
     handleCopyClick(url, message);
@@ -82,7 +109,7 @@ function VisualizationShareButton({ trackingInfo, uuid, hasNotebook, parentUuid 
 
   const emailConf = useEventCallback(() => {
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
-    createEmailWithUrl(vitessceState as object);
+    createEmailWithUrl(vitessceState as object, { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen });
   });
 
   const downloadNotebook = useEventCallback(() => {

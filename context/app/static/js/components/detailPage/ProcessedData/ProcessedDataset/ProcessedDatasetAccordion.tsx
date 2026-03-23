@@ -11,6 +11,7 @@ import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccor
 import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useInView } from 'react-intersection-observer';
 import { useHash } from 'js/hooks/useHash';
+import { useQueryState, parseAsString } from 'nuqs';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
@@ -50,7 +51,11 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   });
   const datasetIdSubstring = datasetSectionId(sectionDataset);
   const [hash] = useHash();
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded || hash.includes(datasetIdSubstring));
+  const [vizParam] = useQueryState('viz', parseAsString);
+  const vizParamMatchesDataset = vizParam === sectionDataset.hubmap_id.toLowerCase();
+  const [isExpanded, setIsExpanded] = useState(
+    defaultExpanded || hash.includes(datasetIdSubstring) || vizParamMatchesDataset,
+  );
 
   useEffect(() => {
     const datasetId = datasetSectionId(sectionDataset);
@@ -58,6 +63,13 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
       setIsExpanded(true);
     }
   }, [hash, sectionDataset]);
+
+  // Auto-expand when the ?viz= query param targets this dataset
+  useEffect(() => {
+    if (vizParamMatchesDataset) {
+      setIsExpanded(true);
+    }
+  }, [vizParamMatchesDataset]);
 
   return (
     <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
