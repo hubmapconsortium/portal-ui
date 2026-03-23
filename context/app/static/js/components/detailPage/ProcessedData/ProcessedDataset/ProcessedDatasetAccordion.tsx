@@ -52,7 +52,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const datasetIdSubstring = datasetSectionId(sectionDataset);
   const [hash] = useHash();
   const [vizParam] = useQueryState('viz', parseAsString);
-  const vizParamMatchesDataset = vizParam === sectionDataset.hubmap_id.toLowerCase();
+  const vizParamMatchesDataset = vizParam?.toLowerCase() === sectionDataset.hubmap_id.toLowerCase();
   const [isExpanded, setIsExpanded] = useState(
     defaultExpanded || hash.includes(datasetIdSubstring) || vizParamMatchesDataset,
   );

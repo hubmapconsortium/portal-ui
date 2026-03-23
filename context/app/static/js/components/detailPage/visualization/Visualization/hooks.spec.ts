@@ -2,14 +2,28 @@ import { renderHook, act } from 'test-utils/functions';
 
 import { useVitessceConfig } from './hooks';
 
-function mockWindowLocation(hash: string, search = '') {
-  // @ts-expect-error - Intentionally replacing location for test mock
-  delete window.location;
-  // @ts-expect-error - Partial Location mock for testing hash/search behavior
-  window.location = { hash, search };
-}
-
 describe('useVitessceConfig', () => {
+  let originalLocation: Location;
+
+  beforeEach(() => {
+    originalLocation = window.location;
+  });
+
+  afterEach(() => {
+    window.location = originalLocation as unknown as string & Location;
+  });
+
+  function mockWindowLocation(hash: string, search = '') {
+    const mockLocation = new URL(`https://example.com/${search}`) as unknown as Location;
+    mockLocation.hash = hash;
+    mockLocation.replace = jest.fn();
+    mockLocation.assign = jest.fn();
+    mockLocation.reload = jest.fn();
+    // @ts-expect-error - Test mock
+    delete window.location;
+    window.location = mockLocation as unknown as string & Location;
+  }
+
   test('without vitessce fragment returns vitData defaults', () => {
     mockWindowLocation('#mock_url_to_be_ignored');
     const vitData = [{ name: 'conf1' }, { name: 'conf2' }];
@@ -51,12 +65,12 @@ describe('useVitessceConfig', () => {
     expect(result.current.localVitessceState).toEqual({ name: 'conf1' });
   });
 
-  test('target visualization applies URL config when ?viz= matches hubmapId', () => {
-    mockWindowLocation('#vitessce_conf_=mock_is_called', '?viz=hbm123.abcd.456');
+  test('target visualization applies URL config when ?viz= matches hubmapId (case-insensitive)', () => {
+    mockWindowLocation('#vitessce_conf_=mock_is_called', '?viz=HBM123.ABCD.456');
     const vitData = [{ name: 'conf1' }, { name: 'conf2' }];
     const { result } = renderHook(() => useVitessceConfig({ vitData, hubmapId: 'HBM123.ABCD.456' }));
 
-    // Should attempt to apply URL config since ?viz= matches this instance's lowercased hubmapId
+    // Should attempt to apply URL config since ?viz= matches (case-insensitive)
     expect(result.current.vitessceSelection).toEqual(0);
     expect(result.current.vitessceConfig).not.toBeNull();
     expect(result.current.localVitessceState).not.toBeNull();

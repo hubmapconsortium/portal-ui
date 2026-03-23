@@ -61,14 +61,17 @@ function VisualizationShareButton({
   const handleCopyClick = useHandleCopyClick();
   const { toastError } = useSnackbarActions();
 
+  const hasConfig = vitessceState != null;
+  const urlOptions = { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen };
+
   const copyLink = useEventCallback(() => {
+    if (!hasConfig) return;
     trackEntityPageEvent({
       ...trackingInfo,
       action: `${trackingInfo?.action ?? 'Visualization'} / Share Visualization`,
     });
 
     let urlIsLong = false;
-    const urlOptions = { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen };
     const url = getUrl(
       vitessceState as object,
       () => {
@@ -82,6 +85,7 @@ function VisualizationShareButton({
   });
 
   const copyConf = useEventCallback(() => {
+    if (!hasConfig) return;
     trackEntityPageEvent({
       ...trackingInfo,
       action: `${trackingInfo.action} / Copy Visualization Configuration to Clipboard`,
@@ -91,6 +95,7 @@ function VisualizationShareButton({
   });
 
   const downloadConf = useEventCallback(() => {
+    if (!hasConfig) return;
     trackEntityPageEvent({
       ...trackingInfo,
       action: `${trackingInfo.action} / Download Visualization Configuration`,
@@ -108,8 +113,9 @@ function VisualizationShareButton({
   });
 
   const emailConf = useEventCallback(() => {
+    if (!hasConfig) return;
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
-    createEmailWithUrl(vitessceState as object, { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen });
+    createEmailWithUrl(vitessceState as object, urlOptions);
   });
 
   const downloadNotebook = useEventCallback(() => {
@@ -129,16 +135,19 @@ function VisualizationShareButton({
       children: 'Copy Visualization Link',
       onClick: copyLink,
       icon: LinkIcon,
+      disabled: !hasConfig,
     },
     {
       children: 'Copy Visualization Configuration',
       onClick: copyConf,
       icon: ContentCopyIcon,
+      disabled: !hasConfig,
     },
     {
       children: 'Download Visualization Configuration',
       onClick: downloadConf,
       icon: FileIcon,
+      disabled: !hasConfig,
     },
     ...(uuid && hasNotebook
       ? [
@@ -153,6 +162,7 @@ function VisualizationShareButton({
       children: 'Email',
       onClick: emailConf,
       icon: EmailIcon,
+      disabled: !hasConfig,
     },
   ];
 

@@ -7,14 +7,16 @@ interface GetUrlOptions {
 }
 
 const getUrl = (conf: object, onOverMaximumUrlLength: () => void, options?: GetUrlOptions) => {
-  const currentUrl = new URL(window.location.href.split('#')[0]);
+  // Build from origin+pathname only to avoid retaining stale query params (e.g., ?viz= or ?fullscreen=)
+  // from the current URL when sharing a different visualization.
+  const cleanUrl = new URL(window.location.pathname, window.location.origin);
   if (options?.vizHubmapId) {
-    currentUrl.searchParams.set('viz', options.vizHubmapId.toLowerCase());
+    cleanUrl.searchParams.set('viz', options.vizHubmapId.toLowerCase());
   }
   if (options?.fullscreen) {
-    currentUrl.searchParams.set('fullscreen', 'true');
+    cleanUrl.searchParams.set('fullscreen', 'true');
   }
-  const baseUrl = currentUrl.toString();
+  const baseUrl = cleanUrl.toString();
   const fragment = encodeConfInUrl({
     conf,
     onOverMaximumUrlLength,

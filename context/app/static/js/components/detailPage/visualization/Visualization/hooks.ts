@@ -35,8 +35,17 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
   const debouncedSetterRef = useRef(debounce((val: unknown) => setLocalVitessceState(val), 250));
   const setLocalVitessceStateDebounced = useCallback((val: unknown) => debouncedSetterRef.current(val), []);
 
+  // Cancel any pending debounced setState on unmount to avoid updates after unmount
+  useEffect(() => {
+    const debouncedFn = debouncedSetterRef.current;
+    return () => debouncedFn.cancel();
+  }, []);
+
   const [vizParam] = useQueryState('viz', parseAsString);
-  const isTargetViz = useMemo(() => !vizParam || vizParam === hubmapId?.toLowerCase(), [vizParam, hubmapId]);
+  const isTargetViz = useMemo(
+    () => !vizParam || vizParam.toLowerCase() === hubmapId?.toLowerCase(),
+    [vizParam, hubmapId],
+  );
 
   const headerOffset = useTotalHeaderOffset();
   const headerOffsetRef = useRef(headerOffset);
@@ -67,6 +76,8 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
   }, [vitData, isMultiDataset]);
 
   useEffect(() => {
+    let scrollTimeoutId: ReturnType<typeof setTimeout> | undefined;
+
     function setVitessceDefaults(vData: object | object[]) {
       if (Array.isArray(vData)) {
         const processedVData: object[] = vData.map((v: object) => formatVitessceConf(v));
@@ -85,7 +96,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       if (!isTargetViz || !fragment.startsWith('vitessce_conf_')) {
         // Not the target visualization, or this is an anchor link like "#attribution"
         setVitessceDefaults(vitData);
-        return;
+        return undefined;
       }
       let vitessceURLConf;
       try {
@@ -94,7 +105,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
         // If URL cannot be parsed, display error and show Vitessce.
         toastError('View configuration from URL was not able to be parsed.');
         setVitessceDefaults(vitData);
-        return;
+        return undefined;
       }
 
       let initializedVitDataFromUrl: object | object[];
@@ -124,7 +135,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       // Scroll to the visualization section when loaded from a shared URL with ?viz=
       if (vizParam && hubmapId) {
         const sectionId = `visualization-${hubmapId.toLowerCase()}`;
-        setTimeout(() => {
+        scrollTimeoutId = setTimeout(() => {
           const section = document.getElementById(sectionId);
           if (section) {
             const sectionTop = section.getBoundingClientRect().top;
@@ -134,6 +145,11 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
         }, 1000);
       }
     }
+
+    return () => {
+      if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
+    };
+    // markerGene is included to re-initialize when it changes (e.g., gene search)
   }, [vitData, toastError, markerGene, isTargetViz, vizParam, hubmapId]);
 
   const currentConfig = useMemo(() => {

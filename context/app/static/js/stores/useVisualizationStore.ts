@@ -12,9 +12,8 @@ interface VisualizationStoreState {
   onCopyUrlWarning: string;
   vizNotebookId: string | null;
   vitessceVisualization?: boolean;
-  // Identifiers for the currently fullscreen visualization, used by the header share button
+  // Identifier for the currently fullscreen visualization, used by the header share button
   vizHubmapId: string | null;
-  vizUuid: string | null;
 }
 
 interface VisualizationStoreActions {
@@ -27,7 +26,6 @@ interface VisualizationStoreActions {
   setOnCopyUrlWarning: (val: string) => void;
   setVizNotebookId: (val: string) => void;
   setVizHubmapId: (val: string | null) => void;
-  setVizUuid: (val: string | null) => void;
 }
 
 export type VisualizationStore = VisualizationStoreState & VisualizationStoreActions;
@@ -74,10 +72,6 @@ export const useVisualizationStore = create<VisualizationStore>((set) => ({
   vizHubmapId: null,
   setVizHubmapId: (val) => {
     set({ vizHubmapId: val });
-  },
-  vizUuid: null,
-  setVizUuid: (val) => {
-    set({ vizUuid: val });
   },
 }));
 

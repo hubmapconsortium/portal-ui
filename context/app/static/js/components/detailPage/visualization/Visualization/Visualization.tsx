@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useId } from 'react';
 import { Vitessce } from 'vitessce';
-import { useQueryState, parseAsString } from 'nuqs';
+import { useQueryState, parseAsBoolean } from 'nuqs';
 
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -35,7 +35,6 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
   // Global store vitessceState is only used for fullscreen header sync
   setVitessceState: state.setVitessceState,
   setVizHubmapId: state.setVizHubmapId,
-  setVizUuid: state.setVizUuid,
 });
 
 interface VisualizationProps {
@@ -65,7 +64,7 @@ function Visualization({
   hideShare = false,
   title = 'Visualization',
 }: VisualizationProps) {
-  const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVizNotebookId, setVizHubmapId, setVizUuid } =
+  const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVizNotebookId, setVizHubmapId } =
     useVisualizationStore(visualizationStoreSelector);
 
   const id = useId();
@@ -125,7 +124,7 @@ function Visualization({
   });
 
   // Auto-expand to fullscreen when loaded from a shared URL with ?fullscreen=true
-  const [fullscreenParam] = useQueryState('fullscreen', parseAsString);
+  const [fullscreenParam] = useQueryState('fullscreen', parseAsBoolean);
   useEffect(() => {
     if (fullscreenParam && isTargetViz && vitessceConfig) {
       expandViz(id, true);
@@ -138,9 +137,8 @@ function Visualization({
     if (vizIsFullscreen && localVitessceState) {
       setVitessceState(localVitessceState);
       setVizHubmapId(hubmapId ?? null);
-      setVizUuid(uuid ?? null);
     }
-  }, [vizIsFullscreen, localVitessceState, setVitessceState, setVizHubmapId, setVizUuid, hubmapId, uuid]);
+  }, [vizIsFullscreen, localVitessceState, setVitessceState, setVizHubmapId, hubmapId]);
 
   const setSelectionAndClearErrors = useCallback(
     ({ i }: { i: number }) => {
