@@ -8,6 +8,7 @@ import { debounce } from 'js/helpers/nodash';
 import { useTotalHeaderOffset } from 'js/components/detailPage/entityHeader/EntityHeader/hooks';
 
 import { isFirefox } from 'react-device-detect';
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 
 interface UseVitessceConfigProps {
   vitData?: object | object[];
@@ -134,7 +135,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
 
       // Scroll to the visualization section when loaded from a shared URL with ?viz=
       if (vizParam && hubmapId) {
-        const sectionId = `visualization-${hubmapId.toLowerCase()}`;
+        const sectionId = datasetSectionId({ hubmap_id: hubmapId }, 'visualization');
         scrollTimeoutId = setTimeout(() => {
           const section = document.getElementById(sectionId);
           if (section) {
