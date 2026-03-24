@@ -13,6 +13,7 @@ import FacetAccordion from './FacetAccordion';
 import DateRangeFacet from './DateRangeFacet';
 import ExistsFacet from './ExistsFacet';
 import FacetSearchCombobox from './FacetSearchCombobox';
+import Divider from '@mui/material/Divider';
 
 export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
@@ -25,8 +26,9 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
             padding: theme.spacing(1),
             backgroundColor: theme.palette.white.main,
           })}
+          divider={<Divider orientation="horizontal" flexItem />}
         >
-          <Box sx={{ width: '100%', pb: 1 }}>
+          <Box sx={{ width: '100%', px: 1, borderBottom: 1, borderColor: 'divider' }}>
             <FacetSearchCombobox />
           </Box>
           {Object.entries(facetGroups).map(([k, v], i) => (

@@ -1,7 +1,6 @@
 import React, { ReactElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -337,9 +336,13 @@ function ResetFiltersButton() {
   const resetFilters = useSearchStore((state) => state.resetFilters);
   return (
     <Box flexShrink={0}>
-      <Button variant="outlined" onClick={resetFilters}>
-        Clear Filters
-      </Button>
+      <Chip
+        variant="outlined"
+        onClick={resetFilters}
+        label="Clear Filters"
+        sx={{ cursor: 'pointer' }}
+        data-testid="clear-filters-button"
+      />
     </Box>
   );
 }
@@ -503,9 +506,16 @@ function FilterChips() {
       return;
     }
 
-    const firstTop = children[0].offsetTop;
-    const overflowing = children.filter((child) => child.offsetTop > firstTop);
-    setOverflowCount(overflowing.length);
+    // Use the container's visible height to determine which chips are hidden.
+    // With maxHeight + overflow:hidden, chips below the cutoff are not visible.
+    const containerRect = container.getBoundingClientRect();
+    const containerBottom = containerRect.top + SINGLE_ROW_HEIGHT;
+    const hidden = children.filter((child) => {
+      const childRect = child.getBoundingClientRect();
+      // A chip is hidden if its top edge is at or below the container's visible bottom
+      return childRect.top >= containerBottom;
+    });
+    setOverflowCount(hidden.length);
   }, [isExpanded]);
 
   // Measure after each render when filters change
@@ -555,15 +565,16 @@ function FilterChips() {
         {chipElements}
       </Box>
       <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">
-        {(overflowCount > 0 || isExpanded) && (
-          <Chip
-            label={isExpanded ? 'See less' : `+ ${overflowCount} more`}
-            onClick={() => setIsExpanded((prev) => !prev)}
-            variant="outlined"
-            data-testid="filter-chips-expand-toggle"
-            sx={{ cursor: 'pointer' }}
-          />
-        )}
+        <Chip
+          label={isExpanded ? 'See less' : `+ ${overflowCount} more`}
+          onClick={() => setIsExpanded((prev) => !prev)}
+          variant="outlined"
+          data-testid="filter-chips-expand-toggle"
+          sx={{
+            cursor: 'pointer',
+            visibility: overflowCount > 0 || isExpanded ? 'visible' : 'hidden',
+          }}
+        />
         <ResetFiltersButton />
       </Stack>
     </Stack>

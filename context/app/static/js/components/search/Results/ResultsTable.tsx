@@ -200,7 +200,7 @@ const Table = React.memo(function Table({
     <Box>
       <StyledTable data-testid="search-results-table">
         <TableHead>
-          <TableRow sx={{ p: 0 }}>
+          <TableRow sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
             <StyledTableCell colSpan={colSpan} sx={{ p: 1, borderBottom: 0 }}>
               <FilterChips />
             </StyledTableCell>
@@ -211,7 +211,7 @@ const Table = React.memo(function Table({
               p: 0,
             }}
           >
-            <StyledTableCell colSpan={colSpan} sx={{ p: 0, borderBottom: 0 }}>
+            <StyledTableCell colSpan={colSpan} sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
               <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <NumSelectedHeader numSelected={selectedRows.size} $noBorderBottom />
                 <TableHeaderActions />

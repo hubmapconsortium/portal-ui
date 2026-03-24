@@ -10,8 +10,8 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
 const FacetAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  flexDirection: 'column',
   padding: theme.spacing(0.5, 0.5, 0.5, 1),
+  width: '100%',
 }));
 
 const FacetAccordionSummary = styled(AccordionSummary)<{ $position: 'inner' | 'outer' }>(({ $position, theme }) => ({

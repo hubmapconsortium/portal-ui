@@ -92,8 +92,10 @@ describe('FilterChips', () => {
         },
       );
 
-      // The expand chip should not appear when there's no overflow (jsdom limitation)
-      expect(screen.queryByTestId('filter-chips-expand-toggle')).not.toBeInTheDocument();
+      // The expand chip is always rendered but hidden when there's no overflow
+      const toggle = screen.getByTestId('filter-chips-expand-toggle');
+      expect(toggle).toBeInTheDocument();
+      expect(toggle).not.toBeVisible();
     });
   });
 });

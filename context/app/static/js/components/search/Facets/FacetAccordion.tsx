@@ -11,6 +11,7 @@ function FacetAccordion({
   isFirst,
   isLast,
 }: PropsWithChildren<{ title: string; position: 'inner' | 'outer'; isFirst?: boolean; isLast?: boolean }>) {
+  const isInner = position === 'inner';
   return (
     <Accordion
       key={title}
@@ -19,14 +20,15 @@ function FacetAccordion({
       variant="unstyled"
       sx={(theme) => ({
         width: '100%',
+        px: 0.5,
         '& .MuiAccordionSummary-content': {
           margin: 0,
         },
-        ...(position === 'outer' && !isLast && { borderBottom: `1px solid ${theme.palette.divider}` }),
+        ...(!isInner && !isLast && { borderBottom: `1px solid ${theme.palette.divider}` }),
       })}
     >
       <FacetAccordionSummary expandIcon={<StyledExpandMoreIcon />} $position={position}>
-        <Typography variant="subtitle2" color={position === 'inner' ? 'textPrimary' : 'secondary'}>
+        <Typography variant="subtitle2" color={isInner ? 'textPrimary' : 'secondary'}>
           {title}
         </Typography>
       </FacetAccordionSummary>

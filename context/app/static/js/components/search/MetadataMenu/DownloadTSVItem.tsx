@@ -23,7 +23,7 @@ export function DownloadTSVItem({ lcPluralType, analyticsCategory }: DownloadTSV
       isLoading={isLoading}
       tooltip={`Download a TSV file of your selection. If no selection exists, all ${lcPluralType} will be downloaded.`}
     >
-      Download
+      Download Metadata
     </StyledMenuItem>
   );
 }
