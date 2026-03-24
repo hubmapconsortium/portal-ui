@@ -1,11 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
+import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { trackEvent } from 'js/helpers/trackers';
 import {
@@ -16,13 +19,17 @@ import {
   isTermFacet,
   isExistsFacet,
   isExistsFilter,
+  isDateFacet,
+  isRangeFacet,
+  isDateFilter,
+  isRangeFilter,
   filterHasValues,
 } from '../store';
 import { useSearch } from '../Search';
 import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
 import type { InnerBucket, HierarchicalBucket } from '../Search';
 
-type FacetOptionType = 'TERM' | 'HIERARCHICAL_PARENT' | 'HIERARCHICAL_CHILD' | 'EXISTS';
+type FacetOptionType = 'TERM' | 'HIERARCHICAL_PARENT' | 'HIERARCHICAL_CHILD' | 'EXISTS' | 'DATE' | 'RANGE';
 
 interface FacetOption {
   field: string;
@@ -32,6 +39,12 @@ interface FacetOption {
   displayValue: string;
   facetType: FacetOptionType;
   parentValue?: string;
+  rangeMin?: number;
+  rangeMax?: number;
+}
+
+interface AggMinMax {
+  value?: number | null;
 }
 
 function useFacetOptions(): FacetOption[] {
@@ -109,10 +122,181 @@ function useFacetOptions(): FacetOption[] {
           facetType: 'EXISTS',
         });
       }
+
+      if (isDateFacet(facetConfig)) {
+        const agg = aggregations[field] as Record<string, AggMinMax> | undefined;
+        const aggMin = agg?.[`${field}_min`];
+        const aggMax = agg?.[`${field}_max`];
+        if (aggMin?.value && aggMax?.value) {
+          options.push({
+            field,
+            value: '_date_control',
+            count: 0,
+            groupLabel,
+            displayValue: groupLabel,
+            facetType: 'DATE',
+            rangeMin: aggMin.value,
+            rangeMax: aggMax.value,
+          });
+        }
+      }
+
+      if (isRangeFacet(facetConfig)) {
+        const agg = aggregations[field] as Record<string, { buckets?: { key: string }[] }> | undefined;
+        const buckets = agg?.[field]?.buckets;
+        if (buckets && Array.isArray(buckets) && buckets.length > 0) {
+          const actualMax = Math.max(...buckets.map((b) => parseInt(b.key, 10)));
+          options.push({
+            field,
+            value: '_range_control',
+            count: 0,
+            groupLabel,
+            displayValue: groupLabel,
+            facetType: 'RANGE',
+            rangeMin: 0,
+            rangeMax: actualMax,
+          });
+        }
+      }
     }
 
     return options;
   }, [aggregations, facets, getFieldLabel, getTransformedFieldValue]);
+}
+
+function InlineDateControl({
+  option,
+  onPickerOpenChange,
+}: {
+  option: FacetOption;
+  onPickerOpenChange: (isOpen: boolean) => void;
+}) {
+  const filterDate = useSearchStore((state) => state.filterDate);
+  const filter = useSearchStore((state) => state.filters[option.field]);
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+
+  const aggMin = option.rangeMin ?? 0;
+  const aggMax = option.rangeMax ?? Date.now();
+
+  const currentMin = isDateFilter(filter) ? filter.values.min : undefined;
+  const currentMax = isDateFilter(filter) ? filter.values.max : undefined;
+
+  const [localMin, setLocalMin] = useState(currentMin ?? aggMin);
+  const [localMax, setLocalMax] = useState(currentMax ?? aggMax);
+
+  useEffect(() => {
+    setLocalMin(currentMin ?? aggMin);
+    setLocalMax(currentMax ?? aggMax);
+  }, [currentMin, currentMax, aggMin, aggMax]);
+
+  const handleMinAccept = useCallback(
+    (value: Date | null) => {
+      if (!value) return;
+      const startOfMonth = new Date(value.getFullYear(), value.getMonth(), 1);
+      const newMin = startOfMonth.getTime();
+      setLocalMin(newMin);
+      if (newMin <= localMax) {
+        filterDate({ field: option.field, min: newMin, max: localMax });
+        trackEvent({ category: analyticsCategory, action: 'Set Min Date Facet', label: option.field });
+      }
+    },
+    [filterDate, option.field, localMax, analyticsCategory],
+  );
+
+  const handleMaxAccept = useCallback(
+    (value: Date | null) => {
+      if (!value) return;
+      const endOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0, 23, 59, 59, 999);
+      const newMax = Math.min(endOfMonth.getTime(), Date.now());
+      setLocalMax(newMax);
+      if (newMax >= localMin) {
+        filterDate({ field: option.field, min: localMin, max: newMax });
+        trackEvent({ category: analyticsCategory, action: 'Set Max Date Facet', label: option.field });
+      }
+    },
+    [filterDate, option.field, localMin, analyticsCategory],
+  );
+
+  return (
+    <Stack spacing={1} sx={{ px: 2, py: 1, width: '100%' }}>
+      <DatePicker
+        label="Start"
+        value={new Date(localMin)}
+        onAccept={handleMinAccept}
+        onOpen={() => onPickerOpenChange(true)}
+        onClose={() => onPickerOpenChange(false)}
+        views={['month', 'year']}
+        maxDate={new Date(localMax)}
+        slotProps={{
+          textField: { size: 'small', fullWidth: true },
+          field: { readOnly: true },
+        }}
+      />
+      <DatePicker
+        label="End"
+        value={new Date(localMax)}
+        onAccept={handleMaxAccept}
+        onOpen={() => onPickerOpenChange(true)}
+        onClose={() => onPickerOpenChange(false)}
+        views={['month', 'year']}
+        minDate={new Date(localMin)}
+        maxDate={new Date()}
+        slotProps={{
+          textField: { size: 'small', fullWidth: true },
+          field: { readOnly: true },
+        }}
+      />
+    </Stack>
+  );
+}
+
+function InlineRangeControl({ option }: { option: FacetOption }) {
+  const filterRange = useSearchStore((state) => state.filterRange);
+  const filter = useSearchStore((state) => state.filters[option.field]);
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+
+  const rangeMin = option.rangeMin ?? 0;
+  const rangeMax = option.rangeMax ?? 100;
+
+  const currentMin = isRangeFilter(filter) ? filter.values.min : undefined;
+  const currentMax = isRangeFilter(filter) ? filter.values.max : undefined;
+
+  const [localValues, setLocalValues] = useState<number[]>([currentMin ?? rangeMin, currentMax ?? rangeMax]);
+
+  useEffect(() => {
+    setLocalValues([currentMin ?? rangeMin, currentMax ?? rangeMax]);
+  }, [currentMin, currentMax, rangeMin, rangeMax]);
+
+  const handleChange = useCallback((_: Event, value: number | number[]) => {
+    if (Array.isArray(value)) {
+      setLocalValues(value);
+    }
+  }, []);
+
+  const handleCommitted = useCallback(
+    (_: Event | SyntheticEvent, value: number | number[]) => {
+      if (Array.isArray(value)) {
+        filterRange({ field: option.field, min: value[0], max: value[1] });
+        trackEvent({ category: analyticsCategory, action: 'Set Range Facet', label: option.field });
+      }
+    },
+    [filterRange, option.field, analyticsCategory],
+  );
+
+  return (
+    <Box sx={{ px: 3, pt: 3, pb: 1, width: '100%' }}>
+      <Slider
+        size="small"
+        value={localValues}
+        min={rangeMin}
+        max={rangeMax}
+        valueLabelDisplay="auto"
+        onChange={handleChange}
+        onChangeCommitted={handleCommitted}
+        getAriaLabel={(index) => (index === 0 ? 'Minimum value' : 'Maximum value')}
+      />
+    </Box>
+  );
 }
 
 function FacetSearchCombobox() {
@@ -125,6 +309,9 @@ function FacetSearchCombobox() {
   const facets = useSearchStore((state) => state.facets);
 
   const [inputValue, setInputValue] = useState('');
+  const [open, setOpen] = useState(false);
+  const paperRef = React.useRef<HTMLDivElement>(null);
+  const datePickerOpenRef = React.useRef(false);
   const allOptions = useFacetOptions();
 
   const isOptionSelected = useCallback(
@@ -151,6 +338,9 @@ function FacetSearchCombobox() {
 
   const toggleOption = useCallback(
     (option: FacetOption) => {
+      // DATE and RANGE options manage their own state via inline controls
+      if (option.facetType === 'DATE' || option.facetType === 'RANGE') return;
+
       switch (option.facetType) {
         case 'TERM':
           filterTerm({ term: option.field, value: option.value });
@@ -185,9 +375,30 @@ function FacetSearchCombobox() {
     <Autocomplete<FacetOption, true, true, false>
       multiple
       disableClearable
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={(event, reason) => {
+        if (reason === 'escape') {
+          setOpen(false);
+          return;
+        }
+        // Keep open if a date picker popover is currently active (it renders in a portal
+        // outside the dropdown, so relatedTarget won't be inside paperRef).
+        if (datePickerOpenRef.current) {
+          return;
+        }
+        // On blur, check if focus moved to an element inside the dropdown (e.g. slider).
+        if (reason === 'blur' && event && 'relatedTarget' in event) {
+          const relatedTarget = event.relatedTarget as Node | null;
+          if (relatedTarget && paperRef.current?.contains(relatedTarget)) {
+            return;
+          }
+        }
+        setOpen(false);
+      }}
       options={allOptions}
       value={[]}
-      onChange={(_event, _newValue, reason, details) => {
+      onChange={(_event, _newValue, _reason, details) => {
         if (details?.option) {
           toggleOption(details.option);
         }
@@ -222,7 +433,7 @@ function FacetSearchCombobox() {
         />
       )}
       slotProps={{
-        paper: { sx: { width: 350 } },
+        paper: { ref: paperRef, sx: { width: 350 } },
         listbox: { sx: { width: 350 } },
       }}
       renderGroup={(params) => (
@@ -247,6 +458,37 @@ function FacetSearchCombobox() {
         </li>
       )}
       renderOption={({ key: _key, ...rest }, option) => {
+        if (option.facetType === 'DATE') {
+          return (
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+            <li
+              key={`${option.facetType}-${option.field}`}
+              onMouseDown={(e) => e.preventDefault()}
+              style={{ display: 'block', cursor: 'default' }}
+            >
+              <InlineDateControl
+                option={option}
+                onPickerOpenChange={(isOpen) => {
+                  datePickerOpenRef.current = isOpen;
+                }}
+              />
+            </li>
+          );
+        }
+
+        if (option.facetType === 'RANGE') {
+          return (
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+            <li
+              key={`${option.facetType}-${option.field}`}
+              onMouseDown={(e) => e.preventDefault()}
+              style={{ display: 'block', cursor: 'default' }}
+            >
+              <InlineRangeControl option={option} />
+            </li>
+          );
+        }
+
         const selected = isOptionSelected(option);
         const isChild = option.facetType === 'HIERARCHICAL_CHILD';
         const isParent = option.facetType === 'HIERARCHICAL_PARENT';
