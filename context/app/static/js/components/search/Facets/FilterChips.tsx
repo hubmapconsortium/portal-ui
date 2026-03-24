@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
@@ -16,6 +16,8 @@ import Divider from '@mui/material/Divider';
 import {
   DateValues,
   ExistsValues,
+  FiltersType,
+  FacetsType,
   HierarchicalTermValues,
   RangeValues,
   TermValues,
@@ -342,9 +344,9 @@ function ResetFiltersButton() {
   );
 }
 
-function FilterChips() {
-  const filters = useSearchStore((state) => state.filters);
-  const facets = useSearchStore((state) => state.facets);
+const SINGLE_ROW_HEIGHT = 40;
+
+function useChipElements(filters: FiltersType, facets: FacetsType) {
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterTerms = useSearchStore((state) => state.filterTerms);
   const filterRange = useSearchStore((state) => state.filterRange);
@@ -355,136 +357,215 @@ function FilterChips() {
   const getFieldLabel = useGetFieldLabel();
   const getTransformedFieldValue = useGetTransformedFieldValue();
 
-  const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
-    <>
-      {Object.entries(filters).map(
-        ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
-          if (isTermFilter(v) && v.values.size) {
-            const values = Array.from(v.values);
-            if (values.length === 1) {
-              return (
-                <FilterChip
-                  key={field}
-                  label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: values[0] })}`}
-                  onDelete={() => {
-                    filterTerm({ term: field, value: values[0] });
-                  }}
-                />
-              );
-            }
-            return (
-              <MultiValueFilterChip
-                key={field}
+  const chipElements: ReactElement[] = [];
+
+  Object.entries(filters).forEach(
+    ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
+      if (isTermFilter(v) && v.values.size) {
+        const values = Array.from(v.values);
+        if (values.length === 1) {
+          chipElements.push(
+            <FilterChip
+              key={field}
+              label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: values[0] })}`}
+              onDelete={() => {
+                filterTerm({ term: field, value: values[0] });
+              }}
+            />,
+          );
+        } else {
+          chipElements.push(
+            <MultiValueFilterChip
+              key={field}
+              field={field}
+              values={values}
+              onDeleteValue={(value) => {
+                filterTerm({ term: field, value });
+              }}
+              onDeleteValues={(vals) => {
+                filterTerms({ term: field, values: vals });
+              }}
+            />,
+          );
+        }
+        return;
+      }
+
+      const facetConfig = facets[field];
+
+      if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
+        if (v.values.min === undefined && v.values.max === undefined) return;
+        chipElements.push(
+          <FilterChip
+            label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
+            key={field}
+            onDelete={() => {
+              filterRange({ field, min: undefined, max: undefined });
+            }}
+          />,
+        );
+        return;
+      }
+
+      if (isDateFilter(v) && isDateFacet(facetConfig)) {
+        if (!(v.values.min && v.values.max)) return;
+        chipElements.push(
+          <FilterChip
+            label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
+            key={field}
+            onDelete={() => {
+              filterDate({ field, min: undefined, max: undefined });
+            }}
+          />,
+        );
+        return;
+      }
+
+      if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
+        const parentValues = Object.entries(v.values);
+        if (!parentValues.length) return;
+        parentValues.forEach(([parent, children]) => {
+          if (!children?.size) {
+            chipElements.push(
+              <HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />,
+            );
+            return;
+          }
+          const childValues = Array.from(children);
+          if (childValues.length === 1) {
+            chipElements.push(
+              <FilterChip
+                key={childValues[0]}
+                label={`${getFieldLabel(field)}: ${childValues[0]}`}
+                onDelete={() => {
+                  filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] });
+                }}
+              />,
+            );
+          } else {
+            chipElements.push(
+              <MultiValueHierarchicalFilterChip
+                key={parent}
                 field={field}
-                values={values}
-                onDeleteValue={(value) => {
-                  filterTerm({ term: field, value });
+                parentValue={parent}
+                childValues={childValues}
+                onDeleteChild={(childValue) => {
+                  filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue });
                 }}
-                onDeleteValues={(vals) => {
-                  filterTerms({ term: field, values: vals });
+                onDeleteParent={() => {
+                  filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] });
                 }}
-              />
+              />,
             );
           }
-          const facetConfig = facets[field];
+        });
+        return;
+      }
 
-          if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
-            if (v.values.min === undefined && v.values.max === undefined) {
-              return null;
-            }
-            return (
-              <FilterChip
-                label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
-                key={field}
-                onDelete={() => {
-                  filterRange({ field, min: undefined, max: undefined });
-                }}
-              />
-            );
-          }
-
-          if (isDateFilter(v) && isDateFacet(facetConfig)) {
-            if (!(v.values.min && v.values.max)) {
-              return null;
-            }
-
-            return (
-              <FilterChip
-                label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
-                key={field}
-                onDelete={() => {
-                  filterDate({ field, min: undefined, max: undefined });
-                }}
-              />
-            );
-          }
-
-          if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
-            const parentValues = Object.entries(v.values);
-            if (!parentValues.length) {
-              return null;
-            }
-            return parentValues.map(([parent, children]) => {
-              if (!children?.size) {
-                return <HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />;
-              }
-              const childValues = Array.from(children);
-
-              if (childValues.length === 1) {
-                return (
-                  <FilterChip
-                    key={childValues[0]}
-                    label={`${getFieldLabel(field)}: ${childValues[0]}`}
-                    onDelete={() => {
-                      filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] });
-                    }}
-                  />
-                );
-              }
-
-              return (
-                <MultiValueHierarchicalFilterChip
-                  key={parent}
-                  field={field}
-                  parentValue={parent}
-                  childValues={childValues}
-                  onDeleteChild={(childValue) => {
-                    filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue });
-                  }}
-                  onDeleteParent={() => {
-                    filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] });
-                  }}
-                />
-              );
-            });
-          }
-
-          const hasValues = filterHasValues({ filter: v });
-
-          if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
-            return (
-              <FilterChip
-                label={`${getFieldLabel(field)}: ${v.values}`}
-                key={field}
-                onDelete={() => {
-                  filterExists({ field });
-                }}
-              />
-            );
-          }
-
-          return null;
-        },
-      )}
-    </>
+      const hasValues = filterHasValues({ filter: v });
+      if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
+        chipElements.push(
+          <FilterChip
+            label={`${getFieldLabel(field)}: ${v.values}`}
+            key={field}
+            onDelete={() => {
+              filterExists({ field });
+            }}
+          />,
+        );
+      }
+    },
   );
 
+  return chipElements;
+}
+
+function FilterChips() {
+  const filters = useSearchStore((state) => state.filters);
+  const facets = useSearchStore((state) => state.facets);
+
+  const chipElements = useChipElements(filters, facets);
+  const hasActiveFilters = chipElements.length > 0;
+
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [overflowCount, setOverflowCount] = useState(0);
+  const chipsContainerRef = useRef<HTMLDivElement>(null);
+
+  const measureOverflow = useCallback(() => {
+    if (!chipsContainerRef.current || isExpanded) {
+      if (isExpanded) setOverflowCount(0);
+      return;
+    }
+    const container = chipsContainerRef.current;
+    const children = Array.from(container.children) as HTMLElement[];
+    if (children.length === 0) {
+      setOverflowCount(0);
+      return;
+    }
+
+    const firstTop = children[0].offsetTop;
+    const overflowing = children.filter((child) => child.offsetTop > firstTop);
+    setOverflowCount(overflowing.length);
+  }, [isExpanded]);
+
+  // Measure after each render when filters change
+  useLayoutEffect(() => {
+    measureOverflow();
+  }, [measureOverflow, filters]);
+
+  // Re-measure on window resize
+  useEffect(() => {
+    if (!chipsContainerRef.current) return;
+    const observer = new ResizeObserver(() => {
+      measureOverflow();
+    });
+    observer.observe(chipsContainerRef.current);
+    return () => observer.disconnect();
+  }, [measureOverflow]);
+
+  // Collapse when all filters are cleared
+  useEffect(() => {
+    if (!hasActiveFilters) {
+      setIsExpanded(false);
+    }
+  }, [hasActiveFilters]);
+
+  if (!hasActiveFilters) {
+    return (
+      <Typography fontWeight="500" sx={(theme) => ({ color: theme.palette.grey[500], px: 1, py: 0.75 })}>
+        0 Filters Selected
+      </Typography>
+    );
+  }
+
   return (
-    <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ width: '100%' }}>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-        {chips}
+    <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start" sx={{ width: '100%' }}>
+      <Box
+        ref={chipsContainerRef}
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 1,
+          overflow: isExpanded ? 'visible' : 'hidden',
+          maxHeight: isExpanded ? 'none' : SINGLE_ROW_HEIGHT,
+          flex: 1,
+          minWidth: 0,
+        }}
+      >
+        {chipElements}
+      </Box>
+      <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">
+        {(overflowCount > 0 || isExpanded) && (
+          <Chip
+            label={isExpanded ? 'See less' : `+ ${overflowCount} more`}
+            onClick={() => setIsExpanded((prev) => !prev)}
+            variant="outlined"
+            data-testid="filter-chips-expand-toggle"
+            sx={{ cursor: 'pointer' }}
+          />
+        )}
+        <ResetFiltersButton />
       </Stack>
-      {Boolean(chips?.props?.children.filter((c) => c).length) && <ResetFiltersButton />}
     </Stack>
   );
 }

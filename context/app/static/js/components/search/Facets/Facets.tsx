@@ -12,6 +12,7 @@ import { isDateFacet, isExistsFacet, isHierarchicalFacet, isRangeFacet, isTermFa
 import FacetAccordion from './FacetAccordion';
 import DateRangeFacet from './DateRangeFacet';
 import ExistsFacet from './ExistsFacet';
+import FacetSearchCombobox from './FacetSearchCombobox';
 
 export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
@@ -25,6 +26,9 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
             backgroundColor: theme.palette.white.main,
           })}
         >
+          <Box sx={{ width: '100%', pb: 1 }}>
+            <FacetSearchCombobox />
+          </Box>
           {Object.entries(facetGroups).map(([k, v], i) => (
             <FacetAccordion
               title={k}
