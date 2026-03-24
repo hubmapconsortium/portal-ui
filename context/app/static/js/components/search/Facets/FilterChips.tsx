@@ -205,7 +205,7 @@ function MultiValueHierarchicalFilterChip({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const fieldLabel = getFieldLabel(field);
-  const chipLabel = childValues.length === 1 ? `${fieldLabel}: ${childValues[0]}` : parentValue;
+  const chipLabel = childValues.length === 1 ? `${fieldLabel}: ${childValues[0]}` : `${fieldLabel}: ${parentValue}`;
 
   const handleChipClick = useCallback(() => {
     if (childValues.length > 1) {
