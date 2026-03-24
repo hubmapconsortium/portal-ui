@@ -13,9 +13,7 @@ import { isLegacyCompressedURL, parseReadableParams } from './searchParams';
 
 import { useAppContext } from 'js/components/Contexts';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
-import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
-import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
-import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
+import { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -42,13 +40,9 @@ import {
 } from './store';
 import Results from './Results';
 import Facets from './Facets/Facets';
-import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
-import FilterChips from './Facets/FilterChips';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
-import { TilesSortSelect } from './Results/ResultsTiles';
-import MetadataMenu from './MetadataMenu';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
 import { isDevSearch, SearchTypeProps } from './utils';
@@ -181,27 +175,12 @@ function Header({ type }: SearchTypeProps) {
   );
 }
 
-function Bar({ type }: SearchTypeProps) {
+function TileViewBar() {
   const view = useSearchStore((state) => state.view);
+  if (view !== 'tile') return null;
   return (
-    <Stack direction="row" spacing={1}>
-      <Box flexGrow={1}>
-        <SearchBar type={type} />
-      </Box>
-      <MetadataMenu type={type} />
-      {!isDevSearch(type) && (
-        <>
-          <WorkspacesDropdownMenu type={type} />
-          {view === 'tile' && <TilesSortSelect />}
-          {view === 'table' && (
-            <>
-              <SaveEntitiesButtonFromSearch entity_type={type} />
-              <BulkDownloadButtonFromSearch type={type} />
-            </>
-          )}
-          <DefaultSearchViewSwitch />
-        </>
-      )}
+    <Stack direction="row" justifyContent="flex-end">
+      <DefaultSearchViewSwitch />
     </Stack>
   );
 }
@@ -255,11 +234,8 @@ const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps
       <SCFindAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
-        <Box>
-          <SearchNote />
-          <Bar type={type} />
-        </Box>
-        <FilterChips />
+        <SearchNote />
+        <TileViewBar />
         <Body facetGroups={facetGroups} />
       </Stack>
     </Stack>

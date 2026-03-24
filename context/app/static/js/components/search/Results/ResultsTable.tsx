@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { SearchHit } from 'js/typings/elasticsearch';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
-import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import DOMPurify from 'isomorphic-dompurify';
@@ -14,59 +13,22 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { Entity } from 'js/components/types';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
-import { trackEvent } from 'js/helpers/trackers';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
-import { OrderIcon, getSortOrder } from 'js/shared-styles/tables/TableOrdering';
 import { useAllSearchIDs } from 'js/hooks/useSearchData';
 import { getByPath } from './utils';
-import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell, StyledHeaderCell } from './style';
+import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
+import Stack from '@mui/material/Stack';
 import { buildQuery, isDevSearch } from '../utils';
 import useESmapping from '../useEsMapping';
-
-function SortHeaderCell({ field, label }: { field: string; label: string }) {
-  const { sortField, setSortField, analyticsCategory } = useSearchStore(
-    useShallow((state) => ({
-      sortField: state.sortField,
-      setSortField: state.setSortField,
-      analyticsCategory: state.analyticsCategory,
-    })),
-  );
-
-  const { direction, field: currentSortField } = sortField;
-
-  const isCurrentSortField = field === currentSortField;
-
-  const handleClick = useCallback(() => {
-    const newSortDirection = getSortOrder({ direction, isCurrentSortField });
-    setSortField({ direction: newSortDirection, field });
-    trackEvent({
-      category: analyticsCategory,
-      action: `Sort Table View`,
-      label: `${label} ${newSortDirection}}`,
-    });
-  }, [analyticsCategory, direction, field, isCurrentSortField, label, setSortField]);
-
-  return (
-    <StyledHeaderCell>
-      {label}
-      <IconButton
-        aria-label="Sort Column"
-        onClick={handleClick}
-        sx={(theme) => ({
-          color: theme.palette.text.primary,
-        })}
-      >
-        <OrderIcon direction={direction} isCurrentSortField={isCurrentSortField} />
-      </IconButton>
-    </StyledHeaderCell>
-  );
-}
+import SearchTableHeaderCell from './SearchTableHeaderCell';
+import TableHeaderActions from './TableHeaderActions';
+import FilterChips from '../Facets/FilterChips';
 
 function CellContent({ field, fieldValue }: { field: string; fieldValue: string }) {
   switch (field.split('.').pop()) {
@@ -172,7 +134,7 @@ const HeaderCells = React.memo(function HeaderCells({ tableFields }: { tableFiel
   return (
     <>
       {tableFields.map((field) => (
-        <SortHeaderCell key={field} field={field} label={getFieldLabel(field)} />
+        <SearchTableHeaderCell key={field} field={field} label={getFieldLabel(field)} />
       ))}
     </>
   );
@@ -220,6 +182,8 @@ function SelectableHeaderCells() {
   );
 }
 
+const extraHeaderRowHeight = 48;
+
 const Table = React.memo(function Table({
   isLoading,
   hits,
@@ -230,11 +194,30 @@ const Table = React.memo(function Table({
   const tableFields = useSearchStore((state) => state.sourceFields?.table);
   const { selectedRows } = useSelectableTableStore();
 
+  const colSpan = tableFields.length + 1; // +1 for the selectable checkbox column
+
   return (
     <Box>
-      <NumSelectedHeader numSelected={selectedRows.size} />
       <StyledTable data-testid="search-results-table">
         <TableHead>
+          <TableRow sx={{ p: 0 }}>
+            <StyledTableCell colSpan={colSpan} sx={{ p: 1, borderBottom: 0 }}>
+              <FilterChips />
+            </StyledTableCell>
+          </TableRow>
+          <TableRow
+            sx={{
+              height: extraHeaderRowHeight,
+              p: 0,
+            }}
+          >
+            <StyledTableCell colSpan={colSpan} sx={{ p: 0, borderBottom: 0 }}>
+              <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <NumSelectedHeader numSelected={selectedRows.size} $noBorderBottom />
+                <TableHeaderActions />
+              </Stack>
+            </StyledTableCell>
+          </TableRow>
           <TableRow>
             <SelectableHeaderCells />
             <HeaderCells tableFields={tableFields} />
