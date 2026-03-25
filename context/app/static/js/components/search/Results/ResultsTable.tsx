@@ -14,6 +14,7 @@ import { Entity } from 'js/components/types';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
+import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { useAllSearchIDs } from 'js/hooks/useSearchData';
@@ -30,13 +31,24 @@ import SearchTableHeaderCell from './SearchTableHeaderCell';
 import TableHeaderActions from './TableHeaderActions';
 import FilterChips from '../Facets/FilterChips';
 
-function CellContent({ field, fieldValue }: { field: string; fieldValue: string }) {
+function CellContent({
+  field,
+  fieldValue,
+  hasVisualization,
+}: {
+  field: string;
+  fieldValue: string;
+  hasVisualization?: boolean;
+}) {
   switch (field.split('.').pop()) {
     case 'hubmap_id':
       return (
-        <InternalLink href={`/browse/${fieldValue}`} data-testid="hubmap-id-link">
-          {fieldValue}
-        </InternalLink>
+        <Stack direction="row" gap={0.5} alignItems="center">
+          <InternalLink href={`/browse/${fieldValue}`} data-testid="hubmap-id-link">
+            {fieldValue}
+          </InternalLink>
+          {hasVisualization && <VisualizationIcon display="inline-block" color="primary" />}
+        </Stack>
       );
     case 'last_modified_timestamp':
     case 'published_timestamp':
@@ -61,10 +73,11 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Enti
   }
 
   const fieldValue = getByPath(source, field);
+  const hasVisualization = field.split('.').pop() === 'hubmap_id' ? Boolean(source.visualization) : undefined;
 
   return (
     <StyledTableCell key={field}>
-      <CellContent field={field} fieldValue={fieldValue} />
+      <CellContent field={field} fieldValue={fieldValue} hasVisualization={hasVisualization} />
     </StyledTableCell>
   );
 }

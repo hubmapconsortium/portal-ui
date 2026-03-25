@@ -22,6 +22,10 @@ function ViewMoreResults() {
     });
   }, [analyticsCategory, resultsShown, loadMore]);
 
+  if (hits.length === 0) {
+    return null;
+  }
+
   return (
     <>
       {hits.length !== totalHitsCount && (

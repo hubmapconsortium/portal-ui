@@ -175,16 +175,12 @@ function HubmapIdSearchPopover() {
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      let searchValue = inputValue;
-      // Wrap in quotes if it looks like a HuBMAP ID
-      if (/^HBM\S+$/i.test(searchValue)) {
-        searchValue = `"${searchValue}"`;
-      }
+      const searchValue = inputValue ? `*${inputValue}*` : '';
       setSearch(searchValue);
       trackEvent({
         category: analyticsCategory,
-        action: 'Free Text Search',
-        label: searchValue,
+        action: 'Search HuBMAP ID',
+        label: inputValue,
       });
       handleClose();
     },

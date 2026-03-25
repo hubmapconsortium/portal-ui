@@ -198,6 +198,8 @@ function buildDatasetConfig(isHubmapUser: boolean) {
         'mapped_status',
         isHubmapUser ? 'last_modified_timestamp' : 'published_timestamp',
       ],
+      // visualization is fetched for the icon next to hubmap_id but not displayed as its own column
+      _extra: ['visualization'],
       tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
     },
     sortField: isHubmapUser

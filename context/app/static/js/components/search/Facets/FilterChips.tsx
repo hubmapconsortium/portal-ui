@@ -334,11 +334,16 @@ const HierarchicalParentChip = React.memo(function HierarchicalTermChip({
 
 function ResetFiltersButton() {
   const resetFilters = useSearchStore((state) => state.resetFilters);
+  const setSearch = useSearchStore((state) => state.setSearch);
+  const handleClear = useCallback(() => {
+    resetFilters();
+    setSearch('');
+  }, [resetFilters, setSearch]);
   return (
     <Box flexShrink={0}>
       <Chip
         variant="outlined"
-        onClick={resetFilters}
+        onClick={handleClear}
         label="Clear Filters"
         sx={{ cursor: 'pointer' }}
         data-testid="clear-filters-button"
@@ -483,12 +488,25 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
   return chipElements;
 }
 
+function SearchChip() {
+  const search = useSearchStore((state) => state.search);
+  const setSearch = useSearchStore((state) => state.setSearch);
+
+  if (!search) return null;
+
+  // Strip wildcard wrappers for display (e.g. "*676*" → "676")
+  const displayValue = search.replace(/^\*|\*$/g, '');
+
+  return <FilterChip label={`HuBMAP ID: ${displayValue}`} onDelete={() => setSearch('')} />;
+}
+
 function FilterChips() {
   const filters = useSearchStore((state) => state.filters);
   const facets = useSearchStore((state) => state.facets);
+  const search = useSearchStore((state) => state.search);
 
   const chipElements = useChipElements(filters, facets);
-  const hasActiveFilters = chipElements.length > 0;
+  const hasActiveFilters = chipElements.length > 0 || Boolean(search);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [overflowCount, setOverflowCount] = useState(0);
@@ -562,6 +580,7 @@ function FilterChips() {
           minWidth: 0,
         }}
       >
+        <SearchChip />
         {chipElements}
       </Box>
       <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">

@@ -86,12 +86,18 @@ export function buildQuery({
 
   const hasTextQuery = search.length > 0;
 
-  const freeTextQueries = hasTextQuery ? [esb.simpleQueryStringQuery(search).fields(searchFields)] : [];
+  // Detect wildcard HuBMAP ID searches (e.g. "*676*") and use a wildcard query on hubmap_id
+  const isWildcardIdSearch = hasTextQuery && /^\*.*\*$/.test(search);
+  const freeTextQueries = hasTextQuery
+    ? isWildcardIdSearch
+      ? [esb.wildcardQuery('hubmap_id', search)]
+      : [esb.simpleQueryStringQuery(search).fields(searchFields)]
+    : [];
   const defaultQueries = defaultQuery ? [defaultQuery] : [];
 
   query.query(esb.boolQuery().must([...defaultQueries, ...freeTextQueries]));
 
-  if (hasTextQuery) {
+  if (hasTextQuery && !isWildcardIdSearch) {
     query.highlight(esb.highlight(searchFields));
   }
 
