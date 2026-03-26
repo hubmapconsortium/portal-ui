@@ -6,12 +6,13 @@ import Box from '@mui/material/Box';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
+import { decimal } from 'js/helpers/number-format';
 
 function ViewMoreResults() {
   const { searchHits: hits, loadMore, totalHitsCount } = useSearch();
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
-  const resultsShown = `${hits.length} Results Shown | ${totalHitsCount} Total Results`;
+  const resultsShown = `${decimal.format(hits.length)} Results Shown | ${decimal.format(totalHitsCount ?? 0)} Total Results`;
 
   const handleClick = useCallback(() => {
     loadMore();

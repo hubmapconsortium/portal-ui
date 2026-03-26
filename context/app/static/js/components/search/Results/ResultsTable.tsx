@@ -30,6 +30,7 @@ import useESmapping from '../useEsMapping';
 import SearchTableHeaderCell from './SearchTableHeaderCell';
 import TableHeaderActions from './TableHeaderActions';
 import FilterChips from '../Facets/FilterChips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 function CellContent({
   field,
@@ -47,7 +48,11 @@ function CellContent({
           <InternalLink href={`/browse/${fieldValue}`} data-testid="hubmap-id-link">
             {fieldValue}
           </InternalLink>
-          {hasVisualization && <VisualizationIcon display="inline-block" color="primary" />}
+          {hasVisualization && (
+            <SecondaryBackgroundTooltip title="This dataset has a visualization available.">
+              <VisualizationIcon display="inline-block" color="primary" />
+            </SecondaryBackgroundTooltip>
+          )}
         </Stack>
       );
     case 'last_modified_timestamp':
