@@ -11,6 +11,7 @@ interface VisualizationWrapperProps {
   vitData: object | object[] | undefined;
   trackingInfo: EventWithOptionalCategory;
   uuid?: string;
+  hubmapId?: string;
   hasNotebook?: boolean;
   shouldDisplayHeader?: boolean;
   hasBeenMounted?: boolean;
@@ -25,6 +26,7 @@ function VisualizationWrapper({
   vitData,
   trackingInfo,
   uuid,
+  hubmapId,
   hasNotebook = false,
   shouldDisplayHeader = true,
   hasBeenMounted,
@@ -50,6 +52,7 @@ function VisualizationWrapper({
           <Visualization
             vitData={vitData}
             uuid={uuid}
+            hubmapId={hubmapId}
             hasNotebook={hasNotebook}
             shouldDisplayHeader={shouldDisplayHeader}
             shouldMountVitessce={hasBeenMounted}

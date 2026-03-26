@@ -1,0 +1,3 @@
+- Ensure properly scoped Vitessce configurations are used for Vitessce sharing functionalities.
+- Enable sharing fullscreen visualizations.
+- Enable automatic scrolling to linked Vitessce configurations.
