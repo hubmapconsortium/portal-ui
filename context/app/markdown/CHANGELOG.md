@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.42.1 - 2026-03-27
+
+- Ensure properly scoped Vitessce configurations are used for Vitessce sharing functionalities.
+- Enable sharing fullscreen visualizations.
+- Enable automatic scrolling to linked Vitessce configurations.
+- Update portal-visualization to enable display of all AOIs and ROIs for GeoMX datasets.
+
+
+
 ## v1.42.0 - 2026-03-17
 
 - Improve search state readability for sharing links.
