@@ -494,10 +494,15 @@ function SearchChip() {
 
   if (!search) return null;
 
-  // Strip wildcard wrappers for display (e.g. "*676*" → "676")
-  const displayValue = search.replace(/^\*|\*$/g, '');
+  // Treat as a HuBMAP ID only when it matches the wildcard-ID pattern (e.g. "*676*").
+  const isWildcardId = /^\*.*\*$/.test(search);
 
-  return <FilterChip label={`HuBMAP ID: ${displayValue}`} onDelete={() => setSearch('')} />;
+  // For wildcard-ID queries, strip leading/trailing "*" for display; otherwise use the raw search text.
+  const displayValue = isWildcardId ? search.replace(/^\*|\*$/g, '') : search;
+
+  const label = isWildcardId ? `HuBMAP ID: ${displayValue}` : `Search: ${displayValue}`;
+
+  return <FilterChip label={label} onDelete={() => setSearch('')} />;
 }
 
 function FilterChips() {
@@ -539,7 +544,7 @@ function FilterChips() {
   // Measure after each render when filters change
   useLayoutEffect(() => {
     measureOverflow();
-  }, [measureOverflow, filters]);
+  }, [measureOverflow, filters, search]);
 
   // Re-measure on window resize
   useEffect(() => {

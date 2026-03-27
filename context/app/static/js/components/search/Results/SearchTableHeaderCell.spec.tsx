@@ -2,10 +2,7 @@ import { getColumnFacetInfo } from './SearchTableHeaderCell';
 import { FACETS } from '../store';
 import type { FacetsType } from '../store';
 
-// Re-export the helper for testing by extracting and testing the logic
-// Since getColumnFacetInfo is not exported, we test it via a separate export
-// For now, we test the logic inline
-
+// Unit tests for the exported getColumnFacetInfo helper from SearchTableHeaderCell.
 describe('SearchTableHeaderCell', () => {
   describe('getColumnFacetInfo logic', () => {
     const facets: FacetsType = {

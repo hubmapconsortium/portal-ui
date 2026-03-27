@@ -90,7 +90,7 @@ export function buildQuery({
   const isWildcardIdSearch = hasTextQuery && /^\*.*\*$/.test(search);
   const freeTextQueries = hasTextQuery
     ? isWildcardIdSearch
-      ? [esb.wildcardQuery('hubmap_id', search)]
+      ? [esb.wildcardQuery(getESField({ field: 'hubmap_id', mappings }), search)]
       : [esb.simpleQueryStringQuery(search).fields(searchFields)]
     : [];
   const defaultQueries = defaultQuery ? [defaultQuery] : [];

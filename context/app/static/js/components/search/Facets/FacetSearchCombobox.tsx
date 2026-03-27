@@ -102,7 +102,7 @@ function useFacetOptions(): FacetOption[] {
                   value: childKey,
                   count: child.doc_count,
                   groupLabel,
-                  displayValue: childKey,
+                  displayValue: getTransformedFieldValue({ field: facetConfig.childField ?? field, value: childKey }),
                   facetType: 'HIERARCHICAL_CHILD',
                   parentValue: parentKey,
                 });
