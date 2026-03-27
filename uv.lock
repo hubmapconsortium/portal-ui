@@ -811,7 +811,7 @@ wheels = [
 
 [[package]]
 name = "hubmap-portal-ui"
-version = "1.42.0"
+version = "1.42.1"
 source = { editable = "." }
 dependencies = [
     { name = "flask", extra = ["async"] },
@@ -847,7 +847,7 @@ requires-dist = [
     { name = "globus-sdk", specifier = ">=3.59.0" },
     { name = "hubmap-api-py-client", specifier = ">=0.0.11" },
     { name = "hubmap-commons", specifier = ">=2.1.20" },
-    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.1" },
+    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.2" },
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
@@ -1780,11 +1780,11 @@ wheels = [
 
 [[package]]
 name = "portal-visualization"
-version = "0.5.1"
+version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/50/2d/fd6a335d984d4176e8412ccbf1627477472b33998f13958b88e5d3d9b6dc/portal_visualization-0.5.1.tar.gz", hash = "sha256:72bb2234b5d057147cd23d8726f6fa3c5b93d1d866b2293e8748ffb713418c98", size = 64160, upload-time = "2026-03-03T19:09:53.414Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/be/5b94f876d82472285a347471bd7455accfb804546da44f2055260763efbf/portal_visualization-0.5.2.tar.gz", hash = "sha256:5251b3d0746469351417c89b89c0c6fd4bdaac7083c3b3ea292c87d724845cda", size = 65076, upload-time = "2026-03-26T19:09:34.88Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/c2/dc9c3559f8495f16228dfd4316e29853906101dd522d1e945eda35b4670a/portal_visualization-0.5.1-py3-none-any.whl", hash = "sha256:9aef6ffbc597f8ea3009711f8e32916ae66453edbab3b0bf418bd8e1a5e3d628", size = 67226, upload-time = "2026-03-03T19:09:52.259Z" },
+    { url = "https://files.pythonhosted.org/packages/e4/10/56ee831592b938f83ed0d4c9b6ece3edd48cdc89ce970232b6e74780633f/portal_visualization-0.5.2-py3-none-any.whl", hash = "sha256:6db9033c0cf041bb91ce0d05a99762f64e4310a9115dfc8008c634a8cb24c339", size = 68179, upload-time = "2026-03-26T19:09:33.785Z" },
 ]
 
 [package.optional-dependencies]
