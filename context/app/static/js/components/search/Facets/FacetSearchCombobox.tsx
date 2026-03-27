@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { trackEvent } from 'js/helpers/trackers';
 import {
@@ -45,6 +46,10 @@ interface FacetOption {
 
 interface AggMinMax {
   value?: number | null;
+}
+
+function optionKey(o: Pick<FacetOption, 'field' | 'value' | 'facetType' | 'parentValue'>): string {
+  return `${o.facetType}::${o.field}::${o.value}::${o.parentValue ?? ''}`;
 }
 
 function useFacetOptions(): FacetOption[] {
@@ -164,7 +169,81 @@ function useFacetOptions(): FacetOption[] {
   }, [aggregations, facets, getFieldLabel, getTransformedFieldValue]);
 }
 
-function InlineDateControl({
+/**
+ * Stabilizes the option list while the dropdown is open so that options
+ * disappearing from aggregation buckets don't cause layout shift.
+ * On open: snapshots the full option list.
+ * While open: merges new options into the snapshot, keeping disappeared options with count: 0.
+ * On close: clears the snapshot.
+ */
+function useStableOptions(rawOptions: FacetOption[], isOpen: boolean): FacetOption[] {
+  const snapshotRef = useRef<Map<string, FacetOption> | null>(null);
+
+  // Build/clear snapshot synchronously based on open state
+  if (isOpen && snapshotRef.current === null) {
+    const map = new Map<string, FacetOption>();
+    for (const opt of rawOptions) {
+      map.set(optionKey(opt), opt);
+    }
+    snapshotRef.current = map;
+  } else if (!isOpen && snapshotRef.current !== null) {
+    snapshotRef.current = null;
+  }
+
+  return useMemo(() => {
+    if (!isOpen || !snapshotRef.current) return rawOptions;
+
+    const snapshot = snapshotRef.current;
+    const freshKeySet = new Set<string>();
+    const freshByField = new Map<string, FacetOption[]>();
+
+    // Index fresh options by key and by field
+    for (const opt of rawOptions) {
+      const k = optionKey(opt);
+      freshKeySet.add(k);
+      // Update snapshot with fresh data
+      snapshot.set(k, opt);
+
+      const list = freshByField.get(opt.field) ?? [];
+      list.push(opt);
+      freshByField.set(opt.field, list);
+    }
+
+    // Find disappeared options (in snapshot but not in fresh)
+    const extrasByField = new Map<string, FacetOption[]>();
+    for (const [k, cached] of snapshot) {
+      if (!freshKeySet.has(k)) {
+        const zeroOpt = { ...cached, count: 0 };
+        const list = extrasByField.get(cached.field) ?? [];
+        list.push(zeroOpt);
+        extrasByField.set(cached.field, list);
+      }
+    }
+
+    if (extrasByField.size === 0) return rawOptions;
+
+    // Merge extras after the last fresh option of the same field
+    const merged = [...rawOptions];
+    for (const [field, fieldExtras] of extrasByField) {
+      let lastIdx = -1;
+      for (let i = merged.length - 1; i >= 0; i--) {
+        if (merged[i].field === field) {
+          lastIdx = i;
+          break;
+        }
+      }
+      if (lastIdx >= 0) {
+        merged.splice(lastIdx + 1, 0, ...fieldExtras);
+      } else {
+        merged.push(...fieldExtras);
+      }
+    }
+
+    return merged;
+  }, [rawOptions, isOpen]);
+}
+
+const MemoizedInlineDateControl = React.memo(function InlineDateControl({
   option,
   onPickerOpenChange,
 }: {
@@ -248,9 +327,9 @@ function InlineDateControl({
       />
     </Stack>
   );
-}
+});
 
-function InlineRangeControl({ option }: { option: FacetOption }) {
+const MemoizedInlineRangeControl = React.memo(function InlineRangeControl({ option }: { option: FacetOption }) {
   const filterRange = useSearchStore((state) => state.filterRange);
   const filter = useSearchStore((state) => state.filters[option.field]);
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
@@ -297,7 +376,168 @@ function InlineRangeControl({ option }: { option: FacetOption }) {
       />
     </Box>
   );
+});
+
+// ── Virtualized Listbox ──────────────────────────────────────────────
+
+const HEADER_HEIGHT = 28;
+const OPTION_HEIGHT = 36;
+const DATE_HEIGHT = 120;
+const RANGE_HEIGHT = 72;
+const LISTBOX_MAX_HEIGHT = 300;
+
+/**
+ * Flatten the grouped children rendered by MUI Autocomplete's renderGroup.
+ * Each group is a <li> containing a header element and a <ul> of option children.
+ * We flatten this into a single array: [header, opt, opt, ..., header, opt, ...]
+ */
+interface GroupChildrenTuple {
+  children: [React.ReactNode, React.ReactElement<{ children?: React.ReactNode }>];
 }
+
+function flattenGroupedChildren(children: React.ReactNode): React.ReactNode[] {
+  const items: React.ReactNode[] = [];
+  React.Children.forEach(children, (group) => {
+    if (!React.isValidElement<GroupChildrenTuple>(group)) return;
+    const groupChildren = group.props.children;
+    if (!Array.isArray(groupChildren)) return;
+    // groupChildren[0] = header Typography, groupChildren[1] = <ul>{options}</ul>
+    items.push(groupChildren[0]);
+    const ul = groupChildren[1];
+    if (React.isValidElement<{ children?: React.ReactNode }>(ul) && ul.props.children) {
+      React.Children.forEach(ul.props.children, (option: React.ReactNode) => {
+        items.push(option);
+      });
+    }
+  });
+  return items;
+}
+
+function estimateItemSize(item: React.ReactNode): number {
+  if (!React.isValidElement(item)) return OPTION_HEIGHT;
+  const props = item.props as Record<string, unknown>;
+  if (props['data-group-header']) return HEADER_HEIGHT;
+  switch (props['data-facet-type']) {
+    case 'DATE':
+      return DATE_HEIGHT;
+    case 'RANGE':
+      return RANGE_HEIGHT;
+    default:
+      return OPTION_HEIGHT;
+  }
+}
+
+const VirtualizedListbox = React.forwardRef<HTMLUListElement, React.HTMLAttributes<HTMLUListElement>>(
+  function VirtualizedListbox(props, ref) {
+    // ownerState is injected by MUI's styled-components integration; strip it to avoid DOM warning
+    const {
+      children,
+      style,
+      ownerState: _ownerState,
+      ...other
+    } = props as React.HTMLAttributes<HTMLUListElement> & {
+      ownerState?: unknown;
+    };
+    const flatItems = useMemo(() => flattenGroupedChildren(children), [children]);
+    const scrollRef = useRef<HTMLUListElement>(null);
+
+    const virtualizer = useVirtualizer({
+      count: flatItems.length,
+      getScrollElement: () => scrollRef.current,
+      estimateSize: (index) => estimateItemSize(flatItems[index]),
+      overscan: 15,
+    });
+
+    const mergedRef = useCallback(
+      (node: HTMLUListElement | null) => {
+        (scrollRef as React.MutableRefObject<HTMLUListElement | null>).current = node;
+        if (typeof ref === 'function') {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref],
+    );
+
+    return (
+      <ul {...other} ref={mergedRef} style={{ ...style, maxHeight: LISTBOX_MAX_HEIGHT, overflow: 'auto', width: 350 }}>
+        <div
+          role="presentation"
+          style={{
+            height: virtualizer.getTotalSize(),
+            position: 'relative',
+            width: '100%',
+          }}
+        >
+          {virtualizer.getVirtualItems().map((virtualRow) => (
+            <div
+              key={virtualRow.index}
+              data-index={virtualRow.index}
+              ref={virtualizer.measureElement}
+              role="presentation"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              {flatItems[virtualRow.index]}
+            </div>
+          ))}
+        </div>
+      </ul>
+    );
+  },
+);
+
+// ── Memoized checkbox option ─────────────────────────────────────────
+
+const CheckboxOption = React.memo(function CheckboxOption({
+  option,
+  selected,
+  dimmed,
+  ...liProps
+}: {
+  option: FacetOption;
+  selected: boolean;
+  dimmed: boolean;
+} & React.HTMLAttributes<HTMLLIElement>) {
+  const isChild = option.facetType === 'HIERARCHICAL_CHILD';
+  const isParent = option.facetType === 'HIERARCHICAL_PARENT';
+
+  return (
+    <li {...liProps}>
+      <Checkbox checked={selected} size="small" sx={{ mr: 1, p: 0, ml: isChild ? 2 : 0 }} tabIndex={-1} disableRipple />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '100%',
+          alignItems: 'center',
+          overflow: 'hidden',
+          opacity: dimmed ? 0.5 : 1,
+        }}
+      >
+        <Typography
+          variant="body2"
+          noWrap
+          sx={{ flexGrow: 1, mr: 1, fontWeight: isParent ? 600 : 400 }}
+          title={option.displayValue}
+        >
+          {isParent ? `All ${option.displayValue}` : option.displayValue}
+        </Typography>
+        <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0 }}>
+          ({option.count.toLocaleString()})
+        </Typography>
+      </Box>
+    </li>
+  );
+});
+
+// ── Main component ───────────────────────────────────────────────────
 
 function FacetSearchCombobox() {
   const filterTerm = useSearchStore((state) => state.filterTerm);
@@ -312,7 +552,9 @@ function FacetSearchCombobox() {
   const [open, setOpen] = useState(false);
   const paperRef = React.useRef<HTMLDivElement>(null);
   const datePickerOpenRef = React.useRef(false);
-  const allOptions = useFacetOptions();
+
+  const rawOptions = useFacetOptions();
+  const allOptions = useStableOptions(rawOptions, open);
 
   const isOptionSelected = useCallback(
     (option: FacetOption): boolean => {
@@ -338,7 +580,6 @@ function FacetSearchCombobox() {
 
   const toggleOption = useCallback(
     (option: FacetOption) => {
-      // DATE and RANGE options manage their own state via inline controls
       if (option.facetType === 'DATE' || option.facetType === 'RANGE') return;
 
       switch (option.facetType) {
@@ -382,12 +623,9 @@ function FacetSearchCombobox() {
           setOpen(false);
           return;
         }
-        // Keep open if a date picker popover is currently active (it renders in a portal
-        // outside the dropdown, so relatedTarget won't be inside paperRef).
         if (datePickerOpenRef.current) {
           return;
         }
-        // On blur, check if focus moved to an element inside the dropdown (e.g. slider).
         if (reason === 'blur' && event && 'relatedTarget' in event) {
           const relatedTarget = event.relatedTarget as Node | null;
           if (relatedTarget && paperRef.current?.contains(relatedTarget)) {
@@ -434,11 +672,12 @@ function FacetSearchCombobox() {
       )}
       slotProps={{
         paper: { ref: paperRef, sx: { width: 350 } },
-        listbox: { sx: { width: 350 } },
       }}
+      ListboxComponent={VirtualizedListbox}
       renderGroup={(params) => (
         <li key={params.key}>
           <Typography
+            data-group-header
             variant="body2"
             fontWeight={600}
             color="text.secondary"
@@ -446,10 +685,7 @@ function FacetSearchCombobox() {
               px: 2,
               py: 0.5,
               lineHeight: 1.3,
-              position: 'sticky',
-              top: -8,
               bgcolor: 'background.paper',
-              zIndex: 1,
             }}
           >
             {params.group}
@@ -463,10 +699,11 @@ function FacetSearchCombobox() {
             // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
             <li
               key={`${option.facetType}-${option.field}`}
+              data-facet-type="DATE"
               onMouseDown={(e) => e.preventDefault()}
               style={{ display: 'block', cursor: 'default' }}
             >
-              <InlineDateControl
+              <MemoizedInlineDateControl
                 option={option}
                 onPickerOpenChange={(isOpen) => {
                   datePickerOpenRef.current = isOpen;
@@ -481,50 +718,26 @@ function FacetSearchCombobox() {
             // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
             <li
               key={`${option.facetType}-${option.field}`}
+              data-facet-type="RANGE"
               onMouseDown={(e) => e.preventDefault()}
               style={{ display: 'block', cursor: 'default' }}
             >
-              <InlineRangeControl option={option} />
+              <MemoizedInlineRangeControl option={option} />
             </li>
           );
         }
 
         const selected = isOptionSelected(option);
-        const isChild = option.facetType === 'HIERARCHICAL_CHILD';
-        const isParent = option.facetType === 'HIERARCHICAL_PARENT';
+        const dimmed = option.count === 0 && !selected;
         return (
-          <li key={`${option.facetType}-${option.field}-${option.value}`} {...rest}>
-            <Checkbox
-              checked={selected}
-              size="small"
-              sx={{ mr: 1, p: 0, ml: isChild ? 2 : 0 }}
-              tabIndex={-1}
-              disableRipple
-            />
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-                alignItems: 'center',
-                overflow: 'hidden',
-              }}
-            >
-              <Typography
-                variant="body2"
-                noWrap
-                sx={{ flexGrow: 1, mr: 1, fontWeight: isParent ? 600 : 400 }}
-                title={option.displayValue}
-              >
-                {isParent ? `All ${option.displayValue}` : option.displayValue}
-              </Typography>
-              {option.count > 0 && (
-                <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0 }}>
-                  ({option.count})
-                </Typography>
-              )}
-            </Box>
-          </li>
+          <CheckboxOption
+            key={`${option.facetType}-${option.field}-${option.value}`}
+            data-facet-type={option.facetType}
+            option={option}
+            selected={selected}
+            dimmed={dimmed}
+            {...rest}
+          />
         );
       }}
       renderTags={() => null}
