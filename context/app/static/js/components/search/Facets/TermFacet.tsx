@@ -20,6 +20,7 @@ import {
   StyledStack,
   FormLabelText,
   HierarchicalAccordionSummary,
+  RIGHT_CHEVRON_SIZE,
 } from './style';
 import FacetAccordion from './FacetAccordion';
 import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
@@ -47,7 +48,7 @@ export function TermLabelAndCount({ label, count, active, addRightPadding }: Ter
   return (
     <StyledStack direction="row" justifyContent="space-between" $active={active}>
       <FormLabelText>{label}</FormLabelText>
-      <Typography pr={addRightPadding ? '26px' : 0}>{decimal.format(count)}</Typography>
+      <Typography pr={addRightPadding ? RIGHT_CHEVRON_SIZE : 0}>{decimal.format(count)}</Typography>
     </StyledStack>
   );
 }
@@ -253,8 +254,7 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 
   if (childValues.length === 1 && childBuckets[0].key === label) {
     return (
-      // 26px is the width of the Accordion's expand icon.
-      <Box pr="26px">
+      <Box pr={RIGHT_CHEVRON_SIZE}>
         <HierarchicalFacetParent
           childValues={childValues}
           label={label}

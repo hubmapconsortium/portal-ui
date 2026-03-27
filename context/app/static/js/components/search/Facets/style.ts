@@ -77,6 +77,8 @@ const HierarchicalAccordionSummary = styled(AccordionSummary)({
   },
 });
 
+const RIGHT_CHEVRON_SIZE = '26px';
+
 export {
   StyledCheckBoxBlankIcon,
   StyledCheckBoxIcon,
@@ -88,4 +90,5 @@ export {
   StyledStack,
   FormLabelText,
   HierarchicalAccordionSummary,
+  RIGHT_CHEVRON_SIZE,
 };

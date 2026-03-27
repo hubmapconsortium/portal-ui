@@ -17,6 +17,7 @@ import {
   StyledFormControlLabel,
   StyledStack,
   FormLabelText,
+  RIGHT_CHEVRON_SIZE,
 } from './style';
 import FacetAccordion from './FacetAccordion';
 import Typography from '@mui/material/Typography';
@@ -64,7 +65,7 @@ function BooleanGroupItem({
         />
       }
       label={
-        <StyledStack direction="row" justifyContent="space-between" $active={active} pr={'26px'}>
+        <StyledStack direction="row" justifyContent="space-between" $active={active} pr={RIGHT_CHEVRON_SIZE}>
           <FormLabelText>{label}</FormLabelText>
           <Typography>{decimal.format(count)}</Typography>
         </StyledStack>
