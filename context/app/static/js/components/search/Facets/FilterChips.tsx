@@ -20,6 +20,7 @@ import {
   HierarchicalTermValues,
   RangeValues,
   TermValues,
+  BooleanGroupValues,
   isDateFacet,
   isDateFilter,
   isExistsFilter,
@@ -29,6 +30,9 @@ import {
   isRangeFacet,
   isRangeFilter,
   isTermFilter,
+  isBooleanGroupFilter,
+  isBooleanGroupFacet,
+  getBooleanGroupItemKey,
   useSearchStore,
   filterHasValues,
 } from '../store';
@@ -360,6 +364,7 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
   const filterRange = useSearchStore((state) => state.filterRange);
   const filterDate = useSearchStore((state) => state.filterDate);
   const filterExists = useSearchStore((state) => state.filterExists);
+  const filterBooleanGroupItem = useSearchStore((state) => state.filterBooleanGroupItem);
   const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
   const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
   const getFieldLabel = useGetFieldLabel();
@@ -368,7 +373,10 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
   const chipElements: ReactElement[] = [];
 
   Object.entries(filters).forEach(
-    ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
+    ([field, v]: [
+      string,
+      RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues | BooleanGroupValues,
+    ]) => {
       if (isTermFilter(v) && v.values.size) {
         const values = Array.from(v.values);
         if (values.length === 1) {
@@ -481,6 +489,23 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
             }}
           />,
         );
+      }
+
+      if (isBooleanGroupFilter(v) && isBooleanGroupFacet(facetConfig) && hasValues) {
+        for (const itemKey of v.values) {
+          const item = facetConfig.items.find((i) => getBooleanGroupItemKey(i) === itemKey);
+          if (item) {
+            chipElements.push(
+              <FilterChip
+                label={item.label}
+                key={`${field}::${itemKey}`}
+                onDelete={() => {
+                  filterBooleanGroupItem({ field, itemKey });
+                }}
+              />,
+            );
+          }
+        }
       }
     },
   );

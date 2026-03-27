@@ -8,10 +8,18 @@ import Stack from '@mui/material/Stack';
 import { TermFacet, HierarchicalTermFacet } from './TermFacet';
 import RangeFacet from './RangeFacet';
 import { FacetGroups } from '../Search';
-import { isDateFacet, isExistsFacet, isHierarchicalFacet, isRangeFacet, isTermFacet } from '../store';
+import {
+  isDateFacet,
+  isExistsFacet,
+  isHierarchicalFacet,
+  isRangeFacet,
+  isTermFacet,
+  isBooleanGroupFacet,
+} from '../store';
 import FacetAccordion from './FacetAccordion';
 import DateRangeFacet from './DateRangeFacet';
 import ExistsFacet from './ExistsFacet';
+import BooleanGroupFacet from './BooleanGroupFacet';
 import FacetSearchCombobox from './FacetSearchCombobox';
 import Divider from '@mui/material/Divider';
 
@@ -53,6 +61,10 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
 
                 if (isExistsFacet(f)) {
                   return <ExistsFacet {...f} key={f.field} />;
+                }
+
+                if (isBooleanGroupFacet(f)) {
+                  return <BooleanGroupFacet {...f} key={f.field} />;
                 }
 
                 return null;

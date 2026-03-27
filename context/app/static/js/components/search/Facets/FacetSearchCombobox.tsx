@@ -24,13 +24,23 @@ import {
   isRangeFacet,
   isDateFilter,
   isRangeFilter,
+  isBooleanGroupFacet,
+  isBooleanGroupFilter,
+  getBooleanGroupItemKey,
   filterHasValues,
 } from '../store';
 import { useSearch } from '../Search';
 import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
 import type { InnerBucket, HierarchicalBucket } from '../Search';
 
-type FacetOptionType = 'TERM' | 'HIERARCHICAL_PARENT' | 'HIERARCHICAL_CHILD' | 'EXISTS' | 'DATE' | 'RANGE';
+type FacetOptionType =
+  | 'TERM'
+  | 'HIERARCHICAL_PARENT'
+  | 'HIERARCHICAL_CHILD'
+  | 'EXISTS'
+  | 'DATE'
+  | 'RANGE'
+  | 'BOOLEAN_GROUP';
 
 interface FacetOption {
   field: string;
@@ -40,6 +50,7 @@ interface FacetOption {
   displayValue: string;
   facetType: FacetOptionType;
   parentValue?: string;
+  parentField?: string;
   rangeMin?: number;
   rangeMax?: number;
 }
@@ -160,6 +171,23 @@ function useFacetOptions(): FacetOption[] {
             facetType: 'RANGE',
             rangeMin: 0,
             rangeMax: actualMax,
+          });
+        }
+      }
+
+      if (isBooleanGroupFacet(facetConfig)) {
+        const groupAgg = aggregations[field] as unknown as Record<string, { doc_count: number }> | undefined;
+        for (const item of facetConfig.items) {
+          const itemKey = getBooleanGroupItemKey(item);
+          const itemAgg = groupAgg?.[itemKey];
+          options.push({
+            field,
+            value: itemKey,
+            count: itemAgg?.doc_count ?? 0,
+            groupLabel: 'Dataset Features',
+            displayValue: item.label,
+            facetType: 'BOOLEAN_GROUP',
+            parentField: field,
           });
         }
       }
@@ -544,6 +572,7 @@ function FacetSearchCombobox() {
   const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
   const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
   const filterExists = useSearchStore((state) => state.filterExists);
+  const filterBooleanGroupItem = useSearchStore((state) => state.filterBooleanGroupItem);
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const filters = useSearchStore((state) => state.filters);
   const facets = useSearchStore((state) => state.facets);
@@ -573,6 +602,9 @@ function FacetSearchCombobox() {
       if (option.facetType === 'EXISTS' && isExistsFilter(filter) && isExistsFacet(facets[option.field])) {
         return Boolean(filterHasValues({ filter }));
       }
+      if (option.facetType === 'BOOLEAN_GROUP' && isBooleanGroupFilter(filter)) {
+        return filter.values.has(option.value);
+      }
       return false;
     },
     [filters, facets],
@@ -601,6 +633,9 @@ function FacetSearchCombobox() {
         case 'EXISTS':
           filterExists({ field: option.field });
           break;
+        case 'BOOLEAN_GROUP':
+          filterBooleanGroupItem({ field: option.field, itemKey: option.value });
+          break;
       }
 
       trackEvent({
@@ -609,7 +644,14 @@ function FacetSearchCombobox() {
         label: `${option.groupLabel}: ${option.displayValue}`,
       });
     },
-    [filterTerm, filterHierarchicalParentTerm, filterHierarchicalChildTerm, filterExists, analyticsCategory],
+    [
+      filterTerm,
+      filterHierarchicalParentTerm,
+      filterHierarchicalChildTerm,
+      filterExists,
+      filterBooleanGroupItem,
+      analyticsCategory,
+    ],
   );
 
   return (

@@ -37,6 +37,7 @@ import {
   Facet,
   isDateFilter,
   isExistsFilter,
+  isBooleanGroupFilter,
 } from './store';
 import Results from './Results';
 import Facets from './Facets/Facets';
@@ -117,6 +118,11 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
 
         if (curr.type === FACETS.exists) {
           draft.filters[curr.field] = { values: curr.default, type: curr.type };
+          draft.facets[curr.field] = curr;
+        }
+
+        if (curr.type === FACETS.booleanGroup) {
+          draft.filters[curr.field] = { values: new Set([]), type: curr.type };
           draft.facets[curr.field] = curr;
         }
 
@@ -289,6 +295,12 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
               ? URLStateFilter?.values
               : v.values,
         };
+      }
+
+      if (isBooleanGroupFilter<string[] | Set<string>>(v)) {
+        const urlStateValues =
+          URLStateFilter && isBooleanGroupFilter<string[]>(URLStateFilter) ? URLStateFilter.values : [];
+        draft[k] = { ...v, values: new Set([...v.values, ...urlStateValues]) };
       }
 
       return draft;
