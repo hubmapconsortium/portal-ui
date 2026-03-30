@@ -9,6 +9,7 @@ import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
@@ -88,7 +89,9 @@ export default function DatasetsOverview({
       >
         <Stack spacing={3}>
           <Description belowTheFold={belowTheFold}>{children}</Description>
-          <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
+          <ChartLoader isLoading={matched.isLoading || indexed.isLoading || all.isLoading}>
+            <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
+          </ChartLoader>
           <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
             {tableDescription}
           </DatasetsOverviewTable>
