@@ -173,6 +173,7 @@ function VisualizationAccordion() {
         vitData={conf}
         trackingInfo={{ action: 'Vitessce' }}
         uuid={uuid}
+        hubmapId={hubmap_id}
         shouldDisplayHeader={false}
         hasBeenMounted={hasBeenSeen}
         hasNotebook
