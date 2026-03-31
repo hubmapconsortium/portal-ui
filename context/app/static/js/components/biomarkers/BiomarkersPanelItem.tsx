@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import LineClamp from 'js/shared-styles/text/LineClamp';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
@@ -49,13 +51,31 @@ interface BiomarkerPanelItemProps {
   href?: string;
   description: string;
   geneName: string;
+  hasScfindRna?: boolean | null;
+  hasScfindAtac?: boolean | null;
 }
 
-function BiomarkerPanelItem({ name, href, description, geneName }: BiomarkerPanelItemProps) {
+function BiomarkerPanelItem({
+  name,
+  href,
+  description,
+  geneName,
+  hasScfindRna,
+  hasScfindAtac,
+}: BiomarkerPanelItemProps) {
+  const hasChips = hasScfindRna || hasScfindAtac;
   return (
     <StackTemplate>
       <BodyCell {...desktopConfig.name} aria-label="Name">
-        <InternalLink href={href}>{name}</InternalLink>
+        <Box>
+          <InternalLink href={href}>{name}</InternalLink>
+          {hasChips && (
+            <Stack direction="row" spacing={0.5} mt={0.5}>
+              {hasScfindRna && <Chip label="RNA" size="small" color="primary" variant="outlined" />}
+              {hasScfindAtac && <Chip label="ATAC" size="small" color="secondary" variant="outlined" />}
+            </Stack>
+          )}
+        </Box>
       </BodyCell>
       <BodyCell {...desktopConfig.description} aria-label="Description">
         <LineClamp lines={2}>{description}</LineClamp>

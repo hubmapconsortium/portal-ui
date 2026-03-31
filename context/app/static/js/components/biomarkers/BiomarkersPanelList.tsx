@@ -62,7 +62,7 @@ export default function BiomarkersPanelList() {
         noPadding: true,
         children: <BiomarkerPanel.Header />,
       },
-      ...genesList.map(({ approved_name, approved_symbol, summary }) => ({
+      ...genesList.map(({ approved_name, approved_symbol, summary, has_scfind_rna, has_scfind_atac }) => ({
         key: approved_symbol,
         noPadding: true,
         noHover: false,
@@ -72,6 +72,8 @@ export default function BiomarkersPanelList() {
             description={summary || 'No description available.'}
             href={`/genes/${approved_symbol}`}
             geneName={approved_symbol}
+            hasScfindRna={has_scfind_rna}
+            hasScfindAtac={has_scfind_atac}
           />
         ),
       })),

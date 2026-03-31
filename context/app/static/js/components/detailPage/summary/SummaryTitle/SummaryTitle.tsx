@@ -28,7 +28,7 @@ const titleLinks: Record<AllEntityTypes, string | undefined> = {
   Workspace: '/workspaces',
   WorkspaceTemplate: '/templates',
   CellType: '/cell-types',
-  Gene: '/genes',
+  Gene: '/biomarkers',
   VerifiedUser: undefined,
   Tutorial: '/tutorials',
 };
@@ -43,7 +43,7 @@ const titleLinkNames: Record<AllEntityTypes, string | undefined> = {
   Workspace: 'Workspaces',
   WorkspaceTemplate: 'Workspace Templates',
   CellType: 'Cell Types',
-  Gene: 'Genes',
+  Gene: 'Biomarkers',
   VerifiedUser: undefined,
   Tutorial: 'Tutorials',
 };
