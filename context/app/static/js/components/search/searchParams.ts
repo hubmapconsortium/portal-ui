@@ -100,7 +100,11 @@ export function parseReadableParams(search: string): Partial<SearchURLState> {
 
   // Process each readable param
   (Object.entries(READABLE_PARAM_FIELDS) as [ReadableParamField, ReadableParamName][]).forEach(([field, param]) => {
-    const values = params.getAll(param);
+    // nuqs serializes arrays as comma-separated values in a single param (e.g., "a,b,c"),
+    // but URLs may also use repeated params (e.g., "organ=Kidney&organ=Liver").
+    // Handle both by collecting all param instances and splitting each on commas.
+    const rawValues = params.getAll(param);
+    const values = rawValues.flatMap((v) => v.split(',').filter(Boolean));
     if (values.length === 0) return;
 
     // Determine the facet type based on the field

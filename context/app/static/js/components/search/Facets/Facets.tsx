@@ -8,31 +8,38 @@ import Stack from '@mui/material/Stack';
 import { TermFacet, HierarchicalTermFacet } from './TermFacet';
 import RangeFacet from './RangeFacet';
 import { FacetGroups } from '../Search';
-import { isDateFacet, isExistsFacet, isHierarchicalFacet, isRangeFacet, isTermFacet } from '../store';
+import {
+  isDateFacet,
+  isExistsFacet,
+  isHierarchicalFacet,
+  isRangeFacet,
+  isTermFacet,
+  isBooleanGroupFacet,
+} from '../store';
 import FacetAccordion from './FacetAccordion';
 import DateRangeFacet from './DateRangeFacet';
 import ExistsFacet from './ExistsFacet';
+import BooleanGroupFacet from './BooleanGroupFacet';
+import FacetSearchCombobox from './FacetSearchCombobox';
+import Divider from '@mui/material/Divider';
 
 export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box sx={{ minWidth: 250, maxWidth: 250 }}>
+      <Box sx={{ minWidth: 250, maxWidth: '25%' }}>
         <Stack
           sx={(theme) => ({
             alignItems: 'center',
             boxShadow: theme.shadows[1],
-            padding: theme.spacing(1),
             backgroundColor: theme.palette.white.main,
           })}
+          divider={<Divider orientation="horizontal" flexItem />}
         >
+          <Box sx={{ width: '100%', p: 1, pb: 0, borderBottom: 1, borderColor: 'divider' }}>
+            <FacetSearchCombobox />
+          </Box>
           {Object.entries(facetGroups).map(([k, v], i) => (
-            <FacetAccordion
-              title={k}
-              position="outer"
-              key={k}
-              isFirst={i === 0}
-              isLast={i === Object.keys(facetGroups).length - 1}
-            >
+            <FacetAccordion title={k} position="outer" key={k} isFirst={i === 0}>
               {v.map((f) => {
                 if ('visible' in f && !f.visible) {
                   return null;
@@ -54,6 +61,10 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
 
                 if (isExistsFacet(f)) {
                   return <ExistsFacet {...f} key={f.field} />;
+                }
+
+                if (isBooleanGroupFacet(f)) {
+                  return <BooleanGroupFacet {...f} key={f.field} />;
                 }
 
                 return null;

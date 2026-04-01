@@ -1,7 +1,6 @@
 import React, { ReactElement, useCallback, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,14 +10,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { format } from 'date-fns/format';
 
+import useOverflowCount, { SINGLE_ROW_HEIGHT } from 'js/hooks/useOverflowCount';
 import { trackEvent } from 'js/helpers/trackers';
 import Divider from '@mui/material/Divider';
 import {
   DateValues,
   ExistsValues,
+  FiltersType,
+  FacetsType,
   HierarchicalTermValues,
   RangeValues,
   TermValues,
+  BooleanGroupValues,
   isDateFacet,
   isDateFilter,
   isExistsFilter,
@@ -28,6 +31,9 @@ import {
   isRangeFacet,
   isRangeFilter,
   isTermFilter,
+  isBooleanGroupFilter,
+  isBooleanGroupFacet,
+  getBooleanGroupItemKey,
   useSearchStore,
   filterHasValues,
 } from '../store';
@@ -203,7 +209,7 @@ function MultiValueHierarchicalFilterChip({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const fieldLabel = getFieldLabel(field);
-  const chipLabel = childValues.length === 1 ? `${fieldLabel}: ${childValues[0]}` : parentValue;
+  const chipLabel = childValues.length === 1 ? `${fieldLabel}: ${childValues[0]}` : `${fieldLabel}: ${parentValue}`;
 
   const handleChipClick = useCallback(() => {
     if (childValues.length > 1) {
@@ -333,158 +339,237 @@ const HierarchicalParentChip = React.memo(function HierarchicalTermChip({
 
 function ResetFiltersButton() {
   const resetFilters = useSearchStore((state) => state.resetFilters);
+  const setSearch = useSearchStore((state) => state.setSearch);
+  const handleClear = useCallback(() => {
+    resetFilters();
+    setSearch('');
+  }, [resetFilters, setSearch]);
   return (
     <Box flexShrink={0}>
-      <Button variant="outlined" onClick={resetFilters}>
-        Clear Filters
-      </Button>
+      <Chip
+        variant="outlined"
+        onClick={handleClear}
+        label="Clear Filters"
+        sx={{ cursor: 'pointer' }}
+        data-testid="clear-filters-button"
+      />
     </Box>
   );
 }
 
-function FilterChips() {
-  const filters = useSearchStore((state) => state.filters);
-  const facets = useSearchStore((state) => state.facets);
+function useChipElements(filters: FiltersType, facets: FacetsType) {
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterTerms = useSearchStore((state) => state.filterTerms);
   const filterRange = useSearchStore((state) => state.filterRange);
   const filterDate = useSearchStore((state) => state.filterDate);
   const filterExists = useSearchStore((state) => state.filterExists);
+  const filterBooleanGroupItem = useSearchStore((state) => state.filterBooleanGroupItem);
   const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
   const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
   const getFieldLabel = useGetFieldLabel();
   const getTransformedFieldValue = useGetTransformedFieldValue();
 
-  const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
-    <>
-      {Object.entries(filters).map(
-        ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
-          if (isTermFilter(v) && v.values.size) {
-            const values = Array.from(v.values);
-            if (values.length === 1) {
-              return (
-                <FilterChip
-                  key={field}
-                  label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: values[0] })}`}
-                  onDelete={() => {
-                    filterTerm({ term: field, value: values[0] });
-                  }}
-                />
-              );
-            }
-            return (
-              <MultiValueFilterChip
-                key={field}
-                field={field}
-                values={values}
-                onDeleteValue={(value) => {
-                  filterTerm({ term: field, value });
-                }}
-                onDeleteValues={(vals) => {
-                  filterTerms({ term: field, values: vals });
-                }}
-              />
-            );
-          }
-          const facetConfig = facets[field];
+  return Object.entries(filters).flatMap(
+    ([field, v]: [
+      string,
+      RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues | BooleanGroupValues,
+    ]): ReactElement[] => {
+      if (isTermFilter(v) && v.values.size) {
+        const values = Array.from(v.values);
+        if (values.length === 1) {
+          return [
+            <FilterChip
+              key={field}
+              label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: values[0] })}`}
+              onDelete={() => {
+                filterTerm({ term: field, value: values[0] });
+              }}
+            />,
+          ];
+        }
+        return [
+          <MultiValueFilterChip
+            key={field}
+            field={field}
+            values={values}
+            onDeleteValue={(value) => {
+              filterTerm({ term: field, value });
+            }}
+            onDeleteValues={(vals) => {
+              filterTerms({ term: field, values: vals });
+            }}
+          />,
+        ];
+      }
 
-          if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
-            if (v.values.min === undefined && v.values.max === undefined) {
-              return null;
-            }
+      const facetConfig = facets[field];
+
+      if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
+        if (v.values.min === undefined && v.values.max === undefined) return [];
+        return [
+          <FilterChip
+            label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
+            key={field}
+            onDelete={() => {
+              filterRange({ field, min: undefined, max: undefined });
+            }}
+          />,
+        ];
+      }
+
+      if (isDateFilter(v) && isDateFacet(facetConfig)) {
+        if (!(v.values.min && v.values.max)) return [];
+        return [
+          <FilterChip
+            label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
+            key={field}
+            onDelete={() => {
+              filterDate({ field, min: undefined, max: undefined });
+            }}
+          />,
+        ];
+      }
+
+      if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
+        const parentValues = Object.entries(v.values);
+        if (!parentValues.length) return [];
+        return parentValues.flatMap(([parent, children]) => {
+          if (!children?.size) {
+            return [<HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />];
+          }
+          const childValues = Array.from(children);
+          if (childValues.length === 1) {
+            return [
+              <FilterChip
+                key={childValues[0]}
+                label={`${getFieldLabel(field)}: ${childValues[0]}`}
+                onDelete={() => {
+                  filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] });
+                }}
+              />,
+            ];
+          }
+          return [
+            <MultiValueHierarchicalFilterChip
+              key={parent}
+              field={field}
+              parentValue={parent}
+              childValues={childValues}
+              onDeleteChild={(childValue) => {
+                filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue });
+              }}
+              onDeleteParent={() => {
+                filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] });
+              }}
+            />,
+          ];
+        });
+      }
+
+      const hasValues = filterHasValues({ filter: v });
+      if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
+        return [
+          <FilterChip
+            label={`${getFieldLabel(field)}: ${v.values}`}
+            key={field}
+            onDelete={() => {
+              filterExists({ field });
+            }}
+          />,
+        ];
+      }
+
+      if (isBooleanGroupFilter(v) && isBooleanGroupFacet(facetConfig) && hasValues) {
+        return [...v.values]
+          .map((itemKey) => {
+            const item = facetConfig.items.find((i) => getBooleanGroupItemKey(i) === itemKey);
+            if (!item) return null;
             return (
               <FilterChip
-                label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
-                key={field}
+                label={item.label}
+                key={`${field}::${itemKey}`}
                 onDelete={() => {
-                  filterRange({ field, min: undefined, max: undefined });
+                  filterBooleanGroupItem({ field, itemKey });
                 }}
               />
             );
-          }
+          })
+          .filter(Boolean) as ReactElement[];
+      }
 
-          if (isDateFilter(v) && isDateFacet(facetConfig)) {
-            if (!(v.values.min && v.values.max)) {
-              return null;
-            }
-
-            return (
-              <FilterChip
-                label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
-                key={field}
-                onDelete={() => {
-                  filterDate({ field, min: undefined, max: undefined });
-                }}
-              />
-            );
-          }
-
-          if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
-            const parentValues = Object.entries(v.values);
-            if (!parentValues.length) {
-              return null;
-            }
-            return parentValues.map(([parent, children]) => {
-              if (!children?.size) {
-                return <HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />;
-              }
-              const childValues = Array.from(children);
-
-              if (childValues.length === 1) {
-                return (
-                  <FilterChip
-                    key={childValues[0]}
-                    label={`${getFieldLabel(field)}: ${childValues[0]}`}
-                    onDelete={() => {
-                      filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] });
-                    }}
-                  />
-                );
-              }
-
-              return (
-                <MultiValueHierarchicalFilterChip
-                  key={parent}
-                  field={field}
-                  parentValue={parent}
-                  childValues={childValues}
-                  onDeleteChild={(childValue) => {
-                    filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue });
-                  }}
-                  onDeleteParent={() => {
-                    filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] });
-                  }}
-                />
-              );
-            });
-          }
-
-          const hasValues = filterHasValues({ filter: v });
-
-          if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
-            return (
-              <FilterChip
-                label={`${getFieldLabel(field)}: ${v.values}`}
-                key={field}
-                onDelete={() => {
-                  filterExists({ field });
-                }}
-              />
-            );
-          }
-
-          return null;
-        },
-      )}
-    </>
+      return [];
+    },
   );
+}
+
+function SearchChip() {
+  const search = useSearchStore((state) => state.search);
+  const setSearch = useSearchStore((state) => state.setSearch);
+
+  if (!search) return null;
+
+  // Treat as a HuBMAP ID only when it matches the wildcard-ID pattern (e.g. "*676*").
+  const isWildcardId = /^\*.*\*$/.test(search);
+
+  // For wildcard-ID queries, strip leading/trailing "*" for display; otherwise use the raw search text.
+  const displayValue = isWildcardId ? search.replace(/^\*|\*$/g, '') : search;
+
+  const label = isWildcardId ? `HuBMAP ID: ${displayValue}` : `Search: ${displayValue}`;
+
+  return <FilterChip label={label} onDelete={() => setSearch('')} />;
+}
+
+function FilterChips() {
+  const filters = useSearchStore((state) => state.filters);
+  const facets = useSearchStore((state) => state.facets);
+  const search = useSearchStore((state) => state.search);
+
+  const chipElements = useChipElements(filters, facets);
+  const hasActiveFilters = chipElements.length > 0 || Boolean(search);
+
+  const { containerRef, isExpanded, setIsExpanded, overflowCount } = useOverflowCount(hasActiveFilters, [
+    filters,
+    search,
+  ]);
+
+  if (!hasActiveFilters) {
+    return (
+      <Typography fontWeight="500" sx={(theme) => ({ color: theme.palette.grey[500], px: 1, py: 0.75 })}>
+        0 Filters Selected
+      </Typography>
+    );
+  }
 
   return (
-    <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ width: '100%' }}>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-        {chips}
+    <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start" sx={{ width: '100%' }}>
+      <Box
+        ref={containerRef}
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 1,
+          overflow: isExpanded ? 'visible' : 'hidden',
+          maxHeight: isExpanded ? 'none' : SINGLE_ROW_HEIGHT,
+          flex: 1,
+          minWidth: 0,
+        }}
+      >
+        <SearchChip />
+        {chipElements}
+      </Box>
+      <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">
+        <Chip
+          label={isExpanded ? 'See less' : `+ ${overflowCount} more`}
+          onClick={() => setIsExpanded((prev) => !prev)}
+          variant="outlined"
+          data-testid="filter-chips-expand-toggle"
+          sx={{
+            cursor: 'pointer',
+            visibility: overflowCount > 0 || isExpanded ? 'visible' : 'hidden',
+          }}
+        />
+        <ResetFiltersButton />
       </Stack>
-      {Boolean(chips?.props?.children.filter((c) => c).length) && <ResetFiltersButton />}
     </Stack>
   );
 }

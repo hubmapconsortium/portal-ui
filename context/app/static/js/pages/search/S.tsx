@@ -143,10 +143,32 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
       },
       { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
       {
-        field: 'descendant_counts.entity_type.Publication',
-        type: FACETS.exists,
-        invert: false,
-        default: false,
+        field: '_dataset_features',
+        type: FACETS.booleanGroup,
+        items: [
+          {
+            field: 'descendant_counts.entity_type.Publication',
+            label: 'Linked to Publications',
+            queryType: 'exists' as const,
+          },
+          {
+            field: 'visualization',
+            label: 'Visualization Available',
+            queryType: 'term' as const,
+            value: 'true',
+          },
+          {
+            field: 'calculated_metadata.object_types',
+            label: 'Cell Type Annotations Available',
+            queryType: 'term' as const,
+            value: 'CL:0000000',
+          },
+          {
+            field: 'spatial',
+            label: 'Spatial Data Available',
+            queryType: 'exists' as const,
+          },
+        ],
       },
       { field: 'published_timestamp', type: FACETS.date },
       { field: 'last_modified_timestamp', type: FACETS.date, visible: isHubmapUser },
@@ -158,10 +180,6 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
       },
       {
         field: 'pipeline',
-        type: FACETS.term,
-      },
-      {
-        field: 'visualization',
         type: FACETS.term,
       },
       {
@@ -198,6 +216,8 @@ function buildDatasetConfig(isHubmapUser: boolean) {
         'mapped_status',
         isHubmapUser ? 'last_modified_timestamp' : 'published_timestamp',
       ],
+      // visualization is fetched for the icon next to hubmap_id but not displayed as its own column
+      _extra: ['visualization'],
       tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
     },
     sortField: isHubmapUser

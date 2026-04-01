@@ -15,6 +15,9 @@ import {
   isDateFacet,
   isExistsFilter,
   isExistsFacet,
+  isBooleanGroupFilter,
+  isBooleanGroupFacet,
+  getBooleanGroupItemKey,
 } from './store';
 import { getESField, isESMapping, Mappings, UseESMappingType } from './useEsMapping';
 
@@ -86,12 +89,18 @@ export function buildQuery({
 
   const hasTextQuery = search.length > 0;
 
-  const freeTextQueries = hasTextQuery ? [esb.simpleQueryStringQuery(search).fields(searchFields)] : [];
+  // Detect wildcard HuBMAP ID searches (e.g. "*676*") and use a wildcard query on hubmap_id
+  const isWildcardIdSearch = hasTextQuery && /^\*.*\*$/.test(search);
+  const freeTextQueries = hasTextQuery
+    ? isWildcardIdSearch
+      ? [esb.wildcardQuery(getESField({ field: 'hubmap_id', mappings }), search)]
+      : [esb.simpleQueryStringQuery(search).fields(searchFields)]
+    : [];
   const defaultQueries = defaultQuery ? [defaultQuery] : [];
 
   query.query(esb.boolQuery().must([...defaultQueries, ...freeTextQueries]));
 
-  if (hasTextQuery) {
+  if (hasTextQuery && !isWildcardIdSearch) {
     query.highlight(esb.highlight(searchFields));
   }
 
@@ -140,6 +149,27 @@ export function buildQuery({
         else if (facetConfig?.invert) {
           if (!(hasValues && facetConfig?.invert)) {
             draft[portalField] = esb.existsQuery(field);
+          }
+        }
+      }
+
+      if (isBooleanGroupFilter(filter) && isBooleanGroupFacet(facetConfig)) {
+        if (filterHasValues({ filter })) {
+          const mustQueries: esb.Query[] = [];
+          for (const itemKey of filter.values) {
+            const item = facetConfig.items.find((i) => getBooleanGroupItemKey(i) === itemKey);
+            if (!item) continue;
+            const itemPortalField = getESField({ field: item.field, mappings });
+            if (item.queryType === 'exists') {
+              mustQueries.push(esb.existsQuery(item.field));
+            } else {
+              mustQueries.push(esb.termQuery(itemPortalField, item.value));
+            }
+          }
+          if (mustQueries.length === 1) {
+            draft[field] = mustQueries[0];
+          } else if (mustQueries.length > 1) {
+            draft[field] = esb.boolQuery().must(mustQueries);
           }
         }
       }
@@ -220,6 +250,26 @@ export function buildQuery({
                     .order(order?.type ?? '_count', order?.dir ?? 'desc'),
                 ),
             ],
+            filters: { ...allFilters },
+            field,
+          }),
+        );
+      }
+
+      if (isBooleanGroupFacet(facet)) {
+        const itemAggregations = facet.items.map((item) => {
+          const itemKey = getBooleanGroupItemKey(item);
+          const itemPortalField = getESField({ field: item.field, mappings });
+          if (item.queryType === 'exists') {
+            return esb.filterAggregation(itemKey, esb.existsQuery(item.field));
+          }
+          return esb.filterAggregation(itemKey, esb.termQuery(itemPortalField, item.value));
+        });
+
+        query.agg(
+          buildFilterAggregation({
+            portalFields: [field],
+            aggregations: itemAggregations,
             filters: { ...allFilters },
             field,
           }),

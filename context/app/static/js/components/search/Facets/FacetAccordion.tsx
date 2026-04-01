@@ -9,24 +9,29 @@ function FacetAccordion({
   position,
   children,
   isFirst,
-  isLast,
-}: PropsWithChildren<{ title: string; position: 'inner' | 'outer'; isFirst?: boolean; isLast?: boolean }>) {
+}: PropsWithChildren<{ title: string; position: 'inner' | 'outer'; isFirst?: boolean }>) {
+  const isInner = position === 'inner';
   return (
     <Accordion
       key={title}
       defaultExpanded={!(position === 'outer' && !isFirst)}
       disableGutters
       variant="unstyled"
-      sx={(theme) => ({
+      sx={{
         width: '100%',
         '& .MuiAccordionSummary-content': {
           margin: 0,
         },
-        ...(position === 'outer' && !isLast && { borderBottom: `1px solid ${theme.palette.divider}` }),
-      })}
+        paddingLeft: isInner ? 0 : 0.5,
+        paddingBottom: 0.25,
+      }}
     >
       <FacetAccordionSummary expandIcon={<StyledExpandMoreIcon />} $position={position}>
-        <Typography variant="subtitle2" color={position === 'inner' ? 'textPrimary' : 'secondary'}>
+        <Typography
+          variant={isInner ? 'subtitle2' : 'subtitle1'}
+          color={isInner ? 'textPrimary' : 'primary'}
+          paddingLeft={isInner ? 0 : 1}
+        >
           {title}
         </Typography>
       </FacetAccordionSummary>

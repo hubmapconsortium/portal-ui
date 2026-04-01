@@ -1,0 +1,4 @@
+- Update search page user experience, standardizing styles and functionality to match entity tables throughout the site.
+- Display icons on search page to highlight datasets with visualizations.
+- Update search table actions to logically group related actions.
+- Add facet search combobox.
