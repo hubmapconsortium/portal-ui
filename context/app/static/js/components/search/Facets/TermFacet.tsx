@@ -20,9 +20,11 @@ import {
   StyledStack,
   FormLabelText,
   HierarchicalAccordionSummary,
+  RIGHT_CHEVRON_SIZE,
 } from './style';
 import FacetAccordion from './FacetAccordion';
 import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
+import { decimal } from 'js/helpers/number-format';
 
 interface CheckboxItem {
   label: string;
@@ -32,6 +34,7 @@ interface CheckboxItem {
   onClick: () => void;
   indeterminate?: boolean;
   field: string;
+  addRightPadding?: boolean;
 }
 
 function getBucketKey(bucket: InnerBucket) {
@@ -41,11 +44,11 @@ function getBucketKey(bucket: InnerBucket) {
 
 type TermLabelCount = Omit<CheckboxItem, 'field' | 'indeterminate' | 'onClick' | 'title'>;
 
-export function TermLabelAndCount({ label, count, active }: TermLabelCount) {
+export function TermLabelAndCount({ label, count, active, addRightPadding }: TermLabelCount) {
   return (
     <StyledStack direction="row" justifyContent="space-between" $active={active}>
       <FormLabelText>{label}</FormLabelText>
-      <Typography>{count}</Typography>
+      <Typography pr={addRightPadding ? RIGHT_CHEVRON_SIZE : 0}>{decimal.format(count)}</Typography>
     </StyledStack>
   );
 }
@@ -58,6 +61,7 @@ function CheckboxFilterItem({
   onClick,
   indeterminate = false,
   field,
+  addRightPadding,
 }: CheckboxItem) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const getTransformedFieldValue = useGetTransformedFieldValue();
@@ -87,7 +91,12 @@ function CheckboxFilterItem({
         />
       }
       label={
-        <TermLabelAndCount label={getTransformedFieldValue({ value: label, field })} count={count} active={active} />
+        <TermLabelAndCount
+          label={getTransformedFieldValue({ value: label, field })}
+          count={count}
+          active={active}
+          addRightPadding={addRightPadding}
+        />
       }
     />
   );
@@ -104,7 +113,7 @@ export function TermFacetItem({ label, field, ...rest }: TermFacet) {
     filterTerm({ term: field, value: label });
   }, [filterTerm, field, label]);
 
-  return <CheckboxFilterItem onClick={handleClick} label={label} field={field} {...rest} />;
+  return <CheckboxFilterItem onClick={handleClick} label={label} field={field} {...rest} addRightPadding />;
 }
 
 const smallAggSize = 5;
@@ -192,7 +201,12 @@ export function HierarchicalFacetParent({ childValues, field, label, ...rest }: 
   return <CheckboxFilterItem onClick={f} label={label} field={field} {...rest} />;
 }
 
-export function HierarchicalFacetChild({ parentValue, field, label, ...rest }: TermFacet & { parentValue: string }) {
+export function HierarchicalFacetChild({
+  parentValue,
+  field,
+  label,
+  ...rest
+}: TermFacet & { parentValue: string; addRightPadding?: boolean }) {
   const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
 
   return (
@@ -240,8 +254,7 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 
   if (childValues.length === 1 && childBuckets[0].key === label) {
     return (
-      // 26px is the width of the Accordion's expand icon.
-      <Box pr="26px">
+      <Box pr={RIGHT_CHEVRON_SIZE}>
         <HierarchicalFacetParent
           childValues={childValues}
           label={label}
@@ -300,6 +313,7 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
               parentValue={label}
               active={childState?.has(key)}
               title={title}
+              addRightPadding
             />
           ))}
       </AccordionDetails>

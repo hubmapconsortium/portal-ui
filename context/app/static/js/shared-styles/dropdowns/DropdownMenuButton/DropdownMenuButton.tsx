@@ -32,6 +32,7 @@ function DropdownMenuButton({ children, menuID, variant = 'outlined', ...rest }:
 
 export const StyledDropdownMenuButton = styled(DropdownMenuButton)(({ theme }) => ({
   height: theme.spacing(5),
+  borderRadius: theme.spacing(0.5),
 }));
 
 export default DropdownMenuButton;

@@ -18,9 +18,9 @@ interface StyledMenuItemProps extends MenuItemProps {
   href?: string;
 }
 
-const StyledMenuItem = styled(({ tooltip, isLoading, children, href, ...props }: StyledMenuItemProps) => {
-  return (
-    <MenuItem {...props} {...(href ? { href, component: 'a' } : {})}>
+const StyledMenuItem = styled(({ tooltip, isLoading, children, href, disabled, ...props }: StyledMenuItemProps) => {
+  const menuItem = (
+    <MenuItem disabled={disabled} {...props} {...(href ? { href, component: 'a' } : {})}>
       <Stack direction="column" width="100%">
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <span>{children}</span>
@@ -34,6 +34,18 @@ const StyledMenuItem = styled(({ tooltip, isLoading, children, href, ...props }:
       </Stack>
     </MenuItem>
   );
+
+  // Wrap in a span when disabled so tooltip hover still works
+  // (disabled elements have pointer-events: none which blocks tooltip triggers)
+  if (disabled && tooltip) {
+    return (
+      <SecondaryBackgroundTooltip title={tooltip} placement="bottom-start">
+        <span style={{ display: 'block', width: '100%' }}>{menuItem}</span>
+      </SecondaryBackgroundTooltip>
+    );
+  }
+
+  return menuItem;
 })({
   width: '100%',
   color: 'black',

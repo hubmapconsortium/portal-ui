@@ -10,6 +10,7 @@ import { useSearch } from '../Search';
 import { isDateFilter, useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import FacetAccordion from './FacetAccordion';
+import { RIGHT_CHEVRON_SIZE } from './style';
 
 interface DateRangeFacetProps {
   field: string;
@@ -150,7 +151,7 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
 
   return (
     <FacetAccordion title={getFieldLabel(field)} position="inner">
-      <Stack spacing={1.5} mt={1}>
+      <Stack spacing={1.5} mt={1} pr={RIGHT_CHEVRON_SIZE}>
         <DatePickerComponent
           label="Start"
           value={new Date(values[0])}
