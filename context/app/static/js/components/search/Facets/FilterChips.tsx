@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -10,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { format } from 'date-fns/format';
 
+import useOverflowCount, { SINGLE_ROW_HEIGHT } from 'js/hooks/useOverflowCount';
 import { trackEvent } from 'js/helpers/trackers';
 import Divider from '@mui/material/Divider';
 import {
@@ -356,8 +357,6 @@ function ResetFiltersButton() {
   );
 }
 
-const SINGLE_ROW_HEIGHT = 40;
-
 function useChipElements(filters: FiltersType, facets: FacetsType) {
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterTerms = useSearchStore((state) => state.filterTerms);
@@ -370,17 +369,15 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
   const getFieldLabel = useGetFieldLabel();
   const getTransformedFieldValue = useGetTransformedFieldValue();
 
-  const chipElements: ReactElement[] = [];
-
-  Object.entries(filters).forEach(
+  return Object.entries(filters).flatMap(
     ([field, v]: [
       string,
       RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues | BooleanGroupValues,
-    ]) => {
+    ]): ReactElement[] => {
       if (isTermFilter(v) && v.values.size) {
         const values = Array.from(v.values);
         if (values.length === 1) {
-          chipElements.push(
+          return [
             <FilterChip
               key={field}
               label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: values[0] })}`}
@@ -388,30 +385,28 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
                 filterTerm({ term: field, value: values[0] });
               }}
             />,
-          );
-        } else {
-          chipElements.push(
-            <MultiValueFilterChip
-              key={field}
-              field={field}
-              values={values}
-              onDeleteValue={(value) => {
-                filterTerm({ term: field, value });
-              }}
-              onDeleteValues={(vals) => {
-                filterTerms({ term: field, values: vals });
-              }}
-            />,
-          );
+          ];
         }
-        return;
+        return [
+          <MultiValueFilterChip
+            key={field}
+            field={field}
+            values={values}
+            onDeleteValue={(value) => {
+              filterTerm({ term: field, value });
+            }}
+            onDeleteValues={(vals) => {
+              filterTerms({ term: field, values: vals });
+            }}
+          />,
+        ];
       }
 
       const facetConfig = facets[field];
 
       if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
-        if (v.values.min === undefined && v.values.max === undefined) return;
-        chipElements.push(
+        if (v.values.min === undefined && v.values.max === undefined) return [];
+        return [
           <FilterChip
             label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
             key={field}
@@ -419,13 +414,12 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
               filterRange({ field, min: undefined, max: undefined });
             }}
           />,
-        );
-        return;
+        ];
       }
 
       if (isDateFilter(v) && isDateFacet(facetConfig)) {
-        if (!(v.values.min && v.values.max)) return;
-        chipElements.push(
+        if (!(v.values.min && v.values.max)) return [];
+        return [
           <FilterChip
             label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
             key={field}
@@ -433,23 +427,19 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
               filterDate({ field, min: undefined, max: undefined });
             }}
           />,
-        );
-        return;
+        ];
       }
 
       if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
         const parentValues = Object.entries(v.values);
-        if (!parentValues.length) return;
-        parentValues.forEach(([parent, children]) => {
+        if (!parentValues.length) return [];
+        return parentValues.flatMap(([parent, children]) => {
           if (!children?.size) {
-            chipElements.push(
-              <HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />,
-            );
-            return;
+            return [<HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />];
           }
           const childValues = Array.from(children);
           if (childValues.length === 1) {
-            chipElements.push(
+            return [
               <FilterChip
                 key={childValues[0]}
                 label={`${getFieldLabel(field)}: ${childValues[0]}`}
@@ -457,30 +447,28 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
                   filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] });
                 }}
               />,
-            );
-          } else {
-            chipElements.push(
-              <MultiValueHierarchicalFilterChip
-                key={parent}
-                field={field}
-                parentValue={parent}
-                childValues={childValues}
-                onDeleteChild={(childValue) => {
-                  filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue });
-                }}
-                onDeleteParent={() => {
-                  filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] });
-                }}
-              />,
-            );
+            ];
           }
+          return [
+            <MultiValueHierarchicalFilterChip
+              key={parent}
+              field={field}
+              parentValue={parent}
+              childValues={childValues}
+              onDeleteChild={(childValue) => {
+                filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue });
+              }}
+              onDeleteParent={() => {
+                filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] });
+              }}
+            />,
+          ];
         });
-        return;
       }
 
       const hasValues = filterHasValues({ filter: v });
       if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
-        chipElements.push(
+        return [
           <FilterChip
             label={`${getFieldLabel(field)}: ${v.values}`}
             key={field}
@@ -488,29 +476,30 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
               filterExists({ field });
             }}
           />,
-        );
+        ];
       }
 
       if (isBooleanGroupFilter(v) && isBooleanGroupFacet(facetConfig) && hasValues) {
-        for (const itemKey of v.values) {
-          const item = facetConfig.items.find((i) => getBooleanGroupItemKey(i) === itemKey);
-          if (item) {
-            chipElements.push(
+        return [...v.values]
+          .map((itemKey) => {
+            const item = facetConfig.items.find((i) => getBooleanGroupItemKey(i) === itemKey);
+            if (!item) return null;
+            return (
               <FilterChip
                 label={item.label}
                 key={`${field}::${itemKey}`}
                 onDelete={() => {
                   filterBooleanGroupItem({ field, itemKey });
                 }}
-              />,
+              />
             );
-          }
-        }
+          })
+          .filter(Boolean) as ReactElement[];
       }
+
+      return [];
     },
   );
-
-  return chipElements;
 }
 
 function SearchChip() {
@@ -538,55 +527,10 @@ function FilterChips() {
   const chipElements = useChipElements(filters, facets);
   const hasActiveFilters = chipElements.length > 0 || Boolean(search);
 
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [overflowCount, setOverflowCount] = useState(0);
-  const chipsContainerRef = useRef<HTMLDivElement>(null);
-
-  const measureOverflow = useCallback(() => {
-    if (!chipsContainerRef.current || isExpanded) {
-      if (isExpanded) setOverflowCount(0);
-      return;
-    }
-    const container = chipsContainerRef.current;
-    const children = Array.from(container.children) as HTMLElement[];
-    if (children.length === 0) {
-      setOverflowCount(0);
-      return;
-    }
-
-    // Use the container's visible height to determine which chips are hidden.
-    // With maxHeight + overflow:hidden, chips below the cutoff are not visible.
-    const containerRect = container.getBoundingClientRect();
-    const containerBottom = containerRect.top + SINGLE_ROW_HEIGHT;
-    const hidden = children.filter((child) => {
-      const childRect = child.getBoundingClientRect();
-      // A chip is hidden if its top edge is at or below the container's visible bottom
-      return childRect.top >= containerBottom;
-    });
-    setOverflowCount(hidden.length);
-  }, [isExpanded]);
-
-  // Measure after each render when filters change
-  useLayoutEffect(() => {
-    measureOverflow();
-  }, [measureOverflow, filters, search]);
-
-  // Re-measure on window resize
-  useEffect(() => {
-    if (!chipsContainerRef.current) return;
-    const observer = new ResizeObserver(() => {
-      measureOverflow();
-    });
-    observer.observe(chipsContainerRef.current);
-    return () => observer.disconnect();
-  }, [measureOverflow]);
-
-  // Collapse when all filters are cleared
-  useEffect(() => {
-    if (!hasActiveFilters) {
-      setIsExpanded(false);
-    }
-  }, [hasActiveFilters]);
+  const { containerRef, isExpanded, setIsExpanded, overflowCount } = useOverflowCount(hasActiveFilters, [
+    filters,
+    search,
+  ]);
 
   if (!hasActiveFilters) {
     return (
@@ -599,7 +543,7 @@ function FilterChips() {
   return (
     <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start" sx={{ width: '100%' }}>
       <Box
-        ref={chipsContainerRef}
+        ref={containerRef}
         sx={{
           display: 'flex',
           flexWrap: 'wrap',

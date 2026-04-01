@@ -353,13 +353,11 @@ export default function SearchTableHeaderCell({ field, label }: SearchTableHeade
         filterHierarchicalParentTerm({ term: facetField, value: parentValue, childValues: [] });
       }
     } else if (filterType === 'hierarchical_child') {
-      // Deselect all children
+      // Remove each parent entry, which clears all its children at once
       const filter = filters[facetField];
       if (isHierarchicalFilter(filter)) {
-        for (const [parentValue, children] of Object.entries(filter.values)) {
-          for (const child of children) {
-            filterHierarchicalChildTerm({ parentTerm: facetField, parentValue, value: child });
-          }
+        for (const parentValue of Object.keys(filter.values)) {
+          filterHierarchicalParentTerm({ term: facetField, value: parentValue, childValues: [] });
         }
       }
     }
@@ -375,7 +373,6 @@ export default function SearchTableHeaderCell({ field, label }: SearchTableHeade
     filters,
     filterTerms,
     filterHierarchicalParentTerm,
-    filterHierarchicalChildTerm,
     analyticsCategory,
     label,
   ]);
