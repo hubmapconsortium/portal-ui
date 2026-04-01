@@ -8,6 +8,8 @@ import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
 import Box from '@mui/material/Box';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
+import ViewDatasetsDropdownButton from './ViewDatasetsDropdownButton';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 const desktopConfig = {
   name: {
@@ -26,6 +28,16 @@ const desktopConfig = {
     pr: 2,
   },
 };
+
+function ModalityChip({ label, color }: { label: string; color: 'primary' | 'secondary' }) {
+  return (
+    <SecondaryBackgroundTooltip title={`This gene is available in ${label} datasets indexed by scFind`}>
+      <span>
+        <Chip label={label} size="small" color={color} variant="outlined" />
+      </span>
+    </SecondaryBackgroundTooltip>
+  );
+}
 
 function BiomarkerHeaderPanel() {
   const isMobile = useIsMobile();
@@ -71,8 +83,8 @@ function BiomarkerPanelItem({
           <InternalLink href={href}>{name}</InternalLink>
           {hasChips && (
             <Stack direction="row" spacing={0.5} mt={0.5}>
-              {hasScfindRna && <Chip label="RNA" size="small" color="primary" variant="outlined" />}
-              {hasScfindAtac && <Chip label="ATAC" size="small" color="secondary" variant="outlined" />}
+              {hasScfindRna && <ModalityChip label="RNA" color="primary" />}
+              {hasScfindAtac && <ModalityChip label="ATAC" color="secondary" />}
             </Stack>
           )}
         </Box>
@@ -81,14 +93,15 @@ function BiomarkerPanelItem({
         <LineClamp lines={2}>{description}</LineClamp>
       </BodyCell>
       <BodyCell {...desktopConfig.type} aria-label="Type">
-        <ViewDatasetsButton
-          scFindParams={{ genes: [geneName] }}
+        <ViewDatasetsDropdownButton
+          geneName={geneName}
+          hasScfindRna={hasScfindRna}
+          hasScfindAtac={hasScfindAtac}
           trackingInfo={{
             category: 'Biomarker Landing Page',
             action: 'View Datasets',
             label: name,
           }}
-          isLoading={false}
         />
       </BodyCell>
     </StackTemplate>

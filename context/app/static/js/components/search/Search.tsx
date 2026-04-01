@@ -209,14 +209,20 @@ function SCFindAlert() {
     return null;
   }
 
+  const modalityLabel = scFindParams.allModalities
+    ? ' (all modalities)'
+    : scFindParams.modality === 'ATAC'
+      ? ' (ATAC)'
+      : ' (RNA)';
+
   if (scFindParams.scFindOnly) {
-    return <Alert severity="info">Displaying all entities indexed in scFind.</Alert>;
+    return <Alert severity="info">Displaying all entities indexed in scFind{modalityLabel}.</Alert>;
   }
 
   if (scFindParams.genes) {
     return (
       <Alert severity="info">
-        Displaying all entities indexed in scFind for genes: {scFindParams.genes.join(', ')}.
+        Displaying scFind{modalityLabel} datasets for genes: {scFindParams.genes.join(', ')}.
       </Alert>
     );
   }
@@ -224,7 +230,7 @@ function SCFindAlert() {
   if (scFindParams.cellTypes) {
     return (
       <Alert severity="info">
-        Displaying all entities indexed in scFind for cell types: {scFindParams.cellTypes.join(', ')}.
+        Displaying scFind{modalityLabel} datasets for cell types: {scFindParams.cellTypes.join(', ')}.
       </Alert>
     );
   }
@@ -328,13 +334,21 @@ function useInitialURLState() {
   const shouldCallIndexedDatasets = Boolean(scFindParams?.scFindOnly);
   const shouldCallGeneDatasets = Boolean(scFindParams?.genes?.length);
   const shouldCallCellTypeDatasets = Boolean(scFindParams?.cellTypes?.length);
+  const isAllModalities = Boolean(scFindParams?.allModalities);
 
-  const indexedDatasets = useIndexedDatasets();
+  const indexedDatasets = useIndexedDatasets(scFindParams?.modality);
   const geneDatasets = useFindDatasetForGenes({
     geneList: shouldCallGeneDatasets ? (scFindParams?.genes ?? []) : [],
+    modality: scFindParams?.modality,
+  });
+  // When allModalities is set, also fetch ATAC gene datasets to union with the default (RNA) results
+  const atacGeneDatasets = useFindDatasetForGenes({
+    geneList: shouldCallGeneDatasets && isAllModalities ? (scFindParams?.genes ?? []) : [],
+    modality: 'ATAC',
   });
   const cellTypeDatasets = useFindDatasetForCellTypes({
     cellTypes: shouldCallCellTypeDatasets ? (scFindParams?.cellTypes ?? []) : [],
+    modality: scFindParams?.modality,
   });
 
   useEffect(() => {
@@ -362,6 +376,8 @@ function useInitialURLState() {
           scFindOnly: parsedScFindParams.scFindOnly,
           genes: parsedScFindParams.genes,
           cellTypes: parsedScFindParams.cellTypes,
+          modality: parsedScFindParams.modality,
+          allModalities: parsedScFindParams.allModalities,
         });
       }
 
@@ -385,7 +401,15 @@ function useInitialURLState() {
         isDataReady = true;
       }
     } else if (scFindParams.genes && shouldCallGeneDatasets) {
-      if (geneDatasets.data) {
+      if (isAllModalities) {
+        // Combine RNA + ATAC results when allModalities is set
+        if (geneDatasets.data && atacGeneDatasets.data) {
+          const rnaDatasets = Object.values(geneDatasets.data.findDatasets).flat();
+          const atacDatasets = Object.values(atacGeneDatasets.data.findDatasets).flat();
+          datasetUUIDs = [...new Set([...rnaDatasets, ...atacDatasets])];
+          isDataReady = true;
+        }
+      } else if (geneDatasets.data) {
         // Extract datasets from gene search results
         const allDatasets = Object.values(geneDatasets.data.findDatasets).flat();
         datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
@@ -422,10 +446,12 @@ function useInitialURLState() {
     scFindParams,
     indexedDatasets.data,
     geneDatasets.data,
+    atacGeneDatasets.data,
     cellTypeDatasets.data,
     shouldCallIndexedDatasets,
     shouldCallGeneDatasets,
     shouldCallCellTypeDatasets,
+    isAllModalities,
   ]);
 
   return { initialUrlState, hasLoadedURLState };
