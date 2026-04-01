@@ -350,6 +350,11 @@ function useInitialURLState() {
     cellTypes: shouldCallCellTypeDatasets ? (scFindParams?.cellTypes ?? []) : [],
     modality: scFindParams?.modality,
   });
+  // When allModalities is set, also fetch ATAC cell type datasets to union with the default (RNA) results
+  const atacCellTypeDatasets = useFindDatasetForCellTypes({
+    cellTypes: shouldCallCellTypeDatasets && isAllModalities ? (scFindParams?.cellTypes ?? []) : [],
+    modality: 'ATAC',
+  });
 
   useEffect(() => {
     const locationSearch = history?.location?.search ?? '';
@@ -416,7 +421,15 @@ function useInitialURLState() {
         isDataReady = true;
       }
     } else if (scFindParams.cellTypes && shouldCallCellTypeDatasets) {
-      if (cellTypeDatasets.data) {
+      if (isAllModalities) {
+        // Combine RNA + ATAC results when allModalities is set
+        if (cellTypeDatasets.data && atacCellTypeDatasets.data) {
+          const rnaDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
+          const atacDatasets = atacCellTypeDatasets.data.flatMap((response) => response.datasets);
+          datasetUUIDs = [...new Set([...rnaDatasets, ...atacDatasets])];
+          isDataReady = true;
+        }
+      } else if (cellTypeDatasets.data) {
         // Extract datasets from cell type search results
         const allDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
         datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
@@ -448,6 +461,7 @@ function useInitialURLState() {
     geneDatasets.data,
     atacGeneDatasets.data,
     cellTypeDatasets.data,
+    atacCellTypeDatasets.data,
     shouldCallIndexedDatasets,
     shouldCallGeneDatasets,
     shouldCallCellTypeDatasets,

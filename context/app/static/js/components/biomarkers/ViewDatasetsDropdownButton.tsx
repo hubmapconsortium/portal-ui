@@ -48,11 +48,11 @@ function ModalityMenuItem({ label, scFindParams, trackingInfo }: ModalityMenuIte
 }
 
 interface ViewDatasetsDropdownInnerProps {
-  geneName: string;
+  baseParams: SCFindParams;
   trackingInfo?: EventInfo;
 }
 
-function ViewDatasetsDropdownInner({ geneName, trackingInfo }: ViewDatasetsDropdownInnerProps) {
+function ViewDatasetsDropdownInner({ baseParams, trackingInfo }: ViewDatasetsDropdownInnerProps) {
   return (
     <>
       <StyledDropdownMenuButton menuID={menuId} variant="outlined">
@@ -61,13 +61,13 @@ function ViewDatasetsDropdownInner({ geneName, trackingInfo }: ViewDatasetsDropd
       <DropdownMenu id={menuId}>
         <ModalityMenuItem
           label="All Modalities"
-          scFindParams={{ genes: [geneName], allModalities: true }}
+          scFindParams={{ ...baseParams, allModalities: true }}
           trackingInfo={trackingInfo}
         />
-        <ModalityMenuItem label="RNA Datasets" scFindParams={{ genes: [geneName] }} trackingInfo={trackingInfo} />
+        <ModalityMenuItem label="RNA Datasets" scFindParams={baseParams} trackingInfo={trackingInfo} />
         <ModalityMenuItem
           label="ATAC Datasets"
-          scFindParams={{ genes: [geneName], modality: 'ATAC' }}
+          scFindParams={{ ...baseParams, modality: 'ATAC' }}
           trackingInfo={trackingInfo}
         />
       </DropdownMenu>
@@ -77,15 +77,15 @@ function ViewDatasetsDropdownInner({ geneName, trackingInfo }: ViewDatasetsDropd
 
 const ViewDatasetsDropdown = withDropdownMenuProvider(ViewDatasetsDropdownInner, false);
 
-interface ViewDatasetsDropdownButtonProps {
-  geneName: string;
+export interface ViewDatasetsDropdownButtonProps {
+  baseParams: SCFindParams;
   hasScfindRna?: boolean | null;
   hasScfindAtac?: boolean | null;
   trackingInfo?: EventInfo;
 }
 
 export default function ViewDatasetsDropdownButton({
-  geneName,
+  baseParams,
   hasScfindRna,
   hasScfindAtac,
   trackingInfo,
@@ -93,11 +93,10 @@ export default function ViewDatasetsDropdownButton({
   const modalityCount = (hasScfindRna ? 1 : 0) + (hasScfindAtac ? 1 : 0);
 
   if (modalityCount <= 1) {
-    // Single modality or none: use the simple button
     const modality = hasScfindAtac && !hasScfindRna ? 'ATAC' : undefined;
     return (
       <ViewDatasetsButton
-        scFindParams={{ genes: [geneName], modality }}
+        scFindParams={{ ...baseParams, modality }}
         trackingInfo={trackingInfo}
         isLoading={false}
         endIcon
@@ -105,6 +104,5 @@ export default function ViewDatasetsDropdownButton({
     );
   }
 
-  // Multiple modalities: show dropdown
-  return <ViewDatasetsDropdown geneName={geneName} trackingInfo={trackingInfo} />;
+  return <ViewDatasetsDropdown baseParams={baseParams} trackingInfo={trackingInfo} />;
 }

@@ -8,7 +8,6 @@ import { capitalize, useEventCallback } from '@mui/material/utils';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useCellTypeOrgans } from 'js/api/scfind/useCellTypeNames';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import Divider from '@mui/material/Divider';
@@ -21,8 +20,11 @@ import Filter from '@mui/icons-material/FilterListRounded';
 import Badge from '@mui/material/Badge';
 import { CheckIcon } from 'js/shared-styles/icons';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
+import ViewDatasetsDropdownButton from '../biomarkers/ViewDatasetsDropdownButton';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
 import { LineClamp } from 'js/shared-styles/text';
+import Stack from '@mui/material/Stack';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 const desktopConfig = {
   name: {
@@ -178,52 +180,76 @@ interface CellTypePanelItemProps {
   clid?: string;
   organs: string[];
   description?: string;
+  hasScfindRna?: boolean;
+  hasScfindAtac?: boolean;
+  rnaOrgans: string[];
+  atacOrgans: string[];
 }
 
-function OrgansCell({ organs }: { organs: string[] }) {
+function ModalityOrganLine({
+  name,
+  label,
+  organs,
+  color,
+}: {
+  name: string;
+  label: string;
+  organs: string[];
+  color: 'primary' | 'secondary';
+}) {
   const { organIsSelected, filterIsInactive } = useCellTypesSearchState();
 
-  const sortedOrgans = useMemo(() => {
-    return organs.sort((a, b) => {
-      const aIsSelected = organIsSelected(a);
-      const bIsSelected = organIsSelected(b);
-      if (filterIsInactive || (aIsSelected && bIsSelected)) {
-        return a.localeCompare(b);
-      }
-      if (aIsSelected && !bIsSelected) return -1; // a is selected, b is not
-      if (!aIsSelected && bIsSelected) return 1; // b is selected, a is not
-      return a.localeCompare(b); // both are either selected or not, sort alphabetically
-    });
-  }, [organs, organIsSelected, filterIsInactive]);
+  const sortedOrgans = useMemo(
+    () =>
+      [...organs].sort((a, b) => {
+        const aSelected = organIsSelected(a);
+        const bSelected = organIsSelected(b);
+        if (filterIsInactive || aSelected === bSelected) return a.localeCompare(b);
+        return aSelected ? -1 : 1;
+      }),
+    [organs, organIsSelected, filterIsInactive],
+  );
 
   return (
-    <>
-      {sortedOrgans.map((organ, idx) => {
-        return (
+    <SecondaryBackgroundTooltip
+      title={`The scFind ${label} index contains datasets derived from these organs containing ${name}.`}
+    >
+      <Typography variant="body2" component="div">
+        <Typography variant="body2" component="span" color={color} fontWeight={500}>
+          {label}:
+        </Typography>{' '}
+        {sortedOrgans.map((organ, idx) => (
           <React.Fragment key={organ}>
             <Typography
               variant="body2"
-              sx={{
-                display: 'inline-block',
-                color: organIsSelected(organ) || filterIsInactive ? 'text.primary' : 'text.disabled',
-              }}
+              component="span"
+              sx={{ color: organIsSelected(organ) || filterIsInactive ? 'text.primary' : 'text.disabled' }}
             >
               {capitalize(organ)}
             </Typography>
-            {idx < organs.length - 1 && (
-              <Typography variant="body2" sx={{ display: 'inline-block', color: 'text.secondary' }}>
-                ,&nbsp;
+            {idx < sortedOrgans.length - 1 && (
+              <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
+                ,{' '}
               </Typography>
             )}
           </React.Fragment>
-        );
-      })}
-    </>
+        ))}
+      </Typography>
+    </SecondaryBackgroundTooltip>
   );
 }
 
-function CellTypesPanelItem({ name, href, organs, clid, description }: CellTypePanelItemProps) {
-  // New index version does not lowercase the organ names
+function CellTypesPanelItem({
+  name,
+  href,
+  clid,
+  description,
+  organs,
+  hasScfindRna,
+  hasScfindAtac,
+  rnaOrgans,
+  atacOrgans,
+}: CellTypePanelItemProps) {
   const cellTypes = organs.map((o) => `${o}.${name}`);
 
   return (
@@ -253,13 +279,23 @@ function CellTypesPanelItem({ name, href, organs, clid, description }: CellTypeP
           {description || 'No description available.'}
         </LineClamp>
       </BodyCell>
-      <BodyCell {...desktopConfig.organs} aria-label={organs.length === 1 ? 'Organ' : 'Organs'}>
-        <OrgansCell organs={organs} />
+      <BodyCell {...desktopConfig.organs} aria-label="Organs">
+        <Stack width="100%">
+          {hasScfindRna && <ModalityOrganLine name={name} label="RNA" organs={rnaOrgans} color="primary" />}
+          {hasScfindAtac && <ModalityOrganLine name={name} label="ATAC" organs={atacOrgans} color="secondary" />}
+        </Stack>
       </BodyCell>
       <BodyCell {...desktopConfig.datasets} aria-label="Datasets">
-        <SecondaryBackgroundTooltip title={`View datasets containing ${name}.`}>
-          <ViewDatasetsButton scFindParams={{ cellTypes }} />
-        </SecondaryBackgroundTooltip>
+        <ViewDatasetsDropdownButton
+          baseParams={{ cellTypes }}
+          hasScfindRna={hasScfindRna}
+          hasScfindAtac={hasScfindAtac}
+          trackingInfo={{
+            category: 'Cell Type Landing Page',
+            action: 'View Datasets',
+            label: name,
+          }}
+        />
       </BodyCell>
     </StackTemplate>
   );

@@ -94,7 +94,7 @@ function BiomarkerPanelItem({
       </BodyCell>
       <BodyCell {...desktopConfig.type} aria-label="Type">
         <ViewDatasetsDropdownButton
-          geneName={geneName}
+          baseParams={{ genes: [geneName] }}
           hasScfindRna={hasScfindRna}
           hasScfindAtac={hasScfindAtac}
           trackingInfo={{

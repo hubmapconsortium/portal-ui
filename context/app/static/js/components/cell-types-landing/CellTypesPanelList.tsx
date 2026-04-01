@@ -50,20 +50,26 @@ export default function CellTypesPanelList() {
         noPadding: true,
         children: <CellTypesPanel.Header />,
       },
-      ...sortedCellTypes.map(({ label, organs: cellTypeOrgans, clid, description }) => ({
-        key: label,
-        noPadding: true,
-        noHover: false,
-        children: (
-          <CellTypesPanel.Item
-            name={label}
-            href={`/cell-types/${clid}`}
-            clid={clid}
-            organs={cellTypeOrgans}
-            description={description}
-          />
-        ),
-      })),
+      ...sortedCellTypes.map(
+        ({ label, organs: cellTypeOrgans, clid, description, hasScfindRna, hasScfindAtac, rnaOrgans, atacOrgans }) => ({
+          key: label,
+          noPadding: true,
+          noHover: false,
+          children: (
+            <CellTypesPanel.Item
+              name={label}
+              href={`/cell-types/${clid}`}
+              clid={clid}
+              organs={cellTypeOrgans}
+              description={description}
+              hasScfindRna={hasScfindRna}
+              hasScfindAtac={hasScfindAtac}
+              rnaOrgans={rnaOrgans}
+              atacOrgans={atacOrgans}
+            />
+          ),
+        }),
+      ),
     ];
     return propsList;
   }, [sortedCellTypes, isLoading]);
