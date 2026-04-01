@@ -74,7 +74,8 @@ export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
     const record: Record<string, CellTypeCountWithPercentageAndOrgan[]> = {};
     const totalCountsForOrgan: Record<string, number> = data.reduce<Record<string, number>>((acc, item) => {
       item.cellTypeCounts.forEach((count) => {
-        const { organ } = extractCellTypeInfo(count.index);
+        const { organ, name } = extractCellTypeInfo(count.index);
+        if (name === 'other') return;
         acc[organ] = (acc[organ] || 0) + count.cell_count;
       });
       return acc;
