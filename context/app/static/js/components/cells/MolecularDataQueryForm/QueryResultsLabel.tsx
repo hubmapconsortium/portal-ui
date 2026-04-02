@@ -4,13 +4,13 @@ import useSWR from 'swr';
 import Typography from '@mui/material/Typography';
 import StepLabel from '@mui/material/StepLabel';
 import Stack from '@mui/material/Stack';
-import { useMolecularDataQueryFormState } from './hooks';
+import { getScFindModality, isScFindMethod, useMolecularDataQueryFormState } from './hooks';
 import { useResultsProvider } from './ResultsProvider';
 import CellsService from '../CellsService';
 import QuerySubtitle from './QuerySubtitle';
 
-function SCFindQueryResultsDisplay() {
-  const { data: { datasets = [] } = { datasets: [] } } = useIndexedDatasets();
+function SCFindQueryResultsDisplay({ modality }: { modality?: string }) {
+  const { data: { datasets = [] } = { datasets: [] } } = useIndexedDatasets(modality);
   const resultCount = useResultsProvider((state) => state.resultCount);
   const totalDatasets = datasets.length;
   const percentage = ((resultCount / totalDatasets) * 100).toFixed(1);
@@ -69,8 +69,8 @@ function QueryResultsVariables() {
     return <>Error: {(error as Error)?.message ?? error ?? 'No datasets found'}</>;
   }
 
-  if (queryMethod === 'scFind') {
-    return <SCFindQueryResultsDisplay />;
+  if (isScFindMethod(queryMethod)) {
+    return <SCFindQueryResultsDisplay modality={getScFindModality(queryMethod)} />;
   }
   if (['crossModality', 'crossModalityRNA', 'crossModalityATAC'].includes(queryMethod)) {
     return <CrossModalityQueryResultsDisplay />;

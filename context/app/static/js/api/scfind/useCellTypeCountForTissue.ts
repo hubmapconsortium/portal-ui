@@ -13,13 +13,14 @@ interface CellTypeCountsForTissue {
 
 export interface CellTypeCountForTissueParams {
   tissue: string;
+  modality?: string;
 }
 
 type CellTypeCountForTissueKey = string | null;
 
 export function createCellTypeCountForTissueKey(
   scFindEndpoint: string,
-  { tissue }: CellTypeCountForTissueParams,
+  { tissue, modality }: CellTypeCountForTissueParams,
   scFindIndexVersion?: string,
 ): CellTypeCountForTissueKey | null {
   if (!tissue || tissue.length === 0) {
@@ -30,6 +31,7 @@ export function createCellTypeCountForTissueKey(
     'cellTypeCountForTissue',
     {
       tissue,
+      modality,
     },
     scFindIndexVersion,
   );
@@ -41,10 +43,10 @@ export default function useCellTypeCountForTissue(props: CellTypeCountForTissueP
   return useSWR<CellTypeCountsForTissue, unknown, CellTypeCountForTissueKey>(key, (url) => fetcher({ url }));
 }
 
-export function useCellTypeCountForTissues(tissues: string[]) {
+export function useCellTypeCountForTissues(tissues: string[], modality?: string) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const keys = tissues
-    .map((tissue) => createCellTypeCountForTissueKey(scFindEndpoint, { tissue }, scFindIndexVersion))
+    .map((tissue) => createCellTypeCountForTissueKey(scFindEndpoint, { tissue, modality }, scFindIndexVersion))
     .filter((key): key is string => key !== null);
 
   return useSWR<CellTypeCountsForTissue[], unknown, NonNullable<CellTypeCountForTissueKey>[]>(keys, (urls: string[]) =>

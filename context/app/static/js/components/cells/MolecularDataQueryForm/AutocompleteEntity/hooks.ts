@@ -1,10 +1,11 @@
 import useSWR from 'swr';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { PathwayParticipantsResponse, useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
+import { useGenePathways } from 'js/hooks/useUBKG';
 import { fetcher } from 'js/helpers/swr';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import CellsService from '../../CellsService';
 import type { AutocompleteQueryKey, AutocompleteQueryResponse, AutocompleteResult } from './types';
-import { useMolecularDataQueryFormState } from '../hooks';
+import { getScFindModality, isScFindMethod, useMolecularDataQueryFormState } from '../hooks';
 
 const cellsService = new CellsService();
 
@@ -28,10 +29,14 @@ const fetchEntityAutocomplete = async ({
   }
 
   // Use SCFIND endpoints for genes and cell types when scFind query method is selected
-  if (queryMethod === 'scFind' && targetEntity === 'gene') {
+  if (isScFindMethod(queryMethod) && targetEntity === 'gene') {
     const urlParams = new URLSearchParams();
     urlParams.append('q', substring);
     urlParams.append('limit', '10');
+    const modality = getScFindModality(queryMethod);
+    if (modality) {
+      urlParams.append('modality', modality);
+    }
 
     const responseJson = await fetcher<ScFindGenesAutocompleteResponse>({
       url: `/scfind/genes/autocomplete?${urlParams.toString()}`,
@@ -41,10 +46,14 @@ const fetchEntityAutocomplete = async ({
   }
 
   // Use SCFIND cell types autocomplete endpoint when scFind query method is selected
-  if (queryMethod === 'scFind' && targetEntity === 'cell-type') {
+  if (isScFindMethod(queryMethod) && targetEntity === 'cell-type') {
     const urlParams = new URLSearchParams();
     urlParams.append('q', substring);
     urlParams.append('limit', '10');
+    const modality = getScFindModality(queryMethod);
+    if (modality) {
+      urlParams.append('modality', modality);
+    }
 
     const responseJson = await fetcher<ScFindCellTypesAutocompleteResponse>({
       url: `/scfind/cell-types/autocomplete?${urlParams.toString()}`,
@@ -93,97 +102,91 @@ export function usePathwayAutocompleteQuery(substring: string) {
   return { pathways, options, isLoading };
 }
 
-function getParticipantsFromPathway(pathway?: PathwayParticipantsResponse): string[] {
-  if (!pathway) {
-    return [];
-  }
-  return pathway.events.flatMap((event) => {
-    const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC');
-    if (!hgncSab) {
-      return [];
-    }
-    return hgncSab.participants.map((participant) => participant.symbol).filter((gene) => gene !== undefined);
-  });
+interface PathwayGenesResponse {
+  valid_genes: string[];
+  invalid_genes: string[];
+  total_genes: number;
+  total_valid: number;
+  error?: string;
 }
 
 /**
- * Validates genes against the selected data source (SCFIND or Cells API) to check if they exist.
- * This is used to filter pathway genes when a pathway is selected,
- * ensuring only genes that are indexed in the selected data source are included.
- * @param genes Array of gene symbols to validate
- * @param queryMethod The selected query method ('scFind' or other)
- * @param abortSignal Optional AbortSignal to cancel the request
- * @returns Promise that resolves to an object with valid and invalid gene arrays
+ * Fetches pathway genes from the backend, which resolves pathway participants from UBKG
+ * and validates them against the scFind gene list for the given modality.
+ * This collapses 2 network requests (UBKG fetch + scFind validate) into 1.
  */
-async function validateGenesWithDataSource(
-  genes: string[],
+async function fetchScFindPathwayGenes(
+  pathwayCode: string,
   queryMethod: string,
   abortSignal?: AbortSignal,
-): Promise<{
-  validGenes: string[];
-  invalidGenes: string[];
-}> {
-  try {
-    // Use the appropriate validation endpoint based on query method
-    const endpoint = queryMethod === 'scFind' ? '/scfind/genes/validate' : '/cells/genes/validate';
+): Promise<{ validGenes: string[]; invalidGenes: string[] }> {
+  const modality = getScFindModality(queryMethod);
+  const requestBody: { pathway_code: string; modality?: string } = { pathway_code: pathwayCode };
+  if (modality) {
+    requestBody.modality = modality;
+  }
 
-    const requestBody: { genes: string[]; modality?: string } = { genes };
-
-    // Include modality for Cells API validation
-    if (queryMethod !== 'scFind') {
-      const modality = queryMethod === 'crossModalityATAC' ? 'atac' : 'rna';
-      requestBody.modality = modality;
-    }
-
-    const requestInit: RequestInit = {
+  const result = await fetcher<PathwayGenesResponse>({
+    url: '/scfind/pathway-genes',
+    requestInit: {
       method: 'POST',
       body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       signal: abortSignal,
-    };
+    },
+  });
 
-    const result = await fetcher<{
-      valid_genes: string[];
-      invalid_genes: string[];
-      total_provided: number;
-      total_valid: number;
-      error?: string;
-    }>({
-      url: endpoint,
-      requestInit,
-    });
-
-    if (result.error) {
-      throw new Error(result.error);
-    }
-
-    return {
-      validGenes: result.valid_genes,
-      invalidGenes: result.invalid_genes,
-    };
-  } catch (error) {
-    // Check if the request was aborted
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw error; // Re-throw abort errors so they can be handled appropriately
-    }
-    console.warn(`Failed to validate genes with ${queryMethod}:`, error);
-    // Return all genes as valid if validation fails to avoid breaking the user experience
-    return {
-      validGenes: genes,
-      invalidGenes: [],
-    };
+  if (result.error) {
+    throw new Error(result.error);
   }
+
+  return {
+    validGenes: result.valid_genes,
+    invalidGenes: result.invalid_genes,
+  };
+}
+
+/**
+ * Fetches pathway genes from the backend, which resolves pathway participants from UBKG
+ * and validates them against the Cells API gene list for the given modality.
+ * This collapses 2 network requests (UBKG fetch + Cells API validate) into 1.
+ */
+async function fetchCrossModalityPathwayGenes(
+  pathwayCode: string,
+  queryMethod: string,
+  abortSignal?: AbortSignal,
+): Promise<{ validGenes: string[]; invalidGenes: string[] }> {
+  const modality = queryMethod === 'crossModalityATAC' ? 'atac' : 'rna';
+
+  const result = await fetcher<PathwayGenesResponse>({
+    url: '/cells/pathway-genes',
+    requestInit: {
+      method: 'POST',
+      body: JSON.stringify({ pathway_code: pathwayCode, modality }),
+      headers: { 'Content-Type': 'application/json' },
+      signal: abortSignal,
+    },
+  });
+
+  if (result.error) {
+    throw new Error(result.error);
+  }
+
+  return {
+    validGenes: result.valid_genes,
+    invalidGenes: result.invalid_genes,
+  };
 }
 
 /**
  * Retrieves the genes in a pathway and sets them in the form state in response to a selected pathway.
- * When scFind is the selected query method, genes that don't exist in SCFIND are automatically
- * filtered out to ensure compatibility with the selected data source.
+ * For scFind methods, uses the backend /scfind/pathway-genes endpoint which resolves pathway genes
+ * from UBKG and validates them in a single request.
+ * For crossModality methods, uses the existing UBKG fetch + Cells API validate flow.
  */
 export function useSelectedPathwayParticipants() {
   const { watch, setValue, getValues, formState } = useMolecularDataQueryFormState();
+  const { toastError } = useSnackbarActions();
   const [isLoadingPathwayGenes, setIsLoadingPathwayGenes] = useState(false);
   const [invalidGenes, setInvalidGenes] = useState<string[]>([]);
   const [allGenesExcludedPathway, setAllGenesExcludedPathway] = useState<string | null>(null);
@@ -203,10 +206,12 @@ export function useSelectedPathwayParticipants() {
       ? selectedPathway.values[0]
       : undefined;
 
-  const { data: pathway, isLoading } = useGenePathwayParticipants(pathwayCode);
+  const isScFind = isScFindMethod(queryMethod);
 
-  // Hold on to previous selected pathway to clear the genes when the pathway is removed
-  const previousSelectedPathway = useRef(pathway);
+  // Hold previous pathway code for clearing genes when pathway is removed
+  const previousPathwayCodeRef = useRef<string | undefined>(undefined);
+  // Hold previous valid genes from scFind pathway for clearing
+  const previousScFindGenesRef = useRef<string[]>([]);
   // Hold a ref to the current AbortController for canceling validation requests
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -220,84 +225,115 @@ export function useSelectedPathwayParticipants() {
       }
 
       const updateGenes = async () => {
-        if (selectedPathway && pathway) {
-          // If a new pathway is selected, set the genes to the new pathway.
-          previousSelectedPathway.current = pathway;
-          let pathwayGenes = getParticipantsFromPathway(pathway);
-
+        if (selectedPathway && pathwayCode && queryType === 'gene') {
           // Clear previous invalid genes and exclusion warning when starting a new pathway
           setInvalidGenes([]);
           setAllGenesExcludedPathway(null);
 
-          // Filter genes through validation only if query type is "gene" and we have genes
-          if (queryType === 'gene' && pathwayGenes.length > 0) {
+          if (isScFind) {
+            // For scFind methods, use the backend endpoint that handles UBKG + validation in one request
             setIsLoadingPathwayGenes(true);
-            // Create a new AbortController for this validation request
             const abortController = new AbortController();
             abortControllerRef.current = abortController;
 
             try {
-              const { validGenes, invalidGenes: newInvalidGenes } = await validateGenesWithDataSource(
-                pathwayGenes,
+              const { validGenes, invalidGenes: newInvalidGenes } = await fetchScFindPathwayGenes(
+                pathwayCode,
                 queryMethod,
                 abortController.signal,
               );
 
-              // Check if the request was aborted before updating state
-              if (abortController.signal.aborted) {
+              if (abortController.signal.aborted) return;
+
+              setInvalidGenes(newInvalidGenes);
+
+              if (validGenes.length === 0) {
+                setAllGenesExcludedPathway(pathwayName ?? 'the selected pathway');
+                setValue('pathway', null);
                 return;
               }
 
-              pathwayGenes = validGenes;
+              previousPathwayCodeRef.current = pathwayCode;
+              previousScFindGenesRef.current = validGenes;
+
+              const genes = validGenes.map((gene) => ({
+                full: gene,
+                pre: '',
+                match: gene,
+                post: '',
+                tags: [],
+              }));
+              setValue('genes', genes);
+            } catch (err) {
+              if (err instanceof Error && err.name === 'AbortError') return;
+              console.error('Failed to fetch pathway genes:', err);
+              toastError('Failed to load pathway genes. Please try again.');
+            } finally {
+              if (!abortController.signal.aborted) {
+                setIsLoadingPathwayGenes(false);
+                abortControllerRef.current = null;
+              }
+            }
+          } else {
+            // For crossModality methods, use the backend endpoint that handles UBKG + validation
+            setIsLoadingPathwayGenes(true);
+            const abortController = new AbortController();
+            abortControllerRef.current = abortController;
+
+            try {
+              const { validGenes, invalidGenes: newInvalidGenes } = await fetchCrossModalityPathwayGenes(
+                pathwayCode,
+                queryMethod,
+                abortController.signal,
+              );
+
+              if (abortController.signal.aborted) return;
+
               setInvalidGenes(newInvalidGenes);
-            } catch (error) {
-              // If the request was aborted, don't update the loading state or show errors
-              if (error instanceof Error && error.name === 'AbortError') {
+
+              if (validGenes.length === 0) {
+                setAllGenesExcludedPathway(pathwayName ?? 'the selected pathway');
+                setValue('pathway', null);
                 return;
               }
-              console.error('Failed to validate pathway genes:', error);
+
+              previousPathwayCodeRef.current = pathwayCode;
+              previousScFindGenesRef.current = validGenes;
+
+              const genes = validGenes.map((gene) => ({
+                full: gene,
+                pre: '',
+                match: gene,
+                post: '',
+                tags: [],
+              }));
+              setValue('genes', genes);
+            } catch (err) {
+              if (err instanceof Error && err.name === 'AbortError') return;
+              console.error('Failed to fetch pathway genes:', err);
+              toastError('Failed to load pathway genes. Please try again.');
             } finally {
-              // Only clear loading state if the request wasn't aborted
               if (!abortController.signal.aborted) {
                 setIsLoadingPathwayGenes(false);
                 abortControllerRef.current = null;
               }
             }
           }
-
-          // If validation removed all pathway genes, clear the pathway selection and show a warning
-          if (pathwayGenes.length === 0) {
-            setAllGenesExcludedPathway(pathwayName ?? 'the selected pathway');
-            setValue('pathway', null);
-            return;
-          }
-
-          const genes = pathwayGenes.map((gene) => ({
-            full: gene,
-            pre: '',
-            match: gene,
-            post: '',
-            tags: [],
-          }));
-          // Only set genes when the query type is "gene"
-          if (queryType === 'gene') {
-            setValue('genes', genes);
-          }
         } else {
           // If the pathway was removed, clear the genes that were in that pathway.
           setInvalidGenes([]);
           setIsLoadingPathwayGenes(false);
-          // Only manage genes when the query type is "gene"
           if (queryType === 'gene') {
             const currentGenes = getValues('genes');
-            if (!currentGenes || !previousSelectedPathway.current) {
-              return;
+            if (!currentGenes) return;
+
+            if (previousScFindGenesRef.current.length > 0) {
+              // Use the stored previous genes to remove only pathway genes
+              const filteredGenes = currentGenes.filter((gene) => !previousScFindGenesRef.current.includes(gene.full));
+              setValue('genes', filteredGenes);
+              previousScFindGenesRef.current = [];
+              previousPathwayCodeRef.current = undefined;
             }
-            const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
-            const filteredGenes = currentGenes.filter((gene) => {
-              return !previousParticipants.includes(gene.full);
-            });
-            setValue('genes', filteredGenes);
           }
         }
       };
@@ -315,33 +351,22 @@ export function useSelectedPathwayParticipants() {
       }
     };
   }, [
-    pathway,
+    pathwayCode,
     selectedPathway,
     setValue,
-    isLoading,
     formState.isSubmitted,
     getValues,
     queryMethod,
     pathwayName,
     queryType,
+    isScFind,
+    toastError,
   ]);
 
-  const participants = useMemo(() => {
-    if (!pathway) {
-      return [];
-    }
-    return pathway.events.flatMap((event) => {
-      // find the HUGO gene symbol sab in the event
-      const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC')!;
-      if (!hgncSab) {
-        return [];
-      }
-      return hgncSab.participants.map((participant) => participant.symbol).filter((gene) => gene !== undefined);
-    });
-  }, [pathway]);
+  // Both scFind and crossModality paths store valid genes in previousScFindGenesRef
+  const participants = previousScFindGenesRef.current;
 
   return {
-    isLoading,
     pathwayName,
     pathwayCode,
     participants,
