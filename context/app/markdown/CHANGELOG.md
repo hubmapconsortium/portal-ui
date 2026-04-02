@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.43.0 - 2026-04-02
+
+- Update search page user experience, standardizing styles and functionality to match entity tables throughout the site.
+- Display icons on search page to highlight datasets with visualizations.
+- Update search table actions to logically group related actions.
+- Add facet search combobox.
+
+
+
 ## v1.42.1 - 2026-03-27
 
 - Ensure properly scoped Vitessce configurations are used for Vitessce sharing functionalities.
