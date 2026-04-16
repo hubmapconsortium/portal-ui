@@ -8,7 +8,14 @@ import requests
 
 from flask import Response, abort, request, render_template, jsonify, current_app, make_response
 
-from .utils import make_blueprint, get_client, get_default_flask_data, get_allowed_cors_origin
+from .utils_datapackage import build_resource, resolve_field_type
+from .utils import (
+    make_blueprint,
+    get_client,
+    get_default_flask_data,
+    get_allowed_cors_origin,
+    get_url_base_from_request,
+)
 
 
 blueprint = make_blueprint(__name__)
@@ -113,6 +120,47 @@ def entities_plain_tsv(entity_type):
     return _generate_tsv_response(entity_type, with_descriptions=False, cors_origin=cors_origin)
 
 
+@blueprint.route('/metadata/v0/udi/datapackage.json', methods=['GET'])
+def udi_datapackage():
+    request_origin = request.headers.get('Origin', '')
+    cors_origin = get_allowed_cors_origin(
+        request_origin,
+        allowed_origins=['https://hms-dbmi.github.io'],
+        allowed_domain_suffixes=['.hubmapconsortium.org'],
+    )
+
+    client = get_client()
+
+    field_descriptions_raw = client.get_metadata_descriptions()
+    descriptions_dict = {
+        d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions_raw
+    }
+
+    field_types_raw = client.get_metadata_field_types()
+    types_dict = {ft['name']: resolve_field_type(ft) for ft in field_types_raw}
+
+    resources = []
+    for entity_type in ['donors', 'samples', 'datasets']:
+        entities = _get_entities(entity_type)
+        resource = build_resource(
+            entity_type, entities, descriptions_dict, types_dict, _first_fields
+        )
+        resources.append(resource)
+
+    datapackage = {
+        'name': 'hubmap_metadata',
+        'resources': resources,
+        'udi:name': 'hubmap_api',
+        'udi:path': f'{get_url_base_from_request()}/metadata/v0/udi/',
+    }
+
+    response = jsonify(datapackage)
+    if cors_origin:
+        response.headers['Access-Control-Allow-Origin'] = cors_origin
+
+    return response
+
+
 @blueprint.route('/lineup/<entity_type>')
 def lineup(entity_type):
     flask_data = {
@@ -142,7 +190,7 @@ def _get_entities(entity_type, constraints={}, uuids=None):
         'created_timestamp',
         # Status
         'status',
-        'mapped_status'
+        'mapped_status',
         # Access
         'data_access_level',
         # Consortium
@@ -157,12 +205,15 @@ def _get_entities(entity_type, constraints={}, uuids=None):
         extra_fields += ['donor.hubmap_id', 'origin_samples_unique_mapped_organs']
     if entity_type in ['samples']:
         extra_fields += ['sample_category']
+    post_filter_extra = None
+    if entity_type == 'samples':
+        post_filter_extra = {'exists': {'field': 'descendant_counts.entity_type.Dataset'}}
     entities = client.get_entities(
         plural_lc_entity_type=entity_type,
         non_metadata_fields=extra_fields,
         constraints=constraints,
         uuids=uuids,
-        # Default "True" would throw away repeated keys after the first.
+        post_filter_extra=post_filter_extra,
     )
     return entities
 

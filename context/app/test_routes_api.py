@@ -36,15 +36,32 @@ mock_ontology_descriptions = [
     },
 ]
 
+mock_ontology_field_types = [
+    {
+        'name': 'age_unit',
+        'code_ids': ['HMFIELD:1235'],
+        'types': [{'mapping_source': 'HMFIELD', 'type': 'string', 'type_source': 'HMFIELD'}],
+    },
+    {
+        'name': 'age_value',
+        'code_ids': ['HMFIELD:1234'],
+        'types': [
+            {'mapping_source': 'HMFIELD', 'type': 'number', 'type_source': 'HMFIELD'},
+            {'mapping_source': 'HMFIELD', 'type': 'float', 'type_source': 'XSD'},
+        ],
+    },
+]
+
 tab = '\t'
 extra_fields = [
     'created_by_user_displayname',
     'created_by_user_email',
     'created_timestamp',
+    'data_access_level',
     'group_name',
     'last_modified_timestamp',
     'mapped_consortium',
-    'mapped_statusdata_access_level',
+    'mapped_status',
     'published_timestamp',
     'status',
 ]
@@ -70,13 +87,18 @@ def mock_es_post(path, **kwargs):
 
 
 def mock_es_get(path, **kwargs):
+    if 'field-types' in path:
+        data = mock_ontology_field_types
+    else:
+        data = mock_ontology_descriptions
+
     class MockResponse:
         def __init__(self):
             self.status_code = 0  # _request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
-            return mock_ontology_descriptions
+            return data
 
         def raise_for_status(self):
             pass
@@ -128,3 +150,111 @@ def test_unexpected_args_tsv_post(client, mocker):
         response.get_data(as_text=True).strip()
         == '{"message":"POST only accepts a JSON body.","status":400}'
     )
+
+
+def test_datapackage(client, mocker):
+    mocker.patch('requests.post', side_effect=mock_es_post)
+    mocker.patch('requests.get', side_effect=mock_es_get)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status == '200 OK'
+    data = response.get_json()
+
+    assert data['name'] == 'hubmap_metadata'
+    assert data['udi:name'] == 'hubmap_api'
+    assert len(data['resources']) == 3
+    assert [r['name'] for r in data['resources']] == ['donors', 'samples', 'datasets']
+
+    # Check donors resource structure
+    donors = data['resources'][0]
+    assert donors['udi:row_count'] == 1
+    assert donors['type'] == 'table'
+    assert donors['format'] == 'tsv'
+    assert donors['schema']['primaryKey'] == ['hubmap_id']
+    assert donors['schema']['foreignKeys'] == []
+
+    # Check field details
+    field_names = [f['name'] for f in donors['schema']['fields']]
+    assert field_names[0] == 'uuid'
+    assert field_names[1] == 'hubmap_id'
+    assert 'age_unit' in field_names
+    assert 'age_value' in field_names
+
+    # Check UBKG type resolution
+    age_value_field = next(f for f in donors['schema']['fields'] if f['name'] == 'age_value')
+    assert age_value_field['type'] == 'number'
+    assert age_value_field['description'] == 'The time elapsed since birth.'
+    assert age_value_field['udi:data_type'] == 'quantitative'
+    assert age_value_field['udi:cardinality'] == 1
+    assert age_value_field['udi:unique'] == True
+
+    age_unit_field = next(f for f in donors['schema']['fields'] if f['name'] == 'age_unit')
+    assert age_unit_field['type'] == 'string'
+    assert age_unit_field['udi:data_type'] == 'nominal'
+
+    # Fields without UBKG info should default to string
+    uuid_field = next(f for f in donors['schema']['fields'] if f['name'] == 'uuid')
+    assert uuid_field['type'] == 'string'
+    assert uuid_field['description'] == ''
+
+    # With only 1 row, all non-empty fields overlap with all
+    assert age_value_field['udi:overlapping_fields'] == 'all'
+
+    # Samples should have foreign keys
+    samples = data['resources'][1]
+    assert len(samples['schema']['foreignKeys']) == 1
+    assert samples['schema']['foreignKeys'][0]['reference']['resource'] == 'donors'
+
+    # Datasets should have 2 foreign keys
+    datasets = data['resources'][2]
+    assert len(datasets['schema']['foreignKeys']) == 2
+
+
+def test_datapackage_cors(client, mocker):
+    mocker.patch('requests.post', side_effect=mock_es_post)
+    mocker.patch('requests.get', side_effect=mock_es_get)
+    response = client.get(
+        '/metadata/v0/udi/datapackage.json',
+        headers={'Origin': 'https://hms-dbmi.github.io'},
+    )
+    assert response.headers.get('Access-Control-Allow-Origin') == 'https://hms-dbmi.github.io'
+
+
+def test_datapackage_no_cors_for_unknown_origin(client, mocker):
+    mocker.patch('requests.post', side_effect=mock_es_post)
+    mocker.patch('requests.get', side_effect=mock_es_get)
+    response = client.get(
+        '/metadata/v0/udi/datapackage.json',
+        headers={'Origin': 'https://evil.com'},
+    )
+    assert 'Access-Control-Allow-Origin' not in response.headers
+
+
+def test_overlapping_fields_partial():
+    """Test overlapping fields computation with partial field coverage."""
+    from .utils_datapackage import compute_overlapping_fields
+
+    # 3 rows: field_a present in all, field_b only in rows 0,1, field_c only in row 0
+    non_null_maps = {
+        'field_a': {0, 1, 2},
+        'field_b': {0, 1},
+        'field_c': {0},
+    }
+    result = compute_overlapping_fields(['field_a', 'field_b', 'field_c'], non_null_maps, 3)
+    assert result['field_a'] == 'all'
+    # field_b is in rows 0,1 — field_a covers those too, but field_c doesn't
+    assert result['field_b'] == ['field_a', 'field_b']
+    # field_c is in row 0 — both field_a and field_b cover that
+    assert result['field_c'] == ['field_a', 'field_b', 'field_c']
+
+
+def test_overlapping_fields_empty():
+    """Test overlapping fields with a field that has no values."""
+    from .utils_datapackage import compute_overlapping_fields
+
+    non_null_maps = {
+        'field_a': {0, 1},
+        'field_empty': set(),
+    }
+    result = compute_overlapping_fields(['field_a', 'field_empty'], non_null_maps, 2)
+    assert result['field_a'] == 'all'
+    assert result['field_empty'] == []
