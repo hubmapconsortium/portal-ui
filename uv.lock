@@ -916,11 +916,11 @@ requires-dist = [
     { name = "globus-sdk", specifier = ">=3.59.0" },
     { name = "hubmap-api-py-client", specifier = ">=0.0.11" },
     { name = "hubmap-commons", specifier = ">=2.1.20" },
-    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.2" },
+    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.3" },
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "udiagent", editable = "../../udi/UDIAgent" },
+    { name = "udiagent", specifier = ">=0.2.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -1941,11 +1941,11 @@ wheels = [
 
 [[package]]
 name = "portal-visualization"
-version = "0.5.2"
+version = "0.5.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/6c/be/5b94f876d82472285a347471bd7455accfb804546da44f2055260763efbf/portal_visualization-0.5.2.tar.gz", hash = "sha256:5251b3d0746469351417c89b89c0c6fd4bdaac7083c3b3ea292c87d724845cda", size = 65076, upload-time = "2026-03-26T19:09:34.88Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/77/06964e7469baa21270bdf1e7c8b78fe427af82ae4d39b9cc5c2215f57cab/portal_visualization-0.5.3.tar.gz", hash = "sha256:3fb7bbda020b066558de10be32167e1151377c24f3fcd50a8fb2b503f51038ae", size = 66017, upload-time = "2026-04-21T19:56:33.137Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/10/56ee831592b938f83ed0d4c9b6ece3edd48cdc89ce970232b6e74780633f/portal_visualization-0.5.2-py3-none-any.whl", hash = "sha256:6db9033c0cf041bb91ce0d05a99762f64e4310a9115dfc8008c634a8cb24c339", size = 68179, upload-time = "2026-03-26T19:09:33.785Z" },
+    { url = "https://files.pythonhosted.org/packages/23/2a/a8f5f7b18d57fd31663cbc1870be42a8125202a96c45726081f9216c82d1/portal_visualization-0.5.3-py3-none-any.whl", hash = "sha256:39637216db836dd05c59ab6bc04451127ed3bee8c0be5116ca12fdf4ccd39845", size = 69143, upload-time = "2026-04-21T19:56:32.063Z" },
 ]
 
 [package.optional-dependencies]
@@ -2808,33 +2808,17 @@ wheels = [
 [[package]]
 name = "udiagent"
 version = "0.2.1"
-source = { editable = "../../udi/UDIAgent" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
     { name = "openai" },
     { name = "python-dotenv" },
     { name = "requests" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "datasets", marker = "extra == 'benchmark'", specifier = ">=4.5.0" },
-    { name = "fastapi", extras = ["standard"], marker = "extra == 'server'", specifier = ">=0.128.0" },
-    { name = "huggingface-hub", marker = "extra == 'benchmark'", specifier = ">=0.36.0" },
-    { name = "ijson", marker = "extra == 'benchmark'", specifier = ">=3.4.0.post0" },
-    { name = "jsonschema", specifier = ">=4.26.0" },
-    { name = "langfuse", marker = "extra == 'langfuse'", specifier = ">=3.14.3" },
-    { name = "openai", specifier = ">=2.15.0" },
-    { name = "pandas", marker = "extra == 'codegen'", specifier = ">=2.0.0" },
-    { name = "pytest", marker = "extra == 'test'", specifier = ">=8.0.0" },
-    { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "python-dotenv", marker = "extra == 'server'", specifier = ">=1.0.0" },
-    { name = "python-jose", marker = "extra == 'server'", specifier = ">=3.5.0" },
-    { name = "requests", specifier = ">=2.32.5" },
-    { name = "udi-grammar-py", marker = "extra == 'codegen'" },
-    { name = "udiagent", extras = ["langfuse", "server", "benchmark", "codegen"], marker = "extra == 'all'" },
+sdist = { url = "https://files.pythonhosted.org/packages/7a/63/3140f947bdb0389deb2002492e4c064636034d949af4579bb9a701a490e7/udiagent-0.2.1.tar.gz", hash = "sha256:8093e0d5c5748904f91a96c24241be0d76a1bd97cdbb8577533bd20810097120", size = 28205295, upload-time = "2026-04-20T18:42:20.657Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3d/c8/ffc6082bcaedc47dd16d218d7b9566b92deba507f25598c128bd2d3c3022/udiagent-0.2.1-py3-none-any.whl", hash = "sha256:3977536204295d7956e7c5af3d65c57758f39475c5696e5c916cdcea7ddec6a4", size = 78753, upload-time = "2026-04-20T18:42:18.847Z" },
 ]
-provides-extras = ["langfuse", "server", "benchmark", "codegen", "test", "all"]
 
 [[package]]
 name = "urllib3"
