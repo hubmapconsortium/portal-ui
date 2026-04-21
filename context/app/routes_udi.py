@@ -77,21 +77,18 @@ def _udi_cors_origin():
     )
 
 
-def _apply_cors(response, cors_origin):
+@blueprint.after_request
+def _udi_cors_after_request(response):
+    # Runs on every response from this blueprint — including Flask's
+    # auto-generated OPTIONS preflight — so individual view functions don't
+    # need to set CORS headers themselves.
+    cors_origin = _udi_cors_origin()
     if cors_origin:
         response.headers['Access-Control-Allow-Origin'] = cors_origin
         response.headers['Access-Control-Allow-Methods'] = _UDI_ALLOWED_METHODS
         response.headers['Access-Control-Allow-Headers'] = _UDI_ALLOWED_HEADERS
         response.headers['Vary'] = 'Origin'
     return response
-
-
-@blueprint.after_request
-def _udi_cors_after_request(response):
-    # Flask auto-generates the preflight (OPTIONS) response; this hook attaches
-    # CORS headers to both it and regular responses so the browser lets the
-    # real request through.
-    return _apply_cors(response, _udi_cors_origin())
 
 
 def _build_orchestrator(openai_api_key):
@@ -140,8 +137,6 @@ def _pick_orchestrator():
 # removes CORS block.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
-    cors_origin = _udi_cors_origin()
-
     if not _is_authenticated():
         cached = _get_cached(f'tsv:{entity_type}')
         if cached:
@@ -149,11 +144,9 @@ def entities_plain_tsv(entity_type):
             response = make_response(tsv)
             response.headers['Content-Type'] = 'text/tab-separated-values; charset=utf-8'
             response.headers['Content-Disposition'] = f'attachment; filename={filename}'
-            return _apply_cors(response, cors_origin)
+            return response
 
-    response = _generate_tsv_response(
-        entity_type, with_descriptions=False, cors_origin=cors_origin
-    )
+    response = _generate_tsv_response(entity_type, with_descriptions=False)
 
     if not _is_authenticated():
         tsv = response.get_data(as_text=True)
@@ -166,14 +159,13 @@ def entities_plain_tsv(entity_type):
 @blueprint.route('/metadata/v0/udi/datapackage.json', methods=['GET'])
 def udi_datapackage():
     # This endpoint serves the datapackage.json used to power the UDI chat.
-    cors_origin = _udi_cors_origin()
 
     # If a user is not authenticated, we cache the generated datapackage for 12 hours to improve
     # load times, since generating the datapackage involves multiple API calls and can be slow.
     if not _is_authenticated():
         cached = _get_cached('datapackage')
         if cached:
-            return _apply_cors(jsonify(cached), cors_origin)
+            return jsonify(cached)
 
     # If a user is authenticated, we do not cache, since they may have access to different data
     # and we want to ensure they get the correct datapackage.
@@ -207,29 +199,26 @@ def udi_datapackage():
     if not _is_authenticated():
         _set_cached('datapackage', datapackage)
 
-    return _apply_cors(jsonify(datapackage), cors_origin)
+    return jsonify(datapackage)
 
 
 @blueprint.route('/v1/yac/completions', methods=['POST'])
 def yac_completions():
-    cors_origin = _udi_cors_origin()
     body = request.get_json(silent=True) or {}
     messages = body.get('messages')
     data_schema = body.get('dataSchema')
     data_domains = body.get('dataDomains')
     if messages is None or data_schema is None or data_domains is None:
-        response = _get_api_json_error(
+        return _get_api_json_error(
             400, 'Request body must include messages, dataSchema, and dataDomains.'
-        )
-        return _apply_cors(response, cors_origin), 400
+        ), 400
 
     orchestrator, openai_api_key = _pick_orchestrator()
     if orchestrator is None:
-        response = _get_api_json_error(
+        return _get_api_json_error(
             401,
             'OpenAI key required: send X-OpenAI-Key header, or sign in as a HuBMAP-Read member.',
-        )
-        return _apply_cors(response, cors_origin), 401
+        ), 401
 
     try:
         result = orchestrator.run(
@@ -240,16 +229,14 @@ def yac_completions():
         )
     except Exception as e:
         current_app.logger.exception('UDIAgent orchestrator failed')
-        response = _get_api_json_error(500, f'UDIAgent orchestration error: {e}')
-        return _apply_cors(response, cors_origin), 500
+        return _get_api_json_error(500, f'UDIAgent orchestration error: {e}'), 500
 
-    return _apply_cors(jsonify(result.tool_calls), cors_origin)
+    return jsonify(result.tool_calls)
 
 
 @blueprint.route('/v1/yac/examples', methods=['GET'])
 def yac_examples():
-    cors_origin = _udi_cors_origin()
     examples_path = os.path.join(os.path.dirname(__file__), 'udi_example_prompts.json')
     with open(examples_path) as f:
         prompts = json.load(f)
-    return _apply_cors(jsonify(prompts), cors_origin)
+    return jsonify(prompts)
