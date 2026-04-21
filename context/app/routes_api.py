@@ -8,13 +8,10 @@ import requests
 
 from flask import Response, abort, request, render_template, jsonify, current_app, make_response
 
-from .utils_datapackage import build_resource, resolve_field_type
 from .utils import (
     make_blueprint,
     get_client,
     get_default_flask_data,
-    get_allowed_cors_origin,
-    get_url_base_from_request,
 )
 
 
@@ -103,62 +100,6 @@ def _generate_tsv_response(
 @blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_tsv(entity_type):
     return _generate_tsv_response(entity_type, with_descriptions=True)
-
-
-# This endpoint is for the UDI demo site - produces plain TSV without descriptions and
-# removes CORS block.
-@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
-def entities_plain_tsv(entity_type):
-    # Dynamically set CORS origin based on request origin
-    request_origin = request.headers.get('Origin', '')
-    cors_origin = get_allowed_cors_origin(
-        request_origin,
-        allowed_origins=['https://hms-dbmi.github.io'],
-        allowed_domain_suffixes=['.hubmapconsortium.org'],
-    )
-
-    return _generate_tsv_response(entity_type, with_descriptions=False, cors_origin=cors_origin)
-
-
-@blueprint.route('/metadata/v0/udi/datapackage.json', methods=['GET'])
-def udi_datapackage():
-    request_origin = request.headers.get('Origin', '')
-    cors_origin = get_allowed_cors_origin(
-        request_origin,
-        allowed_origins=['https://hms-dbmi.github.io'],
-        allowed_domain_suffixes=['.hubmapconsortium.org'],
-    )
-
-    client = get_client()
-
-    field_descriptions_raw = client.get_metadata_descriptions()
-    descriptions_dict = {
-        d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions_raw
-    }
-
-    field_types_raw = client.get_metadata_field_types()
-    types_dict = {ft['name']: resolve_field_type(ft) for ft in field_types_raw}
-
-    resources = []
-    for entity_type in ['donors', 'samples', 'datasets']:
-        entities = _get_entities(entity_type)
-        resource = build_resource(
-            entity_type, entities, descriptions_dict, types_dict, _first_fields
-        )
-        resources.append(resource)
-
-    datapackage = {
-        'name': 'hubmap_metadata',
-        'resources': resources,
-        'udi:name': 'hubmap_api',
-        'udi:path': f'{get_url_base_from_request()}/metadata/v0/udi/',
-    }
-
-    response = jsonify(datapackage)
-    if cors_origin:
-        response.headers['Access-Control-Allow-Origin'] = cors_origin
-
-    return response
 
 
 @blueprint.route('/lineup/<entity_type>')

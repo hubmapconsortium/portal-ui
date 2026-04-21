@@ -4,6 +4,7 @@ from . import (
     routes_main,
     routes_browse,
     routes_api,
+    routes_udi,
     routes_file_based,
     routes_auth,
     routes_cells,
@@ -76,6 +77,7 @@ def create_app(testing=False):
     app.register_blueprint(routes_main.blueprint)
     app.register_blueprint(routes_browse.blueprint)
     app.register_blueprint(routes_api.blueprint)
+    app.register_blueprint(routes_udi.blueprint)
     app.register_blueprint(routes_file_based.blueprint)
     app.register_blueprint(routes_cells.blueprint)
     app.register_blueprint(routes_auth.blueprint)
