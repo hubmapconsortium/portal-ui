@@ -212,6 +212,17 @@ def test_yac_completions_preflight_from_localhost(client):
     assert 'POST' in response.headers.get('Access-Control-Allow-Methods', '')
 
 
+def test_localhost_origin_rejected_in_production(client):
+    # Disable both debug and testing flags to simulate production config.
+    client.application.debug = False
+    client.application.config['TESTING'] = False
+    response = client.get(
+        '/v1/yac/examples',
+        headers={'Origin': 'http://localhost:5173'},
+    )
+    assert 'Access-Control-Allow-Origin' not in response.headers
+
+
 _sample_completion_body = {
     'messages': [{'role': 'user', 'content': 'show a bar chart of donors by sex'}],
     'dataSchema': '{"resources": []}',

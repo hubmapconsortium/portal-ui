@@ -58,9 +58,11 @@ def _set_cached(key, data):
     _udi_cache[key] = (time.time(), data)
 
 
-_UDI_ALLOWED_ORIGINS = [
-    'https://hms-dbmi.github.io',
-    # Local development for the standalone chat frontend.
+_UDI_ALLOWED_ORIGINS = ['https://hms-dbmi.github.io']
+# Extra origins allowed when the app is running in dev/test mode (Flask's
+# --debug flag or TESTING=True) so the standalone chat frontend on Vite's
+# default port can call the API locally.
+_UDI_DEV_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
@@ -69,10 +71,13 @@ _UDI_ALLOWED_METHODS = 'GET, POST, OPTIONS'
 
 
 def _udi_cors_origin():
+    allowed_origins = list(_UDI_ALLOWED_ORIGINS)
+    if current_app.debug or current_app.testing:
+        allowed_origins.extend(_UDI_DEV_ALLOWED_ORIGINS)
     request_origin = request.headers.get('Origin', '')
     return get_allowed_cors_origin(
         request_origin,
-        allowed_origins=_UDI_ALLOWED_ORIGINS,
+        allowed_origins=allowed_origins,
         allowed_domain_suffixes=['.hubmapconsortium.org'],
     )
 
