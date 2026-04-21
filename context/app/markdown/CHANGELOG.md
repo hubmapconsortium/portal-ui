@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.44.0 - 2026-04-21
+
+- Implement endpoints necessary to use the portal-ui back-end as the server for UDI chat with Globus authentication/authorization.
+- Update portal-visualization to 0.5.3 to pull in improvements to TSV endpoints and fix zarr v3 handling.
+
+
+
 ## v1.43.0 - 2026-04-02
 
 - Update search page user experience, standardizing styles and functionality to match entity tables throughout the site.

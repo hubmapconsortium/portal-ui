@@ -1,2 +1,0 @@
-- Implement endpoints necessary to use the portal-ui back-end as the server for UDI chat with Globus authentication/authorization.
-- Update portal-visualization to 0.5.3 to pull in improvements to TSV endpoints and fix zarr v3 handling.
