@@ -26,7 +26,8 @@ dependencies = [
     "python-frontmatter>=1.1.0",
     "hubmap-api-py-client>=0.0.11",
     "hubmap-commons>=2.1.20",
-    "portal-visualization[full]>=0.5.2",
+    "portal-visualization[full]>=0.5.3",
+    "udiagent>=0.2.1",
 ]
 
 [project.urls]

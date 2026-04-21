@@ -1,0 +1,14 @@
+[
+  "show me a scatterplot of donor height and weight",
+  "how many donors are there for each race?",
+  "show a density plot of donor age",
+  "filter to only female donors",
+  "filter to donors 50 and older",
+  "show a scatterplot of BMI and age but filter to White donors only",
+  "heatmap of sample organ and sample category",
+  "show a CDF of donor weight for each sex",
+  "Summarize the number of rows and columns in each data table.",
+  "Create a few visualizations of donor demographics.",
+  "What can I do in YAC?",
+  "Is there a correlation between age and weight for white male donors with blood type A, B, AB, or O?"
+]

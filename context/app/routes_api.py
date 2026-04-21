@@ -8,7 +8,11 @@ import requests
 
 from flask import Response, abort, request, render_template, jsonify, current_app, make_response
 
-from .utils import make_blueprint, get_client, get_default_flask_data, get_allowed_cors_origin
+from .utils import (
+    make_blueprint,
+    get_client,
+    get_default_flask_data,
+)
 
 
 blueprint = make_blueprint(__name__)
@@ -98,21 +102,6 @@ def entities_tsv(entity_type):
     return _generate_tsv_response(entity_type, with_descriptions=True)
 
 
-# This endpoint is for the UDI demo site - produces plain TSV without descriptions and
-# removes CORS block.
-@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
-def entities_plain_tsv(entity_type):
-    # Dynamically set CORS origin based on request origin
-    request_origin = request.headers.get('Origin', '')
-    cors_origin = get_allowed_cors_origin(
-        request_origin,
-        allowed_origins=['https://hms-dbmi.github.io'],
-        allowed_domain_suffixes=['.hubmapconsortium.org'],
-    )
-
-    return _generate_tsv_response(entity_type, with_descriptions=False, cors_origin=cors_origin)
-
-
 @blueprint.route('/lineup/<entity_type>')
 def lineup(entity_type):
     flask_data = {
@@ -142,7 +131,7 @@ def _get_entities(entity_type, constraints={}, uuids=None):
         'created_timestamp',
         # Status
         'status',
-        'mapped_status'
+        'mapped_status',
         # Access
         'data_access_level',
         # Consortium
@@ -157,12 +146,15 @@ def _get_entities(entity_type, constraints={}, uuids=None):
         extra_fields += ['donor.hubmap_id', 'origin_samples_unique_mapped_organs']
     if entity_type in ['samples']:
         extra_fields += ['sample_category']
+    post_filter_extra = None
+    if entity_type == 'samples':
+        post_filter_extra = {'exists': {'field': 'descendant_counts.entity_type.Dataset'}}
     entities = client.get_entities(
         plural_lc_entity_type=entity_type,
         non_metadata_fields=extra_fields,
         constraints=constraints,
         uuids=uuids,
-        # Default "True" would throw away repeated keys after the first.
+        post_filter_extra=post_filter_extra,
     )
     return entities
 
