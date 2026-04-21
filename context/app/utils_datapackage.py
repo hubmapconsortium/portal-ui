@@ -85,10 +85,7 @@ def compute_overlapping_fields(field_names, non_null_maps, row_count):
         elif field_rows == all_rows:
             result[field] = 'all'
         else:
-            result[field] = [
-                other for other in field_names
-                if field_rows <= non_null_maps[other]
-            ]
+            result[field] = [other for other in field_names if field_rows <= non_null_maps[other]]
     return result
 
 
@@ -154,15 +151,17 @@ def build_resource(entity_type, entities, descriptions_dict, types_dict, first_f
     for field_name in ordered_fields:
         cardinality, is_unique = field_stats[field_name]
         dp_type = types_dict.get(field_name, 'string')
-        fields.append({
-            'name': field_name,
-            'type': dp_type,
-            'description': descriptions_dict.get(field_name, ''),
-            'udi:cardinality': cardinality,
-            'udi:unique': is_unique,
-            'udi:data_type': _udi_data_type(dp_type),
-            'udi:overlapping_fields': overlapping[field_name],
-        })
+        fields.append(
+            {
+                'name': field_name,
+                'type': dp_type,
+                'description': descriptions_dict.get(field_name, ''),
+                'udi:cardinality': cardinality,
+                'udi:unique': is_unique,
+                'udi:data_type': _udi_data_type(dp_type),
+                'udi:overlapping_fields': overlapping[field_name],
+            }
+        )
 
     return {
         'name': entity_type,
