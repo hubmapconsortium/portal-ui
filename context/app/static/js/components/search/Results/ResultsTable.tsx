@@ -14,7 +14,7 @@ import { Entity } from 'js/components/types';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
-import { VisualizationIcon } from 'js/shared-styles/icons';
+import { VitessceIcon } from 'js/shared-styles/icons';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { useAllSearchIDs } from 'js/hooks/useSearchData';
@@ -49,8 +49,8 @@ function CellContent({
             {fieldValue}
           </InternalLink>
           {hasVisualization && (
-            <SecondaryBackgroundTooltip title="This dataset has a visualization available.">
-              <VisualizationIcon display="inline-block" color="primary" />
+            <SecondaryBackgroundTooltip title="This dataset has a Vitessce visualization available.">
+              <VitessceIcon display="inline-block" color="primary" />
             </SecondaryBackgroundTooltip>
           )}
         </Stack>
