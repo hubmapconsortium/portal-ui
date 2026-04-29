@@ -75,9 +75,7 @@ def _apply_cache_headers(response, *, public, etag_payload=None):
     if public:
         response.headers['Cache-Control'] = f'public, max-age={_UDI_CACHE_TTL}'
         if etag_payload is not None:
-            response.headers['ETag'] = (
-                f'"{hashlib.md5(etag_payload).hexdigest()}"'  # noqa: S324  (non-security ETag)
-            )
+            response.headers['ETag'] = f'"{hashlib.md5(etag_payload).hexdigest()}"'  # noqa: S324  (non-security ETag)
     else:
         response.headers['Cache-Control'] = 'private, no-store'
     return response
