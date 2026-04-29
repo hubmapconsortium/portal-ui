@@ -16,6 +16,8 @@ import { SavedPreferences } from 'js/components/savedLists/types';
 import HuBMAPPerson from 'assets/svg/hubmap-person.svg';
 import SaySeePanelDescription from './SeeSayPanelDescription';
 import SaySeeWelcomeDialog from './SaySeeWelcomeDialog';
+import OpenInWorkspacesFromYAC from './OpenInWorkspacesFromYAC';
+import useSaySeeDownloadActions from './saySeeDownloadActions';
 
 import 'udi-yac/style.css';
 
@@ -45,13 +47,14 @@ function ChatFallback() {
 }
 
 function SaySeePanel() {
-  const { isAuthenticated, isHubmapUser } = useAppContext();
+  const { isAuthenticated, isHubmapUser, isWorkspacesUser } = useAppContext();
   const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(visualizationSelector);
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
   const { savedPreferences: rawPrefs, isLoading: prefsLoading } = useSavedPreferences();
   const savedPreferences = rawPrefs as SavedPreferences;
   const useAuthScope = isHubmapUser && savedPreferences?.saySeeDataScope === 'authenticated';
   const dataPackagePath = useAuthScope ? DATA_PACKAGE_PATH : `${DATA_PACKAGE_PATH}?public=1`;
+  const downloadActions = useSaySeeDownloadActions();
 
   const toggleFullscreen = useEventCallback(() => {
     if (isFullscreen) {
@@ -69,6 +72,7 @@ function SaySeePanel() {
   return (
     <Stack direction="column" spacing={2}>
       <SaySeeWelcomeDialog />
+      {isWorkspacesUser && <OpenInWorkspacesFromYAC />}
       <SaySeePanelDescription />
       <Stack direction="row" justifyContent="flex-end">
         <SecondaryBackgroundTooltip title={isFullscreen ? 'Exit Fullscreen' : 'Switch to Fullscreen'}>
@@ -102,6 +106,7 @@ function SaySeePanel() {
                 }}
                 mascot={<HuBMAPPerson style={{ width: 300, height: 'auto' }} />}
                 onEvent={onEvent}
+                downloadActions={downloadActions}
               />
             )}
           </Suspense>
