@@ -10,6 +10,8 @@ import { ExpandButton, ExpandableDiv } from 'js/components/detailPage/visualizat
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
+import { useSavedPreferences } from 'js/components/savedLists/hooks';
+import { SavedPreferences } from 'js/components/savedLists/types';
 
 import HuBMAPPerson from 'assets/svg/hubmap-person.svg';
 import SaySeePanelDescription from './SeeSayPanelDescription';
@@ -43,9 +45,13 @@ function ChatFallback() {
 }
 
 function SaySeePanel() {
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated, isHubmapUser } = useAppContext();
   const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(visualizationSelector);
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
+  const { savedPreferences: rawPrefs, isLoading: prefsLoading } = useSavedPreferences();
+  const savedPreferences = rawPrefs as SavedPreferences;
+  const useAuthScope = isHubmapUser && savedPreferences?.saySeeDataScope === 'authenticated';
+  const dataPackagePath = useAuthScope ? DATA_PACKAGE_PATH : `${DATA_PACKAGE_PATH}?public=1`;
 
   const toggleFullscreen = useEventCallback(() => {
     if (isFullscreen) {
@@ -79,20 +85,25 @@ function SaySeePanel() {
       <Paper>
         <ExpandableDiv $isExpanded={isFullscreen} $theme={theme} $nonExpandedHeight={NON_EXPANDED_HEIGHT}>
           <Suspense fallback={<ChatFallback />}>
-            <UDIChat
-              apiBaseUrl={API_BASE_URL}
-              dataPackagePath={DATA_PACKAGE_PATH}
-              fetchOptions={FETCH_OPTIONS}
-              requireApiKey={!isAuthenticated}
-              style={{ height: '100%', width: '100%' }}
-              entityIcons={{
-                datasets: DatasetIcon,
-                samples: SampleIcon,
-                donors: DonorIcon,
-              }}
-              mascot={<HuBMAPPerson style={{ width: 300, height: 'auto' }} />}
-              onEvent={onEvent}
-            />
+            {prefsLoading ? (
+              <ChatFallback />
+            ) : (
+              <UDIChat
+                key={dataPackagePath}
+                apiBaseUrl={API_BASE_URL}
+                dataPackagePath={dataPackagePath}
+                fetchOptions={FETCH_OPTIONS}
+                requireApiKey={!isAuthenticated}
+                style={{ height: '100%', width: '100%' }}
+                entityIcons={{
+                  datasets: DatasetIcon,
+                  samples: SampleIcon,
+                  donors: DonorIcon,
+                }}
+                mascot={<HuBMAPPerson style={{ width: 300, height: 'auto' }} />}
+                onEvent={onEvent}
+              />
+            )}
           </Suspense>
           <BodyExpandedCSS id={SAY_SEE_VIZ_ID} />
         </ExpandableDiv>

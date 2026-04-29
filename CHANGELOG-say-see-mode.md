@@ -1,0 +1,5 @@
+- Add "Say & See Mode" tab to the donor, sample, and dataset search pages with an embedded UDI chat (`udi-yac`) wired to the portal-ui back-end. Authenticated HuBMAP-Read users use server-side AI credentials; other users are prompted for an OpenAI API key.
+- Restore a top-level search input attached above the results table, alongside the existing filter chips and selected-items rows.
+- Add a dismissible promo alert above the page title and dialog on page open. Dismissal is persisted in `localStorage` and shared across the three search pages.
+- Support deep-linking to either tab via a new `mode=filter|say-see` URL parameter.
+- Backend: `/metadata/v0/udi/datapackage.json` and `/metadata/v0/udi/<entity>.tsv` now accept `?public=1` to serve from the shared cache regardless of session, generated with a tokenless ApiClient. Public-scope responses emit `Cache-Control: public, max-age=43200` + `ETag`; authenticated responses emit `Cache-Control: private, no-store`.

@@ -62,7 +62,10 @@ def metadata_descriptions():
 
 
 def _generate_tsv_response(
-    entity_type: str, with_descriptions: bool = True, cors_origin: Optional[str] = None
+    entity_type: str,
+    with_descriptions: bool = True,
+    cors_origin: Optional[str] = None,
+    use_groups_token: bool = True,
 ):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
@@ -76,7 +79,7 @@ def _generate_tsv_response(
         constraints = {}
         uuids = body.get('uuids')
 
-    entities = _get_entities(entity_type, constraints, uuids)
+    entities = _get_entities(entity_type, constraints, uuids, use_groups_token=use_groups_token)
 
     if with_descriptions:
         descriptions_dict = metadata_descriptions()
@@ -115,10 +118,10 @@ def lineup(entity_type):
 _first_fields = ['uuid', 'hubmap_id']
 
 
-def _get_entities(entity_type, constraints={}, uuids=None):
+def _get_entities(entity_type, constraints={}, uuids=None, use_groups_token=True):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
-    client = get_client()
+    client = get_client(use_groups_token=use_groups_token)
     extra_fields = _first_fields[:]
     extra_fields += [
         # Version number is not in document:

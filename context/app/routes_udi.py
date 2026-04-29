@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import time
@@ -56,6 +57,30 @@ def _get_cached(key):
 
 def _set_cached(key, data):
     _udi_cache[key] = (time.time(), data)
+
+
+def _wants_public_scope():
+    """Logged-in users can opt in to the cached public datapackage/TSVs by
+    appending ?public=1, trading per-user data access for shared-cache speed."""
+    return request.args.get('public') in ('1', 'true')
+
+
+def _serve_in_public_scope():
+    return not _is_authenticated() or _wants_public_scope()
+
+
+def _apply_cache_headers(response, *, public, etag_payload=None):
+    """Cacheable when the response is generated in public scope; otherwise
+    `private, no-store` to prevent shared caches from leaking authed data."""
+    if public:
+        response.headers['Cache-Control'] = f'public, max-age={_UDI_CACHE_TTL}'
+        if etag_payload is not None:
+            response.headers['ETag'] = (
+                f'"{hashlib.md5(etag_payload).hexdigest()}"'  # noqa: S324  (non-security ETag)
+            )
+    else:
+        response.headers['Cache-Control'] = 'private, no-store'
+    return response
 
 
 _UDI_ALLOWED_ORIGINS = ['https://hms-dbmi.github.io']
@@ -142,40 +167,51 @@ def _pick_orchestrator():
 # removes CORS block.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
-    if not _is_authenticated():
+    public_scope = _serve_in_public_scope()
+
+    if public_scope:
         cached = _get_cached(f'tsv:{entity_type}')
         if cached:
             tsv, filename = cached
             response = make_response(tsv)
             response.headers['Content-Type'] = 'text/tab-separated-values; charset=utf-8'
             response.headers['Content-Disposition'] = f'attachment; filename={filename}'
-            return response
+            return _apply_cache_headers(response, public=True, etag_payload=tsv.encode('utf-8'))
 
-    response = _generate_tsv_response(entity_type, with_descriptions=False)
+    response = _generate_tsv_response(
+        entity_type, with_descriptions=False, use_groups_token=not public_scope
+    )
 
-    if not _is_authenticated():
+    if public_scope:
         tsv = response.get_data(as_text=True)
         filename = response.headers.get('Content-Disposition', '').split('filename=')[-1]
         _set_cached(f'tsv:{entity_type}', (tsv, filename))
+        return _apply_cache_headers(response, public=True, etag_payload=tsv.encode('utf-8'))
 
-    return response
+    return _apply_cache_headers(response, public=False)
 
 
 @blueprint.route('/metadata/v0/udi/datapackage.json', methods=['GET'])
 def udi_datapackage():
     # This endpoint serves the datapackage.json used to power the UDI chat.
+    #
+    # Anonymous users — and authenticated users who pass ?public=1 — are served
+    # from a 12-hour shared cache for fast Say & See open times. Authenticated
+    # users without ?public=1 get a fresh build under their own groups_token so
+    # the datapackage reflects their actual data access.
+    public_scope = _serve_in_public_scope()
 
-    # If a user is not authenticated, we cache the generated datapackage for 12 hours to improve
-    # load times, since generating the datapackage involves multiple API calls and can be slow.
-    if not _is_authenticated():
+    if public_scope:
         cached = _get_cached('datapackage')
         if cached:
-            return jsonify(cached)
+            response = jsonify(cached)
+            return _apply_cache_headers(
+                response,
+                public=True,
+                etag_payload=json.dumps(cached, sort_keys=True).encode('utf-8'),
+            )
 
-    # If a user is authenticated, we do not cache, since they may have access to different data
-    # and we want to ensure they get the correct datapackage.
-
-    client = get_client()
+    client = get_client(use_groups_token=not public_scope)
 
     field_descriptions_raw = client.get_metadata_descriptions()
     descriptions_dict = {
@@ -187,7 +223,7 @@ def udi_datapackage():
 
     resources = []
     for entity_type in ['donors', 'samples', 'datasets']:
-        entities = _get_entities(entity_type)
+        entities = _get_entities(entity_type, use_groups_token=not public_scope)
         resource = build_resource(
             entity_type, entities, descriptions_dict, types_dict, _first_fields
         )
@@ -200,11 +236,16 @@ def udi_datapackage():
         'udi:path': f'{get_url_base_from_request()}/metadata/v0/udi/',
     }
 
-    # Update the cache for unauthenticated users so subsequent requests are faster.
-    if not _is_authenticated():
+    response = jsonify(datapackage)
+    if public_scope:
         _set_cached('datapackage', datapackage)
+        return _apply_cache_headers(
+            response,
+            public=True,
+            etag_payload=json.dumps(datapackage, sort_keys=True).encode('utf-8'),
+        )
 
-    return jsonify(datapackage)
+    return _apply_cache_headers(response, public=False)
 
 
 @blueprint.route('/v1/yac/completions', methods=['POST'])

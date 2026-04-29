@@ -30,11 +30,12 @@ def get_valid_tutorial_routes():
     return {tutorial['route'] for tutorial in tutorials}
 
 
-def get_client():
+def get_client(use_groups_token=True):
     if current_app.config.get('IS_MOCK'):
         return MockApiClient()
+    groups_token = session['groups_token'] if use_groups_token else None
     return ApiClient(
-        groups_token=session['groups_token'],
+        groups_token=groups_token,
         elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT'],
         portal_index_path=current_app.config['PORTAL_INDEX_PATH'],
         ubkg_endpoint=current_app.config['UBKG_ENDPOINT'],

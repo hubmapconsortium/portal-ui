@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -6,13 +6,17 @@ import { useAppContext } from 'js/components/Contexts';
 import { OutboundLink } from 'js/shared-styles/Links';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import LabeledPrimarySwitch from 'js/shared-styles/switches/LabeledPrimarySwitch';
+import { useSavedPreferences } from 'js/components/savedLists/hooks';
+import { trackEvent } from 'js/helpers/trackers';
+import { SaySeeDataScope, SavedPreferences } from 'js/components/savedLists/types';
 
 function GetAnOpenAIKey() {
   return <OutboundLink href="https://platform.openai.com/api-keys">Get an API key at OpenAI</OutboundLink>;
 }
 
 function AccessDescription() {
-  const { isAuthenticated, isHuBMAPUser } = useAppContext();
+  const { isAuthenticated, isHubmapUser } = useAppContext();
 
   if (!isAuthenticated) {
     return (
@@ -23,7 +27,7 @@ function AccessDescription() {
     );
   }
 
-  if (!isHuBMAPUser) {
+  if (!isHubmapUser) {
     return (
       <Typography variant="body1">
         Your account does not currently have access to HuBMAP&apos;s AI resources. To use this feature, enter your own
@@ -40,6 +44,51 @@ function AccessDescription() {
       <GetAnOpenAIKey />.
     </Typography>
   );
+}
+
+function DataScopeSwitch() {
+  const { savedPreferences: rawPrefs, handleUpdateSavedPreferences } = useSavedPreferences();
+  const savedPreferences = rawPrefs as SavedPreferences;
+  const scope: SaySeeDataScope = savedPreferences?.saySeeDataScope ?? 'public';
+
+  const handleChange = useCallback(
+    (_event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+      const next: SaySeeDataScope = checked ? 'authenticated' : 'public';
+      trackEvent({
+        category: 'Say & See',
+        action: 'Toggle Data Scope',
+        label: next,
+      });
+      void handleUpdateSavedPreferences({ ...savedPreferences, saySeeDataScope: next });
+    },
+    [handleUpdateSavedPreferences, savedPreferences],
+  );
+
+  return (
+    <>
+      <Typography variant="subtitle2">Data scope</Typography>
+      <Typography variant="body1" gutterBottom>
+        By default, Say &amp; See uses a fast, shared cache of HuBMAP&apos;s public index. Switch to your authenticated
+        view to query any non-public datasets your account can access — this skips the shared cache and may take longer
+        to load.
+      </Typography>
+      <LabeledPrimarySwitch
+        label="Use my full HuBMAP access"
+        ariaLabel="Toggle whether Say & See uses public data or your authenticated HuBMAP access"
+        disabledLabel="Published data (faster)"
+        enabledLabel="All available data (slower)"
+        tooltip="Published data is much faster to load, but excludes any non-public datasets your account can access. Toggle on to fetch the authenticated view, which is slower because it skips the shared cache and reflects your individual level of access."
+        checked={scope === 'authenticated'}
+        onChange={handleChange}
+      />
+    </>
+  );
+}
+
+function DataScopeSection() {
+  const { isAuthenticated, isHubmapUser } = useAppContext();
+  if (!isAuthenticated || !isHubmapUser) return null;
+  return <DataScopeSwitch />;
 }
 
 export default function SaySeePanelDescription() {
@@ -59,6 +108,7 @@ export default function SaySeePanelDescription() {
           related donors, samples and datasets. To download the files contained within the datasets, use the manifest
           file with the HuBMAP CLT Tool.
         </Typography>
+        <DataScopeSection />
       </Box>
     </SectionDescription>
   );
