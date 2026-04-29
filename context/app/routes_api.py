@@ -66,6 +66,8 @@ def _generate_tsv_response(
     with_descriptions: bool = True,
     cors_origin: Optional[str] = None,
     use_groups_token: bool = True,
+    excluded_fields: Optional[list] = None,
+    exclude_revisions: bool = False,
 ):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
@@ -79,7 +81,14 @@ def _generate_tsv_response(
         constraints = {}
         uuids = body.get('uuids')
 
-    entities = _get_entities(entity_type, constraints, uuids, use_groups_token=use_groups_token)
+    entities = _get_entities(
+        entity_type,
+        constraints,
+        uuids,
+        use_groups_token=use_groups_token,
+        excluded_fields=excluded_fields,
+        exclude_revisions=exclude_revisions,
+    )
 
     if with_descriptions:
         descriptions_dict = metadata_descriptions()
@@ -118,7 +127,14 @@ def lineup(entity_type):
 _first_fields = ['uuid', 'hubmap_id']
 
 
-def _get_entities(entity_type, constraints={}, uuids=None, use_groups_token=True):
+def _get_entities(
+    entity_type,
+    constraints={},
+    uuids=None,
+    use_groups_token=True,
+    excluded_fields=None,
+    exclude_revisions=False,
+):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
     client = get_client(use_groups_token=use_groups_token)
@@ -152,13 +168,34 @@ def _get_entities(entity_type, constraints={}, uuids=None, use_groups_token=True
     post_filter_extra = None
     if entity_type == 'samples':
         post_filter_extra = {'exists': {'field': 'descendant_counts.entity_type.Dataset'}}
+
+    # When `exclude_revisions` is set, mirror the search-page default filter so
+    # superseded revisions and sub-status'd entities don't inflate counts. Pass
+    # via `query_override` since `client.get_entities`'s `_make_query` doesn't
+    # accept must_not clauses.
+    query_override = None
+    if exclude_revisions:
+        query_override = {
+            'bool': {
+                'must_not': [
+                    {'exists': {'field': 'next_revision_uuid'}},
+                    {'exists': {'field': 'sub_status'}},
+                ],
+            },
+        }
+
     entities = client.get_entities(
         plural_lc_entity_type=entity_type,
         non_metadata_fields=extra_fields,
         constraints=constraints,
         uuids=uuids,
         post_filter_extra=post_filter_extra,
+        query_override=query_override,
     )
+    if excluded_fields:
+        for entity in entities:
+            for field in excluded_fields:
+                entity.pop(field, None)
     return entities
 
 

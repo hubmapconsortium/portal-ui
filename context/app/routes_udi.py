@@ -59,6 +59,11 @@ def _set_cached(key, data):
     _udi_cache[key] = (time.time(), data)
 
 
+# Fields to strip from UDI responses. `assaytype` overlaps semantically with the
+# dataset_type field and creates confusion in the chat UI's schema.
+_UDI_EXCLUDED_FIELDS = ['assaytype']
+
+
 def _wants_public_scope():
     """Logged-in users can opt in to the cached public datapackage/TSVs by
     appending ?public=1, trading per-user data access for shared-cache speed."""
@@ -177,7 +182,11 @@ def entities_plain_tsv(entity_type):
             return _apply_cache_headers(response, public=True, etag_payload=tsv.encode('utf-8'))
 
     response = _generate_tsv_response(
-        entity_type, with_descriptions=False, use_groups_token=not public_scope
+        entity_type,
+        with_descriptions=False,
+        use_groups_token=not public_scope,
+        excluded_fields=_UDI_EXCLUDED_FIELDS,
+        exclude_revisions=True,
     )
 
     if public_scope:
@@ -221,7 +230,12 @@ def udi_datapackage():
 
     resources = []
     for entity_type in ['donors', 'samples', 'datasets']:
-        entities = _get_entities(entity_type, use_groups_token=not public_scope)
+        entities = _get_entities(
+            entity_type,
+            use_groups_token=not public_scope,
+            excluded_fields=_UDI_EXCLUDED_FIELDS,
+            exclude_revisions=True,
+        )
         resource = build_resource(
             entity_type, entities, descriptions_dict, types_dict, _first_fields
         )

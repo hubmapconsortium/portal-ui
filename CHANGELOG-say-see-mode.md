@@ -3,3 +3,4 @@
 - Add a dismissible promo alert above the page title and dialog on page open. Dismissal is persisted in `localStorage` and shared across the three search pages.
 - Support deep-linking to either tab via a new `mode=filter|say-see` URL parameter.
 - Backend: `/metadata/v0/udi/datapackage.json` and `/metadata/v0/udi/<entity>.tsv` now accept `?public=1` to serve from the shared cache regardless of session, generated with a tokenless ApiClient. Public-scope responses emit `Cache-Control: public, max-age=43200` + `ETag`; authenticated responses emit `Cache-Control: private, no-store`.
+- Match the search page's default filter on the UDI data routes by excluding entities with `next_revision_uuid` or `sub_status`, so authenticated dataset counts in Say & See align with `/search/datasets`.

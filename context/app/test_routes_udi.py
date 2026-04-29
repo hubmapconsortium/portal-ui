@@ -420,3 +420,134 @@ def test_tsv_authed_with_public_param_uses_shared_cache(client, mocker):
     assert authed_response.headers.get('ETag') == anon_response.headers.get('ETag')
     assert authed_response.get_data() == anon_response.get_data()
     assert post_mock.call_count == initial_post_calls
+
+
+# ---- Field stripping (assaytype) and revision filtering ----
+
+mock_es_with_assaytype = {
+    'hits': {
+        'total': {'value': 1},
+        'hits': [
+            {
+                '_source': {
+                    'uuid': 'ABC123',
+                    'hubmap_id': 'HMB123.XYZ',
+                    'mapped_metadata': {
+                        'age_unit': ['eons'],
+                        'age_value': [42],
+                        'assaytype': ['10x Multiome'],
+                    },
+                }
+            }
+        ],
+    }
+}
+
+
+def _patch_es_with_assaytype(mocker):
+    def _post(_path, **_kwargs):
+        class MockResponse:
+            status_code = 0
+            text = 'Logger call requires this'
+
+            def json(self):
+                return mock_es_with_assaytype
+
+            def raise_for_status(self):
+                pass
+
+        return MockResponse()
+
+    return (
+        mocker.patch('requests.post', side_effect=_post),
+        mocker.patch('requests.get', side_effect=mock_es_get),
+    )
+
+
+def test_datapackage_strips_assaytype_field(client, mocker):
+    _patch_es_with_assaytype(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    data = response.get_json()
+    for resource in data['resources']:
+        field_names = [f['name'] for f in resource['schema']['fields']]
+        assert 'assaytype' not in field_names, (
+            f'assaytype should not appear in {resource["name"]} schema, got {field_names}'
+        )
+
+
+def test_tsv_strips_assaytype_field(client, mocker):
+    _patch_es_with_assaytype(mocker)
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    body = response.get_data(as_text=True)
+    header_line = body.splitlines()[0]
+    assert 'assaytype' not in header_line.split('\t')
+
+
+def _capture_es_post_bodies(mocker):
+    bodies = []
+
+    def _post(_path, **kwargs):
+        bodies.append(kwargs.get('json'))
+
+        class MockResponse:
+            status_code = 0
+            text = 'Logger call requires this'
+
+            def json(self):
+                return mock_es
+
+            def raise_for_status(self):
+                pass
+
+        return MockResponse()
+
+    mocker.patch('requests.post', side_effect=_post)
+    mocker.patch('requests.get', side_effect=mock_es_get)
+    return bodies
+
+
+def _query_excludes_revisions(query):
+    """Walk the ES query tree and return True if a must_not clause excludes
+    both next_revision_uuid and sub_status via `exists`."""
+    if not isinstance(query, dict):
+        return False
+    bool_clause = query.get('bool', {})
+    must_not = bool_clause.get('must_not', [])
+    excluded = {
+        clause.get('exists', {}).get('field')
+        for clause in must_not
+        if isinstance(clause, dict)
+    }
+    return {'next_revision_uuid', 'sub_status'}.issubset(excluded)
+
+
+def test_datapackage_query_excludes_superseded_and_sub_status(client, mocker):
+    bodies = _capture_es_post_bodies(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    # Each entity-type fetch (donors/samples/datasets) hits ES; assert at least
+    # one query for each carries the revision-exclusion clause.
+    assert bodies, 'expected at least one ES query'
+    queries_with_filter = [b for b in bodies if _query_excludes_revisions(b.get('query', {}))]
+    assert len(queries_with_filter) >= 3, (
+        f'expected revisions filter on each of donors/samples/datasets, got '
+        f'{len(queries_with_filter)} of {len(bodies)} queries with the filter'
+    )
+
+
+def test_tsv_query_excludes_superseded_and_sub_status(client, mocker):
+    bodies = _capture_es_post_bodies(mocker)
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    assert any(_query_excludes_revisions(b.get('query', {})) for b in bodies)
+
+
+def test_regular_metadata_tsv_does_not_apply_udi_filters(client, mocker):
+    """The non-UDI /metadata/v0/<entity>.tsv route should keep the existing
+    behavior: no revisions filter, no assaytype stripping."""
+    bodies = _capture_es_post_bodies(mocker)
+    response = client.get('/metadata/v0/datasets.tsv')
+    assert response.status_code == 200
+    assert all(not _query_excludes_revisions(b.get('query', {})) for b in bodies)
