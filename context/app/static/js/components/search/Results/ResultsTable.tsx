@@ -30,6 +30,7 @@ import useESmapping from '../useEsMapping';
 import SearchTableHeaderCell from './SearchTableHeaderCell';
 import TableHeaderActions from './TableHeaderActions';
 import FilterChips from '../Facets/FilterChips';
+import TopSearchBar from '../TopSearchBar';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 function CellContent({
@@ -218,6 +219,11 @@ const Table = React.memo(function Table({
     <Box>
       <StyledTable data-testid="search-results-table">
         <TableHead>
+          <TableRow sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
+            <StyledTableCell colSpan={colSpan} sx={{ p: 1, borderBottom: 0 }}>
+              <TopSearchBar />
+            </StyledTableCell>
+          </TableRow>
           <TableRow sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
             <StyledTableCell colSpan={colSpan} sx={{ p: 1, borderBottom: 0 }}>
               <FilterChips />

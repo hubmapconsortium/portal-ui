@@ -47,6 +47,11 @@ import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
 import { isDevSearch, SearchTypeProps } from './utils';
+import SaySeeAlert from './SaySeeAlert';
+import SearchModeTabs from './SearchModeTabs';
+import SaySeePanel from './SaySeePanel';
+import { useSearchMode } from './useSearchMode';
+import Paper from '@mui/material/Paper';
 
 interface OuterBucket {
   doc_count: number;
@@ -193,12 +198,12 @@ function TileViewBar() {
 
 function Body({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
-    <Stack direction="row" spacing={2}>
+    <Paper component={Stack} direction="row" spacing={2} p={2}>
       <Facets facetGroups={facetGroups} />
       <Box flexGrow={1}>
         <Results />
       </Box>
-    </Stack>
+    </Paper>
   );
 }
 
@@ -233,16 +238,26 @@ function SCFindAlert() {
 }
 
 const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
+  const [mode] = useSearchMode();
   return (
     <Stack spacing={2} mb={4}>
+      <SaySeeAlert />
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <SearchNote />
-        <TileViewBar />
-        <Body facetGroups={facetGroups} />
+        <div>
+          <SearchModeTabs />
+          {mode === 'filter' && (
+            <>
+              <TileViewBar />
+              <Body facetGroups={facetGroups} />
+            </>
+          )}
+          {mode === 'say-see' && <SaySeePanel />}
+        </div>
       </Stack>
     </Stack>
   );
