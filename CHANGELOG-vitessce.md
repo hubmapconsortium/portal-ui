@@ -1,1 +1,0 @@
-- Update Vitessce to fix handling of zarr v3 datasets.

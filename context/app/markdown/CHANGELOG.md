@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.44.1 - 2026-04-29
+
+- Update Vitessce to fix handling of zarr v3 datasets.
+
+
+
 ## v1.44.0 - 2026-04-21
 
 - Implement endpoints necessary to use the portal-ui back-end as the server for UDI chat with Globus authentication/authorization.
