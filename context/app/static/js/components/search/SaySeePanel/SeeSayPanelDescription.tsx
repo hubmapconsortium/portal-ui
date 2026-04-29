@@ -10,6 +10,7 @@ import LabeledPrimarySwitch from 'js/shared-styles/switches/LabeledPrimarySwitch
 import { useSavedPreferences } from 'js/components/savedLists/hooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { SaySeeDataScope, SavedPreferences } from 'js/components/savedLists/types';
+import Stack from '@mui/material/Stack';
 
 function GetAnOpenAIKey() {
   return <OutboundLink href="https://platform.openai.com/api-keys">Get an API key at OpenAI</OutboundLink>;
@@ -65,8 +66,8 @@ function DataScopeSwitch() {
   );
 
   return (
-    <>
-      <Typography variant="subtitle2">Data scope</Typography>
+    <div>
+      <Typography variant="subtitle1">Data scope</Typography>
       <Typography variant="body1" gutterBottom>
         By default, Say &amp; See uses a fast, shared cache of HuBMAP&apos;s public index. Switch to your authenticated
         view to query any non-public datasets your account can access — this skips the shared cache and may take longer
@@ -74,6 +75,7 @@ function DataScopeSwitch() {
       </Typography>
       <LabeledPrimarySwitch
         label="Use my full HuBMAP access"
+        labelVariant="subtitle1"
         ariaLabel="Toggle whether Say & See uses public data or your authenticated HuBMAP access"
         disabledLabel="Published data (faster)"
         enabledLabel="All available data (slower)"
@@ -81,7 +83,7 @@ function DataScopeSwitch() {
         checked={scope === 'authenticated'}
         onChange={handleChange}
       />
-    </>
+    </div>
   );
 }
 
@@ -94,22 +96,26 @@ function DataScopeSection() {
 export default function SaySeePanelDescription() {
   return (
     <SectionDescription>
-      <Box>
+      <Stack spacing={1}>
         <Typography variant="body1">
           Explore public HuBMAP datasets using natural language queries and get instant visualizations. Results are
           independent from the Filter &amp; Browse Mode and do not link to individual dataset pages.{' '}
           <ContactUsLink capitalize /> to report an issue or share feedback.
         </Typography>
-        <Typography variant="subtitle2">How to get access?</Typography>
-        <AccessDescription />
-        <Typography variant="subtitle2">Can I download my results?</Typography>
-        <Typography variant="body1">
-          Two types of files are available for download: a manifest file of your filtered query results and CSVs of the
-          related donors, samples and datasets. To download the files contained within the datasets, use the manifest
-          file with the HuBMAP CLT Tool.
-        </Typography>
+        <div>
+          <Typography variant="subtitle1">How to get access?</Typography>
+          <AccessDescription />
+        </div>
+        <div>
+          <Typography variant="subtitle1">Can I download my results?</Typography>
+          <Typography variant="body1">
+            Two types of files are available for download: a manifest file of your filtered query results and CSVs of
+            the related donors, samples and datasets. To download the files contained within the datasets, use the
+            manifest file with the HuBMAP CLT Tool.
+          </Typography>
+        </div>
         <DataScopeSection />
-      </Box>
+      </Stack>
     </SectionDescription>
   );
 }

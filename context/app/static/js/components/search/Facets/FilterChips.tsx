@@ -535,7 +535,7 @@ function FilterChips() {
   if (!hasActiveFilters) {
     return (
       <Typography fontWeight="500" sx={(theme) => ({ color: theme.palette.grey[500], px: 1, py: 0.75 })}>
-        0 Filters Selected
+        No active filters
       </Typography>
     );
   }

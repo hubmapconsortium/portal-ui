@@ -22,6 +22,15 @@ def _reset_udi_orchestrator_cache():
     routes_udi._udi_orchestrator_byok = None
 
 
+@pytest.fixture(autouse=True)
+def _reset_udi_data_cache():
+    # The datapackage/TSV cache is module-level; tests need a cold cache
+    # to deterministically observe miss-vs-hit behavior.
+    routes_udi._udi_cache.clear()
+    yield
+    routes_udi._udi_cache.clear()
+
+
 mock_es = {
     'hits': {
         'total': {'value': 1},
@@ -314,3 +323,100 @@ def test_yac_completions_non_hubmap_authed_user_needs_header(client):
         sess['user_groups'] = ['Workspaces']
     response = client.post('/v1/yac/completions', json=_sample_completion_body)
     assert response.status_code == 401
+
+
+def _patch_es(mocker):
+    return (
+        mocker.patch('requests.post', side_effect=mock_es_post),
+        mocker.patch('requests.get', side_effect=mock_es_get),
+    )
+
+
+def test_datapackage_anon_emits_public_cache_headers(client, mocker):
+    _patch_es(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert response.headers.get('ETag')
+
+
+def test_datapackage_authed_default_emits_private_cache_headers(client, mocker):
+    _patch_es(mocker)
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'private, no-store'
+    assert response.headers.get('ETag') is None
+
+
+def test_datapackage_authed_with_public_param_uses_shared_cache(client, mocker):
+    post_mock, _ = _patch_es(mocker)
+    # First request: anonymous, populates the shared cache.
+    anon_response = client.get('/metadata/v0/udi/datapackage.json')
+    assert anon_response.status_code == 200
+    initial_post_calls = post_mock.call_count
+    assert initial_post_calls > 0
+
+    # Second request: authed user with ?public=1 must reuse the same cache
+    # entry, byte-for-byte, without re-running the ES fan-out.
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    authed_response = client.get('/metadata/v0/udi/datapackage.json?public=1')
+    assert authed_response.status_code == 200
+    assert authed_response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert authed_response.headers.get('ETag') == anon_response.headers.get('ETag')
+    assert authed_response.get_data() == anon_response.get_data()
+    assert post_mock.call_count == initial_post_calls
+
+
+def test_datapackage_authed_with_public_does_not_pass_groups_token(client, mocker):
+    _patch_es(mocker)
+    api_client_mock = mocker.patch('app.utils.ApiClient')
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'real-token'
+        sess['user_groups'] = ['HuBMAP']
+    response = client.get('/metadata/v0/udi/datapackage.json?public=1')
+    assert response.status_code == 200
+    assert api_client_mock.called
+    for call in api_client_mock.call_args_list:
+        assert call.kwargs.get('groups_token') is None
+
+
+def test_tsv_anon_emits_public_cache_headers(client, mocker):
+    _patch_es(mocker)
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert response.headers.get('ETag')
+
+
+def test_tsv_authed_default_emits_private_cache_headers(client, mocker):
+    _patch_es(mocker)
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'private, no-store'
+    assert response.headers.get('ETag') is None
+
+
+def test_tsv_authed_with_public_param_uses_shared_cache(client, mocker):
+    post_mock, _ = _patch_es(mocker)
+    anon_response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert anon_response.status_code == 200
+    initial_post_calls = post_mock.call_count
+    assert initial_post_calls > 0
+
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    authed_response = client.get('/metadata/v0/udi/datasets.tsv?public=1')
+    assert authed_response.status_code == 200
+    assert authed_response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert authed_response.headers.get('ETag') == anon_response.headers.get('ETag')
+    assert authed_response.get_data() == anon_response.get_data()
+    assert post_mock.call_count == initial_post_calls
