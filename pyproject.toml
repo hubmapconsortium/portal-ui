@@ -28,6 +28,7 @@ dependencies = [
     "hubmap-commons>=2.1.20",
     "portal-visualization[full]>=0.5.3",
     "udiagent>=0.2.3",
+    "udiagent[langfuse]>=0.2.3",
 ]
 
 [project.urls]
