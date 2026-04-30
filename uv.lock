@@ -920,7 +920,7 @@ requires-dist = [
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "udiagent", specifier = ">=0.2.1" },
+    { name = "udiagent", specifier = ">=0.2.3" },
 ]
 
 [package.metadata.requires-dev]
@@ -2807,7 +2807,7 @@ wheels = [
 
 [[package]]
 name = "udiagent"
-version = "0.2.1"
+version = "0.2.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
@@ -2815,9 +2815,9 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7a/63/3140f947bdb0389deb2002492e4c064636034d949af4579bb9a701a490e7/udiagent-0.2.1.tar.gz", hash = "sha256:8093e0d5c5748904f91a96c24241be0d76a1bd97cdbb8577533bd20810097120", size = 28205295, upload-time = "2026-04-20T18:42:20.657Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/1e/ffa1452e4e8478da661a5039bb4b1d1238d6d8048df62543d4c16bea908e/udiagent-0.2.3.tar.gz", hash = "sha256:706927eef43528ad970d3b54cab0209633f2b269c71f7016e3a2c043b9c5157d", size = 28250004, upload-time = "2026-04-30T19:04:14.965Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3d/c8/ffc6082bcaedc47dd16d218d7b9566b92deba507f25598c128bd2d3c3022/udiagent-0.2.1-py3-none-any.whl", hash = "sha256:3977536204295d7956e7c5af3d65c57758f39475c5696e5c916cdcea7ddec6a4", size = 78753, upload-time = "2026-04-20T18:42:18.847Z" },
+    { url = "https://files.pythonhosted.org/packages/5f/93/e339150f1953e941188cca85b35c3aa0067a9aba9951a33fc572656db5c9/udiagent-0.2.3-py3-none-any.whl", hash = "sha256:2849b0469a5d842c732d7472f9bbafd30064895783df1d0af0720164e8d48674", size = 82368, upload-time = "2026-04-30T19:04:13.276Z" },
 ]
 
 [[package]]
