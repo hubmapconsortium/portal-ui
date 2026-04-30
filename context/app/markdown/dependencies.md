@@ -19,6 +19,7 @@ python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
 udiagent>=0.2.3
+udiagent[langfuse]>=0.2.3
 
 # Development dependencies
 boto3>=1.39.3
