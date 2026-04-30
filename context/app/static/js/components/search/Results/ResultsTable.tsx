@@ -14,7 +14,7 @@ import { Entity } from 'js/components/types';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
-import { VisualizationIcon } from 'js/shared-styles/icons';
+import { VitessceIcon } from 'js/shared-styles/icons';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { useAllSearchIDs } from 'js/hooks/useSearchData';
@@ -30,6 +30,7 @@ import useESmapping from '../useEsMapping';
 import SearchTableHeaderCell from './SearchTableHeaderCell';
 import TableHeaderActions from './TableHeaderActions';
 import FilterChips from '../Facets/FilterChips';
+import TopSearchBar from '../TopSearchBar';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 function CellContent({
@@ -49,8 +50,8 @@ function CellContent({
             {fieldValue}
           </InternalLink>
           {hasVisualization && (
-            <SecondaryBackgroundTooltip title="This dataset has a visualization available.">
-              <VisualizationIcon display="inline-block" color="primary" />
+            <SecondaryBackgroundTooltip title="This dataset has a Vitessce visualization available.">
+              <VitessceIcon display="inline-block" color="primary" />
             </SecondaryBackgroundTooltip>
           )}
         </Stack>
@@ -218,6 +219,11 @@ const Table = React.memo(function Table({
     <Box>
       <StyledTable data-testid="search-results-table">
         <TableHead>
+          <TableRow sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
+            <StyledTableCell colSpan={colSpan} sx={{ p: 1, borderBottom: 0 }}>
+              <TopSearchBar />
+            </StyledTableCell>
+          </TableRow>
           <TableRow sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
             <StyledTableCell colSpan={colSpan} sx={{ p: 1, borderBottom: 0 }}>
               <FilterChips />

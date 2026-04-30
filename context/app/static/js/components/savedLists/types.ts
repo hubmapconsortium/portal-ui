@@ -48,8 +48,11 @@ export function validateSavedEntitiesList(obj: unknown): obj is SavedEntitiesLis
   return true;
 }
 
+export type SaySeeDataScope = 'public' | 'authenticated';
+
 export interface SavedPreferences {
   enableOpenKeyNav?: boolean;
+  saySeeDataScope?: SaySeeDataScope;
 }
 
 export const SavedListsEventCategories = {

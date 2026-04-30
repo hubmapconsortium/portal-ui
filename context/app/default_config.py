@@ -62,3 +62,9 @@ class DefaultConfig(object):
     # HuBMAP-Read users. If unset, all callers must supply X-OpenAI-Key.
     OPENAI_API_KEY = None
     UDI_GPT_MODEL_NAME = 'gpt-5.4'
+
+    # Optional: Langfuse observability for UDIAgent. Tracing is enabled when
+    # any of these is set; otherwise the plain OpenAI client is used.
+    LANGFUSE_PUBLIC_KEY = None
+    LANGFUSE_SECRET_KEY = None
+    LANGFUSE_BASE_URL = None

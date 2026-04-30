@@ -22,6 +22,15 @@ def _reset_udi_orchestrator_cache():
     routes_udi._udi_orchestrator_byok = None
 
 
+@pytest.fixture(autouse=True)
+def _reset_udi_data_cache():
+    # The datapackage/TSV cache is module-level; tests need a cold cache
+    # to deterministically observe miss-vs-hit behavior.
+    routes_udi._udi_cache.clear()
+    yield
+    routes_udi._udi_cache.clear()
+
+
 mock_es = {
     'hits': {
         'total': {'value': 1},
@@ -307,6 +316,30 @@ def test_yac_completions_hubmap_user_without_config_key_falls_back_to_header(cli
     assert captured['openai_api_key'] == 'sk-header'
 
 
+def test_build_orchestrator_forwards_langfuse_config(client, mocker):
+    client.application.config['LANGFUSE_PUBLIC_KEY'] = 'pk-lf-test'
+    client.application.config['LANGFUSE_SECRET_KEY'] = 'sk-lf-test'
+    client.application.config['LANGFUSE_BASE_URL'] = 'https://langfuse.example.com'
+    client.application.config['OPENAI_API_KEY'] = 'sk-server'
+
+    captured = {}
+
+    def _fake_agent(**kwargs):
+        captured.update(kwargs)
+        return mocker.MagicMock()
+
+    mocker.patch('app.routes_udi.UDIAgent', side_effect=_fake_agent)
+    mocker.patch('app.routes_udi.Orchestrator', side_effect=lambda **_: mocker.MagicMock())
+
+    with client.application.test_request_context():
+        routes_udi._get_hubmap_orchestrator()
+
+    assert captured['langfuse_public_key'] == 'pk-lf-test'
+    assert captured['langfuse_secret_key'] == 'sk-lf-test'
+    assert captured['langfuse_host'] == 'https://langfuse.example.com'
+    assert captured['openai_api_key'] == 'sk-server'
+
+
 def test_yac_completions_non_hubmap_authed_user_needs_header(client):
     client.application.config['OPENAI_API_KEY'] = 'sk-server'
     with client.session_transaction() as sess:
@@ -314,3 +347,229 @@ def test_yac_completions_non_hubmap_authed_user_needs_header(client):
         sess['user_groups'] = ['Workspaces']
     response = client.post('/v1/yac/completions', json=_sample_completion_body)
     assert response.status_code == 401
+
+
+def _patch_es(mocker):
+    return (
+        mocker.patch('requests.post', side_effect=mock_es_post),
+        mocker.patch('requests.get', side_effect=mock_es_get),
+    )
+
+
+def test_datapackage_anon_emits_public_cache_headers(client, mocker):
+    _patch_es(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert response.headers.get('ETag')
+
+
+def test_datapackage_authed_default_emits_private_cache_headers(client, mocker):
+    _patch_es(mocker)
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'private, no-store'
+    assert response.headers.get('ETag') is None
+
+
+def test_datapackage_authed_with_public_param_uses_shared_cache(client, mocker):
+    post_mock, _ = _patch_es(mocker)
+    # First request: anonymous, populates the shared cache.
+    anon_response = client.get('/metadata/v0/udi/datapackage.json')
+    assert anon_response.status_code == 200
+    initial_post_calls = post_mock.call_count
+    assert initial_post_calls > 0
+
+    # Second request: authed user with ?public=1 must reuse the same cache
+    # entry, byte-for-byte, without re-running the ES fan-out.
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    authed_response = client.get('/metadata/v0/udi/datapackage.json?public=1')
+    assert authed_response.status_code == 200
+    assert authed_response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert authed_response.headers.get('ETag') == anon_response.headers.get('ETag')
+    assert authed_response.get_data() == anon_response.get_data()
+    assert post_mock.call_count == initial_post_calls
+
+
+def test_datapackage_authed_with_public_does_not_pass_groups_token(client, mocker):
+    _patch_es(mocker)
+    api_client_mock = mocker.patch('app.utils.ApiClient')
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'real-token'
+        sess['user_groups'] = ['HuBMAP']
+    response = client.get('/metadata/v0/udi/datapackage.json?public=1')
+    assert response.status_code == 200
+    assert api_client_mock.called
+    for call in api_client_mock.call_args_list:
+        assert call.kwargs.get('groups_token') is None
+
+
+def test_tsv_anon_emits_public_cache_headers(client, mocker):
+    _patch_es(mocker)
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert response.headers.get('ETag')
+
+
+def test_tsv_authed_default_emits_private_cache_headers(client, mocker):
+    _patch_es(mocker)
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    assert response.headers.get('Cache-Control') == 'private, no-store'
+    assert response.headers.get('ETag') is None
+
+
+def test_tsv_authed_with_public_param_uses_shared_cache(client, mocker):
+    post_mock, _ = _patch_es(mocker)
+    anon_response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert anon_response.status_code == 200
+    initial_post_calls = post_mock.call_count
+    assert initial_post_calls > 0
+
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    authed_response = client.get('/metadata/v0/udi/datasets.tsv?public=1')
+    assert authed_response.status_code == 200
+    assert authed_response.headers.get('Cache-Control') == 'public, max-age=43200'
+    assert authed_response.headers.get('ETag') == anon_response.headers.get('ETag')
+    assert authed_response.get_data() == anon_response.get_data()
+    assert post_mock.call_count == initial_post_calls
+
+
+# ---- Field stripping (assaytype) and revision filtering ----
+
+mock_es_with_assaytype = {
+    'hits': {
+        'total': {'value': 1},
+        'hits': [
+            {
+                '_source': {
+                    'uuid': 'ABC123',
+                    'hubmap_id': 'HMB123.XYZ',
+                    'mapped_metadata': {
+                        'age_unit': ['eons'],
+                        'age_value': [42],
+                        'assaytype': ['10x Multiome'],
+                    },
+                }
+            }
+        ],
+    }
+}
+
+
+def _patch_es_with_assaytype(mocker):
+    def _post(_path, **_kwargs):
+        class MockResponse:
+            status_code = 0
+            text = 'Logger call requires this'
+
+            def json(self):
+                return mock_es_with_assaytype
+
+            def raise_for_status(self):
+                pass
+
+        return MockResponse()
+
+    return (
+        mocker.patch('requests.post', side_effect=_post),
+        mocker.patch('requests.get', side_effect=mock_es_get),
+    )
+
+
+def test_datapackage_strips_assaytype_field(client, mocker):
+    _patch_es_with_assaytype(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    data = response.get_json()
+    for resource in data['resources']:
+        field_names = [f['name'] for f in resource['schema']['fields']]
+        assert 'assaytype' not in field_names, (
+            f'assaytype should not appear in {resource["name"]} schema, got {field_names}'
+        )
+
+
+def test_tsv_strips_assaytype_field(client, mocker):
+    _patch_es_with_assaytype(mocker)
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    body = response.get_data(as_text=True)
+    header_line = body.splitlines()[0]
+    assert 'assaytype' not in header_line.split('\t')
+
+
+def _capture_es_post_bodies(mocker):
+    bodies = []
+
+    def _post(_path, **kwargs):
+        bodies.append(kwargs.get('json'))
+
+        class MockResponse:
+            status_code = 0
+            text = 'Logger call requires this'
+
+            def json(self):
+                return mock_es
+
+            def raise_for_status(self):
+                pass
+
+        return MockResponse()
+
+    mocker.patch('requests.post', side_effect=_post)
+    mocker.patch('requests.get', side_effect=mock_es_get)
+    return bodies
+
+
+def _query_excludes_revisions(query):
+    """Walk the ES query tree and return True if a must_not clause excludes
+    both next_revision_uuid and sub_status via `exists`."""
+    if not isinstance(query, dict):
+        return False
+    bool_clause = query.get('bool', {})
+    must_not = bool_clause.get('must_not', [])
+    excluded = {
+        clause.get('exists', {}).get('field') for clause in must_not if isinstance(clause, dict)
+    }
+    return {'next_revision_uuid', 'sub_status'}.issubset(excluded)
+
+
+def test_datapackage_query_excludes_superseded_and_sub_status(client, mocker):
+    bodies = _capture_es_post_bodies(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    # Each entity-type fetch (donors/samples/datasets) hits ES; assert at least
+    # one query for each carries the revision-exclusion clause.
+    assert bodies, 'expected at least one ES query'
+    queries_with_filter = [b for b in bodies if _query_excludes_revisions(b.get('query', {}))]
+    assert len(queries_with_filter) >= 3, (
+        f'expected revisions filter on each of donors/samples/datasets, got '
+        f'{len(queries_with_filter)} of {len(bodies)} queries with the filter'
+    )
+
+
+def test_tsv_query_excludes_superseded_and_sub_status(client, mocker):
+    bodies = _capture_es_post_bodies(mocker)
+    response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert response.status_code == 200
+    assert any(_query_excludes_revisions(b.get('query', {})) for b in bodies)
+
+
+def test_regular_metadata_tsv_does_not_apply_udi_filters(client, mocker):
+    """The non-UDI /metadata/v0/<entity>.tsv route should keep the existing
+    behavior: no revisions filter, no assaytype stripping."""
+    bodies = _capture_es_post_bodies(mocker)
+    response = client.get('/metadata/v0/datasets.tsv')
+    assert response.status_code == 200
+    assert all(not _query_excludes_revisions(b.get('query', {})) for b in bodies)

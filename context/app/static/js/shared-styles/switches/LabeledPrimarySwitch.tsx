@@ -1,5 +1,5 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import PrimarySwitch from 'js/shared-styles/switches/PrimarySwitch';
 import { SwitchProps } from '@mui/material/Switch';
@@ -13,6 +13,7 @@ interface LabeledPrimarySwitchProps extends Omit<SwitchProps, 'label'> {
   disabledLabel?: string;
   enabledLabel?: string;
   tooltip?: string;
+  labelVariant?: TypographyProps['variant'];
 }
 export default function LabeledPrimarySwitch({
   label,
@@ -22,10 +23,11 @@ export default function LabeledPrimarySwitch({
   disabledLabel = 'Disabled',
   enabledLabel = 'Enabled',
   sx,
+  labelVariant = 'subtitle2',
   ...rest
 }: LabeledPrimarySwitchProps) {
   const labelNode = label ? (
-    <Typography variant="subtitle2" color={rest.disabled ? 'textDisabled' : undefined}>
+    <Typography variant={labelVariant} color={rest.disabled ? 'textDisabled' : undefined}>
       {label}
     </Typography>
   ) : null;
