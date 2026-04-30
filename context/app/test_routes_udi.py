@@ -516,9 +516,7 @@ def _query_excludes_revisions(query):
     bool_clause = query.get('bool', {})
     must_not = bool_clause.get('must_not', [])
     excluded = {
-        clause.get('exists', {}).get('field')
-        for clause in must_not
-        if isinstance(clause, dict)
+        clause.get('exists', {}).get('field') for clause in must_not if isinstance(clause, dict)
     }
     return {'next_revision_uuid', 'sub_status'}.issubset(excluded)
 

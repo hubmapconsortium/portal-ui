@@ -9,8 +9,8 @@ import { List } from './styles';
 
 const LOCAL_STORAGE_KEY = 'hubmap-say-see-welcome-seen';
 
-function readSeen() {
-  if (typeof window === 'undefined') return true;
+function hasBeenDismissed() {
+  if (typeof window === 'undefined') return false;
   return Boolean(window.localStorage.getItem(LOCAL_STORAGE_KEY));
 }
 
@@ -30,7 +30,7 @@ function SaySeeWelcomeDialog() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (!readSeen()) {
+    if (!hasBeenDismissed()) {
       setIsOpen(true);
     }
   }, []);

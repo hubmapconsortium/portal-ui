@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import { useAppContext } from 'js/components/Contexts';
 import { OutboundLink } from 'js/shared-styles/Links';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
