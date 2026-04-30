@@ -316,6 +316,30 @@ def test_yac_completions_hubmap_user_without_config_key_falls_back_to_header(cli
     assert captured['openai_api_key'] == 'sk-header'
 
 
+def test_build_orchestrator_forwards_langfuse_config(client, mocker):
+    client.application.config['LANGFUSE_PUBLIC_KEY'] = 'pk-lf-test'
+    client.application.config['LANGFUSE_SECRET_KEY'] = 'sk-lf-test'
+    client.application.config['LANGFUSE_BASE_URL'] = 'https://langfuse.example.com'
+    client.application.config['OPENAI_API_KEY'] = 'sk-server'
+
+    captured = {}
+
+    def _fake_agent(**kwargs):
+        captured.update(kwargs)
+        return mocker.MagicMock()
+
+    mocker.patch('app.routes_udi.UDIAgent', side_effect=_fake_agent)
+    mocker.patch('app.routes_udi.Orchestrator', side_effect=lambda **_: mocker.MagicMock())
+
+    with client.application.test_request_context():
+        routes_udi._get_hubmap_orchestrator()
+
+    assert captured['langfuse_public_key'] == 'pk-lf-test'
+    assert captured['langfuse_secret_key'] == 'sk-lf-test'
+    assert captured['langfuse_host'] == 'https://langfuse.example.com'
+    assert captured['openai_api_key'] == 'sk-server'
+
+
 def test_yac_completions_non_hubmap_authed_user_needs_header(client):
     client.application.config['OPENAI_API_KEY'] = 'sk-server'
     with client.session_transaction() as sess:

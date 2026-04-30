@@ -128,6 +128,9 @@ def _build_orchestrator(openai_api_key):
     agent = UDIAgent(
         gpt_model_name=current_app.config.get('UDI_GPT_MODEL_NAME', 'gpt-5.4'),
         openai_api_key=openai_api_key,
+        langfuse_public_key=current_app.config.get('LANGFUSE_PUBLIC_KEY'),
+        langfuse_secret_key=current_app.config.get('LANGFUSE_SECRET_KEY'),
+        langfuse_host=current_app.config.get('LANGFUSE_BASE_URL'),
     )
     return Orchestrator(agent=agent)
 
