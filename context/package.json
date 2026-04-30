@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "1.44.0",
+  "version": "1.44.1",
   "dependencies": {
     "@dagrejs/dagre": "^1.1.5",
     "@datapunt/matomo-tracker-js": "^0.5.1",
@@ -68,7 +68,7 @@
     "uuid": "^9.0.1",
     "vega": "^6.2.0",
     "vega-embed": "^7.1.0",
-    "vitessce": "^3.9.1",
+    "vitessce": "^3.9.8",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },
