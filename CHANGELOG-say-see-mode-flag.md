@@ -1,1 +1,0 @@
-- Gate the Say & See Mode (BETA) front-end behind a new `ENABLE_SAY_SEE_MODE` Flask config flag. When disabled (the default), the search page hides the mode tabs and the promo alert, leaving only Filter & Browse mode; `?mode=say-see` URLs fall back to the filter view.

@@ -1,1 +1,0 @@
-- Split UDI data endpoints into separate URL prefixes: `/metadata/v0/udi/...` always serves the cached public-scope data, and new `/metadata/v0/udi/consortium/...` endpoints serve the request's session auth. The Say & See switch now toggles between these two paths instead of using a `?public=1` query param, which had been confusing the udi-yac grammar component.

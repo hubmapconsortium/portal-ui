@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.44.4 - 2026-05-01
+
+- Fix the publication detail page Data section showing the wrong number of related datasets. All entities referenced by a publication's `ancestor_ids` are now loaded, including older dataset versions that have a `next_revision_uuid`.
+- Gate the Say & See Mode (BETA) front-end behind a new `ENABLE_SAY_SEE_MODE` Flask config flag. When disabled (the default), the search page hides the mode tabs and the promo alert, leaving only Filter & Browse mode; `?mode=say-see` URLs fall back to the filter view.
+- Split UDI data endpoints into separate URL prefixes: `/metadata/v0/udi/...` always serves the cached public-scope data, and new `/metadata/v0/udi/consortium/...` endpoints serve the request's session auth. The Say & See switch now toggles between these two paths instead of using a `?public=1` query param, which had been confusing the udi-yac grammar component.
+
+
+
 ## v1.44.2 - 2026-04-30
 
 - Add "Say & See Mode" tab to the donor, sample, and dataset search pages with an embedded UDI chat (`udi-yac`) wired to the portal-ui back-end. Authenticated HuBMAP-Read users use server-side AI credentials; other users are prompted for an OpenAI API key.
