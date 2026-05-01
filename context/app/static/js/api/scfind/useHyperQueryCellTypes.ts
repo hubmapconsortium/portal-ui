@@ -7,6 +7,7 @@ export interface HyperQueryCellTypesParams {
   geneList: string | string[];
   organName?: string | string[];
   includePrefix?: boolean;
+  modality?: string;
 }
 
 export interface GeneSignatureStats {
@@ -25,7 +26,7 @@ type HyperQueryCellTypesKey = string;
 
 export function createCellTypeNamesKey(
   scFindEndpoint: string,
-  { geneList, organName, includePrefix = true }: HyperQueryCellTypesParams,
+  { geneList, organName, includePrefix = true, modality }: HyperQueryCellTypesParams,
   scFindIndexVersion?: string,
 ): HyperQueryCellTypesKey {
   return createScFindKey(
@@ -37,6 +38,7 @@ export function createCellTypeNamesKey(
       // because these calculations are run either across all datasets, or all datasets of a specific organ.
       dataset_name: organName ? stringOrArrayToString(organName) : undefined,
       include_prefix: includePrefix ? 'true' : 'false',
+      modality,
     },
     scFindIndexVersion,
   );

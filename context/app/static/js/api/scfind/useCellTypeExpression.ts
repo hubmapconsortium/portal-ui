@@ -5,6 +5,7 @@ import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 export interface GeneExpressionParams {
   geneList?: string | string[];
   datasetName: string;
+  modality?: string;
 }
 
 interface GeneExpressionKeyParams extends GeneExpressionParams {
@@ -20,7 +21,7 @@ type GeneExpressionBinKey = string | null;
 
 export function createGeneExpressionBinKey(
   scFindEndpoint: string,
-  { geneList, datasetName, bin }: GeneExpressionKeyParams,
+  { geneList, datasetName, bin, modality }: GeneExpressionKeyParams,
   scFindIndexVersion?: string,
 ): GeneExpressionBinKey {
   const base = bin ? 'getCellTypeExpressionBinData' : 'getCellTypeExpression';
@@ -35,6 +36,7 @@ export function createGeneExpressionBinKey(
       // this is weird but it is how the API works - e.g. `HBM762-RPDR-282.HBM762.RPDR.282`
       cell_type: `${datasetName.replaceAll('.', '-')}.${datasetName}`,
       ...(bin ? { bin_length: '1' } : {}),
+      modality,
     },
     scFindIndexVersion,
   );

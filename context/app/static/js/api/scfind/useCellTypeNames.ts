@@ -11,13 +11,17 @@ interface CellTypeNamesResponse {
   cellTypeNames: string[];
 }
 
-export function createCellTypeNamesKey(scFindEndpoint: string, scFindIndexVersion?: string): CellTypeNamesKey {
-  return createScFindKey(scFindEndpoint, 'cellTypeNames', {}, scFindIndexVersion);
+export function createCellTypeNamesKey(
+  scFindEndpoint: string,
+  scFindIndexVersion?: string,
+  modality?: string,
+): CellTypeNamesKey {
+  return createScFindKey(scFindEndpoint, 'cellTypeNames', { modality }, scFindIndexVersion);
 }
 
-export default function useCellTypeNames() {
+export default function useCellTypeNames(modality?: string) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCellTypeNamesKey(scFindEndpoint, scFindIndexVersion);
+  const key = createCellTypeNamesKey(scFindEndpoint, scFindIndexVersion, modality);
   const { data, ...rest } = useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
 
   const filteredData = useMemo(() => {

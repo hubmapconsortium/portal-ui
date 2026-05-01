@@ -8,12 +8,12 @@ interface SCFindGenesList {
   genes: string[];
 }
 
-function createMarkerGenesKey(scFindApiUrl: string, scFindIndexVersion?: string): MarkerGenesKey {
-  return createScFindKey(scFindApiUrl, 'scfindGenes', {}, scFindIndexVersion);
+function createMarkerGenesKey(scFindApiUrl: string, scFindIndexVersion?: string, modality?: string): MarkerGenesKey {
+  return createScFindKey(scFindApiUrl, 'scfindGenes', { modality }, scFindIndexVersion);
 }
 
-export default function useScfindGenes() {
+export default function useScfindGenes(modality?: string) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createMarkerGenesKey(scFindEndpoint, scFindIndexVersion);
+  const key = createMarkerGenesKey(scFindEndpoint, scFindIndexVersion, modality);
   return useSWR<SCFindGenesList, unknown, MarkerGenesKey>(key, (url) => fetcher({ url }));
 }

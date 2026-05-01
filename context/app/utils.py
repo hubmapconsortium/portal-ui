@@ -2,6 +2,7 @@ from functools import cache
 from itertools import islice
 import json
 from urllib.parse import urlparse
+import requests as http_requests
 from flask import current_app, request, session, Blueprint
 
 from portal_visualization.client import ApiClient
@@ -258,3 +259,43 @@ def first_n_matches(strings, substring, n):
         }
         for s, offset in zip(first_n, offsets)
     ]
+
+
+EXTERNAL_REQUEST_TIMEOUT = 30  # seconds for external API calls (scFind, UBKG, etc.)
+
+
+@cache
+def fetch_pathway_participants(pathway_code):
+    """
+    Fetch pathway participants from the UBKG API.
+
+    Args:
+        pathway_code: The Reactome pathway code (e.g., 'R-HSA-12345')
+
+    Returns:
+        List of HGNC gene symbols from the pathway
+    """
+    ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
+    url = f'{ubkg_endpoint}/pathways/{pathway_code}/participants'
+
+    try:
+        response = http_requests.get(url, timeout=EXTERNAL_REQUEST_TIMEOUT)
+        response.raise_for_status()
+        data = response.json()
+    except http_requests.exceptions.Timeout as e:
+        current_app.logger.error(f'Timeout fetching pathway participants from UBKG: {e}')
+        raise
+    except http_requests.RequestException as e:
+        current_app.logger.error(f'Error fetching pathway participants from UBKG: {e}')
+        raise
+
+    # Extract HGNC gene symbols (same logic as front-end getParticipantsFromPathway)
+    genes = []
+    for event in data.get('events', []):
+        for sab in event.get('sabs', []):
+            if sab.get('SAB') == 'HGNC':
+                for participant in sab.get('participants', []):
+                    symbol = participant.get('symbol')
+                    if symbol:
+                        genes.append(symbol)
+    return genes
