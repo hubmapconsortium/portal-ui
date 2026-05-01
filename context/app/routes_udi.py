@@ -206,7 +206,7 @@ def _serve_tsv(entity_type, *, consortium):
 
 
 # This endpoint is for the UDI demo site - produces plain TSV without descriptions and
-# removes CORS block.
+# uses the blueprint's normal CORS handling for allowed origins.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
     return _serve_tsv(entity_type, consortium=False)
