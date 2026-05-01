@@ -20,7 +20,7 @@ const exampleQuestions = [
 ];
 
 const capabilities = [
-  'Get visual answers instantly as interactive charts and tables',
+  'Get visual answers instantly as interactive charts and tables.',
   'Apply filters based on your queries to refine your results.',
   'Ask follow-up questions about the metadata.',
   'Download a manifest file or CSVs file of your filtered datasets for bulk analysis.',
