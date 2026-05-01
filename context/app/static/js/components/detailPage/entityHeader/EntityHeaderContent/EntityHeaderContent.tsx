@@ -200,6 +200,7 @@ const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: Boolean(state.fullscreenVizId),
   vizNotebookId: state.vizNotebookId,
   isVitessce: Boolean(state.vitessceVisualization),
+  isSaySeeViz: state.fullscreenVizId === 'search-say-see',
 });
 
 function OrganItem({ organ }: { organ: OrganFile }) {
@@ -256,7 +257,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
 
   const isOrganPage = Boolean(organ);
 
-  const { vizIsFullscreen, vizNotebookId, isVitessce } = useVisualizationStore(visualizationSelector);
+  const { vizIsFullscreen, vizNotebookId, isVitessce, isSaySeeViz } = useVisualizationStore(visualizationSelector);
 
   const styles = useSpring({
     from: { opacity: 1 },
@@ -301,7 +302,9 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
           <>
             {vizNotebookId && <VisualizationWorkspaceButton />}
             {isVitessce && <VisualizationShareButtonWrapper />}
-            <VisualizationThemeSwitch trackingInfo={{ action: 'Vitessce' }} />
+            {!isSaySeeViz && (
+              <VisualizationThemeSwitch trackingInfo={{ action: isVitessce ? 'Vitessce' : 'Scellop' }} />
+            )}
             <VisualizationCollapseButton />
           </>
         )}
