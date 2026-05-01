@@ -28,7 +28,8 @@ import { useEventCallback } from '@mui/material/utils';
 const UDIChat = lazy(() => import('udi-yac').then((m) => ({ default: m.UDIChat })));
 
 export const SAY_SEE_VIZ_ID = 'search-say-see';
-const DATA_PACKAGE_PATH = '/metadata/v0/udi/datapackage.json';
+const PUBLIC_DATA_PACKAGE_PATH = '/metadata/v0/udi/datapackage.json';
+const CONSORTIUM_DATA_PACKAGE_PATH = '/metadata/v0/udi/consortium/datapackage.json';
 const API_BASE_URL = document.location.origin;
 const FETCH_OPTIONS: RequestInit = { credentials: 'include' };
 const NON_EXPANDED_HEIGHT = 700;
@@ -53,7 +54,7 @@ function SaySeePanel() {
   const { savedPreferences: rawPrefs, isLoading: prefsLoading } = useSavedPreferences();
   const savedPreferences = rawPrefs as SavedPreferences;
   const useAuthScope = isHubmapUser && savedPreferences?.saySeeDataScope === 'authenticated';
-  const dataPackagePath = useAuthScope ? DATA_PACKAGE_PATH : `${DATA_PACKAGE_PATH}?public=1`;
+  const dataPackagePath = useAuthScope ? CONSORTIUM_DATA_PACKAGE_PATH : PUBLIC_DATA_PACKAGE_PATH;
   const downloadActions = useSaySeeDownloadActions();
 
   const toggleFullscreen = useEventCallback(() => {
@@ -107,6 +108,7 @@ function SaySeePanel() {
                 mascot={<HuBMAPPerson style={{ width: 300, height: 'auto' }} />}
                 onEvent={onEvent}
                 downloadActions={downloadActions}
+                downloadButtonLabel="Download Metadata"
               />
             )}
           </Suspense>

@@ -356,7 +356,7 @@ def _patch_es(mocker):
     )
 
 
-def test_datapackage_anon_emits_public_cache_headers(client, mocker):
+def test_datapackage_public_emits_public_cache_headers(client, mocker):
     _patch_es(mocker)
     response = client.get('/metadata/v0/udi/datapackage.json')
     assert response.status_code == 200
@@ -364,18 +364,18 @@ def test_datapackage_anon_emits_public_cache_headers(client, mocker):
     assert response.headers.get('ETag')
 
 
-def test_datapackage_authed_default_emits_private_cache_headers(client, mocker):
+def test_datapackage_consortium_emits_private_cache_headers(client, mocker):
     _patch_es(mocker)
     with client.session_transaction() as sess:
         sess['groups_token'] = 'token'
         sess['user_groups'] = ['HuBMAP']
-    response = client.get('/metadata/v0/udi/datapackage.json')
+    response = client.get('/metadata/v0/udi/consortium/datapackage.json')
     assert response.status_code == 200
     assert response.headers.get('Cache-Control') == 'private, no-store'
     assert response.headers.get('ETag') is None
 
 
-def test_datapackage_authed_with_public_param_uses_shared_cache(client, mocker):
+def test_datapackage_public_route_serves_authed_users_from_shared_cache(client, mocker):
     post_mock, _ = _patch_es(mocker)
     # First request: anonymous, populates the shared cache.
     anon_response = client.get('/metadata/v0/udi/datapackage.json')
@@ -383,12 +383,12 @@ def test_datapackage_authed_with_public_param_uses_shared_cache(client, mocker):
     initial_post_calls = post_mock.call_count
     assert initial_post_calls > 0
 
-    # Second request: authed user with ?public=1 must reuse the same cache
-    # entry, byte-for-byte, without re-running the ES fan-out.
+    # Second request: authed user hitting the same public path must reuse the
+    # shared cache entry byte-for-byte and skip the ES fan-out.
     with client.session_transaction() as sess:
         sess['groups_token'] = 'token'
         sess['user_groups'] = ['HuBMAP']
-    authed_response = client.get('/metadata/v0/udi/datapackage.json?public=1')
+    authed_response = client.get('/metadata/v0/udi/datapackage.json')
     assert authed_response.status_code == 200
     assert authed_response.headers.get('Cache-Control') == 'public, max-age=43200'
     assert authed_response.headers.get('ETag') == anon_response.headers.get('ETag')
@@ -396,20 +396,45 @@ def test_datapackage_authed_with_public_param_uses_shared_cache(client, mocker):
     assert post_mock.call_count == initial_post_calls
 
 
-def test_datapackage_authed_with_public_does_not_pass_groups_token(client, mocker):
+def test_datapackage_public_route_does_not_pass_groups_token(client, mocker):
     _patch_es(mocker)
     api_client_mock = mocker.patch('app.utils.ApiClient')
     with client.session_transaction() as sess:
         sess['groups_token'] = 'real-token'
         sess['user_groups'] = ['HuBMAP']
-    response = client.get('/metadata/v0/udi/datapackage.json?public=1')
+    response = client.get('/metadata/v0/udi/datapackage.json')
     assert response.status_code == 200
     assert api_client_mock.called
     for call in api_client_mock.call_args_list:
         assert call.kwargs.get('groups_token') is None
 
 
-def test_tsv_anon_emits_public_cache_headers(client, mocker):
+def test_datapackage_consortium_route_passes_groups_token(client, mocker):
+    _patch_es(mocker)
+    api_client_mock = mocker.patch('app.utils.ApiClient')
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'real-token'
+        sess['user_groups'] = ['HuBMAP']
+    response = client.get('/metadata/v0/udi/consortium/datapackage.json')
+    assert response.status_code == 200
+    assert api_client_mock.called
+    for call in api_client_mock.call_args_list:
+        assert call.kwargs.get('groups_token') == 'real-token'
+
+
+def test_datapackage_udi_path_reflects_request_route(client, mocker):
+    _patch_es(mocker)
+    public_response = client.get('/metadata/v0/udi/datapackage.json')
+    assert public_response.get_json()['udi:path'].endswith('/metadata/v0/udi/')
+
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    consortium_response = client.get('/metadata/v0/udi/consortium/datapackage.json')
+    assert consortium_response.get_json()['udi:path'].endswith('/metadata/v0/udi/consortium/')
+
+
+def test_tsv_public_emits_public_cache_headers(client, mocker):
     _patch_es(mocker)
     response = client.get('/metadata/v0/udi/datasets.tsv')
     assert response.status_code == 200
@@ -417,18 +442,18 @@ def test_tsv_anon_emits_public_cache_headers(client, mocker):
     assert response.headers.get('ETag')
 
 
-def test_tsv_authed_default_emits_private_cache_headers(client, mocker):
+def test_tsv_consortium_emits_private_cache_headers(client, mocker):
     _patch_es(mocker)
     with client.session_transaction() as sess:
         sess['groups_token'] = 'token'
         sess['user_groups'] = ['HuBMAP']
-    response = client.get('/metadata/v0/udi/datasets.tsv')
+    response = client.get('/metadata/v0/udi/consortium/datasets.tsv')
     assert response.status_code == 200
     assert response.headers.get('Cache-Control') == 'private, no-store'
     assert response.headers.get('ETag') is None
 
 
-def test_tsv_authed_with_public_param_uses_shared_cache(client, mocker):
+def test_tsv_public_route_serves_authed_users_from_shared_cache(client, mocker):
     post_mock, _ = _patch_es(mocker)
     anon_response = client.get('/metadata/v0/udi/datasets.tsv')
     assert anon_response.status_code == 200
@@ -438,12 +463,28 @@ def test_tsv_authed_with_public_param_uses_shared_cache(client, mocker):
     with client.session_transaction() as sess:
         sess['groups_token'] = 'token'
         sess['user_groups'] = ['HuBMAP']
-    authed_response = client.get('/metadata/v0/udi/datasets.tsv?public=1')
+    authed_response = client.get('/metadata/v0/udi/datasets.tsv')
     assert authed_response.status_code == 200
     assert authed_response.headers.get('Cache-Control') == 'public, max-age=43200'
     assert authed_response.headers.get('ETag') == anon_response.headers.get('ETag')
     assert authed_response.get_data() == anon_response.get_data()
     assert post_mock.call_count == initial_post_calls
+
+
+def test_tsv_consortium_route_does_not_share_cache_with_public(client, mocker):
+    post_mock, _ = _patch_es(mocker)
+    public_response = client.get('/metadata/v0/udi/datasets.tsv')
+    assert public_response.status_code == 200
+    after_public_calls = post_mock.call_count
+
+    with client.session_transaction() as sess:
+        sess['groups_token'] = 'token'
+        sess['user_groups'] = ['HuBMAP']
+    consortium_response = client.get('/metadata/v0/udi/consortium/datasets.tsv')
+    assert consortium_response.status_code == 200
+    # Consortium fetches always re-issue the ES query, since the response is
+    # per-user-scoped and cannot share the shared public cache.
+    assert post_mock.call_count > after_public_calls
 
 
 # ---- Field stripping (assaytype) and revision filtering ----

@@ -77,25 +77,25 @@ beforeEach(() => {
 });
 
 describe('SaySeePanel', () => {
-  it('appends ?public=1 to dataPackagePath by default for a HuBMAP user', async () => {
+  it('points dataPackagePath at the public endpoint by default for a HuBMAP user', async () => {
     setup({ isAuthenticated: true, isHubmapUser: true });
-    render(<SaySeePanel />, { wrapper: Wrapper });
-    const chat = await screen.findByTestId('udi-chat');
-    expect(chat).toHaveAttribute('data-path', '/metadata/v0/udi/datapackage.json?public=1');
-  });
-
-  it('omits ?public=1 when a HuBMAP user has opted into the authenticated scope', async () => {
-    setup({ isAuthenticated: true, isHubmapUser: true }, { scope: 'authenticated' });
     render(<SaySeePanel />, { wrapper: Wrapper });
     const chat = await screen.findByTestId('udi-chat');
     expect(chat).toHaveAttribute('data-path', '/metadata/v0/udi/datapackage.json');
   });
 
-  it('forces ?public=1 even if a non-HuBMAP user has a stale "authenticated" preference', async () => {
+  it('points dataPackagePath at the consortium endpoint when a HuBMAP user has opted in', async () => {
+    setup({ isAuthenticated: true, isHubmapUser: true }, { scope: 'authenticated' });
+    render(<SaySeePanel />, { wrapper: Wrapper });
+    const chat = await screen.findByTestId('udi-chat');
+    expect(chat).toHaveAttribute('data-path', '/metadata/v0/udi/consortium/datapackage.json');
+  });
+
+  it('forces the public endpoint even if a non-HuBMAP user has a stale "authenticated" preference', async () => {
     setup({ isAuthenticated: true, isHubmapUser: false }, { scope: 'authenticated' });
     render(<SaySeePanel />, { wrapper: Wrapper });
     const chat = await screen.findByTestId('udi-chat');
-    expect(chat).toHaveAttribute('data-path', '/metadata/v0/udi/datapackage.json?public=1');
+    expect(chat).toHaveAttribute('data-path', '/metadata/v0/udi/datapackage.json');
   });
 
   it('does not mount UDIChat while saved preferences are still loading', async () => {

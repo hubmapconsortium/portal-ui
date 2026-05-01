@@ -113,9 +113,7 @@ _FOREIGN_KEYS = {
 }
 
 
-def build_resource(
-    entity_type, entities, descriptions_dict, types_dict, first_fields, wants_public_scope
-):
+def build_resource(entity_type, entities, descriptions_dict, types_dict, first_fields):
     if not entities:
         return {
             'name': entity_type,
@@ -168,7 +166,7 @@ def build_resource(
     return {
         'name': entity_type,
         'type': 'table',
-        'path': f'{entity_type}.tsv{wants_public_scope and "?public=1" or ""}',
+        'path': f'{entity_type}.tsv',
         'scheme': 'file',
         'format': 'tsv',
         'mediatype': 'text/tsv',
