@@ -9,14 +9,14 @@ import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPag
 import { useEntitiesData } from 'js/hooks/useEntityData';
 
 interface PublicationsDataSectionProps {
-  datasetUUIDs: string[];
+  ancestorIds: string[];
   associatedCollectionUUID?: string;
 }
 
 function useEffectiveDatasetUUIDs({
-  datasetUUIDs = [],
+  ancestorIds = [],
   associatedCollectionUUID,
-}: Pick<PublicationsDataSectionProps, 'datasetUUIDs' | 'associatedCollectionUUID'>) {
+}: Pick<PublicationsDataSectionProps, 'ancestorIds' | 'associatedCollectionUUID'>) {
   const collectionQuery = associatedCollectionUUID
     ? {
         query: getIDsQuery(associatedCollectionUUID),
@@ -39,7 +39,7 @@ function useEffectiveDatasetUUIDs({
 
   return {
     collections,
-    datasetUUIDs: datasetUUIDs.filter(Boolean),
+    datasetUUIDs: ancestorIds.filter(Boolean),
     isLoading,
   };
 }
@@ -58,6 +58,9 @@ function useAllAncestors(datasetUUIDs: string[], isLoadingDatasetUUIDs: boolean)
         },
       },
       _source: 'ancestor_ids',
+      // Without an explicit size, ES caps results at 10. Publications can reference
+      // hundreds of ancestors, so all of them must be fetched.
+      size: 10000,
     }),
     [datasetUUIDs],
   );
@@ -79,14 +82,14 @@ function useAllAncestors(datasetUUIDs: string[], isLoadingDatasetUUIDs: boolean)
   };
 }
 
-function PublicationsDataSection({ datasetUUIDs, associatedCollectionUUID }: PublicationsDataSectionProps) {
+function PublicationsDataSection({ ancestorIds, associatedCollectionUUID }: PublicationsDataSectionProps) {
   // Extract dataset UUIDs from collection or use provided ones
   const {
     collections,
     datasetUUIDs: effectiveDatasetUUIDs,
     isLoading: isLoadingEffectiveDatasetUUIDs,
   } = useEffectiveDatasetUUIDs({
-    datasetUUIDs,
+    ancestorIds,
     associatedCollectionUUID,
   });
 
@@ -105,7 +108,12 @@ function PublicationsDataSection({ datasetUUIDs, associatedCollectionUUID }: Pub
 
   return (
     <CollapsibleDetailPageSection id="data" title="Data">
-      <IntegratedDataTables entities={allEntities} isLoading={loadingTableEntities} />
+      {/*
+        Publications reference specific dataset versions, including older ones whose
+        next_revision_uuid points to newer versions. Disable the default-query filter
+        so those referenced versions aren't dropped from the table.
+      */}
+      <IntegratedDataTables entities={allEntities} isLoading={loadingTableEntities} useDefaultQuery={false} />
       {associatedCollectionUUID && <PublicationCollections collectionsData={collections} isCollectionPublication />}
     </CollapsibleDetailPageSection>
   );

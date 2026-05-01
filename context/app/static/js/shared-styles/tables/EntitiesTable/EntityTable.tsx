@@ -45,6 +45,7 @@ interface EntityTableProps<Doc extends Entity>
   estimatedExpandedRowHeight?: number;
   initialSortState?: { columnId: string; direction: 'asc' | 'desc' };
   headerActions?: React.ReactNode;
+  useDefaultQuery?: boolean;
 }
 
 const headerRowHeight = 60;
@@ -73,6 +74,7 @@ function EntityTable<Doc extends Entity>({
   estimatedExpandedRowHeight,
   initialSortState = { columnId: 'last_modified_timestamp', direction: 'desc' },
   headerActions,
+  useDefaultQuery = true,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -104,6 +106,7 @@ function EntityTable<Doc extends Entity>({
     columns,
     isExpandable,
     estimatedExpandedRowHeight,
+    useDefaultQuery,
   });
 
   // Create a combined onExpand handler that tracks expansion state and calls the external callback

@@ -29,6 +29,7 @@ interface EntitiesTablesProps<Doc extends Entity> {
   onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   resetSelectionOnTabChange?: boolean;
   isLoading?: boolean;
+  useDefaultQuery?: boolean;
 }
 
 /**
@@ -131,6 +132,7 @@ interface EntitiesTablesBodiesProps<Doc extends Entity>
       | 'trackingInfo'
       | 'disabledIDs'
       | 'isSelectable'
+      | 'useDefaultQuery'
     > {}
 
 function EntitiesTablesBodies<Doc extends Entity>({
@@ -139,6 +141,7 @@ function EntitiesTablesBodies<Doc extends Entity>({
   emptyAlert,
   isLoading,
   totalHitsCounts,
+  useDefaultQuery,
   ...restSharedProps
 }: EntitiesTablesBodiesProps<Doc>) {
   return (
@@ -174,7 +177,7 @@ function EntitiesTablesBodies<Doc extends Entity>({
 
         return (
           <TabPanel key={entityType} value={openTabIndex} index={i}>
-            <EntityTable query={query} {...entityTableProps} {...restSharedProps} />
+            <EntityTable query={query} useDefaultQuery={useDefaultQuery} {...entityTableProps} {...restSharedProps} />
           </TabPanel>
         );
       })}
@@ -187,12 +190,14 @@ function EntitiesTables<Doc extends Entity>({
   entities,
   resetSelectionOnTabChange = false,
   isLoading,
+  useDefaultQuery = true,
   ...rest
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
   const { totalHitsCounts, isLoading: isLoadingHitCounts } = useSearchTotalHitsCounts(
     entities.map(({ query }) => query),
+    { useDefaultQuery },
   ) as {
     totalHitsCounts: number[];
     isLoading: boolean;
@@ -212,6 +217,7 @@ function EntitiesTables<Doc extends Entity>({
         handleTabChange={handleTabChange}
         isLoading={isLoading || isLoadingHitCounts}
         totalHitsCounts={totalHitsCounts}
+        useDefaultQuery={useDefaultQuery}
         {...rest}
       />
       {resetSelectionOnTabChange && <TabChangeSelectionHandler openTabIndex={openTabIndex} />}

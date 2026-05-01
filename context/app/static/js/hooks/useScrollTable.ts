@@ -56,6 +56,13 @@ interface ScrollTableTypes<Doc> {
   isExpandable?: boolean;
   /** Height estimate for expanded content in pixels (default: 200px) */
   estimatedExpandedRowHeight?: number;
+  /**
+   * Whether to apply the default ES query restriction (excludes documents with
+   * `next_revision_uuid` or `sub_status`). Defaults to true. Set false when the
+   * caller passes specific entity IDs that should not be re-filtered — e.g.,
+   * publications that reference older dataset versions.
+   */
+  useDefaultQuery?: boolean;
 }
 
 interface UseScrollSearchHitsTypes<Document> {
@@ -74,8 +81,9 @@ function useScrollTable<Document>({
   columns,
   isExpandable = false,
   estimatedExpandedRowHeight = 200,
+  useDefaultQuery = true,
 }: ScrollTableTypes<Document>) {
-  const { allSearchIDs } = useAllSearchIDs(query) as AllSearchIDsTypes;
+  const { allSearchIDs } = useAllSearchIDs(query, { useDefaultQuery }) as AllSearchIDsTypes;
 
   const { sortState, setSort, sort } = useSortState(columnNameMapping, initialSortState);
 
@@ -101,13 +109,15 @@ function useScrollTable<Document>({
     columns,
     baseQuery: queryWithSort,
     enabled: true,
+    useDefaultQuery,
   });
 
   // Use different data fetching strategies based on sort type
-  const scrollData = useScrollSearchHits(filteredQuery, {}) as UseScrollSearchHitsTypes<Document>;
+  const scrollData = useScrollSearchHits(filteredQuery, { useDefaultQuery }) as UseScrollSearchHitsTypes<Document>;
 
   const { searchHits: allSearchHits, isLoading: allDataLoading } = useSearchHits<Document>(filteredQuery, {
     shouldFetch: isCustomSort,
+    useDefaultQuery,
   });
 
   // Apply custom sorting when needed

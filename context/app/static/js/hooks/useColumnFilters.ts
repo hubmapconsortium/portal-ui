@@ -29,9 +29,15 @@ interface UseColumnFiltersProps<Doc> {
   columns: Column<Doc>[];
   baseQuery: SearchRequest;
   enabled?: boolean;
+  useDefaultQuery?: boolean;
 }
 
-export function useColumnFilters<Doc>({ columns, baseQuery, enabled = true }: UseColumnFiltersProps<Doc>) {
+export function useColumnFilters<Doc>({
+  columns,
+  baseQuery,
+  enabled = true,
+  useDefaultQuery = true,
+}: UseColumnFiltersProps<Doc>) {
   const [filters, setFilters] = useState<ColumnFilterState>({});
 
   const filterableColumns = useMemo(() => columns.filter((col) => col.filterable && col.sort), [columns]);
@@ -125,6 +131,7 @@ export function useColumnFilters<Doc>({ columns, baseQuery, enabled = true }: Us
     aggregationsQuery ?? { query: { match_all: {} } },
     {
       shouldFetch: Boolean(aggregationsQuery),
+      useDefaultQuery,
     },
   );
 
