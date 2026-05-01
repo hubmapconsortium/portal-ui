@@ -240,7 +240,12 @@ def udi_datapackage():
             exclude_revisions=True,
         )
         resource = build_resource(
-            entity_type, entities, descriptions_dict, types_dict, _first_fields
+            entity_type,
+            entities,
+            descriptions_dict,
+            types_dict,
+            _first_fields,
+            _wants_public_scope(),
         )
         resources.append(resource)
 
@@ -278,7 +283,7 @@ def yac_completions():
     if orchestrator is None:
         return _get_api_json_error(
             401,
-            'OpenAI key required: send X-OpenAI-Key header, or sign in as a HuBMAP-Read member.',
+            'OpenAI key required: enter your OpenAI key, or sign in as a HuBMAP member.',
         ), 401
 
     try:

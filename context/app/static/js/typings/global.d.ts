@@ -51,6 +51,8 @@ declare module '*.svg' {
   export default ReactComponent;
 }
 
+declare module '*.css';
+
 declare namespace JSX {
   interface IntrinsicElements {
     'ccf-organ-info': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;

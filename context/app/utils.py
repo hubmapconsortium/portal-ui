@@ -69,6 +69,7 @@ def get_default_flask_data():
             'dataProductsEndpoint': current_app.config['DATA_PRODUCTS_ENDPOINT'],
             'scFindEndpoint': current_app.config['SCFIND_ENDPOINT'],
             'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION'],
+            'enableSaySeeMode': bool(current_app.config.get('ENABLE_SAY_SEE_MODE')),
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD'),
     }

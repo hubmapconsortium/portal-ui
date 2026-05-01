@@ -54,6 +54,7 @@ export interface AppContextType {
   userLastName?: string;
   userGlobusId?: string;
   userGlobusAffiliation?: string;
+  enableSaySeeMode?: boolean;
   [key: string]: unknown;
 }
 
