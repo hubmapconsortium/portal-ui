@@ -1,0 +1,1 @@
+- Fix the publication detail page Data section showing the wrong number of related datasets. All entities referenced by a publication's `ancestor_ids` are now loaded, including older dataset versions that have a `next_revision_uuid`.

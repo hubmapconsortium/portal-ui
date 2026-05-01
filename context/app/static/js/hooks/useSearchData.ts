@@ -97,8 +97,9 @@ export async function fetchSearchData<Documents, Aggs>(
   query: SearchRequest,
   url: string,
   token: string,
+  useDefaultQuery: boolean = true,
 ): Promise<SearchResponseBody<Documents, Aggs>> {
-  const body = createSearchRequestBody({ query, useDefaultQuery: true });
+  const body = createSearchRequestBody({ query, useDefaultQuery });
   const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
   const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
     url,
@@ -240,6 +241,7 @@ async function* fetchAllPages(
   elasticsearchEndpoint: string,
   groupsToken: string,
   numberOfPagesToRequest: number,
+  useDefaultQuery: boolean,
 ) {
   const q = query;
 
@@ -248,7 +250,7 @@ async function* fetchAllPages(
     while (i < numberOfPagesToRequest) {
       // disabling eslint rule because that's the whole point of this generator
 
-      const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken);
+      const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken, useDefaultQuery);
       yield firstPageResults;
       q.search_after = getSearchAfterSort(firstPageResults.hits.hits);
       i += 1;
@@ -281,11 +283,16 @@ async function fetchAllIDs({
   useDefaultQuery: boolean;
   numberOfPagesToRequest: number;
 }) {
-  const query = useDefaultQuery ? addRestrictionsToQuery(q) : q;
   const ids = new Set<string>();
   // For await loop is the clearest way to fetch all pages sequentially.
 
-  for await (const results of fetchAllPages(query, elasticsearchEndpoint, groupsToken, numberOfPagesToRequest)) {
+  for await (const results of fetchAllPages(
+    q,
+    elasticsearchEndpoint,
+    groupsToken,
+    numberOfPagesToRequest,
+    useDefaultQuery,
+  )) {
     extractIDs(results).forEach((id) => ids.add(id));
   }
   return Array.from(ids);
@@ -314,11 +321,16 @@ async function fetchAllHits<Documents>({
   useDefaultQuery: boolean;
   numberOfPagesToRequest: number;
 }) {
-  const query = useDefaultQuery ? addRestrictionsToQuery(q) : q;
   const hits: Required<SearchHit<Documents>>[] = [];
   // For await loop is the clearest way to fetch all pages sequentially.
 
-  for await (const results of fetchAllPages(query, elasticsearchEndpoint, groupsToken, numberOfPagesToRequest)) {
+  for await (const results of fetchAllPages(
+    q,
+    elasticsearchEndpoint,
+    groupsToken,
+    numberOfPagesToRequest,
+    useDefaultQuery,
+  )) {
     const pageHits = (results?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
     hits.push(...pageHits);
   }
@@ -488,8 +500,7 @@ export function useScrollSearchHits<Doc, Aggs>(
     SWRError
   >(
     getKey,
-    (args: [SearchRequest, string, string, boolean, number]) =>
-      fetcher(...args) as Promise<SearchResponseBody<Doc, Aggs>>,
+    (args: [SearchRequest, string, string, boolean]) => fetcher(...args) as Promise<SearchResponseBody<Doc, Aggs>>,
     {
       fallbackData: [],
       revalidateAll: false,
