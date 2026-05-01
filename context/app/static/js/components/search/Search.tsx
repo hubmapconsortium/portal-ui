@@ -196,14 +196,21 @@ function TileViewBar() {
   );
 }
 
-function Body({ facetGroups }: { facetGroups: FacetGroups }) {
-  return (
+function Body({ facetGroups, withPaper }: { facetGroups: FacetGroups; withPaper?: boolean }) {
+  return withPaper ? (
     <Paper component={Stack} direction="row" spacing={2} p={2}>
       <Facets facetGroups={facetGroups} />
       <Box flexGrow={1}>
         <Results />
       </Box>
     </Paper>
+  ) : (
+    <Stack direction="row" spacing={2}>
+      <Facets facetGroups={facetGroups} />
+      <Box flexGrow={1}>
+        <Results />
+      </Box>
+    </Stack>
   );
 }
 
@@ -239,9 +246,11 @@ function SCFindAlert() {
 
 const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
   const [mode] = useSearchMode();
+  const { enableSaySeeMode } = useAppContext();
+  const effectiveMode = enableSaySeeMode ? mode : 'filter';
   return (
     <Stack spacing={2} mb={4}>
-      <SaySeeAlert />
+      {enableSaySeeMode && <SaySeeAlert />}
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
@@ -249,14 +258,14 @@ const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps
       <Stack direction="column" spacing={1} mb={2}>
         <SearchNote />
         <div>
-          <SearchModeTabs />
-          {mode === 'filter' && (
+          {enableSaySeeMode && <SearchModeTabs />}
+          {effectiveMode === 'filter' && (
             <>
               <TileViewBar />
-              <Body facetGroups={facetGroups} />
+              <Body facetGroups={facetGroups} withPaper={enableSaySeeMode} />
             </>
           )}
-          {mode === 'say-see' && <SaySeePanel />}
+          {effectiveMode === 'say-see' && <SaySeePanel />}
         </div>
       </Stack>
     </Stack>

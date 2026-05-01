@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import Typography from '@mui/material/Typography';
 import { useAppContext } from 'js/components/Contexts';
-import { OutboundLink } from 'js/shared-styles/Links';
+import { InternalLink, OutboundLink } from 'js/shared-styles/Links';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import LabeledPrimarySwitch from 'js/shared-styles/switches/LabeledPrimarySwitch';
@@ -10,6 +10,7 @@ import { useSavedPreferences } from 'js/components/savedLists/hooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { SaySeeDataScope, SavedPreferences } from 'js/components/savedLists/types';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 function GetAnOpenAIKey() {
   return <OutboundLink href="https://platform.openai.com/api-keys">Get an API key at OpenAI</OutboundLink>;
@@ -22,7 +23,8 @@ function AccessDescription() {
     return (
       <Typography variant="body1">
         To use this feature, you will need your own OpenAI API key. Your key is stored locally on your browser and never
-        sent anywhere else. <GetAnOpenAIKey /> or log in for other access options.
+        sent anywhere else. <GetAnOpenAIKey /> or <InternalLink href="/login">log in</InternalLink> for other access
+        options.
       </Typography>
     );
   }
@@ -93,6 +95,7 @@ function DataScopeSection() {
 }
 
 export default function SaySeePanelDescription() {
+  const { isAuthenticated } = useAppContext();
   return (
     <SectionDescription>
       <Stack spacing={1}>
@@ -110,10 +113,21 @@ export default function SaySeePanelDescription() {
           <Typography variant="body1">
             Two types of files are available for download: a manifest file of your filtered query results and CSVs of
             the related donors, samples and datasets. To download the files contained within the datasets, use the
-            manifest file with the HuBMAP CLT Tool.
+            manifest file with the{' '}
+            <OutboundLink href="https://docs.hubmapconsortium.org/clt/index.html">HuBMAP CLT Tool</OutboundLink>.
           </Typography>
         </div>
         <DataScopeSection />
+        {!isAuthenticated && (
+          <Button
+            variant="outlined"
+            color="primary"
+            href={'/login'}
+            sx={{ alignSelf: 'flex-start', borderRadius: '8px' }}
+          >
+            Log In
+          </Button>
+        )}
       </Stack>
     </SectionDescription>
   );

@@ -68,3 +68,7 @@ class DefaultConfig(object):
     LANGFUSE_PUBLIC_KEY = None
     LANGFUSE_SECRET_KEY = None
     LANGFUSE_BASE_URL = None
+
+    # Gates the Say & See Mode (BETA) front-end. When False, the search page
+    # hides the mode tabs and promo alert, leaving only Filter & Browse mode.
+    ENABLE_SAY_SEE_MODE = False

@@ -35,7 +35,7 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
           })}
           divider={<Divider orientation="horizontal" flexItem />}
         >
-          <Box sx={{ width: '100%', p: 1, pb: 0, borderBottom: 1, borderColor: 'divider' }}>
+          <Box sx={{ width: '100%', p: 1, pb: 0 }}>
             <FacetSearchCombobox />
           </Box>
           {Object.entries(facetGroups).map(([k, v], i) => (

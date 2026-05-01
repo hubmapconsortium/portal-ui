@@ -64,19 +64,9 @@ def _set_cached(key, data):
 _UDI_EXCLUDED_FIELDS = ['assaytype']
 
 
-def _wants_public_scope():
-    """Logged-in users can opt in to the cached public datapackage/TSVs by
-    appending ?public=1, trading per-user data access for shared-cache speed."""
-    return request.args.get('public') in ('1', 'true')
-
-
-def _serve_in_public_scope():
-    return not _is_authenticated() or _wants_public_scope()
-
-
 def _apply_cache_headers(response, *, public, etag_payload=None):
-    """Cacheable when the response is generated in public scope; otherwise
-    `private, no-store` to prevent shared caches from leaking authed data."""
+    """Cacheable on the public routes (`/metadata/v0/udi/...`); `private,
+    no-store` on the consortium routes so per-user data is never shared."""
     if public:
         response.headers['Cache-Control'] = f'public, max-age={_UDI_CACHE_TTL}'
         if etag_payload is not None:
@@ -169,13 +159,27 @@ def _pick_orchestrator():
     return _get_byok_orchestrator(), header_key
 
 
-# This endpoint is for the UDI demo site - produces plain TSV without descriptions and
-# removes CORS block.
-@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
-def entities_plain_tsv(entity_type):
-    public_scope = _serve_in_public_scope()
+# UDI exposes two parallel endpoint trees:
+#
+#   /metadata/v0/udi/...             → public-scope only, shared 12-hour cache.
+#                                       Anyone (anon or authed) gets the same
+#                                       cached payload, generated with no
+#                                       groups_token. Safe for the udi-yac
+#                                       grammar component to load by default.
+#
+#   /metadata/v0/udi/consortium/...  → uses the current session's auth as-is.
+#                                       Authed HuBMAP users see their full
+#                                       access; anon callers get the public
+#                                       view. Never cached, since responses
+#                                       are per-user-scoped.
+#
+# Splitting these into separate URL prefixes (instead of a `?public=1` query
+# param on a single endpoint) gives udi-yac stable, query-string-free TSV
+# paths to derive from `udi:path`.
 
-    if public_scope:
+
+def _serve_tsv(entity_type, *, consortium):
+    if not consortium:
         cached = _get_cached(f'tsv:{entity_type}')
         if cached:
             tsv, filename = cached
@@ -187,12 +191,12 @@ def entities_plain_tsv(entity_type):
     response = _generate_tsv_response(
         entity_type,
         with_descriptions=False,
-        use_groups_token=not public_scope,
+        use_groups_token=consortium,
         excluded_fields=_UDI_EXCLUDED_FIELDS,
         exclude_revisions=True,
     )
 
-    if public_scope:
+    if not consortium:
         tsv = response.get_data(as_text=True)
         filename = response.headers.get('Content-Disposition', '').split('filename=')[-1]
         _set_cached(f'tsv:{entity_type}', (tsv, filename))
@@ -201,17 +205,20 @@ def entities_plain_tsv(entity_type):
     return _apply_cache_headers(response, public=False)
 
 
-@blueprint.route('/metadata/v0/udi/datapackage.json', methods=['GET'])
-def udi_datapackage():
-    # This endpoint serves the datapackage.json used to power the UDI chat.
-    #
-    # Anonymous users — and authenticated users who pass ?public=1 — are served
-    # from a 12-hour shared cache for fast Say & See open times. Authenticated
-    # users without ?public=1 get a fresh build under their own groups_token so
-    # the datapackage reflects their actual data access.
-    public_scope = _serve_in_public_scope()
+# This endpoint is for the UDI demo site - produces plain TSV without descriptions and
+# uses the blueprint's normal CORS handling for allowed origins.
+@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_plain_tsv(entity_type):
+    return _serve_tsv(entity_type, consortium=False)
 
-    if public_scope:
+
+@blueprint.route('/metadata/v0/udi/consortium/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_plain_tsv_consortium(entity_type):
+    return _serve_tsv(entity_type, consortium=True)
+
+
+def _serve_datapackage(*, consortium):
+    if not consortium:
         cached = _get_cached('datapackage')
         if cached:
             response = jsonify(cached)
@@ -221,7 +228,7 @@ def udi_datapackage():
                 etag_payload=json.dumps(cached, sort_keys=True).encode('utf-8'),
             )
 
-    client = get_client(use_groups_token=not public_scope)
+    client = get_client(use_groups_token=consortium)
 
     field_descriptions_raw = client.get_metadata_descriptions()
     descriptions_dict = {
@@ -235,7 +242,7 @@ def udi_datapackage():
     for entity_type in ['donors', 'samples', 'datasets']:
         entities = _get_entities(
             entity_type,
-            use_groups_token=not public_scope,
+            use_groups_token=consortium,
             excluded_fields=_UDI_EXCLUDED_FIELDS,
             exclude_revisions=True,
         )
@@ -244,15 +251,20 @@ def udi_datapackage():
         )
         resources.append(resource)
 
+    # `udi:path` is the base URL the udi-yac client joins with each resource's
+    # `path` (e.g. `donors.tsv`) to build TSV URLs. It must match this route's
+    # own prefix so consortium responses never link back to the public TSV
+    # endpoints (and vice-versa).
+    udi_path_suffix = 'consortium/' if consortium else ''
     datapackage = {
         'name': 'hubmap_metadata',
         'resources': resources,
         'udi:name': 'hubmap_api',
-        'udi:path': f'{get_url_base_from_request()}/metadata/v0/udi/',
+        'udi:path': f'{get_url_base_from_request()}/metadata/v0/udi/{udi_path_suffix}',
     }
 
     response = jsonify(datapackage)
-    if public_scope:
+    if not consortium:
         _set_cached('datapackage', datapackage)
         return _apply_cache_headers(
             response,
@@ -261,6 +273,16 @@ def udi_datapackage():
         )
 
     return _apply_cache_headers(response, public=False)
+
+
+@blueprint.route('/metadata/v0/udi/datapackage.json', methods=['GET'])
+def udi_datapackage():
+    return _serve_datapackage(consortium=False)
+
+
+@blueprint.route('/metadata/v0/udi/consortium/datapackage.json', methods=['GET'])
+def udi_datapackage_consortium():
+    return _serve_datapackage(consortium=True)
 
 
 @blueprint.route('/v1/yac/completions', methods=['POST'])
@@ -278,7 +300,7 @@ def yac_completions():
     if orchestrator is None:
         return _get_api_json_error(
             401,
-            'OpenAI key required: send X-OpenAI-Key header, or sign in as a HuBMAP-Read member.',
+            'OpenAI key required: enter your OpenAI key, or sign in as a HuBMAP member.',
         ), 401
 
     try:
