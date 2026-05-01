@@ -91,7 +91,7 @@ ruff>=0.14.0
 "rehype-raw": "^7.0.0",
 "styled-components": "^6.1.12",
 "swr": "^2.4.1",
-"udi-yac": "^0.1.3",
+"udi-yac": "^0.1.6",
 "universal-cookie": "^7.1.2",
 "use-debounce": "^10.0.0",
 "use-deep-compare-effect": "^1.8.1",
