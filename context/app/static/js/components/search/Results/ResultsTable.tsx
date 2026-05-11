@@ -5,6 +5,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import DOMPurify from 'isomorphic-dompurify';
 import parse from 'html-react-parser';
 import { format } from 'date-fns/format';
@@ -37,10 +38,12 @@ function CellContent({
   field,
   fieldValue,
   hasVisualization,
+  isSuperseded,
 }: {
   field: string;
   fieldValue: string;
   hasVisualization?: boolean;
+  isSuperseded?: boolean;
 }) {
   switch (field.split('.').pop()) {
     case 'hubmap_id':
@@ -52,6 +55,11 @@ function CellContent({
           {hasVisualization && (
             <SecondaryBackgroundTooltip title="This dataset has a Vitessce visualization available.">
               <VitessceIcon display="inline-block" color="primary" />
+            </SecondaryBackgroundTooltip>
+          )}
+          {isSuperseded && (
+            <SecondaryBackgroundTooltip title="A newer revision of this entity exists. Use /browse/latest to navigate to it.">
+              <Chip label="Superseded" size="small" color="warning" variant="outlined" data-testid="superseded-chip" />
             </SecondaryBackgroundTooltip>
           )}
         </Stack>
@@ -79,11 +87,18 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Enti
   }
 
   const fieldValue = getByPath(source, field);
-  const hasVisualization = field.split('.').pop() === 'hubmap_id' ? Boolean(source.visualization) : undefined;
+  const isHubmapIdField = field.split('.').pop() === 'hubmap_id';
+  const hasVisualization = isHubmapIdField ? Boolean(source.visualization) : undefined;
+  const isSuperseded = isHubmapIdField ? Boolean(source.next_revision_uuid) : undefined;
 
   return (
     <StyledTableCell key={field}>
-      <CellContent field={field} fieldValue={fieldValue} hasVisualization={hasVisualization} />
+      <CellContent
+        field={field}
+        fieldValue={fieldValue}
+        hasVisualization={hasVisualization}
+        isSuperseded={isSuperseded}
+      />
     </StyledTableCell>
   );
 }

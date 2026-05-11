@@ -82,6 +82,7 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    latestRevisionFilter,
   }: SearchStoreState = useSearchStore();
 
   return useScrollSearchHits<Partial<Entity>, Aggregations>({
@@ -95,6 +96,7 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    latestRevisionFilter,
   });
 }
 
@@ -148,6 +150,7 @@ type SearchConfig = Pick<
   | 'size'
   | 'type'
   | 'defaultQuery'
+  | 'latestRevisionFilter'
   | 'analyticsCategory'
 > & {
   facets: FacetGroups;

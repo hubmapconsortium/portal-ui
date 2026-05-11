@@ -7,7 +7,7 @@ import { EntityWithType, isDonor } from 'js/components/types';
 import { useAppContext } from 'js/components/Contexts';
 
 const sharedConfig = {
-  searchFields: ['all_text', 'description'],
+  searchFields: ['all_text'],
   // TODO: figure out how to make assertion unnecessary.
   size: 18,
 };
@@ -20,6 +20,7 @@ const sharedTileFields = [
   'published_timestamp',
   'entity_type',
   'descendant_counts.entity_type',
+  'next_revision_uuid',
 ];
 
 const sharedAffiliationFilters = [
@@ -41,12 +42,10 @@ function makeDonorMetadataFilters(e: EntityWithType) {
 
 function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
   return {
-    defaultQuery: esb
+    defaultQuery: esb.boolQuery().must([esb.termsQuery('entity_type.keyword', [type])]),
+    latestRevisionFilter: esb
       .boolQuery()
-      .must([
-        esb.termsQuery('entity_type.keyword', [type]),
-        esb.boolQuery().mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]),
-      ]),
+      .mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]),
   };
 }
 

@@ -34,6 +34,17 @@ const API_BASE_URL = document.location.origin;
 const FETCH_OPTIONS: RequestInit = { credentials: 'include' };
 const NON_EXPANDED_HEIGHT = 700;
 
+const STYLES = {
+  height: '100%',
+  width: '100%',
+};
+
+const ENTITY_ICONS = {
+  datasets: DatasetIcon,
+  samples: SampleIcon,
+  donors: DonorIcon,
+};
+
 function visualizationSelector(store: VisualizationStore) {
   return {
     fullscreenVizId: store.fullscreenVizId,
@@ -48,7 +59,7 @@ function ChatFallback() {
 }
 
 function SaySeePanel() {
-  const { isAuthenticated, isHubmapUser, isWorkspacesUser } = useAppContext();
+  const { isHubmapUser, isWorkspacesUser } = useAppContext();
   const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(visualizationSelector);
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
   const { savedPreferences: rawPrefs, isLoading: prefsLoading } = useSavedPreferences();
@@ -98,13 +109,9 @@ function SaySeePanel() {
                 apiBaseUrl={API_BASE_URL}
                 dataPackagePath={dataPackagePath}
                 fetchOptions={FETCH_OPTIONS}
-                requireApiKey={!isAuthenticated}
-                style={{ height: '100%', width: '100%' }}
-                entityIcons={{
-                  datasets: DatasetIcon,
-                  samples: SampleIcon,
-                  donors: DonorIcon,
-                }}
+                requireApiKey={!isHubmapUser}
+                style={STYLES}
+                entityIcons={ENTITY_ICONS}
                 mascot={<HuBMAPPerson style={{ width: 300, height: 'auto' }} />}
                 onEvent={onEvent}
                 downloadActions={downloadActions}

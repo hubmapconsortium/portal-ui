@@ -1,0 +1,2 @@
+- Search by HuBMAP ID (top search bar or HuBMAP ID column-header popover) now surfaces entities that have been superseded by a newer revision, with a "Superseded" badge on the result so users know what they're clicking. Other search modes continue to hide superseded entities by default.
+- Scope the top search bar's query to the `all_text` field; the HuBMAP ID column popover continues to query the `hubmap_id` field directly.

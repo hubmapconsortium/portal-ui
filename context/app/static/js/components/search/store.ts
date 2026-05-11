@@ -134,6 +134,7 @@ export interface SearchState<V> {
   initialFilters: FiltersType<V>;
   facets: FacetsType;
   defaultQuery?: esb.Query;
+  latestRevisionFilter?: esb.Query;
   search: string;
   searchFields: string[];
   sortField: SortField;

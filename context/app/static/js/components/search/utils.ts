@@ -72,11 +72,20 @@ export function buildQuery({
   sourceFields,
   sortField,
   defaultQuery,
+  latestRevisionFilter,
   mappings,
   buildAggregations = true,
 }: { buildAggregations?: boolean; mappings: UseESMappingType } & Pick<
   SearchStoreState,
-  'filters' | 'facets' | 'search' | 'size' | 'searchFields' | 'sourceFields' | 'sortField' | 'defaultQuery'
+  | 'filters'
+  | 'facets'
+  | 'search'
+  | 'size'
+  | 'searchFields'
+  | 'sourceFields'
+  | 'sortField'
+  | 'defaultQuery'
+  | 'latestRevisionFilter'
 >) {
   if (!isESMapping(mappings)) {
     return null;
@@ -89,16 +98,23 @@ export function buildQuery({
 
   const hasTextQuery = search.length > 0;
 
-  // Detect wildcard HuBMAP ID searches (e.g. "*676*") and use a wildcard query on hubmap_id
+  // Column-header HuBMAP ID popover wraps input as *...* (SearchTableHeaderCell.tsx);
+  // top search bar quotes exact HBM IDs (SearchBar.tsx). Either form is treated as an
+  // entity-id lookup: it bypasses the "latest revision only" filter so superseded
+  // entities can still be found by their HuBMAP ID.
   const isWildcardIdSearch = hasTextQuery && /^\*.*\*$/.test(search);
+  const isQuotedHbmIdSearch = hasTextQuery && /^"\s*HBM\S+\s*"$/i.test(search);
+  const isIdLookupSearch = isWildcardIdSearch || isQuotedHbmIdSearch;
+
   const freeTextQueries = hasTextQuery
     ? isWildcardIdSearch
       ? [esb.wildcardQuery(getESField({ field: 'hubmap_id', mappings }), search)]
       : [esb.simpleQueryStringQuery(search).fields(searchFields)]
     : [];
   const defaultQueries = defaultQuery ? [defaultQuery] : [];
+  const revisionFilterQueries = latestRevisionFilter && !isIdLookupSearch ? [latestRevisionFilter] : [];
 
-  query.query(esb.boolQuery().must([...defaultQueries, ...freeTextQueries]));
+  query.query(esb.boolQuery().must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries]));
 
   if (hasTextQuery && !isWildcardIdSearch) {
     query.highlight(esb.highlight(searchFields));
