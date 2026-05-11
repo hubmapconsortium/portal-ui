@@ -86,7 +86,7 @@ interface ProtocolProps {
 }
 
 function Protocol({ protocol_url, showHeader }: ProtocolProps) {
-  const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
+  const protocolUrls = useFormattedProtocolUrls(protocol_url);
 
   const contents = (
     <>
