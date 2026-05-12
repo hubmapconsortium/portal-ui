@@ -21,6 +21,7 @@ const sharedTileFields = [
   'entity_type',
   'descendant_counts.entity_type',
   'next_revision_uuid',
+  'sub_status',
 ];
 
 const sharedAffiliationFilters = [

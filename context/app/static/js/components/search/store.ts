@@ -209,6 +209,7 @@ const searchURLStateSchema = z
     search: z.string(),
     sortField: sortFieldSchema,
     filters: filtersSchema,
+    includeSupersededEntities: z.boolean(),
     scFindParams: z
       .object({
         genes: z.array(z.string()).optional(),
@@ -404,7 +405,7 @@ export function createDatasetSearchLink(values: Record<string, string[]>) {
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, filters } = state;
+  const { search, sortField, filters, includeSupersededEntities } = state;
 
   const readableParamValues: Record<string, string[]> = {};
   const remainingFilters: FiltersType = {};
@@ -423,11 +424,12 @@ function replaceURLSearchParams(state: SearchStoreState) {
     }
   }
 
-  const hasRemaining = search || Object.keys(remainingFilters).length > 0;
+  const hasRemaining = search || Object.keys(remainingFilters).length > 0 || includeSupersededEntities;
   const qValue = hasRemaining
     ? LZString.compressToEncodedURIComponent(
-        JSON.stringify({ search, sortField, filters: remainingFilters }, (_key, value: unknown) =>
-          value instanceof Set ? [...value] : value,
+        JSON.stringify(
+          { search, sortField, filters: remainingFilters, includeSupersededEntities },
+          (_key, value: unknown) => (value instanceof Set ? [...value] : value),
         ),
       )
     : null;
@@ -606,6 +608,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     setIncludeSupersededEntities: (value) => {
       set((state) => {
         state.includeSupersededEntities = value;
+        replaceURLSearchParams(state);
       });
     },
   }));

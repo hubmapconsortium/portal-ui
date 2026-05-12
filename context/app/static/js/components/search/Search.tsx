@@ -465,7 +465,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
-  const { search, sortField, filters, ...rest } = buildInitialSearchState({
+  const { search, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
     ...config,
     endpoint: elasticsearchEndpoint,
     analyticsCategory: `${type}s Search Page Interactions`,
@@ -478,7 +478,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   }
 
   const initialState = {
-    ...merge({ search, sortField, filters }, initialUrlState, options),
+    ...merge({ search, sortField, filters, includeSupersededEntities }, initialUrlState, options),
     ...rest,
     initialFilters: filters,
   };

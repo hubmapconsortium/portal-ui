@@ -82,4 +82,53 @@ describe('buildQuery HuBMAP-ID lookup handling', () => {
     expect(serialized).toContain('simple_query_string');
     expect(serialized).toContain('kidney atlas');
   });
+
+  test('HuBMAP-ID format search drops the latestRevisionFilter and uses term match on hubmap_id', () => {
+    const serialized = mustOf(run('HBM123.ABCD.456'));
+
+    expect(serialized).not.toContain('next_revision_uuid');
+    expect(serialized).not.toContain('simple_query_string');
+    expect(serialized).toContain('"term"');
+    expect(serialized).toContain('hubmap_id');
+    expect(serialized).toContain('HBM123.ABCD.456');
+  });
+
+  test('UUID format search drops the latestRevisionFilter and uses term match on uuid', () => {
+    const uuid = 'a'.repeat(32);
+    const serialized = mustOf(run(uuid));
+
+    expect(serialized).not.toContain('next_revision_uuid');
+    expect(serialized).not.toContain('simple_query_string');
+    expect(serialized).toContain('"term"');
+    expect(serialized).toContain('uuid');
+    expect(serialized).toContain(uuid);
+  });
+
+  test('non-canonical HBM-prefixed text remains a free-text search', () => {
+    const serialized = mustOf(run('HBM kidney datasets'));
+
+    expect(serialized).toContain('next_revision_uuid');
+    expect(serialized).toContain('simple_query_string');
+  });
+
+  test('lowercase HuBMAP-ID input is treated as an ID lookup and normalized to uppercase', () => {
+    const serialized = mustOf(run('hbm123.abcd.456'));
+
+    expect(serialized).not.toContain('next_revision_uuid');
+    expect(serialized).toContain('"term"');
+    expect(serialized).toContain('hubmap_id');
+    expect(serialized).toContain('HBM123.ABCD.456');
+    expect(serialized).not.toContain('hbm123.abcd.456');
+  });
+
+  test('uppercase UUID input is treated as an ID lookup and normalized to lowercase', () => {
+    const upper = 'A'.repeat(32);
+    const lower = 'a'.repeat(32);
+    const serialized = mustOf(run(upper));
+
+    expect(serialized).not.toContain('next_revision_uuid');
+    expect(serialized).toContain('"term"');
+    expect(serialized).toContain(lower);
+    expect(serialized).not.toContain(upper);
+  });
 });
