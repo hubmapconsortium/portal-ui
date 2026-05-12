@@ -73,6 +73,7 @@ export function buildQuery({
   sortField,
   defaultQuery,
   latestRevisionFilter,
+  includeSupersededEntities,
   mappings,
   buildAggregations = true,
 }: { buildAggregations?: boolean; mappings: UseESMappingType } & Pick<
@@ -86,6 +87,7 @@ export function buildQuery({
   | 'sortField'
   | 'defaultQuery'
   | 'latestRevisionFilter'
+  | 'includeSupersededEntities'
 >) {
   if (!isESMapping(mappings)) {
     return null;
@@ -112,7 +114,8 @@ export function buildQuery({
       : [esb.simpleQueryStringQuery(search).fields(searchFields)]
     : [];
   const defaultQueries = defaultQuery ? [defaultQuery] : [];
-  const revisionFilterQueries = latestRevisionFilter && !isIdLookupSearch ? [latestRevisionFilter] : [];
+  const revisionFilterQueries =
+    latestRevisionFilter && !isIdLookupSearch && !includeSupersededEntities ? [latestRevisionFilter] : [];
 
   query.query(esb.boolQuery().must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries]));
 

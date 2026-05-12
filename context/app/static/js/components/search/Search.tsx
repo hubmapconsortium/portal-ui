@@ -83,6 +83,7 @@ export function useSearch() {
     sortField,
     defaultQuery,
     latestRevisionFilter,
+    includeSupersededEntities,
   }: SearchStoreState = useSearchStore();
 
   return useScrollSearchHits<Partial<Entity>, Aggregations>({
@@ -97,6 +98,7 @@ export function useSearch() {
     sortField,
     defaultQuery,
     latestRevisionFilter,
+    includeSupersededEntities,
   });
 }
 
@@ -159,6 +161,7 @@ type SearchConfig = Pick<
 function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
+    includeSupersededEntities: false,
     ...buildFacets({ facetGroups: facets }),
     swrConfig,
     sourceFields,

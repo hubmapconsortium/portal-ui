@@ -19,7 +19,7 @@ const latestRevisionFilter = esb
   .boolQuery()
   .mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]);
 
-function run(search: string) {
+function run(search: string, opts: { includeSupersededEntities?: boolean } = {}) {
   return buildQuery({
     filters: {},
     facets: {},
@@ -30,6 +30,7 @@ function run(search: string) {
     sortField: { field: 'last_modified_timestamp', direction: 'desc' },
     defaultQuery,
     latestRevisionFilter,
+    includeSupersededEntities: opts.includeSupersededEntities ?? false,
     mappings,
     buildAggregations: false,
   }) as { query: { bool: { must: unknown[] } } } | null;
@@ -72,5 +73,13 @@ describe('buildQuery HuBMAP-ID lookup handling', () => {
     const serialized = mustOf(run(''));
 
     expect(serialized).toContain('next_revision_uuid');
+  });
+
+  test('includeSupersededEntities=true drops the latestRevisionFilter for free-text search', () => {
+    const serialized = mustOf(run('kidney atlas', { includeSupersededEntities: true }));
+
+    expect(serialized).not.toContain('next_revision_uuid');
+    expect(serialized).toContain('simple_query_string');
+    expect(serialized).toContain('kidney atlas');
   });
 });

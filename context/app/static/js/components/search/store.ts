@@ -135,6 +135,7 @@ export interface SearchState<V> {
   facets: FacetsType;
   defaultQuery?: esb.Query;
   latestRevisionFilter?: esb.Query;
+  includeSupersededEntities?: boolean;
   search: string;
   searchFields: string[];
   sortField: SortField;
@@ -259,6 +260,7 @@ export interface SearchStoreActions {
   filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterExists: ({ field }: { field: string }) => void;
   filterBooleanGroupItem: ({ field, itemKey }: { field: string; itemKey: string }) => void;
+  setIncludeSupersededEntities: (value: boolean) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -446,6 +448,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     ...initialState,
     resetFilters: () => {
       set((state) => {
+        state.includeSupersededEntities = false;
         state.filters = state.initialFilters;
         replaceURLSearchParams(state);
       });
@@ -598,6 +601,11 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
           filter.values.add(itemKey);
         }
         replaceURLSearchParams(state);
+      });
+    },
+    setIncludeSupersededEntities: (value) => {
+      set((state) => {
+        state.includeSupersededEntities = value;
       });
     },
   }));

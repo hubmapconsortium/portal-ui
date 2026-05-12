@@ -1,2 +1,3 @@
 - Search by HuBMAP ID (top search bar or HuBMAP ID column-header popover) now surfaces entities that have been superseded by a newer revision, with a "Superseded" badge on the result so users know what they're clicking. Other search modes continue to hide superseded entities by default.
+- Add an "Include superseded entities" checkbox to the facets sidebar (after the Status section) so users can opt to include superseded entities in any search. When active, an "Including superseded entities" chip appears alongside the other filter chips.
 - Scope the top search bar's query to the `all_text` field; the HuBMAP ID column popover continues to query the `hubmap_id` field directly.
