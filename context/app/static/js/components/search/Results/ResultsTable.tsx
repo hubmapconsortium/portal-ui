@@ -62,14 +62,18 @@ function HuBMAPIDCellContent({
           sx={isStale ? { color: 'warning.main' } : undefined}
         >
           <Stack direction="row" gap={0.5} alignItems="center">
-            {isStale && (
+            {isStale ? (
               <SecondaryBackgroundTooltip
                 title={isSuperseded ? 'A newer revision of this entity exists.' : 'This entity has been retracted.'}
               >
-                <WarningRounded fontSize="small" />
+                <Stack direction="row" gap={0.5} alignItems="center">
+                  <WarningRounded fontSize="small" />
+                  {fieldValue}
+                </Stack>
               </SecondaryBackgroundTooltip>
+            ) : (
+              fieldValue
             )}
-            {fieldValue}
           </Stack>
         </InternalLink>
         {hasVisualization && (
