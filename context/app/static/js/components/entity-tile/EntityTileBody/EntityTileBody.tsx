@@ -45,8 +45,8 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
           <Tile.Text>{getOriginSamplesOrgan(entityData)}</Tile.Text>
         )}
         {'sample_category' in entityData && isSample(entityData) && <Tile.Text>{entityData.sample_category}</Tile.Text>}
-        {'mapped_data_types' in entityData && isDataset(entityData) && (
-          <Tile.Text>{entityData.mapped_data_types.join(', ')}</Tile.Text>
+        {'assay_display_name' in entityData && isDataset(entityData) && (
+          <Tile.Text>{entityData.assay_display_name.join(', ')}</Tile.Text>
         )}
         {entity_type === 'Donor' && 'mapped_metadata' in entityData && isDonor(entityData) && (
           <>
