@@ -25,8 +25,8 @@ describe('useFormattedProtocolUrls', () => {
     const result = getResult(protocolUrls);
     expect(result).toEqual({
       protocols: [
-        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn',
-        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en',
+        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn/v1',
+        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en/v2',
       ],
       gitHub: [],
     });
@@ -65,8 +65,8 @@ describe('useFormattedProtocolUrls', () => {
     const result = getResult(protocolUrls);
     expect(result).toEqual({
       protocols: [
-        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn',
-        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en',
+        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn/v1',
+        'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en/v2',
       ],
       gitHub: [],
     });
@@ -76,7 +76,7 @@ describe('useFormattedProtocolUrls', () => {
     const protocolUrls = 'dx.doi.org/10.17504/protocols.io.btnfnmbn/v1';
     const result = getResult(protocolUrls);
     expect(result).toEqual({
-      protocols: ['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn'],
+      protocols: ['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn/v1'],
       gitHub: [],
     });
   });
@@ -185,7 +185,7 @@ describe('useFormattedProtocolUrls', () => {
       expect(result).toEqual({
         protocols: [
           'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn',
-          'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en',
+          'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en/v1',
         ],
         gitHub: ['https://github.com/user/repo1', 'https://github.com/user/repo2'],
       });

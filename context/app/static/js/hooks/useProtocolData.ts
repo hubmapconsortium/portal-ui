@@ -73,9 +73,6 @@ export function useFormattedProtocolUrls(protocolUrls: string): FormattedProtoco
         // Strip `dx.doi.org/` from the beginning of the URL if it exists
         // dx.doi.org/10.17504/protocols.io.btnfnmbn -> 10.17504/protocols.io.btnfnmbn
         processedUrl = processedUrl.replace(/^dx\.doi\.org\//i, '');
-        // Strip version number from end of the URL if it exists
-        // 10.17504/protocols.io.btnfnmbn/v1 -> 10.17504/protocols.io.btnfnmbn
-        processedUrl = processedUrl.replace(/\/v\d+$/, '');
         // Format into the API call URL
         // 10.17504/protocols.io.btnfnmbn -> https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn
         links.protocols.push(`https://www.protocols.io/api/v4/protocols/${processedUrl}`);
