@@ -5,17 +5,13 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import DOMPurify from 'isomorphic-dompurify';
 import parse from 'html-react-parser';
-import { format } from 'date-fns/format';
 
-import { InternalLink } from 'js/shared-styles/Links';
 import { Entity } from 'js/components/types';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
-import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
-import { VitessceIcon } from 'js/shared-styles/icons';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { useAllSearchIDs } from 'js/hooks/useSearchData';
@@ -25,122 +21,13 @@ import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
-import Stack from '@mui/material/Stack';
 import { buildQuery, isDevSearch } from '../utils';
 import useESmapping from '../useEsMapping';
 import SearchTableHeaderCell from './SearchTableHeaderCell';
 import TableHeaderActions from './TableHeaderActions';
 import FilterChips from '../Facets/FilterChips';
 import TopSearchBar from '../TopSearchBar';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import ArrowRight from '@mui/icons-material/ChevronRightRounded';
-import WarningRounded from '@mui/icons-material/WarningRounded';
-
-interface CellContentProps {
-  field: string;
-  fieldValue: string;
-  hasVisualization?: boolean;
-  isSuperseded?: boolean;
-  isRetracted?: boolean;
-  latestRevisionUrl?: string;
-}
-
-function HuBMAPIDCellContent({
-  fieldValue,
-  hasVisualization,
-  isSuperseded,
-  isRetracted,
-  latestRevisionUrl,
-}: Omit<CellContentProps, 'field'>) {
-  const isStale = isSuperseded || isRetracted;
-  return (
-    <Stack direction="column" gap={0.5} alignItems="flex-start">
-      <Stack direction="row" gap={0.5} alignItems="center">
-        <InternalLink
-          href={`/browse/${fieldValue}`}
-          data-testid="hubmap-id-link"
-          sx={isStale ? { color: 'warning.main' } : undefined}
-        >
-          <Stack direction="row" gap={0.5} alignItems="center">
-            {isStale ? (
-              <SecondaryBackgroundTooltip
-                title={isSuperseded ? 'A newer revision of this entity exists.' : 'This entity has been retracted.'}
-              >
-                <Stack direction="row" gap={0.5} alignItems="center">
-                  <WarningRounded fontSize="small" />
-                  {fieldValue}
-                </Stack>
-              </SecondaryBackgroundTooltip>
-            ) : (
-              fieldValue
-            )}
-          </Stack>
-        </InternalLink>
-        {hasVisualization && (
-          <SecondaryBackgroundTooltip title="This dataset has a Vitessce visualization available.">
-            <VitessceIcon display="inline-block" color="primary" />
-          </SecondaryBackgroundTooltip>
-        )}
-      </Stack>
-      {isSuperseded && latestRevisionUrl && (
-        <SecondaryBackgroundTooltip title="A newer revision of this entity exists. Click to navigate to it.">
-          <Chip
-            label="View Latest Version"
-            size="small"
-            color="success"
-            variant="outlined"
-            component="a"
-            href={latestRevisionUrl}
-            clickable
-            data-testid="superseded-chip"
-            icon={<ArrowRight />}
-            sx={{ flexDirection: 'row-reverse', pr: 1, '.MuiChip-label': { paddingRight: 0 } }}
-          />
-        </SecondaryBackgroundTooltip>
-      )}
-      {isRetracted && !isSuperseded && (
-        <SecondaryBackgroundTooltip title="This entity has been retracted.">
-          <Chip label="Retracted" size="small" color="warning" variant="outlined" data-testid="retracted-chip" />
-        </SecondaryBackgroundTooltip>
-      )}
-    </Stack>
-  );
-}
-
-function CellContent({
-  field,
-  fieldValue,
-  hasVisualization,
-  isSuperseded,
-  isRetracted,
-  latestRevisionUrl,
-}: CellContentProps) {
-  switch (field.split('.').pop()) {
-    case 'hubmap_id': {
-      return (
-        <HuBMAPIDCellContent
-          fieldValue={fieldValue}
-          hasVisualization={hasVisualization}
-          isSuperseded={isSuperseded}
-          isRetracted={isRetracted}
-          latestRevisionUrl={latestRevisionUrl}
-        />
-      );
-    }
-    case 'last_modified_timestamp':
-    case 'published_timestamp':
-    case 'created_timestamp':
-      // Handle datasets without published timestamps.
-      if (!fieldValue) {
-        return null;
-      }
-      return format(fieldValue, 'yyyy-MM-dd');
-    case 'age':
-      return <DonorAgeTooltip donorAge={fieldValue}>{fieldValue}</DonorAgeTooltip>;
-    default:
-      return fieldValue;
-  }
-}
+import { CellContent, getHuBMAPIdDisplayInfo } from './CellContent';
 
 function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Entity>> }) {
   const source = hit?._source;
@@ -151,24 +38,11 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Enti
 
   const fieldValue = getByPath(source, field);
   const isHubmapIdField = field.split('.').pop() === 'hubmap_id';
-  const hasVisualization = isHubmapIdField ? Boolean(source.visualization) : undefined;
-  const isSuperseded = isHubmapIdField ? Boolean(source.next_revision_uuid) : undefined;
-  const isRetracted = isHubmapIdField ? Boolean(source.sub_status) : undefined;
-  const latestRevisionUrl =
-    isHubmapIdField && isSuperseded && source.entity_type && source.uuid
-      ? `/browse/${source.entity_type.toLowerCase()}/${source.uuid}`
-      : undefined;
+  const displayInfo = isHubmapIdField ? getHuBMAPIdDisplayInfo(source) : {};
 
   return (
     <StyledTableCell key={field}>
-      <CellContent
-        field={field}
-        fieldValue={fieldValue}
-        hasVisualization={hasVisualization}
-        isSuperseded={isSuperseded}
-        isRetracted={isRetracted}
-        latestRevisionUrl={latestRevisionUrl}
-      />
+      <CellContent field={field} fieldValue={fieldValue} {...displayInfo} />
     </StyledTableCell>
   );
 }
