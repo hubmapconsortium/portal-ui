@@ -65,7 +65,7 @@
     "use-debounce": "^10.0.0",
     "use-deep-compare-effect": "^1.8.1",
     "use-resize-observer": "^9.1.0",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "vega": "^6.2.0",
     "vega-embed": "^7.1.0",
     "vitessce": "^3.9.8",
