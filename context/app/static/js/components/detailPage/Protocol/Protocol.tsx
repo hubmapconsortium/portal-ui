@@ -15,6 +15,15 @@ import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 const loadingText = 'Protocols are loading. If protocols take a significant time to load, please ';
 const errorText = 'Failed to retrieve protocols. Please ';
 
+function decodeHtmlEntities(str: string): string {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = str;
+  const formatted = textarea.value;
+  // clean up the created textarea
+  textarea.remove();
+  return formatted;
+}
+
 interface ProtocolMessageProps {
   isLoading?: boolean;
   isError?: boolean;
@@ -57,7 +66,7 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
   }
 
   return (
-    <SectionItem label={data?.payload?.title}>
+    <SectionItem label={data?.payload?.title ? decodeHtmlEntities(data.payload.title) : undefined}>
       {data?.payload && (
         <OutboundIconLink
           onClick={() => {
@@ -86,7 +95,7 @@ interface ProtocolProps {
 }
 
 function Protocol({ protocol_url, showHeader }: ProtocolProps) {
-  const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
+  const protocolUrls = useFormattedProtocolUrls(protocol_url);
 
   const contents = (
     <>

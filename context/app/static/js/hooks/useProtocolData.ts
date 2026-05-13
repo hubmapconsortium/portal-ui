@@ -41,13 +41,12 @@ export function isGithubUrl(url: string): boolean {
  * Occasionally (e.g. for Object x Analyte datasets), there may be a GitHub link instead of a Protocols.io link.
  *
  * @param protocolUrls the protocol URL(s) string from the entity metadata
- * @param lastVersion the last version number to request from the Protocols.io API
  * @returns {
  *  protocols: string[] - array of formatted protocol URLs for API requests
  *  gitHub: string[] - array of GitHub links found in the input URLs
  * }
  */
-export function useFormattedProtocolUrls(protocolUrls: string, lastVersion: number): FormattedProtocolUrls {
+export function useFormattedProtocolUrls(protocolUrls: string): FormattedProtocolUrls {
   return useMemo(() => {
     const links: FormattedProtocolUrls = { gitHub: [], protocols: [] };
     if (protocolUrls.length === 0) {
@@ -74,17 +73,14 @@ export function useFormattedProtocolUrls(protocolUrls: string, lastVersion: numb
         // Strip `dx.doi.org/` from the beginning of the URL if it exists
         // dx.doi.org/10.17504/protocols.io.btnfnmbn -> 10.17504/protocols.io.btnfnmbn
         processedUrl = processedUrl.replace(/^dx\.doi\.org\//i, '');
-        // Strip version number from end of the URL if it exists
-        // 10.17504/protocols.io.btnfnmbn/v1 -> 10.17504/protocols.io.btnfnmbn
-        processedUrl = processedUrl.replace(/\/v\d+$/, '');
         // Format into the API call URL
-        // 10.17504/protocols.io.btnfnmbn -> https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1
-        links.protocols.push(`https://www.protocols.io/api/v4/protocols/${processedUrl}?last_version=${lastVersion}`);
+        // 10.17504/protocols.io.btnfnmbn -> https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn
+        links.protocols.push(`https://www.protocols.io/api/v4/protocols/${processedUrl}`);
       }
     });
 
     return links;
-  }, [protocolUrls, lastVersion]);
+  }, [protocolUrls]);
 }
 
 interface ProtocolData {
