@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useRef } from 'react';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
@@ -55,6 +55,12 @@ function SaySeePanel() {
   const savedPreferences = rawPrefs as SavedPreferences;
   const useAuthScope = isHubmapUser && savedPreferences?.saySeeDataScope === 'authenticated';
   const dataPackagePath = useAuthScope ? CONSORTIUM_DATA_PACKAGE_PATH : PUBLIC_DATA_PACKAGE_PATH;
+
+  // Latch on first resolve so a later isLoading=true (e.g. an SWR
+  // revalidation that lost cache) can't unmount the heavy UDIChat tree.
+  const hasResolvedRef = useRef(false);
+  if (!prefsLoading) hasResolvedRef.current = true;
+  const showFallback = !hasResolvedRef.current;
   const downloadActions = useSaySeeDownloadActions();
 
   const toggleFullscreen = useEventCallback(() => {
@@ -90,7 +96,7 @@ function SaySeePanel() {
       <Paper>
         <ExpandableDiv $isExpanded={isFullscreen} $theme={theme} $nonExpandedHeight={NON_EXPANDED_HEIGHT}>
           <Suspense fallback={<ChatFallback />}>
-            {prefsLoading ? (
+            {showFallback ? (
               <ChatFallback />
             ) : (
               <UDIChat

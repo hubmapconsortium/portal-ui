@@ -106,6 +106,19 @@ describe('SaySeePanel', () => {
     expect(screen.queryByTestId('udi-chat')).not.toBeInTheDocument();
   });
 
+  it('keeps UDIChat mounted if isLoading flips back to true after a successful resolve', async () => {
+    setup({ isAuthenticated: true, isHubmapUser: true });
+    const { rerender } = render(<SaySeePanel />, { wrapper: Wrapper });
+    const initialChat = await screen.findByTestId('udi-chat');
+
+    // Simulate a background SWR revalidation that lost its cache: isLoading
+    // flips back to true. UDIChat must not unmount.
+    setup({ isAuthenticated: true, isHubmapUser: true }, { isLoading: true });
+    rerender(<SaySeePanel />);
+
+    expect(screen.getByTestId('udi-chat')).toBe(initialChat);
+  });
+
   it('hides OpenInWorkspacesFromYAC for non-Workspaces users', async () => {
     setup({ isAuthenticated: true, isHubmapUser: true, isWorkspacesUser: false });
     render(<SaySeePanel />, { wrapper: Wrapper });

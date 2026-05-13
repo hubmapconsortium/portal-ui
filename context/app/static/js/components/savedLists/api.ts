@@ -3,6 +3,7 @@ import useSWRMutation from 'swr/mutation';
 import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr/fetchers';
+import { SWRError } from 'js/helpers/swr/errors';
 import { useAppContext } from 'js/components/Contexts';
 import { SavedEntitiesList, SavedPreferences } from 'js/components/savedLists/types';
 import { SAVED_PREFERENCES_KEY } from 'js/components/savedLists/constants';
@@ -75,15 +76,28 @@ function useFetchSavedListsAndEntities(listUUID?: string) {
 
   const { data, isLoading, ...rest } = useSWR(
     buildKey({ url: listsURL }),
-    ([url, head]) =>
-      fetcher<{ key: string; value: SavedEntitiesList }[]>({
-        url,
-        requestInit: { headers: head },
-        errorMessages: {
-          404: listUUID ? `No list with UUID ${listUUID} found.` : 'No lists for the current user were found.',
-        },
-      }),
-    { revalidateOnFocus: hasAccess },
+    async ([url, head]) => {
+      try {
+        return await fetcher<{ key: string; value: SavedEntitiesList }[]>({
+          url,
+          requestInit: { headers: head },
+          errorMessages: {
+            404: listUUID ? `No list with UUID ${listUUID} found.` : 'No lists for the current user were found.',
+          },
+        });
+      } catch (err) {
+        // A user with no UKV entries gets a 404 from `/user/keys` — that's a valid
+        // "no entries yet" state, not an error. Without this, SWR retries forever
+        // with exponential backoff, causing isLoading to flicker and consumers
+        // (e.g. SaySeePanel) to unmount/remount their children on every retry.
+        // The listUUID-scoped variant still treats 404 as a real error.
+        if (!listUUID && err instanceof SWRError && err.status === 404) {
+          return [];
+        }
+        throw err;
+      }
+    },
+    { revalidateOnFocus: hasAccess, shouldRetryOnError: false },
   );
   const savedListsAndEntities = data ?? [];
   return { savedListsAndEntities, isLoading, ...rest };
