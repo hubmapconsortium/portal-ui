@@ -82,6 +82,8 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    latestRevisionFilter,
+    includeSupersededEntities,
   }: SearchStoreState = useSearchStore();
 
   return useScrollSearchHits<Partial<Entity>, Aggregations>({
@@ -95,6 +97,8 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    latestRevisionFilter,
+    includeSupersededEntities,
   });
 }
 
@@ -148,6 +152,7 @@ type SearchConfig = Pick<
   | 'size'
   | 'type'
   | 'defaultQuery'
+  | 'latestRevisionFilter'
   | 'analyticsCategory'
 > & {
   facets: FacetGroups;
@@ -156,6 +161,7 @@ type SearchConfig = Pick<
 function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
+    includeSupersededEntities: false,
     ...buildFacets({ facetGroups: facets }),
     swrConfig,
     sourceFields,
@@ -459,7 +465,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
-  const { search, sortField, filters, ...rest } = buildInitialSearchState({
+  const { search, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
     ...config,
     endpoint: elasticsearchEndpoint,
     analyticsCategory: `${type}s Search Page Interactions`,
@@ -472,7 +478,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   }
 
   const initialState = {
-    ...merge({ search, sortField, filters }, initialUrlState, options),
+    ...merge({ search, sortField, filters, includeSupersededEntities }, initialUrlState, options),
     ...rest,
     initialFilters: filters,
   };

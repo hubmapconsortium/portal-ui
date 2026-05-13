@@ -38,6 +38,7 @@ import {
   filterHasValues,
 } from '../store';
 import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
+import { isHbmIdFormat, isUuidFormat } from '../utils';
 
 function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
@@ -508,28 +509,47 @@ function SearchChip() {
 
   if (!search) return null;
 
-  // Treat as a HuBMAP ID only when it matches the wildcard-ID pattern (e.g. "*676*").
+  // Detect ID-style searches so the chip surfaces what the user is actually looking up.
   const isWildcardId = /^\*.*\*$/.test(search);
+  const isQuotedHbmId = /^"\s*HBM\S+\s*"$/i.test(search);
 
-  // For wildcard-ID queries, strip leading/trailing "*" for display; otherwise use the raw search text.
-  const displayValue = isWildcardId ? search.replace(/^\*|\*$/g, '') : search;
-
-  const label = isWildcardId ? `HuBMAP ID: ${displayValue}` : `Search: ${displayValue}`;
+  let label: string;
+  if (isWildcardId) {
+    // For wildcard-ID queries, strip leading/trailing "*" for display.
+    label = `HuBMAP ID: ${search.replace(/^\*|\*$/g, '')}`;
+  } else if (isHbmIdFormat(search) || isQuotedHbmId) {
+    label = `HuBMAP ID: ${search.replace(/^"|"$/g, '')}`;
+  } else if (isUuidFormat(search)) {
+    label = `UUID: ${search}`;
+  } else {
+    label = `Search: ${search}`;
+  }
 
   return <FilterChip label={label} onDelete={() => setSearch('')} />;
+}
+
+function IncludeSupersededChip() {
+  const includeSupersededEntities = useSearchStore((state) => state.includeSupersededEntities);
+  const setIncludeSupersededEntities = useSearchStore((state) => state.setIncludeSupersededEntities);
+
+  if (!includeSupersededEntities) return null;
+
+  return <FilterChip label="Including superseded entities" onDelete={() => setIncludeSupersededEntities(false)} />;
 }
 
 function FilterChips() {
   const filters = useSearchStore((state) => state.filters);
   const facets = useSearchStore((state) => state.facets);
   const search = useSearchStore((state) => state.search);
+  const includeSupersededEntities = useSearchStore((state) => state.includeSupersededEntities);
 
   const chipElements = useChipElements(filters, facets);
-  const hasActiveFilters = chipElements.length > 0 || Boolean(search);
+  const hasActiveFilters = chipElements.length > 0 || Boolean(search) || Boolean(includeSupersededEntities);
 
   const { containerRef, isExpanded, setIsExpanded, overflowCount } = useOverflowCount(hasActiveFilters, [
     filters,
     search,
+    includeSupersededEntities,
   ]);
 
   if (!hasActiveFilters) {
@@ -555,6 +575,7 @@ function FilterChips() {
         }}
       >
         <SearchChip />
+        <IncludeSupersededChip />
         {chipElements}
       </Box>
       <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">
