@@ -62,15 +62,9 @@ export function HuBMAPIdLabel({
 
 interface ViewLatestChipProps {
   latestRevisionUrl: string;
-  /**
-   * Navigate via onClick (with stopPropagation) instead of an `<a>` element.
-   * Required inside ancestors that are already `<a>` tags (e.g. tiles), since
-   * nested anchors are invalid HTML.
-   */
-  programmaticNavigation?: boolean;
 }
 
-export function ViewLatestVersionChip({ latestRevisionUrl, programmaticNavigation }: ViewLatestChipProps) {
+export function ViewLatestVersionChip({ latestRevisionUrl }: ViewLatestChipProps) {
   return (
     <SecondaryBackgroundTooltip title="A newer revision of this entity exists. Click to navigate to it.">
       <Chip
@@ -82,15 +76,8 @@ export function ViewLatestVersionChip({ latestRevisionUrl, programmaticNavigatio
         icon={<ArrowRight />}
         clickable
         sx={{ flexDirection: 'row-reverse', pr: 1, '.MuiChip-label': { paddingRight: 0 } }}
-        {...(programmaticNavigation
-          ? {
-              onClick: (e: React.MouseEvent) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.location.href = latestRevisionUrl;
-              },
-            }
-          : { component: 'a' as const, href: latestRevisionUrl })}
+        href={latestRevisionUrl}
+        component="a"
       />
     </SecondaryBackgroundTooltip>
   );

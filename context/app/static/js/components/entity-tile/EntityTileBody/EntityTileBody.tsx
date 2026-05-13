@@ -36,9 +36,7 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
               <HuBMAPIdLabel hubmapId={id} isSuperseded={isSuperseded} isRetracted={isRetracted} />
             </Box>
           </Tile.Title>
-          {isSuperseded && latestRevisionUrl && (
-            <ViewLatestVersionChip latestRevisionUrl={latestRevisionUrl} programmaticNavigation />
-          )}
+          {isSuperseded && latestRevisionUrl && <ViewLatestVersionChip latestRevisionUrl={latestRevisionUrl} />}
           {isRetracted && !isSuperseded && <RetractedChip />}
         </Stack>
         {'origin_samples_unique_mapped_organs' in entityData && (isSample(entityData) || isDataset(entityData)) && (
