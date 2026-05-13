@@ -1,1 +1,0 @@
-- Fix the Say & See panel reloading continuously for HuBMAP users who had not yet saved any preferences or lists. The underlying `/user/keys` 404 is now treated as an empty UKV response instead of a retryable error, and the panel keeps the chat mounted once it has resolved at least once.

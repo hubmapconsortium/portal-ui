@@ -1,1 +1,0 @@
-- Display provenance tree for all publications.

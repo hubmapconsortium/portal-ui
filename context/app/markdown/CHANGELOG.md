@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.45.0 - 2026-05-13
+
+- Adjust protocol links to point to specific version associated with donor/sample.
+- Display provenance tree for all publications.
+- Search by HuBMAP ID (top search bar or HuBMAP ID column-header popover) now surfaces entities that have been superseded by a newer revision, with a "Superseded" badge on the result so users know what they're clicking. Other search modes continue to hide superseded entities by default.
+- Add an "Include superseded entities" checkbox to the facets sidebar (after the Status section) so users can opt to include superseded entities in any search. When active, an "Including superseded entities" chip appears alongside the other filter chips.
+- Scope the top search bar's query to the `all_text` field; the HuBMAP ID column popover continues to query the `hubmap_id` field directly.
+- Fix the Say & See panel reloading continuously for HuBMAP users who had not yet saved any preferences or lists. The underlying `/user/keys` 404 is now treated as an empty UKV response instead of a retryable error, and the panel keeps the chat mounted once it has resolved at least once.
+
+
+
 ## v1.44.4 - 2026-05-01
 
 - Fix the publication detail page Data section showing the wrong number of related datasets. All entities referenced by a publication's `ancestor_ids` are now loaded, including older dataset versions that have a `next_revision_uuid`.
