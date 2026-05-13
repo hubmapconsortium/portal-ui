@@ -142,6 +142,9 @@ export function CellContent({
   isRetracted,
   latestRevisionUrl,
 }: CellContentProps) {
+  if (!fieldValue) {
+    return null;
+  }
   switch (field.split('.').pop()) {
     case 'hubmap_id':
       return (
@@ -156,10 +159,6 @@ export function CellContent({
     case 'last_modified_timestamp':
     case 'published_timestamp':
     case 'created_timestamp':
-      // Handle datasets without published timestamps.
-      if (!fieldValue) {
-        return null;
-      }
       return <>{format(fieldValue, 'yyyy-MM-dd')}</>;
     case 'age':
       return <DonorAgeTooltip donorAge={fieldValue}>{fieldValue}</DonorAgeTooltip>;
