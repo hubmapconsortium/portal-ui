@@ -6,6 +6,7 @@ import { Dataset, EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
+import Alert from '@mui/material/Alert';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import HelperPanel from 'js/shared-styles/HelperPanel';
 import { useInView } from 'react-intersection-observer';
@@ -27,11 +28,13 @@ import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import { CellTypeCategory } from './types';
+import { useSCFindModality } from './SCFindModalityContext';
 
 function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+  const modality = useSCFindModality();
 
-  const { data } = useIndexedDatasets();
+  const { data } = useIndexedDatasets(modality);
 
   const allCountsMap = data?.countsMap;
 
@@ -93,6 +96,8 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
     cellTypeStats: state.cellTypeStats,
   }));
   const cellTypes = useCellVariableNames();
+  const modality = useSCFindModality();
+  const modalityLabel = modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
 
   return (
     <HelperPanel shouldDisplay={shouldDisplay} sx={{ minWidth: shouldDisplay ? 192 : 0 }}>
@@ -103,7 +108,7 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
       <HelperPanel.BodyItem label="Cell Type Distribution">
         <div>
           This chart shows the distribution of cell types across {currentTissue} for the selected tissue. These results
-          are derived from RNAseq datasets that were indexed by the <SCFindLink />.
+          are derived from {modalityLabel} datasets that were indexed by the <SCFindLink />.
         </div>
         {/* For some reason, `py: 1` leads to the divider being vertically misaligned; pt:1 and mb: 1 are a workaround */}
         <Divider sx={{ pt: 1, mb: 1 }} />
@@ -126,6 +131,8 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
 function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: EventInfo }) {
   const { openTabIndex, handleTabChange } = useTabs();
   const cellTypes = useCellVariableNames();
+  const modality = useSCFindModality();
+  const modalityLabel = modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
   const tissues = useMemo(() => {
     const uniqueTissues = new Set<string>();
     cellTypes.forEach((cellType) => {
@@ -209,8 +216,9 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
           </>
         }
       >
-        These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP datasets
-        are currently compatible with this method due to data modalities or the availability of cell annotations.
+        These results are derived from {modalityLabel} datasets that were indexed by the <SCFindLink />. Not all HuBMAP
+        datasets are currently compatible with this method due to data modalities or the availability of cell
+        annotations.
       </DatasetsOverview>
       <ResultsHelperPanel shouldDisplay={displayHelper} currentTissue={currentTissue} />
     </div>
@@ -246,11 +254,19 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
 
 function DatasetListSection() {
   const cellTypes = useCellVariableNames();
-  const { datasets, cellTypeCategories, isLoading, countsMaps } = useSCFindCellTypeResults(cellTypes);
+  const { datasets, cellTypeCategories, isLoading, error, countsMaps } = useSCFindCellTypeResults(cellTypes);
   const { openTabIndex, handleTabChange } = useTabs();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
+      </Alert>
+    );
   }
 
   if (!datasets) {
@@ -306,6 +322,14 @@ function SCFindCellTypeQueryResultsLoader({ trackingInfo }: SCFindCellTypeQueryR
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
+      </Alert>
+    );
   }
 
   if (!datasets) {

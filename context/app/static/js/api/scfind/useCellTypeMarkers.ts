@@ -19,6 +19,7 @@ export interface CellTypeMarkersParams {
   topK?: number;
   sortField?: keyof CellTypeMarkerInfo;
   includePrefix?: boolean;
+  modality?: string;
 }
 
 type CellTypeMarkersKey = string | null;
@@ -31,7 +32,7 @@ interface CellTypeMarkersResponse {
 
 export function createCellTypeMarkersKey(
   scFindEndpoint: string,
-  { cellTypes, topK, backgroundCellTypes, sortField, includePrefix }: CellTypeMarkersParams,
+  { cellTypes, topK, backgroundCellTypes, sortField, includePrefix, modality }: CellTypeMarkersParams,
   scFindIndexVersion?: string,
 ): CellTypeMarkersKey {
   if (!cellTypes || cellTypes.length === 0) {
@@ -46,6 +47,7 @@ export function createCellTypeMarkersKey(
       top_k: topK ? topK.toString() : undefined,
       include_prefix: includePrefix ? String(includePrefix) : undefined,
       sort_field: sortField,
+      modality,
     },
     scFindIndexVersion,
   );

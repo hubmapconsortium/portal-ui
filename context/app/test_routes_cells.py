@@ -4,6 +4,7 @@ from hubmap_api_py_client.errors import ClientError
 
 from .main import create_app
 from . import routes_cells
+from . import utils as app_utils
 
 
 @pytest.fixture
@@ -27,6 +28,8 @@ def client():
             routes_cells.translate_label.cache_clear()
         if hasattr(routes_cells._get_all_names_for_clid, 'cache_clear'):
             routes_cells._get_all_names_for_clid.cache_clear()
+        if hasattr(app_utils.fetch_pathway_participants, 'cache_clear'):
+            app_utils.fetch_pathway_participants.cache_clear()
 
         yield client
 
@@ -536,6 +539,80 @@ class TestTranslationFunctions:
         assert 'cardiomyocyte' not in result
 
 
+class TestPathwayGenes:
+    """Test class for the /cells/pathway-genes endpoint."""
+
+    def test_pathway_genes_rna_success(self, client, mocker):
+        """Test successful pathway gene validation with RNA modality."""
+        mocker.patch(
+            'app.utils.fetch_pathway_participants',
+            return_value=['ACTB', 'GAPDH', 'INVALID_GENE'],
+        )
+        mocker.patch('app.routes_cells._get_rna_genes', return_value=['ACTB', 'GAPDH', 'TP53'])
+
+        response = client.post('/cells/pathway-genes', json={'pathway_code': 'R-HSA-12345'})
+        assert response.status_code == 200
+        data = response.get_json()
+        assert 'ACTB' in data['valid_genes']
+        assert 'GAPDH' in data['valid_genes']
+        assert 'INVALID_GENE' in data['invalid_genes']
+        assert data['total_genes'] == 3
+        assert data['total_valid'] == 2
+
+    def test_pathway_genes_atac_success(self, client, mocker):
+        """Test successful pathway gene validation with ATAC modality."""
+        mocker.patch(
+            'app.utils.fetch_pathway_participants',
+            return_value=['ACTB', 'GAPDH', 'TP53'],
+        )
+        mocker.patch('app.routes_cells._get_atac_genes', return_value=['ACTB', 'TP53'])
+
+        response = client.post(
+            '/cells/pathway-genes', json={'pathway_code': 'R-HSA-12345', 'modality': 'atac'}
+        )
+        assert response.status_code == 200
+        data = response.get_json()
+        assert 'ACTB' in data['valid_genes']
+        assert 'TP53' in data['valid_genes']
+        assert 'GAPDH' in data['invalid_genes']
+        assert data['total_valid'] == 2
+
+    def test_pathway_genes_missing_json(self, client):
+        """Test pathway genes without JSON content type."""
+        response = client.post('/cells/pathway-genes', data='not json')
+        assert response.status_code == 400
+        data = response.get_json()
+        assert data['error'] == 'Request must be JSON'
+
+    def test_pathway_genes_missing_pathway_code(self, client):
+        """Test pathway genes without pathway_code."""
+        response = client.post('/cells/pathway-genes', json={'modality': 'rna'})
+        assert response.status_code == 400
+        data = response.get_json()
+        assert data['error'] == 'Missing "pathway_code" in request body'
+
+    def test_pathway_genes_unsupported_modality(self, client):
+        """Test pathway genes with unsupported modality."""
+        response = client.post(
+            '/cells/pathway-genes', json={'pathway_code': 'R-HSA-12345', 'modality': 'unsupported'}
+        )
+        assert response.status_code == 400
+        data = response.get_json()
+        assert 'Unsupported modality' in data['error']
+
+    def test_pathway_genes_ubkg_error(self, client, mocker):
+        """Test pathway genes when UBKG fetch fails."""
+        mocker.patch(
+            'app.utils.fetch_pathway_participants',
+            side_effect=Exception('UBKG error'),
+        )
+
+        response = client.post('/cells/pathway-genes', json={'pathway_code': 'R-HSA-99999'})
+        assert response.status_code == 500
+        data = response.get_json()
+        assert 'error' in data
+
+
 @pytest.mark.parametrize(
     'endpoint,method,expected_status',
     [
@@ -546,6 +623,7 @@ class TestTranslationFunctions:
         ('/cells/proteins-by-substring.json', 'POST', 200),
         ('/cells/cell-types-by-substring.json', 'POST', 200),
         ('/cells/genes/validate', 'POST', 400),  # No JSON body
+        ('/cells/pathway-genes', 'POST', 400),  # No JSON body
         ('/cells/cell-percentages-for-datasets.json', 'POST', 200),
         ('/cells/cell-expression-in-dataset.json', 'POST', 200),
         ('/cells/all-indexed-uuids.json', 'POST', 200),

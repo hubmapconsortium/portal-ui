@@ -9,7 +9,7 @@ import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useMolecularDataQueryFormState } from '../hooks';
-import { usePathwayAutocompleteQuery, useSelectedPathwayParticipants } from './hooks';
+import { usePathwayAutocompleteQuery } from './hooks';
 import { PreserveWhiteSpaceListItem } from './styles';
 import { AutocompleteResult } from './types';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
@@ -23,8 +23,6 @@ export default function GenePathwaysAutocomplete() {
     control,
     defaultValue: null,
   });
-
-  useSelectedPathwayParticipants();
 
   const handleSubstringChange = useEventCallback(({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
     setSubstring(value);

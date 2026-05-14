@@ -6,15 +6,25 @@ export type QueryType = (typeof QUERY_TYPES)[number];
 
 export const GENE_QUERY_METHODS = {
   scFind: 'scFind - RNAseq experiments (gene expression)',
+  scFindATAC: 'scFind - ATACseq experiments (DNA accessibility)',
   crossModalityRNA: 'Cells Cross-Modality - RNAseq experiments (gene expression)',
   crossModalityATAC: 'Cells Cross-Modality - ATACseq experiments (DNA accessibility)',
 };
 
 export type GeneQueryMethod = keyof typeof GENE_QUERY_METHODS;
 
+export type SCFindModality = 'ATAC' | undefined;
+
 export interface SCFindGeneQueryFormState {
   queryType: 'gene';
   queryMethod: 'scFind';
+  genes: AutocompleteResult[];
+  threshold: number;
+}
+
+export interface SCFindATACGeneQueryFormState {
+  queryType: 'gene';
+  queryMethod: 'scFindATAC';
   genes: AutocompleteResult[];
   threshold: number;
 }
@@ -29,7 +39,7 @@ export interface CrossModalityGeneQueryFormState {
 
 type GeneQueryFormState = {
   pathway: AutocompleteResult | null;
-} & (SCFindGeneQueryFormState | CrossModalityGeneQueryFormState);
+} & (SCFindGeneQueryFormState | SCFindATACGeneQueryFormState | CrossModalityGeneQueryFormState);
 
 export interface ProteinQueryFormState {
   queryType: 'protein';
@@ -41,7 +51,7 @@ export interface ProteinQueryFormState {
 
 export interface CellTypeQueryFormState {
   queryType: 'cell-type';
-  queryMethod: 'scFind' | 'crossModality';
+  queryMethod: 'scFind' | 'scFindATAC' | 'crossModality';
   cellTypes: AutocompleteResult[];
 }
 

@@ -10,13 +10,14 @@ export interface DatasetsForGenesResponse {
 
 export interface DatasetsForGenesParams {
   geneList: string | string[];
+  modality?: string;
 }
 
 type DatasetsForGenesKey = string | null;
 
 export function createFindDatasetForGenesKey(
   scFindEndpoint: string,
-  { geneList }: DatasetsForGenesParams,
+  { geneList, modality }: DatasetsForGenesParams,
   scFindIndexVersion?: string,
 ): DatasetsForGenesKey {
   if (
@@ -29,6 +30,7 @@ export function createFindDatasetForGenesKey(
     'findDatasets',
     {
       gene_list: stringOrArrayToString(geneList) || undefined, // Convert to string or return undefined if empty
+      modality,
     },
     scFindIndexVersion,
   );
@@ -44,6 +46,8 @@ export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
         url,
         errorMessages: {
           400: `No results found for ${Array.isArray(props.geneList) ? props.geneList.join(', ') : props.geneList}`,
+          500: 'The scFind server encountered an error. Please try again.',
+          504: 'The scFind server took too long to respond. Please try again.',
         },
       }),
     {

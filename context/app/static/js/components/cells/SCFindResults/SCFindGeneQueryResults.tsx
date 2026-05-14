@@ -9,6 +9,7 @@ import {
 } from 'js/shared-styles/tables/columns';
 import { Dataset, EventInfo } from 'js/components/types';
 import Skeleton from '@mui/material/Skeleton';
+import Alert from '@mui/material/Alert';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import Description from 'js/shared-styles/sections/Description';
@@ -29,6 +30,7 @@ import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { GeneCountsContextProvider } from './GeneCountsContext';
 import { matchingGeneColumn, matchingGenesColumn, totalCellCountColumn } from './columns';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import { useSCFindModality } from './SCFindModalityContext';
 
 const columns = [hubmapID, organCol, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
@@ -56,8 +58,9 @@ function SCFindGeneQueryDatasetList({ datasetIds, countsMap, geneCountMap }: SCF
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
   const gene = useOptionalGeneContext();
   const hasIndividualGene = Boolean(gene);
+  const modality = useSCFindModality();
 
-  const { data } = useIndexedDatasets();
+  const { data } = useIndexedDatasets(modality);
 
   const allCountsMap = data?.countsMap;
 
@@ -141,7 +144,15 @@ function DatasetListSection() {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
   }
 
-  if (error || !order || emptyResults.length === order.length) {
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
+      </Alert>
+    );
+  }
+
+  if (!order || emptyResults.length === order.length) {
     return <NoMatchesText emptyResults={genes} />;
   }
 
@@ -211,6 +222,14 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
+      </Alert>
+    );
   }
 
   // countsMaps is Record<string, Record<string, number>> - gene -> dataset -> count
