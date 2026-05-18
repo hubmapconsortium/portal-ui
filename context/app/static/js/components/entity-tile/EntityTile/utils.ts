@@ -6,7 +6,10 @@ function filterDescendantCountsByType(descendant_counts: DescendantCounts['entit
   if (type === 'Dataset') {
     return descendant_counts?.Dataset ? { Dataset: descendant_counts.Dataset } : {};
   }
-  return descendant_counts;
+  // Support entities share the dataset icon but aren't reachable from the dataset search page,
+  // so excluding them avoids misleading counts that don't match the linked search results.
+  const { Support: _Support, ...rest } = descendant_counts ?? {};
+  return rest;
 }
 
 function getTileDescendantCounts(source: object | undefined, type: string) {

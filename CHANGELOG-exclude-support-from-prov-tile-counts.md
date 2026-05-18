@@ -1,0 +1,1 @@
+- Exclude `Support` entities from the derived entity counts displayed in provenance tile views, since they are not reachable from the derived dataset search page.

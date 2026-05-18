@@ -52,3 +52,21 @@ test.each([
     ),
   ).toStrictEqual(expected);
 });
+
+const sourceWithSupport = {
+  descendant_counts: {
+    entity_type: {
+      Dataset: 5,
+      Sample: 12,
+      Support: 3,
+    },
+  },
+};
+
+test.each([
+  ['Donor', { Dataset: 5, Sample: 12 }],
+  ['Sample', { Dataset: 5, Sample: 12 }],
+  ['Dataset', { Dataset: 5 }],
+])('Excludes Support counts for %s tiles', (entityType, expected) => {
+  expect(getTileDescendantCounts(sourceWithSupport, entityType)).toStrictEqual(expected);
+});
