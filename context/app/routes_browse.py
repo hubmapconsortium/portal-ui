@@ -68,8 +68,7 @@ def details(type, uuid):
     if should_redirect_entity(entity):
         raw_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))
 
-        pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
-        anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
+        anchor = quote(f'section-{entity.get("hubmap_id")}').lower()
 
         if raw_dataset is None or len(raw_dataset) == 0:
             abort(404)
