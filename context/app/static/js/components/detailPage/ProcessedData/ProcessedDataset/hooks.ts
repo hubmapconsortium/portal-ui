@@ -53,6 +53,7 @@ export function useProcessedDatasetDetails(uuid: string) {
       'ingest_metadata.dag_provenance_list',
       'ingest_metadata.workflow_description',
       'ingest_metadata.workflow_version',
+      'ingest_metadata.segmentation_metadata',
       'metadata',
       'protocol_url',
       'dataset_type',

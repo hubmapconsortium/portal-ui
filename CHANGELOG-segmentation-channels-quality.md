@@ -1,0 +1,1 @@
+- Display segmentation channels and quality scores (Quality Score, Mean SNZ, ACVF) below the visualization for datasets with `ingest_metadata.segmentation_metadata`.

@@ -49,6 +49,7 @@ interface VisualizationProps {
   hideTheme?: boolean;
   hideShare?: boolean;
   title?: React.ReactNode;
+  renderBelowFooter?: (args: { activeConfigName?: string }) => React.ReactNode;
 }
 
 function Visualization({
@@ -63,6 +64,7 @@ function Visualization({
   hideTheme = false,
   hideShare = false,
   title = 'Visualization',
+  renderBelowFooter,
 }: VisualizationProps) {
   const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVizNotebookId, setVizHubmapId } =
     useVisualizationStore(visualizationStoreSelector);
@@ -212,6 +214,7 @@ function Visualization({
           </ExpandableDiv>
         </Paper>
         <VisualizationFooter />
+        {renderBelowFooter?.({ activeConfigName: (currentConfig as { name?: string } | undefined)?.name })}
         <BodyExpandedCSS id={id} />
       </StyledDetailPageSection>
     )
