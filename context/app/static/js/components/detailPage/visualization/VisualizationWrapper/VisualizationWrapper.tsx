@@ -20,6 +20,7 @@ interface VisualizationWrapperProps {
   hideTheme?: boolean;
   hideShare?: boolean;
   title?: React.ReactNode;
+  renderBelowFooter?: (args: { activeConfigName?: string }) => React.ReactNode;
 }
 
 function VisualizationWrapper({
@@ -35,6 +36,7 @@ function VisualizationWrapper({
   hideTheme = false,
   hideShare = false,
   title,
+  renderBelowFooter,
 }: VisualizationWrapperProps) {
   const containerStyles = useMemo(
     () => ({
@@ -61,6 +63,7 @@ function VisualizationWrapper({
             hideTheme={hideTheme}
             hideShare={hideShare}
             title={title}
+            renderBelowFooter={renderBelowFooter}
           />
         </Suspense>
       </VisualizationErrorBoundary>

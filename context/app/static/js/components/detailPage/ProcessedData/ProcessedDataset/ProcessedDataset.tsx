@@ -19,7 +19,9 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import { DatasetAttributionDescription } from 'js/components/detailPage/Attribution/Attribution';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
+import SegmentationChannelsAndQuality from 'js/components/detailPage/SegmentationChannelsAndQuality/SegmentationChannelsAndQuality';
 import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 // import Protocol from 'js/components/detailPage/Protocol';
 import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
@@ -152,12 +154,17 @@ function FilesAccordion() {
 
 function VisualizationAccordion() {
   const {
+    dataset,
     dataset: { uuid },
+    sectionDataset,
     sectionDataset: { hubmap_id },
     conf,
   } = useProcessedDatasetContext();
 
   const hasBeenSeen = useProcessedDataStore((state) => state.hasBeenSeen(hubmap_id));
+
+  const segmentationMetadata = dataset.ingest_metadata?.segmentation_metadata;
+  const workflowDetailsHref = `#${datasetSectionId(sectionDataset, 'protocols-and-workflow-details')}`;
 
   if (!conf) {
     return null;
@@ -177,6 +184,13 @@ function VisualizationAccordion() {
         shouldDisplayHeader={false}
         hasBeenMounted={hasBeenSeen}
         hasNotebook
+        renderBelowFooter={({ activeConfigName }) => (
+          <SegmentationChannelsAndQuality
+            segmentationMetadata={segmentationMetadata}
+            activeConfigName={activeConfigName}
+            workflowDetailsHref={workflowDetailsHref}
+          />
+        )}
       />
     </Subsection>
   );

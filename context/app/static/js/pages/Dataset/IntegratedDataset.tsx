@@ -145,6 +145,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
           <IntegratedDatasetVisualizationSection
             uuid={uuid}
             vitessceConfig={vitessceConfig.data}
+            segmentationMetadata={ingest_metadata?.segmentation_metadata}
             shouldDisplay={shouldDisplaySection.visualization}
           />
           <MetadataSection entities={[assayMetadata]} shouldDisplay={shouldDisplaySection.metadata} />

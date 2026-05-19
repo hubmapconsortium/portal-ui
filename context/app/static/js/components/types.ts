@@ -47,6 +47,15 @@ export interface IngestPipelineLink {
 
 export type DagProvenanceType = CWLPipelineLink | IngestPipelineLink;
 
+export interface SegmentationMetadataEntry {
+  ACVF: number;
+  Mean_SNZ: number;
+  Image?: string;
+  CellSegmentationChannels: string[];
+  NucleusSegmentationChannels: string[];
+  QualityScore: number;
+}
+
 export interface Entity {
   entity_type: ESEntityType;
   description: string;
@@ -160,6 +169,12 @@ export interface Dataset extends Entity {
   calculated_metadata?: {
     annotation_tools?: string[];
     object_types?: string[];
+  };
+  ingest_metadata: {
+    dag_provenance_list: DagProvenanceType[];
+    workflow_description?: string;
+    workflow_version?: string;
+    segmentation_metadata?: SegmentationMetadataEntry[];
   };
 }
 
