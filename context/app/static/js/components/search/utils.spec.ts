@@ -132,3 +132,62 @@ describe('buildQuery HuBMAP-ID lookup handling', () => {
     expect(serialized).not.toContain(upper);
   });
 });
+
+describe('buildQuery defaultQueryWithAncestorFilter handling', () => {
+  const expandedDefaultQuery = esb.boolQuery().must([esb.termsQuery('entity_type.keyword', ['Dataset', 'Support'])]);
+
+  function runWithAncestor({
+    ancestorIdValues,
+    includeExpanded,
+  }: {
+    ancestorIdValues?: string[];
+    includeExpanded: boolean;
+  }) {
+    return buildQuery({
+      filters:
+        ancestorIdValues !== undefined
+          ? { ancestor_ids: { values: new Set(ancestorIdValues), type: 'TERM' as const } }
+          : {},
+      facets: {},
+      search: '',
+      size: 18,
+      searchFields: ['all_text'],
+      sourceFields: { table: ['hubmap_id'] },
+      sortField: { field: 'last_modified_timestamp', direction: 'desc' },
+      defaultQuery,
+      defaultQueryWithAncestorFilter: includeExpanded ? expandedDefaultQuery : undefined,
+      latestRevisionFilter,
+      includeSupersededEntities: false,
+      mappings,
+      buildAggregations: false,
+    }) as { query: { bool: { must: unknown[] } } } | null;
+  }
+
+  test('uses the expanded default query when ancestor_ids filter has values', () => {
+    const serialized = mustOf(runWithAncestor({ ancestorIdValues: ['abc123'], includeExpanded: true }));
+
+    expect(serialized).toContain('"Dataset"');
+    expect(serialized).toContain('"Support"');
+  });
+
+  test('falls back to defaultQuery when ancestor_ids filter is absent', () => {
+    const serialized = mustOf(runWithAncestor({ includeExpanded: true }));
+
+    expect(serialized).toContain('"Dataset"');
+    expect(serialized).not.toContain('"Support"');
+  });
+
+  test('falls back to defaultQuery when ancestor_ids filter is empty', () => {
+    const serialized = mustOf(runWithAncestor({ ancestorIdValues: [], includeExpanded: true }));
+
+    expect(serialized).toContain('"Dataset"');
+    expect(serialized).not.toContain('"Support"');
+  });
+
+  test('uses defaultQuery when no expanded variant is configured', () => {
+    const serialized = mustOf(runWithAncestor({ ancestorIdValues: ['abc123'], includeExpanded: false }));
+
+    expect(serialized).toContain('"Dataset"');
+    expect(serialized).not.toContain('"Support"');
+  });
+});
