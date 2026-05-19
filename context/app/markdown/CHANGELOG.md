@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.45.1 - 2026-05-19
+
+- Add support for new dataset workflow status "Approval"; treated equivalently to "QA" for status icons, provenance queries, and image pyramid visualization lifting.
+- Include `Support` entities in the dataset search results when an `ancestor_ids` filter is applied so the count of derived entities shown in the provenance section's tiles matches what users see on the search page, and label support entities with a chip and tooltip explaining that they only carry processing for web visualizations.
+- Migrate package manager from npm to pnpm and consolidate `context/` and `end-to-end/` into a single pnpm workspace at the repo root.
+- Update CI workflows, the Dockerfile, husky hooks, and `etc/` shell scripts to use `pnpm`.
+- Add `@storybook/react`, `yaml-eslint-parser`, `@types/uuid`, `@types/d3-array`, and `@open-draft/deferred-promise` (transitive) to whitelists / explicit deps that npm previously hoisted but pnpm exposes strictly.
+- Accept minor-version bumps in eslint, typescript-eslint, prettier, typescript, and other lint-related tools that surfaced during the fresh lockfile resolution; fix a handful of newly-flagged lint and tsc issues.
+- Widen the `Donor.mapped_metadata` type to allow arbitrary fields that the donor metadata UI was already accessing.
+- Polyfill `WritableStream` / `ReadableStream` / `TransformStream` in Jest setup for MSW 2.14's SSE support.
+- Mark `end-to-end/artillery/` as archival.
+- Display segmentation channels and quality scores (Quality Score, Mean SNZ, ACVF) below the visualization for datasets with `ingest_metadata.segmentation_metadata`.
+
+
+
 ## v1.45.0 - 2026-05-13
 
 - Adjust protocol links to point to specific version associated with donor/sample.

@@ -1,1 +1,0 @@
-- Add support for new dataset workflow status "Approval"; treated equivalently to "QA" for status icons, provenance queries, and image pyramid visualization lifting.

@@ -1,1 +1,0 @@
-- Include `Support` entities in the dataset search results when an `ancestor_ids` filter is applied so the count of derived entities shown in the provenance section's tiles matches what users see on the search page, and label support entities with a chip and tooltip explaining that they only carry processing for web visualizations.
