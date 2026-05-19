@@ -99,7 +99,7 @@ const stringifyEventValues = (obj: Record<string, unknown>): StringifiedEvent =>
       key,
       typeof value === 'string' || typeof value === 'number' ? value : `${JSON.stringify(value)}`,
     ]),
-  ) as StringifiedEvent;
+  );
 
 function prependIDToLabel(event: StringifiedEvent, id?: string): string | number | undefined {
   const { label } = event;
@@ -125,7 +125,7 @@ function buildLabelFields(event: StringifiedEvent, id?: string): Partial<Pick<St
 function formatEvent(event: TrackingEvent, id?: string): StringifiedEvent {
   // Convert all event values to strings to avoid errors in faro and matomo.
   // https://github.com/grafana/faro-web-sdk/issues/269
-  const safeEvent = stringifyEventValues(event as Record<string, unknown>);
+  const safeEvent = stringifyEventValues(event);
   return { ...safeEvent, ...buildLabelFields(safeEvent, id) };
 }
 

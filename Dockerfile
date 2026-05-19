@@ -13,23 +13,25 @@ RUN apk add --no-cache git make g++ python3 \
 
 # Set memory optimization environment variables
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-ENV NPM_CONFIG_PROGRESS=false
-ENV NPM_CONFIG_LOGLEVEL=warn
+
+# Enable pnpm via corepack. The version is pinned via package.json#packageManager.
+RUN corepack enable && corepack prepare pnpm@10.27.0 --activate
 
 # COPY only what is needed so layers can be cached.
-COPY context/package.json .
-COPY context/package-lock.json .
-COPY context/.npmrc .
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
+COPY context/package.json context/package.json
+COPY end-to-end/package.json end-to-end/package.json
 
-RUN npm ci
+# Install only context's deps (skip the cypress binary download from end-to-end).
+RUN pnpm install --frozen-lockfile --filter ./context...
 
-COPY context/tsconfig.json tsconfig.json
-COPY context/.swcrc .swcrc
-COPY context/build-utils build-utils
-COPY context/app app
-# portal-visualization is python-only, and not needed for the npm build.
+COPY context/tsconfig.json context/tsconfig.json
+COPY context/.swcrc context/.swcrc
+COPY context/build-utils context/build-utils
+COPY context/app context/app
+# portal-visualization is python-only, and not needed for the frontend build.
 
-RUN npm run build
+RUN pnpm --filter ./context run build
 
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
 
@@ -55,5 +57,5 @@ ENV STATIC_PATH=/app/app/static
 # Source: https://github.com/tiangolo/uwsgi-nginx-docker/blob/c1e6eb2/docker-images/entrypoint.sh#L37
 COPY context/portal.nginx.conf /etc/nginx/conf.d/
 
-COPY --from=frontend /work/app/static/public ${STATIC_PATH}/public
+COPY --from=frontend /work/context/app/static/public ${STATIC_PATH}/public
 COPY context/ /app

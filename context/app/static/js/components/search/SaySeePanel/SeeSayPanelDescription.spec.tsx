@@ -28,7 +28,7 @@ beforeEach(() => {
     handleUpdateSavedPreferences: mockHandleUpdateSavedPreferences,
     isLoading: false,
     mutate: jest.fn(),
-  } as unknown as ReturnType<typeof useSavedPreferences>);
+  });
 });
 
 function setAppContext(overrides: { isAuthenticated?: boolean; isHubmapUser?: boolean }) {
@@ -83,7 +83,7 @@ describe('SaySeePanelDescription DataScopeSwitch', () => {
       handleUpdateSavedPreferences: mockHandleUpdateSavedPreferences,
       isLoading: false,
       mutate: jest.fn(),
-    } as unknown as ReturnType<typeof useSavedPreferences>);
+    });
 
     render(<SaySeePanelDescription />);
     await user.click(screen.getByRole('checkbox', { name: /Toggle whether Say & See uses public data/i }));

@@ -367,7 +367,7 @@ function sortTemplates(templates: TemplatesTypes, disabledTemplates?: TemplatesT
       // Alphabetical sorting by title for remaining templates
       return templateA.title.localeCompare(templateB.title);
     }),
-  ) as TemplatesTypes;
+  );
 }
 
 /**

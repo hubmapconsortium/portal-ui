@@ -17,7 +17,7 @@ const mockUseAppContext = jest.mocked(useAppContext);
 const mockCheckAndDownloadFile = jest.mocked(checkAndDownloadFile);
 
 function buildCtx(rowsBySource: { source: string; rows: Record<string, unknown>[] }[]): DownloadActionContext {
-  return { rowsBySource, filters: {}, dataPackage: null } as unknown as DownloadActionContext;
+  return { rowsBySource, filters: {}, dataPackage: null };
 }
 
 function runAction(action: DownloadAction, ctx: DownloadActionContext) {

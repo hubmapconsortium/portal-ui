@@ -18,7 +18,7 @@ initTrackers();
 const root = ReactDOM.createRoot(document.getElementById('react-content')!);
 root.render(
   window.location.pathname.startsWith('/iframe/') ? (
-    <Iframe flaskData={flaskData as unknown as FlaskData} />
+    <Iframe flaskData={flaskData} />
   ) : (
     <App
       flaskData={flaskData}

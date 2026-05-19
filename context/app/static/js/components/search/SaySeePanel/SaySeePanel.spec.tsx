@@ -69,7 +69,7 @@ function setup(app: AppContextOverrides = {}, prefs: PrefsOverrides = {}) {
     handleUpdateSavedPreferences: jest.fn(),
     isLoading: prefs.isLoading ?? false,
     mutate: jest.fn(),
-  } as unknown as ReturnType<typeof useSavedPreferences>);
+  });
 }
 
 beforeEach(() => {

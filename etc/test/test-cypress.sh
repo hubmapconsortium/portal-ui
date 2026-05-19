@@ -14,10 +14,8 @@ case $1 in
 
   maintenance)
     CYPRESS_ARGS="--spec cypress/e2e/maintenance/*.cy.js --config baseUrl=http://localhost:${PORT}"
-    cd context
-    npm run build:maintain
-    ( cd app/static/js/maintenance/public/ ; python -m http.server $PORT & )
-    cd -
+    pnpm --filter ./context run build:maintain
+    ( cd context/app/static/js/maintenance/public/ ; python -m http.server $PORT & )
     ;;
 
   portal)

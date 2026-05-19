@@ -9,7 +9,6 @@ import {
   TemplatesResponse,
   CreateTemplateNotebooksTypes,
   TemplateTagsResponse,
-  TemplatesTypes,
   WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates, useWorkspacesList } from 'js/components/workspaces/hooks';
@@ -63,7 +62,7 @@ function useWorkspaceTemplates(tags: string[] = []) {
           : template.title;
         return [key, { ...template, title: newTitle }];
       }),
-  ) as TemplatesTypes;
+  );
 
   return {
     templates: filteredTemplates,

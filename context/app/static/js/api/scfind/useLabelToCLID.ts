@@ -3,10 +3,6 @@ import { fetcher } from 'js/helpers/swr';
 import { useMemo } from 'react';
 import { createScFindKey, formatCellTypeName } from './utils';
 
-interface CellTypeToCLID {
-  CLIDs: string[];
-}
-
 export interface CellTypeToCLIDParams {
   cellType: string;
 }
@@ -45,7 +41,7 @@ export default function useLabelToCLID(props: CellTypeToCLIDParams) {
 
     const clids = fullMapping[props.cellType] || [];
     return {
-      data: { CLIDs: clids } as CellTypeToCLID,
+      data: { CLIDs: clids },
       error: undefined,
       isLoading: false,
     };

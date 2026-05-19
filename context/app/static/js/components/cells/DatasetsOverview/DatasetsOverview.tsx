@@ -58,7 +58,7 @@ export default function DatasetsOverview({
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
         label: trackingInfo.label ? `${trackingInfo.label} Expand` : 'Expand',
-      } as EventInfo);
+      });
     }
   });
 

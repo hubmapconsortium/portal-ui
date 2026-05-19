@@ -73,7 +73,7 @@ const getFirstValue = (value: unknown): string | number => {
 const getFirstAnatomyValue = (anatomy_1: unknown, anatomy_2: unknown): string | number => {
   const anatomy2 = getFirstValue(anatomy_2);
   if (anatomy2 && anatomy2 !== '—') {
-    return anatomy2 as string;
+    return anatomy2;
   }
   return getFirstValue(anatomy_1);
 };
@@ -126,8 +126,7 @@ const useCellPopDataForOrgan = (
     datasetMetadata.forEach((dataset) => {
       const { _id: uuid, _source: source } = dataset;
       const { hubmap_id, title, assay_display_name, anatomy_1, anatomy_2, donor } = source;
-      // Type assertion to handle the flexible nature of mapped_metadata
-      const dmm = donor?.mapped_metadata as Record<string, unknown> | undefined;
+      const dmm = donor?.mapped_metadata;
 
       uuidToHubmapId.set(uuid, hubmap_id);
 

@@ -45,8 +45,10 @@ function TabChangeSelectionHandler({ openTabIndex }: { openTabIndex: number }) {
   return <></>;
 }
 
-interface EntitiesTableTabsProps<Doc extends Entity>
-  extends Pick<ReturnType<typeof useTabs>, 'openTabIndex' | 'handleTabChange'> {
+interface EntitiesTableTabsProps<Doc extends Entity> extends Pick<
+  ReturnType<typeof useTabs>,
+  'openTabIndex' | 'handleTabChange'
+> {
   entities: EntitiesTabTypes<Doc>[];
   isLoading?: boolean;
   totalHitsCounts?: number[];
@@ -122,7 +124,8 @@ function EntitiesTablesTabs<Doc extends Entity>({
 }
 
 interface EntitiesTablesBodiesProps<Doc extends Entity>
-  extends EntitiesTableTabsProps<Doc>,
+  extends
+    EntitiesTableTabsProps<Doc>,
     Pick<
       EntitiesTablesProps<Doc>,
       | 'emptyAlert'

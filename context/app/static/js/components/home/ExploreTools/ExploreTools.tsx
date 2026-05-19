@@ -82,7 +82,7 @@ export default function ExploreTools() {
         }}
         onMouseLeave={resetExpandedCardIndex}
         onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget as Node)) resetExpandedCardIndex();
+          if (!e.currentTarget.contains(e.relatedTarget)) resetExpandedCardIndex();
         }}
       >
         {cards.map(({ title, icon, src, alt, ...card }, index) => (

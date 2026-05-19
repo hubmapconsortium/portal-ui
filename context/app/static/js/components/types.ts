@@ -98,7 +98,7 @@ export interface Donor extends Entity {
     race: string[];
     body_mass_index_value: string;
     body_mass_index_unit: string;
-  }>;
+  }> & { [key: string]: unknown };
   group_name: string;
   protocol_url: string;
   organ_donor_data: Record<string, unknown>;

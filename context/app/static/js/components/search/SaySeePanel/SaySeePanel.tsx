@@ -11,7 +11,6 @@ import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpanded
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useSavedPreferences } from 'js/components/savedLists/hooks';
-import { SavedPreferences } from 'js/components/savedLists/types';
 
 import HuBMAPPerson from 'assets/svg/hubmap-person.svg';
 import SaySeePanelDescription from './SeeSayPanelDescription';
@@ -63,7 +62,7 @@ function SaySeePanel() {
   const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(visualizationSelector);
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
   const { savedPreferences: rawPrefs, isLoading: prefsLoading } = useSavedPreferences();
-  const savedPreferences = rawPrefs as SavedPreferences;
+  const savedPreferences = rawPrefs;
   const useAuthScope = isHubmapUser && savedPreferences?.saySeeDataScope === 'authenticated';
   const dataPackagePath = useAuthScope ? CONSORTIUM_DATA_PACKAGE_PATH : PUBLIC_DATA_PACKAGE_PATH;
 

@@ -30,7 +30,7 @@ const config = {
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js|history|pdfjs-dist|until-async|nuqs)/)',
+    'node_modules/(?!(?:\\.pnpm/[^/]+/node_modules/)?(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js|history|pdfjs-dist|until-async|nuqs|rettime|@open-draft/deferred-promise)/)',
   ],
   transform: {
     '^.+\\.(t|j)sx?$': [

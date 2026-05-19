@@ -99,9 +99,9 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
         setVitessceDefaults(vitData);
         return undefined;
       }
-      let vitessceURLConf;
+      let vitessceURLConf: object | null;
       try {
-        vitessceURLConf = fragment.length > 0 ? decodeURLParamsToConf(fragment) : null;
+        vitessceURLConf = fragment.length > 0 ? (decodeURLParamsToConf(fragment) as unknown as object) : null;
       } catch {
         // If URL cannot be parsed, display error and show Vitessce.
         toastError('View configuration from URL was not able to be parsed.');
@@ -113,21 +113,22 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       let initialSelectionFromUrl;
       // If there is a url conf and we have a multidataset, use the url conf to find the initial selection of the multi-dataset.
       if (Array.isArray(vitData)) {
+        // Array.isArray narrows to any[], so re-assert to object[] for downstream type safety.
+        const vitDataArr = vitData as object[];
         initialSelectionFromUrl = Math.max(
           0,
-          (vitData as { name: string }[])
+          (vitDataArr as { name: string }[])
             .map(({ name }) => name)
             .indexOf((vitessceURLConf as unknown as { name: string })?.name),
         );
 
         // Clone the array to avoid mutating the vitData prop
-        const clonedVitData = [...vitData];
-        clonedVitData[initialSelectionFromUrl] =
-          (vitessceURLConf as unknown as object) ?? vitData[initialSelectionFromUrl];
+        const clonedVitData: object[] = [...vitDataArr];
+        clonedVitData[initialSelectionFromUrl] = vitessceURLConf ?? vitDataArr[initialSelectionFromUrl];
         initializedVitDataFromUrl = clonedVitData;
-        setLocalVitessceState(clonedVitData[initialSelectionFromUrl] as object);
+        setLocalVitessceState(clonedVitData[initialSelectionFromUrl]);
       } else {
-        initializedVitDataFromUrl = (vitessceURLConf as unknown as object) ?? vitData;
+        initializedVitDataFromUrl = vitessceURLConf ?? vitData;
         setLocalVitessceState(initializedVitDataFromUrl);
       }
       setVitessceSelection(initialSelectionFromUrl ?? 0);

@@ -14,8 +14,11 @@ interface MultiGeneAssociation {
   colors: string[];
 }
 
-interface BarChartProps<T extends { value: number }, K extends string, D extends Record<K, T>>
-  extends WithParentSizeProvidedProps {
+interface BarChartProps<
+  T extends { value: number },
+  K extends string,
+  D extends Record<K, T>,
+> extends WithParentSizeProvidedProps {
   data: D;
   highlightedKeys?: K[];
   margin?: { top: number; right: number; bottom: number; left: number };
@@ -89,7 +92,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
 
   // Function to create patterns for multi-gene associations similar to StackedBar
   const createPattern = (key: K, id: string) => {
-    const geneAssociation = cellTypeToGenes.get(key as string);
+    const geneAssociation = cellTypeToGenes.get(key);
 
     if (!geneAssociation || geneAssociation.genes.length <= 1) {
       // Single gene or no association - use solid color

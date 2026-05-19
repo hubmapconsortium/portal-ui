@@ -1,0 +1,3 @@
+cd context
+pnpm run pre-commit
+pnpm exec tsc -p tsconfig.json --noEmit --skipLibCheck

@@ -22,7 +22,7 @@ function buildInitialState(overrides: Partial<SearchStoreState> = {}): SearchSto
     type: 'Dataset' as const,
     analyticsCategory: 'Test Search',
     ...overrides,
-  } as SearchStoreState;
+  };
 }
 
 function renderWithStore(overrides?: Partial<SearchStoreState>) {

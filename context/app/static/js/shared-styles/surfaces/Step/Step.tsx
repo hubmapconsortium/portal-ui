@@ -10,11 +10,6 @@ interface StepProps {
   hideRequiredText?: boolean;
 }
 
-interface RequiredVariant {
-  text: string;
-  color: string;
-}
-
 const requiredVariants = {
   true: {
     text: 'Required',
@@ -36,7 +31,7 @@ function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
   );
 }
 function Step({ index, title, isRequired = false, hideRequiredText, children }: PropsWithChildren<StepProps>) {
-  const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'] as RequiredVariant;
+  const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'];
   return (
     <>
       <Paper

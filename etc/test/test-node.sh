@@ -3,13 +3,11 @@ set -o errexit
 
 . etc/test/utils.sh
 
-cd context
-
 start lint
-npm run lint
+pnpm --filter ./context run lint
 end lint
 
-start npm-test
-npm run test
-end npm-test
+start pnpm-test
+pnpm --filter ./context run test
+end pnpm-test
 

@@ -63,7 +63,7 @@ function App(props: AppProps) {
         workspacesToken={workspacesToken}
         isWorkspacesUser={isWorkspacesUser}
         isHubmapUser={isHubmapUser}
-        flaskData={flaskDataWithoutEndpoints as FlaskData}
+        flaskData={flaskDataWithoutEndpoints}
         userFirstName={userFirstName}
         userLastName={userLastName}
         userGlobusId={userGlobusId}

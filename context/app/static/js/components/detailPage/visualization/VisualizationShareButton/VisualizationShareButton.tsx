@@ -73,7 +73,7 @@ function VisualizationShareButton({
 
     let urlIsLong = false;
     const url = getUrl(
-      vitessceState as object,
+      vitessceState,
       () => {
         urlIsLong = true;
       },
@@ -115,7 +115,7 @@ function VisualizationShareButton({
   const emailConf = useEventCallback(() => {
     if (!hasConfig) return;
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
-    createEmailWithUrl(vitessceState as object, urlOptions);
+    createEmailWithUrl(vitessceState, urlOptions);
   });
 
   const downloadNotebook = useEventCallback(() => {

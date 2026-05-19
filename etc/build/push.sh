@@ -68,16 +68,16 @@ if [[ -z "$MAJOR" ]]; then
   echo "Days since last minor version: $DAYS_PAST_REF"
 
   if [[ $DAYS_PAST_REF -lt 14 ]]; then
-    VERSION=`cd context && npm version patch --no-git-tag-version`
+    VERSION=`cd context && pnpm version patch --no-git-tag-version`
     uv version --bump patch
   else
     echo "End of 2-week cycle."
-    VERSION=`cd context && npm version minor --no-git-tag-version`
+    VERSION=`cd context && pnpm version minor --no-git-tag-version`
     uv version --bump minor
   fi
 else
   # major version bump, don't need to check for 2-week cycle
-  VERSION=`cd context && npm version major --no-git-tag-version`
+  VERSION=`cd context && pnpm version major --no-git-tag-version`
   uv version --bump major
 fi
 
@@ -86,7 +86,7 @@ echo "Version: $VERSION"
 
 ./grab-dependencies.sh
 
-git add context/package*.json
+git add context/package.json package.json pnpm-lock.yaml
 git add pyproject.toml
 git add context/app/markdown/dependencies.md
 git add uv.lock

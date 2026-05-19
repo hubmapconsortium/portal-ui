@@ -20,7 +20,8 @@ import { StyledIcon } from './style';
 const tileWidth = 310;
 
 interface EntityTileProps
-  extends Omit<ComponentProps<typeof Tile>, 'icon' | 'bodyContent' | 'footerContent' | 'tileWidth'>,
+  extends
+    Omit<ComponentProps<typeof Tile>, 'icon' | 'bodyContent' | 'footerContent' | 'tileWidth'>,
     Pick<Entity, 'entity_type'> {
   uuid: string;
   id: string;

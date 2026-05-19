@@ -28,8 +28,10 @@ function TablePaddingRow({ padding }: { padding: number }) {
   );
 }
 
-interface EntityTableProps<Doc extends Entity>
-  extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns' | 'expandedContent'> {
+interface EntityTableProps<Doc extends Entity> extends Pick<
+  EntitiesTabTypes<Doc>,
+  'query' | 'columns' | 'expandedContent'
+> {
   isSelectable?: boolean;
   numSelected?: number;
   disabledIDs?: Set<string>;

@@ -8,7 +8,7 @@ import { SectionDescription } from 'js/shared-styles/sections/SectionDescription
 import LabeledPrimarySwitch from 'js/shared-styles/switches/LabeledPrimarySwitch';
 import { useSavedPreferences } from 'js/components/savedLists/hooks';
 import { trackEvent } from 'js/helpers/trackers';
-import { SaySeeDataScope, SavedPreferences } from 'js/components/savedLists/types';
+import { SaySeeDataScope } from 'js/components/savedLists/types';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
@@ -50,7 +50,7 @@ function AccessDescription() {
 
 function DataScopeSwitch() {
   const { savedPreferences: rawPrefs, handleUpdateSavedPreferences } = useSavedPreferences();
-  const savedPreferences = rawPrefs as SavedPreferences;
+  const savedPreferences = rawPrefs;
   const scope: SaySeeDataScope = savedPreferences?.saySeeDataScope ?? 'public';
 
   const handleChange = useCallback(
