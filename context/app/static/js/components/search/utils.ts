@@ -87,6 +87,7 @@ export function buildQuery({
   sourceFields,
   sortField,
   defaultQuery,
+  defaultQueryWithAncestorFilter,
   latestRevisionFilter,
   includeSupersededEntities,
   mappings,
@@ -101,6 +102,7 @@ export function buildQuery({
   | 'sourceFields'
   | 'sortField'
   | 'defaultQuery'
+  | 'defaultQueryWithAncestorFilter'
   | 'latestRevisionFilter'
   | 'includeSupersededEntities'
 >) {
@@ -138,7 +140,11 @@ export function buildQuery({
           ? [esb.termQuery(getESField({ field: 'uuid', mappings }), search.toLowerCase())]
           : [esb.simpleQueryStringQuery(search).fields(searchFields)]
     : [];
-  const defaultQueries = defaultQuery ? [defaultQuery] : [];
+  const ancestorIdsFilter = filters?.ancestor_ids;
+  const hasAncestorIdsFilter = Boolean(ancestorIdsFilter && filterHasValues({ filter: ancestorIdsFilter }));
+  const effectiveDefaultQuery =
+    hasAncestorIdsFilter && defaultQueryWithAncestorFilter ? defaultQueryWithAncestorFilter : defaultQuery;
+  const defaultQueries = effectiveDefaultQuery ? [effectiveDefaultQuery] : [];
   const revisionFilterQueries =
     latestRevisionFilter && !isIdLookupSearch && !includeSupersededEntities ? [latestRevisionFilter] : [];
 

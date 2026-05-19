@@ -10,11 +10,13 @@ import { VitessceIcon } from 'js/shared-styles/icons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { Entity } from 'js/components/types';
+import Typography from '@mui/material/Typography';
 
 export interface HuBMAPIdDisplayInfo {
   hasVisualization?: boolean;
   isSuperseded?: boolean;
   isRetracted?: boolean;
+  isSupport?: boolean;
   latestRevisionUrl?: string;
 }
 
@@ -26,12 +28,13 @@ export function getHuBMAPIdDisplayInfo(source: Partial<Entity>): HuBMAPIdDisplay
   const nextRevisionUuid = typeof source.next_revision_uuid === 'string' ? source.next_revision_uuid : undefined;
   const isSuperseded = Boolean(nextRevisionUuid);
   const isRetracted = Boolean(source.sub_status);
+  const isSupport = source.entity_type === 'Support';
   const hasVisualization = Boolean(source.visualization);
   const latestRevisionUrl =
     nextRevisionUuid && source.entity_type
       ? `/browse/${source.entity_type.toLowerCase()}/${nextRevisionUuid}`
       : undefined;
-  return { isSuperseded, isRetracted, hasVisualization, latestRevisionUrl };
+  return { isSuperseded, isRetracted, isSupport, hasVisualization, latestRevisionUrl };
 }
 
 /**
@@ -91,6 +94,21 @@ export function RetractedChip() {
   );
 }
 
+export function SupportChip() {
+  return (
+    <SecondaryBackgroundTooltip title="Support entities have only been processed to aid visualizations on the web and do not contain additional analysis.">
+      <Chip
+        label="Support"
+        size="small"
+        color="info"
+        variant="outlined"
+        data-testid="support-chip"
+        sx={{ maxWidth: 'fit-content' }}
+      />
+    </SecondaryBackgroundTooltip>
+  );
+}
+
 interface HuBMAPIDCellContentProps extends HuBMAPIdDisplayInfo {
   hubmapId: string;
 }
@@ -140,12 +158,14 @@ export function CellContent({
   hasVisualization,
   isSuperseded,
   isRetracted,
+  isSupport,
   latestRevisionUrl,
 }: CellContentProps) {
   if (!fieldValue) {
     return null;
   }
-  switch (field.split('.').pop()) {
+
+  switch (field.split('.').pop() ?? '') {
     case 'hubmap_id':
       return (
         <HuBMAPIDCellContent
@@ -162,6 +182,13 @@ export function CellContent({
       return <>{format(fieldValue, 'yyyy-MM-dd')}</>;
     case 'age':
       return <DonorAgeTooltip donorAge={fieldValue}>{fieldValue}</DonorAgeTooltip>;
+    case 'assay_display_name':
+      return (
+        <Stack direction="column" gap={0.5}>
+          <Typography variant="body2">{fieldValue}</Typography>
+          {isSupport && <SupportChip />}
+        </Stack>
+      );
     default:
       return <>{fieldValue}</>;
   }

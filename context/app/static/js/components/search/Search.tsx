@@ -82,6 +82,7 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
     latestRevisionFilter,
     includeSupersededEntities,
   }: SearchStoreState = useSearchStore();
@@ -97,6 +98,7 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
     latestRevisionFilter,
     includeSupersededEntities,
   });
@@ -152,6 +154,7 @@ type SearchConfig = Pick<
   | 'size'
   | 'type'
   | 'defaultQuery'
+  | 'defaultQueryWithAncestorFilter'
   | 'latestRevisionFilter'
   | 'analyticsCategory'
 > & {

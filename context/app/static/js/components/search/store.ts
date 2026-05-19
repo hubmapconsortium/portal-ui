@@ -134,6 +134,10 @@ export interface SearchState<V> {
   initialFilters: FiltersType<V>;
   facets: FacetsType;
   defaultQuery?: esb.Query;
+  // Used as the default query when filters.ancestor_ids has values. Lets the dataset search
+  // include Support entities when navigating from a "View Derived Datasets" link so the
+  // results match the descendant counts shown in the parent entity's prov section.
+  defaultQueryWithAncestorFilter?: esb.Query;
   latestRevisionFilter?: esb.Query;
   includeSupersededEntities?: boolean;
   search: string;

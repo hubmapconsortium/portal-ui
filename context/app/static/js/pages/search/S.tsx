@@ -44,6 +44,13 @@ function makeDonorMetadataFilters(e: EntityWithType) {
 function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
   return {
     defaultQuery: esb.boolQuery().must([esb.termsQuery('entity_type.keyword', [type])]),
+    // When filtering the dataset search by ancestor_ids (e.g. coming from a "View Derived Datasets"
+    // link in a parent entity's prov section), also include Support entities so the result set
+    // matches the descendant count shown upstream.
+    defaultQueryWithAncestorFilter:
+      type === 'Dataset'
+        ? esb.boolQuery().must([esb.termsQuery('entity_type.keyword', ['Dataset', 'Support'])])
+        : undefined,
     latestRevisionFilter: esb
       .boolQuery()
       .mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]),

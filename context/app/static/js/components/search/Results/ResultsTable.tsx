@@ -39,10 +39,11 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Enti
   const fieldValue = getByPath(source, field);
   const isHubmapIdField = field.split('.').pop() === 'hubmap_id';
   const displayInfo = isHubmapIdField ? getHuBMAPIdDisplayInfo(source) : {};
+  const isSupport = source.entity_type === 'Support';
 
   return (
     <StyledTableCell key={field}>
-      <CellContent field={field} fieldValue={fieldValue} {...displayInfo} />
+      <CellContent field={field} fieldValue={fieldValue} {...displayInfo} isSupport={isSupport} />
     </StyledTableCell>
   );
 }
@@ -127,6 +128,7 @@ function SelectableHeaderCells() {
   const sourceFields = useSearchStore((state) => state.sourceFields);
   const sortField = useSearchStore((state) => state.sortField);
   const defaultQuery = useSearchStore((state) => state.defaultQuery);
+  const defaultQueryWithAncestorFilter = useSearchStore((state) => state.defaultQueryWithAncestorFilter);
   const type = useSearchStore((state) => state.type);
 
   const mappings = useESmapping();
@@ -140,6 +142,7 @@ function SelectableHeaderCells() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
     mappings,
     buildAggregations: false,
   });
