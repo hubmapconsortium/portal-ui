@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import ColoredStatusIcon from './ColoredStatusIcon';
 
 function getColor(status: string) {
-  if (['NEW', 'REOPENED', 'QA', 'LOCKED', 'PROCESSING', 'HOLD', 'SUBMITTED'].includes(status)) {
+  if (['NEW', 'REOPENED', 'QA', 'APPROVAL', 'LOCKED', 'PROCESSING', 'HOLD', 'SUBMITTED'].includes(status)) {
     return 'info';
   }
 
