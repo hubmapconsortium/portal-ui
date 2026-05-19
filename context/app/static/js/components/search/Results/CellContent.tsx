@@ -96,7 +96,7 @@ export function RetractedChip() {
 
 export function SupportChip() {
   return (
-    <SecondaryBackgroundTooltip title="Support entities have only been processed to aid visualizations on the web and do not contain additional analysis.">
+    <SecondaryBackgroundTooltip title="Support datasets are created to enable visualizations and do not contain independent analysis results.">
       <Chip
         label="Support"
         size="small"
