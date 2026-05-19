@@ -273,6 +273,9 @@ importers:
       '@types/d3':
         specifier: ^7.4.3
         version: 7.4.3
+      '@types/d3-array':
+        specifier: ^3.2.2
+        version: 3.2.2
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -285,6 +288,9 @@ importers:
       '@types/styled-components':
         specifier: ^5.1.34
         version: 5.1.36
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.44.1
         version: 8.59.4(@typescript-eslint/parser@8.59.4(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3)
