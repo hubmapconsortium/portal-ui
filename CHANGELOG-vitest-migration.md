@@ -1,0 +1,1 @@
+- Replace Jest with Vitest. All 113 test files run through Vite's transform pipeline; `jest.*` APIs migrated to `vi.*`. `@testing-library/react-hooks` and `react-test-renderer` dropped (use `renderHook` from `@testing-library/react`). ESLint plugin swapped from `eslint-plugin-jest` to `@vitest/eslint-plugin`.

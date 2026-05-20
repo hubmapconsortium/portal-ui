@@ -1,0 +1,1 @@
+- Upgrade TypeScript to 6.0.x. Remove the deprecated `compilerOptions.baseUrl` from `tsconfig.json` and add an explicit `test-utils/*` entry to `paths`.

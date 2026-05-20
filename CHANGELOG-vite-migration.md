@@ -1,0 +1,1 @@
+- Replace Webpack 5 with Vite (+ Rolldown) for the main and maintenance frontend builds. Storybook builder swapped from `@storybook/react-webpack5` to `@storybook/react-vite`. Flask's `flask_static_digest` learned a `vite_dev_mode()` template global so dev mode renders the unbundled Vite entry while production keeps the existing hashed `main.js` / `vendors.js` flow.
