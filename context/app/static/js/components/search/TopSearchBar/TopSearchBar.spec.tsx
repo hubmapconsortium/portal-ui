@@ -5,7 +5,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { SearchStoreProvider, SearchStoreState } from '../store';
 import TopSearchBar from './TopSearchBar';
 
-const mockTrackEvent = jest.mocked(trackEvent);
+const mockTrackEvent = vi.mocked(trackEvent);
 
 function buildInitialState(overrides: Partial<SearchStoreState> = {}): SearchStoreState {
   return {
@@ -34,15 +34,15 @@ function renderWithStore(overrides?: Partial<SearchStoreState>) {
 }
 
 beforeEach(() => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
   mockTrackEvent.mockClear();
 });
 
 afterEach(() => {
   act(() => {
-    jest.runOnlyPendingTimers();
+    vi.runOnlyPendingTimers();
   });
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 describe('TopSearchBar', () => {
@@ -62,7 +62,7 @@ describe('TopSearchBar', () => {
     expect(mockTrackEvent).not.toHaveBeenCalled();
 
     act(() => {
-      jest.advanceTimersByTime(300);
+      vi.advanceTimersByTime(300);
     });
 
     expect(mockTrackEvent).toHaveBeenCalledTimes(1);
@@ -79,7 +79,7 @@ describe('TopSearchBar', () => {
 
     unmount();
     act(() => {
-      jest.advanceTimersByTime(500);
+      vi.advanceTimersByTime(500);
     });
 
     expect(mockTrackEvent).not.toHaveBeenCalled();

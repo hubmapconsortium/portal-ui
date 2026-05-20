@@ -16,7 +16,7 @@
     "baseUrl": "./",
     "sourceMap": true,
     "noEmit": true,
-    "types": ["jest", "@testing-library/jest-dom"],
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "paths": {
       "js/*": ["./app/static/js/*"],
       "assets/*": ["./app/static/assets/*"],

@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import { vi } from 'vitest';
 import { render, renderHook, RenderHookOptions, RenderOptions, act } from '@testing-library/react';
 import Providers from 'js/components/Providers';
 import { enableMapSet } from 'immer';
@@ -15,11 +16,11 @@ const isWorkspacesUser = false;
 const appProviderToken = 'fakeGroupsToken';
 
 // Mock tracking helpers
-jest.mock('js/helpers/trackers');
-jest.mock('@grafana/faro-web-sdk', () => ({
+vi.mock('js/helpers/trackers');
+vi.mock('@grafana/faro-web-sdk', () => ({
   faro: {
     api: {
-      pushError: jest.fn(),
+      pushError: vi.fn(),
     },
   },
 }));

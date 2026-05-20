@@ -9,7 +9,7 @@ import prettier from 'eslint-plugin-prettier';
 import tseslint from 'typescript-eslint';
 
 // Environment-specific configurations
-import jestConfig from './eslint.jest.config.mjs';
+import vitestConfig from './eslint.vitest.config.mjs';
 import storybookConfig from './eslint.storybook.config.mjs';
 import cypressConfig from './eslint.cypress.config.mjs';
 import markdownConfig from './eslint.markdown.config.mjs';
@@ -187,7 +187,7 @@ export default defineConfig(
     },
   },
   // Environment-specific configurations
-  ...jestConfig,
+  ...vitestConfig,
   ...storybookConfig,
   ...cypressConfig,
   ...markdownConfig,

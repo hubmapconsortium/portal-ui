@@ -8,26 +8,26 @@ import { trackEvent } from 'js/helpers/trackers';
 
 import SaySeePanelDescription from './SeeSayPanelDescription';
 
-jest.mock('js/helpers/trackers');
-jest.mock('js/components/Contexts', () => ({
-  useAppContext: jest.fn(),
+vi.mock('js/helpers/trackers');
+vi.mock('js/components/Contexts', () => ({
+  useAppContext: vi.fn(),
 }));
-jest.mock('js/components/savedLists/hooks', () => ({
-  useSavedPreferences: jest.fn(),
+vi.mock('js/components/savedLists/hooks', () => ({
+  useSavedPreferences: vi.fn(),
 }));
 
-const mockUseAppContext = jest.mocked(useAppContext);
-const mockUseSavedPreferences = jest.mocked(useSavedPreferences);
-const mockTrackEvent = jest.mocked(trackEvent);
-const mockHandleUpdateSavedPreferences = jest.fn();
+const mockUseAppContext = vi.mocked(useAppContext);
+const mockUseSavedPreferences = vi.mocked(useSavedPreferences);
+const mockTrackEvent = vi.mocked(trackEvent);
+const mockHandleUpdateSavedPreferences = vi.fn();
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockUseSavedPreferences.mockReturnValue({
     savedPreferences: {},
     handleUpdateSavedPreferences: mockHandleUpdateSavedPreferences,
     isLoading: false,
-    mutate: jest.fn(),
+    mutate: vi.fn(),
   });
 });
 
@@ -68,7 +68,7 @@ describe('SaySeePanelDescription DataScopeSwitch', () => {
       savedPreferences: { saySeeDataScope: 'authenticated' },
       handleUpdateSavedPreferences: mockHandleUpdateSavedPreferences,
       isLoading: false,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     } as unknown as ReturnType<typeof useSavedPreferences>);
 
     render(<SaySeePanelDescription />);
@@ -82,7 +82,7 @@ describe('SaySeePanelDescription DataScopeSwitch', () => {
       savedPreferences: { enableOpenKeyNav: true },
       handleUpdateSavedPreferences: mockHandleUpdateSavedPreferences,
       isLoading: false,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     });
 
     render(<SaySeePanelDescription />);

@@ -1,3 +1,4 @@
+import { type MockInstance } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import type { DownloadAction, DownloadActionContext } from 'udi-yac';
 import { useAppContext } from 'js/components/Contexts';
@@ -5,16 +6,16 @@ import { checkAndDownloadFile } from 'js/helpers/download';
 import useSaySeeDownloadActions from './saySeeDownloadActions';
 import useOpenInWorkspacesTrigger from './openInWorkspacesStore';
 
-jest.mock('js/helpers/trackers');
-jest.mock('js/components/Contexts', () => ({
-  useAppContext: jest.fn(),
+vi.mock('js/helpers/trackers');
+vi.mock('js/components/Contexts', () => ({
+  useAppContext: vi.fn(),
 }));
-jest.mock('js/helpers/download', () => ({
-  checkAndDownloadFile: jest.fn().mockResolvedValue(undefined),
+vi.mock('js/helpers/download', () => ({
+  checkAndDownloadFile: vi.fn().mockResolvedValue(undefined),
 }));
 
-const mockUseAppContext = jest.mocked(useAppContext);
-const mockCheckAndDownloadFile = jest.mocked(checkAndDownloadFile);
+const mockUseAppContext = vi.mocked(useAppContext);
+const mockCheckAndDownloadFile = vi.mocked(checkAndDownloadFile);
 
 function buildCtx(rowsBySource: { source: string; rows: Record<string, unknown>[] }[]): DownloadActionContext {
   return { rowsBySource, filters: {}, dataPackage: null };
@@ -25,12 +26,12 @@ function runAction(action: DownloadAction, ctx: DownloadActionContext) {
 }
 
 let blobCounter = 0;
-let createObjectURLSpy: jest.SpyInstance;
+let createObjectURLSpy: MockInstance;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   blobCounter = 0;
-  createObjectURLSpy = jest.spyOn(URL, 'createObjectURL').mockImplementation(() => {
+  createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockImplementation(() => {
     return `blob:test-${++blobCounter}`;
   });
   useOpenInWorkspacesTrigger.setState({ pending: null });

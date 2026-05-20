@@ -1,24 +1,25 @@
+import { type MockedFunction } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useSharedEntityLogic, entitiesToTableData } from './useSharedEntityLogic';
 
 // Mock the dependencies
-jest.mock('./hooks', () => ({
-  useMetadataMenu: jest.fn(),
+vi.mock('./hooks', () => ({
+  useMetadataMenu: vi.fn(),
 }));
 
-jest.mock('js/components/search/store', () => ({
-  useSearchStore: jest.fn(),
-  filterHasValues: jest.fn(),
+vi.mock('js/components/search/store', () => ({
+  useSearchStore: vi.fn(),
+  filterHasValues: vi.fn(),
 }));
 
-jest.mock('js/components/search/utils', () => ({
-  buildQuery: jest.fn(),
+vi.mock('js/components/search/utils', () => ({
+  buildQuery: vi.fn(),
 }));
 
-jest.mock('js/components/search/useEsMapping', () => ({
+vi.mock('js/components/search/useEsMapping', () => ({
   __esModule: true,
-  default: jest.fn(),
-  isESMapping: jest.fn(),
+  default: vi.fn(),
+  isESMapping: vi.fn(),
 }));
 
 import { useMetadataMenu } from './hooks';
@@ -27,21 +28,21 @@ import { buildQuery } from 'js/components/search/utils';
 import useEsMapping, { isESMapping } from 'js/components/search/useEsMapping';
 
 // Type the mocked functions
-const mockUseMetadataMenu = useMetadataMenu as jest.MockedFunction<typeof useMetadataMenu>;
-const mockUseSearchStore = useSearchStore as jest.MockedFunction<typeof useSearchStore>;
-const mockFilterHasValues = filterHasValues as jest.MockedFunction<typeof filterHasValues>;
-const mockBuildQuery = buildQuery as jest.MockedFunction<typeof buildQuery>;
-const mockUseEsMapping = useEsMapping as jest.MockedFunction<typeof useEsMapping>;
-const mockIsESMapping = isESMapping as jest.MockedFunction<typeof isESMapping>;
+const mockUseMetadataMenu = useMetadataMenu as MockedFunction<typeof useMetadataMenu>;
+const mockUseSearchStore = useSearchStore as MockedFunction<typeof useSearchStore>;
+const mockFilterHasValues = filterHasValues as MockedFunction<typeof filterHasValues>;
+const mockBuildQuery = buildQuery as MockedFunction<typeof buildQuery>;
+const mockUseEsMapping = useEsMapping as MockedFunction<typeof useEsMapping>;
+const mockIsESMapping = isESMapping as MockedFunction<typeof isESMapping>;
 
 describe('useSharedEntityLogic', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     // Default mock implementations
     mockUseMetadataMenu.mockReturnValue({
       selectedHits: new Set(),
-      closeMenu: jest.fn(),
+      closeMenu: vi.fn(),
     });
 
     mockUseSearchStore.mockReturnValue({
@@ -88,7 +89,7 @@ describe('useSharedEntityLogic', () => {
       const selectedUUIDs = new Set(['uuid-1', 'uuid-2', 'uuid-3']);
       mockUseMetadataMenu.mockReturnValue({
         selectedHits: selectedUUIDs,
-        closeMenu: jest.fn(),
+        closeMenu: vi.fn(),
       });
 
       const { result } = renderHook(() => useSharedEntityLogic('donors'));
@@ -168,7 +169,7 @@ describe('useSharedEntityLogic', () => {
 
       mockUseMetadataMenu.mockReturnValue({
         selectedHits: selectedUUIDs,
-        closeMenu: jest.fn(),
+        closeMenu: vi.fn(),
       });
 
       mockUseSearchStore.mockReturnValue({
@@ -193,12 +194,12 @@ describe('entitiesToTableData', () => {
   const mockDate = new Date('2025-10-15T10:30:00.000Z');
 
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(mockDate);
+    vi.useFakeTimers();
+    vi.setSystemTime(mockDate);
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   describe('empty entities handling', () => {

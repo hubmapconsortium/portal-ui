@@ -1,7 +1,6 @@
-import jest from 'eslint-plugin-jest';
+import vitest from '@vitest/eslint-plugin';
 import jestDom from 'eslint-plugin-jest-dom';
 import testingLibrary from 'eslint-plugin-testing-library';
-import globals from 'globals';
 
 export default [
   {
@@ -13,25 +12,17 @@ export default [
       'test-utils/**/*.{js,jsx,ts,tsx}',
     ],
     plugins: {
-      jest,
+      vitest,
       'jest-dom': jestDom,
       'testing-library': testingLibrary,
     },
     languageOptions: {
       globals: {
-        ...globals.jest,
-        jest: 'readonly',
-      },
-    },
-    settings: {
-      'import/resolver': {
-        jest: {
-          jestConfigFile: './jest.config.js',
-        },
+        ...vitest.environments.env.globals,
       },
     },
     rules: {
-      ...jest.configs.recommended.rules,
+      ...vitest.configs.recommended.rules,
       ...jestDom.configs.recommended.rules,
       ...testingLibrary.configs.react.rules,
 
@@ -40,13 +31,13 @@ export default [
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
 
-      'jest/no-standalone-expect': [
+      'vitest/no-standalone-expect': [
         'error',
         {
           additionalTestBlockFunctions: ['test.each'],
         },
       ],
-      'jest/expect-expect': [
+      'vitest/expect-expect': [
         'error',
         {
           assertFunctionNames: ['expect*'],
