@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.45.2 - 2026-05-20
+
+- Fix docker pulling in stale local builds by adding dockerignore file.
+
 ## v1.45.1 - 2026-05-19
 
 - Add support for new dataset workflow status "Approval"; treated equivalently to "QA" for status icons, provenance queries, and image pyramid visualization lifting.
@@ -13,8 +17,6 @@
 - Mark `end-to-end/artillery/` as archival.
 - Display segmentation channels and quality scores (Quality Score, Mean SNZ, ACVF) below the visualization for datasets with `ingest_metadata.segmentation_metadata`.
 
-
-
 ## v1.45.0 - 2026-05-13
 
 - Adjust protocol links to point to specific version associated with donor/sample.
@@ -24,15 +26,15 @@
 - Scope the top search bar's query to the `all_text` field; the HuBMAP ID column popover continues to query the `hubmap_id` field directly.
 - Fix the Say & See panel reloading continuously for HuBMAP users who had not yet saved any preferences or lists. The underlying `/user/keys` 404 is now treated as an empty UKV response instead of a retryable error, and the panel keeps the chat mounted once it has resolved at least once.
 
-
-
 ## v1.44.4 - 2026-05-01
 
 - Fix the publication detail page Data section showing the wrong number of related datasets. All entities referenced by a publication's `ancestor_ids` are now loaded, including older dataset versions that have a `next_revision_uuid`.
 - Gate the Say & See Mode (BETA) front-end behind a new `ENABLE_SAY_SEE_MODE` Flask config flag. When disabled (the default), the search page hides the mode tabs and the promo alert, leaving only Filter & Browse mode; `?mode=say-see` URLs fall back to the filter view.
 - Split UDI data endpoints into separate URL prefixes: `/metadata/v0/udi/...` always serves the cached public-scope data, and new `/metadata/v0/udi/consortium/...` endpoints serve the request's session auth. The Say & See switch now toggles between these two paths instead of using a `?public=1` query param, which had been confusing the udi-yac grammar component.
 
+## v1.44.3 - 2026-04-30
 
+- Troubleshooting Say & See deploy.
 
 ## v1.44.2 - 2026-04-30
 
@@ -43,20 +45,14 @@
 - Backend: `/metadata/v0/udi/datapackage.json` and `/metadata/v0/udi/<entity>.tsv` now accept `?public=1` to serve from the shared cache regardless of session, generated with a tokenless ApiClient. Public-scope responses emit `Cache-Control: public, max-age=43200` + `ETag`; authenticated responses emit `Cache-Control: private, no-store`.
 - Match the search page's default filter on the UDI data routes by excluding entities with `next_revision_uuid` or `sub_status`, so authenticated dataset counts in Say & See align with `/search/datasets`.
 
-
-
 ## v1.44.1 - 2026-04-29
 
 - Update Vitessce to fix handling of zarr v3 datasets.
-
-
 
 ## v1.44.0 - 2026-04-21
 
 - Implement endpoints necessary to use the portal-ui back-end as the server for UDI chat with Globus authentication/authorization.
 - Update portal-visualization to 0.5.3 to pull in improvements to TSV endpoints and fix zarr v3 handling.
-
-
 
 ## v1.43.0 - 2026-04-02
 
@@ -65,8 +61,6 @@
 - Update search table actions to logically group related actions.
 - Add facet search combobox.
 
-
-
 ## v1.42.1 - 2026-03-27
 
 - Ensure properly scoped Vitessce configurations are used for Vitessce sharing functionalities.
@@ -74,34 +68,24 @@
 - Enable automatic scrolling to linked Vitessce configurations.
 - Update portal-visualization to enable display of all AOIs and ROIs for GeoMX datasets.
 
-
-
 ## v1.42.0 - 2026-03-17
 
 - Improve search state readability for sharing links.
 - Add saved list validation to initial processing of received data.
 - Added a dedicated `/integrated-maps` page that displays the full list of HuBMAP-wide data products.
 
-
-
 ## v1.41.3 - 2026-03-10
 
 - Convert remaining JavaScript components/functions to TypeScript.
 - Improved detail page breadcrumb clarity.
 
-
-
 ## v1.41.2 - 2026-03-04
 
 - Fix infinite loading for dataset permissions in Chrome.
 
-
-
 ## v1.41.1 - 2026-03-04
 
 - Remove duplicate "Annotations" section label from processed datasets' summaries.
-
-
 
 ## v1.41.0 - 2026-03-03
 
@@ -112,8 +96,6 @@
 - Enhance dataset permission handling to rely purely on `accessible-data-directories` endpoint for all users.
 - Updated Portal-Visualization to improve Vitessce configuration generation logic maintainability and restore malfunctioning visualizations.
 
-
-
 ## v1.40.3 - 2026-02-24
 
 - Improve handling for gene pathways with no genes in the index.
@@ -121,25 +103,17 @@
 - Handle cases where integrated maps are only available for one organ laterality.
 - Fix gene detail page cell types section.
 
-
-
 ## v1.40.2 - 2026-02-17
 
 - Improve permission handling for datasets to consistently handle public data and keep protected data inaccessible by default until API response indicates otherwise.
-
-
 
 ## v1.40.1 - 2026-02-11
 
 - Add null safety to metadata export functionalities.
 
-
-
 ## v1.40.0 - 2026-02-11
 
 - Prevent page crashes when an entity's metadata is `null`.
-
-
 
 ## v1.39.5 - 2026-01-30
 
@@ -147,25 +121,17 @@
 - Add description to Integrated Data section.
 - Handle externally processed datasets without visualizations and ingest metadata.
 
-
-
 ## v1.39.4 - 2026-01-30
 
 - Remove contributors table for internally processed integrated datasets.
-
-
 
 ## v1.39.3 - 2026-01-29
 
 - Add HuBMAP Help Desk contact link to internal integrated datasets.
 
-
-
 ## v1.39.2 - 2026-01-28
 
 - Fix display of contributors to externally processed datasets.
-
-
 
 ## v1.39.1 - 2026-01-28
 
@@ -173,8 +139,6 @@
 - Move the "Download Jupyter Notebook" action into the visualization's "share" menu.
 - Streamline the bulk download manifest download by opting in to every dataset type by default once no restricted datasets are present.
 - Update the attribution text for integrated datasets.
-
-
 
 ## v1.39.0 - 2026-01-27
 
@@ -192,13 +156,9 @@
 - Add integrated dataset pages to display datasets derived from multiple ancestors.
 - Update Vitessce to v3.9.1.
 
-
-
 ## v1.38.1 - 2026-01-12
 
 - Prevent users without Workspaces access from creating new workspaces from the dataset detail page.
-
-
 
 ## v1.38.0 - 2026-01-08
 
@@ -214,13 +174,9 @@
 - Support edge cases where collections don't have any datasets.
 - Fix typo in biomarker and cell type search display of unavailable genes on pathway selection.
 
-
-
 ## v1.37.5 - 2025-12-15
 
 - Fix list entity counts query.
-
-
 
 ## v1.37.4 - 2025-12-11
 
@@ -228,19 +184,13 @@
 - Return empty lists of results for requests made with an empty list of IDs.
 - Add more explicit validation to confirm a value in UKV is a saved list before treating it as a list.
 
-
-
 ## v1.37.3 - 2025-12-05
 
 - Fix empty IDs query breaking permission checks.
 
-
-
 ## v1.37.2 - 2025-12-04
 
 - Disable formatting check for Vitessce configurations due to dropped fields.
-
-
 
 ## v1.37.0 - 2025-12-03
 
@@ -253,16 +203,12 @@
 - Improve lineup visualization by loading data on front-end, improving selection/filtering of entities for lineup, and enabling selection of fields.
 - Improve TSV export of entities by loading data on front-end and pulling in more fields.
 
-
-
 ## v1.36.1 - 2025-11-24
 
 - Fix entity sorting in ProvTable and update sample category comparison order instantiation to occur outside of sort function.
 - Improve visibility of OpenKeyNav switch's focus state.
 - Directly use URLs provided by Workspaces API for certain environments.
 - Fix vitessce visualizations displaying incorrect expression levels.
-
-
 
 ## v1.36.0 - 2025-11-18
 
@@ -271,8 +217,6 @@
 - Improve handling for looking up datasets to visualize in Scellop on the organs page.
 - Fix Table of Contents positioning to enable scrolling when contents are longer than screen size and avoid overflowing into main page.
 - Add CORS origin validation and update UDI TSV endpoint to use dynamic CORS.
-
-
 
 ## v1.35.1 - 2025-11-06
 
@@ -284,8 +228,6 @@
 - Added space between bottom of Biomarker and Cell Type Search page and footer.
 - Prevented content shift when Table of Contents' children's names were longer than their parents' names.
 - Fixed large gene pathways breaking display of pathway result charts.
-
-
 
 ## v1.35.0 - 2025-11-03
 
@@ -300,13 +242,9 @@
 - Updated project structure to use `pyproject.toml` file for configuration.
 - Implement [updated Tutorial pages](/tutorials).
 
-
-
 ## v1.34.1 - 2025-10-15
 
 - Fix regression with form submissions not executing as expected.
-
-
 
 ## v1.34.0 - 2025-10-08
 
