@@ -1,15 +1,8 @@
-// Shared config for Jest with SWC and Styled Components plugin
-const experimental = {
-  plugins: [
-    [
-      '@swc/plugin-styled-components',
-      {
-        displayName: true,
-        ssr: false,
-      },
-    ],
-  ],
-};
+// Jest config. The styled-components SWC plugin is intentionally NOT
+// loaded here -- the newer plugin version is incompatible with the
+// @swc/core 1.13.5 that @swc/jest is pinned against, and styled-components
+// display names don't change test behavior. The plugin is wired in
+// vite.config.mts for the production build instead.
 
 /** @type {import('jest').Config} */
 const config = {
@@ -42,7 +35,6 @@ const config = {
             tsx: true,
             decorators: false,
           },
-          experimental,
         },
       },
     ],
@@ -55,7 +47,6 @@ const config = {
             tsx: false,
             decorators: false,
           },
-          experimental,
         },
       },
     ],

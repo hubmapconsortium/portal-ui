@@ -28,8 +28,14 @@
 <body>
   {% block body %}{% endblock %}
 
-  <script src="{{ static_url_for('static', filename='main.js') }}"></script>
-  <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
+  {% if vite_dev_mode() %}
+    {# Dev mode: load the Vite client + the unbundled entry; HMR runs through the dev server. #}
+    <script type="module" src="/static/public/@vite/client"></script>
+    <script type="module" src="/static/public/{{ vite_dev_entry() }}"></script>
+  {% else %}
+    <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
+    <script src="{{ static_url_for('static', filename='main.js') }}"></script>
+  {% endif %}
 
   {% block extra_scripts %}{% endblock %}
 </body>

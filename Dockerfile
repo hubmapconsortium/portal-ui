@@ -26,8 +26,7 @@ COPY end-to-end/package.json end-to-end/package.json
 RUN pnpm install --frozen-lockfile --filter ./context...
 
 COPY context/tsconfig.json context/tsconfig.json
-COPY context/.swcrc context/.swcrc
-COPY context/build-utils context/build-utils
+COPY context/vite.config.mts context/vite.config.maintenance.mts context/
 COPY context/app context/app
 # portal-visualization is python-only, and not needed for the frontend build.
 
