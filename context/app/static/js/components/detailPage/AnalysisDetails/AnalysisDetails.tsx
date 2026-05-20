@@ -23,6 +23,7 @@ import { OutboundLink } from 'js/shared-styles/Links';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledTableContainer } from 'js/shared-styles/tables';
+import MarkdownRenderer from 'js/components/Markdown/MarkdownRenderer';
 
 interface AnalysisDetailsProps {
   dagListData: DagProvenanceType[];
@@ -290,7 +291,7 @@ function AnalysisDetails({ dagListData, workflow_description, workflow_version }
   return (
     <Stack spacing={1}>
       {workflow_version && <Typography variant="subtitle2">Workflow (v{workflow_version})</Typography>}
-      {workflow_description && <Typography>{workflow_description}</Typography>}
+      {workflow_description && <MarkdownRenderer>{workflow_description}</MarkdownRenderer>}
       {hasInputParameters && (
         <Box>
           <Button variant="outlined" onClick={collapseSteps} disabled={Object.keys(expandedRows).length === 0}>
