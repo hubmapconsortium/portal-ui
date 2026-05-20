@@ -66,7 +66,11 @@ function SegmentationChannelsAndQuality({
       <Typography variant="body1" gutterBottom>
         These channels were used for segmentation, which are visible in the visualization. Segmentation outputs and
         quality control scores are available for each image, with additional segmentation information described in the
-        workflow description in the <Link href={workflowDetailsHref}>Protocols & Workflow Details</Link> section.
+        workflow description in the{' '}
+        <Link color="info" href={workflowDetailsHref}>
+          Protocols & Workflow Details
+        </Link>{' '}
+        section.
       </Typography>
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} mt={2}>
         <SectionPaper sx={{ flex: 1 }}>
