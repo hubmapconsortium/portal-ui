@@ -1,9 +1,9 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 
 import { useFormattedProtocolUrls, isGithubUrl } from './useProtocolData';
 
 const getResult = (protocols: string) => {
-  const { result } = renderHook(({ urls }) => useFormattedProtocolUrls(urls), {
+  const { result } = renderHook(({ urls }: { urls: string }) => useFormattedProtocolUrls(urls), {
     initialProps: { urls: protocols },
   });
   return result.current;

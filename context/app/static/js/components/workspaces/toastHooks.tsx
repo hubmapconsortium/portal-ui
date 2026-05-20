@@ -14,7 +14,7 @@ export const useWorkspaceToasts = () => {
    ********************************** */
 
   const toastErrorDeleteWorkspaces = useCallback(
-    (names: string | React.ReactElement) => {
+    (names: string | React.ReactElement<unknown>) => {
       toastError(<Typography>Error deleting workspaces: {names}.</Typography>);
     },
     [toastError],
@@ -25,7 +25,7 @@ export const useWorkspaceToasts = () => {
   }, [toastError]);
 
   const toastErrorStopWorkspace = useCallback(
-    (workspaceName?: string | React.ReactElement) => {
+    (workspaceName?: string | React.ReactElement<unknown>) => {
       toastError(<Typography>Failed to stop {workspaceName ?? 'workspace'}. Please try again.</Typography>);
     },
     [toastError],
@@ -49,7 +49,7 @@ export const useWorkspaceToasts = () => {
   );
 
   const toastErrorShareInvitation = useCallback(
-    (workspaceName?: React.ReactElement | string) => {
+    (workspaceName?: React.ReactElement<unknown> | string) => {
       toastError(<Typography>Failed to share {workspaceName ?? 'workspace'}. Please try again.</Typography>);
     },
     [toastError],
@@ -107,7 +107,7 @@ export const useWorkspaceToasts = () => {
   );
 
   const toastSuccessDeleteWorkspaces = useCallback(
-    (names: string | React.ReactElement) => {
+    (names: string | React.ReactElement<unknown>) => {
       toastSuccess(<Typography>Successfully deleted workspaces: {names}.</Typography>);
     },
     [toastSuccess],
@@ -138,14 +138,14 @@ export const useWorkspaceToasts = () => {
   );
 
   const toastSuccessStopWorkspace = useCallback(
-    (names: string | React.ReactElement) => {
+    (names: string | React.ReactElement<unknown>) => {
       toastSuccess(<Typography>Successfully stopped workspaces: {names}.</Typography>);
     },
     [toastSuccess],
   );
 
   const toastSuccessShareInvitation = useCallback(
-    (names: string | React.ReactElement) => {
+    (names: string | React.ReactElement<unknown>) => {
       toastSuccess(<Typography>Successfully shared workspaces: {names}.</Typography>);
     },
     [toastSuccess],

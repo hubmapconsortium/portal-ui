@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, type JSX } from 'react';
 import { FaroErrorBoundary, faro } from '@grafana/faro-react';
 
 import DetailPageSection from 'js/components/detailPage/DetailPageSection';

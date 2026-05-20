@@ -3,8 +3,8 @@ import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
 
 interface AccordionStepsProps {
   steps: {
-    heading: string | React.ReactElement;
-    content?: React.ReactElement;
+    heading: string | React.ReactElement<unknown>;
+    content?: React.ReactElement<unknown>;
     ref?: React.RefObject<HTMLDivElement>;
   }[];
   id: string;

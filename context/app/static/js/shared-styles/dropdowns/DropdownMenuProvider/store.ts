@@ -3,7 +3,7 @@ import { createStore as createZustandStore } from 'zustand';
 
 interface DropdownMenuStoreState {
   menuIsOpen: boolean;
-  menuRef: RefObject<HTMLElement>;
+  menuRef: RefObject<HTMLElement | null>;
 }
 
 interface DropdownMenuStoreActions {
@@ -18,7 +18,7 @@ export interface CreateDropdownMenuStore {
   isOpenToStart: boolean;
 }
 
-const createStore = ({ isOpenToStart }: CreateDropdownMenuStore, menuRef: RefObject<HTMLElement>) =>
+const createStore = ({ isOpenToStart }: CreateDropdownMenuStore, menuRef: RefObject<HTMLElement | null>) =>
   createZustandStore<DropdownMenuStore>((set) => ({
     menuRef,
     menuIsOpen: isOpenToStart,

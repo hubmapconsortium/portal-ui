@@ -98,7 +98,7 @@ function EntitiesTableTabInternal<Doc extends Entity>(
 // React doesn't support generic forwardRef, so we need to cast it
 const EntitiesTableTab = forwardRef(EntitiesTableTabInternal) as <Doc extends Entity>(
   props: EntitiesTableTabProps<Doc> & { ref?: React.Ref<HTMLDivElement> },
-) => React.ReactElement;
+) => React.ReactElement<unknown>;
 
 function EntitiesTablesTabs<Doc extends Entity>({
   openTabIndex,

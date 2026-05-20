@@ -374,7 +374,7 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
     ([field, v]: [
       string,
       RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues | BooleanGroupValues,
-    ]): ReactElement[] => {
+    ]): ReactElement<unknown>[] => {
       if (isTermFilter(v) && v.values.size) {
         const values = Array.from(v.values);
         if (values.length === 1) {
@@ -495,7 +495,7 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
               />
             );
           })
-          .filter(Boolean) as ReactElement[];
+          .filter(Boolean) as ReactElement<unknown>[];
       }
 
       return [];

@@ -1,25 +1,18 @@
 import { act, renderHook } from 'test-utils/functions';
-import { RenderHookResult, Renderer } from '@testing-library/react-hooks';
 import { InitialSelectableTableState, createStore } from './store';
 
 const defaultState = { selectedRows: new Set([]), totalNumRows: 0, headerRowIsSelected: false };
 const selectedState = { ...defaultState, selectedRows: new Set(['apple', 'pear']), totalNumRows: 2 };
 
-type StoreType = ReturnType<typeof createStore>;
-
 const setupStore = (initialState: InitialSelectableTableState = defaultState) => {
-  const render = renderHook(() => createStore({ tableLabel: 'test', ...initialState })) as RenderHookResult<
-    StoreType,
-    StoreType,
-    Renderer<StoreType>
-  >;
-  if (!render.result.current) {
+  const view = renderHook(() => createStore({ tableLabel: 'test', ...initialState }));
+  if (!view.result.current) {
     throw new Error('Hook result is undefined');
   }
-  return render;
+  return view;
 };
 
-const getState = ({ result }: RenderHookResult<StoreType, StoreType, Renderer<StoreType>>) => {
+const getState = ({ result }: ReturnType<typeof setupStore>) => {
   if (!result.current) {
     throw new Error('Hook result is undefined');
   }

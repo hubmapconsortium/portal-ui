@@ -76,7 +76,7 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
   });
 
   // Clone the button element and add the onClick handler
-  const buttonWithClickHandler = React.cloneElement(button as React.ReactElement, {
+  const buttonWithClickHandler = React.cloneElement(button as React.ReactElement<React.HTMLAttributes<HTMLElement>>, {
     onClick: handleOpen,
     'aria-controls': open ? 'basic-menu' : undefined,
     'aria-haspopup': 'true',

@@ -21,7 +21,7 @@ const requiredVariants = {
   },
 };
 
-function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
+function StepDescription({ blocks }: { blocks: (string | ReactElement<unknown>)[] }) {
   return (
     <Stack gap={2} p={2} component={Paper} direction="column">
       {blocks.map((block) => (

@@ -13,7 +13,7 @@ function useWorkspacesPleaseWait(workspaceId: number) {
   const [dead, setDead] = useState<boolean | undefined>();
   const { workspacesEndpoint, workspacesToken } = useAppContext();
   const loadingStartTime = useRef(new Date().getTime());
-  const firstRunningResponseTime = useRef<number | undefined>();
+  const firstRunningResponseTime = useRef<number | undefined>(undefined);
   const [jobStatus, setJobStatus] = useState<string | undefined>();
   const { handleStopWorkspace } = useWorkspacesList();
 

@@ -11,7 +11,7 @@ import { useHeroTabContext } from './HeroTabsContext';
 
 interface HeroTabActionProps {
   title: string;
-  icon: ReactElement;
+  icon: ReactElement<unknown>;
   tabTitle: string;
   onClick?: () => void;
   href?: string;
@@ -44,7 +44,7 @@ function HeroTabAction({ title, icon, tabTitle, onClick, href }: HeroTabActionPr
 export interface HeroTabProps {
   title: string;
   description: string;
-  icon: ReactElement;
+  icon: ReactElement<unknown>;
   isCurrent?: boolean;
   bgColor?: string;
   actions?: Omit<HeroTabActionProps, 'tabTitle'>[];

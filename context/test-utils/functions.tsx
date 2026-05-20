@@ -1,9 +1,7 @@
 import React, { PropsWithChildren } from 'react';
-import { render, RenderOptions, act } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { render, renderHook, RenderHookOptions, RenderOptions, act } from '@testing-library/react';
 import Providers from 'js/components/Providers';
 import { enableMapSet } from 'immer';
-import { RenderHookOptions } from '@testing-library/react-hooks/lib/types';
 
 enableMapSet();
 
@@ -64,7 +62,6 @@ const customRenderHook = <TProps, TResult>(
   options?: Partial<RenderHookOptions<TProps>> & { flaskData?: FlaskData },
 ) =>
   renderHook(callback, {
-    // @ts-expect-error - TS is causing issues with the wrapper prop type
     wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
     ...options,
   });
