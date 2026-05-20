@@ -7,7 +7,10 @@ import useSavedLists from 'js/components/savedLists/hooks';
 import { SavedEntitiesList } from 'js/components/savedLists/types';
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 
-function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitiesList>, entityUUID: string): string[] {
+export function getSavedListsWhichContainEntity(
+  savedLists: Record<string, SavedEntitiesList>,
+  entityUUID: string,
+): string[] {
   return Object.entries(savedLists).reduce<string[]>((acc, [id, obj]) => {
     return entityUUID in obj.savedEntities ? [...acc, id] : acc;
   }, []);
@@ -19,9 +22,9 @@ interface EditSavedStatusDialogProps {
   uuid: string;
 }
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSavedStatusDialogProps) {
-  const { savedListsAndEntities, handleAddEntitiesToList, handleRemoveEntitiesFromList } = useSavedLists();
+  const { savedLists, handleAddEntitiesToList, handleRemoveEntitiesFromList } = useSavedLists();
   const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
-    getSavedListsWhichContainEntity(savedListsAndEntities, uuid),
+    getSavedListsWhichContainEntity(savedLists, uuid),
   );
 
   function updateLists() {
@@ -33,7 +36,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
     });
 
     // Remove entities from lists that are no longer selected
-    const unselectedLists = Object.keys(savedListsAndEntities).filter((listUUID) => !selectedLists.has(listUUID));
+    const unselectedLists = Object.keys(savedLists).filter((listUUID) => !selectedLists.has(listUUID));
     unselectedLists.forEach((listUUID) => {
       handleRemoveEntitiesFromList({ listUUID, entityUUIDs: new Set([uuid]) }).catch((error) => {
         console.error(error);
@@ -47,14 +50,14 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
   }
 
   function handleClose() {
-    setSelectedLists(new Set(getSavedListsWhichContainEntity(savedListsAndEntities, uuid)));
+    setSelectedLists(new Set(getSavedListsWhichContainEntity(savedLists, uuid)));
     setDialogIsOpen(false);
   }
 
   const dialogContent = (
     <AddToList
       selectedLists={selectedLists}
-      allLists={savedListsAndEntities}
+      allLists={savedLists}
       addToSelectedLists={addToSelectedLists}
       removeFromSelectedLists={removeFromSelectedLists}
     />
