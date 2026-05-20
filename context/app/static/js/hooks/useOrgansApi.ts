@@ -7,6 +7,9 @@ import useSWR from 'swr/immutable';
 
 export const useOrganApiLinks = () => ({
   organDetails(organName: string) {
+    if (!organName) {
+      return null;
+    }
     return `/organs/${organName}.json`;
   },
   get organList() {
@@ -33,7 +36,7 @@ export const useOrgansAPI = (organsToFetch: string[]) => {
 };
 
 export function useOrgan(organName: string) {
-  const { data, error } = useSWR<OrganFile, SWRError, { url: string }>(
+  const { data, error } = useSWR<OrganFile, SWRError, { url: string | null }>(
     { url: useOrganApiLinks().organDetails(organName) },
     fetcher,
   );

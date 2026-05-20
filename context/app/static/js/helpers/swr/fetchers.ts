@@ -8,7 +8,7 @@ export interface FetchOptionsType {
 
 export type SingleFetchOptionsType = FetchOptionsType & {
   requestInit?: RequestInit;
-  url: string;
+  url: string | null;
 };
 
 export type MultiFetchOptionsType = FetchOptionsType & {
@@ -24,6 +24,10 @@ async function f({
   errorMessages = {},
   returnResponse = false,
 }: SingleFetchOptionsType): Promise<unknown> {
+  if (!url) {
+    return null;
+  }
+
   return fetch(url, requestInit).then(async (response) => {
     // Separate handling for 303 status code thrown by ES when documents are >10MB
     if (response.status === 303) {

@@ -1,4 +1,5 @@
 import { useAppContext } from 'js/components/Contexts';
+import { fetcher, multiFetcher, MultiFetchOptionsType } from 'js/helpers/swr';
 
 // NOTE: This is the dev endpoint. We can't use flaskdata to provide this in Storybook because it doesn't exist in the Storybook environment.
 export const SCFIND_BASE_STORYBOOK = 'https://scfind.dev.hubmapconsortium.org';
@@ -29,6 +30,83 @@ export function createScFindKey(
   }
   const fullUrl = new URL(`${scFindApiUrl}/api/${endpoint}?${urlParams.toString()}`);
   return fullUrl.toString();
+}
+
+/**
+ * POST-flavored scFind request key. Used as a workaround when cell type names contain
+ * commas, which would otherwise be ambiguous when joined into a comma-separated GET param.
+ */
+export interface ScFindPostRequest {
+  url: string;
+  body: Record<string, unknown>;
+}
+
+export type ScFindRequest = string | ScFindPostRequest;
+
+/**
+ * Builds a POST-flavored scFind request: endpoint URL with no query params, and all
+ * parameters (including index_version) in the JSON body. Undefined values are dropped.
+ */
+export function createScFindPostRequest(
+  scFindApiUrl: string,
+  endpoint: string,
+  body: Record<string, unknown>,
+  indexVersion?: string,
+): ScFindPostRequest {
+  const url = new URL(`${scFindApiUrl}/api/${endpoint}`).toString();
+  const fullBody: Record<string, unknown> = {};
+  Object.entries(body).forEach(([key, value]) => {
+    if (value !== undefined) {
+      fullBody[key] = value;
+    }
+  });
+  if (indexVersion) {
+    fullBody.index_version = indexVersion;
+  }
+  return { url, body: fullBody };
+}
+
+/**
+ * Returns true if any cell type name in the input contains a comma. Comma-containing
+ * names break the default GET behavior because they collide with the array separator
+ * used when joining multiple cell types into a single query param.
+ */
+export function cellTypeNameContainsComma(value: string | string[] | undefined): boolean {
+  if (!value) return false;
+  if (Array.isArray(value)) return value.some((v) => v.includes(','));
+  return value.includes(',');
+}
+
+function requestInitForKey(key: ScFindRequest | null): RequestInit {
+  if (key === null || typeof key === 'string') return {};
+  return {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(key.body),
+  };
+}
+
+/**
+ * SWR fetcher that dispatches GET vs. POST based on the shape of the scFind request key.
+ */
+export async function scFindFetcher<T>(key: ScFindRequest): Promise<T> {
+  if (typeof key === 'string') {
+    return fetcher<T>({ url: key });
+  }
+  return fetcher<T>({ url: key.url, requestInit: requestInitForKey(key) });
+}
+
+/**
+ * Multi-URL SWR fetcher for scFind. Accepts an array of GET/POST request keys (or null
+ * to skip a slot) and dispatches each appropriately, preserving the matching response order.
+ */
+export async function scFindMultiFetcher<T>(
+  keys: (ScFindRequest | null)[],
+  options?: Omit<MultiFetchOptionsType, 'urls' | 'requestInits'>,
+): Promise<T[]> {
+  const urls = keys.map((key) => (key === null ? null : typeof key === 'string' ? key : key.url));
+  const requestInits = keys.map((key) => requestInitForKey(key));
+  return multiFetcher<T>({ ...options, urls, requestInits });
 }
 
 /**
