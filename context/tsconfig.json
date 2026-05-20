@@ -13,13 +13,13 @@
     "incremental": true,
     "jsx": "react",
     "allowJs": true,
-    "baseUrl": "./",
     "sourceMap": true,
     "noEmit": true,
     "types": ["vitest/globals", "@testing-library/jest-dom"],
     "paths": {
       "js/*": ["./app/static/js/*"],
       "assets/*": ["./app/static/assets/*"],
+      "test-utils/*": ["./test-utils/*"],
       "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
     }
   },
