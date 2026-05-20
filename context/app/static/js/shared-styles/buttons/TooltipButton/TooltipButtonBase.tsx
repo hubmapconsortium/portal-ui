@@ -17,44 +17,45 @@ type TooltipButtonBaseProps = (
 ) &
   Pick<TooltipProps, 'placement'>;
 
-type WrapperButtonProps = { buttonComponent: ElementType } & Omit<TooltipButtonBaseProps, 'tooltip' | 'isIconButton'>;
+type WrapperButtonProps = {
+  buttonComponent: ElementType;
+  ref?: React.Ref<HTMLButtonElement>;
+} & Omit<TooltipButtonBaseProps, 'tooltip' | 'isIconButton'>;
 
-const WrappedButton = React.forwardRef(
-  (
-    { children, disabled, buttonComponent: ButtonComponent, ...props }: WrapperButtonProps,
-    ref: React.Ref<HTMLButtonElement>,
-  ) => {
-    if (disabled) {
-      const { onMouseLeave, onMouseEnter, onMouseMove, onMouseOver, ...restProps } = props;
-      const eventProps = {
-        onMouseLeave,
-        onMouseEnter,
-        onMouseMove,
-        onMouseOver,
-      };
-      return (
-        <span ref={ref} {...eventProps}>
-          <ButtonComponent {...restProps} disabled>
-            {children}
-          </ButtonComponent>
-        </span>
-      );
-    }
-
+function WrappedButton({ children, disabled, buttonComponent: ButtonComponent, ref, ...props }: WrapperButtonProps) {
+  if (disabled) {
+    const { onMouseLeave, onMouseEnter, onMouseMove, onMouseOver, ...restProps } = props;
+    const eventProps = {
+      onMouseLeave,
+      onMouseEnter,
+      onMouseMove,
+      onMouseOver,
+    };
     return (
-      <ButtonComponent {...props} ref={ref}>
-        {children}
-      </ButtonComponent>
+      <span ref={ref} {...eventProps}>
+        <ButtonComponent {...restProps} disabled>
+          {children}
+        </ButtonComponent>
+      </span>
     );
-  },
-);
+  }
 
-WrappedButton.displayName = 'WrappedButton';
+  return (
+    <ButtonComponent {...props} ref={ref}>
+      {children}
+    </ButtonComponent>
+  );
+}
 
-function TooltipButtonBase(
-  { tooltip, placement, children, component, isIconButton, ...props }: TooltipButtonBaseProps,
-  ref: React.Ref<HTMLButtonElement>,
-) {
+function TooltipButtonBase({
+  tooltip,
+  placement,
+  children,
+  component,
+  isIconButton,
+  ref,
+  ...props
+}: TooltipButtonBaseProps & { ref?: React.Ref<HTMLButtonElement> }) {
   return (
     <SecondaryBackgroundTooltip describeChild title={tooltip} placement={placement}>
       <WrappedButton {...props} buttonComponent={isIconButton ? IconButton : Button} ref={ref}>
@@ -64,4 +65,4 @@ function TooltipButtonBase(
   );
 }
 
-export default React.forwardRef(TooltipButtonBase);
+export default TooltipButtonBase;

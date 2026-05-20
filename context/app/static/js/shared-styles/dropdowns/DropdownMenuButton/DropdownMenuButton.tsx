@@ -21,7 +21,7 @@ function DropdownMenuButton({ children, menuID, variant = 'outlined', ...rest }:
       color="primary"
       aria-controls={menuIsOpen ? menuID : undefined}
       aria-haspopup="true"
-      ref={menuRef as React.RefObject<HTMLButtonElement>}
+      ref={menuRef as React.RefObject<HTMLButtonElement | null>}
       {...rest}
     >
       {children}

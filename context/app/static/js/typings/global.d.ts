@@ -53,11 +53,16 @@ declare module '*.svg' {
 
 declare module '*.css';
 
-declare namespace JSX {
-  interface IntrinsicElements {
-    'ccf-organ-info': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    'ccf-body-ui-wc': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    'ccf-body-ui': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+// React 19 moved the JSX namespace under React.JSX (the global JSX namespace
+// is deprecated). Augmenting React.JSX.IntrinsicElements is the supported
+// path now.
+declare namespace React {
+  namespace JSX {
+    interface IntrinsicElements {
+      'ccf-organ-info': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      'ccf-body-ui-wc': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      'ccf-body-ui': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
   }
 }
 

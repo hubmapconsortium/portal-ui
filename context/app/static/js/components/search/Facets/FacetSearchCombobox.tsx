@@ -467,7 +467,7 @@ const VirtualizedListbox = React.forwardRef<HTMLUListElement, React.HTMLAttribut
       ownerState?: unknown;
     };
     const flatItems = useMemo(() => flattenGroupedChildren(children), [children]);
-    const scrollRef = useRef<HTMLUListElement>(null);
+    const scrollRef = useRef<HTMLUListElement | null>(null);
 
     const virtualizer = useVirtualizer({
       count: flatItems.length,
@@ -478,7 +478,7 @@ const VirtualizedListbox = React.forwardRef<HTMLUListElement, React.HTMLAttribut
 
     const mergedRef = useCallback(
       (node: HTMLUListElement | null) => {
-        (scrollRef as React.MutableRefObject<HTMLUListElement | null>).current = node;
+        scrollRef.current = node;
         if (typeof ref === 'function') {
           ref(node);
         } else if (ref) {

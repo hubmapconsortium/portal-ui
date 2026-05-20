@@ -5,7 +5,7 @@ interface AccordionStepsProps {
   steps: {
     heading: string | React.ReactElement<unknown>;
     content?: React.ReactElement<unknown>;
-    ref?: React.RefObject<HTMLDivElement>;
+    ref?: React.RefObject<HTMLDivElement | null>;
   }[];
   id: string;
 }
