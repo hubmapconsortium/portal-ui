@@ -13,7 +13,7 @@
         "typescript-language-server",
         "--stdio"
       ],
-      "rootDir": "../context"
+      "rootDir": "./context"
     },
     {
       "extensions": [
