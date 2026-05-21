@@ -1,6 +1,14 @@
 import useSWR from 'swr';
-import { fetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import {
+  cellTypeNameContainsComma,
+  createScFindKey,
+  createScFindPostRequest,
+  ScFindRequest,
+  scFindFetcher,
+  stringOrArrayToString,
+  toArray,
+  useScFindKey,
+} from './utils';
 
 export interface FindHouseKeepingGenesParams {
   cellTypes?: string | string[];
@@ -8,7 +16,7 @@ export interface FindHouseKeepingGenesParams {
   maxGenes?: number;
 }
 
-type FindHouseKeepingGenesKey = string;
+type FindHouseKeepingGenesKey = ScFindRequest;
 
 interface FindHouseKeepingGenesResponse {
   findHouseKeepingGenes: unknown;
@@ -19,6 +27,18 @@ export function createFindHouseKeepingGenesKey(
   { cellTypes, minRecall, maxGenes }: FindHouseKeepingGenesParams,
   scFindIndexVersion?: string,
 ): FindHouseKeepingGenesKey {
+  if (cellTypeNameContainsComma(cellTypes)) {
+    return createScFindPostRequest(
+      scFindEndpoint,
+      'findHouseKeepingGenes',
+      {
+        cell_types: toArray(cellTypes),
+        min_recall: minRecall,
+        max_genes: maxGenes,
+      },
+      scFindIndexVersion,
+    );
+  }
   return createScFindKey(
     scFindEndpoint,
     'findHouseKeepingGenes',
@@ -34,5 +54,5 @@ export function createFindHouseKeepingGenesKey(
 export default function useFindHouseKeepingGenes(params: FindHouseKeepingGenesParams) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createFindHouseKeepingGenesKey(scFindEndpoint, params, scFindIndexVersion);
-  return useSWR<FindHouseKeepingGenesResponse, unknown, FindHouseKeepingGenesKey>(key, (url) => fetcher({ url }));
+  return useSWR<FindHouseKeepingGenesResponse, unknown, FindHouseKeepingGenesKey>(key, scFindFetcher);
 }

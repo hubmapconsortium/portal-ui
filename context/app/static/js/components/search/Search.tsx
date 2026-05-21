@@ -427,7 +427,7 @@ function useInitialURLState() {
     } else if (scFindParams.cellTypes && shouldCallCellTypeDatasets) {
       if (cellTypeDatasets.data) {
         // Extract datasets from cell type search results
-        const allDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
+        const allDatasets = cellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
         datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
         isDataReady = true;
       }
