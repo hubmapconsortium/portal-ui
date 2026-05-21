@@ -29,9 +29,21 @@
   {% block body %}{% endblock %}
 
   {% if vite_dev_mode() %}
-    {# Dev mode: load the Vite client + the unbundled entry; HMR runs through the dev server. #}
-    <script type="module" src="/static/public/@vite/client"></script>
-    <script type="module" src="/static/public/{{ vite_dev_entry() }}"></script>
+    {# Dev mode: load the Vite client + the unbundled entry. #}
+    {#
+       @vitejs/plugin-react-swc requires this preamble before any module
+       containing JSX is evaluated; with appType:'custom' it would normally
+       be injected via Vite's HTML transform, but here Flask owns the HTML.
+    #}
+    <script type="module">
+      import RefreshRuntime from "/@react-refresh"
+      RefreshRuntime.injectIntoGlobalHook(window)
+      window.$RefreshReg$ = () => {}
+      window.$RefreshSig$ = () => (type) => type
+      window.__vite_plugin_react_preamble_installed__ = true
+    </script>
+    <script type="module" src="/@vite/client"></script>
+    <script type="module" src="/{{ vite_dev_entry() }}"></script>
   {% else %}
     <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
     <script src="{{ static_url_for('static', filename='main.js') }}"></script>

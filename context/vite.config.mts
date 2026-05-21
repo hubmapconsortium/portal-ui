@@ -40,7 +40,11 @@ function webpackStyleManifest(): Plugin {
 }
 
 export default defineConfig(({ command }) => ({
-  base: '/static/public/',
+  // Dev: serve at the root of localhost:5001 so the terminal shows a clean
+  // URL and the browser can navigate there directly. Production: bundles
+  // still ship under /static/public/, where Flask + Nginx serve them from
+  // disk.
+  base: command === 'serve' ? '/' : '/static/public/',
   appType: 'custom',
   build: {
     outDir: resolve(__dirname, 'app/static/public'),
@@ -95,7 +99,11 @@ export default defineConfig(({ command }) => ({
     port: 5001,
     strictPort: true,
     proxy: {
-      '^(?!/static/public/).*': 'http://localhost:5000',
+      // Forward every URL that isn't a Vite-served asset to Flask. Vite
+      // owns:  /@*  (internals like /@vite/client, /@react-refresh, /@id),
+      //        /node_modules/*  (deps in HMR mode),
+      //        /app/static/*  (the project source tree).
+      '^/(?!@|node_modules/|app/static/).*': 'http://localhost:5000',
     },
   },
 }));
