@@ -1,6 +1,14 @@
 import useSWR from 'swr';
-import { fetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import {
+  cellTypeNameContainsComma,
+  createScFindKey,
+  createScFindPostRequest,
+  ScFindRequest,
+  scFindFetcher,
+  stringOrArrayToString,
+  toArray,
+  useScFindKey,
+} from './utils';
 
 interface CellTypeMarkerInfo {
   cellType: string;
@@ -21,7 +29,7 @@ export interface CellTypeMarkersParams {
   includePrefix?: boolean;
 }
 
-type CellTypeMarkersKey = string | null;
+type CellTypeMarkersKey = ScFindRequest | null;
 
 interface CellTypeMarkersResponse {
   // This is the correct name for the property based on the API response, even though it doesn't
@@ -36,6 +44,20 @@ export function createCellTypeMarkersKey(
 ): CellTypeMarkersKey {
   if (!cellTypes || cellTypes.length === 0) {
     return null;
+  }
+  if (cellTypeNameContainsComma(cellTypes) || cellTypeNameContainsComma(backgroundCellTypes)) {
+    return createScFindPostRequest(
+      scFindEndpoint,
+      'cellTypeMarkers',
+      {
+        cell_types: toArray(cellTypes),
+        background_cell_types: backgroundCellTypes,
+        top_k: topK,
+        include_prefix: includePrefix,
+        sort_field: sortField,
+      },
+      scFindIndexVersion,
+    );
   }
   return createScFindKey(
     scFindEndpoint,
@@ -63,5 +85,5 @@ export default function useCellTypeMarkers({
     { topK, sortField, includePrefix, ...params },
     scFindIndexVersion,
   );
-  return useSWR<CellTypeMarkersResponse, unknown, CellTypeMarkersKey>(key, (url) => fetcher({ url }));
+  return useSWR<CellTypeMarkersResponse, unknown, CellTypeMarkersKey>(key, scFindFetcher);
 }

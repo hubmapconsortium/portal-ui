@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import { SegmentationMetadataEntry } from 'js/components/types';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const TOOLTIPS = {
   QualityScore:
@@ -66,7 +66,8 @@ function SegmentationChannelsAndQuality({
       <Typography variant="body1" gutterBottom>
         These channels were used for segmentation, which are visible in the visualization. Segmentation outputs and
         quality control scores are available for each image, with additional segmentation information described in the
-        workflow description in the <Link href={workflowDetailsHref}>Protocols & Workflow Details</Link> section.
+        workflow description in the <InternalLink href={workflowDetailsHref}>Protocols & Workflow Details</InternalLink>{' '}
+        section.
       </Typography>
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} mt={2}>
         <SectionPaper sx={{ flex: 1 }}>

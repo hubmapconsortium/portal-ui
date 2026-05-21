@@ -83,7 +83,7 @@ export function categorizeCellTypes(cellTypes: string[]): CellTypeCategory[] {
 export function mapDatasetsToCellTypeCategories(
   cellTypeCategories: CellTypeCategory[],
   cellTypes: string[],
-  data: FindDatasetForCellTypeResponse[],
+  data: (FindDatasetForCellTypeResponse | undefined)[],
 ): WrappedDatasetResults {
   const datasetsForEachCategory = cellTypes.reduce<Record<string, Set<string>>>((acc, cellType, index) => {
     const cellTypeDatasets = data[index];
