@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.45.3 - 2026-05-21
+
+- Fix color of Protocols & Workflow link in segmentation metadata section.
+- Fix crash when visiting a saved entity page caused by the Edit Saved Status dialog iterating over the `savedPreferences` UKV entry as if it were a list; the dialog now uses the filtered `savedLists` record that excludes reserved keys.
+- Fix scFind queries failing when cell type names contain commas. Hooks that send cell type names to scFind (`useCellTypeMarkers`, `useEvaluateMarkers`, `useFindGeneSignatures`, `useFindHouseKeepingGenes`, `useFindDatasetForCellTypes`) now detect commas in cell type names and fall back to a POST request with all parameters in the JSON body, sending cell type lists as JSON arrays so the backend no longer splits a single name on its internal comma.
+- Render workflow descriptions as Markdown to enable links.
+
+
+
 ## v1.45.2 - 2026-05-20
 
 - Fix docker pulling in stale local builds by adding dockerignore file.

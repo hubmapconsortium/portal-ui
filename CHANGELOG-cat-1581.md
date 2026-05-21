@@ -1,1 +1,0 @@
-- Fix color of Protocols & Workflow link in segmentation metadata section.

@@ -1,1 +1,0 @@
-- Fix crash when visiting a saved entity page caused by the Edit Saved Status dialog iterating over the `savedPreferences` UKV entry as if it were a list; the dialog now uses the filtered `savedLists` record that excludes reserved keys.
