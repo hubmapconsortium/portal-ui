@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import { AggregationsBuckets } from 'js/typings/elasticsearch';
 
-import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSearch, InnerBucket } from '../Search';
 import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter } from '../store';
@@ -280,17 +280,40 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
       slotProps={{ transition: { unmountOnExit: true } }}
     >
       <HierarchicalAccordionSummary
+        // AccordionSummary's root is a <button> (inherited from ButtonBase).
+        // The expand icon used to be a <TooltipIconButton>, which made the
+        // rendered HTML <button><button/></button> -- invalid and noisy in
+        // strict-mode warnings. Render the icon in a clickable span instead;
+        // AccordionSummary still handles its own focus/keyboard.
         expandIcon={
-          <TooltipIconButton
-            onClick={toggleExpanded}
-            size="small"
-            color="primary"
-            disabled={!hasChildBuckets}
-            tooltip={buildExpandTooltip({ expanded, disabled: !hasChildBuckets })}
+          <SecondaryBackgroundTooltip
+            describeChild
+            title={buildExpandTooltip({ expanded, disabled: !hasChildBuckets })}
             placement="right"
           >
-            <ExpandMoreIcon sx={{ fontSize: '1rem' }} color="inherit" />
-          </TooltipIconButton>
+            <Box
+              component="span"
+              role="presentation"
+              onClick={(event: React.MouseEvent<HTMLSpanElement>) => {
+                event.stopPropagation();
+                if (hasChildBuckets) toggleExpanded();
+              }}
+              sx={{
+                // Match the footprint of the IconButton-sized expand control
+                // used by non-hierarchical rows (RIGHT_CHEVRON_SIZE) so all
+                // facet counts stay right-aligned in the same column.
+                width: RIGHT_CHEVRON_SIZE,
+                height: RIGHT_CHEVRON_SIZE,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: (theme) => (hasChildBuckets ? theme.palette.primary.main : theme.palette.action.disabled),
+                cursor: hasChildBuckets ? 'pointer' : 'default',
+              }}
+            >
+              <ExpandMoreIcon sx={{ fontSize: '1rem' }} color="inherit" />
+            </Box>
+          </SecondaryBackgroundTooltip>
         }
       >
         <HierarchicalFacetParent
