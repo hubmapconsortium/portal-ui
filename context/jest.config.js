@@ -30,7 +30,7 @@ const config = {
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(?:\\.pnpm/[^/]+/node_modules/)?(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js|history|pdfjs-dist|until-async|nuqs|rettime|@open-draft/deferred-promise)/)',
+    'node_modules/(?!(?:\\.pnpm/[^/]+/node_modules/)?(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js|history|pdfjs-dist|until-async|nuqs|rettime|@open-draft/deferred-promise|react-markdown|rehype-raw|remark-parse|remark-rehype|unified|bail|ccount|character-entities(?:-html4|-legacy)?|character-reference-invalid|comma-separated-tokens|decode-named-character-reference|devlop|escape-string-regexp|estree-util-is-identifier-name|estree-walker|extend|hastscript|hast-util-[^/]+|html-url-attributes|html-void-elements|inline-style-parser|is-plain-obj|longest-streak|mdast-util-[^/]+|micromark|micromark-[^/]+|unist-util-[^/]+|property-information|space-separated-tokens|stringify-entities|style-to-js|style-to-object|trim-lines|trough|vfile|vfile-location|vfile-message|web-namespaces|zwitch)/)',
   ],
   transform: {
     '^.+\\.(t|j)sx?$': [
