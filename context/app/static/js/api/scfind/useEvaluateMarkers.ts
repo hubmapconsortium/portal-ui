@@ -6,6 +6,7 @@ import {
   ScFindRequest,
   scFindFetcher,
   stringOrArrayToString,
+  toArray,
   useScFindKey,
 } from './utils';
 
@@ -33,8 +34,8 @@ export function createCellTypeMarkersKey(
       scFindEndpoint,
       'evaluateMarkers',
       {
-        gene_list: Array.isArray(geneList) ? geneList : [geneList],
-        cell_types: Array.isArray(cellTypes) ? cellTypes : [cellTypes],
+        gene_list: toArray(geneList),
+        cell_types: toArray(cellTypes),
         background_cell_types: backgroundCellTypes,
         sort_field: sortField,
         include_prefix: includePrefix,

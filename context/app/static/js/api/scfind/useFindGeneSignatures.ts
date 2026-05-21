@@ -6,6 +6,7 @@ import {
   ScFindRequest,
   scFindFetcher,
   stringOrArrayToString,
+  toArray,
   useScFindKey,
 } from './utils';
 
@@ -31,7 +32,7 @@ export function createFindGeneSignaturesKey(
       scFindEndpoint,
       'findGeneSignatures',
       {
-        cell_types: cellTypes ? (Array.isArray(cellTypes) ? cellTypes : [cellTypes]) : undefined,
+        cell_types: toArray(cellTypes),
         min_cells: minCells,
         min_fraction: minFraction,
       },

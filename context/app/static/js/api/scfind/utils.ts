@@ -67,6 +67,17 @@ export function createScFindPostRequest(
 }
 
 /**
+ * Wraps a single value in an array if it isn't already one; passes `undefined` through.
+ * Useful for normalizing `string | string[]` params to arrays for JSON request bodies.
+ */
+export function toArray<T>(input: T | T[]): T[];
+export function toArray<T>(input: T | T[] | undefined): T[] | undefined;
+export function toArray<T>(input: T | T[] | undefined): T[] | undefined {
+  if (input === undefined) return undefined;
+  return Array.isArray(input) ? input : [input];
+}
+
+/**
  * Returns true if any cell type name in the input contains a comma. Comma-containing
  * names break the default GET behavior because they collide with the array separator
  * used when joining multiple cell types into a single query param.
