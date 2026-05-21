@@ -11,7 +11,7 @@ export function useMatchedDatasets(cellTypes: string[]) {
   const { data: matchedDatasets, isLoading } = useFindDatasetForCellTypes({
     cellTypes,
   });
-  const matchedDatasetsCounts = matchedDatasets?.map(({ datasets }) => datasets.length) ?? [];
+  const matchedDatasetsCounts = matchedDatasets?.map((entry) => entry?.datasets.length ?? 0) ?? [];
   return {
     matchedDatasets,
     matchedDatasetsCounts,

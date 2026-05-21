@@ -61,7 +61,7 @@ export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetFor
   const key = cellTypes.map((cellType) =>
     createFindDatasetForCellTypeKey(scFindEndpoint, { cellType }, scFindIndexVersion),
   );
-  const { data, ...rest } = useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(
+  const { data, ...rest } = useSWR<(FindDatasetForCellTypeResponse | undefined)[], unknown, FindDatasetForCellTypesKey>(
     key,
     (requests) =>
       scFindMultiFetcher<FindDatasetForCellTypeResponse>(requests, {
@@ -79,6 +79,7 @@ export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetFor
     const maps: Record<string, Record<string, number>> = {};
 
     data.forEach((result, index) => {
+      if (!result) return;
       const cellType = cellTypes[index];
       const map: Record<string, number> = {};
       result.counts.forEach((count, datasetIndex) => {

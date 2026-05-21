@@ -98,15 +98,26 @@ export async function scFindFetcher<T>(key: ScFindRequest): Promise<T> {
 
 /**
  * Multi-URL SWR fetcher for scFind. Accepts an array of GET/POST request keys (or null
- * to skip a slot) and dispatches each appropriately, preserving the matching response order.
+ * to skip a slot) and dispatches each appropriately. The returned array has the same length
+ * as the input, with `undefined` in any slot whose key was null, so callers can rely on
+ * input-index alignment.
  */
 export async function scFindMultiFetcher<T>(
   keys: (ScFindRequest | null)[],
   options?: Omit<MultiFetchOptionsType, 'urls' | 'requestInits'>,
-): Promise<T[]> {
-  const urls = keys.map((key) => (key === null ? null : typeof key === 'string' ? key : key.url));
-  const requestInits = keys.map((key) => requestInitForKey(key));
-  return multiFetcher<T>({ ...options, urls, requestInits });
+): Promise<(T | undefined)[]> {
+  const activeSlots: { key: ScFindRequest; index: number }[] = [];
+  keys.forEach((key, index) => {
+    if (key !== null) activeSlots.push({ key, index });
+  });
+  const urls = activeSlots.map(({ key }) => (typeof key === 'string' ? key : key.url));
+  const requestInits = activeSlots.map(({ key }) => requestInitForKey(key));
+  const results = await multiFetcher<T>({ ...options, urls, requestInits });
+  const aligned: (T | undefined)[] = keys.map(() => undefined);
+  activeSlots.forEach((slot, i) => {
+    aligned[slot.index] = results[i];
+  });
+  return aligned;
 }
 
 /**

@@ -138,6 +138,11 @@ export async function fetcher<T>({
   errorMessages = {},
   returnResponse = false,
 }: SingleFetchOptionsType) {
+  // Short-circuit on null URL so callers get an explicit null rather than the
+  // ambiguous `undefined` that would fall out of multiFetcher filtering empty slots.
+  if (url === null) {
+    return null as T;
+  }
   return multiFetcher({
     urls: [url],
     requestInits: [requestInit],
