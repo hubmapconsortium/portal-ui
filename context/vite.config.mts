@@ -103,7 +103,17 @@ export default defineConfig(({ command }) => ({
       // owns:  /@*  (internals like /@vite/client, /@react-refresh, /@id),
       //        /node_modules/*  (deps in HMR mode),
       //        /app/static/*  (the project source tree).
-      '^/(?!@|node_modules/|app/static/).*': 'http://localhost:5000',
+      '^/(?!@|node_modules/|app/static/).*': {
+        target: 'http://localhost:5000',
+        // Preserve the browser's Host header (localhost:5001) so Flask's
+        // url_for(..., _external=True) builds redirects pointing back at
+        // the dev server instead of the upstream Flask port. Also send
+        // X-Forwarded-* headers so a ProxyFix-wrapped Flask app can
+        // reconstruct the original URL even if any intermediate hop
+        // rewrites Host.
+        changeOrigin: false,
+        xfwd: true,
+      },
     },
   },
 }));
