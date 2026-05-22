@@ -54,7 +54,7 @@ function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }
     <StackTemplate>
       <BodyCell {...desktopConfig.name} aria-label="Name">
         <Typography>
-          <InternalLink href={href} data-testId="panel-title">
+          <InternalLink href={href} data-testid="panel-title">
             {name}
           </InternalLink>
           {` (${hubmapId})`}

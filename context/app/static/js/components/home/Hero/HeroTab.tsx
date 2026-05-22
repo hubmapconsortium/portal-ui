@@ -3,7 +3,7 @@ import { useEventCallback } from '@mui/material/utils';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Hidden from '@mui/material/Hidden';
+import Box from '@mui/material/Box';
 import { trackEvent } from 'js/helpers/trackers';
 import { InternalLink } from 'js/shared-styles/Links';
 import { HeroTabContainer } from './styles';
@@ -61,9 +61,9 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
 
   return (
     <>
-      <Hidden mdDown>
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
         <Content {...props} />
-      </Hidden>
+      </Box>
       <HeroTabContainer
         $index={index}
         $activeSlide={activeTab}
@@ -78,9 +78,9 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
         aria-controls={`tabpanel-${index}`}
         id={`tab-${index}`}
       >
-        <Hidden mdUp>
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
           <Content {...props} />
-        </Hidden>
+        </Box>
         <Stack p={2} spacing={1}>
           <Stack direction="row" spacing={1}>
             {icon}
