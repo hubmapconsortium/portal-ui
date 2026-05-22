@@ -10,9 +10,10 @@ import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 
 function UserOption(props: React.HTMLAttributes<HTMLLIElement>, option: WorkspaceUser) {
   const { id, first_name, last_name, email } = option;
+  const { key: _propsKey, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
 
   return (
-    <li {...props} key={id}>
+    <li key={id} {...rest}>
       <div>
         <Typography variant="subtitle1">{`${first_name} ${last_name}`}</Typography>
         <Typography variant="body2">{email}</Typography>

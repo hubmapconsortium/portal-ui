@@ -7,7 +7,9 @@ interface StyledTableContainerProps extends TableContainerProps {
   maxHeight?: number;
 }
 
-const StyledTableContainer = styled(TableContainer)<StyledTableContainerProps>(({ theme, maxHeight = 340 }) => ({
+const StyledTableContainer = styled(TableContainer, {
+  shouldForwardProp: (prop) => prop !== 'maxHeight',
+})<StyledTableContainerProps>(({ theme, maxHeight = 340 }) => ({
   maxHeight,
   overflowY: 'auto',
   '& .MuiTableCell-root': {

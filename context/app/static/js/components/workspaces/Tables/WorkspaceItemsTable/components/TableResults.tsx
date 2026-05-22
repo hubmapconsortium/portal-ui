@@ -19,17 +19,19 @@ function TableResults<T extends WorkspaceItem>({
     return <LoadingRows tableWidth={tableFields.length + 1} />;
   }
 
-  return sortedItems
-    .slice(0, numVisibleItems)
-    .map((item) => (
-      <ResultRow
-        key={isWorkspace(item) ? item.id : item.shared_workspace_id.id}
-        item={item}
-        tableFields={tableFields}
-        selectedItemIds={selectedItemIds}
-        toggleItem={toggleItem}
-      />
-    ));
+  return (
+    <>
+      {sortedItems.slice(0, numVisibleItems).map((item) => (
+        <ResultRow
+          key={isWorkspace(item) ? item.id : item.shared_workspace_id.id}
+          item={item}
+          tableFields={tableFields}
+          selectedItemIds={selectedItemIds}
+          toggleItem={toggleItem}
+        />
+      ))}
+    </>
+  );
 }
 
 export default TableResults;

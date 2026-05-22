@@ -24,9 +24,7 @@ const requiredVariants = {
 function StepDescription({ blocks }: { blocks: (string | ReactElement<unknown>)[] }) {
   return (
     <Stack gap={2} p={2} component={Paper} direction="column">
-      {blocks.map((block) => (
-        <Typography key={typeof block === 'string' ? block : block.key}>{block}</Typography>
-      ))}
+      {blocks.map((block) => (typeof block === 'string' ? <Typography key={block}>{block}</Typography> : block))}
     </Stack>
   );
 }

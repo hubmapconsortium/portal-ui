@@ -61,7 +61,24 @@ interface EntitiesTableTabProps<Doc extends Entity> extends EntitiesTabTypes<Doc
   isLoading?: boolean;
 }
 function EntitiesTableTabInternal<Doc extends Entity>(
-  { entityType, tabTooltipText, totalHitsCount = 0, index, isLoading, entities, ...rest }: EntitiesTableTabProps<Doc>,
+  {
+    entityType,
+    tabTooltipText,
+    totalHitsCount = 0,
+    index,
+    isLoading,
+    entities,
+    // Table-only fields from EntitiesTabTypes -- strip so they don't leak
+    // onto <Tab>'s DOM via the spread below.
+    query: _query,
+    columns: _columns,
+    expandedContent: _expandedContent,
+    estimatedExpandedRowHeight: _estimatedExpandedRowHeight,
+    reverseExpandIndicator: _reverseExpandIndicator,
+    headerActions: _headerActions,
+    initialSortState: _initialSortState,
+    ...rest
+  }: EntitiesTableTabProps<Doc>,
   ref: React.Ref<HTMLDivElement>,
 ) {
   const Icon = entityIconMap?.[entityType];

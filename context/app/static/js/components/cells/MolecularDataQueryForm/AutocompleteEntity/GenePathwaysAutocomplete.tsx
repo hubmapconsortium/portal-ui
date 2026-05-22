@@ -44,20 +44,23 @@ export default function GenePathwaysAutocomplete() {
       title="pathway"
       loading={isLoading}
       getOptionLabel={(option) => option.full}
-      renderOption={(props, option: AutocompleteResult) => (
-        <PreserveWhiteSpaceListItem {...props} key={option.full}>
-          <span>{option.pre}</span>
-          <b>{option.match}</b>
-          <span>{option.post}</span>
-          {'tags' in option && option?.tags && (
-            <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
-              {option.tags.map((tag) => (
-                <Chip key={tag} label={tag} size="small" variant="filled" />
-              ))}
-            </Box>
-          )}
-        </PreserveWhiteSpaceListItem>
-      )}
+      renderOption={(props, option: AutocompleteResult) => {
+        const { key: _propsKey, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
+        return (
+          <PreserveWhiteSpaceListItem key={option.full} {...rest}>
+            <span>{option.pre}</span>
+            <b>{option.match}</b>
+            <span>{option.post}</span>
+            {'tags' in option && option?.tags && (
+              <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
+                {option.tags.map((tag) => (
+                  <Chip key={tag} label={tag} size="small" variant="filled" />
+                ))}
+              </Box>
+            )}
+          </PreserveWhiteSpaceListItem>
+        );
+      }}
       renderInput={({ InputLabelProps, ...params }) => (
         <TextField
           placeholder="Find a pathway by name (e.g. DNA Damage)."
