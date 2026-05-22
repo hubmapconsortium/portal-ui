@@ -61,7 +61,10 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
 
   return (
     <>
-      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+      {/* `display: contents` so the wrapper doesn't interfere with the
+          parent's CSS grid: HeroImageSlide places itself into the `panel`
+          grid area and needs to be a direct grid child at md+. */}
+      <Box sx={{ display: { xs: 'none', md: 'contents' } }}>
         <Content {...props} />
       </Box>
       <HeroTabContainer
@@ -78,7 +81,7 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
         aria-controls={`tabpanel-${index}`}
         id={`tab-${index}`}
       >
-        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+        <Box sx={{ display: { xs: 'contents', md: 'none' } }}>
           <Content {...props} />
         </Box>
         <Stack p={2} spacing={1}>
