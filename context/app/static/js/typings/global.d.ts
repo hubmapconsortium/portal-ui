@@ -1,6 +1,8 @@
-// Variables provided via webpack plugins
+// Build-time constants injected via Vite's `define:` config (see vite.config.mts).
 declare const CDN_URL: string;
 declare const PACKAGE_VERSION: string;
+// Stripped of any ^/~ range prefix.
+declare const VITESSCE_VERSION: string;
 
 // Flask data object embedded in react-content.html via {{ flask_data | tojson }}
 // Default keys come from get_default_flask_data() in utils.py;
@@ -64,11 +66,6 @@ declare namespace React {
       'ccf-body-ui': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
     }
   }
-}
-
-declare module 'package' {
-  export const dependencies: Record<string, string>;
-  export const version: string;
 }
 
 declare module 'openkeynav' {

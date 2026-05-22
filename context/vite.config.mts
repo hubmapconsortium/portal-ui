@@ -8,7 +8,10 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf8')) as { version: string };
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf8')) as {
+  version: string;
+  dependencies: Record<string, string>;
+};
 
 // Emit a webpack-manifest-plugin-compatible manifest.json so Flask's
 // flask_static_digest.py can keep mapping `main.js` -> the hashed asset name
@@ -66,13 +69,17 @@ export default defineConfig(({ command }) => ({
   define: {
     CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
     PACKAGE_VERSION: JSON.stringify(pkg.version),
+    // Vitessce version (with any ^/~ range prefix stripped) so the
+    // Visualization footer can show the running Vitessce release without
+    // importing package.json at runtime -- Vite's dev server doesn't expose
+    // the project's package.json as a fetchable module.
+    VITESSCE_VERSION: JSON.stringify((pkg.dependencies.vitessce ?? '').replace(/^[\^~]/, '')),
   },
   resolve: {
     alias: {
       js: resolve(__dirname, 'app/static/js'),
       assets: resolve(__dirname, 'app/static/assets'),
       'shared-styles': resolve(__dirname, 'app/static/js/shared-styles'),
-      package: resolve(__dirname, 'package.json'),
       '@mui/styled-engine': '@mui/styled-engine-sc',
       'txml/txml': 'txml/dist/txml',
     },

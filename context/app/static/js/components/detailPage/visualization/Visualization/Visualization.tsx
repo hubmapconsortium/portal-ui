@@ -203,6 +203,11 @@ function Visualization({
             {shouldMountVitessce && (
               <VisualizationTracker>
                 <Vitessce
+                  // Force a fresh Vitessce instance when the multi-dataset
+                  // selection changes; swapping the `config` prop in place
+                  // leaves stale internal state and crashes getLayers in
+                  // vitessce@4.0.0-test.2.
+                  key={isMultiDataset ? vitessceSelection : undefined}
                   config={currentConfig}
                   theme={vizTheme}
                   onConfigChange={setLocalVitessceStateDebounced}

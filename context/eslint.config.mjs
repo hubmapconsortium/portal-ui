@@ -56,6 +56,7 @@ export default defineConfig(
         ...globals.node,
         CDN_URL: 'readonly',
         PACKAGE_VERSION: 'readonly',
+        VITESSCE_VERSION: 'readonly',
         flaskData: 'readonly',
         groupsToken: 'readonly',
         isAuthenticated: 'readonly',

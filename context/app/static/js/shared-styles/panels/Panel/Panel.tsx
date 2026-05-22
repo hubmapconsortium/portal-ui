@@ -19,7 +19,10 @@ interface BasicPanelProps {
 interface CustomPanelProps extends PropsWithChildren {
   noPadding?: boolean;
   noHover?: boolean;
-  key: string;
+  // Identifier used by PanelList for React reconciliation and to mark the
+  // optional `header` panel. Named ``panelKey`` (not ``key``) so React 19's
+  // strict-mode doesn't warn about ``key`` flowing through a spread.
+  panelKey: string;
 }
 
 export type PanelProps = BasicPanelProps | CustomPanelProps;
@@ -30,7 +33,10 @@ function isCustomPanel(props: PanelProps): props is CustomPanelProps {
 
 function Panel(props: PanelProps) {
   if (isCustomPanel(props)) {
-    return <PanelBox {...props} />;
+    // Strip panelKey before spreading -- it's metadata for PanelList, not a
+    // DOM attribute.
+    const { panelKey: _panelKey, ...rest } = props;
+    return <PanelBox {...rest} />;
   }
 
   const { title, href, secondaryText, rightText, icon, small, ...panelBoxProps } = props;
