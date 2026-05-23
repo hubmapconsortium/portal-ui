@@ -1,5 +1,6 @@
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import React, { ComponentProps, useId, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Scellop } from 'scellop';
 import { CellTypeIcon, DatasetIcon } from 'js/shared-styles/icons';
 import Paper from '@mui/material/Paper';
@@ -277,7 +278,7 @@ function CellPopSkeleton() {
 }
 
 function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
-  const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
+  const { fullscreenVizId, theme } = useVisualizationStore(useShallow(visualizationSelector));
   const vizIsFullscreen = fullscreenVizId === scellopId;
 
   const trackEvent = useTrackCellpop();

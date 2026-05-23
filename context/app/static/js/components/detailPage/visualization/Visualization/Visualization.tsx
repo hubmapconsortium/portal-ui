@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useId } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Vitessce } from 'vitessce';
 import { useQueryState, parseAsBoolean } from 'nuqs';
 
@@ -67,7 +68,7 @@ function Visualization({
   renderBelowFooter,
 }: VisualizationProps) {
   const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVizNotebookId, setVizHubmapId } =
-    useVisualizationStore(visualizationStoreSelector);
+    useVisualizationStore(useShallow(visualizationStoreSelector));
 
   const id = useId();
   const vizIsFullscreen = fullscreenVizId === id;

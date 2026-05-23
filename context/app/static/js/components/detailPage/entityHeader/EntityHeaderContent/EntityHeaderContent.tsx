@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { animated, useSpring } from '@react-spring/web';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import Stack from '@mui/material/Stack';
@@ -250,14 +251,16 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
     assayMetadata,
     summaryComponentObserver: { summaryInView },
     organFile: organ,
-  } = useEntityStore(entityStoreSelector);
+  } = useEntityStore(useShallow(entityStoreSelector));
 
   const { entity } = useFlaskDataContext();
   const { hubmap_id, entity_type } = entity;
 
   const isOrganPage = Boolean(organ);
 
-  const { vizIsFullscreen, vizNotebookId, isVitessce, isSaySeeViz } = useVisualizationStore(visualizationSelector);
+  const { vizIsFullscreen, vizNotebookId, isVitessce, isSaySeeViz } = useVisualizationStore(
+    useShallow(visualizationSelector),
+  );
 
   const styles = useSpring({
     from: { opacity: 1 },

@@ -54,9 +54,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
     headerOffsetRef.current = headerOffset;
   }, [headerOffset]);
 
-  const { toastError } = useSnackbarStore((store) => ({
-    toastError: store.toastError,
-  }));
+  const toastError = useSnackbarStore((store) => store.toastError);
 
   const isMultiDataset = Array.isArray(vitData);
 

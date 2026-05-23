@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
@@ -59,7 +60,7 @@ function ChatFallback() {
 
 function SaySeePanel() {
   const { isHubmapUser, isWorkspacesUser } = useAppContext();
-  const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(visualizationSelector);
+  const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(useShallow(visualizationSelector));
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
   const { savedPreferences: rawPrefs, isLoading: prefsLoading } = useSavedPreferences();
   const savedPreferences = rawPrefs;
