@@ -20,7 +20,7 @@ function DatePickerComponent({
   minDate,
   maxDate,
   ...rest
-}: DatePickerProps<Date> & Partial<Pick<DatePickerProps<Date>, 'minDate' | 'maxDate'>>) {
+}: DatePickerProps & Partial<Pick<DatePickerProps, 'minDate' | 'maxDate'>>) {
   const [error, setError] = useState<DateValidationError | null>(null);
 
   const errorMessage = useMemo(() => {
