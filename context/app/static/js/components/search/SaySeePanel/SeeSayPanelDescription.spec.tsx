@@ -56,7 +56,7 @@ describe('SaySeePanelDescription DataScopeSwitch', () => {
     setAppContext({ isAuthenticated: true, isHubmapUser: true });
     render(<SaySeePanelDescription />);
     expect(screen.getByText('Data scope')).toBeInTheDocument();
-    const toggle = screen.getByRole('checkbox', {
+    const toggle = screen.getByRole('switch', {
       name: /Toggle whether Say & See uses public data/i,
     });
     expect(toggle).not.toBeChecked();
@@ -72,7 +72,7 @@ describe('SaySeePanelDescription DataScopeSwitch', () => {
     } as unknown as ReturnType<typeof useSavedPreferences>);
 
     render(<SaySeePanelDescription />);
-    expect(screen.getByRole('checkbox', { name: /Toggle whether Say & See uses public data/i })).toBeChecked();
+    expect(screen.getByRole('switch', { name: /Toggle whether Say & See uses public data/i })).toBeChecked();
   });
 
   it('flipping the switch persists the new scope and emits a tracking event', async () => {
@@ -86,7 +86,7 @@ describe('SaySeePanelDescription DataScopeSwitch', () => {
     });
 
     render(<SaySeePanelDescription />);
-    await user.click(screen.getByRole('checkbox', { name: /Toggle whether Say & See uses public data/i }));
+    await user.click(screen.getByRole('switch', { name: /Toggle whether Say & See uses public data/i }));
 
     expect(mockHandleUpdateSavedPreferences).toHaveBeenCalledTimes(1);
     expect(mockHandleUpdateSavedPreferences).toHaveBeenCalledWith({

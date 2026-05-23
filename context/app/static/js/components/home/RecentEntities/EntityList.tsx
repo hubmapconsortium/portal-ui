@@ -36,7 +36,7 @@ export function EntityList<T extends { uuid: string }>({
   });
 
   return (
-    <Grid item xs={12} md={6}>
+    <Grid size={{ xs: 12, md: 6 }}>
       <Stack spacing={1} direction="row" alignItems="center" mb={1}>
         <Icon sx={{ width: '2rem', height: '2rem' }} color="primary" />
         <Typography variant="h4" mb={1}>

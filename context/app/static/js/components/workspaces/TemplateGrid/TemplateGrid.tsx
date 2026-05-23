@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useMemo } from 'react';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { InternalLink } from 'js/shared-styles/Links';
 import { sortTemplates } from 'js/components/workspaces/utils';
