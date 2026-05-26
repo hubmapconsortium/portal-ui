@@ -205,6 +205,12 @@ function useFacetOptions(): FacetOption[] {
  * On close: clears the snapshot.
  */
 function useStableOptions(rawOptions: FacetOption[], isOpen: boolean): FacetOption[] {
+  // Intentional ref-during-render: the snapshot is an open-state-bound cache
+  // of the option list at the moment the combobox is opened. Moving this to
+  // an effect would render one frame behind and visibly flicker the "zero-
+  // count" disappeared options on each keystroke. The cache is consumed via
+  // useMemo below, so the result is correctly memoized.
+  /* eslint-disable react-hooks/refs */
   const snapshotRef = useRef<Map<string, FacetOption> | null>(null);
 
   // Build/clear snapshot synchronously based on open state
@@ -269,6 +275,7 @@ function useStableOptions(rawOptions: FacetOption[], isOpen: boolean): FacetOpti
 
     return merged;
   }, [rawOptions, isOpen]);
+  /* eslint-enable react-hooks/refs */
 }
 
 const MemoizedInlineDateControl = React.memo(function InlineDateControl({
@@ -283,6 +290,7 @@ const MemoizedInlineDateControl = React.memo(function InlineDateControl({
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
   const aggMin = option.rangeMin ?? 0;
+  // eslint-disable-next-line react-hooks/purity -- Pattern is read-during-render by design.
   const aggMax = option.rangeMax ?? Date.now();
 
   const currentMin = isDateFilter(filter) ? filter.values.min : undefined;
@@ -292,6 +300,7 @@ const MemoizedInlineDateControl = React.memo(function InlineDateControl({
   const [localMax, setLocalMax] = useState(currentMax ?? aggMax);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setLocalMin(currentMin ?? aggMin);
     setLocalMax(currentMax ?? aggMax);
   }, [currentMin, currentMax, aggMin, aggMax]);
@@ -371,6 +380,7 @@ const MemoizedInlineRangeControl = React.memo(function InlineRangeControl({ opti
   const [localValues, setLocalValues] = useState<number[]>([currentMin ?? rangeMin, currentMax ?? rangeMax]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setLocalValues([currentMin ?? rangeMin, currentMax ?? rangeMax]);
   }, [currentMin, currentMax, rangeMin, rangeMax]);
 
@@ -469,6 +479,7 @@ const VirtualizedListbox = React.forwardRef<HTMLUListElement, React.HTMLAttribut
     const flatItems = useMemo(() => flattenGroupedChildren(children), [children]);
     const scrollRef = useRef<HTMLUListElement | null>(null);
 
+    // eslint-disable-next-line react-hooks/incompatible-library -- External library hook signature (Tanstack Virtual / react-hook-form).
     const virtualizer = useVirtualizer({
       count: flatItems.length,
       getScrollElement: () => scrollRef.current,

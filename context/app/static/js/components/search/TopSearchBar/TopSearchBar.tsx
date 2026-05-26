@@ -32,6 +32,11 @@ function TopSearchBar() {
 
   const commit = useMemo(
     () =>
+      // The ref `lastSeenStoreValue` is captured by this debounced callback;
+      // react-hooks/refs flags it as a render-time read because the closure
+      // is created during render, but the actual access only happens once
+      // the debounced fn fires from a user event.
+      // eslint-disable-next-line react-hooks/refs
       debounce((value: string) => {
         setSearch(value);
         lastSeenStoreValue.current = value;

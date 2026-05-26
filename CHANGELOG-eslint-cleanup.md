@@ -1,0 +1,12 @@
+- Drop dead eslint plugins: `eslint-plugin-flowtype` (Flow isn't used), `eslint-plugin-json` (no config referenced it), `eslint-plugin-markdown` (deprecated). The unused `@eslint/js` import was also removed.
+- Replace `eslint-plugin-markdown` with the official `@eslint/markdown`.
+- Bump `eslint-plugin-react-hooks` 5 → 7 and `eslint-plugin-cypress` 5 → 6 (latest majors compatible with our pinned `eslint@9` and `storybook@9`).
+- Switch typescript-eslint typed-rules layer to `parserOptions.projectService: true` -- typescript-eslint v8's faster auto-program loading, noticeably better on lint-staged partial runs.
+- Enable lint caching: `lint`/`lint:fix` and `lint-staged` now pass `--cache --cache-location node_modules/.cache/eslint/`. Second-run lint drops from ~50s cold to ~2s warm.
+- Tighten `lint-staged` glob to `{js,jsx,ts,tsx}` -- the prior `{y*ml,json,md}` extensions weren't present under `app/static/js/`.
+- Address the ~65 net-new violations the `react-hooks@7` rules surface:
+  - Convert popper/menu anchor patterns from `useRef + .current` to `useState + callback ref` so MUI's positioning re-runs correctly on mount.
+  - Refactor `DropdownMenuProvider` store to expose `anchorEl` + `setAnchorEl` state instead of a shared ref.
+  - Migrate `useInitialHash`, `SaySeeWelcomeDialog`, and `WorkspacePleaseWait` timing from `useEffect`-set to lazy `useState` init.
+  - Reroute `useTooManyDatasetsErrors` one-shot tracking through a guarded `useEffect`.
+  - For genuinely intentional ref / effect-driven patterns (Vitessce config sync, SWR loading latches, the FacetSearchCombobox snapshot cache), add scoped `eslint-disable-next-line` directives with rationale comments.

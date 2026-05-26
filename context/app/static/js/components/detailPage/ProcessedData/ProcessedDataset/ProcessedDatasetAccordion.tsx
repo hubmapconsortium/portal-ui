@@ -63,6 +63,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   useEffect(() => {
     const datasetId = datasetSectionId(sectionDataset);
     if (hash.includes(datasetId)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setIsExpanded(true);
     }
   }, [hash, sectionDataset]);
@@ -70,6 +71,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   // Auto-expand when the ?viz= query param targets this dataset
   useEffect(() => {
     if (vizParamMatchesDataset) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setIsExpanded(true);
     }
   }, [vizParamMatchesDataset]);

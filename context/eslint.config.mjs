@@ -1,4 +1,3 @@
-import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
@@ -158,7 +157,11 @@ export default defineConfig(
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        // `projectService: true` (typescript-eslint v8.x) is meaningfully faster
+        // than the explicit `project` pointer used here previously, especially
+        // on partial runs from lint-staged: it auto-loads only the program
+        // needed for the files being linted instead of the whole tsconfig.
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,

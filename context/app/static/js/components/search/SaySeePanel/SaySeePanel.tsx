@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useRef } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
@@ -69,9 +69,12 @@ function SaySeePanel() {
 
   // Latch on first resolve so a later isLoading=true (e.g. an SWR
   // revalidation that lost cache) can't unmount the heavy UDIChat tree.
-  const hasResolvedRef = useRef(false);
-  if (!prefsLoading) hasResolvedRef.current = true;
-  const showFallback = !hasResolvedRef.current;
+  // Set-during-render with a guard is the official React 19 pattern for
+  // "store info while rendering"; it doesn't loop because the guard
+  // prevents a second set.
+  const [hasResolved, setHasResolved] = useState(false);
+  if (!prefsLoading && !hasResolved) setHasResolved(true);
+  const showFallback = !hasResolved;
   const downloadActions = useSaySeeDownloadActions();
 
   const toggleFullscreen = useEventCallback(() => {

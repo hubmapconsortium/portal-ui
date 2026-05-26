@@ -124,6 +124,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
         const clonedVitData: object[] = [...vitDataArr];
         clonedVitData[initialSelectionFromUrl] = vitessceURLConf ?? vitDataArr[initialSelectionFromUrl];
         initializedVitDataFromUrl = clonedVitData;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setLocalVitessceState(clonedVitData[initialSelectionFromUrl]);
       } else {
         initializedVitDataFromUrl = vitessceURLConf ?? vitData;

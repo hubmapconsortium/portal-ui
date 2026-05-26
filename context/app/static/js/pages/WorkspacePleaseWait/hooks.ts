@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
 import { getWorkspaceJob } from 'js/components/workspaces/utils';
@@ -11,7 +11,7 @@ function useWorkspacesPleaseWait(workspaceId: number) {
   const [message, setMessage] = useState<string | undefined>();
   const [dead, setDead] = useState<boolean | undefined>();
   const { workspacesEndpoint, workspacesToken } = useAppContext();
-  const loadingStartTime = useRef(new Date().getTime());
+  const [loadingStartTime] = useState(() => new Date().getTime());
   const [jobStatus, setJobStatus] = useState<string | undefined>();
   const { handleStopWorkspace } = useWorkspacesList();
 
@@ -53,7 +53,7 @@ function useWorkspacesPleaseWait(workspaceId: number) {
       document.location.href = jupyterUrl;
     }
 
-    if (status === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime.current > 5 * 60 * 1000) {
+    if (status === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime > 5 * 60 * 1000) {
       try {
         await handleStopWorkspace(workspaceId);
         document.location.href = `/workspaces/?failed_workspace_id=${encodeURIComponent(workspaceId)}`;
@@ -67,7 +67,7 @@ function useWorkspacesPleaseWait(workspaceId: number) {
 
   return {
     message,
-    isPending30s: jobStatus === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime.current > 30 * 1000,
+    isPending30s: jobStatus === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime > 30 * 1000,
   };
 }
 

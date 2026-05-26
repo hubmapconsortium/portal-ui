@@ -117,6 +117,7 @@ export function useWorkspaceItemsTableContent<T extends WorkspaceItem>({
   const [numVisibleItems, setNumVisibleItems] = useState(3);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setNumVisibleItems(showSeeMoreOption ? 3 : items.length);
   }, [items, showSeeMoreOption]);
 

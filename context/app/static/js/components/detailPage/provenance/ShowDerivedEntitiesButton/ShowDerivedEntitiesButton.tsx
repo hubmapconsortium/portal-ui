@@ -73,6 +73,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
       const uniqueNodes = getUniques(nodes, layoutNodes);
       const uniqueEdges = getUniques(edges, layoutEdges);
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setNewNodes(uniqueNodes);
       setNewEdges(uniqueEdges);
       setDescendantUuids(uuidsToAdd);

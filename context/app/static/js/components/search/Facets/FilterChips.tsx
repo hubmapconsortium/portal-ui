@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -77,7 +77,7 @@ function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: 
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const getFieldLabel = useGetFieldLabel();
   const getTransformedFieldValue = useGetTransformedFieldValue();
-  const anchorEl = useRef<HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const fieldLabel = getFieldLabel(field);
@@ -122,7 +122,7 @@ function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: 
 
   return (
     <>
-      <div ref={anchorEl}>
+      <div ref={setAnchorEl}>
         <Chip
           variant="outlined"
           color="primary"
@@ -141,7 +141,7 @@ function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: 
         />
       </div>
       <Menu
-        anchorEl={anchorEl.current}
+        anchorEl={anchorEl}
         open={menuOpen}
         onClose={handleMenuClose}
         slotProps={{
@@ -206,7 +206,7 @@ function MultiValueHierarchicalFilterChip({
 }: MultiValueHierarchicalFilterChipProps) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const getFieldLabel = useGetFieldLabel();
-  const anchorEl = useRef<HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const fieldLabel = getFieldLabel(field);
@@ -250,7 +250,7 @@ function MultiValueHierarchicalFilterChip({
 
   return (
     <>
-      <div ref={anchorEl}>
+      <div ref={setAnchorEl}>
         <Chip
           variant="outlined"
           color="primary"
@@ -269,7 +269,7 @@ function MultiValueHierarchicalFilterChip({
         />
       </div>
       <Menu
-        anchorEl={anchorEl.current}
+        anchorEl={anchorEl}
         open={menuOpen}
         onClose={handleMenuClose}
         slotProps={{

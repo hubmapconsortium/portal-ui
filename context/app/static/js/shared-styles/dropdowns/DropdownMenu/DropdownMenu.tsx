@@ -8,10 +8,10 @@ interface DropdownMenuProps extends Omit<ComponentProps<typeof Menu>, 'open'> {
 }
 
 function DropdownMenu({ children, id, ...rest }: PropsWithChildren<DropdownMenuProps>) {
-  const { menuRef, menuIsOpen, closeMenu } = useDropdownMenuStore();
+  const { anchorEl, menuIsOpen, closeMenu } = useDropdownMenuStore();
   return (
     <Menu
-      anchorEl={menuRef.current}
+      anchorEl={anchorEl}
       open={menuIsOpen}
       onClose={closeMenu}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

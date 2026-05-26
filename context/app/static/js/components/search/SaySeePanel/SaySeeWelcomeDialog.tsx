@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -27,13 +27,9 @@ const capabilities = [
 ];
 
 function SaySeeWelcomeDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (!hasBeenDismissed()) {
-      setIsOpen(true);
-    }
-  }, []);
+  // Initialize lazily from localStorage so the dialog opens on first paint
+  // rather than flashing closed-then-open via a useEffect.
+  const [isOpen, setIsOpen] = useState(() => !hasBeenDismissed());
 
   const handleClose = useCallback(() => {
     window.localStorage.setItem(LOCAL_STORAGE_KEY, 'true');

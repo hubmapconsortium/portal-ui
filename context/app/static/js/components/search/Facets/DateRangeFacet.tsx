@@ -110,6 +110,7 @@ function DateRangeFacet({
 
   // Reset slider position when filter chip is deleted.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setValues([min, max]);
   }, [min, max, setValues]);
 
@@ -169,6 +170,7 @@ function DateRangeFacet({
   // The end picker also clamps to "now" so future months never become
   // selectable even if the upstream aggregation reports stale data.
   const lowerBound = useMemo(() => new Date(aggMin), [aggMin]);
+  // eslint-disable-next-line react-hooks/purity -- Pattern is read-during-render by design.
   const upperBound = useMemo(() => new Date(Math.min(aggMax, Date.now())), [aggMax]);
 
   return (
