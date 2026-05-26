@@ -105,65 +105,70 @@ function ColumnFilterDropdown({
           </Typography>
         </Box>
         <Divider />
-        {/* Menu uses React.Children to iterate keyboard targets and rejects
-            Fragment children, so each conditional branch below must resolve
-            to a single element or null -- not wrap multiple MenuItems. */}
-        {isLoading && (
+        {/* Menu's keyboard nav iterates via React.Children, which treats a
+            Fragment as a single opaque child -- so we render the loaded
+            items as an array (React.Children flattens those) instead of
+            wrapping in <>...</>. */}
+        {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
             <CircularProgress size={20} />
           </Box>
+        ) : (
+          [
+            <MenuItem key="clear-all" onClick={handleClearAll} disabled={selectedCount === 0}>
+              <Typography variant="body2" color="text.secondary">
+                Clear all filters {selectedCount > 0 && `(${selectedCount})`}
+              </Typography>
+            </MenuItem>,
+            <Divider key="divider" />,
+            ...(values.length === 0
+              ? [
+                  <MenuItem key="empty" disabled>
+                    <Typography variant="body2" color="text.secondary">
+                      No values available
+                    </Typography>
+                  </MenuItem>,
+                ]
+              : values.map(({ value, count }) => (
+                  <MenuItem
+                    key={value}
+                    onClick={() => {
+                      handleToggleValue(value);
+                    }}
+                    dense
+                  >
+                    <Checkbox
+                      checked={selectedValues.has(value)}
+                      size="small"
+                      sx={{ mr: 1, p: 0 }}
+                      tabIndex={-1}
+                      disableRipple
+                    />
+                    <ListItemText
+                      primary={
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              maxWidth: 150,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                            title={value}
+                          >
+                            {value}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>
+                            ({count})
+                          </Typography>
+                        </Box>
+                      }
+                    />
+                  </MenuItem>
+                ))),
+          ]
         )}
-        {!isLoading && (
-          <MenuItem onClick={handleClearAll} disabled={selectedCount === 0}>
-            <Typography variant="body2" color="text.secondary">
-              Clear all filters {selectedCount > 0 && `(${selectedCount})`}
-            </Typography>
-          </MenuItem>
-        )}
-        {!isLoading && <Divider />}
-        {!isLoading && values.length === 0 && (
-          <MenuItem disabled>
-            <Typography variant="body2" color="text.secondary">
-              No values available
-            </Typography>
-          </MenuItem>
-        )}
-        {!isLoading &&
-          values.map(({ value, count }) => {
-            const isSelected = selectedValues.has(value);
-            return (
-              <MenuItem
-                key={value}
-                onClick={() => {
-                  handleToggleValue(value);
-                }}
-                dense
-              >
-                <Checkbox checked={isSelected} size="small" sx={{ mr: 1, p: 0 }} tabIndex={-1} disableRipple />
-                <ListItemText
-                  primary={
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          maxWidth: 150,
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}
-                        title={value}
-                      >
-                        {value}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>
-                        ({count})
-                      </Typography>
-                    </Box>
-                  }
-                />
-              </MenuItem>
-            );
-          })}
       </Menu>
     </>
   );
