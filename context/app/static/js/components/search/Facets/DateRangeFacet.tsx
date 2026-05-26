@@ -49,7 +49,8 @@ function DatePickerComponent({
           fontSize: theme.typography.subtitle2.fontSize,
         },
       })}
-      views={['month', 'year']}
+      views={['year', 'month']}
+      openTo="year"
       onError={setError}
       minDate={minDate}
       maxDate={maxDate}
@@ -94,7 +95,13 @@ function DatePickerComponent({
   );
 }
 
-function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number; max: number }) {
+function DateRangeFacet({
+  field,
+  min,
+  max,
+  aggMin,
+  aggMax,
+}: DateRangeFacetProps & { min: number; max: number; aggMin: number; aggMax: number }) {
   const filterDate = useSearchStore((state) => state.filterDate);
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
@@ -158,6 +165,12 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
     [filterDate, min, field, setValues, values, analyticsCategory],
   );
 
+  // Hard outer bounds = the data's actual extent (aggregation min/max).
+  // The end picker also clamps to "now" so future months never become
+  // selectable even if the upstream aggregation reports stale data.
+  const lowerBound = useMemo(() => new Date(aggMin), [aggMin]);
+  const upperBound = useMemo(() => new Date(Math.min(aggMax, Date.now())), [aggMax]);
+
   return (
     <FacetAccordion title={getFieldLabel(field)} position="inner">
       <Stack spacing={1.5} mt={1} pr={RIGHT_CHEVRON_SIZE}>
@@ -165,15 +178,17 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
           label="Start"
           value={new Date(values[0])}
           onAccept={filterMin}
+          minDate={lowerBound}
           maxDate={new Date(values[1])}
         />
         <DatePickerComponent
           label="End"
           value={new Date(values[1])}
-          views={['month', 'year']}
+          views={['year', 'month']}
+          openTo="year"
           onAccept={filterMax}
           minDate={new Date(values[0])}
-          maxDate={new Date()}
+          maxDate={upperBound}
         />
       </Stack>
     </FacetAccordion>
@@ -205,7 +220,16 @@ function DateRangeFacetGuard({ field, ...rest }: DateRangeFacetProps) {
     return null;
   }
 
-  return <DateRangeFacet field={field} min={min ?? aggMin.value} max={max ?? aggMax.value} {...rest} />;
+  return (
+    <DateRangeFacet
+      field={field}
+      min={min ?? aggMin.value}
+      max={max ?? aggMax.value}
+      aggMin={aggMin.value}
+      aggMax={aggMax.value}
+      {...rest}
+    />
+  );
 }
 
 export default DateRangeFacetGuard;

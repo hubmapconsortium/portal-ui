@@ -57,7 +57,7 @@
     "react-pdf": "^9.2.1",
     "reactify-wc": "^4.0.0",
     "rehype-raw": "^7.0.0",
-    "scellop": "link:../../../scellop",
+    "scellop": "^0.1.1",
     "styled-components": "^6.1.12",
     "swr": "^2.4.1",
     "udi-yac": "^0.1.6",

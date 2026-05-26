@@ -20,7 +20,11 @@
       "js/*": ["./app/static/js/*"],
       "assets/*": ["./app/static/assets/*"],
       "test-utils/*": ["./test-utils/*"],
-      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"],
+      "react": ["./node_modules/@types/react"],
+      "react-dom": ["./node_modules/@types/react-dom"],
+      "@mui/material": ["./node_modules/@mui/material"],
+      "@mui/material/*": ["./node_modules/@mui/material/*"]
     }
   },
   "include": [
