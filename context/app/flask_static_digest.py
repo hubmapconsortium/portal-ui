@@ -42,15 +42,19 @@ class FlaskStaticDigest(object):
         This function uses Flask's url_for under the hood and accepts the
         same arguments. The only difference is when a manifest is available
         it will look up the filename from the manifest.
-        :param endpoint: The endpoint of the URL
-        :type endpoint: str
-        :param values: Arguments of the URL rule
-        :return: Static file path.
+
+        Manifest entries are full URL paths (e.g.
+        ``/static/public/assets/main.HASH.js``) so we strip the leading
+        ``/static/`` and hand the rest to Flask as a static-folder-relative
+        filename. Anything under ``public/`` is preserved so chunks nested
+        under ``assets/`` resolve correctly.
         """
         filename = values.get('filename')
-        temp_filename = Path(self.manifest[filename]).name if self.has_manifest else filename
-
-        values.update({'filename': 'public/' + temp_filename})
+        if self.has_manifest:
+            manifest_url = self.manifest[filename]
+            values.update({'filename': manifest_url.removeprefix('/static/')})
+        else:
+            values.update({'filename': 'public/' + filename})
         return flask_url_for(endpoint, **values)
 
     def vite_dev_mode(self):
