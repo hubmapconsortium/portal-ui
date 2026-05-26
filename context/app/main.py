@@ -123,7 +123,6 @@ def create_app(testing=False):
             'user_email': session.get('user_email'),
             'workspaces_token': session.get('workspaces_token'),
             'user_groups': session.get('user_groups'),
-            'sentry_env': app.config['SENTRY_ENV'],
         }
 
     @app.before_request

@@ -63,7 +63,6 @@ export default defineConfig(
         userEmail: 'readonly',
         workspacesToken: 'readonly',
         userGroups: 'readonly',
-        sentryEnv: 'readonly',
       },
       parserOptions: {
         ecmaVersion: 'latest',

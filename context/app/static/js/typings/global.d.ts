@@ -46,7 +46,6 @@ declare const userGlobusId: string;
 declare const userGlobusAffiliation: string;
 declare const workspacesToken: string;
 declare const userGroups: string[];
-declare const sentryEnv: string;
 
 declare module '*.svg' {
   const ReactComponent: React.FunctionComponent<React.SVGAttributes<SVGElement>>;

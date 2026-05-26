@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 
 import App from './components/App';
 import Iframe from './pages/Iframe';
-import initTrackers from './helpers/init-trackers';
+// Side-effect import: instantiates Matomo + GA4 at module load time so they
+// are ready before the first render.
+import './helpers/trackers';
 import { setJsonLD, DatasetForLD } from './schema.org';
 
 // TODO: Re-enable. https://github.com/hubmapconsortium/portal-ui/issues/1426
@@ -12,8 +14,6 @@ import { setJsonLD, DatasetForLD } from './schema.org';
 // if (validation_errors && validation_errors.length) {
 //   console.warn('Schema validation errors', validation_errors);
 // }
-
-initTrackers();
 
 const root = ReactDOM.createRoot(document.getElementById('react-content')!);
 root.render(

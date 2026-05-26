@@ -1,0 +1,5 @@
+- Remove Grafana Faro SDK (`@grafana/faro-react`, `@grafana/faro-web-sdk`, `@grafana/faro-web-tracing`). Matomo + GA4 remain the analytics surface.
+- Replace `FaroErrorBoundary` with `react-error-boundary`'s `<ErrorBoundary>` on the top-level site fallback, the Provenance graph fallback, and the Vitessce visualization fallback.
+- Route SWR `onError` / `onLoadingSlow` to `trackEvent` so error and slow-query signals land in Matomo + GA4 (previously Faro-only).
+- Drop the `sentryEnv` global and the Flask `SENTRY_ENV` config that fed it.
+- Drop the Faro-only `trackMeasurement` helper and the unused `workspace_loading` timing it emitted from the workspace launch flow.

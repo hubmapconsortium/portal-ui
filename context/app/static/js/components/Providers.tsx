@@ -1,9 +1,10 @@
 import React, { PropsWithChildren, useMemo } from 'react';
 import { NuqsAdapter } from 'nuqs/adapters/react';
 import { SWRConfig } from 'swr';
-import { faro } from '@grafana/faro-web-sdk';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+
+import { trackEvent } from 'js/helpers/trackers';
 
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import type { AppContextType, FlaskDataContextType } from 'js/components/Contexts';
@@ -20,15 +21,11 @@ import { useEntityHeaderSprings } from './detailPage/entityHeader/EntityHeader/h
 const swrConfig = {
   revalidateOnFocus: false,
   onError: (error: Error, key: string) => {
-    faro.api.pushError(error, {
-      context: { key, type: 'SWR Error' },
-    });
+    trackEvent({ category: 'SWR', action: 'Error', label: key, error: error.message });
   },
+  // Triggered by default when a request takes longer than 3000ms.
   onLoadingSlow: (key: string) => {
-    // By default, this is triggered if a request takes longer than 3000ms.
-    faro.api.pushError(new Error(`Slow-loading query: ${key}`), {
-      context: { key, type: 'SWR Slow Loading' },
-    });
+    trackEvent({ category: 'SWR', action: 'Slow Loading', label: key });
   },
 };
 

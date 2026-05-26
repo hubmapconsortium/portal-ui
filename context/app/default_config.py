@@ -56,8 +56,6 @@ class DefaultConfig(object):
     PROTOCOLS_IO_CLIENT_SECRET = 'should-be-overridden'
     PROTOCOLS_IO_CLIENT_AUTH_TOKEN = 'should-be-overridden'
 
-    SENTRY_ENV = 'should-be-overridden'
-
     # Optional: server-side OpenAI key used by the UDIAgent for authenticated
     # HuBMAP-Read users. If unset, all callers must supply X-OpenAI-Key.
     OPENAI_API_KEY = None

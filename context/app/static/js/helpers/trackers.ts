@@ -1,6 +1,5 @@
 import MatomoTracker from '@datapunt/matomo-tracker-js';
 import ReactGA from 'react-ga4';
-import { faro } from '@grafana/faro-web-sdk';
 import { readCookie } from 'js/helpers/functions';
 
 // Flexible event type that matches actual usage across the codebase.
@@ -88,7 +87,6 @@ ReactGA.initialize('G-Q1QJYZHM1D', {
 function trackPageView(path: string) {
   tracker.trackPageView({ href: path });
   ReactGA.send({ hitType: 'pageview', page: path });
-  faro.api.pushEvent('pageview', { path });
 }
 
 type StringifiedEvent = Record<string, string | number>;
@@ -123,8 +121,7 @@ function buildLabelFields(event: StringifiedEvent, id?: string): Partial<Pick<St
 }
 
 function formatEvent(event: TrackingEvent, id?: string): StringifiedEvent {
-  // Convert all event values to strings to avoid errors in faro and matomo.
-  // https://github.com/grafana/faro-web-sdk/issues/269
+  // Convert all event values to strings; Matomo's event API expects scalars.
   const safeEvent = stringifyEventValues(event);
   return { ...safeEvent, ...buildLabelFields(safeEvent, id) };
 }
@@ -133,16 +130,6 @@ function trackEvent(event: TrackingEvent, id?: string, matomo = true) {
   const formattedEvent = formatEvent(event, id);
   if (matomo) tracker.trackEvent(formattedEvent as unknown as Parameters<typeof tracker.trackEvent>[0]);
   ReactGA.event(formattedEvent as unknown as Parameters<typeof ReactGA.event>[0]);
-  const category = String(formattedEvent.category).replace(/ /g, '_');
-  faro.api.pushEvent(category, formattedEvent as Record<string, string>);
-}
-
-function trackMeasurement(type: string, values: Record<string, number>, context?: Record<string, unknown>) {
-  faro.api.pushMeasurement({
-    type,
-    values,
-    context: context ? (stringifyEventValues(context) as Record<string, string>) : undefined,
-  });
 }
 
 function trackLink(href: string, type?: string) {
@@ -156,7 +143,6 @@ function trackLink(href: string, type?: string) {
     label: href,
     nonInteraction: false,
   });
-  faro.api.pushEvent(type || 'Outbound Link Clicked', { href });
 }
 
 function trackSiteSearch(keyword: string, category?: string) {
@@ -164,17 +150,8 @@ function trackSiteSearch(keyword: string, category?: string) {
     keyword,
     category,
   });
-  /*
-  We currently call both trackEvent and trackSiteSearch:
-  while that is the case, we don't have to double track the event in GA/faro.
-
-  ReactGA.event({
-    // category: analyticsCategory,
-    action: 'Free Text Search',
-    label: keyword,
-  });
-  faro.api.pushEvent('Free Text Search', { keyword });
-  */
+  // We currently call both trackEvent and trackSiteSearch; while that's the
+  // case there's no reason to double-track the search as a GA event too.
 }
 
-export { trackPageView, formatEvent, trackEvent, trackMeasurement, trackLink, trackSiteSearch };
+export { trackPageView, formatEvent, trackEvent, trackLink, trackSiteSearch };
