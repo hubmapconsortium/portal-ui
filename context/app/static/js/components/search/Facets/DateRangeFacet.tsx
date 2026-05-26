@@ -115,8 +115,13 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
           label: field,
         });
 
-        // Set to first moment of the month
-        const startOfMonth = new Date(value.getFullYear(), value.getMonth(), 1);
+        // x-date-pickers v8 + AdapterDateFns hand back a Date at UTC midnight
+        // of the selected month, which would shift to the previous month for
+        // any user east of UTC if read via local-time accessors. Read year /
+        // month in UTC, then construct first-of-month at local midnight.
+        const year = value.getUTCFullYear();
+        const month = value.getUTCMonth();
+        const startOfMonth = new Date(year, month, 1);
         const newMin = startOfMonth.getTime();
         setValues([newMin, values[1]]);
         if (newMin <= values[1]) {
@@ -136,8 +141,12 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
           label: field,
         });
 
-        // Set to last moment of the month, but not in the future
-        const endOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0, 23, 59, 59, 999);
+        // Same UTC-read / local-construct pattern as filterMin; clamp the
+        // resulting last-moment-of-month to "now" so future months don't
+        // slip in.
+        const year = value.getUTCFullYear();
+        const month = value.getUTCMonth();
+        const endOfMonth = new Date(year, month + 1, 0, 23, 59, 59, 999);
         const now = new Date();
         const newMax = Math.min(endOfMonth.getTime(), now.getTime());
         setValues([values[0], newMax]);
