@@ -44,8 +44,11 @@
     <script type="module" src="/@vite/client"></script>
     <script type="module" src="/{{ vite_dev_entry() }}"></script>
   {% else %}
-    <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
-    <script src="{{ static_url_for('static', filename='main.js') }}"></script>
+    {# Vite emits ESM bundles; the script tags must be `type="module"` or
+       the browser parses the top-level `import` as a classic script and
+       throws SyntaxError. Production-only branch. #}
+    <script type="module" src="{{ static_url_for('static', filename='vendors.js') }}"></script>
+    <script type="module" src="{{ static_url_for('static', filename='main.js') }}"></script>
   {% endif %}
 
   {% block extra_scripts %}{% endblock %}
