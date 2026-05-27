@@ -100,9 +100,10 @@ export default function SaySeePanelDescription() {
     <SectionDescription>
       <Stack spacing={1}>
         <Typography variant="body1">
-          Explore public HuBMAP datasets using natural language queries and get instant visualizations. Results are
-          independent from the Filter &amp; Browse Mode and do not link to individual dataset pages.{' '}
-          <ContactUsLink capitalize /> to report an issue or share feedback.
+          Explore HuBMAP&apos;s public data through a natural language chat interface. Ask questions about donor,
+          sample, and dataset metadata and get visualizations back. Results are independent from the Filter &amp; Browse
+          Mode and do not link to individual dataset, sample, or donor pages. <ContactUsLink capitalize /> to report an
+          issue or share feedback.
         </Typography>
         <div>
           <Typography variant="subtitle1">How to get access?</Typography>
