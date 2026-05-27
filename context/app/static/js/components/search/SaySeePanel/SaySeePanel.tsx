@@ -8,6 +8,7 @@ import FullscreenExitRoundedIcon from '@mui/icons-material/FullscreenExitRounded
 
 import { useAppContext } from 'js/components/Contexts';
 import { ExpandButton, ExpandableDiv } from 'js/components/detailPage/visualization/Visualization/style';
+import { useCollapseViz } from 'js/components/detailPage/visualization/Visualization/hooks';
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
@@ -62,6 +63,10 @@ function SaySeePanel() {
   const { isHubmapUser, isWorkspacesUser } = useAppContext();
   const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(useShallow(visualizationSelector));
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
+  // Subscribe to the shared Escape-collapses-fullscreen listener; the
+  // Vitessce viz wires this up on its detail page, but Say & See lives on
+  // the search page where it's the only fullscreen-capable component.
+  useCollapseViz();
   const { savedPreferences: rawPrefs, isLoading: prefsLoading } = useSavedPreferences();
   const savedPreferences = rawPrefs;
   const useAuthScope = isHubmapUser && savedPreferences?.saySeeDataScope === 'authenticated';
