@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import 'whatwg-fetch'; // polyfill fetch
-import 'intersection-observer'; // polyfill intersection observer
+import 'intersection-observer'; // polyfill intersection observer (jsdom doesn't ship one)
 
 // Polyfill TextEncoder and TextDecoder, which are no longer provided by jsdom
 import { TextEncoder, TextDecoder } from 'node:util';
