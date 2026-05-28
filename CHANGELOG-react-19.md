@@ -1,1 +1,0 @@
-- Upgrade to React 19 (react/react-dom 19.2, @types/react 19.2). Vitessce bumped to 4.0.0-test.2 for compatibility. Custom web component types moved from the deprecated global `JSX.IntrinsicElements` to `React.JSX.IntrinsicElements`. Internal TooltipButton family converted from `React.forwardRef` to React 19's ref-as-prop pattern.

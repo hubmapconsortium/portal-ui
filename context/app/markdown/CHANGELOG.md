@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.46.0 - 2026-05-28
+
+- Upgrade MUI 6 to 7 (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/system`, `@mui/styled-engine-sc`). The `Grid2` import path is gone in v7 — Grid is unified under `@mui/material/Grid`. Remaining v1 Grid usage (`item xs={...}`) migrated to `size={{ ... }}`. Switch now exposes `role="switch"` (was `checkbox`), so testing-library queries against it updated accordingly.
+- Upgrade `@mui/x-date-pickers` 7 to 8. The `AdapterDateFnsV3` entry was removed; use the default `AdapterDateFns` export. `DatePickerProps`'s date-value generic is gone (the type is inferred from the adapter).
+- Upgrade `date-fns` 3 to 4. Surface in this codebase is just `format()`, which is signature-stable across the bump.
+- Upgrade Zustand 4 to 5. Wrap object-returning selectors with `useShallow` so v5's stricter default equality (`Object.is`) doesn't trigger render loops. `useStoreWithEqualityFn` is preserved in `zustand/traditional`, so the `createStoreContext` helper continues to work unchanged.
+- Upgrade `uuid` 9 to 11 (closes the open Dependabot alert; named `v4` import shape unchanged) and `@types/uuid` to match.
+- Patch-bump `zod` 3.22 to 3.25. Staying on the 3.x line to remain compatible with vitessce's catalog pin until vitessce moves to zod 4.
+- Lockfile dedupe pass that comes with the above install consolidates several transitive duplicates surfaced by the prior React 19 / Vite / Vitest cutover.
+- Drop dead eslint plugins: `eslint-plugin-flowtype` (Flow isn't used), `eslint-plugin-json` (no config referenced it), `eslint-plugin-markdown` (deprecated). The unused `@eslint/js` import was also removed.
+- Replace `eslint-plugin-markdown` with the official `@eslint/markdown`.
+- Bump `eslint-plugin-react-hooks` 5 → 7 and `eslint-plugin-cypress` 5 → 6 (latest majors compatible with our pinned `eslint@9` and `storybook@9`).
+- Switch typescript-eslint typed-rules layer to `parserOptions.projectService: true` -- typescript-eslint v8's faster auto-program loading, noticeably better on lint-staged partial runs.
+- Enable lint caching: `lint`/`lint:fix` and `lint-staged` now pass `--cache --cache-location node_modules/.cache/eslint/`. Second-run lint drops from ~50s cold to ~2s warm.
+- Tighten `lint-staged` glob to `{js,jsx,ts,tsx}` -- the prior `{y*ml,json,md}` extensions weren't present under `app/static/js/`.
+- Address the ~65 net-new violations the `react-hooks@7` rules surface:
+  - Convert popper/menu anchor patterns from `useRef + .current` to `useState + callback ref` so MUI's positioning re-runs correctly on mount.
+  - Refactor `DropdownMenuProvider` store to expose `anchorEl` + `setAnchorEl` state instead of a shared ref.
+  - Migrate `useInitialHash`, `SaySeeWelcomeDialog`, and `WorkspacePleaseWait` timing from `useEffect`-set to lazy `useState` init.
+  - Reroute `useTooManyDatasetsErrors` one-shot tracking through a guarded `useEffect`.
+  - For genuinely intentional ref / effect-driven patterns (Vitessce config sync, SWR loading latches, the FacetSearchCombobox snapshot cache), add scoped `eslint-disable-next-line` directives with rationale comments.
+- Remove Grafana Faro SDK (`@grafana/faro-react`, `@grafana/faro-web-sdk`, `@grafana/faro-web-tracing`). Matomo + GA4 remain the analytics surface.
+- Replace `FaroErrorBoundary` with `react-error-boundary`'s `<ErrorBoundary>` on the top-level site fallback, the Provenance graph fallback, and the Vitessce visualization fallback.
+- Route SWR `onError` / `onLoadingSlow` to `trackEvent` so error and slow-query signals land in Matomo + GA4 (previously Faro-only).
+- Drop the `sentryEnv` global and the Flask `SENTRY_ENV` config that fed it.
+- Drop the Faro-only `trackMeasurement` helper and the unused `workspace_loading` timing it emitted from the workspace launch flow.
+- Upgrade to React 19 (react/react-dom 19.2, @types/react 19.2). Vitessce bumped to 4.0.0-test.2 for compatibility. Custom web component types moved from the deprecated global `JSX.IntrinsicElements` to `React.JSX.IntrinsicElements`. Internal TooltipButton family converted from `React.forwardRef` to React 19's ref-as-prop pattern.
+- Upgrade TypeScript to 6.0.x. Remove the deprecated `compilerOptions.baseUrl` from `tsconfig.json` and add an explicit `test-utils/*` entry to `paths`.
+- Replace Webpack 5 with Vite (+ Rolldown) for the main and maintenance frontend builds. Storybook builder swapped from `@storybook/react-webpack5` to `@storybook/react-vite`. Flask's `flask_static_digest` learned a `vite_dev_mode()` template global so dev mode renders the unbundled Vite entry while production keeps the existing hashed `main.js` / `vendors.js` flow.
+- Replace Jest with Vitest. All 113 test files run through Vite's transform pipeline; `jest.*` APIs migrated to `vi.*`. `@testing-library/react-hooks` and `react-test-renderer` dropped (use `renderHook` from `@testing-library/react`). ESLint plugin swapped from `eslint-plugin-jest` to `@vitest/eslint-plugin`.
+
+
+
 ## v1.45.3 - 2026-05-21
 
 - Fix color of Protocols & Workflow link in segmentation metadata section.
