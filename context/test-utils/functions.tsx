@@ -1,9 +1,8 @@
 import React, { PropsWithChildren } from 'react';
-import { render, RenderOptions, act } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { vi } from 'vitest';
+import { render, renderHook, RenderHookOptions, RenderOptions, act } from '@testing-library/react';
 import Providers from 'js/components/Providers';
 import { enableMapSet } from 'immer';
-import { RenderHookOptions } from '@testing-library/react-hooks/lib/types';
 
 enableMapSet();
 
@@ -17,11 +16,11 @@ const isWorkspacesUser = false;
 const appProviderToken = 'fakeGroupsToken';
 
 // Mock tracking helpers
-jest.mock('js/helpers/trackers');
-jest.mock('@grafana/faro-web-sdk', () => ({
+vi.mock('js/helpers/trackers');
+vi.mock('@grafana/faro-web-sdk', () => ({
   faro: {
     api: {
-      pushError: jest.fn(),
+      pushError: vi.fn(),
     },
   },
 }));
@@ -64,7 +63,6 @@ const customRenderHook = <TProps, TResult>(
   options?: Partial<RenderHookOptions<TProps>> & { flaskData?: FlaskData },
 ) =>
   renderHook(callback, {
-    // @ts-expect-error - TS is causing issues with the wrapper prop type
     wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
     ...options,
   });

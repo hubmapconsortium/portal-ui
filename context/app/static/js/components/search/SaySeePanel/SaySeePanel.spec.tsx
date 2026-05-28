@@ -12,39 +12,35 @@ function Wrapper({ children }: PropsWithChildren) {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }
 
-jest.mock('js/helpers/trackers');
-jest.mock('js/components/Contexts', () => ({
-  useAppContext: jest.fn(),
+vi.mock('js/helpers/trackers');
+vi.mock('js/components/Contexts', () => ({
+  useAppContext: vi.fn(),
 }));
-jest.mock('js/components/savedLists/hooks', () => ({
-  useSavedPreferences: jest.fn(),
+vi.mock('js/components/savedLists/hooks', () => ({
+  useSavedPreferences: vi.fn(),
 }));
-jest.mock(
-  'udi-yac',
-  () => ({
-    __esModule: true,
-    UDIChat: ({ dataPackagePath }: { dataPackagePath: string }) => (
-      <div data-testid="udi-chat" data-path={dataPackagePath} />
-    ),
-  }),
-  { virtual: true },
-);
-jest.mock('udi-yac/style.css', () => ({}), { virtual: true });
-jest.mock('./SeeSayPanelDescription', () => ({
+vi.mock('udi-yac', () => ({
+  __esModule: true,
+  UDIChat: ({ dataPackagePath }: { dataPackagePath: string }) => (
+    <div data-testid="udi-chat" data-path={dataPackagePath} />
+  ),
+}));
+vi.mock('udi-yac/style.css', () => ({}));
+vi.mock('./SeeSayPanelDescription', () => ({
   __esModule: true,
   default: () => <div data-testid="say-see-description" />,
 }));
-jest.mock('./SaySeeWelcomeDialog', () => ({
+vi.mock('./SaySeeWelcomeDialog', () => ({
   __esModule: true,
   default: () => null,
 }));
-jest.mock('./OpenInWorkspacesFromYAC', () => ({
+vi.mock('./OpenInWorkspacesFromYAC', () => ({
   __esModule: true,
   default: () => <div data-testid="open-in-workspaces" />,
 }));
 
-const mockUseAppContext = jest.mocked(useAppContext);
-const mockUseSavedPreferences = jest.mocked(useSavedPreferences);
+const mockUseAppContext = vi.mocked(useAppContext);
+const mockUseSavedPreferences = vi.mocked(useSavedPreferences);
 
 interface AppContextOverrides {
   isAuthenticated?: boolean;
@@ -66,14 +62,14 @@ function setup(app: AppContextOverrides = {}, prefs: PrefsOverrides = {}) {
   } as unknown as ReturnType<typeof useAppContext>);
   mockUseSavedPreferences.mockReturnValue({
     savedPreferences: prefs.scope ? { saySeeDataScope: prefs.scope } : {},
-    handleUpdateSavedPreferences: jest.fn(),
+    handleUpdateSavedPreferences: vi.fn(),
     isLoading: prefs.isLoading ?? false,
-    mutate: jest.fn(),
+    mutate: vi.fn(),
   });
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('SaySeePanel', () => {

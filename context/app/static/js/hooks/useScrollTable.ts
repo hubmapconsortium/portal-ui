@@ -248,6 +248,7 @@ function useScrollTable<Document>({
     [searchHits, expandedRows, isExpandable, estimatedExpandedRowHeight, estimator],
   );
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- External library hook signature (Tanstack Virtual / react-hook-form).
   const virtualizer = useVirtualizer({
     count: searchHits.length,
     getScrollElement: () => tableContainerRef.current,

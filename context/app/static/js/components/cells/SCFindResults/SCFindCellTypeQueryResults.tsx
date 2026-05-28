@@ -1,4 +1,5 @@
 import React, { forwardRef, useEffect, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Tab, TabPanel, TabProps, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, organCol, hubmapID } from 'js/shared-styles/tables/columns';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
@@ -88,10 +89,12 @@ interface HelperPanelProps {
 }
 
 function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) {
-  const { datasetStats, cellTypeStats } = useSCFindResultsStatisticsStore((state) => ({
-    datasetStats: state.datasetStats,
-    cellTypeStats: state.cellTypeStats,
-  }));
+  const { datasetStats, cellTypeStats } = useSCFindResultsStatisticsStore(
+    useShallow((state) => ({
+      datasetStats: state.datasetStats,
+      cellTypeStats: state.cellTypeStats,
+    })),
+  );
   const cellTypes = useCellVariableNames();
 
   return (

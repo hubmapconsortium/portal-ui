@@ -6,13 +6,14 @@ import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { SAVED_ENTITIES_KEY, SAVED_PREFERENCES_KEY } from 'js/components/savedLists/constants';
 import EditSavedStatusDialog, { getSavedListsWhichContainEntity } from './EditSavedStatusDialog';
 
-jest.mock('js/components/savedLists/hooks', () => ({
+vi.mock('js/components/savedLists/hooks', () => ({
   __esModule: true,
-  default: jest.fn(),
+  default: vi.fn(),
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockedUseSavedLists = useSavedLists as jest.MockedFunction<(...args: any[]) => any>;
+// Cast through unknown so individual tests can return only the slice of
+// useSavedLists they exercise without listing every field on the full hook return.
+const mockedUseSavedLists = useSavedLists as unknown as ReturnType<typeof vi.fn<(...args: unknown[]) => unknown>>;
 
 function makeList(overrides: Partial<SavedEntitiesList> = {}): SavedEntitiesList {
   return {
@@ -50,7 +51,7 @@ describe('getSavedListsWhichContainEntity', () => {
 
 describe('EditSavedStatusDialog', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   /**
@@ -76,11 +77,11 @@ describe('EditSavedStatusDialog', () => {
         [SAVED_ENTITIES_KEY]: makeList({ title: 'My Saved Items' }),
         [SAVED_PREFERENCES_KEY]: { enableOpenKeyNav: true },
       },
-      handleAddEntitiesToList: jest.fn().mockResolvedValue(undefined),
-      handleRemoveEntitiesFromList: jest.fn().mockResolvedValue(undefined),
+      handleAddEntitiesToList: vi.fn().mockResolvedValue(undefined),
+      handleRemoveEntitiesFromList: vi.fn().mockResolvedValue(undefined),
     });
 
-    render(<EditSavedStatusDialog dialogIsOpen setDialogIsOpen={jest.fn()} uuid="entity-1" />);
+    render(<EditSavedStatusDialog dialogIsOpen setDialogIsOpen={vi.fn()} uuid="entity-1" />);
 
     expect(screen.getByText('My Real List')).toBeInTheDocument();
   });
@@ -93,11 +94,11 @@ describe('EditSavedStatusDialog', () => {
         [SAVED_ENTITIES_KEY]: makeList({ title: 'My Saved Items' }),
         [SAVED_PREFERENCES_KEY]: { enableOpenKeyNav: true },
       },
-      handleAddEntitiesToList: jest.fn().mockResolvedValue(undefined),
-      handleRemoveEntitiesFromList: jest.fn().mockResolvedValue(undefined),
+      handleAddEntitiesToList: vi.fn().mockResolvedValue(undefined),
+      handleRemoveEntitiesFromList: vi.fn().mockResolvedValue(undefined),
     });
 
-    render(<EditSavedStatusDialog dialogIsOpen setDialogIsOpen={jest.fn()} uuid="entity-1" />);
+    render(<EditSavedStatusDialog dialogIsOpen setDialogIsOpen={vi.fn()} uuid="entity-1" />);
 
     expect(screen.getByText('My Real List')).toBeInTheDocument();
     expect(screen.queryByText('My Saved Items')).not.toBeInTheDocument();
@@ -110,11 +111,11 @@ describe('EditSavedStatusDialog', () => {
         'list-without-entity': makeList({ title: 'Empty' }),
       },
       savedListsAndEntities: {},
-      handleAddEntitiesToList: jest.fn().mockResolvedValue(undefined),
-      handleRemoveEntitiesFromList: jest.fn().mockResolvedValue(undefined),
+      handleAddEntitiesToList: vi.fn().mockResolvedValue(undefined),
+      handleRemoveEntitiesFromList: vi.fn().mockResolvedValue(undefined),
     });
 
-    render(<EditSavedStatusDialog dialogIsOpen setDialogIsOpen={jest.fn()} uuid="entity-1" />);
+    render(<EditSavedStatusDialog dialogIsOpen setDialogIsOpen={vi.fn()} uuid="entity-1" />);
 
     const containingRow = screen.getByText('Contains Entity').closest('li')!;
     const emptyRow = screen.getByText('Empty').closest('li')!;

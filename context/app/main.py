@@ -1,4 +1,5 @@
 from flask import Flask, session, render_template, redirect, request
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from . import (
     routes_main,
@@ -72,6 +73,14 @@ def create_app(testing=False):
         # We should not load the gitignored app.conf during tests.
         app.config.from_pyfile('app.conf')
 
+    # Trust X-Forwarded-* headers when running behind a reverse proxy. In dev,
+    # the Vite dev server (port 5001) proxies non-asset requests to Flask;
+    # without this, ``url_for(..., _external=True)`` would build redirects
+    # targeting the upstream Flask port (5000) instead of the browser-facing
+    # one, breaking OAuth login round-trips. In prod, NGINX sits in front of
+    # uWSGI and sets the same headers.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
+
     flask_static_digest.init_app(app)
 
     app.register_blueprint(routes_main.blueprint)
@@ -114,7 +123,6 @@ def create_app(testing=False):
             'user_email': session.get('user_email'),
             'workspaces_token': session.get('workspaces_token'),
             'user_groups': session.get('user_groups'),
-            'sentry_env': app.config['SENTRY_ENV'],
         }
 
     @app.before_request

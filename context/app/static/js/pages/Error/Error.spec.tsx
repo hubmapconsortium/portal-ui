@@ -2,17 +2,15 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
 import Error from './Error';
+import { getErrorTitleAndSubtitle } from './utils';
 
 // Mock the utils module to work around the use of window.location in getErrorTitleAndSubtitle
-jest.mock('./utils', () => ({
-  ...jest.requireActual('./utils'),
-  getErrorTitleAndSubtitle: jest.fn(),
+vi.mock('./utils', async () => ({
+  ...(await vi.importActual<typeof import('./utils')>('./utils')),
+  getErrorTitleAndSubtitle: vi.fn(),
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-const mockGetErrorTitleAndSubtitle = jest.requireMock('./utils').getErrorTitleAndSubtitle as jest.MockedFunction<
-  typeof import('./utils').getErrorTitleAndSubtitle
->;
+const mockGetErrorTitleAndSubtitle = vi.mocked(getErrorTitleAndSubtitle);
 
 describe('Error page', () => {
   test.each([

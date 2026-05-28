@@ -1,6 +1,8 @@
-// Variables provided via webpack plugins
+// Build-time constants injected via Vite's `define:` config (see vite.config.mts).
 declare const CDN_URL: string;
 declare const PACKAGE_VERSION: string;
+// Stripped of any ^/~ range prefix.
+declare const VITESSCE_VERSION: string;
 
 // Flask data object embedded in react-content.html via {{ flask_data | tojson }}
 // Default keys come from get_default_flask_data() in utils.py;
@@ -44,7 +46,6 @@ declare const userGlobusId: string;
 declare const userGlobusAffiliation: string;
 declare const workspacesToken: string;
 declare const userGroups: string[];
-declare const sentryEnv: string;
 
 declare module '*.svg' {
   const ReactComponent: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
@@ -53,17 +54,17 @@ declare module '*.svg' {
 
 declare module '*.css';
 
-declare namespace JSX {
-  interface IntrinsicElements {
-    'ccf-organ-info': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    'ccf-body-ui-wc': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    'ccf-body-ui': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+// React 19 moved the JSX namespace under React.JSX (the global JSX namespace
+// is deprecated). Augmenting React.JSX.IntrinsicElements is the supported
+// path now.
+declare namespace React {
+  namespace JSX {
+    interface IntrinsicElements {
+      'ccf-organ-info': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      'ccf-body-ui-wc': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      'ccf-body-ui': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
   }
-}
-
-declare module 'package' {
-  export const dependencies: Record<string, string>;
-  export const version: string;
 }
 
 declare module 'openkeynav' {

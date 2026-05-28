@@ -61,7 +61,24 @@ interface EntitiesTableTabProps<Doc extends Entity> extends EntitiesTabTypes<Doc
   isLoading?: boolean;
 }
 function EntitiesTableTabInternal<Doc extends Entity>(
-  { entityType, tabTooltipText, totalHitsCount = 0, index, isLoading, entities, ...rest }: EntitiesTableTabProps<Doc>,
+  {
+    entityType,
+    tabTooltipText,
+    totalHitsCount = 0,
+    index,
+    isLoading,
+    entities,
+    // Table-only fields from EntitiesTabTypes -- strip so they don't leak
+    // onto <Tab>'s DOM via the spread below.
+    query: _query,
+    columns: _columns,
+    expandedContent: _expandedContent,
+    estimatedExpandedRowHeight: _estimatedExpandedRowHeight,
+    reverseExpandIndicator: _reverseExpandIndicator,
+    headerActions: _headerActions,
+    initialSortState: _initialSortState,
+    ...rest
+  }: EntitiesTableTabProps<Doc>,
   ref: React.Ref<HTMLDivElement>,
 ) {
   const Icon = entityIconMap?.[entityType];
@@ -98,7 +115,7 @@ function EntitiesTableTabInternal<Doc extends Entity>(
 // React doesn't support generic forwardRef, so we need to cast it
 const EntitiesTableTab = forwardRef(EntitiesTableTabInternal) as <Doc extends Entity>(
   props: EntitiesTableTabProps<Doc> & { ref?: React.Ref<HTMLDivElement> },
-) => React.ReactElement;
+) => React.ReactElement<unknown>;
 
 function EntitiesTablesTabs<Doc extends Entity>({
   openTabIndex,

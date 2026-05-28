@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { createContext, useContext } from 'js/helpers/context';
 import { trackEvent } from 'js/helpers/trackers';
 import { v4 } from 'uuid';
@@ -39,15 +39,17 @@ export default function MolecularDataQueryFormTrackingProvider({
   children,
   category = defaultCategory,
 }: MolecularDataQueryFormTrackingProviderProps) {
-  // This generates a unique session ID for each instance of the form
-  // to track the session of the user filling out the form.
-  const sessionId = useRef<string>(`{${v4()}}`);
+  // Unique session ID for each instance of the form, used to correlate
+  // events for the session of the user filling out the form. Stored in
+  // useState (initialized lazily) instead of a ref so render-time reads
+  // don't trip react-hooks/refs.
+  const [sessionId] = useState(() => `{${v4()}}`);
   const genePageContext = useOptionalGenePageContext();
   const cellTypePageContext = useOptionalCellTypesDetailPageContext();
 
   const track = useCallback(
     (action: string, name?: string) => {
-      const id = sessionId.current;
+      const id = sessionId;
       const geneSymbol = genePageContext?.geneSymbolUpper ?? '';
       const cellTypeName = cellTypePageContext?.name ?? '';
       const molecularQueryTrackingLabel = name ? `${id} ${name}` : id;
@@ -65,18 +67,20 @@ export default function MolecularDataQueryFormTrackingProvider({
         label,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Deps intentionally narrowed -- adding the rest would re-run on every parent render.
     [category, cellTypePageContext?.name, genePageContext?.geneSymbolUpper],
   );
 
   const value = useMemo(
     () => ({
       track,
-      sessionId: sessionId.current,
+      sessionId: sessionId,
       category,
-      label: category === defaultCategory ? sessionId.current : (genePageContext?.geneSymbolUpper ?? ''),
+      label: category === defaultCategory ? sessionId : (genePageContext?.geneSymbolUpper ?? ''),
       isDefaultCategory: category === defaultCategory,
       isGenePageCategory: category === geneDetailPageCategory,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Deps intentionally narrowed -- adding the rest would re-run on every parent render.
     [category, genePageContext?.geneSymbolUpper, track],
   );
 

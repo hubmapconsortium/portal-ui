@@ -12,9 +12,10 @@ import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: WorkspaceWithCreatorInfo) {
   const { name, id } = option;
+  const { key: _propsKey, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
 
   return (
-    <li {...props} key={id}>
+    <li key={id} {...rest}>
       <div>
         <Typography variant="subtitle1">{name}</Typography>
         <Typography variant="body2">{`ID: ${id}`}</Typography>

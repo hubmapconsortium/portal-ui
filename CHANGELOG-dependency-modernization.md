@@ -1,0 +1,7 @@
+- Upgrade MUI 6 to 7 (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/system`, `@mui/styled-engine-sc`). The `Grid2` import path is gone in v7 — Grid is unified under `@mui/material/Grid`. Remaining v1 Grid usage (`item xs={...}`) migrated to `size={{ ... }}`. Switch now exposes `role="switch"` (was `checkbox`), so testing-library queries against it updated accordingly.
+- Upgrade `@mui/x-date-pickers` 7 to 8. The `AdapterDateFnsV3` entry was removed; use the default `AdapterDateFns` export. `DatePickerProps`'s date-value generic is gone (the type is inferred from the adapter).
+- Upgrade `date-fns` 3 to 4. Surface in this codebase is just `format()`, which is signature-stable across the bump.
+- Upgrade Zustand 4 to 5. Wrap object-returning selectors with `useShallow` so v5's stricter default equality (`Object.is`) doesn't trigger render loops. `useStoreWithEqualityFn` is preserved in `zustand/traditional`, so the `createStoreContext` helper continues to work unchanged.
+- Upgrade `uuid` 9 to 11 (closes the open Dependabot alert; named `v4` import shape unchanged) and `@types/uuid` to match.
+- Patch-bump `zod` 3.22 to 3.25. Staying on the 3.x line to remain compatible with vitessce's catalog pin until vitessce moves to zod 4.
+- Lockfile dedupe pass that comes with the above install consolidates several transitive duplicates surfaced by the prior React 19 / Vite / Vitest cutover.

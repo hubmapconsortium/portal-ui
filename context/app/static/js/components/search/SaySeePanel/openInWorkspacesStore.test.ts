@@ -31,7 +31,7 @@ describe('useOpenInWorkspacesTrigger', () => {
     const firstNonce = result.current.pending?.nonce;
 
     // Date.now() can return identical values on adjacent calls in fast tests; spy to guarantee a step.
-    const dateSpy = jest.spyOn(Date, 'now').mockReturnValueOnce((firstNonce ?? 0) + 1);
+    const dateSpy = vi.spyOn(Date, 'now').mockReturnValueOnce((firstNonce ?? 0) + 1);
     act(() => {
       result.current.trigger(['HBM1']);
     });

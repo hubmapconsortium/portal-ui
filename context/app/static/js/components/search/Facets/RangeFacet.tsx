@@ -42,6 +42,7 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
 
   // Reset slider position when filter chip is deleted.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setSelectedValues([values.min, values.max]);
   }, [values, setSelectedValues]);
 

@@ -81,6 +81,7 @@ function useDatasetsPublicationsTabs() {
         const { uuid } = processedDatasetTab;
         const publicationsForDataset = publicationsMap[uuid];
         if (publicationsForDataset?.length > 0) {
+          // eslint-disable-next-line react-hooks/immutability -- Intentional in-place mutation of a local accumulator.
           atLeastOnePublication = true;
         }
         return {

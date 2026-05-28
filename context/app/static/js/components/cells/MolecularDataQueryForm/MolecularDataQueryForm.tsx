@@ -32,9 +32,13 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
 
   const [activeStep, setActiveStep] = useState(0);
 
-  // Move to results step when form is successfully submitted
+  // Move to results step when form is successfully submitted. activeStep
+  // is also reset to 0 by an explicit "back" button and by the param-reset
+  // effect below, so derived state isn't a clean substitute -- the user
+  // can navigate back from step 1 while submitSuccessful is still true.
   useEffect(() => {
     if (methods.formState.isSubmitSuccessful) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveStep(1);
     }
   }, [methods.formState.isSubmitSuccessful]);
@@ -83,7 +87,10 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
       keepDirty: false,
     });
 
-    // Reset to parameters step when form parameters change
+    // Reset to parameters step when form parameters change. This effect
+    // does double duty (it also calls react-hook-form's reset()), so it
+    // can't be replaced by derived state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveStep(0);
   }, [threshold, genes, proteins, cellTypes, reset]);
 

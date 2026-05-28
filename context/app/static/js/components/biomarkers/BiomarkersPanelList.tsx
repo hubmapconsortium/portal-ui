@@ -52,18 +52,18 @@ export default function BiomarkersPanelList() {
       return [
         {
           children: <>No results found. Try searching for a different biomarker.</>,
-          key: 'no-results',
+          panelKey: 'no-results',
         },
       ];
     }
     const propsList: PanelProps[] = [
       {
-        key: 'header',
+        panelKey: 'header',
         noPadding: true,
         children: <BiomarkerPanel.Header />,
       },
       ...genesList.map(({ approved_name, approved_symbol, summary }) => ({
-        key: approved_symbol,
+        panelKey: approved_symbol,
         noPadding: true,
         noHover: false,
         children: (
@@ -76,7 +76,7 @@ export default function BiomarkersPanelList() {
         ),
       })),
       {
-        key: 'view-more',
+        panelKey: 'view-more',
         noPadding: true,
         children: <ViewMoreButton />,
       },

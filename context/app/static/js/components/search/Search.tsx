@@ -391,6 +391,7 @@ function useInitialURLState() {
       const parsedScFindParams = searchParams.scFindParams;
       if (parsedScFindParams) {
         isDoneLoading = false;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setScFindParams({
           scFindOnly: parsedScFindParams.scFindOnly,
           genes: parsedScFindParams.genes,
@@ -438,6 +439,7 @@ function useInitialURLState() {
 
     if (isDataReady) {
       if (datasetUUIDs.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setInitialUrlState((prevState) => ({
           ...prevState,
           filters: {

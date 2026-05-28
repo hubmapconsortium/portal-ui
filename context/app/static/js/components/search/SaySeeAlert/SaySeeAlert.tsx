@@ -44,8 +44,8 @@ function SaySeeAlert() {
         </Stack>
       }
     >
-      Try a preview of the Say &amp; See Mode (Beta)! Explore datasets using natural language queries and get instant
-      visualizations.
+      Try a preview of the Say &amp; See Mode (Beta)! Explore data through a natural language chat interface and get
+      visualizations back.
     </Alert>
   );
 }

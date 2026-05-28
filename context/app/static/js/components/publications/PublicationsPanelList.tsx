@@ -20,18 +20,18 @@ export default function PublicationsPanelList({
       return [
         {
           children: <Typography>No results found. Try searching for a different publication.</Typography>,
-          key: 'no-results',
+          panelKey: 'no-results',
         },
       ];
     }
     const propsList: PanelProps[] = [
       {
-        key: 'header',
+        panelKey: 'header',
         noPadding: true,
         children: <PublicationPanel.Header />,
       },
       ...publications.map(({ uuid, title, contributors, publication_date, publication_venue }) => ({
-        key: uuid,
+        panelKey: uuid,
         noPadding: true,
         noHover: false,
         children: (

@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useId } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Vitessce } from 'vitessce';
 import { useQueryState, parseAsBoolean } from 'nuqs';
 
@@ -67,7 +68,7 @@ function Visualization({
   renderBelowFooter,
 }: VisualizationProps) {
   const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVizNotebookId, setVizHubmapId } =
-    useVisualizationStore(visualizationStoreSelector);
+    useVisualizationStore(useShallow(visualizationStoreSelector));
 
   const id = useId();
   const vizIsFullscreen = fullscreenVizId === id;
@@ -203,6 +204,11 @@ function Visualization({
             {shouldMountVitessce && (
               <VisualizationTracker>
                 <Vitessce
+                  // Force a fresh Vitessce instance when the multi-dataset
+                  // selection changes; swapping the `config` prop in place
+                  // leaves stale internal state and crashes getLayers in
+                  // vitessce@4.0.0-test.2.
+                  key={isMultiDataset ? vitessceSelection : undefined}
                   config={currentConfig}
                   theme={vizTheme}
                   onConfigChange={setLocalVitessceStateDebounced}

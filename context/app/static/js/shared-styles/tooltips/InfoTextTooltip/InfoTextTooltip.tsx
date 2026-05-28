@@ -11,12 +11,12 @@ interface InfoTextTooltipProps extends PropsWithChildren {
 
 function InfoTextTooltip({ tooltipTitle, children, infoIconSize }: InfoTextTooltipProps) {
   return (
-    <StyledOuterStack>
+    <StyledOuterStack as="span">
       <Box display="inline-block" component="span">
         {children}
       </Box>
       <SecondaryBackgroundTooltip title={tooltipTitle} role="definition">
-        <StyledInnerStack>
+        <StyledInnerStack as="span">
           <StyledInfoIcon fontSize={infoIconSize} />
         </StyledInnerStack>
       </SecondaryBackgroundTooltip>

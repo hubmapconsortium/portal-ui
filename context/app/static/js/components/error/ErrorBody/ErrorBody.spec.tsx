@@ -9,23 +9,22 @@ const help = {
 };
 const login = { url: '/login', name: 'login' };
 
-jest.mock('react', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const ReactMock = jest.requireActual('react');
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  ReactMock.Suspense = ({ children }: { children: React.ReactNode }) => children;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  ReactMock.lazy = jest.fn().mockImplementation(
-    () =>
-      function MockedMaintenanceMessage() {
-        return (
-          <div>
-            This is test data <a href="https://hubmapconsortium.org/">HuBMAP Consortium</a>
-          </div>
-        );
-      },
-  );
-  return ReactMock;
+vi.mock('react', async () => {
+  const ReactMock = await vi.importActual<typeof import('react')>('react');
+  return {
+    ...ReactMock,
+    Suspense: ({ children }: { children: React.ReactNode }) => children,
+    lazy: vi.fn().mockImplementation(
+      () =>
+        function MockedMaintenanceMessage() {
+          return (
+            <div>
+              This is test data <a href="https://hubmapconsortium.org/">HuBMAP Consortium</a>
+            </div>
+          );
+        },
+    ),
+  };
 });
 
 test('maintenance page', () => {

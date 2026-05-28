@@ -55,7 +55,7 @@ const graphMargin = {
 
 type StackKeys = 'matched' | 'unmatched';
 
-const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackingInfo?: EventInfo) => {
+const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement | null>, trackingInfo?: EventInfo) => {
   const [yAxis, setYAxis] = useState<YAxisOptions>('Datasets');
 
   const onChangeYAxis = useEventCallback((e: SelectChangeEvent) => {

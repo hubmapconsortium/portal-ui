@@ -1,33 +1,23 @@
 import React, { PropsWithChildren } from 'react';
+import { ErrorBoundary as ReactErrorBoundary, type FallbackProps } from 'react-error-boundary';
 import Error from 'js/pages/Error';
-import { FaroErrorBoundary, faro } from '@grafana/faro-react';
 
-function ErrorFallback(error: (Error & { status?: number }) | null) {
-  // The default error message here is not very helpful,
-  // but it prevents crashes when the error is purposely triggered by the browser.
-  // In all other situations, `error` should be defined when we reach this.
+function ErrorFallback({ error }: FallbackProps) {
+  const err = error as (Error & { status?: number }) | null;
+  // The default error message here is not very helpful, but it prevents
+  // crashes when the error is purposely triggered by the browser. In all
+  // other situations `error` should be defined when we reach this.
   return (
     <Error
-      errorCode={error?.status}
+      errorCode={err?.status}
       isErrorBoundary
-      errorBoundaryMessage={(error ?? 'The application experienced an error.').toString()}
+      errorBoundaryMessage={err?.message ?? 'The application experienced an error.'}
     />
   );
 }
 
 function ErrorBoundary({ children }: PropsWithChildren) {
-  return (
-    <FaroErrorBoundary
-      fallback={ErrorFallback}
-      beforeCapture={() =>
-        faro.api.setView({
-          name: 'Sitewide Error Boundary',
-        })
-      }
-    >
-      {children}
-    </FaroErrorBoundary>
-  );
+  return <ReactErrorBoundary FallbackComponent={ErrorFallback}>{children}</ReactErrorBoundary>;
 }
 
 export default ErrorBoundary;

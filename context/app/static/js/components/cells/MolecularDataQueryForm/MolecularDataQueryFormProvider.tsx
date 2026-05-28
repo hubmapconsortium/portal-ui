@@ -17,6 +17,7 @@ export default function MolecularDataQueryFormProvider({ children, initialValues
 
   const { watch, reset } = methods;
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- External library hook signature (Tanstack Virtual / react-hook-form).
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
 

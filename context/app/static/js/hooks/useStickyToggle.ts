@@ -6,6 +6,7 @@ function useStickyToggle(toggleCondition?: unknown) {
 
   useEffect(() => {
     if (toggleCondition) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setHasBeenToggled(true);
     }
   }, [toggleCondition]);

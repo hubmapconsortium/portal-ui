@@ -5,6 +5,7 @@ import Description from 'js/shared-styles/sections/Description';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 
@@ -149,28 +150,30 @@ function BiomarkersTable() {
               </TableCell>
             </TableRow>
           </TableHead>
-          {isLoading && <LoadingTableRows numberOfCols={5} numberOfRows={3} />}
-          {sortedRows.map(({ genes, precision, recall, f1, description }) => (
-            <TableRow key={genes}>
-              <TableCell>
-                <InternalLink
-                  href={`/genes/${genes}`}
-                  onClick={() => {
-                    trackEvent({ ...trackingInfo, action: 'Biomarkers / Select Biomarker', label: genes });
-                  }}
-                >
-                  {genes}
-                </InternalLink>
-              </TableCell>
-              <TableCell>
-                <GeneDescription description={description} />
-              </TableCell>
-              <ScientificNotationDisplayCell value={precision} />
-              <ScientificNotationDisplayCell value={recall} />
-              <ScientificNotationDisplayCell value={f1} />
-              <TableCell />
-            </TableRow>
-          ))}
+          <TableBody>
+            {isLoading && <LoadingTableRows numberOfCols={5} numberOfRows={3} />}
+            {sortedRows.map(({ genes, precision, recall, f1, description }) => (
+              <TableRow key={genes}>
+                <TableCell>
+                  <InternalLink
+                    href={`/genes/${genes}`}
+                    onClick={() => {
+                      trackEvent({ ...trackingInfo, action: 'Biomarkers / Select Biomarker', label: genes });
+                    }}
+                  >
+                    {genes}
+                  </InternalLink>
+                </TableCell>
+                <TableCell>
+                  <GeneDescription description={description} />
+                </TableCell>
+                <ScientificNotationDisplayCell value={precision} />
+                <ScientificNotationDisplayCell value={recall} />
+                <ScientificNotationDisplayCell value={f1} />
+                <TableCell />
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </StyledTableContainer>
     </Paper>

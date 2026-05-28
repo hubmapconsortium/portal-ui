@@ -7,10 +7,10 @@ import { SWRConfig } from 'swr';
 import Providers from 'js/components/Providers';
 import { useFetchSavedListsAndEntities } from './api';
 
-jest.mock('@grafana/faro-web-sdk', () => ({
+vi.mock('@grafana/faro-web-sdk', () => ({
   faro: {
     api: {
-      pushError: jest.fn(),
+      pushError: vi.fn(),
     },
   },
 }));

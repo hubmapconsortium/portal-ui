@@ -35,8 +35,10 @@ export default function useOverflowCount(hasContent: boolean, deps: DependencyLi
     setOverflowCount(hidden.length);
   }, [isExpanded]);
 
-  // Measure after each render when dependencies change
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Measure after each render when dependencies change. Deps are spread
+  // from the caller so the rule can't statically verify them; effect calls
+  // a setter via measureOverflow's body.
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   useLayoutEffect(() => measureOverflow(), [measureOverflow, ...deps]);
 
   // Re-measure on container resize
@@ -50,6 +52,7 @@ export default function useOverflowCount(hasContent: boolean, deps: DependencyLi
   // Collapse when content is cleared
   useEffect(() => {
     if (!hasContent) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setIsExpanded(false);
     }
   }, [hasContent]);

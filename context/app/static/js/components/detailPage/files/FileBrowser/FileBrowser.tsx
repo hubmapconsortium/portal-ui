@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
@@ -29,8 +30,9 @@ interface FileBrowserProps {
 }
 
 function FileBrowser({ files }: FileBrowserProps) {
-  const { filesToDisplay, toggleFileFilter, displayOnlyQaQc, displayOnlyDataProducts } =
-    useFilesStore(filesStoreSelector);
+  const { filesToDisplay, toggleFileFilter, displayOnlyQaQc, displayOnlyDataProducts } = useFilesStore(
+    useShallow(filesStoreSelector),
+  );
   const {
     entity: { entity_type },
   } = useFlaskDataContext();

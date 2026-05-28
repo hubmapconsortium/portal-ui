@@ -1,3 +1,4 @@
+import { type MockedFunction } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -33,7 +34,7 @@ describe('SaySeeAlert', () => {
 
   it('clicking the CTA flips mode to say-see, dismisses the alert, and persists dismissal', async () => {
     const user = userEvent.setup();
-    const onUrlUpdate: jest.MockedFunction<OnUrlUpdateFunction> = jest.fn();
+    const onUrlUpdate: MockedFunction<OnUrlUpdateFunction> = vi.fn();
     renderWithUrl(onUrlUpdate);
 
     await user.click(screen.getByRole('button', { name: /Explore with Say & See Mode/i }));
@@ -47,7 +48,7 @@ describe('SaySeeAlert', () => {
 
   it('clicking the close X dismisses the alert without changing mode', async () => {
     const user = userEvent.setup();
-    const onUrlUpdate: jest.MockedFunction<OnUrlUpdateFunction> = jest.fn();
+    const onUrlUpdate: MockedFunction<OnUrlUpdateFunction> = vi.fn();
     renderWithUrl(onUrlUpdate);
 
     await user.click(screen.getByRole('button', { name: /Dismiss Say and See promo/i }));

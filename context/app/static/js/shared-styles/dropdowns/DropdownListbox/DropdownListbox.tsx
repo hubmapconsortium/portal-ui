@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUpRounded';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -29,7 +29,10 @@ function DropdownListbox<T>({
   getOptionLabel,
   id,
 }: DropdownListboxProps<T>) {
-  const anchorRef = useRef(null);
+  // Track the anchor as state via a callback ref. Reading ref.current during
+  // render trips react-hooks/refs in v7, and the Popper / Menu / Popover
+  // family needs a stable element handle for positioning.
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const selectOption = useEventCallback((selectedItem: { option: T; i: number }) => {
@@ -40,7 +43,7 @@ function DropdownListbox<T>({
   return (
     <>
       <SelectionButton
-        ref={anchorRef}
+        ref={setAnchorEl}
         id={`${id}-button`}
         data-testid={`${id}-button`}
         aria-haspopup="listbox"
@@ -52,13 +55,13 @@ function DropdownListbox<T>({
         {...buttonProps}
       >
         <Stack direction="row" alignItems="center" justifyContent="flex-end">
-          <Typography variant="inherit" flexGrow={1} display="flex" justifyContent="center">
+          <Typography component="span" variant="inherit" flexGrow={1} display="flex" justifyContent="center">
             {getOptionLabel(options[selectedOptionIndex])}
           </Typography>
           {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
         </Stack>
       </SelectionButton>
-      <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
+      <StyledPopper open={isOpen} anchorEl={anchorEl} placement="bottom-start">
         <StyledPaper>
           <ClickAwayListener
             onClickAway={() => {

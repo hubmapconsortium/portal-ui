@@ -10,8 +10,8 @@ interface PanelListProps {
 }
 
 function PanelList({ panelsProps }: PanelListProps) {
-  const headerProps = panelsProps.find((p) => 'key' in p && p.key === 'header');
-  const itemProps = panelsProps.filter((p) => !('key' in p && p.key === 'header'));
+  const headerProps = panelsProps.find((p) => 'panelKey' in p && p.panelKey === 'header');
+  const itemProps = panelsProps.filter((p) => !('panelKey' in p && p.panelKey === 'header'));
 
   return (
     <Stack
@@ -25,7 +25,8 @@ function PanelList({ panelsProps }: PanelListProps) {
       {headerProps && <Panel {...headerProps} />}
       <PanelScrollBox>
         {itemProps.map((props) => (
-          <Panel key={'key' in props ? props.key : props.title} {...props} />
+          // React's reserved `key` must be passed directly, not via spread.
+          <Panel key={'panelKey' in props ? props.panelKey : props.title} {...props} />
         ))}
       </PanelScrollBox>
     </Stack>

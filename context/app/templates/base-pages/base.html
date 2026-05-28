@@ -21,15 +21,35 @@
     const userGlobusAffiliation = '{{ user_globus_affiliation }}';
     const workspacesToken = '{{ workspaces_token }}';
     const userGroups = {{ user_groups | tojson  }};
-    const sentryEnv = '{{ sentry_env }}';
   </script>
 </head>
 
 <body>
   {% block body %}{% endblock %}
 
-  <script src="{{ static_url_for('static', filename='main.js') }}"></script>
-  <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
+  {% if vite_dev_mode() %}
+    {# Dev mode: load the Vite client + the unbundled entry. #}
+    {#
+       @vitejs/plugin-react-swc requires this preamble before any module
+       containing JSX is evaluated; with appType:'custom' it would normally
+       be injected via Vite's HTML transform, but here Flask owns the HTML.
+    #}
+    <script type="module">
+      import RefreshRuntime from "/@react-refresh"
+      RefreshRuntime.injectIntoGlobalHook(window)
+      window.$RefreshReg$ = () => {}
+      window.$RefreshSig$ = () => (type) => type
+      window.__vite_plugin_react_preamble_installed__ = true
+    </script>
+    <script type="module" src="/@vite/client"></script>
+    <script type="module" src="/{{ vite_dev_entry() }}"></script>
+  {% else %}
+    {# Vite emits ESM bundles; the script tags must be `type="module"` or
+       the browser parses the top-level `import` as a classic script and
+       throws SyntaxError. Production-only branch. #}
+    <script type="module" src="{{ static_url_for('static', filename='vendors.js') }}"></script>
+    <script type="module" src="{{ static_url_for('static', filename='main.js') }}"></script>
+  {% endif %}
 
   {% block extra_scripts %}{% endblock %}
 </body>

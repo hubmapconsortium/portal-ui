@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -23,17 +23,13 @@ const capabilities = [
   'Get visual answers instantly as interactive charts and tables.',
   'Apply filters based on your queries to refine your results.',
   'Ask follow-up questions about the metadata.',
-  'Download a manifest file or CSVs file of your filtered datasets for bulk analysis.',
+  'Download a manifest file or CSVs of your filtered datasets for bulk analysis.',
 ];
 
 function SaySeeWelcomeDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (!hasBeenDismissed()) {
-      setIsOpen(true);
-    }
-  }, []);
+  // Initialize lazily from localStorage so the dialog opens on first paint
+  // rather than flashing closed-then-open via a useEffect.
+  const [isOpen, setIsOpen] = useState(() => !hasBeenDismissed());
 
   const handleClose = useCallback(() => {
     window.localStorage.setItem(LOCAL_STORAGE_KEY, 'true');
@@ -50,7 +46,7 @@ function SaySeeWelcomeDialog() {
       content={
         <Box>
           <Typography variant="body1" gutterBottom>
-            Explore HuBMAP&apos;s public datasets through a natural language chat interface. Ask questions about donor,
+            Explore HuBMAP&apos;s public data through a natural language chat interface. Ask questions about donor,
             sample, and dataset metadata and get visualizations back.
           </Typography>
           <Typography variant="subtitle2" sx={{ mt: 2 }}>
@@ -75,7 +71,7 @@ function SaySeeWelcomeDialog() {
           </List>
           <Typography variant="subtitle2">Beta Status:</Typography>
           <Typography variant="body1">
-            Say &amp; See Mode is in active development. Always verify important findings against the original datasets.{' '}
+            Say &amp; See Mode is in active development. Always verify important findings against the original data.{' '}
             <ContactUsLink capitalize /> to share feedback or report an issue to help us improve.
           </Typography>
         </Box>

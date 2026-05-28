@@ -8,15 +8,19 @@ import { getArrayRange } from 'js/helpers/functions';
 // Using indexes as keys is an anti-pattern and can affect performance, but index can be used for items with no stable ID.
 // A uuid generator cannot be used as keys need to be consistent through renders.
 function LoadingTableRows({ numberOfRows, numberOfCols }: { numberOfRows: number; numberOfCols: number }) {
-  return getArrayRange(numberOfRows).map((r, rowIndex) => (
-    <TableRow key={`loading-table-row-${rowIndex}`}>
-      {getArrayRange(numberOfCols).map((c, colIndex) => (
-        <TableCell key={`loading-table-row-${colIndex}`}>
-          <Skeleton />
-        </TableCell>
+  return (
+    <>
+      {getArrayRange(numberOfRows).map((_r, rowIndex) => (
+        <TableRow key={`loading-table-row-${rowIndex}`}>
+          {getArrayRange(numberOfCols).map((_c, colIndex) => (
+            <TableCell key={`loading-table-row-${colIndex}`}>
+              <Skeleton />
+            </TableCell>
+          ))}
+        </TableRow>
       ))}
-    </TableRow>
-  ));
+    </>
+  );
 }
 
 export default LoadingTableRows;

@@ -1,3 +1,4 @@
+import { type MockedFunction } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { withNuqsTestingAdapter, type OnUrlUpdateFunction } from 'nuqs/adapters/testing';
 import { useSearchMode } from './useSearchMode';
@@ -25,7 +26,7 @@ describe('useSearchMode', () => {
   });
 
   it('round-trips a setMode call through the URL', async () => {
-    const onUrlUpdate: jest.MockedFunction<OnUrlUpdateFunction> = jest.fn();
+    const onUrlUpdate: MockedFunction<OnUrlUpdateFunction> = vi.fn();
     const { result } = renderHook(() => useSearchMode(), {
       wrapper: withNuqsTestingAdapter({ searchParams: '', onUrlUpdate, hasMemory: true }),
     });

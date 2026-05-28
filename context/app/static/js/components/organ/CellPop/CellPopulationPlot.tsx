@@ -1,6 +1,7 @@
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import React, { ComponentProps, useId, useMemo } from 'react';
-import { CellPop } from 'cellpop';
+import { useShallow } from 'zustand/react/shallow';
+import { Scellop } from 'scellop';
 import { CellTypeIcon, DatasetIcon } from 'js/shared-styles/icons';
 import Paper from '@mui/material/Paper';
 import { ExpandableDiv } from 'js/components/detailPage/visualization/Visualization/style';
@@ -33,7 +34,7 @@ function visualizationSelector(store: VisualizationStore) {
 
 const { scellopId } = OrganPageIds;
 
-type CellPopProps = ComponentProps<typeof CellPop>;
+type CellPopProps = ComponentProps<typeof Scellop>;
 type CellPopData = CellPopProps['data'];
 
 const useCellTypeNames = (data: Record<string, CellTypeCountForDataset[]> | undefined) => {
@@ -113,7 +114,7 @@ const useCellPopDataForOrgan = (
     formatCellTypeNames: true,
   });
 
-  // Format data for CellPop component
+  // Format data for Scellop component
   const formattedData = useMemo(() => {
     if (!data || Object.keys(data).length === 0 || !datasetMetadata) {
       return undefined;
@@ -240,12 +241,12 @@ const xAxisConfig: CellPopProps['xAxis'] = {
   icon: <CellTypeIcon />,
 };
 
-const initialProportions: ComponentProps<typeof CellPop>['initialProportions'] = [
+const initialProportions: ComponentProps<typeof Scellop>['initialProportions'] = [
   [0.4, 0.5, 0.1],
   [0.3, 0.6, 0.1],
 ];
 
-const tooltipFields: ComponentProps<typeof CellPop>['tooltipFields'] = [
+const tooltipFields: ComponentProps<typeof Scellop>['tooltipFields'] = [
   'Cell Ontology ID',
   'title',
   'assay',
@@ -255,7 +256,7 @@ const tooltipFields: ComponentProps<typeof CellPop>['tooltipFields'] = [
   'donor_race',
 ];
 
-const disabledControls: ComponentProps<typeof CellPop>['disabledControls'] = ['theme'];
+const disabledControls: ComponentProps<typeof Scellop>['disabledControls'] = ['theme'];
 
 function CellPopSkeleton() {
   const id = useId();
@@ -277,7 +278,7 @@ function CellPopSkeleton() {
 }
 
 function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
-  const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
+  const { fullscreenVizId, theme } = useVisualizationStore(useShallow(visualizationSelector));
   const vizIsFullscreen = fullscreenVizId === scellopId;
 
   const trackEvent = useTrackCellpop();
@@ -296,7 +297,7 @@ function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
           {isLoading ? (
             <CellPopSkeleton />
           ) : (
-            <CellPop
+            <Scellop
               data={data}
               theme={theme}
               yAxis={yAxisConfig}
