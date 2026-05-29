@@ -1,1 +1,0 @@
-- Fix markdown sections' styles.

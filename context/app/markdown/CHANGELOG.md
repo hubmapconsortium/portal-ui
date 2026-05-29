@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.46.1 - 2026-05-29
+
+- Fix markdown sections' styles.
+
+
+
 ## v1.46.0 - 2026-05-28
 
 - Upgrade MUI 6 to 7 (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/system`, `@mui/styled-engine-sc`). The `Grid2` import path is gone in v7 — Grid is unified under `@mui/material/Grid`. Remaining v1 Grid usage (`item xs={...}`) migrated to `size={{ ... }}`. Switch now exposes `role="switch"` (was `checkbox`), so testing-library queries against it updated accordingly.
