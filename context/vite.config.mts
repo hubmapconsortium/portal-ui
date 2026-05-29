@@ -37,6 +37,24 @@ function webpackStyleManifest(): Plugin {
           compat['vendors.js'] = `/static/public/${chunk.fileName}`;
         }
       }
+      // Vite emits library CSS (`udi-yac` / Tailwind, React Flow, etc.) as
+      // separate `.css` assets associated with the chunk that imports them.
+      // Re-export them under the same webpack-style flat key shape so
+      // Flask's `static_url_for` can resolve e.g. `vendors.css` -> hashed
+      // file. Without this, the prod-built HTML loaded only the JS and
+      // every static-CSS-dependent rule (Tailwind utilities, React Flow
+      // tokens) went missing on every page.
+      for (const fileName of Object.keys(bundle)) {
+        const chunk = bundle[fileName];
+        if (chunk.type !== 'chunk') continue;
+        const importedCss = chunk.viteMetadata?.importedCss;
+        if (!importedCss?.size) continue;
+        const key = chunk.isEntry && chunk.name ? chunk.name : chunk.name === 'vendors' ? 'vendors' : null;
+        if (!key) continue;
+        for (const cssFile of importedCss) {
+          compat[`${key}.css`] = `/static/public/${cssFile}`;
+        }
+      }
       writeFileSync(resolve(outDir, 'manifest.json'), JSON.stringify(compat, null, 2));
     },
   };

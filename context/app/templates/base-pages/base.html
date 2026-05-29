@@ -44,6 +44,11 @@
     <script type="module" src="/@vite/client"></script>
     <script type="module" src="/{{ vite_dev_entry() }}"></script>
   {% else %}
+    {# Vite emits library CSS (`udi-yac` / Tailwind, React Flow design
+       tokens, etc.) as a separate hashed stylesheet alongside the JS
+       bundles. The dev server auto-injects it; in prod we need an
+       explicit <link>. MUI's styled() injects its own rules at runtime. #}
+    <link rel="stylesheet" href="{{ static_url_for('static', filename='vendors.css') }}">
     {# Vite emits ESM bundles; the script tags must be `type="module"` or
        the browser parses the top-level `import` as a classic script and
        throws SyntaxError. Production-only branch. #}
