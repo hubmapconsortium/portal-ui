@@ -1,5 +1,9 @@
 from functools import cache
+import fcntl
+import json
+import os
 import sys
+import tempfile
 import threading
 import requests
 from flask import current_app, jsonify, request
@@ -11,21 +15,85 @@ from .utils import first_n_matches, make_blueprint
 blueprint = make_blueprint(__name__)
 
 
+# In-process memo of the aggregate maps, keyed by cache name. Guards against
+# re-reading the shared file on every request within a worker. The shared file
+# (below) is what makes the expensive build happen once per deploy across all
+# gunicorn worker processes.
+_memory_cache = {}
+_memory_lock = threading.Lock()
+
+
+def _scfind_cache_dir():
+    """Directory backing the cross-process scfind map cache (created on demand).
+
+    Defaults to a subdir of the system temp dir, which is writable by the
+    non-root container user and ephemeral (so each deploy starts fresh).
+    """
+    cache_dir = current_app.config.get('SCFIND_CACHE_DIR') or os.path.join(
+        tempfile.gettempdir(), 'scfind-cache'
+    )
+    os.makedirs(cache_dir, exist_ok=True)
+    return cache_dir
+
+
+def _scfind_cache_path(name):
+    """Path to the JSON file for a given map, keyed by the index version so an
+    index change invalidates the cache."""
+    version = current_app.config.get('SCFIND_DEFAULT_INDEX_VERSION') or 'default'
+    safe_version = version.replace('/', '_').replace(os.sep, '_')
+    return os.path.join(_scfind_cache_dir(), f'{name}.{safe_version}.json')
+
+
+def _get_or_build_map(name, builder):
+    """
+    Return an aggregate scfind map, building it at most once across all worker
+    processes.
+
+    Resolution order: in-process memo -> shared JSON file on disk -> build it.
+    The build is serialized with an exclusive ``fcntl.flock`` so that, even when
+    every gunicorn worker warms at startup simultaneously, only the first to
+    acquire the lock actually calls scfind; the rest block briefly and then load
+    the file the winner wrote. The file is written atomically (temp + rename).
+    """
+    with _memory_lock:
+        if name in _memory_cache:
+            return _memory_cache[name]
+
+    path = _scfind_cache_path(name)
+    lock_path = f'{path}.lock'
+    with open(lock_path, 'w') as lock_file:
+        fcntl.flock(lock_file, fcntl.LOCK_EX)
+        try:
+            if os.path.exists(path):
+                with open(path) as data_file:
+                    data = json.load(data_file)
+            else:
+                data = builder()
+                tmp_path = f'{path}.{os.getpid()}.tmp'
+                with open(tmp_path, 'w') as tmp_file:
+                    json.dump(data, tmp_file)
+                os.replace(tmp_path, path)
+        finally:
+            fcntl.flock(lock_file, fcntl.LOCK_UN)
+
+    with _memory_lock:
+        _memory_cache[name] = data
+    return data
+
+
 def warm_scfind_caches(app):
     """
     Pre-build the cell type mappings in a background thread at app startup.
 
-    The mappings are cached with ``functools.cache``, which is per-process and
-    ephemeral, so the first user after every deploy/restart would otherwise wait
-    tens of seconds for them to build. Warming them on startup means a real user
-    arrives to an already-populated cache.
+    The aggregate maps are backed by a cross-process disk cache (see
+    ``_get_or_build_map``), so the expensive scfind build happens once per deploy
+    even though each gunicorn worker runs this warmer: an ``fcntl`` lock ensures
+    only the first process builds and the rest load the file it wrote. Warming on
+    startup means a real user arrives to an already-populated cache.
 
     Skips warming when running tests or when SCFIND_ENDPOINT is unconfigured.
     Runs as a daemon thread so it never blocks startup or shutdown, and a SCFIND
     outage at boot is logged rather than fatal.
-
-    Note: this only runs under uWSGI when ``enable-threads`` is set (the same
-    prerequisite as the per-request ThreadPoolExecutor parallelism).
     """
     # main.py creates a module-level ``app = create_app()`` at import time, which
     # pytest also imports. Skip warming under pytest so tests never fire real
@@ -140,8 +208,12 @@ def _get_clid_to_label_mapping(clid):
     return response.get('cell_types', [])
 
 
-@cache
 def _build_label_to_clid_map():
+    """Return the label-to-CLID map, built once and shared across worker processes."""
+    return _get_or_build_map('label_to_clid', _build_label_to_clid_map_uncached)
+
+
+def _build_label_to_clid_map_uncached():
     """
     Build a complete mapping from cell type labels to CLIDs using parallel requests.
 
@@ -184,15 +256,20 @@ def _build_label_to_clid_map():
     return label_to_clid_map
 
 
-@cache
 def _build_clid_to_label_map():
+    """Return the CLID-to-label map, built once and shared across worker processes."""
+    return _get_or_build_map('clid_to_label', _build_clid_to_label_map_uncached)
+
+
+def _build_clid_to_label_map_uncached():
     """
     Build a complete mapping from CLIDs to cell type labels using parallel requests.
 
     Returns:
         Dictionary mapping CLIDs to lists of cell type labels
     """
-    # First get all label-to-CLID mappings to collect all CLIDs
+    # First get all label-to-CLID mappings to collect all CLIDs (reuses the
+    # shared label-to-CLID cache rather than rebuilding it).
     label_to_clid_map = _build_label_to_clid_map()
 
     # Collect all unique CLIDs

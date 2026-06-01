@@ -6,12 +6,17 @@ from . import routes_scfind
 
 
 @pytest.fixture
-def client():
+def client(tmp_path):
     app = create_app(testing=True)
     # Set mock config values for SCFIND
     app.config['SCFIND_ENDPOINT'] = 'https://mock.scfind.api'
     app.config['SCFIND_DEFAULT_INDEX_VERSION'] = 'v1.0'
     app.config['SCFIND_MAX_WORKERS'] = 2  # Low value for tests
+    # Isolate the cross-process map cache to a per-test temp dir, and clear the
+    # in-process memo so maps don't leak between tests (the builders are no
+    # longer @cache-decorated; they use the disk-backed cache instead).
+    app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
+    routes_scfind._memory_cache.clear()
     with app.test_client() as client:
         # Clear any cached data before each test
         if hasattr(routes_scfind._get_all_cell_type_names, 'cache_clear'):
@@ -464,6 +469,32 @@ class TestRequestTimeouts:
         assert response.status_code == 500
         data = response.get_json()
         assert 'error' in data
+
+
+class TestSharedMapCache:
+    """The aggregate maps are built at most once across processes/calls."""
+
+    def test_get_or_build_map_builds_once(self, tmp_path):
+        app = create_app(testing=True)
+        app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
+        routes_scfind._memory_cache.clear()
+
+        calls = {'n': 0}
+
+        def builder():
+            calls['n'] += 1
+            return {'cell': ['CL:0001']}
+
+        with app.app_context():
+            assert routes_scfind._get_or_build_map('m', builder) == {'cell': ['CL:0001']}
+            # Second call within the worker is served from the in-process memo.
+            assert routes_scfind._get_or_build_map('m', builder) == {'cell': ['CL:0001']}
+            # Clearing the memo simulates a fresh worker process: it must read
+            # the shared file written by the first build, not rebuild.
+            routes_scfind._memory_cache.clear()
+            assert routes_scfind._get_or_build_map('m', builder) == {'cell': ['CL:0001']}
+
+        assert calls['n'] == 1
 
 
 @pytest.mark.parametrize(

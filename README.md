@@ -245,7 +245,11 @@ To build and run the docker image locally:
 etc/dev/docker.sh 5001 --follow
 ```
 
-Our base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
+The image is a multi-stage build on a [Docker Hardened Image](https://docs.docker.com/dhi/) Python
+base (`dhi.io/python`, pulled via `docker login dhi.io`). The runtime stage is minimal and non-root;
+[gunicorn](context/gunicorn.conf.py) serves the Flask app on port 8080 and [WhiteNoise](context/app/main.py)
+serves static assets (gzip/brotli + immutable caching) — replacing the nginx + uWSGI + supervisor that
+the old base image bundled.
 
 </details>
 

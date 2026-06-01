@@ -46,6 +46,9 @@ class DefaultConfig(object):
     UKV_ENDPOINT = 'should-be-overridden'
     SCFIND_ENDPOINT = 'should-be-overridden'
     SCFIND_DEFAULT_INDEX_VERSION = ''
+    # Directory backing the cross-process scfind map cache. None -> a subdir of
+    # the system temp dir (writable by the non-root container user, ephemeral).
+    SCFIND_CACHE_DIR = None
     DATA_PRODUCTS_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
