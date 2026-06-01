@@ -1,9 +1,9 @@
-import React, { ComponentType, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { format } from 'date-fns/format';
 
 import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from 'js/typings/search';
 import { InternalLink } from 'js/shared-styles/Links';
-import { getDonorAgeString } from 'js/helpers/functions';
+import { getDonorAgeString, getDemographicRangeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
 import { EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
@@ -174,21 +174,22 @@ export const organCol = {
   filterable: true,
 };
 
-function withParentDonor(Component: ComponentType<{ hit: DonorDocument }>) {
-  return function D({ hit: { donor } }: CellContentProps<SampleDocument | DatasetDocument>) {
-    return <Component hit={donor} />;
-  };
-}
+// Donor-entity cell components read the single donor's own mapped_metadata.
+// Parent (Dataset/Sample) cell components read donor_demographics, aggregated across all donors.
 
 function DonorAge({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata && getDonorAgeString(hit?.mapped_metadata);
 }
 
+function ParentDonorAge({ hit: { donor_demographics } }: CellContentProps<SampleDocument | DatasetDocument>) {
+  return getDemographicRangeString(donor_demographics?.age, donor_demographics?.age_unit);
+}
+
 export const parentDonorAge = {
-  id: 'donor.mapped_metadata.age_value',
+  id: 'donor_demographics.age_value',
   label: 'Donor Age',
-  sort: 'donor.mapped_metadata.age_value',
-  cellContent: withParentDonor(DonorAge),
+  sort: 'donor_demographics.age_value',
+  cellContent: ParentDonorAge,
   width: 150,
   filterable: true,
 };
@@ -217,11 +218,15 @@ function DonorSex({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.sex;
 }
 
+function ParentDonorSex({ hit: { donor_demographics } }: CellContentProps<SampleDocument | DatasetDocument>) {
+  return (donor_demographics?.sex ?? []).join(', ');
+}
+
 export const parentDonorSex = {
-  id: 'donor.mapped_metadata.sex',
+  id: 'donor_demographics.sex',
   label: 'Donor Sex',
-  sort: 'donor.mapped_metadata.sex.keyword',
-  cellContent: withParentDonor(DonorSex),
+  sort: 'donor_demographics.sex.keyword',
+  cellContent: ParentDonorSex,
   width: 150,
   filterable: true,
 };
@@ -237,11 +242,15 @@ function DonorRace({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.race;
 }
 
+function ParentDonorRace({ hit: { donor_demographics } }: CellContentProps<SampleDocument | DatasetDocument>) {
+  return (donor_demographics?.race ?? []).join(', ');
+}
+
 export const parentDonorRace = {
-  id: 'donor.mapped_metadata.race',
+  id: 'donor_demographics.race',
   label: 'Donor Race',
-  sort: 'donor.mapped_metadata.race.keyword',
-  cellContent: withParentDonor(DonorRace),
+  sort: 'donor_demographics.race.keyword',
+  cellContent: ParentDonorRace,
   width: 150,
   filterable: true,
 };

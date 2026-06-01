@@ -104,6 +104,7 @@ export function SCFindGeneQueryDatasetList({
           'uuid',
           'last_modified_timestamp',
           'donor',
+          'donor_demographics',
           'entity_type',
         ],
       }}

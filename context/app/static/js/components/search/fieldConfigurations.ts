@@ -77,6 +77,18 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
     'donor.mapped_metadata.sex': {
       label: 'Donor Sex',
     },
+    'donor_demographics.age_value': {
+      label: 'Donor Age',
+    },
+    'donor_demographics.body_mass_index_value': {
+      label: 'Donor BMI',
+    },
+    'donor_demographics.race': {
+      label: 'Donor Race',
+    },
+    'donor_demographics.sex': {
+      label: 'Donor Sex',
+    },
     entity_type: {
       label: 'Entity Type',
     },

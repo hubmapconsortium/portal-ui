@@ -29,15 +29,16 @@ const sharedAffiliationFilters = [
   { field: 'created_by_user_displayname', type: FACETS.term },
 ];
 
-function makeDonorMetadataFilters(e: EntityWithType) {
-  const isDonorEntity = isDonor(e);
-
-  const pathPrefix = isDonorEntity ? '' : 'donor.';
+export function makeDonorMetadataFilters(e: EntityWithType) {
+  // A Donor entity is a single donor (top-level mapped_metadata). Datasets/Samples can have
+  // multiple donors, so they filter on the aggregated donor_demographics object instead, which
+  // includes every donor's values (categorical sets + numeric value arrays).
+  const basePath = isDonor(e) ? 'mapped_metadata' : 'donor_demographics';
   return [
-    { field: `${pathPrefix}mapped_metadata.sex`, type: FACETS.term },
-    { field: `${pathPrefix}mapped_metadata.age_value`, type: FACETS.range },
-    { field: `${pathPrefix}mapped_metadata.race`, type: FACETS.term },
-    { field: `${pathPrefix}mapped_metadata.body_mass_index_value`, type: FACETS.range },
+    { field: `${basePath}.sex`, type: FACETS.term },
+    { field: `${basePath}.age_value`, type: FACETS.range },
+    { field: `${basePath}.race`, type: FACETS.term },
+    { field: `${basePath}.body_mass_index_value`, type: FACETS.range },
   ];
 }
 
