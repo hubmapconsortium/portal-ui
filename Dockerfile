@@ -34,16 +34,13 @@ RUN pnpm --filter ./context run build
 
 # ---- Backend build stage --------------------------------------------------
 # Docker Hardened Image, "-dev" variant: runs as root and includes a shell and
-# package manager so we can build the venv here. Pulling dhi.io/* requires
-# `docker login dhi.io`. Use a Debian/glibc 3.13 tag (NOT Alpine/musl) so the
-# scientific wheels from portal-visualization[full] install cleanly; confirm the
-# exact tag in the catalog (it may need a -debian13 suffix).
+# package manager so we can build the venv here.
 FROM dhi.io/python:${PYTHON_MINOR_V}-dev AS backend-build
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    VIRTUAL_ENV=/app/venv \
-    PATH="/app/venv/bin:$PATH"
+  PYTHONUNBUFFERED=1 \
+  VIRTUAL_ENV=/app/venv \
+  PATH="/app/venv/bin:$PATH"
 
 WORKDIR /app
 
@@ -83,9 +80,9 @@ RUN python -m whitenoise.compress /app/app/static
 FROM dhi.io/python:${PYTHON_MINOR_V} AS backend
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    VIRTUAL_ENV=/app/venv \
-    PATH="/app/venv/bin:$PATH"
+  PYTHONUNBUFFERED=1 \
+  VIRTUAL_ENV=/app/venv \
+  PATH="/app/venv/bin:$PATH"
 
 WORKDIR /app
 
