@@ -10,6 +10,7 @@ the Flask app. Gunicorn runs native CPython threads, so the per-request
 
 import multiprocessing
 import os
+import time
 
 # The Docker Hardened Image runtime runs as a non-root user, which cannot bind
 # privileged ports (<1024). The external gateway proxies to this port.
@@ -47,11 +48,18 @@ loglevel = os.environ.get('GUNICORN_LOG_LEVEL', 'info')
 
 
 def on_starting(server):
-    """Print the configured service ENDPOINTs at boot.
+    """Run once in the master before workers fork.
 
-    Reproduces the old ``prestart.sh`` diagnostic dump. Runs once in the master
-    before workers fork. Pure Python so it works in the shell-less DHI runtime.
+    1. Stamp a per-server-start token into the environment. Workers inherit it at
+       fork and embed it in the scfind cache filename (see ``_scfind_cache_path``),
+       so each server start builds the maps fresh and all workers of that start
+       share the one freshly built cache. This is how production "regenerates on
+       server start"; development has no gunicorn (hence no token) and instead
+       ages the cache out via ``SCFIND_CACHE_TTL``.
+    2. Print the configured service ENDPOINTs (reproduces the old ``prestart.sh``
+       diagnostic dump). Pure Python so it works in the shell-less DHI runtime.
     """
+    os.environ['SCFIND_CACHE_TOKEN'] = str(int(time.time()))
     try:
         with open('/app/instance/app.conf') as conf:
             for line in conf:
