@@ -1,4 +1,6 @@
 from functools import cache
+import sys
+import threading
 import requests
 from flask import current_app, jsonify, request
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -7,6 +9,51 @@ from .utils import first_n_matches, make_blueprint
 
 
 blueprint = make_blueprint(__name__)
+
+
+def warm_scfind_caches(app):
+    """
+    Pre-build the cell type mappings in a background thread at app startup.
+
+    The mappings are cached with ``functools.cache``, which is per-process and
+    ephemeral, so the first user after every deploy/restart would otherwise wait
+    tens of seconds for them to build. Warming them on startup means a real user
+    arrives to an already-populated cache.
+
+    Skips warming when running tests or when SCFIND_ENDPOINT is unconfigured.
+    Runs as a daemon thread so it never blocks startup or shutdown, and a SCFIND
+    outage at boot is logged rather than fatal.
+
+    Note: this only runs under uWSGI when ``enable-threads`` is set (the same
+    prerequisite as the per-request ThreadPoolExecutor parallelism).
+    """
+    # main.py creates a module-level ``app = create_app()`` at import time, which
+    # pytest also imports. Skip warming under pytest so tests never fire real
+    # network requests or race on the shared module-level functools caches; the
+    # test fixture's own app sets TESTING, but this import-time app does not.
+    if 'pytest' in sys.modules:
+        return
+
+    scfind_endpoint = app.config.get('SCFIND_ENDPOINT')
+    if (
+        app.config.get('TESTING')
+        or not scfind_endpoint
+        or scfind_endpoint == 'should-be-overridden'
+    ):
+        return
+
+    def _warm():
+        with app.app_context():
+            try:
+                current_app.logger.info('Warming scfind cell type mapping caches...')
+                # Build both maps so both endpoints serve cache hits.
+                _build_label_to_clid_map()
+                _build_clid_to_label_map()
+                current_app.logger.info('Finished warming scfind cell type mapping caches.')
+            except Exception as e:
+                current_app.logger.warning(f'Failed to warm scfind caches at startup: {e}')
+
+    threading.Thread(target=_warm, name='scfind-cache-warmer', daemon=True).start()
 
 
 def _make_scfind_request(endpoint, params=None):
@@ -222,8 +269,10 @@ def label_to_clid_map():
         JSON object mapping cell type labels to lists of CLIDs
     """
     try:
-        label_to_clid_map, _ = _get_complete_mappings()
-        return jsonify(label_to_clid_map)
+        # Build only the label-to-CLID map: the frontend fetches this map and the
+        # CLID-to-label map via separate hooks on different pages, so there is no
+        # reason to pay the cost of building the CLID-to-label map here.
+        return jsonify(_build_label_to_clid_map())
     except Exception as e:
         current_app.logger.error(f'Error building label-to-CLID map: {e}')
         return jsonify({'error': 'Failed to build label-to-CLID mapping'}), 500
@@ -238,8 +287,10 @@ def clid_to_label_map():
         JSON object mapping CLIDs to lists of cell type labels
     """
     try:
-        _, clid_to_label_map = _get_complete_mappings()
-        return jsonify(clid_to_label_map)
+        # Build only the CLID-to-label map. It internally reuses the cached
+        # label-to-CLID map (see _build_clid_to_label_map), so correctness is
+        # unchanged while we avoid coupling this to the other endpoint.
+        return jsonify(_build_clid_to_label_map())
     except Exception as e:
         current_app.logger.error(f'Error building CLID-to-label map: {e}')
         return jsonify({'error': 'Failed to build CLID-to-label mapping'}), 500

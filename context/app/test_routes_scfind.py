@@ -157,7 +157,8 @@ class TestSCFindEndpoints:
     def test_label_to_clid_map_error(self, client, mocker):
         """Test error handling for label-to-CLID mapping endpoint."""
         mocker.patch(
-            'app.routes_scfind._get_complete_mappings', side_effect=Exception('SCFIND API error')
+            'app.routes_scfind._build_label_to_clid_map',
+            side_effect=Exception('SCFIND API error'),
         )
 
         response = client.get('/scfind/label-to-clid-map.json')
@@ -179,7 +180,8 @@ class TestSCFindEndpoints:
     def test_clid_to_label_map_error(self, client, mocker):
         """Test error handling for CLID-to-label mapping endpoint."""
         mocker.patch(
-            'app.routes_scfind._get_complete_mappings', side_effect=Exception('SCFIND API error')
+            'app.routes_scfind._build_clid_to_label_map',
+            side_effect=Exception('SCFIND API error'),
         )
 
         response = client.get('/scfind/clid-to-label-map.json')

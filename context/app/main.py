@@ -96,6 +96,10 @@ def create_app(testing=False):
     app.register_blueprint(routes_cell_types.blueprint)
     app.register_blueprint(routes_scfind.blueprint)
 
+    # Pre-build the scfind cell type mappings in the background so the first user
+    # to open cell-type pages does not wait tens of seconds for them to build.
+    routes_scfind.warm_scfind_caches(app)
+
     app.register_error_handler(400, bad_request)
     app.register_error_handler(401, unauthorized)
     app.register_error_handler(403, forbidden)
