@@ -34,9 +34,12 @@ if [ ! -z "$GH_ACTIONS" ]; then
     CI_ENV_ARGS="$CI_ENV_ARGS -e GH_ACTIONS=$GH_ACTIONS"
 fi
 
+# gunicorn listens on 8080 inside the container (the non-root hardened-image
+# runtime can't bind privileged ports). The host port stays 5000/5001 to match
+# the Globus whitelist and cypress.json.
 docker run -d \
   --name $CONTAINER_NAME \
-  -p $PORT:80 \
+  -p $PORT:8080 \
   --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/app/instance/app.conf \
   $CI_ENV_ARGS \
   $IMAGE_NAME
@@ -46,6 +49,6 @@ reset=`tput sgr0 || echo ''`
 
 echo $green
 echo "To visit:   http://localhost:$PORT/"
-echo "To connect: docker exec -it $CONTAINER_NAME /bin/bash"
+# The hardened runtime image has no shell, so there's no interactive exec.
 echo "For logs:   docker logs --timestamps --follow $CONTAINER_NAME"
 echo $reset

@@ -5,7 +5,7 @@ description = "HuBMAP Data Portal - Flask app with React frontend"
 readme = "README.md"
 # Note: keep in sync with .python-version, which is needed for `uv` to automatically
 # pick up the correct Python version without additional config.
-requires-python = ">=3.12.8"
+requires-python = ">=3.13"
 license = "MIT"
 authors = [{ name = "HuBMAP Consortium", email = "help@hubmapconsortium.org" }]
 keywords = ["hubmap", "portal", "bioinformatics", "flask", "react"]
@@ -13,7 +13,7 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 
@@ -29,6 +29,8 @@ dependencies = [
     "portal-visualization[full]>=0.5.5",
     "udiagent>=0.2.3",
     "udiagent[langfuse]>=0.2.3",
+    "gunicorn>=23.0.0",
+    "whitenoise[brotli]>=6.9.0",
 ]
 
 [project.urls]

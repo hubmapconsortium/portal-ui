@@ -46,6 +46,14 @@ class DefaultConfig(object):
     UKV_ENDPOINT = 'should-be-overridden'
     SCFIND_ENDPOINT = 'should-be-overridden'
     SCFIND_DEFAULT_INDEX_VERSION = ''
+    # Directory backing the cross-process scfind map cache. None -> a subdir of
+    # the system temp dir (writable by the non-root container user, ephemeral).
+    SCFIND_CACHE_DIR = None
+    # Max age (seconds) of a cached scfind map before it is rebuilt. Bounds
+    # staleness in development (default 1 day), where the cache persists across
+    # restarts. In production gunicorn regenerates on each server start (see the
+    # SCFIND_CACHE_TOKEN set in gunicorn.conf.py). None/0 disables expiry.
+    SCFIND_CACHE_TTL = 86400
     DATA_PRODUCTS_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
