@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.46.2 - 2026-06-02
+
+- Migrate the backend container off the deprecated `tiangolo/uwsgi-nginx-flask` base image to a multi-stage build on a **Docker Hardened Image** (`dhi.io/python`) Python 3.13 base. The runtime stage is minimal and **non-root**; **gunicorn** (`context/gunicorn.conf.py`, `gthread` workers) serves the Flask app and **WhiteNoise** serves static assets (precompressed gzip/brotli + `Vary`, immutable far-future caching for content-hashed bundles, short cache otherwise) — replacing the bundled nginx + uWSGI + supervisor. Source maps and the bundle-analyzer report are stripped from the image. Gunicorn runs native Python threads, so the per-request `ThreadPoolExecutor` and the scfind cache-warmer no longer depend on the uWSGI `enable-threads` flag.
+- Bump Python to 3.13 (`.python-version`, `requires-python`, classifier) and add `gunicorn` + `whitenoise[brotli]` dependencies.
+- The non-root runtime listens on **port 8080** (it can't bind privileged ports). **Deployment note:** the external `gateway` nginx must be updated to proxy to `portal-ui:8080` in lockstep with this image, or the service is unreachable. Building the image requires `docker login dhi.io` (free Community tier).
+- Make the scfind label↔CLID maps a **cross-process shared cache** (disk-backed JSON guarded by an `fcntl` lock) so the expensive build runs once per deploy across all gunicorn workers instead of once per worker. Invalidation: in **production** the cache regenerates on each server start (a per-start token, stamped by gunicorn's `on_starting` and inherited by all workers, is part of the cache filename); in **development** the cache persists across restarts but ages out after `SCFIND_CACHE_TTL` (default 1 day) — since `SCFIND_DEFAULT_INDEX_VERSION` is usually blank (server picks latest), it can't be relied on to invalidate. Cache location is configurable via `SCFIND_CACHE_DIR` (defaults under the system temp dir). The cache also logs whether each map was built (with timing + entry count) or loaded from cache.
+- Fix the local-dev `compose/docker-compose.yml` build (was pointing at a non-existent `context/Dockerfile`) to build from the repo-root Dockerfile with `NODE_V`/`PYTHON_MINOR_V` args, and update the dev nginx sidecar + port mappings to the new 8080 internal port.
+- Cut the first-request latency for scfind cell-type pages. The `/scfind/label-to-clid-map.json` endpoint no longer builds the unused CLID-to-label map before responding (and `/scfind/clid-to-label-map.json` likewise builds only its own map), since the frontend fetches the two maps via separate hooks on different pages. This drops the cold label-to-CLID response from ~44s to ~25s.
+- Pre-build both scfind cell-type mappings in a background daemon thread at app startup (`warm_scfind_caches`), so the first real user arrives to an already-populated cache instead of waiting for the build. Warming is skipped under tests and when `SCFIND_ENDPOINT` is unconfigured.
+
+
+
 ## v1.46.1 - 2026-05-29
 
 - Fix markdown sections' styles.
