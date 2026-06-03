@@ -41,6 +41,20 @@
       }
     },
     {
+      "label": "Clean build output",
+      "type": "npm",
+      "script": "clean",
+      "detail": "Remove stale app/static/public so Flask serves the Vite dev server, not a prebuilt bundle.",
+      "options": {
+        "cwd": "${workspaceFolder}/context"
+      },
+      "presentation": {
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "npm install",
       "type": "npm",
       "script": "install",
@@ -68,7 +82,7 @@
       "label": "Flask Server",
       "type": "shell",
       "command": "${command:python.interpreterPath} -m flask run --debug",
-      "dependsOn": ["Copy app configuration"],
+      "dependsOn": ["Copy app configuration", "Clean build output"],
       "options": {
         "cwd": "${workspaceFolder}/context",
         "env": {
@@ -80,6 +94,9 @@
         "reveal": "always"
       },
       "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1
+      },
       "problemMatcher": {
         "pattern": {
           "regexp": ""
@@ -122,6 +139,9 @@
         "reveal": "always"
       },
       "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1
+      },
       "problemMatcher": [
         {
           "pattern": {
@@ -129,8 +149,8 @@
           },
           "background": {
             "activeOnStart": true,
-            "beginsPattern": "portal-ui",
-            "endsPattern": "compiled"
+            "beginsPattern": "portal-ui|VITE",
+            "endsPattern": "ready in|Local:"
           }
         }
       ]
@@ -151,6 +171,9 @@
         "panel": "dedicated"
       },
       "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1
+      },
       "problemMatcher": {
         "pattern": {
           "regexp": ""
@@ -158,7 +181,7 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": "storybook dev",
-          "endsPattern": "react-webpack5 started"
+          "endsPattern": "started"
         }
       }
     },

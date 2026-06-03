@@ -88,6 +88,13 @@ fi
 # Start subprocesses
 cd $CONTEXT
 
+# Remove any stale production build output (app/static/public) left behind by a
+# prior `pnpm build`. Flask only runs in Vite dev mode when no manifest.json is
+# present (see flask_static_digest.vite_dev_mode); otherwise it serves the
+# prebuilt hashed bundle off disk, masking local source changes behind a stale
+# build. No-op when the dir is already absent.
+pnpm run clean
+
 FLASK_APP="app/main.py" python -m flask run --debug &
 
 pnpm run lint || die 'Try "pnpm run lint:fix"'
