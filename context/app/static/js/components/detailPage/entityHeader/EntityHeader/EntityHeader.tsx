@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { animated } from '@react-spring/web';
 import Box from '@mui/material/Box';
 
@@ -22,7 +23,7 @@ function Header() {
   const { springs, view, setView, summaryHeight, setSummaryHeight } = useEntityStore();
   const startViewChangeSpring = useStartViewChangeSpring();
   const isLargeDesktop = useIsLargeDesktop();
-  const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+  const { vizIsFullscreen } = useVisualizationStore(useShallow(visualizationSelector));
 
   const { entity } = useFlaskDataContext();
   const uuid = entity?.uuid;

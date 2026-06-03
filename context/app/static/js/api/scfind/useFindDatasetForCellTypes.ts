@@ -1,6 +1,13 @@
 import useSWR from 'swr';
-import { multiFetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import {
+  cellTypeNameContainsComma,
+  createScFindKey,
+  createScFindPostRequest,
+  ScFindRequest,
+  scFindMultiFetcher,
+  stringOrArrayToString,
+  useScFindKey,
+} from './utils';
 import { useMemo } from 'react';
 
 export interface FindDatasetForCellTypeParams {
@@ -8,7 +15,7 @@ export interface FindDatasetForCellTypeParams {
   modality?: string;
 }
 
-type FindDatasetForCellTypeKey = string | null;
+type FindDatasetForCellTypeKey = ScFindRequest | null;
 
 export interface FindDatasetForCellTypeResponse {
   counts: number[];
@@ -21,6 +28,14 @@ export function createFindDatasetForCellTypeKey(
   scFindIndexVersion?: string,
 ): FindDatasetForCellTypeKey {
   if (typeof cellType !== 'string' || cellType.length === 0) return null;
+  if (cellTypeNameContainsComma(cellType)) {
+    return createScFindPostRequest(
+      scFindEndpoint,
+      'findDatasetForCellType',
+      { cell_type: cellType },
+      scFindIndexVersion,
+    );
+  }
   return createScFindKey(
     scFindEndpoint,
     'findDatasetForCellType',
@@ -49,11 +64,10 @@ export default function useFindDatasetForCellTypes({ cellTypes, modality }: Find
   const key = cellTypes.map((cellType) =>
     createFindDatasetForCellTypeKey(scFindEndpoint, { cellType, modality }, scFindIndexVersion),
   );
-  const { data, ...rest } = useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(
+  const { data, ...rest } = useSWR<(FindDatasetForCellTypeResponse | undefined)[], unknown, FindDatasetForCellTypesKey>(
     key,
-    (urls) =>
-      multiFetcher({
-        urls,
+    (requests) =>
+      scFindMultiFetcher<FindDatasetForCellTypeResponse>(requests, {
         errorMessages: {
           400: `No results found for ${stringOrArrayToString(cellTypes)}`,
           500: 'The scFind server encountered an error. Please try again.',
@@ -70,6 +84,7 @@ export default function useFindDatasetForCellTypes({ cellTypes, modality }: Find
     const maps: Record<string, Record<string, number>> = {};
 
     data.forEach((result, index) => {
+      if (!result) return;
       const cellType = cellTypes[index];
       const map: Record<string, number> = {};
       result.counts.forEach((count, datasetIndex) => {

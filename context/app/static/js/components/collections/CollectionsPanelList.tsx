@@ -16,18 +16,18 @@ export default function CollectionsPanelList() {
       return [
         {
           children: <Typography>No results found. Try searching for a different collection.</Typography>,
-          key: 'no-results',
+          panelKey: 'no-results',
         },
       ];
     }
     const propsList: PanelProps[] = [
       {
-        key: 'header',
+        panelKey: 'header',
         noPadding: true,
         children: <CollectionPanel.Header />,
       },
       ...filteredCollections.map(({ uuid, title, hubmap_id, created_timestamp, datasets = [] }) => ({
-        key: uuid,
+        panelKey: uuid,
         noPadding: true,
         noHover: false,
         children: (

@@ -1,5 +1,126 @@
 # Changelog
 
+## v1.46.2 - 2026-06-02
+
+- Migrate the backend container off the deprecated `tiangolo/uwsgi-nginx-flask` base image to a multi-stage build on a **Docker Hardened Image** (`dhi.io/python`) Python 3.13 base. The runtime stage is minimal and **non-root**; **gunicorn** (`context/gunicorn.conf.py`, `gthread` workers) serves the Flask app and **WhiteNoise** serves static assets (precompressed gzip/brotli + `Vary`, immutable far-future caching for content-hashed bundles, short cache otherwise) — replacing the bundled nginx + uWSGI + supervisor. Source maps and the bundle-analyzer report are stripped from the image. Gunicorn runs native Python threads, so the per-request `ThreadPoolExecutor` and the scfind cache-warmer no longer depend on the uWSGI `enable-threads` flag.
+- Bump Python to 3.13 (`.python-version`, `requires-python`, classifier) and add `gunicorn` + `whitenoise[brotli]` dependencies.
+- The non-root runtime listens on **port 8080** (it can't bind privileged ports). **Deployment note:** the external `gateway` nginx must be updated to proxy to `portal-ui:8080` in lockstep with this image, or the service is unreachable. Building the image requires `docker login dhi.io` (free Community tier).
+- Make the scfind label↔CLID maps a **cross-process shared cache** (disk-backed JSON guarded by an `fcntl` lock) so the expensive build runs once per deploy across all gunicorn workers instead of once per worker. Invalidation: in **production** the cache regenerates on each server start (a per-start token, stamped by gunicorn's `on_starting` and inherited by all workers, is part of the cache filename); in **development** the cache persists across restarts but ages out after `SCFIND_CACHE_TTL` (default 1 day) — since `SCFIND_DEFAULT_INDEX_VERSION` is usually blank (server picks latest), it can't be relied on to invalidate. Cache location is configurable via `SCFIND_CACHE_DIR` (defaults under the system temp dir). The cache also logs whether each map was built (with timing + entry count) or loaded from cache.
+- Fix the local-dev `compose/docker-compose.yml` build (was pointing at a non-existent `context/Dockerfile`) to build from the repo-root Dockerfile with `NODE_V`/`PYTHON_MINOR_V` args, and update the dev nginx sidecar + port mappings to the new 8080 internal port.
+- Cut the first-request latency for scfind cell-type pages. The `/scfind/label-to-clid-map.json` endpoint no longer builds the unused CLID-to-label map before responding (and `/scfind/clid-to-label-map.json` likewise builds only its own map), since the frontend fetches the two maps via separate hooks on different pages. This drops the cold label-to-CLID response from ~44s to ~25s.
+- Pre-build both scfind cell-type mappings in a background daemon thread at app startup (`warm_scfind_caches`), so the first real user arrives to an already-populated cache instead of waiting for the build. Warming is skipped under tests and when `SCFIND_ENDPOINT` is unconfigured.
+
+
+
+## v1.46.1 - 2026-05-29
+
+- Fix markdown sections' styles.
+
+
+
+## v1.46.0 - 2026-05-28
+
+- Upgrade MUI 6 to 7 (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/system`, `@mui/styled-engine-sc`). The `Grid2` import path is gone in v7 — Grid is unified under `@mui/material/Grid`. Remaining v1 Grid usage (`item xs={...}`) migrated to `size={{ ... }}`. Switch now exposes `role="switch"` (was `checkbox`), so testing-library queries against it updated accordingly.
+- Upgrade `@mui/x-date-pickers` 7 to 8. The `AdapterDateFnsV3` entry was removed; use the default `AdapterDateFns` export. `DatePickerProps`'s date-value generic is gone (the type is inferred from the adapter).
+- Upgrade `date-fns` 3 to 4. Surface in this codebase is just `format()`, which is signature-stable across the bump.
+- Upgrade Zustand 4 to 5. Wrap object-returning selectors with `useShallow` so v5's stricter default equality (`Object.is`) doesn't trigger render loops. `useStoreWithEqualityFn` is preserved in `zustand/traditional`, so the `createStoreContext` helper continues to work unchanged.
+- Upgrade `uuid` 9 to 11 (closes the open Dependabot alert; named `v4` import shape unchanged) and `@types/uuid` to match.
+- Patch-bump `zod` 3.22 to 3.25. Staying on the 3.x line to remain compatible with vitessce's catalog pin until vitessce moves to zod 4.
+- Lockfile dedupe pass that comes with the above install consolidates several transitive duplicates surfaced by the prior React 19 / Vite / Vitest cutover.
+- Drop dead eslint plugins: `eslint-plugin-flowtype` (Flow isn't used), `eslint-plugin-json` (no config referenced it), `eslint-plugin-markdown` (deprecated). The unused `@eslint/js` import was also removed.
+- Replace `eslint-plugin-markdown` with the official `@eslint/markdown`.
+- Bump `eslint-plugin-react-hooks` 5 → 7 and `eslint-plugin-cypress` 5 → 6 (latest majors compatible with our pinned `eslint@9` and `storybook@9`).
+- Switch typescript-eslint typed-rules layer to `parserOptions.projectService: true` -- typescript-eslint v8's faster auto-program loading, noticeably better on lint-staged partial runs.
+- Enable lint caching: `lint`/`lint:fix` and `lint-staged` now pass `--cache --cache-location node_modules/.cache/eslint/`. Second-run lint drops from ~50s cold to ~2s warm.
+- Tighten `lint-staged` glob to `{js,jsx,ts,tsx}` -- the prior `{y*ml,json,md}` extensions weren't present under `app/static/js/`.
+- Address the ~65 net-new violations the `react-hooks@7` rules surface:
+  - Convert popper/menu anchor patterns from `useRef + .current` to `useState + callback ref` so MUI's positioning re-runs correctly on mount.
+  - Refactor `DropdownMenuProvider` store to expose `anchorEl` + `setAnchorEl` state instead of a shared ref.
+  - Migrate `useInitialHash`, `SaySeeWelcomeDialog`, and `WorkspacePleaseWait` timing from `useEffect`-set to lazy `useState` init.
+  - Reroute `useTooManyDatasetsErrors` one-shot tracking through a guarded `useEffect`.
+  - For genuinely intentional ref / effect-driven patterns (Vitessce config sync, SWR loading latches, the FacetSearchCombobox snapshot cache), add scoped `eslint-disable-next-line` directives with rationale comments.
+- Remove Grafana Faro SDK (`@grafana/faro-react`, `@grafana/faro-web-sdk`, `@grafana/faro-web-tracing`). Matomo + GA4 remain the analytics surface.
+- Replace `FaroErrorBoundary` with `react-error-boundary`'s `<ErrorBoundary>` on the top-level site fallback, the Provenance graph fallback, and the Vitessce visualization fallback.
+- Route SWR `onError` / `onLoadingSlow` to `trackEvent` so error and slow-query signals land in Matomo + GA4 (previously Faro-only).
+- Drop the `sentryEnv` global and the Flask `SENTRY_ENV` config that fed it.
+- Drop the Faro-only `trackMeasurement` helper and the unused `workspace_loading` timing it emitted from the workspace launch flow.
+- Upgrade to React 19 (react/react-dom 19.2, @types/react 19.2). Vitessce bumped to 4.0.0-test.2 for compatibility. Custom web component types moved from the deprecated global `JSX.IntrinsicElements` to `React.JSX.IntrinsicElements`. Internal TooltipButton family converted from `React.forwardRef` to React 19's ref-as-prop pattern.
+- Upgrade TypeScript to 6.0.x. Remove the deprecated `compilerOptions.baseUrl` from `tsconfig.json` and add an explicit `test-utils/*` entry to `paths`.
+- Replace Webpack 5 with Vite (+ Rolldown) for the main and maintenance frontend builds. Storybook builder swapped from `@storybook/react-webpack5` to `@storybook/react-vite`. Flask's `flask_static_digest` learned a `vite_dev_mode()` template global so dev mode renders the unbundled Vite entry while production keeps the existing hashed `main.js` / `vendors.js` flow.
+- Replace Jest with Vitest. All 113 test files run through Vite's transform pipeline; `jest.*` APIs migrated to `vi.*`. `@testing-library/react-hooks` and `react-test-renderer` dropped (use `renderHook` from `@testing-library/react`). ESLint plugin swapped from `eslint-plugin-jest` to `@vitest/eslint-plugin`.
+
+
+
+## v1.45.3 - 2026-05-21
+
+- Fix color of Protocols & Workflow link in segmentation metadata section.
+- Fix crash when visiting a saved entity page caused by the Edit Saved Status dialog iterating over the `savedPreferences` UKV entry as if it were a list; the dialog now uses the filtered `savedLists` record that excludes reserved keys.
+- Fix scFind queries failing when cell type names contain commas. Hooks that send cell type names to scFind (`useCellTypeMarkers`, `useEvaluateMarkers`, `useFindGeneSignatures`, `useFindHouseKeepingGenes`, `useFindDatasetForCellTypes`) now detect commas in cell type names and fall back to a POST request with all parameters in the JSON body, sending cell type lists as JSON arrays so the backend no longer splits a single name on its internal comma.
+- Render workflow descriptions as Markdown to enable links.
+
+
+
+## v1.45.2 - 2026-05-20
+
+- Fix docker pulling in stale local builds by adding dockerignore file.
+
+## v1.45.1 - 2026-05-19
+
+- Add support for new dataset workflow status "Approval"; treated equivalently to "QA" for status icons, provenance queries, and image pyramid visualization lifting.
+- Include `Support` entities in the dataset search results when an `ancestor_ids` filter is applied so the count of derived entities shown in the provenance section's tiles matches what users see on the search page, and label support entities with a chip and tooltip explaining that they only carry processing for web visualizations.
+- Migrate package manager from npm to pnpm and consolidate `context/` and `end-to-end/` into a single pnpm workspace at the repo root.
+- Update CI workflows, the Dockerfile, husky hooks, and `etc/` shell scripts to use `pnpm`.
+- Add `@storybook/react`, `yaml-eslint-parser`, `@types/uuid`, `@types/d3-array`, and `@open-draft/deferred-promise` (transitive) to whitelists / explicit deps that npm previously hoisted but pnpm exposes strictly.
+- Accept minor-version bumps in eslint, typescript-eslint, prettier, typescript, and other lint-related tools that surfaced during the fresh lockfile resolution; fix a handful of newly-flagged lint and tsc issues.
+- Widen the `Donor.mapped_metadata` type to allow arbitrary fields that the donor metadata UI was already accessing.
+- Polyfill `WritableStream` / `ReadableStream` / `TransformStream` in Jest setup for MSW 2.14's SSE support.
+- Mark `end-to-end/artillery/` as archival.
+- Display segmentation channels and quality scores (Quality Score, Mean SNZ, ACVF) below the visualization for datasets with `ingest_metadata.segmentation_metadata`.
+
+## v1.45.0 - 2026-05-13
+
+- Adjust protocol links to point to specific version associated with donor/sample.
+- Display provenance tree for all publications.
+- Search by HuBMAP ID (top search bar or HuBMAP ID column-header popover) now surfaces entities that have been superseded by a newer revision, with a "Superseded" badge on the result so users know what they're clicking. Other search modes continue to hide superseded entities by default.
+- Add an "Include superseded entities" checkbox to the facets sidebar (after the Status section) so users can opt to include superseded entities in any search. When active, an "Including superseded entities" chip appears alongside the other filter chips.
+- Scope the top search bar's query to the `all_text` field; the HuBMAP ID column popover continues to query the `hubmap_id` field directly.
+- Fix the Say & See panel reloading continuously for HuBMAP users who had not yet saved any preferences or lists. The underlying `/user/keys` 404 is now treated as an empty UKV response instead of a retryable error, and the panel keeps the chat mounted once it has resolved at least once.
+
+## v1.44.4 - 2026-05-01
+
+- Fix the publication detail page Data section showing the wrong number of related datasets. All entities referenced by a publication's `ancestor_ids` are now loaded, including older dataset versions that have a `next_revision_uuid`.
+- Gate the Say & See Mode (BETA) front-end behind a new `ENABLE_SAY_SEE_MODE` Flask config flag. When disabled (the default), the search page hides the mode tabs and the promo alert, leaving only Filter & Browse mode; `?mode=say-see` URLs fall back to the filter view.
+- Split UDI data endpoints into separate URL prefixes: `/metadata/v0/udi/...` always serves the cached public-scope data, and new `/metadata/v0/udi/consortium/...` endpoints serve the request's session auth. The Say & See switch now toggles between these two paths instead of using a `?public=1` query param, which had been confusing the udi-yac grammar component.
+
+## v1.44.3 - 2026-04-30
+
+- Troubleshooting Say & See deploy.
+
+## v1.44.2 - 2026-04-30
+
+- Add "Say & See Mode" tab to the donor, sample, and dataset search pages with an embedded UDI chat (`udi-yac`) wired to the portal-ui back-end. Authenticated HuBMAP-Read users use server-side AI credentials; other users are prompted for an OpenAI API key.
+- Restore a top-level search input attached above the results table, alongside the existing filter chips and selected-items rows.
+- Add a dismissible promo alert above the page title and dialog on page open. Dismissal is persisted in `localStorage` and shared across the three search pages.
+- Support deep-linking to either tab via a new `mode=filter|say-see` URL parameter.
+- Backend: `/metadata/v0/udi/datapackage.json` and `/metadata/v0/udi/<entity>.tsv` now accept `?public=1` to serve from the shared cache regardless of session, generated with a tokenless ApiClient. Public-scope responses emit `Cache-Control: public, max-age=43200` + `ETag`; authenticated responses emit `Cache-Control: private, no-store`.
+- Match the search page's default filter on the UDI data routes by excluding entities with `next_revision_uuid` or `sub_status`, so authenticated dataset counts in Say & See align with `/search/datasets`.
+
+## v1.44.1 - 2026-04-29
+
+- Update Vitessce to fix handling of zarr v3 datasets.
+
+## v1.44.0 - 2026-04-21
+
+- Implement endpoints necessary to use the portal-ui back-end as the server for UDI chat with Globus authentication/authorization.
+- Update portal-visualization to 0.5.3 to pull in improvements to TSV endpoints and fix zarr v3 handling.
+
+## v1.43.0 - 2026-04-02
+
+- Update search page user experience, standardizing styles and functionality to match entity tables throughout the site.
+- Display icons on search page to highlight datasets with visualizations.
+- Update search table actions to logically group related actions.
+- Add facet search combobox.
+
 ## v1.42.1 - 2026-03-27
 
 - Ensure properly scoped Vitessce configurations are used for Vitessce sharing functionalities.
@@ -7,34 +128,24 @@
 - Enable automatic scrolling to linked Vitessce configurations.
 - Update portal-visualization to enable display of all AOIs and ROIs for GeoMX datasets.
 
-
-
 ## v1.42.0 - 2026-03-17
 
 - Improve search state readability for sharing links.
 - Add saved list validation to initial processing of received data.
 - Added a dedicated `/integrated-maps` page that displays the full list of HuBMAP-wide data products.
 
-
-
 ## v1.41.3 - 2026-03-10
 
 - Convert remaining JavaScript components/functions to TypeScript.
 - Improved detail page breadcrumb clarity.
 
-
-
 ## v1.41.2 - 2026-03-04
 
 - Fix infinite loading for dataset permissions in Chrome.
 
-
-
 ## v1.41.1 - 2026-03-04
 
 - Remove duplicate "Annotations" section label from processed datasets' summaries.
-
-
 
 ## v1.41.0 - 2026-03-03
 
@@ -45,8 +156,6 @@
 - Enhance dataset permission handling to rely purely on `accessible-data-directories` endpoint for all users.
 - Updated Portal-Visualization to improve Vitessce configuration generation logic maintainability and restore malfunctioning visualizations.
 
-
-
 ## v1.40.3 - 2026-02-24
 
 - Improve handling for gene pathways with no genes in the index.
@@ -54,25 +163,17 @@
 - Handle cases where integrated maps are only available for one organ laterality.
 - Fix gene detail page cell types section.
 
-
-
 ## v1.40.2 - 2026-02-17
 
 - Improve permission handling for datasets to consistently handle public data and keep protected data inaccessible by default until API response indicates otherwise.
-
-
 
 ## v1.40.1 - 2026-02-11
 
 - Add null safety to metadata export functionalities.
 
-
-
 ## v1.40.0 - 2026-02-11
 
 - Prevent page crashes when an entity's metadata is `null`.
-
-
 
 ## v1.39.5 - 2026-01-30
 
@@ -80,25 +181,17 @@
 - Add description to Integrated Data section.
 - Handle externally processed datasets without visualizations and ingest metadata.
 
-
-
 ## v1.39.4 - 2026-01-30
 
 - Remove contributors table for internally processed integrated datasets.
-
-
 
 ## v1.39.3 - 2026-01-29
 
 - Add HuBMAP Help Desk contact link to internal integrated datasets.
 
-
-
 ## v1.39.2 - 2026-01-28
 
 - Fix display of contributors to externally processed datasets.
-
-
 
 ## v1.39.1 - 2026-01-28
 
@@ -106,8 +199,6 @@
 - Move the "Download Jupyter Notebook" action into the visualization's "share" menu.
 - Streamline the bulk download manifest download by opting in to every dataset type by default once no restricted datasets are present.
 - Update the attribution text for integrated datasets.
-
-
 
 ## v1.39.0 - 2026-01-27
 
@@ -125,13 +216,9 @@
 - Add integrated dataset pages to display datasets derived from multiple ancestors.
 - Update Vitessce to v3.9.1.
 
-
-
 ## v1.38.1 - 2026-01-12
 
 - Prevent users without Workspaces access from creating new workspaces from the dataset detail page.
-
-
 
 ## v1.38.0 - 2026-01-08
 
@@ -147,13 +234,9 @@
 - Support edge cases where collections don't have any datasets.
 - Fix typo in biomarker and cell type search display of unavailable genes on pathway selection.
 
-
-
 ## v1.37.5 - 2025-12-15
 
 - Fix list entity counts query.
-
-
 
 ## v1.37.4 - 2025-12-11
 
@@ -161,19 +244,13 @@
 - Return empty lists of results for requests made with an empty list of IDs.
 - Add more explicit validation to confirm a value in UKV is a saved list before treating it as a list.
 
-
-
 ## v1.37.3 - 2025-12-05
 
 - Fix empty IDs query breaking permission checks.
 
-
-
 ## v1.37.2 - 2025-12-04
 
 - Disable formatting check for Vitessce configurations due to dropped fields.
-
-
 
 ## v1.37.0 - 2025-12-03
 
@@ -186,16 +263,12 @@
 - Improve lineup visualization by loading data on front-end, improving selection/filtering of entities for lineup, and enabling selection of fields.
 - Improve TSV export of entities by loading data on front-end and pulling in more fields.
 
-
-
 ## v1.36.1 - 2025-11-24
 
 - Fix entity sorting in ProvTable and update sample category comparison order instantiation to occur outside of sort function.
 - Improve visibility of OpenKeyNav switch's focus state.
 - Directly use URLs provided by Workspaces API for certain environments.
 - Fix vitessce visualizations displaying incorrect expression levels.
-
-
 
 ## v1.36.0 - 2025-11-18
 
@@ -204,8 +277,6 @@
 - Improve handling for looking up datasets to visualize in Scellop on the organs page.
 - Fix Table of Contents positioning to enable scrolling when contents are longer than screen size and avoid overflowing into main page.
 - Add CORS origin validation and update UDI TSV endpoint to use dynamic CORS.
-
-
 
 ## v1.35.1 - 2025-11-06
 
@@ -217,8 +288,6 @@
 - Added space between bottom of Biomarker and Cell Type Search page and footer.
 - Prevented content shift when Table of Contents' children's names were longer than their parents' names.
 - Fixed large gene pathways breaking display of pathway result charts.
-
-
 
 ## v1.35.0 - 2025-11-03
 
@@ -233,13 +302,9 @@
 - Updated project structure to use `pyproject.toml` file for configuration.
 - Implement [updated Tutorial pages](/tutorials).
 
-
-
 ## v1.34.1 - 2025-10-15
 
 - Fix regression with form submissions not executing as expected.
-
-
 
 ## v1.34.0 - 2025-10-08
 

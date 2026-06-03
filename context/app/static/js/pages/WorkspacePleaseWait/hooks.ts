@@ -1,9 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
 import { getWorkspaceJob } from 'js/components/workspaces/utils';
 import useInterval from 'js/hooks/useInterval';
-import { trackMeasurement } from 'js/helpers/trackers';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 
 const ACTIVATING_STATUS = 'Activating';
@@ -12,8 +11,7 @@ function useWorkspacesPleaseWait(workspaceId: number) {
   const [message, setMessage] = useState<string | undefined>();
   const [dead, setDead] = useState<boolean | undefined>();
   const { workspacesEndpoint, workspacesToken } = useAppContext();
-  const loadingStartTime = useRef(new Date().getTime());
-  const firstRunningResponseTime = useRef<number | undefined>();
+  const [loadingStartTime] = useState(() => new Date().getTime());
   const [jobStatus, setJobStatus] = useState<string | undefined>();
   const { handleStopWorkspace } = useWorkspacesList();
 
@@ -35,27 +33,10 @@ function useWorkspacesPleaseWait(workspaceId: number) {
     const { status } = jobLocation;
     setJobStatus(status);
     if (jobLocation.status === 'Active') {
-      // Track first time we see the job is running to measure time job is pending and jupyter startup time
-      if (!firstRunningResponseTime.current) {
-        firstRunningResponseTime.current = new Date().getTime();
-      }
       // If no URL is present yet, jupyter env is still starting up
       if (!jobLocation.url) {
         return;
       }
-      const loadingEndTime = new Date().getTime();
-      const resourceAllocationDuration = firstRunningResponseTime.current - loadingStartTime.current;
-      const jupyterStartupDuration = loadingEndTime - firstRunningResponseTime.current;
-      const loadingDuration = loadingEndTime - loadingStartTime.current;
-      trackMeasurement(
-        'workspace_loading',
-        {
-          resourceAllocationDuration,
-          jupyterStartupDuration,
-          loadingDuration,
-        },
-        { workspaceId, jobUrl: jobLocation.url },
-      );
 
       const currentURLParams = new URLSearchParams(window.location.search);
       const directJobType = currentURLParams.get('direct');
@@ -72,7 +53,7 @@ function useWorkspacesPleaseWait(workspaceId: number) {
       document.location.href = jupyterUrl;
     }
 
-    if (status === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime.current > 5 * 60 * 1000) {
+    if (status === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime > 5 * 60 * 1000) {
       try {
         await handleStopWorkspace(workspaceId);
         document.location.href = `/workspaces/?failed_workspace_id=${encodeURIComponent(workspaceId)}`;
@@ -86,7 +67,7 @@ function useWorkspacesPleaseWait(workspaceId: number) {
 
   return {
     message,
-    isPending30s: jobStatus === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime.current > 30 * 1000,
+    isPending30s: jobStatus === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime > 30 * 1000,
   };
 }
 

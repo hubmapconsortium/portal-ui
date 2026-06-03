@@ -10,11 +10,6 @@ interface StepProps {
   hideRequiredText?: boolean;
 }
 
-interface RequiredVariant {
-  text: string;
-  color: string;
-}
-
 const requiredVariants = {
   true: {
     text: 'Required',
@@ -26,17 +21,15 @@ const requiredVariants = {
   },
 };
 
-function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
+function StepDescription({ blocks }: { blocks: (string | ReactElement<unknown>)[] }) {
   return (
     <Stack gap={2} p={2} component={Paper} direction="column">
-      {blocks.map((block) => (
-        <Typography key={typeof block === 'string' ? block : block.key}>{block}</Typography>
-      ))}
+      {blocks.map((block) => (typeof block === 'string' ? <Typography key={block}>{block}</Typography> : block))}
     </Stack>
   );
 }
 function Step({ index, title, isRequired = false, hideRequiredText, children }: PropsWithChildren<StepProps>) {
-  const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'] as RequiredVariant;
+  const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'];
   return (
     <>
       <Paper

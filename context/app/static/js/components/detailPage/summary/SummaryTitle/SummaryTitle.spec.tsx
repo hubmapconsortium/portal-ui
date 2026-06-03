@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from 'test-utils/functions';
 import SummaryTitle from './SummaryTitle';
 
-jest.mock('react-intersection-observer', () => ({
-  useInView: jest.fn(() => ({
-    ref: jest.fn(),
+vi.mock('react-intersection-observer', () => ({
+  useInView: vi.fn(() => ({
+    ref: vi.fn(),
     inView: true,
     entry: undefined,
   })),

@@ -153,7 +153,7 @@ function ContentWithUseEffect({ spyFunction }: { spyFunction: () => void }) {
 }
 
 test('children useEffect hooks dependent on completeStep are only called once', () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(
     <AccordionStepsWithProvider
       steps={[

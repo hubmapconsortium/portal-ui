@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import { useProvenanceStore, type ProvenanceStoreType } from '../ProvContext';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
@@ -30,7 +31,9 @@ interface ShowDerivedEntitiesButtonProps {
 }
 
 function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }: ShowDerivedEntitiesButtonProps) {
-  const { nodes, edges, uuid, addDescendantNodesAndEdges, addUuids } = useProvenanceStore(useProvenanceStoreSelector);
+  const { nodes, edges, uuid, addDescendantNodesAndEdges, addUuids } = useProvenanceStore(
+    useShallow(useProvenanceStoreSelector),
+  );
   const [newNodes, setNewNodes] = useState<Node[]>([]);
   const [newEdges, setNewEdges] = useState<Edge[]>([]);
   const [descendantUuids, setDescendantUuids] = useState<string[]>([]);
@@ -70,6 +73,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }:
       const uniqueNodes = getUniques(nodes, layoutNodes);
       const uniqueEdges = getUniques(edges, layoutEdges);
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setNewNodes(uniqueNodes);
       setNewEdges(uniqueEdges);
       setDescendantUuids(uuidsToAdd);

@@ -1,4 +1,3 @@
-import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
@@ -9,7 +8,7 @@ import prettier from 'eslint-plugin-prettier';
 import tseslint from 'typescript-eslint';
 
 // Environment-specific configurations
-import jestConfig from './eslint.jest.config.mjs';
+import vitestConfig from './eslint.vitest.config.mjs';
 import storybookConfig from './eslint.storybook.config.mjs';
 import cypressConfig from './eslint.cypress.config.mjs';
 import markdownConfig from './eslint.markdown.config.mjs';
@@ -56,13 +55,13 @@ export default defineConfig(
         ...globals.node,
         CDN_URL: 'readonly',
         PACKAGE_VERSION: 'readonly',
+        VITESSCE_VERSION: 'readonly',
         flaskData: 'readonly',
         groupsToken: 'readonly',
         isAuthenticated: 'readonly',
         userEmail: 'readonly',
         workspacesToken: 'readonly',
         userGroups: 'readonly',
-        sentryEnv: 'readonly',
       },
       parserOptions: {
         ecmaVersion: 'latest',
@@ -158,7 +157,11 @@ export default defineConfig(
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        // `projectService: true` (typescript-eslint v8.x) is meaningfully faster
+        // than the explicit `project` pointer used here previously, especially
+        // on partial runs from lint-staged: it auto-loads only the program
+        // needed for the files being linted instead of the whole tsconfig.
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
@@ -187,7 +190,7 @@ export default defineConfig(
     },
   },
   // Environment-specific configurations
-  ...jestConfig,
+  ...vitestConfig,
   ...storybookConfig,
   ...cypressConfig,
   ...markdownConfig,

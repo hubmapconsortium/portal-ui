@@ -5,8 +5,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 interface WorkspaceFieldProps<FormType extends FieldValues>
-  extends Pick<UseControllerProps<FormType>, 'name' | 'control'>,
-    Omit<TextFieldProps<'outlined'>, 'variant' | 'name'> {
+  extends Pick<UseControllerProps<FormType>, 'name' | 'control'>, Omit<TextFieldProps<'outlined'>, 'variant' | 'name'> {
   label: string;
   value?: PathValue<FormType, Path<FormType>> | undefined;
   maxLength?: number;

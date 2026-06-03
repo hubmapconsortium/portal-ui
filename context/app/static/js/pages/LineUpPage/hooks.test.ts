@@ -1,9 +1,10 @@
+import { type MockedFunction } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useLineupEntities, UseLineupPageEntitiesProps } from './hooks';
 
 // Mock the dependencies
-jest.mock('js/hooks/useSearchData', () => ({
-  useAllSearchHits: jest.fn(),
+vi.mock('js/hooks/useSearchData', () => ({
+  useAllSearchHits: vi.fn(),
 }));
 
 import { useAllSearchHits } from 'js/hooks/useSearchData';
@@ -11,7 +12,7 @@ import { SearchHit } from 'js/typings/elasticsearch';
 import { Entity } from 'js/components/types';
 
 // Type the mocked function
-const mockUseSearchHits = useAllSearchHits as jest.MockedFunction<typeof useAllSearchHits>;
+const mockUseSearchHits = useAllSearchHits as MockedFunction<typeof useAllSearchHits>;
 
 // Simplified mock data for testing
 const createMockEntity = (sourceOverrides = {}) =>
@@ -86,7 +87,7 @@ const sourceFields = [
 
 describe('useLineupEntities', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     // Default mock implementation
     mockUseSearchHits.mockReturnValue({

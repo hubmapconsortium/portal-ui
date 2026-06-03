@@ -13,9 +13,7 @@ import { isLegacyCompressedURL, parseReadableParams } from './searchParams';
 
 import { useAppContext } from 'js/components/Contexts';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
-import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
-import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
-import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
+import { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -39,19 +37,21 @@ import {
   Facet,
   isDateFilter,
   isExistsFilter,
+  isBooleanGroupFilter,
 } from './store';
 import Results from './Results';
 import Facets from './Facets/Facets';
-import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
-import FilterChips from './Facets/FilterChips';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
-import { TilesSortSelect } from './Results/ResultsTiles';
-import MetadataMenu from './MetadataMenu';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
 import { isDevSearch, SearchTypeProps } from './utils';
+import SaySeeAlert from './SaySeeAlert';
+import SearchModeTabs from './SearchModeTabs';
+import SaySeePanel from './SaySeePanel';
+import { useSearchMode } from './useSearchMode';
+import Paper from '@mui/material/Paper';
 
 interface OuterBucket {
   doc_count: number;
@@ -82,6 +82,9 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
   }: SearchStoreState = useSearchStore();
 
   return useScrollSearchHits<Partial<Entity>, Aggregations>({
@@ -95,6 +98,9 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
   });
 }
 
@@ -126,6 +132,11 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
           draft.facets[curr.field] = curr;
         }
 
+        if (curr.type === FACETS.booleanGroup) {
+          draft.filters[curr.field] = { values: new Set([]), type: curr.type };
+          draft.facets[curr.field] = curr;
+        }
+
         return draft;
       });
     },
@@ -143,6 +154,8 @@ type SearchConfig = Pick<
   | 'size'
   | 'type'
   | 'defaultQuery'
+  | 'defaultQueryWithAncestorFilter'
+  | 'latestRevisionFilter'
   | 'analyticsCategory'
 > & {
   facets: FacetGroups;
@@ -151,6 +164,7 @@ type SearchConfig = Pick<
 function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
+    includeSupersededEntities: false,
     ...buildFacets({ facetGroups: facets }),
     swrConfig,
     sourceFields,
@@ -181,33 +195,25 @@ function Header({ type }: SearchTypeProps) {
   );
 }
 
-function Bar({ type }: SearchTypeProps) {
+function TileViewBar() {
   const view = useSearchStore((state) => state.view);
+  if (view !== 'tile') return null;
   return (
-    <Stack direction="row" spacing={1}>
-      <Box flexGrow={1}>
-        <SearchBar type={type} />
-      </Box>
-      <MetadataMenu type={type} />
-      {!isDevSearch(type) && (
-        <>
-          <WorkspacesDropdownMenu type={type} />
-          {view === 'tile' && <TilesSortSelect />}
-          {view === 'table' && (
-            <>
-              <SaveEntitiesButtonFromSearch entity_type={type} />
-              <BulkDownloadButtonFromSearch type={type} />
-            </>
-          )}
-          <DefaultSearchViewSwitch />
-        </>
-      )}
+    <Stack direction="row" justifyContent="flex-end">
+      <DefaultSearchViewSwitch />
     </Stack>
   );
 }
 
-function Body({ facetGroups }: { facetGroups: FacetGroups }) {
-  return (
+function Body({ facetGroups, withPaper }: { facetGroups: FacetGroups; withPaper?: boolean }) {
+  return withPaper ? (
+    <Paper component={Stack} direction="row" spacing={2} p={2}>
+      <Facets facetGroups={facetGroups} />
+      <Box flexGrow={1}>
+        <Results />
+      </Box>
+    </Paper>
+  ) : (
     <Stack direction="row" spacing={2}>
       <Facets facetGroups={facetGroups} />
       <Box flexGrow={1}>
@@ -248,19 +254,28 @@ function SCFindAlert() {
 }
 
 const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
+  const [mode] = useSearchMode();
+  const { enableSaySeeMode } = useAppContext();
+  const effectiveMode = enableSaySeeMode ? mode : 'filter';
   return (
     <Stack spacing={2} mb={4}>
+      {enableSaySeeMode && <SaySeeAlert />}
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
-        <Box>
-          <SearchNote />
-          <Bar type={type} />
-        </Box>
-        <FilterChips />
-        <Body facetGroups={facetGroups} />
+        <SearchNote />
+        <div>
+          {enableSaySeeMode && <SearchModeTabs />}
+          {effectiveMode === 'filter' && (
+            <>
+              <TileViewBar />
+              <Body facetGroups={facetGroups} withPaper={enableSaySeeMode} />
+            </>
+          )}
+          {effectiveMode === 'say-see' && <SaySeePanel />}
+        </div>
       </Stack>
     </Stack>
   );
@@ -313,6 +328,12 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
               ? URLStateFilter?.values
               : v.values,
         };
+      }
+
+      if (isBooleanGroupFilter<string[] | Set<string>>(v)) {
+        const urlStateValues =
+          URLStateFilter && isBooleanGroupFilter<string[]>(URLStateFilter) ? URLStateFilter.values : [];
+        draft[k] = { ...v, values: new Set([...v.values, ...urlStateValues]) };
       }
 
       return draft;
@@ -370,6 +391,7 @@ function useInitialURLState() {
       const parsedScFindParams = searchParams.scFindParams;
       if (parsedScFindParams) {
         isDoneLoading = false;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setScFindParams({
           scFindOnly: parsedScFindParams.scFindOnly,
           genes: parsedScFindParams.genes,
@@ -406,7 +428,7 @@ function useInitialURLState() {
     } else if (scFindParams.cellTypes && shouldCallCellTypeDatasets) {
       if (cellTypeDatasets.data) {
         // Extract datasets from cell type search results
-        const allDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
+        const allDatasets = cellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
         datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
         isDataReady = true;
       }
@@ -417,6 +439,7 @@ function useInitialURLState() {
 
     if (isDataReady) {
       if (datasetUUIDs.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setInitialUrlState((prevState) => ({
           ...prevState,
           filters: {
@@ -447,7 +470,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
-  const { search, sortField, filters, ...rest } = buildInitialSearchState({
+  const { search, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
     ...config,
     endpoint: elasticsearchEndpoint,
     analyticsCategory: `${type}s Search Page Interactions`,
@@ -460,7 +483,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   }
 
   const initialState = {
-    ...merge({ search, sortField, filters }, initialUrlState, options),
+    ...merge({ search, sortField, filters, includeSupersededEntities }, initialUrlState, options),
     ...rest,
     initialFilters: filters,
   };

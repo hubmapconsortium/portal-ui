@@ -5,6 +5,10 @@
   "eslint.format.enable": true,
   "eslint.useFlatConfig": true,
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "npm.packageManager": "pnpm",
+  "typescript.tsdk": "context/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "files.eol": "\n",
   "files.exclude": {
     "app": true
   },
@@ -23,7 +27,7 @@
   "optional": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.fixAll": true
+      "source.fixAll": "explicit"
     }
   }
 }

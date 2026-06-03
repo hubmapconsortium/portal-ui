@@ -4,15 +4,15 @@ import { useDatasetsAccess, DatasetPermissionsResponse } from './useDatasetPermi
 import useHubmapIds from './useHubmapIds';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
-jest.mock('js/hooks/useDatasetPermissions');
-jest.mock('js/hooks/useHubmapIds');
-jest.mock('js/components/workspaces/toastHooks');
+vi.mock('js/hooks/useDatasetPermissions');
+vi.mock('js/hooks/useHubmapIds');
+vi.mock('js/components/workspaces/toastHooks');
 
-const mockUseDatasetsAccess = jest.mocked(useDatasetsAccess);
-const mockUseHubmapIds = jest.mocked(useHubmapIds);
-const mockUseWorkspaceToasts = jest.mocked(useWorkspaceToasts);
+const mockUseDatasetsAccess = vi.mocked(useDatasetsAccess);
+const mockUseHubmapIds = vi.mocked(useHubmapIds);
+const mockUseWorkspaceToasts = vi.mocked(useWorkspaceToasts);
 
-const mockToastSuccess = jest.fn();
+const mockToastSuccess = vi.fn();
 
 beforeEach(() => {
   mockUseHubmapIds.mockReturnValue({ hubmapIds: [], isLoading: false });
@@ -22,7 +22,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
 describe('useGetRestrictedDatasets', () => {
@@ -106,7 +106,7 @@ describe('useRestrictedDatasetsForm', () => {
   });
 
   test('removeRestrictedDatasets calls deselectRows and toast', () => {
-    const deselectRows = jest.fn();
+    const deselectRows = vi.fn();
     mockUseDatasetsAccess.mockReturnValue({
       accessibleDatasets: { 'uuid-1': { valid_id: true, access_allowed: false } },
       isLoading: false,

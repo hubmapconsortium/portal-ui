@@ -76,7 +76,7 @@ const files = {
 };
 
 test('handles DUA flow', async () => {
-  const open = jest.fn();
+  const open = vi.fn();
   Object.defineProperty(window, 'open', { value: open });
 
   render(<TestFiles />);

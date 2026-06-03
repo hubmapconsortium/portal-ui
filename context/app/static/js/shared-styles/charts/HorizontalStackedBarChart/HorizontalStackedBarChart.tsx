@@ -29,8 +29,11 @@ const srOnlyLabelStyles: Partial<TextProps> = {
   },
 };
 
-interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>
-  extends WithParentSizeProvidedProps {
+interface HorizontalStackedBarChartProps<
+  Datum,
+  XAxisScale extends AnyD3Scale,
+  YAxisScale extends AnyD3Scale,
+> extends WithParentSizeProvidedProps {
   visxData: Datum[];
   xScale: XAxisScale;
   getXScaleRange?: (max: number) => [number, number];

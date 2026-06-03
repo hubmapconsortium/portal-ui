@@ -8,6 +8,7 @@ import {
   StyledTableCell,
   StyledTableContainer,
   StyledTableHead,
+  StyledTableRow,
 } from 'js/components/workspaces/Tables/WorkspaceItemsTable/style';
 import { CenteredAlert } from 'js/components/style';
 import Checkbox from '@mui/material/Checkbox';
@@ -31,9 +32,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
   if (!isLoading && noFiltersSelected) {
     return (
       <StyledTableContainer sx={(theme) => ({ padding: theme.spacing(2) })}>
-        <StyledTable>
-          <CenteredAlert severity="info">No {itemType}s to display based on current filters.</CenteredAlert>
-        </StyledTable>
+        <CenteredAlert severity="info">No {itemType}s to display based on current filters.</CenteredAlert>
       </StyledTableContainer>
     );
   }
@@ -43,14 +42,16 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
       <StyledTableContainer sx={{ maxHeight: showSeeMoreOption ? 'inherit' : '425px' }}>
         <StyledTable>
           <StyledTableHead>
-            {!!selectedItemIds && (
-              <StyledCheckboxHeaderCell>
-                <Checkbox checked={selectedItemIds?.size === items.length} onChange={onToggleAllItems} />
-              </StyledCheckboxHeaderCell>
-            )}
-            <StyledTableCell width="0" />
-            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} {...rest} />
-            <StyledTableCell />
+            <StyledTableRow>
+              {!!selectedItemIds && (
+                <StyledCheckboxHeaderCell>
+                  <Checkbox checked={selectedItemIds?.size === items.length} onChange={onToggleAllItems} />
+                </StyledCheckboxHeaderCell>
+              )}
+              <StyledTableCell width="0" />
+              <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} {...rest} />
+              <StyledTableCell />
+            </StyledTableRow>
           </StyledTableHead>
           <StyledTableBody>
             <TableResults

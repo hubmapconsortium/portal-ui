@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
@@ -12,7 +12,7 @@ import { MoreIcon, DeleteIcon } from 'js/shared-styles/icons';
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 
 function DeleteListButton({ listUUID }: { listUUID: string }) {
-  const anchorEl = useRef(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [deleteListDialogIsOpen, setDeleteListDialogIsOpen] = useState(false);
 
@@ -32,14 +32,14 @@ function DeleteListButton({ listUUID }: { listUUID: string }) {
           }}
           aria-controls="list-actions-menu"
           aria-haspopup="true"
-          ref={anchorEl}
+          ref={setAnchorEl}
         >
           <MoreIcon color="primary" />
         </WhiteBackgroundIconButton>
       </SecondaryBackgroundTooltip>
       <Menu
         id="list-actions-menu"
-        anchorEl={anchorEl.current}
+        anchorEl={anchorEl}
         keepMounted
         open={menuIsOpen}
         onClose={() => {

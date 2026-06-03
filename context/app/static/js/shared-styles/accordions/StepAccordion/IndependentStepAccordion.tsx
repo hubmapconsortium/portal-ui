@@ -9,13 +9,13 @@ import CompletedStepText from './CompletedStepText';
 
 interface StepAccordionProps {
   index: number;
-  summaryHeading: string | React.ReactElement;
-  content?: React.ReactElement;
+  summaryHeading: string | React.ReactElement<unknown>;
+  content?: React.ReactElement<unknown>;
   id: string;
   onChange?: () => void;
   disabled?: boolean;
   isExpanded?: boolean;
-  completedStepText?: string | React.ReactElement;
+  completedStepText?: string | React.ReactElement<unknown>;
   noProvider?: boolean;
 }
 

@@ -104,7 +104,6 @@ describe('buildSecondaryText', () => {
 describe('buildPublicationsPanelProps', () => {
   test('should return the props require for the panel list for a preprint', () => {
     expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
-      key: 'abc123',
       href: '/browse/publication/abc123',
       onClick: expect.any(Function) as unknown,
       title: 'Publication ABC',
@@ -114,7 +113,6 @@ describe('buildPublicationsPanelProps', () => {
   });
   test('should return the props required for the panel list of a peer reviewed paper', () => {
     expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
-      key: 'def234',
       href: '/browse/publication/def234',
       onClick: expect.any(Function) as unknown,
       title: 'Publication DEF',

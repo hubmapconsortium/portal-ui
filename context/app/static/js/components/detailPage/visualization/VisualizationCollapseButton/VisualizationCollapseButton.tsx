@@ -1,4 +1,5 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import FullscreenExitRoundedIcon from '@mui/icons-material/FullscreenExitRounded';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -10,7 +11,7 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 });
 
 function VisualizationCollapseButton() {
-  const { collapseViz } = useVisualizationStore(visualizationStoreSelector);
+  const { collapseViz } = useVisualizationStore(useShallow(visualizationStoreSelector));
   return (
     <SecondaryBackgroundTooltip title="Exit Fullscreen">
       <WhiteBackgroundIconButton onClick={collapseViz}>

@@ -42,6 +42,7 @@ function FileBrowserDirectory({ dirName, children, depth }: FileBrowserDirectory
   const allFilesAreVisible = useFilesStore(filesStoreSelector) === 'all';
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setIsExpanded(!allFilesAreVisible);
   }, [allFilesAreVisible]);
 

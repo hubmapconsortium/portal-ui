@@ -5,8 +5,8 @@ import { render, screen } from 'test-utils/functions';
 
 import FileBrowserDUA from './FileBrowserDUA';
 
-const handleAgreeFn = jest.fn();
-const handleCloseFn = jest.fn();
+const handleAgreeFn = vi.fn();
+const handleCloseFn = vi.fn();
 const mapped_data_access_level = 'fakeaccess';
 
 function TestFileBrowserDUA({
@@ -116,7 +116,7 @@ test('displays correct text for when access level is not protected or consortium
 });
 
 test('handles agree flow', async () => {
-  const mockAgree = jest.fn();
+  const mockAgree = vi.fn();
   render(<TestFileBrowserDUA handleAgree={mockAgree} />);
 
   expect(duaModal.checkbox.byLabel).not.toBeChecked();
@@ -129,7 +129,7 @@ test('handles agree flow', async () => {
 });
 
 test('calls handleClose when disagree button is clicked', async () => {
-  const mockClose = jest.fn();
+  const mockClose = vi.fn();
   render(<TestFileBrowserDUA handleClose={mockClose} />);
 
   expect(mockClose).toHaveBeenCalledTimes(0);

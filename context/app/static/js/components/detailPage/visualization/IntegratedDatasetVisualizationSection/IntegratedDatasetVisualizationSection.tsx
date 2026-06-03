@@ -5,10 +5,13 @@ import Description from 'js/shared-styles/sections/Description';
 import { Box } from '@mui/system';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import SegmentationChannelsAndQuality from 'js/components/detailPage/SegmentationChannelsAndQuality/SegmentationChannelsAndQuality';
+import { SegmentationMetadataEntry } from 'js/components/types';
 
 interface IntegratedDatasetVisualizationProps {
   uuid: string;
   vitessceConfig?: object;
+  segmentationMetadata?: SegmentationMetadataEntry[];
 }
 
 const trackingInfo = {
@@ -16,7 +19,11 @@ const trackingInfo = {
   category: 'Integrated Dataset',
 };
 
-function IntegratedDatasetVisualizationSection({ uuid, vitessceConfig }: IntegratedDatasetVisualizationProps) {
+function IntegratedDatasetVisualizationSection({
+  uuid,
+  vitessceConfig,
+  segmentationMetadata,
+}: IntegratedDatasetVisualizationProps) {
   return (
     <CollapsibleDetailPageSection title="Visualization" icon={VisualizationIcon}>
       <Description
@@ -28,6 +35,12 @@ function IntegratedDatasetVisualizationSection({ uuid, vitessceConfig }: Integra
               trackingInfo={trackingInfo}
               shouldDisplayHeader={false}
               hasNotebook
+              renderBelowFooter={({ activeConfigName }) => (
+                <SegmentationChannelsAndQuality
+                  segmentationMetadata={segmentationMetadata}
+                  activeConfigName={activeConfigName}
+                />
+              )}
             />
           </Box>
         }

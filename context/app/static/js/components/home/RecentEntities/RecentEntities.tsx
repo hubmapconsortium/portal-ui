@@ -67,7 +67,7 @@ function RecentDatasets() {
 function PublicationPanel({ entity: _source }: EntityPanelProps<RecentPublication>) {
   const props = buildPublicationPanelProps({ _source }, true);
 
-  return <Panel small {...props} />;
+  return <Panel small key={_source.uuid} {...props} />;
 }
 
 function RecentPublications() {

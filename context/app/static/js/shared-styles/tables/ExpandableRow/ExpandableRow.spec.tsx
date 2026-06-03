@@ -14,7 +14,7 @@ test('should handle user expanding row', async () => {
       ))}
     </ExpandableRow>,
   );
-  cellsText.forEach((cellText) => expect(screen.getByText(cellText)).not.toHaveStyle('border-bottom: none'));
+  cellsText.forEach((cellText) => expect(screen.getByText(cellText)).not.toHaveStyle('border-bottom-style: none'));
   expect(screen.getByTestId('down-arrow-icon')).toBeInTheDocument();
   expect(screen.queryByText('123')).not.toBeInTheDocument();
 
@@ -24,6 +24,6 @@ test('should handle user expanding row', async () => {
     expect(screen.getByText('123')).toBeVisible();
   });
 
-  cellsText.forEach((cellText) => expect(screen.getByText(cellText)).toHaveStyle('border-bottom: none'));
+  cellsText.forEach((cellText) => expect(screen.getByText(cellText)).toHaveStyle('border-bottom-style: none'));
   expect(screen.getByTestId('up-arrow-icon')).toBeInTheDocument();
 });

@@ -40,18 +40,18 @@ export default function CellTypesPanelList() {
       return [
         {
           children: <>No results found. Try searching for a different cell type.</>,
-          key: 'no-results',
+          panelKey: 'no-results',
         },
       ];
     }
     const propsList: PanelProps[] = [
       {
-        key: 'header',
+        panelKey: 'header',
         noPadding: true,
         children: <CellTypesPanel.Header />,
       },
       ...sortedCellTypes.map(({ label, organs: cellTypeOrgans, clid, description }) => ({
-        key: label,
+        panelKey: label,
         noPadding: true,
         noHover: false,
         children: (

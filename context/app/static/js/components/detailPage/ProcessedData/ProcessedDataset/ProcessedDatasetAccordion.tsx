@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -31,10 +32,12 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const track = useTrackEntityPageEvent();
   const [threshold, setThreshold] = useState(inViewThreshold);
 
-  const { setCurrentDataset, removeVisibleDataset } = useProcessedDataStore((state) => ({
-    setCurrentDataset: state.setCurrentDataset,
-    removeVisibleDataset: state.removeFromVisibleDatasets,
-  }));
+  const { setCurrentDataset, removeVisibleDataset } = useProcessedDataStore(
+    useShallow((state) => ({
+      setCurrentDataset: state.setCurrentDataset,
+      removeVisibleDataset: state.removeFromVisibleDatasets,
+    })),
+  );
   const { ref } = useInView({
     threshold,
     initialInView: false,
@@ -60,6 +63,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   useEffect(() => {
     const datasetId = datasetSectionId(sectionDataset);
     if (hash.includes(datasetId)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setIsExpanded(true);
     }
   }, [hash, sectionDataset]);
@@ -67,6 +71,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   // Auto-expand when the ?viz= query param targets this dataset
   useEffect(() => {
     if (vizParamMatchesDataset) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setIsExpanded(true);
     }
   }, [vizParamMatchesDataset]);

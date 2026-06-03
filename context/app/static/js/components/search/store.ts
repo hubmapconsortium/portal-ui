@@ -20,6 +20,7 @@ export const FACETS = {
   range: 'RANGE',
   date: 'DATE',
   exists: 'EXISTS',
+  booleanGroup: 'BOOLEAN_GROUP',
 } as const;
 
 export interface FacetConfig {
@@ -50,6 +51,30 @@ export interface ExistsConfig extends FacetConfig {
 export interface ExistsValues {
   values: boolean;
   type: typeof FACETS.exists;
+}
+
+export interface BooleanGroupItem {
+  field: string;
+  label: string;
+  queryType: 'exists' | 'term';
+  value?: string;
+}
+
+export interface BooleanGroupConfig extends FacetConfig {
+  type: typeof FACETS.booleanGroup;
+  items: BooleanGroupItem[];
+}
+
+export interface BooleanGroupValues<V = Set<string>> {
+  values: V;
+  type: typeof FACETS.booleanGroup;
+}
+
+export function getBooleanGroupItemKey(item: BooleanGroupItem): string {
+  if (item.queryType === 'exists') {
+    return item.field;
+  }
+  return `${item.field}::${item.value}`;
 }
 
 export interface HierarchicalTermConfig extends FacetConfig {
@@ -95,8 +120,9 @@ export type Filter<V = Set<string>> =
   | HierarchicalTermValues<V>
   | RangeValues
   | DateValues
-  | ExistsValues;
-export type Facet = TermConfig | HierarchicalTermConfig | RangeConfig | DateConfig | ExistsConfig;
+  | ExistsValues
+  | BooleanGroupValues<V>;
+export type Facet = TermConfig | HierarchicalTermConfig | RangeConfig | DateConfig | ExistsConfig | BooleanGroupConfig;
 
 export type FiltersType<V = Set<string>> = Record<string, Filter<V>>;
 export type FacetsType = Record<string, Facet>;
@@ -108,6 +134,12 @@ export interface SearchState<V> {
   initialFilters: FiltersType<V>;
   facets: FacetsType;
   defaultQuery?: esb.Query;
+  // Used as the default query when filters.ancestor_ids has values. Lets the dataset search
+  // include Support entities when navigating from a "View Derived Datasets" link so the
+  // results match the descendant counts shown in the parent entity's prov section.
+  defaultQueryWithAncestorFilter?: esb.Query;
+  latestRevisionFilter?: esb.Query;
+  includeSupersededEntities?: boolean;
   search: string;
   searchFields: string[];
   sortField: SortField;
@@ -154,9 +186,21 @@ const existsFilterSchema = z.object({
   type: z.literal(FACETS.exists),
 });
 
+const booleanGroupFilterSchema = z.object({
+  values: z.array(z.string()),
+  type: z.literal(FACETS.booleanGroup),
+});
+
 const filtersSchema = z.record(
   z.string(),
-  z.union([dateFilterSchema, rangeFilterSchema, termFilterSchema, hierarchicalTermFilterSchema, existsFilterSchema]),
+  z.union([
+    dateFilterSchema,
+    rangeFilterSchema,
+    termFilterSchema,
+    hierarchicalTermFilterSchema,
+    existsFilterSchema,
+    booleanGroupFilterSchema,
+  ]),
 );
 
 const sortFieldSchema = z.object({
@@ -169,6 +213,7 @@ const searchURLStateSchema = z
     search: z.string(),
     sortField: sortFieldSchema,
     filters: filtersSchema,
+    includeSupersededEntities: z.boolean(),
     scFindParams: z
       .object({
         genes: z.array(z.string()).optional(),
@@ -219,6 +264,8 @@ export interface SearchStoreActions {
   filterRange: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterExists: ({ field }: { field: string }) => void;
+  filterBooleanGroupItem: ({ field, itemKey }: { field: string; itemKey: string }) => void;
+  setIncludeSupersededEntities: (value: boolean) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -263,6 +310,14 @@ export function isExistsFilter<V = Set<string>>(filter: Filter<V>): filter is Ex
   return filter.type === 'EXISTS';
 }
 
+export function isBooleanGroupFacet(facet: Facet): facet is BooleanGroupConfig {
+  return facet.type === 'BOOLEAN_GROUP';
+}
+
+export function isBooleanGroupFilter<V = Set<string>>(filter: Filter<V>): filter is BooleanGroupValues<V> {
+  return filter.type === 'BOOLEAN_GROUP';
+}
+
 export function filterHasValues({ filter }: { filter: Filter }) {
   if (isTermFilter(filter)) {
     return filter.values.size;
@@ -282,6 +337,10 @@ export function filterHasValues({ filter }: { filter: Filter }) {
 
   if (isExistsFilter(filter)) {
     return filter.values;
+  }
+
+  if (isBooleanGroupFilter(filter)) {
+    return filter.values.size > 0;
   }
   return false;
 }
@@ -350,7 +409,7 @@ export function createDatasetSearchLink(values: Record<string, string[]>) {
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, filters } = state;
+  const { search, sortField, filters, includeSupersededEntities } = state;
 
   const readableParamValues: Record<string, string[]> = {};
   const remainingFilters: FiltersType = {};
@@ -369,11 +428,12 @@ function replaceURLSearchParams(state: SearchStoreState) {
     }
   }
 
-  const hasRemaining = search || Object.keys(remainingFilters).length > 0;
+  const hasRemaining = search || Object.keys(remainingFilters).length > 0 || includeSupersededEntities;
   const qValue = hasRemaining
     ? LZString.compressToEncodedURIComponent(
-        JSON.stringify({ search, sortField, filters: remainingFilters }, (_key, value: unknown) =>
-          value instanceof Set ? [...value] : value,
+        JSON.stringify(
+          { search, sortField, filters: remainingFilters, includeSupersededEntities },
+          (_key, value: unknown) => (value instanceof Set ? [...value] : value),
         ),
       )
     : null;
@@ -394,6 +454,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     ...initialState,
     resetFilters: () => {
       set((state) => {
+        state.includeSupersededEntities = false;
         state.filters = state.initialFilters;
         replaceURLSearchParams(state);
       });
@@ -529,6 +590,28 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         }
 
         filter.values = !filter.values;
+        replaceURLSearchParams(state);
+      });
+    },
+    filterBooleanGroupItem: ({ field, itemKey }) => {
+      set((state) => {
+        const filter = state?.filters[field];
+
+        if (!isBooleanGroupFilter(filter)) {
+          return;
+        }
+
+        if (filter.values.has(itemKey)) {
+          filter.values.delete(itemKey);
+        } else {
+          filter.values.add(itemKey);
+        }
+        replaceURLSearchParams(state);
+      });
+    },
+    setIncludeSupersededEntities: (value) => {
+      set((state) => {
+        state.includeSupersededEntities = value;
         replaceURLSearchParams(state);
       });
     },

@@ -33,9 +33,14 @@ export default function SummaryDataChildren({ mapped_data_types, origin_samples 
       {[...mapped_organs].map((mapped_organ, idx) => (
         <SummaryItem showDivider={idx !== mapped_organs.size - 1} key={mapped_organ}>
           <InternalLink href={`/organs/${mapped_organ}`} underline="none">
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <OrganIcon organName={mapped_organ} />
-              <Typography fontSize="inherit">{mapped_organ}</Typography>
+            {/* SummaryItem wraps its content in a <p>; render both this
+                flex container and the label as inline elements so the
+                resulting HTML stays valid. */}
+            <Stack component="span" direction="row" spacing={0.5} alignItems="center" display="inline-flex">
+              <OrganIcon component="span" organName={mapped_organ} />
+              <Typography component="span" fontSize="inherit">
+                {mapped_organ}
+              </Typography>
             </Stack>
           </InternalLink>
         </SummaryItem>

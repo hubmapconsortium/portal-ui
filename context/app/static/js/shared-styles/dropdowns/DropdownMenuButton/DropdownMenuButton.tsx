@@ -12,7 +12,7 @@ interface DropdownMenuButtonProps {
 }
 
 function DropdownMenuButton({ children, menuID, variant = 'outlined', ...rest }: DropdownMenuButtonProps) {
-  const { menuRef, menuIsOpen, openMenu } = useDropdownMenuStore();
+  const { setAnchorEl, menuIsOpen, openMenu } = useDropdownMenuStore();
 
   return (
     <Button
@@ -21,7 +21,7 @@ function DropdownMenuButton({ children, menuID, variant = 'outlined', ...rest }:
       color="primary"
       aria-controls={menuIsOpen ? menuID : undefined}
       aria-haspopup="true"
-      ref={menuRef as React.RefObject<HTMLButtonElement>}
+      ref={setAnchorEl}
       {...rest}
     >
       {children}
@@ -32,6 +32,7 @@ function DropdownMenuButton({ children, menuID, variant = 'outlined', ...rest }:
 
 export const StyledDropdownMenuButton = styled(DropdownMenuButton)(({ theme }) => ({
   height: theme.spacing(5),
+  borderRadius: theme.spacing(0.5),
 }));
 
 export default DropdownMenuButton;

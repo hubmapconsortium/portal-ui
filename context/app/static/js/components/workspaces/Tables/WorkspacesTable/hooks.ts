@@ -17,6 +17,7 @@ function useWorkspacesTable(workspacesList: WorkspaceWithCreatorInfo[]) {
   const [showShared, setShowShared] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setShowShared(sharedWorkspaces.length > 0);
   }, [sharedWorkspaces.length]);
 

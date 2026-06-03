@@ -1,4 +1,5 @@
 import React, { useId } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import WbSunnyIcon from '@mui/icons-material/WbSunnyRounded';
 import Brightness2Icon from '@mui/icons-material/Brightness2Rounded';
 
@@ -20,7 +21,7 @@ const buttonIcons = {
 };
 
 function VisualizationThemeSwitch({ trackingInfo }: { trackingInfo: EventWithOptionalCategory }) {
-  const { vizTheme, setVizTheme } = useVisualizationStore(visualizationStoreSelector);
+  const { vizTheme, setVizTheme } = useVisualizationStore(useShallow(visualizationStoreSelector));
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
   const id = useId();

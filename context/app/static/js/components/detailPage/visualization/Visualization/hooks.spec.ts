@@ -16,9 +16,9 @@ describe('useVitessceConfig', () => {
   function mockWindowLocation(hash: string, search = '') {
     const mockLocation = new URL(`https://example.com/${search}`) as unknown as Location;
     mockLocation.hash = hash;
-    mockLocation.replace = jest.fn();
-    mockLocation.assign = jest.fn();
-    mockLocation.reload = jest.fn();
+    mockLocation.replace = vi.fn();
+    mockLocation.assign = vi.fn();
+    mockLocation.reload = vi.fn();
     // @ts-expect-error - Test mock
     delete window.location;
     window.location = mockLocation as unknown as string & Location;

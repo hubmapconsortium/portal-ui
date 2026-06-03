@@ -10,6 +10,7 @@ const green = '#6C8938';
 test.each([
   ['Reopened', blue],
   ['QA', blue],
+  ['Approval', blue],
   ['Locked', blue],
   ['Processing', blue],
   ['Hold', blue],

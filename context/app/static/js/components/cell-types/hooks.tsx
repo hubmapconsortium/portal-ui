@@ -87,7 +87,7 @@ export function useIndexedDatasetsForCellType({
     cellTypes,
   });
 
-  const scFindIds = data?.map((d) => d.datasets).flat() ?? [];
+  const scFindIds = data?.flatMap((d) => d?.datasets ?? []) ?? [];
 
   const ids = useSCFindIDAdapter(scFindIds);
 
