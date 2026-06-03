@@ -6,7 +6,12 @@ import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
 import { SCFindParams } from '../organ/utils';
 import { SearchTypeProps } from './utils';
-import { READABLE_PARAM_FIELDS, encodeHierarchical, serializeReadableParams } from './searchParams';
+import {
+  READABLE_PARAM_FIELDS,
+  encodeHierarchical,
+  serializeReadableParams,
+  buildScFindAndDataProductParams,
+} from './searchParams';
 
 export interface SortField {
   field: string;
@@ -151,6 +156,9 @@ export interface SearchState<V> {
   type: SearchTypeProps['type'];
   analyticsCategory: string;
   scFindParams?: SCFindParams;
+  // Set when navigating from a data product's "View Datasets" link. The search page resolves it
+  // into a `uuid` filter; retained here so the page can explain the filtered results to the user.
+  dataProductID?: string;
 }
 
 // Used to validate URL Search
@@ -221,6 +229,7 @@ const searchURLStateSchema = z
         scFindOnly: z.boolean().optional(),
       })
       .optional(),
+    dataProductID: z.string().optional(),
   })
   .partial();
 
@@ -349,12 +358,14 @@ export function buildSearchLink({
   entity_type,
   filters,
   scFindParams = {},
+  dataProductID,
 }: {
   entity_type: 'Donor' | 'Dataset' | 'Sample';
   filters?: FiltersType<string[]>;
   scFindParams?: SCFindParams;
+  dataProductID?: string;
 }) {
-  if (!filters && !Object.keys(scFindParams).length) {
+  if (!filters && !Object.keys(scFindParams).length && !dataProductID) {
     return `/search/${entity_type.toLowerCase()}s`;
   }
 
@@ -380,12 +391,13 @@ export function buildSearchLink({
     }
   }
 
-  const hasRemaining = Object.keys(remainingFilters).length > 0 || Object.keys(scFindParams).length > 0;
-  const qValue = hasRemaining
-    ? LZString.compressToEncodedURIComponent(JSON.stringify({ filters: remainingFilters, scFindParams }))
-    : null;
+  // scFind queries and the data product ID are emitted as readable params (below), not in `q`.
+  const qValue =
+    Object.keys(remainingFilters).length > 0
+      ? LZString.compressToEncodedURIComponent(JSON.stringify({ filters: remainingFilters }))
+      : null;
 
-  const urlParams = serializeReadableParams({
+  const urlParams = serializeReadableParams(buildScFindAndDataProductParams({ scFindParams, dataProductID }), {
     organ: readableParamValues['organ'] ?? [],
     analyte: readableParamValues['analyte'] ?? [],
     dataset_type: readableParamValues['dataset_type'] ?? [],
@@ -409,13 +421,18 @@ export function createDatasetSearchLink(values: Record<string, string[]>) {
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, filters, includeSupersededEntities } = state;
+  const { search, sortField, filters, includeSupersededEntities, scFindParams, dataProductID } = state;
+
+  // When the uuid filter was derived from scFind / data product params, keep those compact readable
+  // params as the source of truth (re-resolved on load) rather than serializing every UUID into `q`.
+  const uuidIsDerived = Boolean(scFindParams && Object.keys(scFindParams).length > 0) || Boolean(dataProductID);
 
   const readableParamValues: Record<string, string[]> = {};
   const remainingFilters: FiltersType = {};
 
   for (const [field, filter] of Object.entries(filters)) {
     if (!filterHasValues({ filter })) continue;
+    if (uuidIsDerived && field === 'uuid') continue;
     const paramName = READABLE_PARAM_FIELDS[field as keyof typeof READABLE_PARAM_FIELDS];
     if (paramName) {
       if (isTermFilter(filter)) {
@@ -438,7 +455,7 @@ function replaceURLSearchParams(state: SearchStoreState) {
       )
     : null;
 
-  const urlParams = serializeReadableParams({
+  const urlParams = serializeReadableParams(buildScFindAndDataProductParams({ scFindParams, dataProductID }), {
     organ: readableParamValues['organ'] ?? [],
     analyte: readableParamValues['analyte'] ?? [],
     dataset_type: readableParamValues['dataset_type'] ?? [],

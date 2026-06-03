@@ -242,7 +242,7 @@ export function DataProductsTable({
           <TableCell>
             <ViewEntitiesButton
               entityType="Dataset"
-              filters={{ datasetUUIDs }}
+              filters={{ dataProductID: data_product_id }}
               count={datasetUUIDs?.length}
               formatCount={formatCount}
               onClick={() => {

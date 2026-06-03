@@ -1,5 +1,6 @@
 import LZString from 'lz-string';
 import { createSerializer, parseAsArrayOf, parseAsString } from 'nuqs';
+import type { SCFindParams } from '../organ/utils';
 import { parseURLState } from './store';
 import type { SearchURLState } from './store';
 
@@ -40,6 +41,66 @@ export const readableParamsSchema = {
 };
 
 export const serializeReadableParams = createSerializer(readableParamsSchema);
+
+/** URL param name for the scFind "indexed datasets only" flag. */
+const SCFIND_ONLY_PARAM = 'scfind';
+/** URL param name for scFind gene queries (repeated, e.g. `genes=CD4&genes=CD8A`). */
+const GENES_PARAM = 'genes';
+/** URL param name for scFind cell-type queries (repeated; values may contain commas). */
+const CELL_TYPES_PARAM = 'cell_types';
+/** URL param name for an integrated map's data product ID. */
+const DATA_PRODUCT_PARAM = 'data_product';
+
+/**
+ * Encodes scFind query params and a data product ID as their own readable URL params, rather than
+ * folding them into the opaque compressed `q` blob. Gene and cell-type lists use repeated params
+ * (e.g. `genes=A&genes=B`) so that values containing commas — like some CL cell-type labels —
+ * survive the round-trip, since comma-joined params are split on commas when parsed.
+ *
+ * Returns a `URLSearchParams` suitable for passing as the base to `serializeReadableParams`.
+ */
+export function buildScFindAndDataProductParams({
+  scFindParams,
+  dataProductID,
+}: {
+  scFindParams?: SCFindParams;
+  dataProductID?: string;
+}): URLSearchParams {
+  const params = new URLSearchParams();
+  if (scFindParams?.scFindOnly) {
+    params.set(SCFIND_ONLY_PARAM, 'true');
+  }
+  (scFindParams?.genes ?? []).forEach((gene) => params.append(GENES_PARAM, gene));
+  (scFindParams?.cellTypes ?? []).forEach((cellType) => params.append(CELL_TYPES_PARAM, cellType));
+  if (dataProductID) {
+    params.set(DATA_PRODUCT_PARAM, dataProductID);
+  }
+  return params;
+}
+
+/**
+ * Reads the scFind / data product readable params produced by {@link buildScFindAndDataProductParams}.
+ * Uses `getAll` without comma-splitting so comma-containing cell-type names are preserved.
+ */
+export function parseScFindAndDataProductParams(params: URLSearchParams): {
+  scFindParams?: SCFindParams;
+  dataProductID?: string;
+} {
+  const genes = params.getAll(GENES_PARAM).filter(Boolean);
+  const cellTypes = params.getAll(CELL_TYPES_PARAM).filter(Boolean);
+  const scFindOnly = params.get(SCFIND_ONLY_PARAM) === 'true';
+  const dataProduct = params.get(DATA_PRODUCT_PARAM);
+
+  const scFindParams: SCFindParams = {};
+  if (scFindOnly) scFindParams.scFindOnly = true;
+  if (genes.length > 0) scFindParams.genes = genes;
+  if (cellTypes.length > 0) scFindParams.cellTypes = cellTypes;
+
+  return {
+    ...(Object.keys(scFindParams).length > 0 && { scFindParams }),
+    ...(dataProduct && { dataProductID: dataProduct }),
+  };
+}
 
 /**
  * Encodes a hierarchical filter's values map into dot-notation URL param strings.
@@ -133,8 +194,13 @@ export function parseReadableParams(search: string): Partial<SearchURLState> {
     ...filters,
   };
 
+  // scFind / data product readable params take precedence over any legacy values from the `q` blob.
+  const { scFindParams, dataProductID } = parseScFindAndDataProductParams(params);
+
   return {
     ...remainingState,
     filters: mergedFilters,
+    ...(scFindParams && { scFindParams }),
+    ...(dataProductID && { dataProductID }),
   };
 }

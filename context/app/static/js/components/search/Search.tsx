@@ -21,6 +21,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
+import useDataProduct from 'js/api/dataProducts/useDataProduct';
 import { ListsIcon } from 'js/shared-styles/icons';
 import {
   SearchStoreProvider,
@@ -253,6 +254,22 @@ function SCFindAlert() {
   return null;
 }
 
+function DataProductAlert() {
+  const dataProductID = useSearchStore((state) => state.dataProductID);
+  // Reuses the SWR cache populated while resolving the data product's datasets, so no extra request is made.
+  const { dataProduct } = useDataProduct(dataProductID);
+
+  if (!dataProductID) {
+    return null;
+  }
+
+  const mapName = dataProduct
+    ? `the ${dataProduct.tissue.tissuetype} ${dataProduct.assay.assayName} integrated map`
+    : 'the selected integrated map';
+
+  return <Alert severity="info">Displaying datasets included in {mapName}.</Alert>;
+}
+
 const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
   const [mode] = useSearchMode();
   const { enableSaySeeMode } = useAppContext();
@@ -263,6 +280,7 @@ const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
+      <DataProductAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <SearchNote />
@@ -358,6 +376,9 @@ function useInitialURLState() {
   // scFind hooks are conditionally enabled based on URL parameters
   const [scFindParams, setScFindParams] = useState<SCFindParams | null>(null);
 
+  // Data product lookup is conditionally enabled based on URL parameters
+  const [dataProductID, setDataProductID] = useState<string | null>(null);
+
   const shouldCallIndexedDatasets = Boolean(scFindParams?.scFindOnly);
   const shouldCallGeneDatasets = Boolean(scFindParams?.genes?.length);
   const shouldCallCellTypeDatasets = Boolean(scFindParams?.cellTypes?.length);
@@ -369,6 +390,9 @@ function useInitialURLState() {
   const cellTypeDatasets = useFindDatasetForCellTypes({
     cellTypes: shouldCallCellTypeDatasets ? (scFindParams?.cellTypes ?? []) : [],
   });
+  const { datasetUUIDs: dataProductDatasetUUIDs, isLoading: isLoadingDataProduct } = useDataProduct(
+    dataProductID ?? undefined,
+  );
 
   useEffect(() => {
     const locationSearch = history?.location?.search ?? '';
@@ -397,6 +421,12 @@ function useInitialURLState() {
           genes: parsedScFindParams.genes,
           cellTypes: parsedScFindParams.cellTypes,
         });
+      }
+
+      // Check if a data product ID exists in the parsed state; its datasets are resolved below.
+      if (searchParams.dataProductID) {
+        isDoneLoading = false;
+        setDataProductID(searchParams.dataProductID);
       }
 
       setInitialUrlState({ filters: {}, ...searchParams });
@@ -462,6 +492,28 @@ function useInitialURLState() {
     shouldCallGeneDatasets,
     shouldCallCellTypeDatasets,
   ]);
+
+  // Effect to update the initial URL state with UUID filters resolved from a data product
+  useEffect(() => {
+    if (!dataProductID || isLoadingDataProduct) {
+      return;
+    }
+
+    if (dataProductDatasetUUIDs.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
+      setInitialUrlState((prevState) => ({
+        ...prevState,
+        filters: {
+          ...prevState.filters,
+          uuid: {
+            type: FACETS.term,
+            values: dataProductDatasetUUIDs,
+          },
+        },
+      }));
+    }
+    setHasLoadedURLState(true);
+  }, [dataProductID, dataProductDatasetUUIDs, isLoadingDataProduct]);
 
   return { initialUrlState, hasLoadedURLState };
 }
