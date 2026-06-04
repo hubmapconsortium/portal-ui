@@ -1,6 +1,7 @@
 from functools import cache
 from itertools import islice
 import json
+import re
 from urllib.parse import urlparse
 import requests as http_requests
 from flask import current_app, request, session, Blueprint
@@ -264,6 +265,16 @@ def first_n_matches(strings, substring, n):
 
 EXTERNAL_REQUEST_TIMEOUT = 30  # seconds for external API calls (scFind, UBKG, etc.)
 
+# Reactome stable identifier, e.g. "R-HSA-8953897" (optionally versioned, "...8953897.2").
+# Pathway codes arrive from the client and are interpolated into the UBKG request URL, so we
+# constrain them to this exact shape to prevent URL/path injection from user-supplied values.
+PATHWAY_CODE_RE = re.compile(r'R-[A-Z]{3}-\d+(?:\.\d+)?')
+
+
+def is_valid_pathway_code(pathway_code):
+    """Return True iff ``pathway_code`` is a well-formed Reactome stable identifier."""
+    return isinstance(pathway_code, str) and PATHWAY_CODE_RE.fullmatch(pathway_code) is not None
+
 
 @cache
 def fetch_pathway_participants(pathway_code):
@@ -276,6 +287,11 @@ def fetch_pathway_participants(pathway_code):
     Returns:
         List of HGNC gene symbols from the pathway
     """
+    # Re-validate at the sink: ``pathway_code`` is interpolated into the request URL below,
+    # so reject anything that isn't a Reactome ID before issuing the request (defense in depth
+    # for callers that don't go through parse_pathway_genes_request).
+    if not isinstance(pathway_code, str) or not PATHWAY_CODE_RE.fullmatch(pathway_code):
+        raise ValueError(f'Invalid pathway code: {pathway_code!r}')
     ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
     url = f'{ubkg_endpoint}/pathways/{pathway_code}/participants'
 
@@ -307,8 +323,8 @@ def parse_pathway_genes_request():
     Validate the JSON body shared by the /cells and /scfind pathway-genes endpoints.
 
     Returns:
-        ``(data, None)`` when the request is JSON containing a ``pathway_code``, or
-        ``(None, (error_payload, status))`` otherwise. Callers return the error tuple
+        ``(data, None)`` when the request is JSON containing a well-formed ``pathway_code``,
+        or ``(None, (error_payload, status))`` otherwise. Callers return the error tuple
         directly (Flask serializes the dict to JSON).
     """
     if not request.is_json:
@@ -316,6 +332,10 @@ def parse_pathway_genes_request():
     data = request.get_json()
     if not data or 'pathway_code' not in data:
         return None, ({'error': 'Missing "pathway_code" in request body'}, 400)
+    # Reject malformed pathway codes at the boundary so clients get a clear 400 rather than a
+    # 500 from the sink guard; the value is later interpolated into the UBKG request URL.
+    if not is_valid_pathway_code(data['pathway_code']):
+        return None, ({'error': 'Invalid "pathway_code" format.'}, 400)
     return data, None
 
 

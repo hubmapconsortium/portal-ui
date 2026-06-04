@@ -696,6 +696,17 @@ class TestPathwayGenes:
         data = response.get_json()
         assert data['error'] == 'Missing "pathway_code" in request body'
 
+    @pytest.mark.parametrize(
+        'pathway_code',
+        ['../../admin', 'R-HSA-1/../../x', 'not-a-code', 'R-HSA-', 123],
+    )
+    def test_pathway_genes_invalid_code(self, client, pathway_code):
+        """Malformed pathway codes are rejected before any UBKG request is issued."""
+        response = client.post('/scfind/pathway-genes', json={'pathway_code': pathway_code})
+        assert response.status_code == 400
+        data = response.get_json()
+        assert data['error'] == 'Invalid "pathway_code" format.'
+
     def test_pathway_genes_ubkg_error(self, client, mocker):
         """Test pathway genes when UBKG fetch fails."""
         mocker.patch(
