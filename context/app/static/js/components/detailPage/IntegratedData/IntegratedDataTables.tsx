@@ -60,9 +60,21 @@ interface IntegratedDataTablesProps {
   entities: Entity[];
   tableTooltips?: Partial<Record<IntegratedEntityTypes, string>>;
   isLoading?: boolean;
+  /**
+   * Whether queries built by this table should apply the default-query restriction
+   * (which excludes documents with `next_revision_uuid` or `sub_status`). Defaults
+   * to true for compatibility with general detail-page surfaces. Publications pass
+   * `false` because they reference specific older dataset versions.
+   */
+  useDefaultQuery?: boolean;
 }
 
-function IntegratedDataTables({ entities: entityList, tableTooltips, isLoading }: IntegratedDataTablesProps) {
+function IntegratedDataTables({
+  entities: entityList,
+  tableTooltips,
+  isLoading,
+  useDefaultQuery = true,
+}: IntegratedDataTablesProps) {
   const entitiesTableConfig: EntitiesTabTypes<Entity>[] = useMemo(() => {
     const integratedEntityList = entityList.filter(isIntegratedEntity);
 
@@ -146,6 +158,7 @@ function IntegratedDataTables({ entities: entityList, tableTooltips, isLoading }
       resetSelectionOnTabChange
       maxHeight={600}
       isLoading={isLoading}
+      useDefaultQuery={useDefaultQuery}
     />
   );
 }

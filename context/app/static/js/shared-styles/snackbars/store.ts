@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 
 import { Severity, SnackbarMessage } from './types';
 
@@ -57,13 +58,15 @@ const useStore = create<SnackbarProviderState>((set, get) => ({
 }));
 
 const useSnackbarActions = () => {
-  return useStore((store) => ({
-    toastError: store.toastError,
-    toastInfo: store.toastInfo,
-    toastWarning: store.toastWarning,
-    toastSuccess: store.toastSuccess,
-    closeSnackbar: store.closeSnackbar,
-  }));
+  return useStore(
+    useShallow((store) => ({
+      toastError: store.toastError,
+      toastInfo: store.toastInfo,
+      toastWarning: store.toastWarning,
+      toastSuccess: store.toastSuccess,
+      closeSnackbar: store.closeSnackbar,
+    })),
+  );
 };
 
 export { useStore as useSnackbarStore, useSnackbarActions };

@@ -21,9 +21,9 @@ NO_UV=0
 optspec=":hnps-:"
 while getopts "$optspec" optchar; do
     case "${optchar}" in
-        h) echo "usage: $0 [-h] [-n | --no-npm-install] [-p | --no-uv-install] [-s | --skip-install]"
+        h) echo "usage: $0 [-h] [-n | --no-pnpm-install] [-p | --no-uv-install] [-s | --skip-install]"
            echo "  -h: show this help message"
-           echo "  -n: skip npm install"
+           echo "  -n: skip pnpm install"
            echo "  -p: skip uv sync"
            echo "  -s: skip both installs"
            exit 0
@@ -35,9 +35,9 @@ while getopts "$optspec" optchar; do
                     NO_UV=1
                     echo "Skipping both installs due to arg: '--${OPTARG}'";
                     ;;
-                no-npm-install)
+                no-npm-install|no-pnpm-install)
                     NO_NPM=1
-                    echo "Skipping npm install due to arg: '--${OPTARG}'";
+                    echo "Skipping pnpm install due to arg: '--${OPTARG}'";
                     ;;
                 no-pip-install|no-uv-install)
                     NO_UV=1
@@ -55,7 +55,7 @@ while getopts "$optspec" optchar; do
             ;;
         n)
             NO_NPM=1
-            echo "Skipping npm install due to arg: '-${optchar}'"
+            echo "Skipping pnpm install due to arg: '-${optchar}'"
             ;;
         s)
             NO_NPM=1
@@ -81,17 +81,24 @@ fi
 
 etc/dev/copy-app-conf.sh
 
-cd $CONTEXT
-if [ "$NO_NPM" -lt 1 ] ; then 
-  npm install
+if [ "$NO_NPM" -lt 1 ] ; then
+  pnpm install
 fi
 
 # Start subprocesses
+cd $CONTEXT
+
+# Remove any stale production build output (app/static/public) left behind by a
+# prior `pnpm build`. Flask only runs in Vite dev mode when no manifest.json is
+# present (see flask_static_digest.vite_dev_mode); otherwise it serves the
+# prebuilt hashed bundle off disk, masking local source changes behind a stale
+# build. No-op when the dir is already absent.
+pnpm run clean
 
 FLASK_APP="app/main.py" python -m flask run --debug &
 
-npm run lint || die 'Try "npm run lint:fix"'
-npm run dev-server &
-npm run storybook &
+pnpm run lint || die 'Try "pnpm run lint:fix"'
+pnpm run dev-server &
+pnpm run storybook &
 
 wait

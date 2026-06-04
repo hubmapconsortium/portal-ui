@@ -1,13 +1,14 @@
+import { type MockedFunction } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import EntityTable from './EntityTable';
 import { Column } from './types';
 
 // Mock the hooks
-jest.mock('js/hooks/useScrollTable');
+vi.mock('js/hooks/useScrollTable');
 import useScrollTable from 'js/hooks/useScrollTable';
 
-const mockUseScrollTable = useScrollTable as jest.MockedFunction<typeof useScrollTable>;
+const mockUseScrollTable = useScrollTable as MockedFunction<typeof useScrollTable>;
 
 interface TestEntity {
   hubmap_id: string;
@@ -47,20 +48,20 @@ describe('EntityTable Custom Sorting', () => {
       isLoading: false,
       totalHitsCount: 0,
       sortState: { columnId: 'hubmap_id', direction: 'desc' },
-      setSort: jest.fn(),
-      fetchMoreOnBottomReached: jest.fn(),
+      setSort: vi.fn(),
+      fetchMoreOnBottomReached: vi.fn(),
       virtualRows: [],
       tableBodyPadding: { top: 0, bottom: 0 },
       tableContainerRef: { current: null },
       aggregationsLoading: false,
-      setColumnFilter: jest.fn(),
-      clearColumnFilter: jest.fn(),
-      clearAllFilters: jest.fn(),
-      toggleFilterValue: jest.fn(),
-      getColumnValues: jest.fn(() => []),
-      getColumnSelectedValues: jest.fn(() => new Set()),
-      toggleRowExpansion: jest.fn(),
-      isRowExpanded: jest.fn(() => false),
+      setColumnFilter: vi.fn(),
+      clearColumnFilter: vi.fn(),
+      clearAllFilters: vi.fn(),
+      toggleFilterValue: vi.fn(),
+      getColumnValues: vi.fn(() => []),
+      getColumnSelectedValues: vi.fn(() => new Set<string>()),
+      toggleRowExpansion: vi.fn(),
+      isRowExpanded: vi.fn(() => false),
     });
   });
 

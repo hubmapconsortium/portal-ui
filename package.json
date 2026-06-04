@@ -1,0 +1,38 @@
+{
+  "name": "portal-ui-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Workspace root for portal-ui (context) and portal-ui-tests (end-to-end).",
+  "packageManager": "pnpm@10.27.0",
+  "scripts": {
+    "prepare": "husky",
+    "tsc": "pnpm --filter ./context run tsc",
+    "lint": "pnpm --filter ./context run lint",
+    "lint:fix": "pnpm --filter ./context run lint:fix",
+    "test": "pnpm --filter ./context run test",
+    "test:watch": "pnpm --filter ./context run test:watch",
+    "build": "pnpm --filter ./context run build",
+    "dev-server": "pnpm --filter ./context run dev-server",
+    "storybook": "pnpm --filter ./context run storybook"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "canvas",
+      "cypress",
+      "esbuild",
+      "msw",
+      "protobufjs",
+      "unrs-resolver"
+    ],
+    "overrides": {
+      "react": "^19.2.6",
+      "react-dom": "^19.2.6",
+      "@types/react": "^19.2.15",
+      "@types/react-dom": "^19.2.3"
+    }
+  }
+}

@@ -46,6 +46,14 @@ class DefaultConfig(object):
     UKV_ENDPOINT = 'should-be-overridden'
     SCFIND_ENDPOINT = 'should-be-overridden'
     SCFIND_DEFAULT_INDEX_VERSION = ''
+    # Directory backing the cross-process scfind map cache. None -> a subdir of
+    # the system temp dir (writable by the non-root container user, ephemeral).
+    SCFIND_CACHE_DIR = None
+    # Max age (seconds) of a cached scfind map before it is rebuilt. Bounds
+    # staleness in development (default 1 day), where the cache persists across
+    # restarts. In production gunicorn regenerates on each server start (see the
+    # SCFIND_CACHE_TOKEN set in gunicorn.conf.py). None/0 disables expiry.
+    SCFIND_CACHE_TTL = 86400
     DATA_PRODUCTS_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
@@ -56,4 +64,17 @@ class DefaultConfig(object):
     PROTOCOLS_IO_CLIENT_SECRET = 'should-be-overridden'
     PROTOCOLS_IO_CLIENT_AUTH_TOKEN = 'should-be-overridden'
 
-    SENTRY_ENV = 'should-be-overridden'
+    # Optional: server-side OpenAI key used by the UDIAgent for authenticated
+    # HuBMAP-Read users. If unset, all callers must supply X-OpenAI-Key.
+    OPENAI_API_KEY = None
+    UDI_GPT_MODEL_NAME = 'gpt-5.4'
+
+    # Optional: Langfuse observability for UDIAgent. Tracing is enabled when
+    # any of these is set; otherwise the plain OpenAI client is used.
+    LANGFUSE_PUBLIC_KEY = None
+    LANGFUSE_SECRET_KEY = None
+    LANGFUSE_BASE_URL = None
+
+    # Gates the Say & See Mode (BETA) front-end. When False, the search page
+    # hides the mode tabs and promo alert, leaving only Filter & Browse mode.
+    ENABLE_SAY_SEE_MODE = False

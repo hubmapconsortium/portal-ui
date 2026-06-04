@@ -20,7 +20,7 @@ test('should return the props require for the panel list', () => {
 
   expect(buildCollectionsPanelsProps(collections)).toEqual([
     {
-      key: 'abc123',
+      panelKey: 'abc123',
       href: '/browse/collection/abc123',
       title: 'Collection ABC',
       secondaryText: 'HBM_ABC123',

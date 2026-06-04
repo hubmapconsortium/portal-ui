@@ -5,7 +5,7 @@ import { SearchStoreProvider } from '../store';
 import FacetSearchCombobox from './FacetSearchCombobox';
 
 // Mock useSearch to provide aggregation data
-jest.mock('../Search', () => ({
+vi.mock('../Search', () => ({
   useSearch: () => ({
     aggregations: {
       group_name: {
@@ -29,8 +29,8 @@ jest.mock('../Search', () => ({
     isLoading: false,
     totalHitsCount: 0,
     error: undefined,
-    loadMore: jest.fn(),
-    setSize: jest.fn(),
+    loadMore: vi.fn(),
+    setSize: vi.fn(),
     isReachingEnd: true,
   }),
 }));

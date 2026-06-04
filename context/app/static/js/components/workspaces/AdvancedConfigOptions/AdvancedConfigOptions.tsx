@@ -75,7 +75,7 @@ function ConfigSlider<FormType extends FieldValues>({
           onChange={(e, value) => {
             field.onChange({
               ...field.value,
-              [id]: unconvert(value as number, conversionFactor),
+              [id]: unconvert(value, conversionFactor),
             });
           }}
           valueLabelDisplay="auto"

@@ -13,8 +13,9 @@ function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: Searc
   const {
     _source: { hubmap_id, assay_display_name, origin_samples_unique_mapped_organs },
   } = option;
+  const { key, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
   return (
-    <li {...props}>
+    <li key={key} {...rest}>
       <div>
         <Typography variant="subtitle1">{hubmap_id}</Typography>
         <Typography variant="body2">

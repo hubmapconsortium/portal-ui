@@ -3,7 +3,7 @@ import { useEventCallback } from '@mui/material/utils';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Hidden from '@mui/material/Hidden';
+import Box from '@mui/material/Box';
 import { trackEvent } from 'js/helpers/trackers';
 import { InternalLink } from 'js/shared-styles/Links';
 import { HeroTabContainer } from './styles';
@@ -11,7 +11,7 @@ import { useHeroTabContext } from './HeroTabsContext';
 
 interface HeroTabActionProps {
   title: string;
-  icon: ReactElement;
+  icon: ReactElement<unknown>;
   tabTitle: string;
   onClick?: () => void;
   href?: string;
@@ -44,7 +44,7 @@ function HeroTabAction({ title, icon, tabTitle, onClick, href }: HeroTabActionPr
 export interface HeroTabProps {
   title: string;
   description: string;
-  icon: ReactElement;
+  icon: ReactElement<unknown>;
   isCurrent?: boolean;
   bgColor?: string;
   actions?: Omit<HeroTabActionProps, 'tabTitle'>[];
@@ -61,9 +61,12 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
 
   return (
     <>
-      <Hidden mdDown>
+      {/* `display: contents` so the wrapper doesn't interfere with the
+          parent's CSS grid: HeroImageSlide places itself into the `panel`
+          grid area and needs to be a direct grid child at md+. */}
+      <Box sx={{ display: { xs: 'none', md: 'contents' } }}>
         <Content {...props} />
-      </Hidden>
+      </Box>
       <HeroTabContainer
         $index={index}
         $activeSlide={activeTab}
@@ -78,9 +81,9 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
         aria-controls={`tabpanel-${index}`}
         id={`tab-${index}`}
       >
-        <Hidden mdUp>
+        <Box sx={{ display: { xs: 'contents', md: 'none' } }}>
           <Content {...props} />
-        </Hidden>
+        </Box>
         <Stack p={2} spacing={1}>
           <Stack direction="row" spacing={1}>
             {icon}

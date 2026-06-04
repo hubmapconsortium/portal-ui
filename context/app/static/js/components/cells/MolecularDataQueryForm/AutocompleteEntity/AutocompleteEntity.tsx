@@ -154,26 +154,29 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           Boolean(option.full === value.full || option.values?.some((v) => v === value.full))
         }
         loading={isLoading || isLoadingFromPathway}
-        renderOption={(props, option) => (
-          <PreserveWhiteSpaceListItem {...props} key={option.full}>
-            <span>{option.pre}</span>
-            <b>{option.match}</b>
-            <span>{option.post}</span>
-            {option?.tags && (
-              <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
-                {option?.tags?.map((tag) => (
-                  <Chip
-                    key={tag}
-                    label={tag}
-                    size="small"
-                    variant="filled"
-                    sx={{ ml: 'auto', background: chipColors(tag) }}
-                  />
-                ))}
-              </Box>
-            )}
-          </PreserveWhiteSpaceListItem>
-        )}
+        renderOption={(props, option) => {
+          const { key: _propsKey, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
+          return (
+            <PreserveWhiteSpaceListItem key={option.full} {...rest}>
+              <span>{option.pre}</span>
+              <b>{option.match}</b>
+              <span>{option.post}</span>
+              {option?.tags && (
+                <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
+                  {option?.tags?.map((tag) => (
+                    <Chip
+                      key={tag}
+                      label={tag}
+                      size="small"
+                      variant="filled"
+                      sx={{ ml: 'auto', background: chipColors(tag) }}
+                    />
+                  ))}
+                </Box>
+              )}
+            </PreserveWhiteSpaceListItem>
+          );
+        }}
         slotProps={{
           clearIndicator: {
             component: ClearIndicator,

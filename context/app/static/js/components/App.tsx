@@ -50,6 +50,7 @@ function App(props: AppProps) {
 
   const { endpoints = {}, globalAlertMd, ...flaskDataWithoutEndpoints } = flaskData;
   const isHubmapUser = userGroups?.includes('HuBMAP');
+
   const isWorkspacesUser = userGroups?.includes('Workspaces') || isHubmapUser;
 
   return (
@@ -62,7 +63,7 @@ function App(props: AppProps) {
         workspacesToken={workspacesToken}
         isWorkspacesUser={isWorkspacesUser}
         isHubmapUser={isHubmapUser}
-        flaskData={flaskDataWithoutEndpoints as FlaskData}
+        flaskData={flaskDataWithoutEndpoints}
         userFirstName={userFirstName}
         userLastName={userLastName}
         userGlobusId={userGlobusId}

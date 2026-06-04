@@ -1,6 +1,14 @@
 import useSWR from 'swr';
-import { fetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import {
+  cellTypeNameContainsComma,
+  createScFindKey,
+  createScFindPostRequest,
+  ScFindRequest,
+  scFindFetcher,
+  stringOrArrayToString,
+  toArray,
+  useScFindKey,
+} from './utils';
 
 export interface EvaluateMarkersParams {
   geneList: string | string[];
@@ -10,7 +18,7 @@ export interface EvaluateMarkersParams {
   includePrefix?: boolean;
 }
 
-type EvaluateMarkersKey = string;
+type EvaluateMarkersKey = ScFindRequest;
 
 interface EvaluateMarkersResponse {
   evaluateMarkers: unknown;
@@ -21,6 +29,20 @@ export function createCellTypeMarkersKey(
   { geneList, cellTypes, backgroundCellTypes, sortField, includePrefix }: EvaluateMarkersParams,
   scFindIndexVersion?: string,
 ): EvaluateMarkersKey {
+  if (cellTypeNameContainsComma(cellTypes) || cellTypeNameContainsComma(backgroundCellTypes)) {
+    return createScFindPostRequest(
+      scFindEndpoint,
+      'evaluateMarkers',
+      {
+        gene_list: toArray(geneList),
+        cell_types: toArray(cellTypes),
+        background_cell_types: backgroundCellTypes,
+        sort_field: sortField,
+        include_prefix: includePrefix,
+      },
+      scFindIndexVersion,
+    );
+  }
   return createScFindKey(
     scFindEndpoint,
     'evaluateMarkers',
@@ -38,5 +60,5 @@ export function createCellTypeMarkersKey(
 export default function useEvaluateMarkers(params: EvaluateMarkersParams) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCellTypeMarkersKey(scFindEndpoint, params, scFindIndexVersion);
-  return useSWR<EvaluateMarkersResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));
+  return useSWR<EvaluateMarkersResponse, unknown, EvaluateMarkersKey>(key, scFindFetcher);
 }

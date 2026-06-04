@@ -73,19 +73,19 @@ export default function OrgansPanelList({ organs, isLoading = false }: OrgansPan
       return [
         {
           children: <>No results found. Try searching for a different organ name or UBERON ID.</>,
-          key: 'no-results',
+          panelKey: 'no-results',
         },
       ];
     }
 
     const propsList: PanelProps[] = [
       {
-        key: 'header',
+        panelKey: 'header',
         noPadding: true,
         children: <OrgansPanel.Header />,
       },
       ...sortedOrgans.map((organ) => ({
-        key: organ.name,
+        panelKey: organ.name,
         noPadding: true,
         noHover: false,
         children: <OrgansPanel.Item organ={organ} href={`/organs/${encodeURIComponent(organ.name.toLowerCase())}`} />,

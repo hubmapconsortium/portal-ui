@@ -31,9 +31,9 @@ function renderWithStore(filters: FiltersType, facets: FacetsType = {}) {
 }
 
 describe('FilterChips', () => {
-  it('renders "0 Filters Selected" when no active filters', () => {
+  it('renders "No active filters" when no filters are active', () => {
     renderWithStore({});
-    expect(screen.getByText('0 Filters Selected')).toBeInTheDocument();
+    expect(screen.getByText('No active filters')).toBeInTheDocument();
   });
 
   it('renders a single term filter chip', () => {

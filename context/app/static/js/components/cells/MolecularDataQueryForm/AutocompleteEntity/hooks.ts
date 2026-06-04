@@ -190,6 +190,10 @@ export function useSelectedPathwayParticipants() {
   const [isLoadingPathwayGenes, setIsLoadingPathwayGenes] = useState(false);
   const [invalidGenes, setInvalidGenes] = useState<string[]>([]);
   const [allGenesExcludedPathway, setAllGenesExcludedPathway] = useState<string | null>(null);
+  // Valid pathway genes surfaced to the render (mirrors previousScFindGenesRef, which the
+  // effect still reads/writes across renders). Kept in state so React re-renders when it changes
+  // and so render never reads a ref's `.current` (react-hooks/refs).
+  const [participants, setParticipants] = useState<string[]>([]);
 
   const selectedPathway = watch('pathway');
   const queryMethod = watch('queryMethod'); // Watch the query method
@@ -255,6 +259,7 @@ export function useSelectedPathwayParticipants() {
 
               previousPathwayCodeRef.current = pathwayCode;
               previousScFindGenesRef.current = validGenes;
+              setParticipants(validGenes);
 
               const genes = validGenes.map((gene) => ({
                 full: gene,
@@ -299,6 +304,7 @@ export function useSelectedPathwayParticipants() {
 
               previousPathwayCodeRef.current = pathwayCode;
               previousScFindGenesRef.current = validGenes;
+              setParticipants(validGenes);
 
               const genes = validGenes.map((gene) => ({
                 full: gene,
@@ -332,6 +338,7 @@ export function useSelectedPathwayParticipants() {
               const filteredGenes = currentGenes.filter((gene) => !previousScFindGenesRef.current.includes(gene.full));
               setValue('genes', filteredGenes);
               previousScFindGenesRef.current = [];
+              setParticipants([]);
               previousPathwayCodeRef.current = undefined;
             }
           }
@@ -362,9 +369,6 @@ export function useSelectedPathwayParticipants() {
     isScFind,
     toastError,
   ]);
-
-  // Both scFind and crossModality paths store valid genes in previousScFindGenesRef
-  const participants = previousScFindGenesRef.current;
 
   return {
     pathwayName,

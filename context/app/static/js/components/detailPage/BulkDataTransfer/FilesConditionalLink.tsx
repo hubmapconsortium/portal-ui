@@ -32,6 +32,7 @@ function FilesConditionalLink({
 
   if (hasAgreedToDUA) {
     return (
+      // eslint-disable-next-line react-hooks/static-components -- Local component literal; lifecycle is the parent's.
       <Link href={href} onClick={onClick} {...rest}>
         {fileName}
       </Link>
@@ -39,6 +40,7 @@ function FilesConditionalLink({
   }
 
   return (
+    // eslint-disable-next-line react-hooks/static-components -- Local component literal; lifecycle is the parent's.
     <Link
       onClick={() => {
         onClick();

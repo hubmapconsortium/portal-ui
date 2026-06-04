@@ -32,9 +32,7 @@ function ProvVisInner() {
     () =>
       storedNodes.map((node) => ({
         ...node,
-        data: { ...node.data, isSelected: node.id === selectedNodeId } as typeof node.data & {
-          isSelected: boolean;
-        },
+        data: { ...node.data, isSelected: node.id === selectedNodeId },
       })),
     [storedNodes, selectedNodeId],
   );
@@ -42,7 +40,9 @@ function ProvVisInner() {
   // Focus on the current entity node on initial load
   useEffect(() => {
     if (nodesWithSelection.length > 0 && !hasFocusedRef.current) {
-      const currentEntityNode = nodesWithSelection.find((node) => node.data?.isCurrentEntity);
+      const currentEntityNode = nodesWithSelection.find(
+        (node) => (node.data as { isCurrentEntity?: boolean })?.isCurrentEntity,
+      );
       if (currentEntityNode) {
         // Wait for ReactFlow to be ready, then focus on the current entity
         setTimeout(() => {

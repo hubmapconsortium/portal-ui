@@ -11,38 +11,42 @@ HuBMAP Data Portal — a Flask + React full-stack application backed by Elastics
 - `context/` — the main source tree (the `app` symlink points here)
   - `app/` — Flask backend (Python routes, templates, config)
   - `app/static/js/` — React frontend source
-  - `build-utils/` — Webpack configs
-  - `package.json` — Node dependencies and scripts
-- `end-to-end/` — Cypress E2E tests (separate package)
+  - `vite.config.mts` / `vite.config.maintenance.mts` — Vite build configs
+  - `package.json` — Node dependencies and scripts (workspace package)
+- `end-to-end/` — Cypress E2E tests (workspace package)
 - `etc/` — development and CI helper scripts
 - `figure-generation/` — static figure asset generation
+- `package.json` + `pnpm-workspace.yaml` — pnpm workspace root (`context` + `end-to-end`)
 - `pyproject.toml` — Python project config (uses `uv` for dependency management)
 
 ## Common Commands
 
-All `npm` commands run from the `context/` directory.
+Package manager is **pnpm** (workspace root at the repo root). `pnpm` commands run from the `context/` directory unless noted; `pnpm install` runs from the repo root.
 
-| Task                                | Command                                                |
-| ----------------------------------- | ------------------------------------------------------ |
-| Start dev servers (webpack + Flask) | `./etc/dev/dev-start.sh`                               |
-| Webpack dev server only (port 5001) | `cd context && npm run dev-server`                     |
-| Run Jest tests                      | `cd context && npm test`                               |
-| Run a single Jest test              | `cd context && npx jest --silent path/to/file.spec.ts` |
-| Jest watch mode                     | `cd context && npm run test:watch`                     |
-| ESLint                              | `cd context && npm run lint`                           |
-| ESLint autofix                      | `cd context && npm run lint:fix`                       |
-| TypeScript type check               | `cd context && npm run tsc`                            |
-| Production build                    | `cd context && npm run build`                          |
-| Storybook (port 6006)               | `cd context && npm run storybook`                      |
-| Python tests                        | `uv run pytest`                                        |
-| Python lint/format                  | `uv run ruff check` / `uv run ruff format`             |
-| Cypress E2E                         | `./etc/test/test-cypress.sh`                           |
+| Task                             | Command                                                       |
+| -------------------------------- | ------------------------------------------------------------- |
+| Install JS deps                  | `pnpm install` (from repo root)                               |
+| Start dev servers (Vite + Flask) | `./etc/dev/dev-start.sh`                                      |
+| Vite dev server only (port 5001) | `cd context && pnpm dev-server`                               |
+| Run Vitest tests                 | `cd context && pnpm test`                                     |
+| Run a single Vitest test         | `cd context && pnpm exec vitest run path/to/file.spec.ts`     |
+| Vitest watch mode                | `cd context && pnpm test:watch`                               |
+| ESLint                           | `cd context && pnpm lint`                                     |
+| ESLint autofix                   | `cd context && pnpm lint:fix`                                 |
+| TypeScript type check            | `cd context && pnpm tsc`                                      |
+| Production build                 | `cd context && pnpm build`                                    |
+| Storybook (port 6006)            | `cd context && pnpm storybook`                                |
+| Python tests                     | `uv run pytest context/app` (scope to `context/app`)          |
+| Python lint/format               | `uv run ruff check context` / `uv run ruff format context`    |
+| Cypress E2E                      | `./etc/test/test-cypress.sh`                                  |
+
+> **Run pytest scoped to `context/app`**, as CI does ([etc/test/test-python.sh](etc/test/test-python.sh)). A bare `uv run pytest` from the repo root collects the whole tree under `--doctest-modules` (per the root `pytest.ini`), which imports `main.py`'s module-level `create_app()` outside testing mode and resolves the instance config to `portal-ui/instance/app.conf` instead of `context/instance/app.conf` — causing spurious collection errors. The config lives at `context/instance/app.conf` (created by `etc/dev/copy-app-conf.sh`).
 
 ## Architecture
 
 ### Hybrid Flask-React Routing
 
-Flask handles server-side routing and renders a template (`react-content.html`) with embedded data. React picks up from there — it reads `window.location.pathname` to render the appropriate page component (no React Router library; manual pathname matching in `Routes.tsx`). The webpack dev server proxies non-static requests to Flask on port 5000.
+Flask handles server-side routing and renders a template (`react-content.html`) with embedded data. React picks up from there — it reads `window.location.pathname` to render the appropriate page component (no React Router library; manual pathname matching in `Routes.tsx`). The Vite dev server (port 5001) proxies any non-Vite-asset request to Flask on port 5000.
 
 ### State Management (Three Tiers)
 
@@ -56,11 +60,15 @@ Flask handles server-side routing and renders a template (`react-content.html`) 
 
 MUI v6 with **styled-components** as the CSS-in-JS engine (not Emotion). Custom theme in `theme/theme.tsx` extends MUI's palette with project-specific colors. Reusable styled components live in `shared-styles/`.
 
-### Webpack Path Aliases
+### Vite Path Aliases
+
+Defined in `context/vite.config.mts`:
 
 - `js` → `./app/static/js/`
 - `assets` → `./app/static/assets/`
 - `shared-styles` → `./app/static/js/shared-styles/`
+- `package` → `./package.json` (for reading `version` at runtime)
+- `@mui/styled-engine` → `@mui/styled-engine-sc` (styled-components engine)
 
 ### Portal-Visualization Integration
 
@@ -69,7 +77,7 @@ The Python package `portal-visualization` (in the sibling `portal-visualization`
 ## File Conventions
 
 - React components live in their own directories under `components/` or `pages/`.
-- Tests: `ComponentName.spec.ts` (Jest, colocated with component)
+- Tests: `ComponentName.spec.ts` / `.spec.tsx` (Vitest, colocated with component)
 - Stories: `ComponentName.stories.tsx` (Storybook, colocated)
 - E2E: `ComponentName.cy.ts` (Cypress, in `end-to-end/`)
 - Each PR must include a `CHANGELOG-<description>.md` file in the repo root, which gets concatenated during deploys.
@@ -85,4 +93,4 @@ The Python package `portal-visualization` (in the sibling `portal-visualization`
 
 - Node: 24.x (see `.nvmrc`)
 - Python: 3.12 (see `.python-version`)
-- Python deps managed with `uv`; Node version managed with `nvm` or `n`
+- Python deps managed with `uv`; Node version managed with `nvm` or `n`; JS deps managed with `pnpm` (version pinned via `packageManager` field in repo-root `package.json`)

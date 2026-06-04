@@ -1,19 +1,20 @@
+import { type MockedFunction } from 'vitest';
 import React from 'react';
 import { render, waitFor } from 'test-utils/functions';
 import useSavedLists from 'js/components/savedLists/hooks';
 import SavedList from './SavedList';
 
-jest.mock('js/components/savedLists/hooks', () => ({
+vi.mock('js/components/savedLists/hooks', () => ({
   __esModule: true,
-  default: jest.fn(),
+  default: vi.fn(),
 })); // Mock the hook
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockedUseSavedLists = useSavedLists as jest.MockedFunction<(...args: any[]) => any>;
+const mockedUseSavedLists = useSavedLists as MockedFunction<(...args: any[]) => any>;
 
 describe('SavedList component', () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Clear all mock instances and calls
+    vi.clearAllMocks(); // Clear all mock instances and calls
   });
 
   test('throws error when listUUID is not in savedLists', () => {
@@ -23,12 +24,12 @@ describe('SavedList component', () => {
     mockedUseSavedLists.mockReturnValue({
       savedLists: {},
       isLoading: false,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     });
 
     // Suppress console.error for this test since we're testing an error scenario
     const originalConsoleError = console.error;
-    console.error = jest.fn();
+    console.error = vi.fn();
 
     expect(() => render(<SavedList listUUID={listUUID} />)).toThrow('This list does not exist.');
 
@@ -51,7 +52,7 @@ describe('SavedList component', () => {
         },
       },
       isLoading: false,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     });
 
     const { container } = render(<SavedList listUUID={listUUID} />);

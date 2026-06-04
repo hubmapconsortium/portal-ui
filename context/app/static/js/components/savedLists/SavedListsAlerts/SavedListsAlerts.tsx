@@ -1,4 +1,5 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import Button from '@mui/material/Button';
 
 import {
@@ -17,7 +18,7 @@ const savedListsStoreSelector = (state: SavedListsAlertsState) => ({
 });
 
 function SavedListsSuccessAlert({ fromSavedLists }: { fromSavedLists?: boolean }) {
-  const { successAlert, setSuccessAlert } = useSavedListsAlertsStore(savedListsStoreSelector);
+  const { successAlert, setSuccessAlert } = useSavedListsAlertsStore(useShallow(savedListsStoreSelector));
 
   if (!successAlert) return null;
 
@@ -51,7 +52,9 @@ function SavedListsSuccessAlert({ fromSavedLists }: { fromSavedLists?: boolean }
 }
 
 function SavedListsTransferAlert() {
-  const { transferredToProfileAlert, setTransferredToProfileAlert } = useSavedListsAlertsStore(savedListsStoreSelector);
+  const { transferredToProfileAlert, setTransferredToProfileAlert } = useSavedListsAlertsStore(
+    useShallow(savedListsStoreSelector),
+  );
 
   if (!transferredToProfileAlert) return null;
 

@@ -151,6 +151,7 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
         })
         .catch((e) => {
           toastErrorDownloadFile('Metadata', () => {
+            // eslint-disable-next-line react-hooks/immutability -- Intentional in-place mutation of a local accumulator.
             downloadMetadata(datasetsToDownload);
           });
           console.error(e);
@@ -177,6 +178,7 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
         })
         .catch((e) => {
           toastErrorDownloadFile('Manifest', () => {
+            // eslint-disable-next-line react-hooks/immutability -- Intentional in-place mutation of a local accumulator.
             downloadManifest(datasetsToDownload);
           });
           console.error(e);

@@ -6,6 +6,13 @@ interface NumSelectedHeaderProps extends HeaderWrapperProps {
   numSelected: number;
 }
 
+function formatNumSelected(numSelected: number): React.ReactNode {
+  if (numSelected === 0) {
+    return null;
+  }
+  return `${numSelected} Selected`;
+}
+
 function NumSelectedHeader({ numSelected, ...props }: NumSelectedHeaderProps) {
   return (
     <HeaderWrapper {...props}>
@@ -13,7 +20,7 @@ function NumSelectedHeader({ numSelected, ...props }: NumSelectedHeaderProps) {
         fontWeight="500"
         sx={(theme) => ({ color: numSelected === 0 ? theme.palette.grey[500] : theme.palette.primary.main })}
       >
-        {`${numSelected} Selected`}
+        {formatNumSelected(numSelected)}
       </Typography>
     </HeaderWrapper>
   );

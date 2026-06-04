@@ -1,3 +1,0 @@
-cd context
-npm run pre-commit
-npx tsc -p tsconfig.json --noEmit --skipLibCheck

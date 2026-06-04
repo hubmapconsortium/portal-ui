@@ -5,6 +5,7 @@ import { useEventCallback } from '@mui/material/utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { trackEvent } from 'js/helpers/trackers';
 import { ExternalLinkContainer, ImageWrapper } from './style';
+import { InternalLink } from 'js/shared-styles/Links';
 
 interface ExternalLinkProps {
   img: React.ReactNode;
@@ -24,15 +25,19 @@ function ExternalLink({ img, title, linkText, linkHref, description, icon }: Ext
     });
   });
 
+  const isExternal = linkHref.startsWith('http');
+
+  const LinkComponent = isExternal ? OutboundIconLink : InternalLink;
+
   return (
     <ExternalLinkContainer alignItems="center" direction="row">
       <ImageWrapper justifyContent="center" flexShrink={0}>
         {icon ?? img}
       </ImageWrapper>
       <div>
-        <OutboundIconLink onClick={handleTrack} href={linkHref} variant="subtitle1">
+        <LinkComponent onClick={handleTrack} href={linkHref} variant="subtitle1">
           {linkText}
-        </OutboundIconLink>
+        </LinkComponent>
         <Typography variant="body2">{description}</Typography>
       </div>
     </ExternalLinkContainer>

@@ -56,7 +56,7 @@ interface RenderWithProvContextOptions {
 }
 
 function renderWithProvContext(
-  ui: ReactElement,
+  ui: ReactElement<unknown>,
   {
     initialUuid = '',
     initialUuids = [],

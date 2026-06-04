@@ -134,6 +134,12 @@ export interface SearchState<V> {
   initialFilters: FiltersType<V>;
   facets: FacetsType;
   defaultQuery?: esb.Query;
+  // Used as the default query when filters.ancestor_ids has values. Lets the dataset search
+  // include Support entities when navigating from a "View Derived Datasets" link so the
+  // results match the descendant counts shown in the parent entity's prov section.
+  defaultQueryWithAncestorFilter?: esb.Query;
+  latestRevisionFilter?: esb.Query;
+  includeSupersededEntities?: boolean;
   search: string;
   searchFields: string[];
   sortField: SortField;
@@ -207,6 +213,7 @@ const searchURLStateSchema = z
     search: z.string(),
     sortField: sortFieldSchema,
     filters: filtersSchema,
+    includeSupersededEntities: z.boolean(),
     scFindParams: z
       .object({
         genes: z.array(z.string()).optional(),
@@ -260,6 +267,7 @@ export interface SearchStoreActions {
   filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterExists: ({ field }: { field: string }) => void;
   filterBooleanGroupItem: ({ field, itemKey }: { field: string; itemKey: string }) => void;
+  setIncludeSupersededEntities: (value: boolean) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -403,7 +411,7 @@ export function createDatasetSearchLink(values: Record<string, string[]>) {
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, filters } = state;
+  const { search, sortField, filters, includeSupersededEntities } = state;
 
   const readableParamValues: Record<string, string[]> = {};
   const remainingFilters: FiltersType = {};
@@ -422,11 +430,12 @@ function replaceURLSearchParams(state: SearchStoreState) {
     }
   }
 
-  const hasRemaining = search || Object.keys(remainingFilters).length > 0;
+  const hasRemaining = search || Object.keys(remainingFilters).length > 0 || includeSupersededEntities;
   const qValue = hasRemaining
     ? LZString.compressToEncodedURIComponent(
-        JSON.stringify({ search, sortField, filters: remainingFilters }, (_key, value: unknown) =>
-          value instanceof Set ? [...value] : value,
+        JSON.stringify(
+          { search, sortField, filters: remainingFilters, includeSupersededEntities },
+          (_key, value: unknown) => (value instanceof Set ? [...value] : value),
         ),
       )
     : null;
@@ -447,6 +456,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     ...initialState,
     resetFilters: () => {
       set((state) => {
+        state.includeSupersededEntities = false;
         state.filters = state.initialFilters;
         replaceURLSearchParams(state);
       });
@@ -598,6 +608,12 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         } else {
           filter.values.add(itemKey);
         }
+        replaceURLSearchParams(state);
+      });
+    },
+    setIncludeSupersededEntities: (value) => {
+      set((state) => {
+        state.includeSupersededEntities = value;
         replaceURLSearchParams(state);
       });
     },

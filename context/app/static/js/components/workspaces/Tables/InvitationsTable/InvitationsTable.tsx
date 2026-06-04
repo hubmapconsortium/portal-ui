@@ -4,7 +4,7 @@ import { InvitationType, WorkspaceInvitation } from 'js/components/workspaces/ty
 import { SortField } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import WorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/WorkspaceItemsTable';
 import useInvitationsTable from 'js/components/workspaces/Tables/InvitationsTable/hooks';
-import { StyledTable, StyledTableContainer } from 'js/components/workspaces/Tables/WorkspaceItemsTable/style';
+import { StyledTableContainer } from 'js/components/workspaces/Tables/WorkspaceItemsTable/style';
 import { CenteredAlert } from 'js/components/style';
 
 const initialSortField: SortField = {
@@ -27,9 +27,7 @@ const InvitationsTable = React.memo(function InvitationsTable({
   if (!isLoading && !invitations.length) {
     return (
       <StyledTableContainer sx={(theme) => ({ padding: theme.spacing(2) })}>
-        <StyledTable>
-          <CenteredAlert severity="info">No {status.toLocaleLowerCase()} workspace invitations.</CenteredAlert>
-        </StyledTable>
+        <CenteredAlert severity="info">No {status.toLocaleLowerCase()} workspace invitations.</CenteredAlert>
       </StyledTableContainer>
     );
   }

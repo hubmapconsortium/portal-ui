@@ -1,6 +1,7 @@
 from functools import cache
 from itertools import islice
 import json
+import re
 from urllib.parse import urlparse
 import requests as http_requests
 from flask import current_app, request, session, Blueprint
@@ -31,11 +32,12 @@ def get_valid_tutorial_routes():
     return {tutorial['route'] for tutorial in tutorials}
 
 
-def get_client():
+def get_client(use_groups_token=True):
     if current_app.config.get('IS_MOCK'):
         return MockApiClient()
+    groups_token = session['groups_token'] if use_groups_token else None
     return ApiClient(
-        groups_token=session['groups_token'],
+        groups_token=groups_token,
         elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT'],
         portal_index_path=current_app.config['PORTAL_INDEX_PATH'],
         ubkg_endpoint=current_app.config['UBKG_ENDPOINT'],
@@ -69,6 +71,7 @@ def get_default_flask_data():
             'dataProductsEndpoint': current_app.config['DATA_PRODUCTS_ENDPOINT'],
             'scFindEndpoint': current_app.config['SCFIND_ENDPOINT'],
             'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION'],
+            'enableSaySeeMode': bool(current_app.config.get('ENABLE_SAY_SEE_MODE')),
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD'),
     }
@@ -262,6 +265,16 @@ def first_n_matches(strings, substring, n):
 
 EXTERNAL_REQUEST_TIMEOUT = 30  # seconds for external API calls (scFind, UBKG, etc.)
 
+# Reactome stable identifier, e.g. "R-HSA-8953897" (optionally versioned, "...8953897.2").
+# Pathway codes arrive from the client and are interpolated into the UBKG request URL, so we
+# constrain them to this exact shape to prevent URL/path injection from user-supplied values.
+PATHWAY_CODE_RE = re.compile(r'R-[A-Z]{3}-\d+(?:\.\d+)?')
+
+
+def is_valid_pathway_code(pathway_code):
+    """Return True iff ``pathway_code`` is a well-formed Reactome stable identifier."""
+    return isinstance(pathway_code, str) and PATHWAY_CODE_RE.fullmatch(pathway_code) is not None
+
 
 @cache
 def fetch_pathway_participants(pathway_code):
@@ -274,6 +287,11 @@ def fetch_pathway_participants(pathway_code):
     Returns:
         List of HGNC gene symbols from the pathway
     """
+    # Re-validate at the sink: ``pathway_code`` is interpolated into the request URL below,
+    # so reject anything that isn't a Reactome ID before issuing the request (defense in depth
+    # for callers that don't go through parse_pathway_genes_request).
+    if not isinstance(pathway_code, str) or not PATHWAY_CODE_RE.fullmatch(pathway_code):
+        raise ValueError(f'Invalid pathway code: {pathway_code!r}')
     ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
     url = f'{ubkg_endpoint}/pathways/{pathway_code}/participants'
 
@@ -298,3 +316,55 @@ def fetch_pathway_participants(pathway_code):
                     if symbol:
                         genes.append(symbol)
     return genes
+
+
+def parse_pathway_genes_request():
+    """
+    Validate the JSON body shared by the /cells and /scfind pathway-genes endpoints.
+
+    Returns:
+        ``(data, None)`` when the request is JSON containing a well-formed ``pathway_code``,
+        or ``(None, error)`` otherwise, where ``error`` is a dict describing the problem.
+        All validation failures are client errors, so callers respond with
+        ``jsonify(error), 400``. Callers must wrap the payload in ``jsonify`` themselves —
+        keeping that call at the route's ``return`` is what marks the response
+        application/json so request-derived data is not treated as an HTML (XSS) sink.
+    """
+    if not request.is_json:
+        return None, {'error': 'Request must be JSON'}
+    data = request.get_json()
+    if not data or 'pathway_code' not in data:
+        return None, {'error': 'Missing "pathway_code" in request body'}
+    # Reject malformed pathway codes at the boundary so clients get a clear 400 rather than a
+    # 500 from the sink guard; the value is later interpolated into the UBKG request URL.
+    if not is_valid_pathway_code(data['pathway_code']):
+        return None, {'error': 'Invalid "pathway_code" format.'}
+    return data, None
+
+
+def validate_pathway_genes(pathway_code, resolve_valid_genes):
+    """
+    Fetch a pathway's genes from UBKG and partition them by membership in the
+    target modality's valid gene list.
+
+    Args:
+        pathway_code: The Reactome pathway code (e.g., 'R-HSA-12345').
+        resolve_valid_genes: Zero-arg callable returning the iterable of valid gene
+            symbols for the target modality. Resolved only after the UBKG fetch
+            succeeds, so a pathway-fetch failure short-circuits before the (possibly
+            networked) gene-list lookup.
+
+    Returns:
+        The pathway-genes response payload shared by the /cells and /scfind endpoints:
+        ``valid_genes``/``invalid_genes`` lists plus ``total_genes``/``total_valid`` counts.
+    """
+    genes = fetch_pathway_participants(pathway_code)
+    valid_gene_set = set(resolve_valid_genes())
+    valid_genes = [gene for gene in genes if gene in valid_gene_set]
+    invalid_genes = [gene for gene in genes if gene not in valid_gene_set]
+    return {
+        'valid_genes': valid_genes,
+        'invalid_genes': invalid_genes,
+        'total_genes': len(genes),
+        'total_valid': len(valid_genes),
+    }

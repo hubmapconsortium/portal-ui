@@ -1,4 +1,5 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 import ShareIcon from '@mui/icons-material/Share';
 import LinkIcon from '@mui/icons-material/Link';
@@ -51,7 +52,7 @@ function VisualizationShareButton({
     vitessceState: vitessceStateFromStore,
     vizHubmapId,
     fullscreenVizId,
-  } = useVisualizationStore(visualizationStoreSelector);
+  } = useVisualizationStore(useShallow(visualizationStoreSelector));
 
   // Use local state from prop when available (inline usage); fall back to global store (fullscreen header usage)
   const vitessceState = vitessceStateProp ?? vitessceStateFromStore;
@@ -73,7 +74,7 @@ function VisualizationShareButton({
 
     let urlIsLong = false;
     const url = getUrl(
-      vitessceState as object,
+      vitessceState,
       () => {
         urlIsLong = true;
       },
@@ -115,7 +116,7 @@ function VisualizationShareButton({
   const emailConf = useEventCallback(() => {
     if (!hasConfig) return;
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
-    createEmailWithUrl(vitessceState as object, urlOptions);
+    createEmailWithUrl(vitessceState, urlOptions);
   });
 
   const downloadNotebook = useEventCallback(() => {

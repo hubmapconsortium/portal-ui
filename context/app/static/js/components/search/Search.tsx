@@ -47,6 +47,11 @@ import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
 import { isDevSearch, SearchTypeProps } from './utils';
+import SaySeeAlert from './SaySeeAlert';
+import SearchModeTabs from './SearchModeTabs';
+import SaySeePanel from './SaySeePanel';
+import { useSearchMode } from './useSearchMode';
+import Paper from '@mui/material/Paper';
 
 interface OuterBucket {
   doc_count: number;
@@ -77,6 +82,9 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
   }: SearchStoreState = useSearchStore();
 
   return useScrollSearchHits<Partial<Entity>, Aggregations>({
@@ -90,6 +98,9 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
   });
 }
 
@@ -143,6 +154,8 @@ type SearchConfig = Pick<
   | 'size'
   | 'type'
   | 'defaultQuery'
+  | 'defaultQueryWithAncestorFilter'
+  | 'latestRevisionFilter'
   | 'analyticsCategory'
 > & {
   facets: FacetGroups;
@@ -151,6 +164,7 @@ type SearchConfig = Pick<
 function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
+    includeSupersededEntities: false,
     ...buildFacets({ facetGroups: facets }),
     swrConfig,
     sourceFields,
@@ -191,8 +205,15 @@ function TileViewBar() {
   );
 }
 
-function Body({ facetGroups }: { facetGroups: FacetGroups }) {
-  return (
+function Body({ facetGroups, withPaper }: { facetGroups: FacetGroups; withPaper?: boolean }) {
+  return withPaper ? (
+    <Paper component={Stack} direction="row" spacing={2} p={2}>
+      <Facets facetGroups={facetGroups} />
+      <Box flexGrow={1}>
+        <Results />
+      </Box>
+    </Paper>
+  ) : (
     <Stack direction="row" spacing={2}>
       <Facets facetGroups={facetGroups} />
       <Box flexGrow={1}>
@@ -239,16 +260,28 @@ function SCFindAlert() {
 }
 
 const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
+  const [mode] = useSearchMode();
+  const { enableSaySeeMode } = useAppContext();
+  const effectiveMode = enableSaySeeMode ? mode : 'filter';
   return (
     <Stack spacing={2} mb={4}>
+      {enableSaySeeMode && <SaySeeAlert />}
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <SearchNote />
-        <TileViewBar />
-        <Body facetGroups={facetGroups} />
+        <div>
+          {enableSaySeeMode && <SearchModeTabs />}
+          {effectiveMode === 'filter' && (
+            <>
+              <TileViewBar />
+              <Body facetGroups={facetGroups} withPaper={enableSaySeeMode} />
+            </>
+          )}
+          {effectiveMode === 'say-see' && <SaySeePanel />}
+        </div>
       </Stack>
     </Stack>
   );
@@ -377,6 +410,7 @@ function useInitialURLState() {
       const parsedScFindParams = searchParams.scFindParams;
       if (parsedScFindParams) {
         isDoneLoading = false;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setScFindParams({
           scFindOnly: parsedScFindParams.scFindOnly,
           genes: parsedScFindParams.genes,
@@ -424,14 +458,14 @@ function useInitialURLState() {
       if (isAllModalities) {
         // Combine RNA + ATAC results when allModalities is set
         if (cellTypeDatasets.data && atacCellTypeDatasets.data) {
-          const rnaDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
-          const atacDatasets = atacCellTypeDatasets.data.flatMap((response) => response.datasets);
+          const rnaDatasets = cellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
+          const atacDatasets = atacCellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
           datasetUUIDs = [...new Set([...rnaDatasets, ...atacDatasets])];
           isDataReady = true;
         }
       } else if (cellTypeDatasets.data) {
         // Extract datasets from cell type search results
-        const allDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
+        const allDatasets = cellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
         datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
         isDataReady = true;
       }
@@ -442,6 +476,7 @@ function useInitialURLState() {
 
     if (isDataReady) {
       if (datasetUUIDs.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setInitialUrlState((prevState) => ({
           ...prevState,
           filters: {
@@ -475,7 +510,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
-  const { search, sortField, filters, ...rest } = buildInitialSearchState({
+  const { search, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
     ...config,
     endpoint: elasticsearchEndpoint,
     analyticsCategory: `${type}s Search Page Interactions`,
@@ -488,7 +523,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   }
 
   const initialState = {
-    ...merge({ search, sortField, filters }, initialUrlState, options),
+    ...merge({ search, sortField, filters, includeSupersededEntities }, initialUrlState, options),
     ...rest,
     initialFilters: filters,
   };

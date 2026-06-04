@@ -16,17 +16,20 @@ jobs:
         with:
           submodules: "recursive"
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "npm"
-          cache-dependency-path: end-to-end/package-lock.json
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
 
-      - run: npm --version
+      - run: pnpm --version
 
       - name: Install node dependencies
-        run: npm ci --prefix end-to-end
+        run: pnpm install --frozen-lockfile --filter ./end-to-end...
 
       - name: Run test script
         run: etc/test/test-cypress.sh portal

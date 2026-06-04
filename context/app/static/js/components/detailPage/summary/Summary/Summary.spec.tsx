@@ -15,9 +15,9 @@ describe('Summary', () => {
 
   beforeEach(() => {
     location = window.location;
-    mockLocation.replace = jest.fn();
-    mockLocation.assign = jest.fn();
-    mockLocation.reload = jest.fn();
+    mockLocation.replace = vi.fn();
+    mockLocation.assign = vi.fn();
+    mockLocation.reload = vi.fn();
     mockLocation.search = 'mockSearch';
     mockLocation.hash = 'mockHash';
     // @ts-expect-error - This for a test mock.

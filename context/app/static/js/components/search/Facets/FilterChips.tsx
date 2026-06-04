@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -38,6 +38,7 @@ import {
   filterHasValues,
 } from '../store';
 import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
+import { isHbmIdFormat, isUuidFormat } from '../utils';
 
 function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
@@ -76,7 +77,7 @@ function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: 
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const getFieldLabel = useGetFieldLabel();
   const getTransformedFieldValue = useGetTransformedFieldValue();
-  const anchorEl = useRef<HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const fieldLabel = getFieldLabel(field);
@@ -121,7 +122,7 @@ function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: 
 
   return (
     <>
-      <div ref={anchorEl}>
+      <div ref={setAnchorEl}>
         <Chip
           variant="outlined"
           color="primary"
@@ -140,7 +141,7 @@ function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: 
         />
       </div>
       <Menu
-        anchorEl={anchorEl.current}
+        anchorEl={anchorEl}
         open={menuOpen}
         onClose={handleMenuClose}
         slotProps={{
@@ -205,7 +206,7 @@ function MultiValueHierarchicalFilterChip({
 }: MultiValueHierarchicalFilterChipProps) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const getFieldLabel = useGetFieldLabel();
-  const anchorEl = useRef<HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const fieldLabel = getFieldLabel(field);
@@ -249,7 +250,7 @@ function MultiValueHierarchicalFilterChip({
 
   return (
     <>
-      <div ref={anchorEl}>
+      <div ref={setAnchorEl}>
         <Chip
           variant="outlined"
           color="primary"
@@ -268,7 +269,7 @@ function MultiValueHierarchicalFilterChip({
         />
       </div>
       <Menu
-        anchorEl={anchorEl.current}
+        anchorEl={anchorEl}
         open={menuOpen}
         onClose={handleMenuClose}
         slotProps={{
@@ -373,7 +374,7 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
     ([field, v]: [
       string,
       RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues | BooleanGroupValues,
-    ]): ReactElement[] => {
+    ]): ReactElement<unknown>[] => {
       if (isTermFilter(v) && v.values.size) {
         const values = Array.from(v.values);
         if (values.length === 1) {
@@ -494,7 +495,7 @@ function useChipElements(filters: FiltersType, facets: FacetsType) {
               />
             );
           })
-          .filter(Boolean) as ReactElement[];
+          .filter(Boolean) as ReactElement<unknown>[];
       }
 
       return [];
@@ -508,34 +509,53 @@ function SearchChip() {
 
   if (!search) return null;
 
-  // Treat as a HuBMAP ID only when it matches the wildcard-ID pattern (e.g. "*676*").
+  // Detect ID-style searches so the chip surfaces what the user is actually looking up.
   const isWildcardId = /^\*.*\*$/.test(search);
+  const isQuotedHbmId = /^"\s*HBM\S+\s*"$/i.test(search);
 
-  // For wildcard-ID queries, strip leading/trailing "*" for display; otherwise use the raw search text.
-  const displayValue = isWildcardId ? search.replace(/^\*|\*$/g, '') : search;
-
-  const label = isWildcardId ? `HuBMAP ID: ${displayValue}` : `Search: ${displayValue}`;
+  let label: string;
+  if (isWildcardId) {
+    // For wildcard-ID queries, strip leading/trailing "*" for display.
+    label = `HuBMAP ID: ${search.replace(/^\*|\*$/g, '')}`;
+  } else if (isHbmIdFormat(search) || isQuotedHbmId) {
+    label = `HuBMAP ID: ${search.replace(/^"|"$/g, '')}`;
+  } else if (isUuidFormat(search)) {
+    label = `UUID: ${search}`;
+  } else {
+    label = `Search: ${search}`;
+  }
 
   return <FilterChip label={label} onDelete={() => setSearch('')} />;
+}
+
+function IncludeSupersededChip() {
+  const includeSupersededEntities = useSearchStore((state) => state.includeSupersededEntities);
+  const setIncludeSupersededEntities = useSearchStore((state) => state.setIncludeSupersededEntities);
+
+  if (!includeSupersededEntities) return null;
+
+  return <FilterChip label="Including superseded entities" onDelete={() => setIncludeSupersededEntities(false)} />;
 }
 
 function FilterChips() {
   const filters = useSearchStore((state) => state.filters);
   const facets = useSearchStore((state) => state.facets);
   const search = useSearchStore((state) => state.search);
+  const includeSupersededEntities = useSearchStore((state) => state.includeSupersededEntities);
 
   const chipElements = useChipElements(filters, facets);
-  const hasActiveFilters = chipElements.length > 0 || Boolean(search);
+  const hasActiveFilters = chipElements.length > 0 || Boolean(search) || Boolean(includeSupersededEntities);
 
   const { containerRef, isExpanded, setIsExpanded, overflowCount } = useOverflowCount(hasActiveFilters, [
     filters,
     search,
+    includeSupersededEntities,
   ]);
 
   if (!hasActiveFilters) {
     return (
       <Typography fontWeight="500" sx={(theme) => ({ color: theme.palette.grey[500], px: 1, py: 0.75 })}>
-        0 Filters Selected
+        No active filters
       </Typography>
     );
   }
@@ -555,6 +575,7 @@ function FilterChips() {
         }}
       >
         <SearchChip />
+        <IncludeSupersededChip />
         {chipElements}
       </Box>
       <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">

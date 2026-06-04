@@ -47,6 +47,15 @@ export interface IngestPipelineLink {
 
 export type DagProvenanceType = CWLPipelineLink | IngestPipelineLink;
 
+export interface SegmentationMetadataEntry {
+  ACVF: number;
+  Mean_SNZ: number;
+  Image?: string;
+  CellSegmentationChannels: string[];
+  NucleusSegmentationChannels: string[];
+  QualityScore: number;
+}
+
 export interface Entity {
   entity_type: ESEntityType;
   description: string;
@@ -98,7 +107,7 @@ export interface Donor extends Entity {
     race: string[];
     body_mass_index_value: string;
     body_mass_index_unit: string;
-  }>;
+  }> & { [key: string]: unknown };
   group_name: string;
   protocol_url: string;
   organ_donor_data: Record<string, unknown>;
@@ -160,6 +169,12 @@ export interface Dataset extends Entity {
   calculated_metadata?: {
     annotation_tools?: string[];
     object_types?: string[];
+  };
+  ingest_metadata: {
+    dag_provenance_list: DagProvenanceType[];
+    workflow_description?: string;
+    workflow_version?: string;
+    segmentation_metadata?: SegmentationMetadataEntry[];
   };
 }
 

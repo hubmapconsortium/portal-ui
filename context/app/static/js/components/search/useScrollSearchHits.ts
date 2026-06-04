@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { SearchRequest, SearchResponseBody, SortResults } from 'js/typings/elasticsearch';
 
@@ -104,7 +104,11 @@ export function useScrollSearchHits<Doc, Aggs>({
     ...swrConfig,
   });
 
-  const hasRun = useRef<boolean>(false);
+  // Latched flag: once data has loaded once, stay "not loading" even if SWR
+  // re-validates and the loading flag briefly flips true again. Stored in
+  // useState with a guarded set-during-render so the flip happens in the
+  // same render that sees the first data, no extra frame of flicker.
+  const [hasRun, setHasRun] = useState(false);
 
   const { searchHits, totalHitsCount, aggregations } = useMemo(() => getCombinedHits<Doc, Aggs>(data ?? []), [data]);
 
@@ -117,11 +121,11 @@ export function useScrollSearchHits<Doc, Aggs>({
     setSize(size + 1).catch(console.error);
   }, [size, setSize, isReachingEnd, isLoading, isValidating]);
 
-  if (data?.length) {
-    hasRun.current = true;
+  if (data?.length && !hasRun) {
+    setHasRun(true);
   }
 
-  const z = isLoading || !hasRun.current;
+  const z = isLoading || !hasRun;
 
   return {
     aggregations,

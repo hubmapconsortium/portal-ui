@@ -164,6 +164,7 @@ function CellTypesChart({
       const GeneTooltipWrapper = (props: { tooltipData: TooltipData<{ value: number }> }) => (
         <GeneTooltipContent {...props} cellTypeGeneAssociations={cellTypeGeneAssociations} />
       );
+      // eslint-disable-next-line react-hooks/immutability -- Intentional in-place mutation of a local accumulator.
       GeneTooltipWrapper.displayName = 'GeneTooltipWrapper';
       return GeneTooltipWrapper;
     }

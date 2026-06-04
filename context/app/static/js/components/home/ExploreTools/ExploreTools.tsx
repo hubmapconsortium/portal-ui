@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import theme from 'js/theme/theme';
 import { VisualizationIcon } from 'js/shared-styles/icons';
@@ -82,7 +82,7 @@ export default function ExploreTools() {
         }}
         onMouseLeave={resetExpandedCardIndex}
         onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget as Node)) resetExpandedCardIndex();
+          if (!e.currentTarget.contains(e.relatedTarget)) resetExpandedCardIndex();
         }}
       >
         {cards.map(({ title, icon, src, alt, ...card }, index) => (

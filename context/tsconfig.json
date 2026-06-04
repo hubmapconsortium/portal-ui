@@ -13,14 +13,18 @@
     "incremental": true,
     "jsx": "react",
     "allowJs": true,
-    "baseUrl": "./",
     "sourceMap": true,
     "noEmit": true,
-    "types": ["jest", "@testing-library/jest-dom"],
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "paths": {
       "js/*": ["./app/static/js/*"],
       "assets/*": ["./app/static/assets/*"],
-      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+      "test-utils/*": ["./test-utils/*"],
+      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"],
+      "react": ["./node_modules/@types/react"],
+      "react-dom": ["./node_modules/@types/react-dom"],
+      "@mui/material": ["./node_modules/@mui/material"],
+      "@mui/material/*": ["./node_modules/@mui/material/*"]
     }
   },
   "include": [
@@ -28,7 +32,9 @@
     "./app/static/assets/json/*",
     "./typings/**/*",
     "./.storybook/main.ts",
-    "./.storybook/preview.tsx"
+    "./.storybook/preview.tsx",
+    "./vite.config.mts",
+    "./vite.config.maintenance.mts"
   ],
   "exclude": ["node_modules", "**/*.bundle.js", "@storybook/types/dist"],
   "$schema": "https://json.schemastore.org/tsconfig",
