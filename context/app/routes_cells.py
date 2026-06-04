@@ -2,7 +2,7 @@ from itertools import groupby
 from posixpath import dirname
 import time
 
-from flask import render_template, current_app, request, redirect, url_for
+from flask import render_template, current_app, jsonify, request, redirect, url_for
 
 # from asyncio import gather, to_thread
 
@@ -451,16 +451,18 @@ def pathway_genes():
 
         modality = data.get('modality', 'rna')
         if modality not in ('rna', 'atac'):
-            return {'error': 'Unsupported modality provided.'}, 400
+            return jsonify({'error': 'Unsupported modality provided.'}), 400
 
         # Resolve the appropriate gene list based on modality.
         get_genes = _get_atac_genes if modality == 'atac' else _get_rna_genes
-        return validate_pathway_genes(data['pathway_code'], lambda: get_genes(current_app))
+        return jsonify(
+            validate_pathway_genes(data['pathway_code'], lambda: get_genes(current_app))
+        )
     except Exception as e:
         current_app.logger.error(f'Error in pathway gene validation: {e}', exc_info=True)
-        return {
-            'error': 'An error occurred while validating pathway genes. Please try again.'
-        }, 500
+        return jsonify(
+            {'error': 'An error occurred while validating pathway genes. Please try again.'}
+        ), 500
 
 
 @timeit

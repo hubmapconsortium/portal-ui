@@ -4,7 +4,7 @@ import json
 import re
 from urllib.parse import urlparse
 import requests as http_requests
-from flask import current_app, request, session, Blueprint
+from flask import current_app, jsonify, request, session, Blueprint
 
 from portal_visualization.client import ApiClient
 from portal_visualization.mock_client import MockApiClient
@@ -324,18 +324,20 @@ def parse_pathway_genes_request():
 
     Returns:
         ``(data, None)`` when the request is JSON containing a well-formed ``pathway_code``,
-        or ``(None, (error_payload, status))`` otherwise. Callers return the error tuple
-        directly (Flask serializes the dict to JSON).
+        or ``(None, (response, status))`` otherwise — where ``response`` is a ``jsonify``'d
+        error body. Callers return the error tuple directly. The error responses are built
+        with ``jsonify`` (not raw dicts) so the application/json content type is explicit and
+        request-derived data never reaches an HTML response sink.
     """
     if not request.is_json:
-        return None, ({'error': 'Request must be JSON'}, 400)
+        return None, (jsonify({'error': 'Request must be JSON'}), 400)
     data = request.get_json()
     if not data or 'pathway_code' not in data:
-        return None, ({'error': 'Missing "pathway_code" in request body'}, 400)
+        return None, (jsonify({'error': 'Missing "pathway_code" in request body'}), 400)
     # Reject malformed pathway codes at the boundary so clients get a clear 400 rather than a
     # 500 from the sink guard; the value is later interpolated into the UBKG request URL.
     if not is_valid_pathway_code(data['pathway_code']):
-        return None, ({'error': 'Invalid "pathway_code" format.'}, 400)
+        return None, (jsonify({'error': 'Invalid "pathway_code" format.'}), 400)
     return data, None
 
 
