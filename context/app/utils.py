@@ -4,7 +4,7 @@ import json
 import re
 from urllib.parse import urlparse
 import requests as http_requests
-from flask import current_app, jsonify, request, session, Blueprint
+from flask import current_app, request, session, Blueprint
 
 from portal_visualization.client import ApiClient
 from portal_visualization.mock_client import MockApiClient
@@ -324,20 +324,21 @@ def parse_pathway_genes_request():
 
     Returns:
         ``(data, None)`` when the request is JSON containing a well-formed ``pathway_code``,
-        or ``(None, (response, status))`` otherwise — where ``response`` is a ``jsonify``'d
-        error body. Callers return the error tuple directly. The error responses are built
-        with ``jsonify`` (not raw dicts) so the application/json content type is explicit and
-        request-derived data never reaches an HTML response sink.
+        or ``(None, error)`` otherwise, where ``error`` is a dict describing the problem.
+        All validation failures are client errors, so callers respond with
+        ``jsonify(error), 400``. Callers must wrap the payload in ``jsonify`` themselves —
+        keeping that call at the route's ``return`` is what marks the response
+        application/json so request-derived data is not treated as an HTML (XSS) sink.
     """
     if not request.is_json:
-        return None, (jsonify({'error': 'Request must be JSON'}), 400)
+        return None, {'error': 'Request must be JSON'}
     data = request.get_json()
     if not data or 'pathway_code' not in data:
-        return None, (jsonify({'error': 'Missing "pathway_code" in request body'}), 400)
+        return None, {'error': 'Missing "pathway_code" in request body'}
     # Reject malformed pathway codes at the boundary so clients get a clear 400 rather than a
     # 500 from the sink guard; the value is later interpolated into the UBKG request URL.
     if not is_valid_pathway_code(data['pathway_code']):
-        return None, (jsonify({'error': 'Invalid "pathway_code" format.'}), 400)
+        return None, {'error': 'Invalid "pathway_code" format.'}
     return data, None
 
 

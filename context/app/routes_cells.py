@@ -447,7 +447,7 @@ def pathway_genes():
     try:
         data, error = parse_pathway_genes_request()
         if error:
-            return error
+            return jsonify(error), 400
 
         modality = data.get('modality', 'rna')
         if modality not in ('rna', 'atac'):
