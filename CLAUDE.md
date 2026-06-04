@@ -36,9 +36,11 @@ Package manager is **pnpm** (workspace root at the repo root). `pnpm` commands r
 | TypeScript type check            | `cd context && pnpm tsc`                                      |
 | Production build                 | `cd context && pnpm build`                                    |
 | Storybook (port 6006)            | `cd context && pnpm storybook`                                |
-| Python tests                     | `uv run pytest`                                               |
-| Python lint/format               | `uv run ruff check` / `uv run ruff format`                    |
+| Python tests                     | `uv run pytest context/app` (scope to `context/app`)          |
+| Python lint/format               | `uv run ruff check context` / `uv run ruff format context`    |
 | Cypress E2E                      | `./etc/test/test-cypress.sh`                                  |
+
+> **Run pytest scoped to `context/app`**, as CI does ([etc/test/test-python.sh](etc/test/test-python.sh)). A bare `uv run pytest` from the repo root collects the whole tree under `--doctest-modules` (per the root `pytest.ini`), which imports `main.py`'s module-level `create_app()` outside testing mode and resolves the instance config to `portal-ui/instance/app.conf` instead of `context/instance/app.conf` — causing spurious collection errors. The config lives at `context/instance/app.conf` (created by `etc/dev/copy-app-conf.sh`).
 
 ## Architecture
 

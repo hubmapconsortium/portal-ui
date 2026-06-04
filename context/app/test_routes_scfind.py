@@ -551,7 +551,7 @@ class TestRequestTimeouts:
     def test_timeout_on_pathway_genes(self, client, mocker):
         """Test timeout handling on pathway-genes endpoint."""
         mocker.patch(
-            'app.routes_scfind._fetch_pathway_participants',
+            'app.utils.fetch_pathway_participants',
             side_effect=requests.exceptions.Timeout('Read timed out'),
         )
 
@@ -699,7 +699,7 @@ class TestPathwayGenes:
     def test_pathway_genes_ubkg_error(self, client, mocker):
         """Test pathway genes when UBKG fetch fails."""
         mocker.patch(
-            'app.routes_scfind._fetch_pathway_participants',
+            'app.utils.fetch_pathway_participants',
             side_effect=Exception('UBKG error'),
         )
 

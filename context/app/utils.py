@@ -300,3 +300,48 @@ def fetch_pathway_participants(pathway_code):
                     if symbol:
                         genes.append(symbol)
     return genes
+
+
+def parse_pathway_genes_request():
+    """
+    Validate the JSON body shared by the /cells and /scfind pathway-genes endpoints.
+
+    Returns:
+        ``(data, None)`` when the request is JSON containing a ``pathway_code``, or
+        ``(None, (error_payload, status))`` otherwise. Callers return the error tuple
+        directly (Flask serializes the dict to JSON).
+    """
+    if not request.is_json:
+        return None, ({'error': 'Request must be JSON'}, 400)
+    data = request.get_json()
+    if not data or 'pathway_code' not in data:
+        return None, ({'error': 'Missing "pathway_code" in request body'}, 400)
+    return data, None
+
+
+def validate_pathway_genes(pathway_code, resolve_valid_genes):
+    """
+    Fetch a pathway's genes from UBKG and partition them by membership in the
+    target modality's valid gene list.
+
+    Args:
+        pathway_code: The Reactome pathway code (e.g., 'R-HSA-12345').
+        resolve_valid_genes: Zero-arg callable returning the iterable of valid gene
+            symbols for the target modality. Resolved only after the UBKG fetch
+            succeeds, so a pathway-fetch failure short-circuits before the (possibly
+            networked) gene-list lookup.
+
+    Returns:
+        The pathway-genes response payload shared by the /cells and /scfind endpoints:
+        ``valid_genes``/``invalid_genes`` lists plus ``total_genes``/``total_valid`` counts.
+    """
+    genes = fetch_pathway_participants(pathway_code)
+    valid_gene_set = set(resolve_valid_genes())
+    valid_genes = [gene for gene in genes if gene in valid_gene_set]
+    invalid_genes = [gene for gene in genes if gene not in valid_gene_set]
+    return {
+        'valid_genes': valid_genes,
+        'invalid_genes': invalid_genes,
+        'total_genes': len(genes),
+        'total_valid': len(valid_genes),
+    }

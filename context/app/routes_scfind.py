@@ -12,9 +12,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from .utils import (
     EXTERNAL_REQUEST_TIMEOUT,
-    fetch_pathway_participants,
     first_n_matches,
     make_blueprint,
+    parse_pathway_genes_request,
+    validate_pathway_genes,
 )
 
 
@@ -402,9 +403,6 @@ def _get_complete_mappings():
     return label_to_clid_map, clid_to_label_map
 
 
-_fetch_pathway_participants = fetch_pathway_participants
-
-
 @blueprint.route('/scfind/label-to-clid-map.json')
 def label_to_clid_map():
     """
@@ -687,39 +685,14 @@ def pathway_genes():
         }
     """
     try:
-        if not request.is_json:
-            return jsonify({'error': 'Request must be JSON'}), 400
+        data, error = parse_pathway_genes_request()
+        if error:
+            return error
 
-        data = request.get_json()
-        if not data or 'pathway_code' not in data:
-            return jsonify({'error': 'Missing "pathway_code" in request body'}), 400
-
-        pathway_code = data['pathway_code']
+        # Validate against the scFind gene list for the given modality.
         modality = data.get('modality')
-
-        # Fetch pathway genes from UBKG
-        pathway_genes = _fetch_pathway_participants(pathway_code)
-
-        # Validate against scFind gene list for the given modality
-        all_genes = _get_all_genes(modality)
-        all_genes_set = set(all_genes)
-
-        valid_genes = []
-        invalid_genes = []
-
-        for gene in pathway_genes:
-            if gene in all_genes_set:
-                valid_genes.append(gene)
-            else:
-                invalid_genes.append(gene)
-
         return jsonify(
-            {
-                'valid_genes': valid_genes,
-                'invalid_genes': invalid_genes,
-                'total_genes': len(pathway_genes),
-                'total_valid': len(valid_genes),
-            }
+            validate_pathway_genes(data['pathway_code'], lambda: _get_all_genes(modality))
         )
     except Exception as e:
         return _handle_scfind_error(e, 'pathway gene validation')
