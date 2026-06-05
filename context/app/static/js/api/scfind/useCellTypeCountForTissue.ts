@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { fetcher, multiFetcher } from 'js/helpers/swr';
+import { fetcher } from 'js/helpers/swr';
 import { createScFindKey, useScFindKey } from './utils';
 
 export interface CellTypeCountForTissue {
@@ -43,6 +43,8 @@ export default function useCellTypeCountForTissue(props: CellTypeCountForTissueP
   return useSWR<CellTypeCountsForTissue, unknown, CellTypeCountForTissueKey>(key, (url) => fetcher({ url }));
 }
 
+const emptyCellTypeCounts: CellTypeCountsForTissue = { cellTypeCounts: [] };
+
 export function useCellTypeCountForTissues(tissues: string[], modality?: string) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const keys = tissues
@@ -50,6 +52,10 @@ export function useCellTypeCountForTissues(tissues: string[], modality?: string)
     .filter((key): key is string => key !== null);
 
   return useSWR<CellTypeCountsForTissue[], unknown, NonNullable<CellTypeCountForTissueKey>[]>(keys, (urls: string[]) =>
-    multiFetcher({ urls }),
+    // Fetch each tissue independently and tolerate per-tissue failures: a tissue/modality combo that
+    // isn't indexed (e.g. ATAC for an unindexed organ) returns a 500 from scFind, which should degrade
+    // to zero cells for that bar rather than blanking the whole chart. Order is preserved so the results
+    // stay aligned with the requested tissues.
+    Promise.all(urls.map((url) => fetcher<CellTypeCountsForTissue>({ url }).catch(() => emptyCellTypeCounts))),
   );
 }

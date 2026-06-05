@@ -2,6 +2,7 @@ import { useCellTypeCountForTissues } from 'js/api/scfind/useCellTypeCountForTis
 import { useLinearScale, useSymLogScale } from 'js/shared-styles/charts/hooks';
 import { useMemo } from 'react';
 import { extractCellTypeInfo, formatCellTypeName } from 'js/api/scfind/utils';
+import useCellTypeNames from 'js/api/scfind/useCellTypeNames';
 import { useCellTypesDistributionChartContext } from './contexts';
 import { addPercentageAndOrganToCellTypeCounts, CellTypeCountWithPercentageAndOrgan } from './utils';
 import { ChartData } from './types';
@@ -47,9 +48,27 @@ export const useYScale = (data: CellTypeCountWithPercentageAndOrgan[], maxCellCo
   return totalCountsScale;
 };
 
+/**
+ * Determines whether ATACseq data exists for the chart's cell types within the given organs.
+ * Reuses the ATAC cell-type-names index (a single lightweight, SWR-deduped call) and checks for
+ * an overlap with the chart's raw `organ.cellType` keys. Used to gate the Data Type toggle.
+ */
+export function useHasAtacData(cellTypes: string[], organs: string[]) {
+  const { data: atacData } = useCellTypeNames('ATAC');
+  return useMemo(() => {
+    if (!atacData?.cellTypeNames?.length) {
+      return false;
+    }
+    const atacKeys = new Set(atacData.cellTypeNames); // raw "organ.cellType" keys
+    const organSet = new Set(organs);
+    // `cellTypes` are raw "organ.cellType" keys (compared via `.includes(count.index)` below).
+    return cellTypes.some((key) => atacKeys.has(key) && organSet.has(key.split('.')[0]));
+  }, [atacData, cellTypes, organs]);
+}
+
 export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
-  const { showOtherCellTypes, showPercentages } = useCellTypesDistributionChartContext();
-  const { data = [], isLoading } = useCellTypeCountForTissues(organs);
+  const { showOtherCellTypes, showPercentages, dataType } = useCellTypesDistributionChartContext();
+  const { data = [], isLoading } = useCellTypeCountForTissues(organs, dataType);
 
   const [targetCellTypeKeys, otherCellTypeKeys, allCellTypeKeys] = useMemo(() => {
     const formattedCellTypes = Array.from(new Set(cellTypes.map((name) => formatCellTypeName(name))));
