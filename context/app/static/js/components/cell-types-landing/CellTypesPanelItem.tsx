@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
@@ -292,6 +292,61 @@ function DataTypeChips({
   );
 }
 
+/**
+ * Cell type description clamped to two lines that expands to its full text on click. Only
+ * interactive when there is a real description that actually overflows when clamped (detected the
+ * same way as LineClampWithTooltip). `expanded` is owned by the row so it can grow to fit.
+ */
+function ExpandableDescription({
+  description,
+  expanded,
+  onToggle,
+}: {
+  description?: string;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const text = description || 'No description available.';
+  const hasDescription = Boolean(description);
+  const ref = useRef<HTMLDivElement>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (element && !expanded) {
+      setIsTruncated(element.scrollHeight > element.clientHeight);
+    }
+  }, [text, expanded]);
+
+  const canExpand = hasDescription && (isTruncated || expanded);
+
+  return (
+    <LineClamp
+      ref={ref}
+      color="text.secondary"
+      // A large clamp value effectively removes the 2-line clamp when expanded (showing all lines).
+      lines={expanded ? 99 : 2}
+      role={canExpand ? 'button' : undefined}
+      tabIndex={canExpand ? 0 : undefined}
+      aria-expanded={canExpand ? expanded : undefined}
+      onClick={canExpand ? onToggle : undefined}
+      onKeyDown={
+        canExpand
+          ? (event: React.KeyboardEvent) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onToggle();
+              }
+            }
+          : undefined
+      }
+      sx={{ cursor: canExpand ? 'pointer' : 'default' }}
+    >
+      {text}
+    </LineClamp>
+  );
+}
+
 function CellTypesPanelItem({
   name,
   href,
@@ -301,8 +356,12 @@ function CellTypesPanelItem({
   rnaDatasetCount,
   atacDatasetCount,
 }: CellTypePanelItemProps) {
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+
   return (
-    <StackTemplate>
+    // Rows are a fixed height by default; when the description is expanded, let the row grow to fit
+    // its full text (top-aligning the cells) instead of clipping it.
+    <StackTemplate {...(descriptionExpanded ? { height: 'auto', minHeight: 52, alignItems: 'flex-start' } : {})}>
       <BodyCell {...desktopConfig.name} aria-label="Cell Type">
         <Box>
           {href ? (
@@ -330,9 +389,11 @@ function CellTypesPanelItem({
         </Box>
       </BodyCell>
       <BodyCell {...desktopConfig.description} aria-label="Description">
-        <LineClamp color="text.secondary" lines={2}>
-          {description || 'No description available.'}
-        </LineClamp>
+        <ExpandableDescription
+          description={description}
+          expanded={descriptionExpanded}
+          onToggle={() => setDescriptionExpanded((prev) => !prev)}
+        />
       </BodyCell>
       <BodyCell {...desktopConfig.organs} aria-label="Organs">
         <OrganList organs={organs} />
