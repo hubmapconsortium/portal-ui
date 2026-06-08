@@ -6,7 +6,7 @@ import PageTitle from 'js/shared-styles/pages/PageTitle';
 import { PageWrapper, StyledDescription } from './style';
 
 interface PanelListLandingPageProps extends PropsWithChildren {
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
   description: React.ReactNode;
   sectionTitle?: string;

@@ -11,11 +11,12 @@ import CellTypesSearchBar from 'js/components/cell-types-landing/CellTypesSearch
 import MultiOrganCellTypeDistributionChartWithProvider from 'js/components/cell-types/CellTypesDistribution/MultiOrganCellTypesDistributionChart';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import { trackEvent } from 'js/helpers/trackers';
+import { CellTypeIcon } from 'js/shared-styles/icons';
 
 function CellTypesLandingPageContent() {
-  const { cellTypeNames, organs: cellTypeOrgans } = useCellTypesLandingDataContext();
+  const { cellTypeNames, cellTypeNamesAtac, organs: cellTypeOrgans } = useCellTypesLandingDataContext();
 
-  const uniqueCellTypes = new Set(cellTypeNames.map(formatCellTypeName)).size;
+  const uniqueCellTypes = new Set([...cellTypeNames, ...cellTypeNamesAtac].map(formatCellTypeName)).size;
 
   return (
     <CellTypesSearchProvider
@@ -24,8 +25,12 @@ function CellTypesLandingPageContent() {
       }}
     >
       <PanelListLandingPage
-        title="Cell Types"
-        subtitle={`${uniqueCellTypes} Cell Types`}
+        title={
+          <>
+            <CellTypeIcon color="primary" fontSize="inherit" /> Cell Types
+          </>
+        }
+        subtitle={`${uniqueCellTypes} Cell Types Total`}
         noIcon
         description={
           <>
