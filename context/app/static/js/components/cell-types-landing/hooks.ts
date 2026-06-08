@@ -1,57 +1,51 @@
-import useCellTypeNames, { useCellTypeNamesMap } from 'js/api/scfind/useCellTypeNames';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { formatCellTypeName } from 'js/api/scfind/utils';
 import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import { useMemo } from 'react';
+import { useCellTypesLandingDataContext } from './CellTypesLandingDataContext';
 
 export function useCellTypesList() {
-  const { data, isLoading: isLoadingLabels, isValidating: isValidatingLabels } = useCellTypeNames();
-  const { data: atacData, isLoading: isLoadingAtac } = useCellTypeNames('ATAC');
-
-  const cellTypesMap = useCellTypeNamesMap();
+  // RNA + ATAC cell type names come from the page aggregate (one request, warmed server-side).
+  const {
+    cellTypeNames,
+    cellTypeNamesAtac,
+    isLoading: isLoadingLanding,
+    isValidating: isValidatingLanding,
+  } = useCellTypesLandingDataContext();
 
   // Build per-modality organ maps: cellTypeName → organs[] for RNA and ATAC
   const rnaOrgansMap = useMemo(() => {
-    if (!data) return {} as Record<string, string[]>;
-    return data.cellTypeNames.reduce<Record<string, string[]>>((acc, raw) => {
+    return cellTypeNames.reduce<Record<string, string[]>>((acc, raw) => {
       const [organ, cellTypeName] = raw.split('.');
       if (!acc[cellTypeName]) acc[cellTypeName] = [];
       acc[cellTypeName].push(organ);
       return acc;
     }, {});
-  }, [data]);
+  }, [cellTypeNames]);
 
   const atacOrgansMap = useMemo(() => {
-    if (!atacData) return {} as Record<string, string[]>;
-    return atacData.cellTypeNames.reduce<Record<string, string[]>>((acc, raw) => {
+    return cellTypeNamesAtac.reduce<Record<string, string[]>>((acc, raw) => {
       const [organ, cellTypeName] = raw.split('.');
       if (!acc[cellTypeName]) acc[cellTypeName] = [];
       acc[cellTypeName].push(organ);
       return acc;
     }, {});
-  }, [atacData]);
+  }, [cellTypeNamesAtac]);
 
   // Build a set of ATAC cell type labels for O(1) lookup
-  const atacCellTypeLabels = useMemo(() => {
-    if (!atacData) return new Set<string>();
-    return new Set(atacData.cellTypeNames.map(formatCellTypeName));
-  }, [atacData]);
+  const atacCellTypeLabels = useMemo(() => new Set(cellTypeNamesAtac.map(formatCellTypeName)), [cellTypeNamesAtac]);
 
   // Combine RNA cell type names with ATAC names for a complete list to resolve CLIDs
-  const allCellTypeNames = useMemo(() => {
-    const rnaNames = data?.cellTypeNames ?? [];
-    const atacNames = atacData?.cellTypeNames ?? [];
+  const allCellTypeNames = useMemo(
     // Deduplicate by raw name (organ.cellType)
-    return [...new Set([...rnaNames, ...atacNames])];
-  }, [data?.cellTypeNames, atacData?.cellTypeNames]);
+    () => [...new Set([...cellTypeNames, ...cellTypeNamesAtac])],
+    [cellTypeNames, cellTypeNamesAtac],
+  );
 
   const { results, isLoading: isLoadingCLIDs } = useLabelsToCLIDs(allCellTypeNames);
 
   // Build a set of RNA cell type labels for O(1) lookup
-  const rnaCellTypeLabels = useMemo(() => {
-    if (!data) return new Set<string>();
-    return new Set(data.cellTypeNames.map(formatCellTypeName));
-  }, [data]);
+  const rnaCellTypeLabels = useMemo(() => new Set(cellTypeNames.map(formatCellTypeName)), [cellTypeNames]);
 
   const cellTypes = useMemo(() => {
     if (!results) {
@@ -64,7 +58,7 @@ export function useCellTypesList() {
           return {
             label,
             clid: clids.CLIDs?.[0],
-            organs: cellTypesMap[label] ?? [],
+            organs: rnaOrgansMap[label] ?? [],
             hasScfindRna: rnaCellTypeLabels.has(label),
             hasScfindAtac: atacCellTypeLabels.has(label),
             rnaOrgans: rnaOrgansMap[label] ?? [],
@@ -74,7 +68,7 @@ export function useCellTypesList() {
         // Filter any duplicate labels (keep first)
         .filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
     );
-  }, [results, allCellTypeNames, cellTypesMap, rnaCellTypeLabels, atacCellTypeLabels, rnaOrgansMap, atacOrgansMap]);
+  }, [results, allCellTypeNames, rnaOrgansMap, rnaCellTypeLabels, atacCellTypeLabels, atacOrgansMap]);
 
   // Fetch cell type descriptions using the UBKG API
   const {
@@ -93,8 +87,8 @@ export function useCellTypesList() {
 
   return {
     cellTypes: cellTypesWithDescriptions,
-    isLoading: isLoadingCLIDs || isLoadingLabels || isLoadingAtac || isLoadingDescriptions,
-    isValidating: isValidatingLabels,
+    isLoading: isLoadingCLIDs || isLoadingLanding || isLoadingDescriptions,
+    isValidating: isValidatingLanding,
     descriptionsError,
   };
 }

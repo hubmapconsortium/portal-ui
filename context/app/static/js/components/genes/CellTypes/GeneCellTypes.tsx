@@ -16,10 +16,11 @@ import { useEventCallback } from '@mui/material/utils';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
+import useSWR from 'swr';
+import { fetcher } from 'js/helpers/swr';
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import { StyledTableContainer } from 'js/shared-styles/tables';
-import useHyperQueryCellTypes, { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
-import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
+import { GeneSignatureStats, createCellTypeNamesKey } from 'js/api/scfind/useHyperQueryCellTypes';
 import { percent } from 'js/helpers/number-format';
 import { CellTypeLink } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
 import { SortState, useSortState } from 'js/hooks/useSortState';
@@ -28,7 +29,6 @@ import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableH
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import IndexedDatasetsSummary from 'js/components/organ/OrganCellTypes/IndexedDatasetsSummary';
-import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useSearchData from 'js/hooks/useSearchData';
 import Description from 'js/shared-styles/sections/Description';
 import Divider from '@mui/material/Divider';
@@ -36,7 +36,13 @@ import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import { trackEvent } from 'js/helpers/trackers';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import ScientificNotationDisplay from './ScientificNotationDisplay';
-import { useGenePageContext, useGeneDetailPageTrackingInfo, useTrackGeneDetailPage } from '../hooks';
+import {
+  useGenePageContext,
+  useGeneCellTypesData,
+  useGeneDatasetsData,
+  useGeneDetailPageTrackingInfo,
+  useTrackGeneDetailPage,
+} from '../hooks';
 import { cellTypes as cellTypesSection } from '../constants';
 import Stack from '@mui/material/Stack';
 import { LineClamp } from 'js/shared-styles/text';
@@ -106,19 +112,18 @@ interface CellTypeRow {
   description: string;
 }
 
-const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
-  const { results: clids } = useLabelsToCLIDs(useMemo(() => cellTypes.map((ct) => ct.cell_type), [cellTypes]));
-
+const useCellTypeRows = (cellTypes: GeneSignatureStats[] = [], labelToClid: Record<string, string[]> = {}) => {
+  // The label->CLID map is part of the page aggregate (GenePageContext), so no extra request here.
   const cellTypeIds = useMemo(
-    () => clids?.map((clid) => clid?.CLIDs?.[0]).filter((id): id is string => id != null) ?? [],
-    [clids],
+    () => cellTypes.map((ct) => labelToClid[ct.cell_type]?.[0]).filter((id): id is string => id != null),
+    [cellTypes, labelToClid],
   );
 
   const { data: cellTypeDetails, isLoading: isLoadingDescriptions } = useCellTypeOntologyDetails(cellTypeIds);
 
   const rows = useMemo(() => {
-    return cellTypes.map((cellType, idx) => {
-      const clid = clids?.[idx]?.CLIDs?.[0] ?? null;
+    return cellTypes.map((cellType) => {
+      const clid = labelToClid[cellType.cell_type]?.[0] ?? null;
       const description = (clid && cellTypeDetails?.[clid.replace(/\D/g, '')]?.definition) ?? '';
 
       return {
@@ -131,7 +136,7 @@ const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
         description,
       };
     });
-  }, [cellTypes, clids, cellTypeDetails]);
+  }, [cellTypes, labelToClid, cellTypeDetails]);
   return { rows, isLoadingDescriptions };
 };
 
@@ -215,29 +220,27 @@ function CellTypesTable() {
     direction: 'desc',
   });
 
-  const { data: allCellTypesForGene, isLoading: isLoadingAllCellTypes } = useHyperQueryCellTypes({
-    geneList: geneSymbol,
-    organName: undefined, // Fetch all datasets
-  });
+  // All-organs signatures + organ list + label->CLID come from the page aggregate (one request,
+  // warmed/cached server-side).
+  const {
+    hyperQuery: allCellTypesForGene,
+    organs: cellTypeOrgans,
+    labelToClid,
+    isLoading: isLoadingAllCellTypes,
+  } = useGeneCellTypesData();
 
-  const { data: cellTypes, isLoading: isLoadingCurrentCellTypes } = useHyperQueryCellTypes({
-    geneList: geneSymbol,
-    organName: selectedOrgan,
-  });
+  // Selecting an organ recomputes the statistics, so it's an interactive fetch to the per-operation
+  // BFF route — only issued once an organ is chosen; the default view reuses the aggregate.
+  const organKey = selectedOrgan ? createCellTypeNamesKey({ geneList: geneSymbol, organName: selectedOrgan }) : null;
+  const { data: organCellTypes, isLoading: isLoadingOrganCellTypes } = useSWR<
+    { findGeneSignatures: GeneSignatureStats[] },
+    unknown,
+    string | null
+  >(organKey, (url) => fetcher({ url }));
 
-  const cellTypeOrgans = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          allCellTypesForGene?.findGeneSignatures
-            ? allCellTypesForGene.findGeneSignatures.map((ct) => ct.cell_type.split('.')[0])
-            : [],
-        ),
-      ),
-    [allCellTypesForGene],
-  );
+  const cellTypes = selectedOrgan ? (organCellTypes?.findGeneSignatures ?? []) : allCellTypesForGene;
 
-  const { rows: cellTypeRows, isLoadingDescriptions } = useCellTypeRows(cellTypes?.findGeneSignatures);
+  const { rows: cellTypeRows, isLoadingDescriptions } = useCellTypeRows(cellTypes, labelToClid);
 
   const filteredSortedCellTypes = useMemo(() => {
     const sortedCellTypes = [...cellTypeRows].sort((a, b) => {
@@ -275,7 +278,7 @@ function CellTypesTable() {
     ]),
   });
 
-  const isLoading = isLoadingAllCellTypes || isLoadingCurrentCellTypes;
+  const isLoading = isLoadingAllCellTypes || (Boolean(selectedOrgan) && isLoadingOrganCellTypes);
 
   const trackDownloadTable = useTrackGeneDetailPage({
     action: 'Cell Types / Download Table',
@@ -386,9 +389,7 @@ interface DatasetGeneAggregations {
 
 const useIndexedDatasetsForGene = () => {
   const { geneSymbol } = useGenePageContext();
-  const { data: datasets, isLoading: isLoadingDatasets } = useFindDatasetForGenes({
-    geneList: geneSymbol,
-  });
+  const { data: datasets, isLoading: isLoadingDatasets } = useGeneDatasetsData();
 
   const ids = useSCFindIDAdapter(datasets?.findDatasets[geneSymbol] ?? []);
 

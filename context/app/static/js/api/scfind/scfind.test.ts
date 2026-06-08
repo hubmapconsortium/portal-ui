@@ -1,6 +1,8 @@
 import { createFindDatasetForCellTypeKey } from './useFindDatasetForCellTypes';
 import {
   cellTypeNameContainsComma,
+  createScFindFlaskKey,
+  createScFindFlaskPostRequest,
   createScFindKey,
   createScFindPostRequest,
   extractCellTypeInfo,
@@ -49,6 +51,45 @@ describe('createScfindKey', () => {
       expect(key.includes(k)).toBe(false);
     });
     expectURLIsValid(key);
+  });
+});
+
+describe('createScFindFlaskKey', () => {
+  it('builds a relative Flask route URL with query params', () => {
+    const key = createScFindFlaskKey('/scfind/find-datasets.json', { gene_list: 'VIM', modality: undefined });
+    expect(key).toBe('/scfind/find-datasets.json?gene_list=VIM');
+  });
+
+  it('returns the bare route when there are no params', () => {
+    expect(createScFindFlaskKey('/scfind/indexed-datasets.json')).toBe('/scfind/indexed-datasets.json');
+  });
+
+  it('filters out undefined/empty params', () => {
+    const key = createScFindFlaskKey('/scfind/x.json', { a: 'value1', b: undefined, c: '' });
+    expect(key).toContain('a=value1');
+    expect(key).not.toContain('b=');
+    expect(key).not.toContain('c=');
+  });
+});
+
+describe('createScFindFlaskPostRequest', () => {
+  it('builds a relative route URL with the params in the body', () => {
+    const request = createScFindFlaskPostRequest('/scfind/cell-type-markers.json', {
+      cell_types: ['CD4, T cell', 'CD8 T cell'],
+      top_k: 10,
+    });
+    expect(request.url).toBe('/scfind/cell-type-markers.json');
+    expect(request.body).toEqual({ cell_types: ['CD4, T cell', 'CD8 T cell'], top_k: 10 });
+  });
+
+  it('drops undefined entries from the body', () => {
+    const request = createScFindFlaskPostRequest('/scfind/cell-type-markers.json', {
+      cell_types: ['CD4, T cell'],
+      background_cell_types: undefined,
+      sort_field: undefined,
+      top_k: 5,
+    });
+    expect(request.body).toEqual({ cell_types: ['CD4, T cell'], top_k: 5 });
   });
 });
 
@@ -198,20 +239,21 @@ describe('createScFindPostRequest', () => {
 
 describe('createFindDatasetForCellTypeKey', () => {
   it('returns null for an empty cell type', () => {
-    expect(createFindDatasetForCellTypeKey(scFindEndpoint, { cellType: '' })).toBeNull();
+    expect(createFindDatasetForCellTypeKey({ cellType: '' })).toBeNull();
   });
 
-  it('builds a GET URL for a comma-free cell type', () => {
-    const key = createFindDatasetForCellTypeKey(scFindEndpoint, { cellType: 'CD4 T cell' });
+  it('builds a relative Flask GET URL for a comma-free cell type', () => {
+    const key = createFindDatasetForCellTypeKey({ cellType: 'CD4 T cell' });
     expect(typeof key).toBe('string');
+    expect(key).toContain('/scfind/find-dataset-for-cell-type.json');
     expect(key).toContain('cell_type=CD4');
   });
 
-  it('builds a POST request when the cell type contains a comma', () => {
-    const key = createFindDatasetForCellTypeKey(scFindEndpoint, { cellType: 'CD4, T cell' });
+  it('builds a POST request to the Flask route when the cell type contains a comma', () => {
+    const key = createFindDatasetForCellTypeKey({ cellType: 'CD4, T cell' });
     expect(typeof key).toBe('object');
     expect(key).toEqual({
-      url: `${scFindEndpoint}/api/findDatasetForCellType`,
+      url: '/scfind/find-dataset-for-cell-type.json',
       body: { cell_type: 'CD4, T cell' },
     });
   });

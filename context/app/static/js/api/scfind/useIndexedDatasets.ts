@@ -1,6 +1,6 @@
 import useSWR from 'swr/immutable';
 import { fetcher } from 'js/helpers/swr';
-import { createScFindKey, useScFindKey } from './utils';
+import { createScFindFlaskKey } from './utils';
 
 type IndexedDatasetsKey = string;
 
@@ -13,17 +13,12 @@ interface AugmentedIndexedDatasetsResponse extends IndexedDatasetsResponse {
   countsMap: Record<string, number>;
 }
 
-export function createIndexedDatasetsKey(
-  scFindEndpoint: string,
-  scFindIndexVersion?: string,
-  modality?: string,
-): IndexedDatasetsKey {
-  return createScFindKey(scFindEndpoint, 'getDatasets', { modality }, scFindIndexVersion);
+export function createIndexedDatasetsKey(modality?: string): IndexedDatasetsKey {
+  return createScFindFlaskKey('/scfind/indexed-datasets.json', { modality });
 }
 
 export default function useIndexedDatasets(modality?: string) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createIndexedDatasetsKey(scFindEndpoint, scFindIndexVersion, modality);
+  const key = createIndexedDatasetsKey(modality);
   const swr = useSWR<AugmentedIndexedDatasetsResponse, Error, IndexedDatasetsKey>(key, (url) =>
     fetcher<IndexedDatasetsResponse>({ url }).then((d) => {
       const countsMap = d.counts.reduce<Record<string, number>>((acc, count, index) => {

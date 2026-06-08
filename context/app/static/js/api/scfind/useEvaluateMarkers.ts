@@ -1,13 +1,12 @@
 import useSWR from 'swr';
 import {
   cellTypeNameContainsComma,
-  createScFindKey,
-  createScFindPostRequest,
+  createScFindFlaskKey,
+  createScFindFlaskPostRequest,
   ScFindRequest,
   scFindFetcher,
   stringOrArrayToString,
   toArray,
-  useScFindKey,
 } from './utils';
 
 export interface EvaluateMarkersParams {
@@ -24,41 +23,32 @@ interface EvaluateMarkersResponse {
   evaluateMarkers: unknown;
 }
 
-export function createCellTypeMarkersKey(
-  scFindEndpoint: string,
-  { geneList, cellTypes, backgroundCellTypes, sortField, includePrefix }: EvaluateMarkersParams,
-  scFindIndexVersion?: string,
-): EvaluateMarkersKey {
+export function createCellTypeMarkersKey({
+  geneList,
+  cellTypes,
+  backgroundCellTypes,
+  sortField,
+  includePrefix,
+}: EvaluateMarkersParams): EvaluateMarkersKey {
   if (cellTypeNameContainsComma(cellTypes) || cellTypeNameContainsComma(backgroundCellTypes)) {
-    return createScFindPostRequest(
-      scFindEndpoint,
-      'evaluateMarkers',
-      {
-        gene_list: toArray(geneList),
-        cell_types: toArray(cellTypes),
-        background_cell_types: backgroundCellTypes,
-        sort_field: sortField,
-        include_prefix: includePrefix,
-      },
-      scFindIndexVersion,
-    );
-  }
-  return createScFindKey(
-    scFindEndpoint,
-    'evaluateMarkers',
-    {
-      gene_list: stringOrArrayToString(geneList),
-      cell_types: stringOrArrayToString(cellTypes),
-      background_cell_types: backgroundCellTypes ? stringOrArrayToString(backgroundCellTypes) : undefined,
+    return createScFindFlaskPostRequest('/scfind/evaluate-markers.json', {
+      gene_list: toArray(geneList),
+      cell_types: toArray(cellTypes),
+      background_cell_types: backgroundCellTypes,
       sort_field: sortField,
-      include_prefix: includePrefix !== undefined ? String(includePrefix) : undefined,
-    },
-    scFindIndexVersion,
-  );
+      include_prefix: includePrefix,
+    });
+  }
+  return createScFindFlaskKey('/scfind/evaluate-markers.json', {
+    gene_list: stringOrArrayToString(geneList),
+    cell_types: stringOrArrayToString(cellTypes),
+    background_cell_types: backgroundCellTypes ? stringOrArrayToString(backgroundCellTypes) : undefined,
+    sort_field: sortField,
+    include_prefix: includePrefix !== undefined ? String(includePrefix) : undefined,
+  });
 }
 
 export default function useEvaluateMarkers(params: EvaluateMarkersParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCellTypeMarkersKey(scFindEndpoint, params, scFindIndexVersion);
+  const key = createCellTypeMarkersKey(params);
   return useSWR<EvaluateMarkersResponse, unknown, EvaluateMarkersKey>(key, scFindFetcher);
 }

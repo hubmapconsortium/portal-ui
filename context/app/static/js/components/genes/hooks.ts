@@ -1,7 +1,7 @@
 import { useGeneOntologyDetail } from 'js/hooks/useUBKG';
 import { useCallback } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
-import { useGenePageContext } from './GenePageContext';
+import { useGenePageContext, useGeneCellTypesData, useGeneDatasetsData } from './GenePageContext';
 import { EventInfo } from '../types';
 
 const useGeneOntology = () => {
@@ -41,4 +41,12 @@ const useTrackGeneDetailPage = (eventInfo?: Partial<EventInfo> | (() => Partial<
   }, [eventInfo, geneSymbol]);
 };
 
-export { useGeneOntology, useGenePageContext, useGeneDetailPageTrackingInfo, useTrackGeneDetailPage, useGeneSymbol };
+export {
+  useGeneOntology,
+  useGenePageContext,
+  useGeneCellTypesData,
+  useGeneDatasetsData,
+  useGeneDetailPageTrackingInfo,
+  useTrackGeneDetailPage,
+  useGeneSymbol,
+};

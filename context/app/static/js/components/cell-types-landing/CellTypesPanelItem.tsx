@@ -8,7 +8,6 @@ import { capitalize, useEventCallback } from '@mui/material/utils';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
-import { useCellTypeOrgans } from 'js/api/scfind/useCellTypeNames';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -22,6 +21,7 @@ import { CheckIcon } from 'js/shared-styles/icons';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import ViewDatasetsDropdownButton from '../biomarkers/ViewDatasetsDropdownButton';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
+import { useCellTypesLandingDataContext } from './CellTypesLandingDataContext';
 import { LineClamp } from 'js/shared-styles/text';
 import Stack from '@mui/material/Stack';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -64,7 +64,7 @@ function CellTypesHeaderPanel() {
     setAnchorEl(null);
   });
 
-  const organs = useCellTypeOrgans();
+  const { organs } = useCellTypesLandingDataContext();
 
   const organSelectionIsNotDefault = organsState.length !== organs.length;
 

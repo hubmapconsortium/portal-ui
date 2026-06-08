@@ -28,6 +28,8 @@ def client(tmp_path):
             routes_scfind._get_all_cell_type_names.cache_clear()
         if hasattr(routes_scfind._get_all_genes, 'cache_clear'):
             routes_scfind._get_all_genes.cache_clear()
+        if hasattr(routes_scfind._cached_scfind_get, 'cache_clear'):
+            routes_scfind._cached_scfind_get.cache_clear()
         if hasattr(routes_scfind._get_label_to_clid_mapping, 'cache_clear'):
             routes_scfind._get_label_to_clid_mapping.cache_clear()
         if hasattr(routes_scfind._get_clid_to_label_mapping, 'cache_clear'):
@@ -96,42 +98,121 @@ mock_label_to_clid = {'CLIDs': ['CL:0000066', 'CL:0000067']}
 
 mock_clid_to_label = {'cell_types': ['epithelial cell', 'mesenchymal cell']}
 
+# Native scfind response shapes for the per-operation proxy routes. The routes forward these
+# unchanged, so the consuming front-end hooks keep their existing response types.
+mock_hyper_query = {
+    'findGeneSignatures': [
+        {'cell_type': 'kidney.epithelial cell', 'cell_hits': 12, 'total_cells': 40},
+    ]
+}
+mock_find_datasets = {
+    'counts': {'VIM': [3, 7]},
+    'findDatasets': {'VIM': ['HBM123.ABCD.456', 'HBM789.EFGH.012']},
+}
+mock_find_dataset_for_cell_type = {'counts': [2], 'datasets': ['HBM123.ABCD.456']}
+mock_cell_type_count_for_dataset = {'cellTypeCounts': [{'count': 5, 'index': 'epithelial cell'}]}
+mock_cell_type_count_for_tissue = {
+    'cellTypeCounts': [{'cell_count': 9, 'index': 'kidney.epithelial cell'}]
+}
+mock_cell_type_expression = {'VIM': {'0-1': 238, '1-2': 57}}
+mock_cell_type_markers = {
+    'findGeneSignatures': [{'cellType': 'kidney.epithelial cell', 'genes': 'VIM'}]
+}
+mock_evaluate_markers = {'evaluateMarkers': [{'gene': 'VIM', 'precision': 0.9}]}
+mock_find_gene_signatures = {'evaluateMarkers': [{'gene': 'VIM'}]}
+mock_find_similar_genes = {'evaluateMarkers': [{'gene': 'ACTB'}]}
+mock_marker_genes = [{'cell_type': 'kidney.epithelial cell'}]
+mock_find_housekeeping_genes = {'findHouseKeepingGenes': ['ACTB', 'GAPDH']}
+mock_find_cell_type_specificities = {
+    'cellTypeSpecificities': [{'cell_type': 'kidney.epithelial cell'}]
+}
+mock_find_tissue_specificities = {'evaluateMarkers': [{'tissue': 'kidney'}]}
+mock_indexed_datasets = {'datasets': ['HBM123.ABCD.456'], 'counts': [42]}
+
+
+def _scfind_response_for_url(url, has_atac_modality):
+    """Return the mock scfind payload for a given request URL, or None if unmatched.
+
+    Ordering matters where one endpoint name is a prefix of another (e.g.
+    getCellTypeExpressionBinData vs getCellTypeExpression).
+    """
+    if 'cellTypeNames' in url:
+        return mock_atac_cell_type_names if has_atac_modality else mock_cell_type_names
+    elif 'scfindGenes' in url:
+        return mock_atac_gene_names if has_atac_modality else mock_gene_names
+    elif 'CellType2CLID' in url:
+        return mock_label_to_clid
+    elif 'CLID2CellType' in url:
+        return mock_clid_to_label
+    elif 'pathways' in url and 'participants' in url:
+        return mock_ubkg_pathway_response
+    elif 'hyperQueryCellTypes' in url:
+        return mock_hyper_query
+    elif 'findDatasetForCellType' in url:
+        return mock_find_dataset_for_cell_type
+    elif 'findDatasets' in url:
+        return mock_find_datasets
+    elif 'cellTypeCountForDataset' in url:
+        return mock_cell_type_count_for_dataset
+    elif 'cellTypeCountForTissue' in url:
+        return mock_cell_type_count_for_tissue
+    elif 'getCellTypeExpressionBinData' in url:
+        return mock_cell_type_expression
+    elif 'getCellTypeExpression' in url:
+        return mock_cell_type_expression
+    elif 'cellTypeMarkers' in url:
+        return mock_cell_type_markers
+    elif 'evaluateMarkers' in url:
+        return mock_evaluate_markers
+    elif 'findGeneSignatures' in url:
+        return mock_find_gene_signatures
+    elif 'findSimilarGenes' in url:
+        return mock_find_similar_genes
+    elif 'marker_genes' in url:
+        return mock_marker_genes
+    elif 'findHouseKeepingGenes' in url:
+        return mock_find_housekeeping_genes
+    elif 'findCellTypeSpecificities' in url:
+        return mock_find_cell_type_specificities
+    elif 'findTissueSpecificities' in url:
+        return mock_find_tissue_specificities
+    elif 'getDatasets' in url:
+        return mock_indexed_datasets
+    return None
+
+
+class _MockResponse:
+    def __init__(self, json_data, status_code=200):
+        self.json_data = json_data
+        self.status_code = status_code
+        self.text = 'Mock response'
+
+    def json(self):
+        return self.json_data
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise requests.exceptions.HTTPError(response=self)
+
 
 def mock_scfind_get(url, **kwargs):
-    """Mock function for SCFIND API requests."""
-
-    class MockResponse:
-        def __init__(self, json_data, status_code=200):
-            self.json_data = json_data
-            self.status_code = status_code
-            self.text = 'Mock response'
-
-        def json(self):
-            return self.json_data
-
-        def raise_for_status(self):
-            if self.status_code >= 400:
-                raise requests.exceptions.HTTPError(response=self)
-
-    # Check for modality parameter in params
+    """Mock function for SCFIND API GET requests."""
     params = kwargs.get('params', {}) or {}
     has_atac_modality = params.get('modality') == 'ATAC'
+    data = _scfind_response_for_url(url, has_atac_modality)
+    if data is None:
+        return _MockResponse({}, 404)
+    return _MockResponse(data)
 
-    # Determine response based on URL
-    if 'cellTypeNames' in url:
-        return MockResponse(
-            mock_atac_cell_type_names if has_atac_modality else mock_cell_type_names
-        )
-    elif 'scfindGenes' in url:
-        return MockResponse(mock_atac_gene_names if has_atac_modality else mock_gene_names)
-    elif 'CellType2CLID' in url:
-        return MockResponse(mock_label_to_clid)
-    elif 'CLID2CellType' in url:
-        return MockResponse(mock_clid_to_label)
-    elif 'pathways' in url and 'participants' in url:
-        return MockResponse(mock_ubkg_pathway_response)
-    else:
-        return MockResponse({}, 404)
+
+def mock_scfind_post(url, **kwargs):
+    """Mock function for SCFIND API POST requests (comma-in-cell-type-name workaround)."""
+    body = kwargs.get('json', {}) or {}
+    has_atac_modality = body.get('modality') == 'ATAC'
+    data = _scfind_response_for_url(url, has_atac_modality)
+    if data is None:
+        return _MockResponse({}, 404)
+    return _MockResponse(data)
 
 
 def mock_scfind_get_error(url, **kwargs):
@@ -720,6 +801,168 @@ class TestPathwayGenes:
         assert 'An error occurred' in data['error']
 
 
+class TestPerOperationProxyRoutes:
+    """The per-operation proxy routes forward to scfind and return its native shape."""
+
+    def test_hyper_query_cell_types(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get('/scfind/hyper-query-cell-types.json?gene_list=VIM')
+        assert response.status_code == 200
+        assert response.get_json() == mock_hyper_query
+
+    def test_find_datasets(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get('/scfind/find-datasets.json?gene_list=VIM')
+        assert response.status_code == 200
+        assert response.get_json() == mock_find_datasets
+
+    def test_cell_type_count_for_tissue(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get('/scfind/cell-type-count-for-tissue.json?tissue=kidney')
+        assert response.status_code == 200
+        assert response.get_json() == mock_cell_type_count_for_tissue
+
+    def test_indexed_datasets(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get('/scfind/indexed-datasets.json')
+        assert response.status_code == 200
+        assert response.get_json() == mock_indexed_datasets
+
+    def test_marker_genes_returns_list(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get('/scfind/marker-genes.json?marker_genes=VIM')
+        assert response.status_code == 200
+        assert response.get_json() == mock_marker_genes
+
+    def test_expression_bins_not_shadowed_by_expression(self, client, mocker):
+        # getCellTypeExpression is a prefix of getCellTypeExpressionBinData; make sure the bins
+        # route hits the right upstream endpoint.
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        client.get('/scfind/cell-type-expression-bins.json?gene_list=VIM&cell_type=kidney.x')
+        called_url = mock_get.call_args[0][0]
+        assert 'getCellTypeExpressionBinData' in called_url
+
+    def test_index_version_injected_server_side(self, client, mocker):
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        client.get('/scfind/find-datasets.json?gene_list=VIM')
+        _, kwargs = mock_get.call_args
+        assert kwargs['params']['index_version'] == 'v1.0'
+
+    def test_get_response_is_cached(self, client, mocker):
+        # Two identical GETs in one worker hit the upstream once (shared lru_cache).
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        client.get('/scfind/find-datasets.json?gene_list=VIM')
+        client.get('/scfind/find-datasets.json?gene_list=VIM')
+        assert mock_get.call_count == 1
+
+    def test_post_forwards_json_body(self, client, mocker):
+        # Comma-containing cell type names dispatch to POST; the body is forwarded to scfind POST.
+        mock_post = mocker.patch('requests.post', side_effect=mock_scfind_post)
+        response = client.post(
+            '/scfind/cell-type-markers.json', json={'cell_types': ['kidney.T cell, regulatory']}
+        )
+        assert response.status_code == 200
+        assert response.get_json() == mock_cell_type_markers
+        mock_post.assert_called_once()
+        _, kwargs = mock_post.call_args
+        # index_version is injected into the POST body server-side.
+        assert kwargs['json']['index_version'] == 'v1.0'
+        assert kwargs['json']['cell_types'] == ['kidney.T cell, regulatory']
+
+    def test_proxy_timeout_returns_504(self, client, mocker):
+        mocker.patch('requests.get', side_effect=requests.exceptions.Timeout('timed out'))
+        response = client.get('/scfind/find-datasets.json?gene_list=VIM')
+        assert response.status_code == 504
+        assert 'took too long' in response.get_json()['error']
+
+    def test_proxy_error_returns_500(self, client, mocker):
+        mocker.patch('requests.get', side_effect=Exception('boom'))
+        response = client.get('/scfind/find-datasets.json?gene_list=VIM')
+        assert response.status_code == 500
+        assert 'An error occurred' in response.get_json()['error']
+
+
+class TestExtractCellTypesInfo:
+    """Pure unit tests for the Python port of the frontend extractCellTypesInfo."""
+
+    def test_parses_name_organs_variants(self):
+        result = routes_scfind._extract_cell_types_info(
+            ['kidney.B cell:1', 'lung.B cell', 'kidney.B cell:2']
+        )
+        assert result['name'] == 'B cell'
+        assert result['organs'] == ['kidney', 'lung']
+        assert result['variants'] == {'kidney': ['1', '2'], 'lung': []}
+
+    def test_empty(self):
+        assert routes_scfind._extract_cell_types_info([]) == {
+            'name': '',
+            'organs': [],
+            'variants': {},
+        }
+
+
+class TestPerPageAggregates:
+    """The per-page aggregate routes assemble all the scfind data a reworked page needs."""
+
+    def test_cell_types_landing(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get('/scfind/cell-types-landing.json')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert data['cell_type_names'] == mock_cell_type_names['cellTypeNames']
+        assert data['cell_type_names_atac'] == mock_atac_cell_type_names['cellTypeNames']
+        # Organs are deduped in first-occurrence order from the RNA names.
+        assert data['organs'] == ['kidney', 'heart', 'lung']
+
+    def test_cell_types_landing_error(self, client, mocker):
+        mocker.patch(
+            'app.routes_scfind._build_cell_types_landing',
+            side_effect=Exception('SCFIND API error'),
+        )
+        response = client.get('/scfind/cell-types-landing.json')
+        assert response.status_code == 500
+        assert 'An error occurred' in response.get_json()['error']
+
+    def test_gene_detail(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get('/scfind/gene-detail/VIM.json')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert data['hyper_query'] == mock_hyper_query['findGeneSignatures']
+        assert data['find_datasets'] == mock_find_datasets
+        assert data['organs'] == ['kidney']
+        assert 'kidney.epithelial cell' in data['label_to_clid']
+
+    @pytest.mark.parametrize('gene_symbol', ['a%20b', '.hidden', 'a%3Bb'])
+    def test_gene_detail_invalid_symbol(self, client, mocker, gene_symbol):
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get(f'/scfind/gene-detail/{gene_symbol}.json')
+        assert response.status_code == 400
+        assert 'Invalid gene symbol' in response.get_json()['error']
+        mock_get.assert_not_called()
+
+    def test_cell_type_detail(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        # CL:0000066 is one of the CLIDs the mock label->CLID map produces.
+        response = client.get('/scfind/cell-type-detail/CL:0000066.json')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert data['cell_types'] == mock_clid_to_label['cell_types']
+        assert 'markers' in data
+        assert 'datasets_for_cell_types' in data
+        assert 'name' in data
+        assert 'organs' in data
+        assert 'variants' in data
+
+    @pytest.mark.parametrize('clid', ['cl:0000236', 'CL:abc', 'CL%3A', '0000236'])
+    def test_cell_type_detail_invalid_clid(self, client, mocker, clid):
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get(f'/scfind/cell-type-detail/{clid}.json')
+        assert response.status_code == 400
+        assert 'Invalid cell type ID' in response.get_json()['error']
+        mock_get.assert_not_called()
+
+
 class TestSharedMapCache:
     """The aggregate maps are built at most once across processes/calls."""
 
@@ -800,6 +1043,25 @@ class TestSharedMapCache:
         ('/scfind/cell-types/autocomplete', 'GET', 200),
         ('/scfind/genes/validate', 'POST', 400),  # No JSON body
         ('/scfind/pathway-genes', 'POST', 400),  # No JSON body
+        ('/scfind/hyper-query-cell-types.json', 'GET', 200),
+        ('/scfind/find-datasets.json', 'GET', 200),
+        ('/scfind/find-dataset-for-cell-type.json', 'GET', 200),
+        ('/scfind/cell-type-count-for-dataset.json', 'GET', 200),
+        ('/scfind/cell-type-count-for-tissue.json', 'GET', 200),
+        ('/scfind/cell-type-expression.json', 'GET', 200),
+        ('/scfind/cell-type-expression-bins.json', 'GET', 200),
+        ('/scfind/cell-type-markers.json', 'GET', 200),
+        ('/scfind/evaluate-markers.json', 'GET', 200),
+        ('/scfind/find-gene-signatures.json', 'GET', 200),
+        ('/scfind/find-similar-genes.json', 'GET', 200),
+        ('/scfind/marker-genes.json', 'GET', 200),
+        ('/scfind/find-housekeeping-genes.json', 'GET', 200),
+        ('/scfind/find-cell-type-specificities.json', 'GET', 200),
+        ('/scfind/find-tissue-specificities.json', 'GET', 200),
+        ('/scfind/indexed-datasets.json', 'GET', 200),
+        ('/scfind/cell-types-landing.json', 'GET', 200),
+        ('/scfind/gene-detail/VIM.json', 'GET', 200),
+        ('/scfind/cell-type-detail/CL:0000066.json', 'GET', 200),
     ],
 )
 def test_endpoint_accessibility(client, mocker, endpoint, method, expected_status):

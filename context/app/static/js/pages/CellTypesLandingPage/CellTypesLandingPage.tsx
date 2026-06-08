@@ -1,7 +1,10 @@
 import React from 'react';
 
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
-import useCellTypeNames, { useCellTypeNamesMap, useCellTypeOrgans } from 'js/api/scfind/useCellTypeNames';
+import { formatCellTypeName } from 'js/api/scfind/utils';
+import CellTypesLandingDataProvider, {
+  useCellTypesLandingDataContext,
+} from 'js/components/cell-types-landing/CellTypesLandingDataContext';
 import CellTypesSearchProvider from 'js/components/cell-types-landing/CellTypesSearchContext';
 import CellTypesPanelList from 'js/components/cell-types-landing/CellTypesPanelList';
 import CellTypesSearchBar from 'js/components/cell-types-landing/CellTypesSearchBar';
@@ -9,12 +12,10 @@ import MultiOrganCellTypeDistributionChartWithProvider from 'js/components/cell-
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import { trackEvent } from 'js/helpers/trackers';
 
-export default function CellTypesLandingPage() {
-  const cellTypesMap = useCellTypeNamesMap();
-  const { data } = useCellTypeNames();
-  const cellTypeOrgans = useCellTypeOrgans();
+function CellTypesLandingPageContent() {
+  const { cellTypeNames, organs: cellTypeOrgans } = useCellTypesLandingDataContext();
 
-  const uniqueCellTypes = Object.keys(cellTypesMap).length;
+  const uniqueCellTypes = new Set(cellTypeNames.map(formatCellTypeName)).size;
 
   return (
     <CellTypesSearchProvider
@@ -51,10 +52,10 @@ export default function CellTypesLandingPage() {
         }
         data-testid="cell-types-title"
       >
-        {data?.cellTypeNames && cellTypeOrgans && (
+        {cellTypeNames.length > 0 && cellTypeOrgans.length > 0 && (
           <div style={{ marginBottom: '1rem' }}>
             <MultiOrganCellTypeDistributionChartWithProvider
-              cellTypes={data?.cellTypeNames}
+              cellTypes={cellTypeNames}
               organs={cellTypeOrgans}
               hideLegend
             />
@@ -64,5 +65,13 @@ export default function CellTypesLandingPage() {
         <CellTypesPanelList />
       </PanelListLandingPage>
     </CellTypesSearchProvider>
+  );
+}
+
+export default function CellTypesLandingPage() {
+  return (
+    <CellTypesLandingDataProvider>
+      <CellTypesLandingPageContent />
+    </CellTypesLandingDataProvider>
   );
 }

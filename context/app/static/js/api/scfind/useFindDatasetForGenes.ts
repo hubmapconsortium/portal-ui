@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import { createScFindFlaskKey, stringOrArrayToString } from './utils';
 import { useMemo } from 'react';
 
 export interface DatasetsForGenesResponse {
@@ -15,30 +15,20 @@ export interface DatasetsForGenesParams {
 
 type DatasetsForGenesKey = string | null;
 
-export function createFindDatasetForGenesKey(
-  scFindEndpoint: string,
-  { geneList, modality }: DatasetsForGenesParams,
-  scFindIndexVersion?: string,
-): DatasetsForGenesKey {
+export function createFindDatasetForGenesKey({ geneList, modality }: DatasetsForGenesParams): DatasetsForGenesKey {
   if (
     (Array.isArray(geneList) && geneList.length === 0) ||
     (typeof geneList === 'string' && geneList.trim().length === 0)
   )
     return null;
-  return createScFindKey(
-    scFindEndpoint,
-    'findDatasets',
-    {
-      gene_list: stringOrArrayToString(geneList) || undefined, // Convert to string or return undefined if empty
-      modality,
-    },
-    scFindIndexVersion,
-  );
+  return createScFindFlaskKey('/scfind/find-datasets.json', {
+    gene_list: stringOrArrayToString(geneList) || undefined, // Convert to string or return undefined if empty
+    modality,
+  });
 }
 
 export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createFindDatasetForGenesKey(scFindEndpoint, props, scFindIndexVersion);
+  const key = createFindDatasetForGenesKey(props);
   const { data, ...rest } = useSWR<DatasetsForGenesResponse, Error, DatasetsForGenesKey>(
     key,
     (url) =>
