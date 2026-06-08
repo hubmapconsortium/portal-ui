@@ -231,6 +231,17 @@
       "command": "npx --yes kill-port 5000 5001 6006"
     },
     {
+      "label": "Clear scFind cache",
+      "type": "shell",
+      "command": "uv run python -c \"import os, shutil, tempfile; d = os.path.join(tempfile.gettempdir(), 'scfind-cache'); shutil.rmtree(d, ignore_errors=True); print('Cleared', d)\"",
+      "detail": "Delete the on-disk scFind aggregate cache so the next Flask start rebuilds it. Use after changing the shape of a cached payload (the dev cache is keyed by name+version, not content).",
+      "presentation": {
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "npm test:watch",
       "type": "npm",
       "script": "test:watch",

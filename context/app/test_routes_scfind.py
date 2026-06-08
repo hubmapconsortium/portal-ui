@@ -129,6 +129,24 @@ mock_find_cell_type_specificities = {
 mock_find_tissue_specificities = {'evaluateMarkers': [{'tissue': 'kidney'}]}
 mock_indexed_datasets = {'datasets': ['HBM123.ABCD.456'], 'counts': [42]}
 
+# UBKG /celltypes response: Cell Ontology definitions keyed (in the response) by full CLID.
+mock_celltypes = [
+    {
+        'cell_type': {
+            'id': 'CL:0000066',
+            'definition': 'A mock epithelial cell definition.',
+            'name': 'epithelial cell',
+        }
+    },
+    {
+        'cell_type': {
+            'id': 'CL:0000067',
+            'definition': 'A mock ciliated cell definition.',
+            'name': 'ciliated cell',
+        }
+    },
+]
+
 
 def _scfind_response_for_url(url, has_atac_modality):
     """Return the mock scfind payload for a given request URL, or None if unmatched.
@@ -146,6 +164,8 @@ def _scfind_response_for_url(url, has_atac_modality):
         return mock_clid_to_label
     elif 'pathways' in url and 'participants' in url:
         return mock_ubkg_pathway_response
+    elif 'celltypes' in url:
+        return mock_celltypes
     elif 'hyperQueryCellTypes' in url:
         return mock_hyper_query
     elif 'findDatasetForCellType' in url:
@@ -913,6 +933,11 @@ class TestPerPageAggregates:
         assert data['cell_type_names_atac'] == mock_atac_cell_type_names['cellTypeNames']
         # Organs are deduped in first-occurrence order from the RNA names.
         assert data['organs'] == ['kidney', 'heart', 'lung']
+        # Per-label dataset counts for the Data Type chips: one dataset contains the cell type for
+        # each modality in the mocks (cellTypeCountForDataset index 'epithelial cell').
+        assert data['dataset_counts']['epithelial cell'] == {'rna': 1, 'atac': 1}
+        # Cell Ontology descriptions (from UBKG) cached in the payload, keyed by full CLID.
+        assert data['descriptions']['CL:0000066'] == 'A mock epithelial cell definition.'
 
     def test_cell_types_landing_error(self, client, mocker):
         mocker.patch(

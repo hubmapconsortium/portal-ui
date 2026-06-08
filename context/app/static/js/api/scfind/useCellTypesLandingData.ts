@@ -11,6 +11,12 @@ export interface CellTypesLandingData {
   cell_type_names: string[];
   cell_type_names_atac: string[];
   organs: string[];
+  // Per formatted cell type label: how many datasets contain it for each modality (for the
+  // panel's Data Type chips). Computed + cached server-side.
+  dataset_counts: Record<string, { rna: number; atac: number }>;
+  // Cell Ontology descriptions keyed by full CLID (e.g. "CL:0000236"), cached server-side so the
+  // panel doesn't fetch them from UBKG per load.
+  descriptions: Record<string, string>;
 }
 
 export function createCellTypesLandingDataKey(): string {

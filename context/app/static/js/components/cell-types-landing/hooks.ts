@@ -1,14 +1,16 @@
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { formatCellTypeName } from 'js/api/scfind/utils';
-import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import { useMemo } from 'react';
 import { useCellTypesLandingDataContext } from './CellTypesLandingDataContext';
 
 export function useCellTypesList() {
-  // RNA + ATAC cell type names come from the page aggregate (one request, warmed server-side).
+  // RNA + ATAC cell type names, dataset counts, and descriptions all come from the page aggregate
+  // (one request, warmed server-side).
   const {
     cellTypeNames,
     cellTypeNamesAtac,
+    datasetCounts,
+    descriptions,
     isLoading: isLoadingLanding,
     isValidating: isValidatingLanding,
   } = useCellTypesLandingDataContext();
@@ -55,40 +57,35 @@ export function useCellTypesList() {
       results
         .map((clids, idx) => {
           const label = formatCellTypeName(allCellTypeNames[idx]);
+          const rnaOrgans = rnaOrgansMap[label] ?? [];
+          const atacOrgans = atacOrgansMap[label] ?? [];
           return {
             label,
             clid: clids.CLIDs?.[0],
-            organs: rnaOrgansMap[label] ?? [],
+            // Unified organ list across modalities (drives both display and the organ filter).
+            organs: [...new Set([...rnaOrgans, ...atacOrgans])],
             hasScfindRna: rnaCellTypeLabels.has(label),
             hasScfindAtac: atacCellTypeLabels.has(label),
-            rnaOrgans: rnaOrgansMap[label] ?? [],
-            atacOrgans: atacOrgansMap[label] ?? [],
+            rnaDatasetCount: datasetCounts[label]?.rna ?? 0,
+            atacDatasetCount: datasetCounts[label]?.atac ?? 0,
           };
         })
         // Filter any duplicate labels (keep first)
         .filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
     );
-  }, [results, allCellTypeNames, rnaOrgansMap, rnaCellTypeLabels, atacCellTypeLabels, atacOrgansMap]);
+  }, [results, allCellTypeNames, rnaOrgansMap, rnaCellTypeLabels, atacCellTypeLabels, atacOrgansMap, datasetCounts]);
 
-  // Fetch cell type descriptions using the UBKG API
-  const {
-    data: cellTypeDetails,
-    isLoading: isLoadingDescriptions,
-    error: descriptionsError,
-  } = useCellTypeOntologyDetails(cellTypes.map((ct) => ct.clid).filter(Boolean));
-
-  // Combine cell types with their descriptions
+  // Combine cell types with their descriptions (cached in the aggregate, keyed by full CLID).
   const cellTypesWithDescriptions = useMemo(() => {
     return cellTypes.map((cellType) => ({
       ...cellType,
-      description: cellType.clid ? cellTypeDetails?.[cellType.clid.replace(/\D/g, '')]?.definition : undefined,
+      description: cellType.clid ? descriptions[cellType.clid] : undefined,
     }));
-  }, [cellTypes, cellTypeDetails]);
+  }, [cellTypes, descriptions]);
 
   return {
     cellTypes: cellTypesWithDescriptions,
-    isLoading: isLoadingCLIDs || isLoadingLanding || isLoadingDescriptions,
+    isLoading: isLoadingCLIDs || isLoadingLanding,
     isValidating: isValidatingLanding,
-    descriptionsError,
   };
 }

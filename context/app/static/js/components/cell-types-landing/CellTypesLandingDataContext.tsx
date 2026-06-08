@@ -6,6 +6,8 @@ interface CellTypesLandingDataContextType {
   cellTypeNames: string[]; // RNA cell type names ("organ.cellType"), 'other' filtered server-side
   cellTypeNamesAtac: string[]; // ATAC cell type names
   organs: string[]; // deduped RNA organs
+  datasetCounts: Record<string, { rna: number; atac: number }>; // per-label dataset counts for chips
+  descriptions: Record<string, string>; // Cell Ontology descriptions keyed by full CLID
   isLoading: boolean;
   isValidating: boolean;
   error: unknown;
@@ -25,6 +27,8 @@ export default function CellTypesLandingDataProvider({ children }: PropsWithChil
       cellTypeNames: data?.cell_type_names ?? [],
       cellTypeNamesAtac: data?.cell_type_names_atac ?? [],
       organs: data?.organs ?? [],
+      datasetCounts: data?.dataset_counts ?? {},
+      descriptions: data?.descriptions ?? {},
       isLoading,
       isValidating,
       error,

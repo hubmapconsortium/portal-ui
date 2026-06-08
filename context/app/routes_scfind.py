@@ -349,6 +349,25 @@ def _get_clid_to_label_mapping(clid):
     return response.get('cell_types', [])
 
 
+def _retry(fn, attempts=3, base_delay=0.5):
+    """
+    Call ``fn`` up to ``attempts`` times with exponential backoff, re-raising the last error.
+
+    Used by the map builders so a transient scfind failure during the concurrent fan-out is retried
+    rather than swallowed into a permanent empty entry that then gets cached to disk (which is what
+    previously left most cell types without a CLID, breaking their detail-page links).
+    """
+    delay = base_delay
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception:
+            if attempt == attempts - 1:
+                raise
+            time.sleep(delay)
+            delay *= 2
+
+
 def _build_label_to_clid_map():
     """Return the label-to-CLID map, built once and shared across worker processes."""
     return _get_or_build_map('label_to_clid', _build_label_to_clid_map_uncached)
@@ -371,7 +390,7 @@ def _build_label_to_clid_map_uncached():
         """Helper function to fetch CLIDs for a single cell type."""
         with app.app_context():
             try:
-                clids = _get_label_to_clid_mapping(cell_type)
+                clids = _retry(lambda: _get_label_to_clid_mapping(cell_type))
                 return cell_type, clids
             except Exception as e:
                 current_app.logger.warning(f"Failed to get CLIDs for cell type '{cell_type}': {e}")
@@ -425,7 +444,7 @@ def _build_clid_to_label_map_uncached():
         """Helper function to fetch labels for a single CLID."""
         with app.app_context():
             try:
-                labels = _get_clid_to_label_mapping(clid)
+                labels = _retry(lambda: _get_clid_to_label_mapping(clid))
                 return clid, labels
             except Exception as e:
                 current_app.logger.warning(f"Failed to get labels for CLID '{clid}': {e}")
@@ -595,6 +614,71 @@ def _cell_type_markers_for(cell_types):
     return _cached_scfind_get('cellTypeMarkers', tuple(sorted(params.items())))
 
 
+def _build_dataset_counts(modality=None):
+    """
+    Count, per formatted cell type label, how many datasets contain it for a modality.
+
+    Fans out over datasets rather than cell types: one `cellTypeCountForDataset` call returns every
+    cell type in a dataset, so this is O(#datasets) upstream calls (hundreds) instead of
+    O(#cell-type-names) (thousands). Returns ``{label: dataset_count}``. Shares the
+    `_cached_scfind_get` cache (so the per-dataset counts the distribution charts use are warmed too).
+    """
+    base_params = {}
+    if modality:
+        base_params['modality'] = modality
+    datasets = _cached_scfind_get('getDatasets', tuple(sorted(base_params.items()))).get(
+        'datasets', []
+    )
+
+    def fetch(dataset):
+        params = {'dataset': dataset, **base_params}
+        counts = _cached_scfind_get('cellTypeCountForDataset', tuple(sorted(params.items()))).get(
+            'cellTypeCounts', []
+        )
+        return [c.get('index') for c in counts if isinstance(c, dict) and c.get('index')]
+
+    per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset')
+    label_datasets = {}
+    for dataset, indexes in per_dataset.items():
+        for index in indexes:
+            label_datasets.setdefault(_format_cell_type_name(index), set()).add(dataset)
+    return {label: len(datasets_for_label) for label, datasets_for_label in label_datasets.items()}
+
+
+def _build_cell_type_descriptions(label_to_clid_map):
+    """
+    Fetch Cell Ontology definitions (from UBKG) for every CLID in the label->CLID map.
+
+    Returns ``{clid: definition}`` keyed by the full CLID (e.g. "CL:0000236"). Bundled into the
+    landing payload (and warmed) so the panel's descriptions are cached server-side instead of being
+    fetched from UBKG on every page load. UBKG/network failures degrade to an empty map (the panel
+    then shows its "No description available." fallback).
+    """
+    clids = sorted({clid for clids in label_to_clid_map.values() for clid in clids})
+    if not clids:
+        return {}
+    ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
+    # UBKG's /celltypes endpoint keys by the numeric portion of the CLID (mirrors stripCLIDPrefix).
+    numeric_ids = ','.join(''.join(ch for ch in clid if ch.isdigit()) for clid in clids)
+    url = f'{ubkg_endpoint}/celltypes/{numeric_ids}'
+    try:
+        response = requests.get(url, timeout=EXTERNAL_REQUEST_TIMEOUT)
+        response.raise_for_status()
+        data = response.json()
+    except requests.RequestException as e:
+        current_app.logger.warning(f'Failed to fetch cell type descriptions from UBKG: {e}')
+        return {}
+
+    descriptions = {}
+    for entry in data:
+        cell_type = entry.get('cell_type') or {}
+        clid = cell_type.get('id')
+        definition = cell_type.get('definition')
+        if clid and definition:
+            descriptions[clid] = definition
+    return descriptions
+
+
 def _build_cell_types_landing_uncached():
     """Assemble the Cell Types landing payload from the cached cell-type-name lists.
 
@@ -610,10 +694,22 @@ def _build_cell_types_landing_uncached():
         organ = cell_type.split('.')[0]
         if organ not in organs:
             organs.append(organ)
+    # Per-label RNAseq/ATACseq dataset counts for the panel's Data Type chips.
+    rna_counts = _build_dataset_counts()
+    atac_counts = _build_dataset_counts('ATAC')
+    dataset_counts = {
+        label: {'rna': rna_counts.get(label, 0), 'atac': atac_counts.get(label, 0)}
+        for label in set(rna_counts) | set(atac_counts)
+    }
+    # Static Cell Ontology descriptions, cached here so the panel doesn't fetch them from UBKG on
+    # every load. Keyed by full CLID (the panel resolves each row's CLID via the label->CLID map).
+    descriptions = _build_cell_type_descriptions(_build_label_to_clid_map())
     return {
         'cell_type_names': rna,
         'cell_type_names_atac': atac,
         'organs': organs,
+        'dataset_counts': dataset_counts,
+        'descriptions': descriptions,
     }
 
 

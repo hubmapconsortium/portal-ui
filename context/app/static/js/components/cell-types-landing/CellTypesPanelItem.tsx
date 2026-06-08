@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Chip from '@mui/material/Chip';
 import { capitalize, useEventCallback } from '@mui/material/utils';
 
 import { InternalLink } from 'js/shared-styles/Links';
@@ -18,13 +19,22 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Filter from '@mui/icons-material/FilterListRounded';
 import Badge from '@mui/material/Badge';
 import { CheckIcon } from 'js/shared-styles/icons';
-import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
-import ViewDatasetsDropdownButton from '../biomarkers/ViewDatasetsDropdownButton';
+import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
+import { trackEvent } from 'js/helpers/trackers';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
 import { useCellTypesLandingDataContext } from './CellTypesLandingDataContext';
 import { LineClamp } from 'js/shared-styles/text';
 import Stack from '@mui/material/Stack';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { getSearchURL } from '../organ/utils';
+
+const dataTypeTooltip =
+  'Indicates which data types the cell type was detected in: RNAseq (gene expression) or ATACseq ' +
+  '(chromatin accessibility). The count is how many datasets include that cell type for that data type.';
+
+// Uniform, compact width for the Data Type chips so RNAseq/ATACseq line up in columns across rows
+// without the counts' varying digit-widths misaligning them. Snug enough to fit "ATACseq (###)" at
+// the small chip size while keeping the column from overflowing the panel.
+const CHIP_WIDTH = '6.5rem';
 
 const desktopConfig = {
   name: {
@@ -34,7 +44,8 @@ const desktopConfig = {
   },
   description: {
     flexBasis: '40%',
-    flexShrink: 0,
+    // Yield space to the fixed-width Data Type column on narrower viewports rather than overflowing.
+    flexShrink: 1,
     flexGrow: 1,
   },
   organs: {
@@ -42,8 +53,10 @@ const desktopConfig = {
     flexShrink: 0,
     flexGrow: 0,
   },
-  datasets: {
-    flexBasis: 'fit-content',
+  dataType: {
+    // Fixed width that holds exactly two compact chips (2 * CHIP_WIDTH + gap), so the chips never
+    // overflow the panel and the column edge is stable across rows.
+    flexBasis: '14rem',
     flexShrink: 0,
     flexGrow: 0,
   },
@@ -164,11 +177,10 @@ function CellTypesHeaderPanel() {
           ))}
         </Box>
       </HeaderCell>
-      <HeaderCell {...desktopConfig.datasets}>
-        {/* Hidden button for layout purposes */}
-        <Box visibility="hidden">
-          <ViewDatasetsButton scFindParams={{}} isLoading={false} />
-        </Box>
+      <HeaderCell {...desktopConfig.dataType}>
+        <InfoTextTooltip infoIconSize="small" tooltipTitle={dataTypeTooltip}>
+          Data Type
+        </InfoTextTooltip>
       </HeaderCell>
     </StackTemplate>
   );
@@ -180,23 +192,15 @@ interface CellTypePanelItemProps {
   clid?: string;
   organs: string[];
   description?: string;
-  hasScfindRna?: boolean;
-  hasScfindAtac?: boolean;
-  rnaOrgans: string[];
-  atacOrgans: string[];
+  rnaDatasetCount: number;
+  atacDatasetCount: number;
 }
 
-function ModalityOrganLine({
-  name,
-  label,
-  organs,
-  color,
-}: {
-  name: string;
-  label: string;
-  organs: string[];
-  color: 'primary' | 'secondary';
-}) {
+/**
+ * Unified organ list for a cell type (across modalities). Organs the active filter has selected are
+ * emphasized; the rest are dimmed (matching the previous per-modality rendering's behavior).
+ */
+function OrganList({ organs }: { organs: string[] }) {
   const { organIsSelected, filterIsInactive } = useCellTypesSearchState();
 
   const sortedOrgans = useMemo(
@@ -211,31 +215,80 @@ function ModalityOrganLine({
   );
 
   return (
-    <SecondaryBackgroundTooltip
-      title={`The scFind ${label} index contains datasets derived from these organs containing ${name}.`}
-    >
-      <Typography variant="body2" component="div">
-        <Typography variant="body2" component="span" color={color} fontWeight={500}>
-          {label}:
-        </Typography>{' '}
-        {sortedOrgans.map((organ, idx) => (
-          <React.Fragment key={organ}>
-            <Typography
-              variant="body2"
-              component="span"
-              sx={{ color: organIsSelected(organ) || filterIsInactive ? 'text.primary' : 'text.disabled' }}
-            >
-              {capitalize(organ)}
+    <Typography variant="body2" component="div">
+      {sortedOrgans.map((organ, idx) => (
+        <React.Fragment key={organ}>
+          <Typography
+            variant="body2"
+            component="span"
+            sx={{ color: organIsSelected(organ) || filterIsInactive ? 'text.primary' : 'text.disabled' }}
+          >
+            {capitalize(organ)}
+          </Typography>
+          {idx < sortedOrgans.length - 1 && (
+            <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
+              ,{' '}
             </Typography>
-            {idx < sortedOrgans.length - 1 && (
-              <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
-                ,{' '}
-              </Typography>
-            )}
-          </React.Fragment>
-        ))}
-      </Typography>
-    </SecondaryBackgroundTooltip>
+          )}
+        </React.Fragment>
+      ))}
+    </Typography>
+  );
+}
+
+/**
+ * Data Type chips: one outlined, clickable chip per modality the cell type was detected in, each
+ * linking to that cell type's datasets for that modality and showing the dataset count.
+ */
+function DataTypeChips({
+  name,
+  organs,
+  rnaDatasetCount,
+  atacDatasetCount,
+}: {
+  name: string;
+  organs: string[];
+  rnaDatasetCount: number;
+  atacDatasetCount: number;
+}) {
+  const cellTypes = useMemo(() => organs.map((organ) => `${organ}.${name}`), [organs, name]);
+
+  const trackClick = (modality: string) =>
+    trackEvent({
+      category: 'Cell Type Landing Page',
+      action: `View Datasets / ${modality}`,
+      label: name,
+    });
+
+  // Compact, uniform-width chips packed from the left. Uniform width keeps the RNAseq and ATACseq
+  // chips aligned in columns across rows despite the counts' varying digit-widths.
+  return (
+    <Stack direction="row" spacing={1} flexWrap="nowrap" useFlexGap>
+      {rnaDatasetCount > 0 && (
+        <Chip
+          size="small"
+          sx={{ width: CHIP_WIDTH }}
+          variant="outlined"
+          clickable
+          component="a"
+          href={getSearchURL({ entityType: 'Dataset', scFindParams: { cellTypes } })}
+          label={`RNAseq (${rnaDatasetCount})`}
+          onClick={() => trackClick('RNAseq')}
+        />
+      )}
+      {atacDatasetCount > 0 && (
+        <Chip
+          size="small"
+          sx={{ width: CHIP_WIDTH }}
+          variant="outlined"
+          clickable
+          component="a"
+          href={getSearchURL({ entityType: 'Dataset', scFindParams: { cellTypes, modality: 'ATAC' } })}
+          label={`ATACseq (${atacDatasetCount})`}
+          onClick={() => trackClick('ATACseq')}
+        />
+      )}
+    </Stack>
   );
 }
 
@@ -245,20 +298,22 @@ function CellTypesPanelItem({
   clid,
   description,
   organs,
-  hasScfindRna,
-  hasScfindAtac,
-  rnaOrgans,
-  atacOrgans,
+  rnaDatasetCount,
+  atacDatasetCount,
 }: CellTypePanelItemProps) {
-  const cellTypes = organs.map((o) => `${o}.${name}`);
-
   return (
     <StackTemplate>
       <BodyCell {...desktopConfig.name} aria-label="Cell Type">
         <Box>
-          <InternalLink href={href} display="inline">
-            {name}
-          </InternalLink>
+          {href ? (
+            <InternalLink href={href} display="inline">
+              {name}
+            </InternalLink>
+          ) : (
+            <Typography variant="body2" component="span">
+              {name}
+            </Typography>
+          )}
           {clid && (
             <Typography
               variant="caption"
@@ -280,21 +335,14 @@ function CellTypesPanelItem({
         </LineClamp>
       </BodyCell>
       <BodyCell {...desktopConfig.organs} aria-label="Organs">
-        <Stack width="100%">
-          {hasScfindRna && <ModalityOrganLine name={name} label="RNA" organs={rnaOrgans} color="primary" />}
-          {hasScfindAtac && <ModalityOrganLine name={name} label="ATAC" organs={atacOrgans} color="secondary" />}
-        </Stack>
+        <OrganList organs={organs} />
       </BodyCell>
-      <BodyCell {...desktopConfig.datasets} aria-label="Datasets">
-        <ViewDatasetsDropdownButton
-          baseParams={{ cellTypes }}
-          hasScfindRna={hasScfindRna}
-          hasScfindAtac={hasScfindAtac}
-          trackingInfo={{
-            category: 'Cell Type Landing Page',
-            action: 'View Datasets',
-            label: name,
-          }}
+      <BodyCell {...desktopConfig.dataType} aria-label="Data Type">
+        <DataTypeChips
+          name={name}
+          organs={organs}
+          rnaDatasetCount={rnaDatasetCount}
+          atacDatasetCount={atacDatasetCount}
         />
       </BodyCell>
     </StackTemplate>
