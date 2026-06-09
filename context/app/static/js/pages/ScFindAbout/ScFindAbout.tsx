@@ -8,7 +8,7 @@ import PageTitle from 'js/shared-styles/pages/PageTitle';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
-import SCFindLink from 'js/shared-styles/Links/SCFindLink';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useCellTypeOrgans } from 'js/api/scfind/useCellTypeNames';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import ScFindDatasetsSection from './ScFindDatasetsSection';
@@ -36,7 +36,7 @@ export default function ScFindAbout() {
         <LabelledSectionText label="What is scFind?">
           The scFind method calculates cell count proportions and statistical metrics based on uniformly processed
           HuBMAP RNAseq or ATACseq datasets with cell type annotations. More information can be found{' '}
-          <SCFindLink>here</SCFindLink>.
+          <OutboundIconLink href="https://www.nature.com/articles/s41592-021-01076-9">here</OutboundIconLink>.
         </LabelledSectionText>
         <LabelledSectionText label="What does scFind currently support?">
           These results are derived from RNAseq or ATACseq datasets to identify cell types expressing a given gene. Not

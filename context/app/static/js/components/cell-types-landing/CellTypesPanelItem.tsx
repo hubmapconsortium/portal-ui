@@ -267,7 +267,7 @@ function DataTypeChips({
       {rnaDatasetCount > 0 ? (
         <Chip
           size="small"
-          sx={{ width: '100%' }}
+          sx={{ width: '100%', borderRadius: '8px' }}
           variant="outlined"
           clickable
           component="a"
@@ -281,7 +281,7 @@ function DataTypeChips({
       {atacDatasetCount > 0 ? (
         <Chip
           size="small"
-          sx={{ width: '100%' }}
+          sx={{ width: '100%', borderRadius: '8px' }}
           variant="outlined"
           clickable
           component="a"
