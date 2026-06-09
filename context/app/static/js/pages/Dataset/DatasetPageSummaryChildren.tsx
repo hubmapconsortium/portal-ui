@@ -21,7 +21,7 @@ export default function SummaryDataChildren({ mapped_data_types, origin_samples 
     <>
       <SummaryItem>
         <InternalLink
-          href="https://docs.hubmapconsortium.org/assays"
+          href="https://docs.hubmapconsortium.org/assays/metadata"
           underline="none"
           onClick={() => {
             trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: dataTypes });
