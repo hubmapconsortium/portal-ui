@@ -1,4 +1,3 @@
-import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher, MultiFetchOptionsType } from 'js/helpers/swr';
 
 // NOTE: This is the dev endpoint. We can't use flaskdata to provide this in Storybook because it doesn't exist in the Storybook environment.
@@ -64,6 +63,39 @@ export function createScFindPostRequest(
     fullBody.index_version = indexVersion;
   }
   return { url, body: fullBody };
+}
+
+/**
+ * Builds a GET key for a Flask scFind BFF route. Unlike {@link createScFindKey}, the URL is a
+ * relative path to our own Flask backend (e.g. `/scfind/find-datasets.json`) rather than the
+ * upstream scFind API, and `index_version` is injected server-side, so callers neither know nor
+ * send it. Undefined/empty params are dropped. Returns the relative URL string used as the SWR key.
+ */
+export function createScFindFlaskKey(route: string, params: Record<string, string | undefined> = {}): string {
+  const urlParams = new URLSearchParams();
+  Object.entries(params)
+    .filter(([, value]) => value)
+    .forEach(([key, value]) => {
+      urlParams.append(key, value!);
+    });
+  const queryString = urlParams.toString();
+  return queryString ? `${route}?${queryString}` : route;
+}
+
+/**
+ * POST-flavored counterpart to {@link createScFindFlaskKey}, used (as with the upstream API) when a
+ * cell type name contains a comma that would be ambiguous in a comma-joined GET param. The route is
+ * a relative Flask path and the body carries all parameters; `index_version` is injected server-side.
+ * Undefined values are dropped.
+ */
+export function createScFindFlaskPostRequest(route: string, body: Record<string, unknown>): ScFindPostRequest {
+  const fullBody: Record<string, unknown> = {};
+  Object.entries(body).forEach(([key, value]) => {
+    if (value !== undefined) {
+      fullBody[key] = value;
+    }
+  });
+  return { url: route, body: fullBody };
 }
 
 /**
@@ -221,13 +253,4 @@ export function stringOrArrayToString(input: string | string[]): string {
     return input.join(',');
   }
   return input;
-}
-
-/**
- * Convenience function for accessing SCFind API keys from context.
- * @returns An object containing the SCFind API endpoint and index version.
- */
-export function useScFindKey() {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
-  return { scFindEndpoint, scFindIndexVersion };
 }

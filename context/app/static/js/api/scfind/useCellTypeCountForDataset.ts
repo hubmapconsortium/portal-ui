@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
-import { createScFindKey, useScFindKey } from './utils';
+import { createScFindFlaskKey } from './utils';
 
 export interface CellTypeCountForDataset {
   count: number;
@@ -13,28 +13,23 @@ export interface CellTypeCountsForDataset {
 
 export interface CellTypeCountForDatasetParams {
   dataset: string;
+  modality?: string;
 }
 
 type CellTypeCountForDatasetKey = string;
 
-export function createCellTypeCountForDatasetKey(
-  scFindEndpoint: string,
-  { dataset }: CellTypeCountForDatasetParams,
-  scFindIndexVersion?: string,
-): CellTypeCountForDatasetKey {
-  return createScFindKey(
-    scFindEndpoint,
-    'cellTypeCountForDataset',
-    {
-      dataset,
-    },
-    scFindIndexVersion,
-  );
+export function createCellTypeCountForDatasetKey({
+  dataset,
+  modality,
+}: CellTypeCountForDatasetParams): CellTypeCountForDatasetKey {
+  return createScFindFlaskKey('/scfind/cell-type-count-for-dataset.json', {
+    dataset,
+    modality,
+  });
 }
 
 export default function useCellTypeCountForDataset(props: CellTypeCountForDatasetParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCellTypeCountForDatasetKey(scFindEndpoint, props, scFindIndexVersion);
+  const key = createCellTypeCountForDatasetKey(props);
   return useSWR<CellTypeCountsForDataset, unknown, CellTypeCountForDatasetKey>(key, (url) => fetcher({ url }), {
     revalidateOnFocus: false,
   });
@@ -42,31 +37,21 @@ export default function useCellTypeCountForDataset(props: CellTypeCountForDatase
 
 interface CellTypeCountForDatasetsParams {
   datasets?: string[];
+  modality?: string;
 }
 
 type CellTypeCountForDatasetsKey = string[];
 
-export function createCellTypeCountForDatasetsKey(
-  scFindEndpoint: string,
-  { datasets }: CellTypeCountForDatasetsParams,
-  scFindIndexVersion?: string,
-): CellTypeCountForDatasetsKey {
+export function createCellTypeCountForDatasetsKey({
+  datasets,
+  modality,
+}: CellTypeCountForDatasetsParams): CellTypeCountForDatasetsKey {
   if (!datasets) return [];
-  return datasets.map((dataset) =>
-    createScFindKey(
-      scFindEndpoint,
-      'cellTypeCountForDataset',
-      {
-        dataset,
-      },
-      scFindIndexVersion,
-    ),
-  );
+  return datasets.map((dataset) => createCellTypeCountForDatasetKey({ dataset, modality }));
 }
 
 export function useCellTypeCountForDatasets(props: CellTypeCountForDatasetsParams = { datasets: [] }) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCellTypeCountForDatasetsKey(scFindEndpoint, props, scFindIndexVersion);
+  const key = createCellTypeCountForDatasetsKey(props);
 
   const cellTypeCountForDatasetsFetcher = async (urls: string[]) => {
     const data = await multiFetcher<CellTypeCountsForDataset>({ urls });

@@ -2,14 +2,13 @@ import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPag
 import React from 'react';
 import MolecularDataQueryFormProvider from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
 import MolecularDataQueryFormTrackingProvider from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
-import SCFindGeneQueryResults from 'js/components/cells/SCFindResults/SCFindGeneQueryResults';
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import Description from 'js/shared-styles/sections/Description';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { datasets } from '../constants';
 import { useGeneDetailPageTrackingInfo, useGeneSymbol, useTrackGeneDetailPage } from '../hooks';
+import GeneDatasetsResults from './GeneDatasetsResults';
 
 export default function Datasets() {
   const geneSymbol = useGeneSymbol();
@@ -52,9 +51,8 @@ export default function Datasets() {
             genes: [{ full: geneSymbol, pre: '', match: geneSymbol, post: '' }],
           }}
         >
-          <SelectableTableProvider tableLabel={`Datasets with ${geneSymbol} - scFind Results`}>
-            <SCFindGeneQueryResults />
-          </SelectableTableProvider>
+          {/* Selection is scoped per results tab inside GeneDatasetsResults, so no provider here. */}
+          <GeneDatasetsResults />
         </MolecularDataQueryFormProvider>
       </MolecularDataQueryFormTrackingProvider>
     </CollapsibleDetailPageSection>

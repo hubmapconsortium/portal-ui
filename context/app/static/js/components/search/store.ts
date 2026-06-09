@@ -227,6 +227,8 @@ const searchURLStateSchema = z
         genes: z.array(z.string()).optional(),
         cellTypes: z.array(z.string()).optional(),
         scFindOnly: z.boolean().optional(),
+        modality: z.string().optional(),
+        allModalities: z.boolean().optional(),
       })
       .optional(),
     dataProductID: z.string().optional(),

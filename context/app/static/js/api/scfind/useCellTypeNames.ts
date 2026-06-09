@@ -3,7 +3,7 @@ import { fetcher } from 'js/helpers/swr';
 import { useMemo } from 'react';
 import { scaleOrdinal } from '@visx/scale';
 import { useTheme } from '@mui/material/styles';
-import { createScFindKey, formatCellTypeName, useScFindKey } from './utils';
+import { createScFindFlaskKey, formatCellTypeName } from './utils';
 
 type CellTypeNamesKey = string;
 
@@ -11,21 +11,28 @@ interface CellTypeNamesResponse {
   cellTypeNames: string[];
 }
 
-export function createCellTypeNamesKey(scFindEndpoint: string, scFindIndexVersion?: string): CellTypeNamesKey {
-  return createScFindKey(scFindEndpoint, 'cellTypeNames', {}, scFindIndexVersion);
+// The Flask BFF route returns the list under `cell_types`; we remap to `cellTypeNames` so the
+// shape consumed by useCellTypeNamesMap/useCellTypeOrgans and other callers is unchanged.
+interface CellTypeNamesFlaskResponse {
+  cell_types: string[];
 }
 
-export default function useCellTypeNames() {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCellTypeNamesKey(scFindEndpoint, scFindIndexVersion);
-  const { data, ...rest } = useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
+export function createCellTypeNamesKey(modality?: string): CellTypeNamesKey {
+  return createScFindFlaskKey('/scfind/cell-type-names.json', { modality });
+}
 
-  const filteredData = useMemo(() => {
+export default function useCellTypeNames(modality?: string) {
+  const key = createCellTypeNamesKey(modality);
+  const { data, ...rest } = useSWR<CellTypeNamesFlaskResponse, unknown, CellTypeNamesKey>(key, (url) =>
+    fetcher({ url }),
+  );
+
+  const filteredData: CellTypeNamesResponse | undefined = useMemo(() => {
     if (!data) {
-      return data;
+      return undefined;
     }
     // Filter out `other`
-    const filteredCellTypeNames = data.cellTypeNames.filter((name) => formatCellTypeName(name) !== 'other');
+    const filteredCellTypeNames = data.cell_types.filter((name) => formatCellTypeName(name) !== 'other');
     return { cellTypeNames: filteredCellTypeNames };
   }, [data]);
 

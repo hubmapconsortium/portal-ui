@@ -1,17 +1,17 @@
 import useSWR from 'swr';
 import {
   cellTypeNameContainsComma,
-  createScFindKey,
-  createScFindPostRequest,
+  createScFindFlaskKey,
+  createScFindFlaskPostRequest,
   ScFindRequest,
   scFindMultiFetcher,
   stringOrArrayToString,
-  useScFindKey,
 } from './utils';
 import { useMemo } from 'react';
 
 export interface FindDatasetForCellTypeParams {
   cellType: string;
+  modality?: string;
 }
 
 type FindDatasetForCellTypeKey = ScFindRequest | null;
@@ -21,32 +21,23 @@ export interface FindDatasetForCellTypeResponse {
   datasets: string[];
 }
 
-export function createFindDatasetForCellTypeKey(
-  scFindEndpoint: string,
-  { cellType }: FindDatasetForCellTypeParams,
-  scFindIndexVersion?: string,
-): FindDatasetForCellTypeKey {
+export function createFindDatasetForCellTypeKey({
+  cellType,
+  modality,
+}: FindDatasetForCellTypeParams): FindDatasetForCellTypeKey {
   if (typeof cellType !== 'string' || cellType.length === 0) return null;
   if (cellTypeNameContainsComma(cellType)) {
-    return createScFindPostRequest(
-      scFindEndpoint,
-      'findDatasetForCellType',
-      { cell_type: cellType },
-      scFindIndexVersion,
-    );
+    return createScFindFlaskPostRequest('/scfind/find-dataset-for-cell-type.json', { cell_type: cellType });
   }
-  return createScFindKey(
-    scFindEndpoint,
-    'findDatasetForCellType',
-    {
-      cell_type: cellType,
-    },
-    scFindIndexVersion,
-  );
+  return createScFindFlaskKey('/scfind/find-dataset-for-cell-type.json', {
+    cell_type: cellType,
+    modality,
+  });
 }
 
 export interface FindDatasetForCellTypesParams {
   cellTypes: string[];
+  modality?: string;
 }
 
 type FindDatasetForCellTypesKey = FindDatasetForCellTypeKey[];
@@ -56,17 +47,16 @@ type FindDatasetForCellTypesKey = FindDatasetForCellTypeKey[];
  * @param params.cellTypes The cell types to search for.
  * @returns A list of HBM dataset IDs that contain the given cell types.
  */
-export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetForCellTypesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = cellTypes.map((cellType) =>
-    createFindDatasetForCellTypeKey(scFindEndpoint, { cellType }, scFindIndexVersion),
-  );
+export default function useFindDatasetForCellTypes({ cellTypes, modality }: FindDatasetForCellTypesParams) {
+  const key = cellTypes.map((cellType) => createFindDatasetForCellTypeKey({ cellType, modality }));
   const { data, ...rest } = useSWR<(FindDatasetForCellTypeResponse | undefined)[], unknown, FindDatasetForCellTypesKey>(
     key,
     (requests) =>
       scFindMultiFetcher<FindDatasetForCellTypeResponse>(requests, {
         errorMessages: {
           400: `No results found for ${stringOrArrayToString(cellTypes)}`,
+          500: 'The scFind server encountered an error. Please try again.',
+          504: 'The scFind server took too long to respond. Please try again.',
         },
       }),
     {

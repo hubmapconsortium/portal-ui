@@ -4,6 +4,7 @@ from hubmap_api_py_client.errors import ClientError
 
 from .main import create_app
 from . import routes_cells
+from . import utils as app_utils
 
 
 @pytest.fixture
@@ -27,6 +28,10 @@ def client():
             routes_cells.translate_label.cache_clear()
         if hasattr(routes_cells._get_all_names_for_clid, 'cache_clear'):
             routes_cells._get_all_names_for_clid.cache_clear()
+        if hasattr(app_utils.fetch_pathway_participants, 'cache_clear'):
+            app_utils.fetch_pathway_participants.cache_clear()
+        if hasattr(routes_cells._get_scfind_gene_sets, 'cache_clear'):
+            routes_cells._get_scfind_gene_sets.cache_clear()
 
         yield client
 
@@ -536,16 +541,217 @@ class TestTranslationFunctions:
         assert 'cardiomyocyte' not in result
 
 
+class TestPathwayGenes:
+    """Test class for the /cells/pathway-genes endpoint."""
+
+    def test_pathway_genes_rna_success(self, client, mocker):
+        """Test successful pathway gene validation with RNA modality."""
+        mocker.patch(
+            'app.utils.fetch_pathway_participants',
+            return_value=['ACTB', 'GAPDH', 'INVALID_GENE'],
+        )
+        mocker.patch('app.routes_cells._get_rna_genes', return_value=['ACTB', 'GAPDH', 'TP53'])
+
+        response = client.post('/cells/pathway-genes', json={'pathway_code': 'R-HSA-12345'})
+        assert response.status_code == 200
+        data = response.get_json()
+        assert 'ACTB' in data['valid_genes']
+        assert 'GAPDH' in data['valid_genes']
+        assert 'INVALID_GENE' in data['invalid_genes']
+        assert data['total_genes'] == 3
+        assert data['total_valid'] == 2
+
+    def test_pathway_genes_atac_success(self, client, mocker):
+        """Test successful pathway gene validation with ATAC modality."""
+        mocker.patch(
+            'app.utils.fetch_pathway_participants',
+            return_value=['ACTB', 'GAPDH', 'TP53'],
+        )
+        mocker.patch('app.routes_cells._get_atac_genes', return_value=['ACTB', 'TP53'])
+
+        response = client.post(
+            '/cells/pathway-genes', json={'pathway_code': 'R-HSA-12345', 'modality': 'atac'}
+        )
+        assert response.status_code == 200
+        data = response.get_json()
+        assert 'ACTB' in data['valid_genes']
+        assert 'TP53' in data['valid_genes']
+        assert 'GAPDH' in data['invalid_genes']
+        assert data['total_valid'] == 2
+
+    def test_pathway_genes_missing_json(self, client):
+        """Test pathway genes without JSON content type."""
+        response = client.post('/cells/pathway-genes', data='not json')
+        assert response.status_code == 400
+        data = response.get_json()
+        assert data['error'] == 'Request must be JSON'
+
+    def test_pathway_genes_missing_pathway_code(self, client):
+        """Test pathway genes without pathway_code."""
+        response = client.post('/cells/pathway-genes', json={'modality': 'rna'})
+        assert response.status_code == 400
+        data = response.get_json()
+        assert data['error'] == 'Missing "pathway_code" in request body'
+
+    @pytest.mark.parametrize(
+        'pathway_code',
+        ['../../admin', 'R-HSA-1/../../x', 'not-a-code', 'R-HSA-', 123],
+    )
+    def test_pathway_genes_invalid_code(self, client, pathway_code):
+        """Malformed pathway codes are rejected before any UBKG request is issued."""
+        response = client.post('/cells/pathway-genes', json={'pathway_code': pathway_code})
+        assert response.status_code == 400
+        data = response.get_json()
+        assert data['error'] == 'Invalid "pathway_code" format.'
+
+    def test_pathway_genes_unsupported_modality(self, client):
+        """Test pathway genes with unsupported modality."""
+        response = client.post(
+            '/cells/pathway-genes', json={'pathway_code': 'R-HSA-12345', 'modality': 'unsupported'}
+        )
+        assert response.status_code == 400
+        data = response.get_json()
+        assert 'Unsupported modality' in data['error']
+
+    def test_pathway_genes_ubkg_error(self, client, mocker):
+        """Test pathway genes when UBKG fetch fails."""
+        mocker.patch(
+            'app.utils.fetch_pathway_participants',
+            side_effect=Exception('UBKG error'),
+        )
+
+        response = client.post('/cells/pathway-genes', json={'pathway_code': 'R-HSA-99999'})
+        assert response.status_code == 500
+        data = response.get_json()
+        assert 'error' in data
+
+
+class TestBiomarkersGenesInfo:
+    """Test class for the /biomarkers/genes-info.json endpoint."""
+
+    mock_ubkg_response = {
+        'genes': [
+            {'approved_name': 'Actin Beta', 'approved_symbol': 'ACTB', 'summary': 'A gene.'},
+            {
+                'approved_name': 'Tumor Protein P53',
+                'approved_symbol': 'TP53',
+                'summary': 'Another gene.',
+            },
+            {'approved_name': 'Unknown Gene', 'approved_symbol': 'ZZZZZ', 'summary': ''},
+        ],
+        'pagination': {
+            'items_per_page': 10,
+            'page': 1,
+            'total_pages': 1,
+            'starts_with': '',
+            'item_count': 3,
+        },
+    }
+
+    def test_genes_info_success(self, client, mocker):
+        """Test successful gene list with modality enrichment."""
+        mock_response = mocker.Mock()
+        mock_response.json.return_value = self.mock_ubkg_response
+        mock_response.raise_for_status.return_value = None
+        mocker.patch('app.routes_cells.http_requests.get', return_value=mock_response)
+        mocker.patch(
+            'app.routes_cells._get_scfind_gene_sets',
+            return_value=({'ACTB', 'TP53'}, {'ACTB'}),
+        )
+
+        def fake_dataset_counts(genes, modality=None):
+            base = {'ACTB': 2} if modality == 'ATAC' else {'ACTB': 5, 'TP53': 3}
+            return {gene: base.get(gene, 0) for gene in genes}
+
+        mocker.patch(
+            'app.routes_scfind._dataset_counts_for_genes', side_effect=fake_dataset_counts
+        )
+
+        response = client.get('/biomarkers/genes-info.json?starts_with=A&page=1')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert len(data['genes']) == 3
+
+        actb = data['genes'][0]
+        assert actb['has_scfind_rna'] is True
+        assert actb['has_scfind_atac'] is True
+        assert actb['scfind_rna_dataset_count'] == 5
+        assert actb['scfind_atac_dataset_count'] == 2
+
+        tp53 = data['genes'][1]
+        assert tp53['has_scfind_rna'] is True
+        assert tp53['has_scfind_atac'] is False
+        assert tp53['scfind_rna_dataset_count'] == 3
+        assert tp53['scfind_atac_dataset_count'] == 0
+
+        zzzzz = data['genes'][2]
+        assert zzzzz['has_scfind_rna'] is False
+        assert zzzzz['has_scfind_atac'] is False
+        assert zzzzz['scfind_rna_dataset_count'] == 0
+        assert zzzzz['scfind_atac_dataset_count'] == 0
+
+        assert 'pagination' in data
+
+    def test_genes_info_ubkg_timeout(self, client, mocker):
+        """Test UBKG timeout returns 504."""
+        import requests
+
+        mocker.patch(
+            'app.routes_cells.http_requests.get',
+            side_effect=requests.exceptions.Timeout('timed out'),
+        )
+
+        response = client.get('/biomarkers/genes-info.json?starts_with=A&page=1')
+        assert response.status_code == 504
+        data = response.get_json()
+        assert 'error' in data
+
+    def test_genes_info_ubkg_error(self, client, mocker):
+        """Test UBKG request error returns 502."""
+        import requests
+
+        mocker.patch(
+            'app.routes_cells.http_requests.get',
+            side_effect=requests.exceptions.ConnectionError('connection refused'),
+        )
+
+        response = client.get('/biomarkers/genes-info.json?starts_with=A&page=1')
+        assert response.status_code == 502
+        data = response.get_json()
+        assert 'error' in data
+
+    def test_genes_info_scfind_failure_graceful(self, client, mocker):
+        """Test graceful degradation when scFind gene sets fail to load."""
+        mock_response = mocker.Mock()
+        mock_response.json.return_value = self.mock_ubkg_response
+        mock_response.raise_for_status.return_value = None
+        mocker.patch('app.routes_cells.http_requests.get', return_value=mock_response)
+        mocker.patch(
+            'app.routes_cells._get_scfind_gene_sets',
+            side_effect=Exception('scFind unavailable'),
+        )
+
+        response = client.get('/biomarkers/genes-info.json?starts_with=A&page=1')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert len(data['genes']) == 3
+        for gene in data['genes']:
+            assert gene['has_scfind_rna'] is None
+            assert gene['has_scfind_atac'] is None
+
+
 @pytest.mark.parametrize(
     'endpoint,method,expected_status',
     [
         ('/search/biomarkers-cell-types', 'GET', 200),
         ('/cells', 'GET', 301),  # Redirect
         ('/biomarkers', 'GET', 200),
+        ('/biomarkers/genes-info.json', 'GET', 502),  # No UBKG mock
         ('/cells/genes-by-substring.json', 'POST', 200),
         ('/cells/proteins-by-substring.json', 'POST', 200),
         ('/cells/cell-types-by-substring.json', 'POST', 200),
         ('/cells/genes/validate', 'POST', 400),  # No JSON body
+        ('/cells/pathway-genes', 'POST', 400),  # No JSON body
         ('/cells/cell-percentages-for-datasets.json', 'POST', 200),
         ('/cells/cell-expression-in-dataset.json', 'POST', 200),
         ('/cells/all-indexed-uuids.json', 'POST', 200),

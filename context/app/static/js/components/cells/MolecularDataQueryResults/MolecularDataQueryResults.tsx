@@ -2,11 +2,12 @@ import React from 'react';
 
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { CrossModalityCellTypeResults, CrossModalityGeneOrProteinResults } from '../CrossModalityResults';
-import { useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
+import { getScFindModality, isScFindMethod, useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
 import LoadingResults from './LoadingResults';
 import { SCFindCellTypeQueryResults } from '../SCFindResults';
 import SCFindGeneQueryResultsLoader from '../SCFindResults/SCFindGeneQueryResults';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
+import { SCFindModalityProvider } from '../SCFindResults/SCFindModalityContext';
 
 function Results() {
   const { watch } = useMolecularDataQueryFormState();
@@ -15,38 +16,30 @@ function Results() {
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
 
-  if (queryMethod === 'scFind') {
-    switch (queryType) {
-      case 'cell-type':
-        return (
-          <SCFindCellTypeQueryResults
-            trackingInfo={{
-              action: 'Results',
-              label: sessionId,
-              category: 'Molecular and Cellular Query',
-            }}
-          />
-        );
-      case 'gene':
-        return (
-          <SCFindGeneQueryResultsLoader
-            trackingInfo={{
-              action: 'Results',
-              label: sessionId,
-              category: 'Molecular and Cellular Query',
-            }}
-          />
-        );
-      default:
-        return null;
-    }
-  } else {
-    switch (queryType) {
-      case 'cell-type':
-        return <CrossModalityCellTypeResults />;
-      default:
-        return <CrossModalityGeneOrProteinResults />;
-    }
+  if (isScFindMethod(queryMethod)) {
+    const modality = getScFindModality(queryMethod);
+    const trackingInfo = {
+      action: 'Results',
+      label: sessionId,
+      category: 'Molecular and Cellular Query' as const,
+    };
+
+    return (
+      <SCFindModalityProvider value={modality}>
+        {queryType === 'cell-type' ? (
+          <SCFindCellTypeQueryResults trackingInfo={trackingInfo} />
+        ) : queryType === 'gene' ? (
+          <SCFindGeneQueryResultsLoader trackingInfo={trackingInfo} />
+        ) : null}
+      </SCFindModalityProvider>
+    );
+  }
+
+  switch (queryType) {
+    case 'cell-type':
+      return <CrossModalityCellTypeResults />;
+    default:
+      return <CrossModalityGeneOrProteinResults />;
   }
 }
 

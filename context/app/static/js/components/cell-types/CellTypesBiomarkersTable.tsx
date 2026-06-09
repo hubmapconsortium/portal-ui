@@ -20,11 +20,13 @@ import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableH
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import { trackEvent } from 'js/helpers/trackers';
-import IndexedDatasetsSummary from '../organ/OrganCellTypes/IndexedDatasetsSummary';
-import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
+import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
+import { useCellTypesDetailPageContext, useCellTypeMarkersData } from './CellTypesDetailPageContext';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import { ScientificNotationDisplayCell } from '../genes/CellTypes/ScientificNotationDisplay';
-import { useBiomarkersTableData, useIndexedDatasetsForCellTypePage } from './hooks';
+import { useBiomarkersTableData } from './hooks';
+import { makeScFindModalityLabel } from '../cells/MolecularDataQueryForm/hooks';
 
 function GeneDescription({ description }: { description: React.ReactNode }) {
   return <LineClamp lines={2}>{description ?? 'No description available.'}</LineClamp>;
@@ -60,10 +62,11 @@ const columns = [
   },
 ];
 
-function BiomarkersTable() {
-  const { isLoading, isLoadingDescriptions, rows } = useBiomarkersTableData();
+function BiomarkersTable({ modality }: { modality?: SCFindModality }) {
+  const { isLoading, isLoadingDescriptions, rows } = useBiomarkersTableData(modality);
 
   const { name, trackingInfo } = useCellTypesDetailPageContext();
+  const modalityLabel = makeScFindModalityLabel(modality);
 
   const { sortState, setSort } = useSortState(
     {
@@ -100,7 +103,7 @@ function BiomarkersTable() {
   }, [rows, sortState]);
 
   const download = useDownloadTable({
-    fileName: `biomarkers_for_${name ?? 'unknown'}.tsv`,
+    fileName: `biomarkers_for_${name ?? 'unknown'}_${modalityLabel}.tsv`,
     columnNames: columns.map((column) => column.label),
     rows: sortedRows.map((row) => [
       row.genes,
@@ -181,26 +184,29 @@ function BiomarkersTable() {
 }
 
 function CellTypesBiomarkersTableSection() {
-  const indexedDatasetsSummaryProps = useIndexedDatasetsForCellTypePage();
   const { trackingInfo } = useCellTypesDetailPageContext();
+  const { openTabIndex, handleTabChange } = useTabs();
+  // Counts for the tab labels come straight from the aggregate's per-modality marker lists.
+  const rnaCount = useCellTypeMarkersData(undefined).markers.length;
+  const atacCount = useCellTypeMarkersData('ATAC').markers.length;
 
   return (
     <CollapsibleDetailPageSection id="biomarkers" title="Biomarkers" trackingInfo={trackingInfo}>
-      <Description
-        belowTheFold={
-          <IndexedDatasetsSummary {...indexedDatasetsSummaryProps} context="Biomarkers">
-            These results are derived from RNAseq datasets that were indexed by the scFind method to identify marker
-            genes associated with the cell type. Not all HuBMAP datasets are currently compatible with this method due
-            to differences in data modalities or the availability of cell annotations. This section gives a summary of
-            the datasets that are used to compute these results.
-          </IndexedDatasetsSummary>
-        }
-      >
+      <Description>
         Explore marker genes associated with the cell type and its statistical metrics as computed by the scFind method.
-        It calculates statistical metrics based on uniformly processed HuBMAP RNAseq datasets with cell type
+        It calculates statistical metrics based on uniformly processed HuBMAP RNAseq and ATACseq datasets with cell type
         annotations. The table can be downloaded in TSV format for further analysis.
       </Description>
-      <BiomarkersTable />
+      <Tabs value={openTabIndex} onChange={handleTabChange}>
+        <Tab label={`RNAseq (${rnaCount})`} index={0} disabled={rnaCount === 0} />
+        <Tab label={`ATACseq (${atacCount})`} index={1} disabled={atacCount === 0} />
+      </Tabs>
+      <TabPanel value={openTabIndex} index={0}>
+        <BiomarkersTable modality={undefined} />
+      </TabPanel>
+      <TabPanel value={openTabIndex} index={1}>
+        <BiomarkersTable modality="ATAC" />
+      </TabPanel>
     </CollapsibleDetailPageSection>
   );
 }

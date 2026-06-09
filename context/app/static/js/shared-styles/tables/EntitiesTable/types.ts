@@ -10,6 +10,8 @@ export interface Column<Doc> {
   tooltipText?: string;
   width?: number;
   filterable?: boolean;
+  /** Keep the header label on a single line (no wrapping) even when it's long. */
+  noWrap?: boolean;
   /** Map of entity ID to custom sort value for client-side sorting */
   customSortValues?: Record<string, number | string>;
 }

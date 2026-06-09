@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import QueryMethod from './QueryMethod';
 import { MolecularDataQueryFormState } from './types';
 import AutocompleteEntity from './AutocompleteEntity';
-import { useIsQueryType, useMolecularDataQueryFormState, useQueryType } from './hooks';
+import { isScFindMethod, useIsQueryType, useMolecularDataQueryFormState, useQueryType } from './hooks';
 import { FormFieldContainer } from './FormField';
 import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
 import GenePathwaysAutocomplete from './AutocompleteEntity/GenePathwaysAutocomplete';
@@ -84,7 +84,7 @@ function ExpressionInput() {
 
 function ThresholdOptions() {
   const queryMethod = useMolecularDataQueryFormState().watch('queryMethod');
-  if (queryMethod === 'scFind') {
+  if (isScFindMethod(queryMethod)) {
     return null;
   }
   return (

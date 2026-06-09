@@ -1,55 +1,91 @@
-import useCellTypeNames, { useCellTypeNamesMap } from 'js/api/scfind/useCellTypeNames';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { formatCellTypeName } from 'js/api/scfind/utils';
-import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import { useMemo } from 'react';
+import { useCellTypesLandingDataContext } from './CellTypesLandingDataContext';
 
 export function useCellTypesList() {
-  const { data, isLoading: isLoadingLabels, isValidating: isValidatingLabels } = useCellTypeNames();
+  // RNA + ATAC cell type names, dataset counts, and descriptions all come from the page aggregate
+  // (one request, warmed server-side).
+  const {
+    cellTypeNames,
+    cellTypeNamesAtac,
+    datasetCounts,
+    descriptions,
+    isLoading: isLoadingLanding,
+    isValidating: isValidatingLanding,
+  } = useCellTypesLandingDataContext();
 
-  const cellTypesMap = useCellTypeNamesMap();
+  // Build per-modality organ maps: cellTypeName → organs[] for RNA and ATAC
+  const rnaOrgansMap = useMemo(() => {
+    return cellTypeNames.reduce<Record<string, string[]>>((acc, raw) => {
+      const [organ, cellTypeName] = raw.split('.');
+      if (!acc[cellTypeName]) acc[cellTypeName] = [];
+      acc[cellTypeName].push(organ);
+      return acc;
+    }, {});
+  }, [cellTypeNames]);
 
-  const { results, isLoading: isLoadingCLIDs } = useLabelsToCLIDs(data?.cellTypeNames ?? []);
+  const atacOrgansMap = useMemo(() => {
+    return cellTypeNamesAtac.reduce<Record<string, string[]>>((acc, raw) => {
+      const [organ, cellTypeName] = raw.split('.');
+      if (!acc[cellTypeName]) acc[cellTypeName] = [];
+      acc[cellTypeName].push(organ);
+      return acc;
+    }, {});
+  }, [cellTypeNamesAtac]);
+
+  // Build a set of ATAC cell type labels for O(1) lookup
+  const atacCellTypeLabels = useMemo(() => new Set(cellTypeNamesAtac.map(formatCellTypeName)), [cellTypeNamesAtac]);
+
+  // Combine RNA cell type names with ATAC names for a complete list to resolve CLIDs
+  const allCellTypeNames = useMemo(
+    // Deduplicate by raw name (organ.cellType)
+    () => [...new Set([...cellTypeNames, ...cellTypeNamesAtac])],
+    [cellTypeNames, cellTypeNamesAtac],
+  );
+
+  const { results, isLoading: isLoadingCLIDs } = useLabelsToCLIDs(allCellTypeNames);
+
+  // Build a set of RNA cell type labels for O(1) lookup
+  const rnaCellTypeLabels = useMemo(() => new Set(cellTypeNames.map(formatCellTypeName)), [cellTypeNames]);
 
   const cellTypes = useMemo(() => {
     if (!results) {
       return [];
     }
-    const cellTypeLabels = data?.cellTypeNames ?? [];
     return (
       results
         .map((clids, idx) => {
-          const label = formatCellTypeName(cellTypeLabels[idx]);
+          const label = formatCellTypeName(allCellTypeNames[idx]);
+          const rnaOrgans = rnaOrgansMap[label] ?? [];
+          const atacOrgans = atacOrgansMap[label] ?? [];
           return {
             label,
             clid: clids.CLIDs?.[0],
-            organs: cellTypesMap[label] ?? [],
+            // Unified organ list across modalities (drives both display and the organ filter).
+            organs: [...new Set([...rnaOrgans, ...atacOrgans])],
+            hasScfindRna: rnaCellTypeLabels.has(label),
+            hasScfindAtac: atacCellTypeLabels.has(label),
+            rnaDatasetCount: datasetCounts[label]?.rna ?? 0,
+            atacDatasetCount: datasetCounts[label]?.atac ?? 0,
           };
         })
         // Filter any duplicate labels (keep first)
         .filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
     );
-  }, [results, data?.cellTypeNames, cellTypesMap]);
+  }, [results, allCellTypeNames, rnaOrgansMap, rnaCellTypeLabels, atacCellTypeLabels, atacOrgansMap, datasetCounts]);
 
-  // Fetch cell type descriptions using the UBKG API
-  const {
-    data: cellTypeDetails,
-    isLoading: isLoadingDescriptions,
-    error: descriptionsError,
-  } = useCellTypeOntologyDetails(cellTypes.map((ct) => ct.clid).filter(Boolean));
-
-  // Combine cell types with their descriptions
+  // Combine cell types with their descriptions (cached in the aggregate, keyed by full CLID).
   const cellTypesWithDescriptions = useMemo(() => {
     return cellTypes.map((cellType) => ({
       ...cellType,
-      description: cellType.clid ? cellTypeDetails?.[cellType.clid.replace(/\D/g, '')]?.definition : undefined,
+      description: cellType.clid ? descriptions[cellType.clid] : undefined,
     }));
-  }, [cellTypes, cellTypeDetails]);
+  }, [cellTypes, descriptions]);
 
   return {
     cellTypes: cellTypesWithDescriptions,
-    isLoading: isLoadingCLIDs || isLoadingLabels || isLoadingDescriptions,
-    isValidating: isValidatingLabels,
-    descriptionsError,
+    isLoading: isLoadingCLIDs || isLoadingLanding,
+    isValidating: isValidatingLanding,
   };
 }

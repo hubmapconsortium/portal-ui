@@ -1,13 +1,12 @@
 import useSWR from 'swr';
 import {
   cellTypeNameContainsComma,
-  createScFindKey,
-  createScFindPostRequest,
+  createScFindFlaskKey,
+  createScFindFlaskPostRequest,
   ScFindRequest,
   scFindFetcher,
   stringOrArrayToString,
   toArray,
-  useScFindKey,
 } from './utils';
 
 export interface FindGeneSignaturesParams {
@@ -22,37 +21,26 @@ interface FindGeneSignaturesResponse {
   evaluateMarkers: unknown;
 }
 
-export function createFindGeneSignaturesKey(
-  scFindEndpoint: string,
-  { cellTypes, minCells, minFraction }: FindGeneSignaturesParams,
-  scFindIndexVersion?: string,
-): FindGeneSignaturesKey {
+export function createFindGeneSignaturesKey({
+  cellTypes,
+  minCells,
+  minFraction,
+}: FindGeneSignaturesParams): FindGeneSignaturesKey {
   if (cellTypeNameContainsComma(cellTypes)) {
-    return createScFindPostRequest(
-      scFindEndpoint,
-      'findGeneSignatures',
-      {
-        cell_types: toArray(cellTypes),
-        min_cells: minCells,
-        min_fraction: minFraction,
-      },
-      scFindIndexVersion,
-    );
+    return createScFindFlaskPostRequest('/scfind/find-gene-signatures.json', {
+      cell_types: toArray(cellTypes),
+      min_cells: minCells,
+      min_fraction: minFraction,
+    });
   }
-  return createScFindKey(
-    scFindEndpoint,
-    'findGeneSignatures',
-    {
-      cell_types: cellTypes ? stringOrArrayToString(cellTypes) : undefined,
-      min_cells: minCells ? String(minCells) : undefined,
-      min_fraction: minFraction ? String(minFraction) : undefined,
-    },
-    scFindIndexVersion,
-  );
+  return createScFindFlaskKey('/scfind/find-gene-signatures.json', {
+    cell_types: cellTypes ? stringOrArrayToString(cellTypes) : undefined,
+    min_cells: minCells ? String(minCells) : undefined,
+    min_fraction: minFraction ? String(minFraction) : undefined,
+  });
 }
 
 export default function useFindGeneSignatures(params: FindGeneSignaturesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createFindGeneSignaturesKey(scFindEndpoint, params, scFindIndexVersion);
+  const key = createFindGeneSignaturesKey(params);
   return useSWR<FindGeneSignaturesResponse, unknown, FindGeneSignaturesKey>(key, scFindFetcher);
 }

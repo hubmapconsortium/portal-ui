@@ -18,7 +18,7 @@ import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
 import { QueryType, queryTypes } from '../../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
-import { useQueryType, useMolecularDataQueryFormState } from '../hooks';
+import { isScFindMethod, useQueryType, useMolecularDataQueryFormState, getScFindModalityLabel } from '../hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
 import { CustomChip } from './EntityChips';
 
@@ -80,7 +80,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
   });
 
   const queryMethod = useWatch({ control, name: 'queryMethod' });
-  const isCellsAPI = queryMethod !== 'scFind';
+  const isCellsAPI = !isScFindMethod(queryMethod);
 
   const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring, queryMethod });
 
@@ -250,7 +250,8 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       {allGenesExcludedPathway && (
         <Alert severity="warning" sx={{ mt: 1 }}>
           All genes in <strong>{allGenesExcludedPathway}</strong> are not present in the{' '}
-          {isCellsAPI ? 'selected modality in the Cells API' : 'scFind'} index. The pathway has been deselected.
+          {isCellsAPI ? 'selected modality in the Cells API' : `scFind ${getScFindModalityLabel(queryMethod)}`} index.
+          The pathway has been deselected.
         </Alert>
       )}
     </Box>

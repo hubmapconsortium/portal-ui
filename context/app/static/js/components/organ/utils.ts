@@ -7,6 +7,8 @@ export interface SCFindParams {
   scFindOnly?: boolean;
   genes?: string[];
   cellTypes?: string[];
+  modality?: string;
+  allModalities?: boolean;
 }
 
 export interface SearchURLTypes {

@@ -2,14 +2,22 @@ from itertools import groupby
 from posixpath import dirname
 import time
 
-from flask import render_template, current_app, request, redirect, url_for
+import requests as http_requests
+from flask import render_template, current_app, jsonify, request, redirect, url_for
 
 # from asyncio import gather, to_thread
 
 from hubmap_api_py_client import Client
 from hubmap_api_py_client.errors import ClientError
 
-from .utils import first_n_matches, get_default_flask_data, make_blueprint
+from .utils import (
+    EXTERNAL_REQUEST_TIMEOUT,
+    first_n_matches,
+    get_default_flask_data,
+    make_blueprint,
+    parse_pathway_genes_request,
+    validate_pathway_genes,
+)
 
 from operator import itemgetter
 
@@ -46,6 +54,79 @@ def biomarkers_ui():
         title='Biomarkers',
         flask_data={**get_default_flask_data()},
     )
+
+
+@cache
+def _get_scfind_gene_sets():
+    from . import routes_scfind
+
+    rna_genes = set(routes_scfind._get_all_genes())
+    atac_genes = set(routes_scfind._get_all_genes('ATAC'))
+    return rna_genes, atac_genes
+
+
+@blueprint.route('/biomarkers/genes-info.json')
+def biomarkers_genes_info():
+    """
+    Proxy the UBKG /genes-info endpoint and enrich each gene with scFind modality availability.
+
+    Query params (forwarded to UBKG):
+        genes_per_page, starts_with, page
+
+    Returns the UBKG response with additional fields per gene:
+        has_scfind_rna (bool|null), has_scfind_atac (bool|null)
+    """
+    ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
+    params = {k: v for k, v in request.args.items()}
+
+    try:
+        ubkg_response = http_requests.get(
+            f'{ubkg_endpoint}/genes-info',
+            params=params,
+            timeout=EXTERNAL_REQUEST_TIMEOUT,
+        )
+        ubkg_response.raise_for_status()
+        data = ubkg_response.json()
+    except http_requests.exceptions.Timeout:
+        current_app.logger.error('Timeout fetching genes-info from UBKG')
+        return {'error': 'UBKG request timed out'}, 504
+    except http_requests.RequestException as e:
+        current_app.logger.error(f'Error proxying UBKG genes-info: {e}')
+        return {'error': 'Failed to fetch gene information'}, 502
+
+    genes = data.get('genes', [])
+    try:
+        rna_genes, atac_genes = _get_scfind_gene_sets()
+        for gene in genes:
+            symbol = gene.get('approved_symbol', '')
+            gene['has_scfind_rna'] = symbol in rna_genes
+            gene['has_scfind_atac'] = symbol in atac_genes
+    except Exception as e:
+        current_app.logger.warning(f'Failed to load scFind gene sets: {e}')
+        for gene in genes:
+            gene['has_scfind_rna'] = None
+            gene['has_scfind_atac'] = None
+        return data
+
+    # Per-gene dataset counts for the Data Type chips. Best-effort: a failure here leaves the
+    # availability flags intact and just reports 0 counts.
+    try:
+        from . import routes_scfind
+
+        rna_symbols = [g['approved_symbol'] for g in genes if g.get('has_scfind_rna')]
+        atac_symbols = [g['approved_symbol'] for g in genes if g.get('has_scfind_atac')]
+        rna_counts = routes_scfind._dataset_counts_for_genes(rna_symbols)
+        atac_counts = routes_scfind._dataset_counts_for_genes(atac_symbols, modality='ATAC')
+    except Exception as e:
+        current_app.logger.warning(f'Failed to load scFind dataset counts: {e}')
+        rna_counts, atac_counts = {}, {}
+
+    for gene in genes:
+        symbol = gene.get('approved_symbol', '')
+        gene['scfind_rna_dataset_count'] = rna_counts.get(symbol, 0)
+        gene['scfind_atac_dataset_count'] = atac_counts.get(symbol, 0)
+
+    return data
 
 
 def _get_client(app):
@@ -415,6 +496,48 @@ def genes_validate():
     except Exception as e:
         current_app.logger.error(f'Error in gene validation: {e}', exc_info=True)
         return {'error': 'Failed to validate genes'}, 500
+
+
+@timeit
+@blueprint.route('/cells/pathway-genes', methods=['POST'])
+def pathway_genes():
+    """
+    Fetch pathway genes from UBKG and validate against the Cells API gene list.
+
+    Expects JSON body:
+        {
+            "pathway_code": "R-HSA-12345",
+            "modality": "rna" (optional, defaults to "rna")
+        }
+
+    Returns:
+        JSON object with validated pathway genes:
+        {
+            "valid_genes": ["GENE1", ...],
+            "invalid_genes": ["GENE2", ...],
+            "total_genes": 50,
+            "total_valid": 42
+        }
+    """
+    try:
+        data, error = parse_pathway_genes_request()
+        if error:
+            return jsonify(error), 400
+
+        modality = data.get('modality', 'rna')
+        if modality not in ('rna', 'atac'):
+            return jsonify({'error': 'Unsupported modality provided.'}), 400
+
+        # Resolve the appropriate gene list based on modality.
+        get_genes = _get_atac_genes if modality == 'atac' else _get_rna_genes
+        return jsonify(
+            validate_pathway_genes(data['pathway_code'], lambda: get_genes(current_app))
+        )
+    except Exception as e:
+        current_app.logger.error(f'Error in pathway gene validation: {e}', exc_info=True)
+        return jsonify(
+            {'error': 'An error occurred while validating pathway genes. Please try again.'}
+        ), 500
 
 
 @timeit

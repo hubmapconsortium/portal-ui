@@ -162,6 +162,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
             const barY = yScale(value) as number;
             const barHeight = yHeight - barY;
             const patternId = createSafeId(key);
+            const showTooltip = handleMouseEnter({ key, bar: { data: data[key] } });
 
             return (
               <rect
@@ -171,7 +172,9 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
                 width={barWidth}
                 height={barHeight}
                 fill={`url(#${patternId})`}
-                onMouseEnter={handleMouseEnter({ key, bar: { data: data[key] } })}
+                onMouseEnter={showTooltip}
+                // Also show on move so the tooltip reliably appears while the pointer is over the bar.
+                onMouseMove={showTooltip}
                 onMouseLeave={handleMouseLeave}
               />
             );

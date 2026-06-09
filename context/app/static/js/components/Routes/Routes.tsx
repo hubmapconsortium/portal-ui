@@ -42,6 +42,7 @@ const GeneDetails = lazy(() => import('js/pages/Genes'));
 const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
 const CellTypes = lazy(() => import('js/pages/CellTypes'));
 const CellTypesLandingPage = lazy(() => import('js/pages/CellTypesLandingPage'));
+const ScFindAbout = lazy(() => import('js/pages/ScFindAbout'));
 const Tutorials = lazy(() => import('js/pages/Tutorials'));
 const Tutorial = lazy(() => import('js/pages/Tutorial'));
 const Profile = lazy(() => import('js/pages/Profile'));
@@ -353,6 +354,14 @@ function Routes({ flaskData }: RoutesProps) {
     return (
       <Route>
         <Biomarkers />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/scfind/about')) {
+    return (
+      <Route>
+        <ScFindAbout />
       </Route>
     );
   }
