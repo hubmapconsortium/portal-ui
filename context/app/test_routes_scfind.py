@@ -868,6 +868,15 @@ class TestPerOperationProxyRoutes:
         _, kwargs = mock_get.call_args
         assert kwargs['params']['index_version'] == 'v1.0'
 
+    def test_index_version_omitted_when_blank(self, client, mocker):
+        # When no index version is configured, it must not be sent (scfind resolves the latest).
+        client.application.config['SCFIND_DEFAULT_INDEX_VERSION'] = ''
+        routes_scfind._cached_scfind_get.cache_clear()
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        client.get('/scfind/find-datasets.json?gene_list=VIM')
+        _, kwargs = mock_get.call_args
+        assert 'index_version' not in kwargs['params']
+
     def test_get_response_is_cached(self, client, mocker):
         # Two identical GETs in one worker hit the upstream once (shared lru_cache).
         mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
@@ -978,6 +987,9 @@ class TestPerPageAggregates:
         assert 'name' in data
         assert 'organs' in data
         assert 'variants' in data
+        # RNA + ATAC variants for the biomarker / dataset modality tabs.
+        assert 'markers_atac' in data
+        assert 'datasets_for_cell_types_atac' in data
 
     @pytest.mark.parametrize('clid', ['cl:0000236', 'CL:abc', 'CL%3A', '0000236'])
     def test_cell_type_detail_invalid_clid(self, client, mocker, clid):

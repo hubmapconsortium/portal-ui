@@ -11,7 +11,7 @@ import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import MolecularDataQueryFormProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
 import MolecularDataQueryFormTrackingProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
-import { SCFindCellTypeQueryResults } from '../cells/SCFindResults';
+import CellTypesDatasetsResults from './CellTypesDatasetsResults';
 
 function CellTypesEntitiesTables() {
   const { cellTypes, name, trackingInfo } = useCellTypesDetailPageContext();
@@ -65,12 +65,7 @@ function CellTypesEntitiesTables() {
           }}
         >
           <SelectableTableProvider tableLabel={`Datasets with ${name} - scFind Results`}>
-            <SCFindCellTypeQueryResults
-              trackingInfo={{
-                ...trackingInfo,
-                action: 'Datasets',
-              }}
-            />
+            <CellTypesDatasetsResults />
           </SelectableTableProvider>
         </MolecularDataQueryFormProvider>
       </MolecularDataQueryFormTrackingProvider>

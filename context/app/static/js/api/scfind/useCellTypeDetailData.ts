@@ -28,8 +28,11 @@ export interface CellTypeDetailData {
   name: string;
   organs: string[];
   variants: Record<string, string[]>;
+  // RNA + ATAC markers and datasets, for the biomarker / dataset RNAseq-ATACseq modality tabs.
   markers: CellTypeMarker[];
+  markers_atac: CellTypeMarker[];
   datasets_for_cell_types: Record<string, DatasetsForCellType>;
+  datasets_for_cell_types_atac: Record<string, DatasetsForCellType>;
 }
 
 export function createCellTypeDetailDataKey(clid: string): string {

@@ -31,7 +31,18 @@ import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import { CellTypeCategory } from './types';
 import { useSCFindModality } from './SCFindModalityContext';
 
-function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
+interface DatasetListExtraProps {
+  /** Renders the "N selected" + actions header row above the table when provided. */
+  numSelected?: number;
+  headerActions?: React.ReactNode;
+}
+
+export function SCFindCellTypeQueryDatasetList({
+  datasetIds,
+  countsMap,
+  numSelected,
+  headerActions,
+}: SCFindQueryResultsListProps & DatasetListExtraProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
   const modality = useSCFindModality();
 
@@ -54,6 +65,8 @@ function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryRe
     <EntityTable<Dataset>
       maxHeight={800}
       isSelectable
+      numSelected={numSelected}
+      headerActions={headerActions}
       columns={columns}
       query={{
         query: {

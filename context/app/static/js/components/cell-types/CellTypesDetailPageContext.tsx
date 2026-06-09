@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useMemo, useContext as useOptionalContext } f
 import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeDetailData, { CellTypeMarker, DatasetsForCellType } from 'js/api/scfind/useCellTypeDetailData';
 import { extractCellTypesInfo } from 'js/api/scfind/utils';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 
 interface CellTypesContextProps {
   cellId: string;
@@ -13,8 +14,12 @@ interface CellTypesContextType extends CellTypesContextProps {
   name: string; // Name of the cell type
   organs: string[]; // List of organs associated with the cell type
   variants: Record<string, string[]>; // Variants associated with each organ
-  markers: CellTypeMarker[]; // Marker genes for the cell type (from the page aggregate)
-  datasetsForCellTypes: Record<string, DatasetsForCellType>; // Datasets per cell type variant
+  // RNA + ATAC marker genes and per-cell-type datasets (from the page aggregate), for the
+  // biomarker and dataset RNAseq/ATACseq modality tabs.
+  markers: CellTypeMarker[];
+  markersAtac: CellTypeMarker[];
+  datasetsForCellTypes: Record<string, DatasetsForCellType>;
+  datasetsForCellTypesAtac: Record<string, DatasetsForCellType>;
   isLoading: boolean;
   error: unknown;
   trackingInfo: {
@@ -40,7 +45,9 @@ export default function CellTypesProvider({ children, cellId }: PropsWithChildre
       organs,
       variants,
       markers: data?.markers ?? [],
+      markersAtac: data?.markers_atac ?? [],
       datasetsForCellTypes: data?.datasets_for_cell_types ?? {},
+      datasetsForCellTypesAtac: data?.datasets_for_cell_types_atac ?? {},
       isLoading,
       error,
       trackingInfo: {
@@ -56,14 +63,17 @@ export default function CellTypesProvider({ children, cellId }: PropsWithChildre
 export const useCellTypesDetailPageContext = () => useContext(CellTypesContext);
 export const useOptionalCellTypesDetailPageContext = () => useOptionalContext(CellTypesContext);
 
-/** Biomarkers slice of the cell-type-detail aggregate (cellTypeMarkers findGeneSignatures). */
-export const useCellTypeMarkersData = () => {
-  const { markers, isLoading } = useCellTypesDetailPageContext();
-  return { markers, isLoading };
+/** Biomarkers slice of the cell-type-detail aggregate for a modality (RNA when `undefined`). */
+export const useCellTypeMarkersData = (modality?: SCFindModality) => {
+  const { markers, markersAtac, isLoading } = useCellTypesDetailPageContext();
+  return { markers: modality === 'ATAC' ? markersAtac : markers, isLoading };
 };
 
-/** Datasets slice of the cell-type-detail aggregate (per-cell-type findDatasetForCellType). */
-export const useCellTypeDatasetsData = () => {
-  const { datasetsForCellTypes, isLoading } = useCellTypesDetailPageContext();
-  return { datasetsForCellTypes, isLoading };
+/** Datasets slice of the cell-type-detail aggregate for a modality (RNA when `undefined`). */
+export const useCellTypeDatasetsData = (modality?: SCFindModality) => {
+  const { datasetsForCellTypes, datasetsForCellTypesAtac, isLoading } = useCellTypesDetailPageContext();
+  return {
+    datasetsForCellTypes: modality === 'ATAC' ? datasetsForCellTypesAtac : datasetsForCellTypes,
+    isLoading,
+  };
 };

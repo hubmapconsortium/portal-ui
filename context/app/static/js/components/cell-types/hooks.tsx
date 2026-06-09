@@ -5,6 +5,7 @@ import useSearchData from 'js/hooks/useSearchData';
 import { isError } from 'js/helpers/is-error';
 import Skeleton from '@mui/material/Skeleton';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 import {
   useCellTypesDetailPageContext,
   useCellTypeMarkersData,
@@ -155,9 +156,9 @@ export function useIndexedDatasetsForCellTypePage() {
   return useIndexedDatasetsForCellType({ cellTypes, trackingInfo });
 }
 
-export function useBiomarkersTableData() {
-  // Marker genes come from the page aggregate (CellTypesDetailPageContext).
-  const { markers, isLoading } = useCellTypeMarkersData();
+export function useBiomarkersTableData(modality?: SCFindModality) {
+  // Marker genes come from the page aggregate (CellTypesDetailPageContext), per modality.
+  const { markers, isLoading } = useCellTypeMarkersData(modality);
 
   const geneIds = useMemo(() => markers.map(({ genes }) => genes), [markers]);
 

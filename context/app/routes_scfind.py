@@ -202,8 +202,9 @@ def _make_scfind_request(endpoint, params=None):
 
     url = f'{base_url}/api/{endpoint}'
 
-    # Add index_version parameter
-    request_params = {'index_version': index_version}
+    # Only pin index_version when one is actually configured; when it's blank, omit it so scfind
+    # resolves the latest index itself (rather than receiving an empty index_version).
+    request_params = {'index_version': index_version} if index_version else {}
     if params:
         request_params.update(params)
 
@@ -233,7 +234,9 @@ def _make_scfind_post_request(endpoint, body):
 
     url = f'{base_url}/api/{endpoint}'
     payload = dict(body or {})
-    payload.setdefault('index_version', index_version)
+    # Only pin index_version when one is actually configured (see _make_scfind_request).
+    if index_version:
+        payload.setdefault('index_version', index_version)
 
     try:
         response = requests.post(url, json=payload, timeout=EXTERNAL_REQUEST_TIMEOUT)
@@ -579,38 +582,46 @@ def _build_cell_counts_for_tissues(organs, modality=None):
     return _fan_out(organs, fetch, 'cellTypeCountForTissue')
 
 
-def _build_datasets_for_cell_types(cell_types):
+def _build_datasets_for_cell_types(cell_types, modality=None):
     """Per-cell-type findDatasetForCellType payloads ({counts, datasets}), keyed by cell type."""
 
     def fetch(cell_type):
         # Comma-containing labels are ambiguous in a GET param, so POST the body (as the hook does).
         if ',' in cell_type:
-            return _make_scfind_post_request('findDatasetForCellType', {'cell_type': cell_type})
-        return _cached_scfind_get('findDatasetForCellType', (('cell_type', cell_type),))
+            body = {'cell_type': cell_type}
+            if modality:
+                body['modality'] = modality
+            return _make_scfind_post_request('findDatasetForCellType', body)
+        params = {'cell_type': cell_type}
+        if modality:
+            params['modality'] = modality
+        return _cached_scfind_get('findDatasetForCellType', tuple(sorted(params.items())))
 
     return _fan_out(cell_types, fetch, 'findDatasetForCellType')
 
 
-def _cell_type_markers_for(cell_types):
+def _cell_type_markers_for(cell_types, modality=None):
     """Marker genes for a set of cell type labels (GET, or POST when a label contains a comma)."""
     if not cell_types:
         return {}
     if any(',' in cell_type for cell_type in cell_types):
-        return _make_scfind_post_request(
-            'cellTypeMarkers',
-            {
-                'cell_types': list(cell_types),
-                'top_k': 10,
-                'sort_field': 'f1',
-                'include_prefix': True,
-            },
-        )
+        body = {
+            'cell_types': list(cell_types),
+            'top_k': 10,
+            'sort_field': 'f1',
+            'include_prefix': True,
+        }
+        if modality:
+            body['modality'] = modality
+        return _make_scfind_post_request('cellTypeMarkers', body)
     params = {
         'cell_types': ','.join(cell_types),
         'top_k': '10',
         'sort_field': 'f1',
         'include_prefix': 'true',
     }
+    if modality:
+        params['modality'] = modality
     return _cached_scfind_get('cellTypeMarkers', tuple(sorted(params.items())))
 
 
@@ -755,8 +766,14 @@ def _build_cell_type_detail(clid):
         'name': info['name'],
         'organs': info['organs'],
         'variants': info['variants'],
+        # RNA + ATAC markers and datasets so the page's biomarker and dataset modality tabs (with
+        # counts) come from this single aggregate fetch.
         'markers': _cell_type_markers_for(cell_types).get('findGeneSignatures', []),
+        'markers_atac': _cell_type_markers_for(cell_types, modality='ATAC').get(
+            'findGeneSignatures', []
+        ),
         'datasets_for_cell_types': _build_datasets_for_cell_types(cell_types),
+        'datasets_for_cell_types_atac': _build_datasets_for_cell_types(cell_types, modality='ATAC'),
     }
 
 
