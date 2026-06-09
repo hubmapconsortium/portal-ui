@@ -144,6 +144,38 @@ describe('parseReadableParams', () => {
     const result = parseReadableParams(`?organ=Kidney&q=${q}`);
     expect(result.filters?.['origin_samples_unique_mapped_organs']).toEqual({ type: 'TERM', values: ['Kidney'] });
   });
+
+  test('parses scFind gene params', () => {
+    const result = parseReadableParams('?genes=CD4&genes=CD8A');
+    expect(result.scFindParams).toEqual({ genes: ['CD4', 'CD8A'] });
+  });
+
+  test('parses scFind-only flag', () => {
+    expect(parseReadableParams('?scfind=true').scFindParams).toEqual({ scFindOnly: true });
+  });
+
+  test('parses cell_types without splitting commas inside a value', () => {
+    const result = parseReadableParams(
+      '?cell_types=Kidney.CD4-positive%2C+alpha-beta+T+cell&cell_types=Liver.podocyte',
+    );
+    expect(result.scFindParams).toEqual({
+      cellTypes: ['Kidney.CD4-positive, alpha-beta T cell', 'Liver.podocyte'],
+    });
+  });
+
+  test('parses a data_product param', () => {
+    expect(parseReadableParams('?data_product=dp-123').dataProductID).toBe('dp-123');
+  });
+
+  test('still reads scFindParams from a legacy q blob for backward compatibility', () => {
+    const q = LZString.compressToEncodedURIComponent(JSON.stringify({ scFindParams: { genes: ['CD4'] } }));
+    expect(parseReadableParams(`?q=${q}`).scFindParams).toEqual({ genes: ['CD4'] });
+  });
+
+  test('readable scFind params take precedence over a legacy q blob', () => {
+    const q = LZString.compressToEncodedURIComponent(JSON.stringify({ scFindParams: { genes: ['LEGACY'] } }));
+    expect(parseReadableParams(`?genes=CD4&q=${q}`).scFindParams).toEqual({ genes: ['CD4'] });
+  });
 });
 
 describe('backward compatibility: legacy compressed URLs', () => {

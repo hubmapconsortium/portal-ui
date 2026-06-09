@@ -20,6 +20,11 @@ export interface SearchURLTypes {
   analyteClass?: string;
   processingStatus?: string;
   datasetUUIDs?: string[];
+  /**
+   * A data product's `data_product_id`. Lets the search link reference a data product by ID so the
+   * search page can resolve its dataset UUIDs, instead of embedding every UUID in the URL.
+   */
+  dataProductID?: string;
   scFindParams?: SCFindParams;
 }
 
@@ -73,10 +78,12 @@ function getSearchURL({
   analyteClass,
   processingStatus,
   datasetUUIDs,
+  dataProductID,
   scFindParams,
 }: SearchURLTypes) {
   return buildSearchLink({
     entity_type: entityType,
+    dataProductID,
     filters: {
       ...(processingStatus && {
         processing: {
