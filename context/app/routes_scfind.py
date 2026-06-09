@@ -767,7 +767,9 @@ def _build_gene_detail(gene_symbol):
 
     def cell_types_of(signatures):
         return [
-            sig['cell_type'] for sig in signatures if isinstance(sig, dict) and sig.get('cell_type')
+            sig['cell_type']
+            for sig in signatures
+            if isinstance(sig, dict) and sig.get('cell_type')
         ]
 
     cell_types = cell_types_of(hyper_query)
@@ -813,7 +815,9 @@ def _build_cell_type_detail(clid):
             'findGeneSignatures', []
         ),
         'datasets_for_cell_types': _build_datasets_for_cell_types(cell_types),
-        'datasets_for_cell_types_atac': _build_datasets_for_cell_types(cell_types, modality='ATAC'),
+        'datasets_for_cell_types_atac': _build_datasets_for_cell_types(
+            cell_types, modality='ATAC'
+        ),
     }
 
 

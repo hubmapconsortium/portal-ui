@@ -632,7 +632,11 @@ class TestBiomarkersGenesInfo:
     mock_ubkg_response = {
         'genes': [
             {'approved_name': 'Actin Beta', 'approved_symbol': 'ACTB', 'summary': 'A gene.'},
-            {'approved_name': 'Tumor Protein P53', 'approved_symbol': 'TP53', 'summary': 'Another gene.'},
+            {
+                'approved_name': 'Tumor Protein P53',
+                'approved_symbol': 'TP53',
+                'summary': 'Another gene.',
+            },
             {'approved_name': 'Unknown Gene', 'approved_symbol': 'ZZZZZ', 'summary': ''},
         ],
         'pagination': {
@@ -659,7 +663,9 @@ class TestBiomarkersGenesInfo:
             base = {'ACTB': 2} if modality == 'ATAC' else {'ACTB': 5, 'TP53': 3}
             return {gene: base.get(gene, 0) for gene in genes}
 
-        mocker.patch('app.routes_scfind._dataset_counts_for_genes', side_effect=fake_dataset_counts)
+        mocker.patch(
+            'app.routes_scfind._dataset_counts_for_genes', side_effect=fake_dataset_counts
+        )
 
         response = client.get('/biomarkers/genes-info.json?starts_with=A&page=1')
         assert response.status_code == 200
