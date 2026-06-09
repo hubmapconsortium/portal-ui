@@ -26,6 +26,7 @@ import { useCellTypesDetailPageContext, useCellTypeMarkersData } from './CellTyp
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import { ScientificNotationDisplayCell } from '../genes/CellTypes/ScientificNotationDisplay';
 import { useBiomarkersTableData } from './hooks';
+import { makeScFindModalityLabel } from '../cells/MolecularDataQueryForm/hooks';
 
 function GeneDescription({ description }: { description: React.ReactNode }) {
   return <LineClamp lines={2}>{description ?? 'No description available.'}</LineClamp>;
@@ -65,7 +66,7 @@ function BiomarkersTable({ modality }: { modality?: SCFindModality }) {
   const { isLoading, isLoadingDescriptions, rows } = useBiomarkersTableData(modality);
 
   const { name, trackingInfo } = useCellTypesDetailPageContext();
-  const modalityLabel = modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
+  const modalityLabel = makeScFindModalityLabel(modality);
 
   const { sortState, setSort } = useSortState(
     {

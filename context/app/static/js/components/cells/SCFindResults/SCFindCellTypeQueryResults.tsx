@@ -7,7 +7,6 @@ import { Dataset, EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
-import Alert from '@mui/material/Alert';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import HelperPanel from 'js/shared-styles/HelperPanel';
 import { useInView } from 'react-intersection-observer';
@@ -18,7 +17,7 @@ import { decimal, percent } from 'js/helpers/number-format';
 import Divider from '@mui/material/Divider';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
+import { makeScFindModalityLabel, useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import CellTypeDistributionChart from '../CellTypeDistributionChart/CellTypeDistributionChart';
@@ -31,6 +30,7 @@ import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { CellTypeCategory } from './types';
 import { useSCFindModality } from './SCFindModalityContext';
+import SCFindErrorAlert from './SCFindQueryErrorAlert';
 
 interface DatasetListExtraProps {
   /** Renders the "N selected" + actions header row above the table when provided. */
@@ -115,7 +115,7 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
   );
   const cellTypes = useCellVariableNames();
   const modality = useSCFindModality();
-  const modalityLabel = modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
+  const modalityLabel = makeScFindModalityLabel(modality);
 
   return (
     <HelperPanel shouldDisplay={shouldDisplay} sx={{ minWidth: shouldDisplay ? 192 : 0 }}>
@@ -150,7 +150,7 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
   const { openTabIndex, handleTabChange } = useTabs();
   const cellTypes = useCellVariableNames();
   const modality = useSCFindModality();
-  const modalityLabel = modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
+  const modalityLabel = makeScFindModalityLabel(modality);
   const tissues = useMemo(() => {
     const uniqueTissues = new Set<string>();
     cellTypes.forEach((cellType) => {
@@ -280,11 +280,7 @@ function DatasetListSection() {
   }
 
   if (error) {
-    return (
-      <Alert severity="error" sx={{ mt: 1 }}>
-        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
-      </Alert>
-    );
+    return <SCFindErrorAlert error={error} />;
   }
 
   if (!datasets) {
@@ -347,11 +343,7 @@ function SCFindCellTypeQueryResultsLoader({ trackingInfo }: SCFindCellTypeQueryR
   }
 
   if (error) {
-    return (
-      <Alert severity="error" sx={{ mt: 1 }}>
-        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
-      </Alert>
-    );
+    return <SCFindErrorAlert error={error} />;
   }
 
   if (!datasets) {

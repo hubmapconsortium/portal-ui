@@ -9,7 +9,6 @@ import {
 } from 'js/shared-styles/tables/columns';
 import { Dataset, EventInfo } from 'js/components/types';
 import Skeleton from '@mui/material/Skeleton';
-import Alert from '@mui/material/Alert';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import Description from 'js/shared-styles/sections/Description';
@@ -32,6 +31,7 @@ import { matchingGeneColumn, matchingGenesColumn, totalCellCountColumn } from '.
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { useSCFindModality } from './SCFindModalityContext';
+import SCFindErrorAlert from './SCFindQueryErrorAlert';
 
 const columns = [hubmapID, organCol, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
@@ -158,11 +158,7 @@ function DatasetListSection() {
   }
 
   if (error) {
-    return (
-      <Alert severity="error" sx={{ mt: 1 }}>
-        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
-      </Alert>
-    );
+    return <SCFindErrorAlert error={error} />;
   }
 
   if (!order || emptyResults.length === order.length) {
@@ -246,11 +242,7 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
   }
 
   if (error) {
-    return (
-      <Alert severity="error" sx={{ mt: 1 }}>
-        {error instanceof Error ? error.message : 'An error occurred while querying scFind. Please try again.'}
-      </Alert>
-    );
+    return <SCFindErrorAlert error={error} />;
   }
 
   // countsMaps is Record<string, Record<string, number>> - gene -> dataset -> count

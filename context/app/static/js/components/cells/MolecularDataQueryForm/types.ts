@@ -13,6 +13,7 @@ export const GENE_QUERY_METHODS = {
 
 export type GeneQueryMethod = keyof typeof GENE_QUERY_METHODS;
 
+// Note: SCFind reads "undefined" modality as RNA
 export type SCFindModality = 'ATAC' | undefined;
 
 export interface SCFindGeneQueryFormState {

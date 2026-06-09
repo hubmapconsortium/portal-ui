@@ -18,7 +18,7 @@ import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
 import { QueryType, queryTypes } from '../../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
-import { isScFindMethod, useQueryType, useMolecularDataQueryFormState, getScFindModality } from '../hooks';
+import { isScFindMethod, useQueryType, useMolecularDataQueryFormState, getScFindModalityLabel } from '../hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
 import { CustomChip } from './EntityChips';
 
@@ -250,8 +250,8 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       {allGenesExcludedPathway && (
         <Alert severity="warning" sx={{ mt: 1 }}>
           All genes in <strong>{allGenesExcludedPathway}</strong> are not present in the{' '}
-          {isCellsAPI ? 'selected modality in the Cells API' : `scFind ${getScFindModality(queryMethod) ?? 'RNA'}`}{' '}
-          index. The pathway has been deselected.
+          {isCellsAPI ? 'selected modality in the Cells API' : `scFind ${getScFindModalityLabel(queryMethod)}`} index.
+          The pathway has been deselected.
         </Alert>
       )}
     </Box>
