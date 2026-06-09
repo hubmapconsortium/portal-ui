@@ -45,8 +45,16 @@ function DownloadMetadataItem() {
   const { closeMenu } = useDropdownMenuStore();
   const disabled = selectedRows.size === 0;
 
-  // Memoized so useDownloadTSV's "reset on params change" effect doesn't fire every render.
-  const queryParams = useMemo(() => ({ uuids: Array.from(selectedRows), entityType: ENTITY_TYPE }), [selectedRows]);
+  // `selectedRows` is an immer Set mutated in place (add/delete/clear), so its reference can stay
+  // the same across selection changes — keying the memo off it directly would keep a stale UUID
+  // snapshot. Key off the serialized selection instead: this reflects the current selection while
+  // staying referentially stable between renders, so useDownloadTSV's "reset on params change"
+  // effect doesn't cancel an in-flight download on every render.
+  const selectionKey = Array.from(selectedRows).join(',');
+  const queryParams = useMemo(
+    () => ({ uuids: selectionKey ? selectionKey.split(',') : [], entityType: ENTITY_TYPE }),
+    [selectionKey],
+  );
   const { initiateDownload, isLoading } = useDownloadTSV({
     lcPluralType: 'datasets',
     queryParams,
