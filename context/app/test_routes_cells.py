@@ -655,6 +655,12 @@ class TestBiomarkersGenesInfo:
             return_value=({'ACTB', 'TP53'}, {'ACTB'}),
         )
 
+        def fake_dataset_counts(genes, modality=None):
+            base = {'ACTB': 2} if modality == 'ATAC' else {'ACTB': 5, 'TP53': 3}
+            return {gene: base.get(gene, 0) for gene in genes}
+
+        mocker.patch('app.routes_scfind._dataset_counts_for_genes', side_effect=fake_dataset_counts)
+
         response = client.get('/biomarkers/genes-info.json?starts_with=A&page=1')
         assert response.status_code == 200
         data = response.get_json()
@@ -663,14 +669,20 @@ class TestBiomarkersGenesInfo:
         actb = data['genes'][0]
         assert actb['has_scfind_rna'] is True
         assert actb['has_scfind_atac'] is True
+        assert actb['scfind_rna_dataset_count'] == 5
+        assert actb['scfind_atac_dataset_count'] == 2
 
         tp53 = data['genes'][1]
         assert tp53['has_scfind_rna'] is True
         assert tp53['has_scfind_atac'] is False
+        assert tp53['scfind_rna_dataset_count'] == 3
+        assert tp53['scfind_atac_dataset_count'] == 0
 
         zzzzz = data['genes'][2]
         assert zzzzz['has_scfind_rna'] is False
         assert zzzzz['has_scfind_atac'] is False
+        assert zzzzz['scfind_rna_dataset_count'] == 0
+        assert zzzzz['scfind_atac_dataset_count'] == 0
 
         assert 'pagination' in data
 

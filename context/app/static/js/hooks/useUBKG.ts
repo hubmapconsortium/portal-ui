@@ -114,6 +114,9 @@ export interface BasicGeneInfo {
   summary: string;
   has_scfind_rna?: boolean | null;
   has_scfind_atac?: boolean | null;
+  // Number of scFind-indexed datasets containing this gene, per modality (for the Data Type chips).
+  scfind_rna_dataset_count?: number;
+  scfind_atac_dataset_count?: number;
 }
 
 /**

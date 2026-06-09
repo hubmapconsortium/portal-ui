@@ -94,17 +94,37 @@ def biomarkers_genes_info():
         current_app.logger.error(f'Error proxying UBKG genes-info: {e}')
         return {'error': 'Failed to fetch gene information'}, 502
 
+    genes = data.get('genes', [])
     try:
         rna_genes, atac_genes = _get_scfind_gene_sets()
-        for gene in data.get('genes', []):
+        for gene in genes:
             symbol = gene.get('approved_symbol', '')
             gene['has_scfind_rna'] = symbol in rna_genes
             gene['has_scfind_atac'] = symbol in atac_genes
     except Exception as e:
         current_app.logger.warning(f'Failed to load scFind gene sets: {e}')
-        for gene in data.get('genes', []):
+        for gene in genes:
             gene['has_scfind_rna'] = None
             gene['has_scfind_atac'] = None
+        return data
+
+    # Per-gene dataset counts for the Data Type chips. Best-effort: a failure here leaves the
+    # availability flags intact and just reports 0 counts.
+    try:
+        from . import routes_scfind
+
+        rna_symbols = [g['approved_symbol'] for g in genes if g.get('has_scfind_rna')]
+        atac_symbols = [g['approved_symbol'] for g in genes if g.get('has_scfind_atac')]
+        rna_counts = routes_scfind._dataset_counts_for_genes(rna_symbols)
+        atac_counts = routes_scfind._dataset_counts_for_genes(atac_symbols, modality='ATAC')
+    except Exception as e:
+        current_app.logger.warning(f'Failed to load scFind dataset counts: {e}')
+        rna_counts, atac_counts = {}, {}
+
+    for gene in genes:
+        symbol = gene.get('approved_symbol', '')
+        gene['scfind_rna_dataset_count'] = rna_counts.get(symbol, 0)
+        gene['scfind_atac_dataset_count'] = atac_counts.get(symbol, 0)
 
     return data
 

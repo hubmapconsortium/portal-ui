@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
@@ -23,8 +23,7 @@ import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { trackEvent } from 'js/helpers/trackers';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
 import { useCellTypesLandingDataContext } from './CellTypesLandingDataContext';
-import { LineClamp } from 'js/shared-styles/text';
-import Stack from '@mui/material/Stack';
+import { ExpandableDescription } from 'js/shared-styles/text';
 import { getSearchURL } from '../organ/utils';
 
 const dataTypeTooltip =
@@ -260,14 +259,15 @@ function DataTypeChips({
       label: name,
     });
 
-  // Compact, uniform-width chips packed from the left. Uniform width keeps the RNAseq and ATACseq
-  // chips aligned in columns across rows despite the counts' varying digit-widths.
+  // Two fixed-width slots (RNAseq, then ATACseq). The grid pins each modality to its own column so
+  // chips line up across every row — a row missing a modality leaves that slot empty rather than
+  // letting the remaining chip slide into the other column's position.
   return (
-    <Stack direction="row" spacing={1} flexWrap="nowrap" useFlexGap>
-      {rnaDatasetCount > 0 && (
+    <Box sx={{ display: 'grid', gridTemplateColumns: `repeat(2, ${CHIP_WIDTH})`, gap: 1, width: 'max-content' }}>
+      {rnaDatasetCount > 0 ? (
         <Chip
           size="small"
-          sx={{ width: CHIP_WIDTH }}
+          sx={{ width: '100%' }}
           variant="outlined"
           clickable
           component="a"
@@ -275,11 +275,13 @@ function DataTypeChips({
           label={`RNAseq (${rnaDatasetCount})`}
           onClick={() => trackClick('RNAseq')}
         />
+      ) : (
+        <Box aria-hidden />
       )}
-      {atacDatasetCount > 0 && (
+      {atacDatasetCount > 0 ? (
         <Chip
           size="small"
-          sx={{ width: CHIP_WIDTH }}
+          sx={{ width: '100%' }}
           variant="outlined"
           clickable
           component="a"
@@ -287,63 +289,10 @@ function DataTypeChips({
           label={`ATACseq (${atacDatasetCount})`}
           onClick={() => trackClick('ATACseq')}
         />
+      ) : (
+        <Box aria-hidden />
       )}
-    </Stack>
-  );
-}
-
-/**
- * Cell type description clamped to two lines that expands to its full text on click. Only
- * interactive when there is a real description that actually overflows when clamped (detected the
- * same way as LineClampWithTooltip). `expanded` is owned by the row so it can grow to fit.
- */
-function ExpandableDescription({
-  description,
-  expanded,
-  onToggle,
-}: {
-  description?: string;
-  expanded: boolean;
-  onToggle: () => void;
-}) {
-  const text = description || 'No description available.';
-  const hasDescription = Boolean(description);
-  const ref = useRef<HTMLDivElement>(null);
-  const [isTruncated, setIsTruncated] = useState(false);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (element && !expanded) {
-      setIsTruncated(element.scrollHeight > element.clientHeight);
-    }
-  }, [text, expanded]);
-
-  const canExpand = hasDescription && (isTruncated || expanded);
-
-  return (
-    <LineClamp
-      ref={ref}
-      color="text.secondary"
-      // A large clamp value effectively removes the 2-line clamp when expanded (showing all lines).
-      lines={expanded ? 99 : 2}
-      role={canExpand ? 'button' : undefined}
-      tabIndex={canExpand ? 0 : undefined}
-      aria-expanded={canExpand ? expanded : undefined}
-      onClick={canExpand ? onToggle : undefined}
-      onKeyDown={
-        canExpand
-          ? (event: React.KeyboardEvent) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                onToggle();
-              }
-            }
-          : undefined
-      }
-      sx={{ cursor: canExpand ? 'pointer' : 'default' }}
-    >
-      {text}
-    </LineClamp>
+    </Box>
   );
 }
 

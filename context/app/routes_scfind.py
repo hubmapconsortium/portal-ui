@@ -600,6 +600,24 @@ def _build_datasets_for_cell_types(cell_types, modality=None):
     return _fan_out(cell_types, fetch, 'findDatasetForCellType')
 
 
+def _dataset_counts_for_genes(genes, modality=None):
+    """
+    Number of datasets containing each gene for a modality, via a single findDatasets call.
+
+    Returns ``{gene: dataset_count}``. Used to label the biomarker landing page's Data Type chips.
+    Gene symbols are comma-free, so a GET (cached) is always safe.
+    """
+    genes = [gene for gene in genes if gene]
+    if not genes:
+        return {}
+    params = {'gene_list': ','.join(genes)}
+    if modality:
+        params['modality'] = modality
+    response = _cached_scfind_get('findDatasets', tuple(sorted(params.items())))
+    found = response.get('findDatasets', {})
+    return {gene: len(found.get(gene, [])) for gene in genes}
+
+
 def _cell_type_markers_for(cell_types, modality=None):
     """Marker genes for a set of cell type labels (GET, or POST when a label contains a comma)."""
     if not cell_types:

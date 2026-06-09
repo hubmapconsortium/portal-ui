@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
@@ -29,7 +29,7 @@ function ViewMoreButton() {
   }, [toastError, viewMore, track]);
 
   return (
-    <LoadingButton
+    <Button
       color="primary"
       variant="contained"
       fullWidth
@@ -39,7 +39,7 @@ function ViewMoreButton() {
       endIcon={<DownIcon />}
     >
       View More
-    </LoadingButton>
+    </Button>
   );
 }
 
@@ -62,21 +62,23 @@ export default function BiomarkersPanelList() {
         noPadding: true,
         children: <BiomarkerPanel.Header />,
       },
-      ...genesList.map(({ approved_name, approved_symbol, summary, has_scfind_rna, has_scfind_atac }) => ({
-        panelKey: approved_symbol,
-        noPadding: true,
-        noHover: false,
-        children: (
-          <BiomarkerPanel.Item
-            name={`${approved_name} (${approved_symbol})`}
-            description={summary || 'No description available.'}
-            href={`/genes/${approved_symbol}`}
-            geneName={approved_symbol}
-            hasScfindRna={has_scfind_rna}
-            hasScfindAtac={has_scfind_atac}
-          />
-        ),
-      })),
+      ...genesList.map(
+        ({ approved_name, approved_symbol, summary, scfind_rna_dataset_count, scfind_atac_dataset_count }) => ({
+          panelKey: approved_symbol,
+          noPadding: true,
+          noHover: false,
+          children: (
+            <BiomarkerPanel.Item
+              name={`${approved_name} (${approved_symbol})`}
+              description={summary}
+              href={`/genes/${approved_symbol}`}
+              geneName={approved_symbol}
+              rnaDatasetCount={scfind_rna_dataset_count ?? 0}
+              atacDatasetCount={scfind_atac_dataset_count ?? 0}
+            />
+          ),
+        }),
+      ),
       {
         panelKey: 'view-more',
         noPadding: true,
