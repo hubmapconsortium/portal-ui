@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.46.3 - 2026-06-09
+
+- Add support for scFind ATAC-seq experiment queries.
+- Add RNAseq/ATACseq tabs (with result counts) to the Biomarkers and Datasets sections of the Cell Type and Gene detail pages, so ATACseq results are now surfaced alongside RNAseq.
+- Add an RNAseq/ATACseq toggle to the Datasets Overview chart on the Cell Type and Gene detail pages, synced with its summary table.
+- Update the scFind dataset results tables on the Cell Type and Gene detail pages to match the dataset search table, with a selected-row counter and table actions (copy HuBMAP IDs, save to list, visualize in LineUp, add to workspace, and download metadata/datasets).
+- Add RNAseq/ATACseq tabs to the marker-gene "Cell Types" table on the Gene detail page, each with its own organ-sources filter.
+- Replace the datasets control on the Cell Types and Biomarkers landing pages with a "Data Type" column of RNAseq/ATACseq chips that show dataset counts and link to the matching datasets, and make the descriptions expandable inline.
+- Add an scFind Method page at `/scfind/about` describing the method, the organs and data types it covers, and a table of all scFind-indexed datasets split by modality. scFind links throughout the portal now point to this page, which links out to the original publication.
+- Update assay links at the top of dataset detail pages to point to updated documentation with metadata schemas.
+- Build a data product's "View Datasets" search link from its `data_product_id` instead of embedding every contributing dataset UUID in the URL, which could grow long enough to trigger browser warnings for products with many datasets. The dataset search page resolves the `data_product_id` into a `uuid` filter on load — fetching the product's datasets via the new `useDataProduct` hook — mirroring how scFind gene/cell-type "View Entities" links are resolved, and surfaces an info alert describing the integrated map whose datasets are shown.
+- Make scFind and integrated-map search links readable and compact: gene, cell-type, scFind-only, and data-product queries are now encoded as named URL params (`genes`, `cell_types`, `scfind`, `data_product`) instead of the opaque LZString-compressed `q` blob. Cell-type lists use repeated params so values containing commas (e.g. CL labels like "CD4-positive, alpha-beta T cell") round-trip intact. These params are preserved when applying facets — the derived `uuid` filter is no longer serialized into the URL, so links stay readable and the scFind/data-product query is re-resolved on load instead of freezing a long UUID list into the URL. Legacy `q`-encoded links continue to parse for backward compatibility.
+
+
+
 ## v1.46.2 - 2026-06-02
 
 - Migrate the backend container off the deprecated `tiangolo/uwsgi-nginx-flask` base image to a multi-stage build on a **Docker Hardened Image** (`dhi.io/python`) Python 3.13 base. The runtime stage is minimal and **non-root**; **gunicorn** (`context/gunicorn.conf.py`, `gthread` workers) serves the Flask app and **WhiteNoise** serves static assets (precompressed gzip/brotli + `Vary`, immutable far-future caching for content-hashed bundles, short cache otherwise) — replacing the bundled nginx + uWSGI + supervisor. Source maps and the bundle-analyzer report are stripped from the image. Gunicorn runs native Python threads, so the per-request `ThreadPoolExecutor` and the scfind cache-warmer no longer depend on the uWSGI `enable-threads` flag.

@@ -1,6 +1,0 @@
-- Add RNAseq/ATACseq tabs (with result counts) to the Biomarkers and Datasets sections of the Cell Type and Gene detail pages, so ATACseq results are now surfaced alongside RNAseq.
-- Add an RNAseq/ATACseq toggle to the Datasets Overview chart on the Cell Type and Gene detail pages, synced with its summary table.
-- Update the scFind dataset results tables on the Cell Type and Gene detail pages to match the dataset search table, with a selected-row counter and table actions (copy HuBMAP IDs, save to list, visualize in LineUp, add to workspace, and download metadata/datasets).
-- Add RNAseq/ATACseq tabs to the marker-gene "Cell Types" table on the Gene detail page, each with its own organ-sources filter.
-- Replace the datasets control on the Cell Types and Biomarkers landing pages with a "Data Type" column of RNAseq/ATACseq chips that show dataset counts and link to the matching datasets, and make the descriptions expandable inline.
-- Add an scFind Method page at `/scfind/about` describing the method, the organs and data types it covers, and a table of all scFind-indexed datasets split by modality. scFind links throughout the portal now point to this page, which links out to the original publication.
