@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.46.4 - 2026-06-09
+
+- Fix Figure 1 panels h and i so they share the same set of data types in the same order; panel i now groups visualization-enabled datasets by `raw_dataset_type` (matching panel h) instead of `display_subtype`, which previously produced a mismatched number of bars.
+
+
+
 ## v1.46.3 - 2026-06-09
 
 - Add support for scFind ATAC-seq experiment queries.
