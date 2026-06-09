@@ -1,13 +1,12 @@
 import useSWR from 'swr';
 import {
   cellTypeNameContainsComma,
-  createScFindKey,
-  createScFindPostRequest,
+  createScFindFlaskKey,
+  createScFindFlaskPostRequest,
   ScFindRequest,
   scFindFetcher,
   stringOrArrayToString,
   toArray,
-  useScFindKey,
 } from './utils';
 
 export interface FindHouseKeepingGenesParams {
@@ -22,37 +21,26 @@ interface FindHouseKeepingGenesResponse {
   findHouseKeepingGenes: unknown;
 }
 
-export function createFindHouseKeepingGenesKey(
-  scFindEndpoint: string,
-  { cellTypes, minRecall, maxGenes }: FindHouseKeepingGenesParams,
-  scFindIndexVersion?: string,
-): FindHouseKeepingGenesKey {
+export function createFindHouseKeepingGenesKey({
+  cellTypes,
+  minRecall,
+  maxGenes,
+}: FindHouseKeepingGenesParams): FindHouseKeepingGenesKey {
   if (cellTypeNameContainsComma(cellTypes)) {
-    return createScFindPostRequest(
-      scFindEndpoint,
-      'findHouseKeepingGenes',
-      {
-        cell_types: toArray(cellTypes),
-        min_recall: minRecall,
-        max_genes: maxGenes,
-      },
-      scFindIndexVersion,
-    );
+    return createScFindFlaskPostRequest('/scfind/find-housekeeping-genes.json', {
+      cell_types: toArray(cellTypes),
+      min_recall: minRecall,
+      max_genes: maxGenes,
+    });
   }
-  return createScFindKey(
-    scFindEndpoint,
-    'findHouseKeepingGenes',
-    {
-      cell_types: cellTypes ? stringOrArrayToString(cellTypes) : undefined,
-      min_recall: minRecall ? String(minRecall) : undefined,
-      max_genes: maxGenes ? String(maxGenes) : undefined,
-    },
-    scFindIndexVersion,
-  );
+  return createScFindFlaskKey('/scfind/find-housekeeping-genes.json', {
+    cell_types: cellTypes ? stringOrArrayToString(cellTypes) : undefined,
+    min_recall: minRecall ? String(minRecall) : undefined,
+    max_genes: maxGenes ? String(maxGenes) : undefined,
+  });
 }
 
 export default function useFindHouseKeepingGenes(params: FindHouseKeepingGenesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createFindHouseKeepingGenesKey(scFindEndpoint, params, scFindIndexVersion);
+  const key = createFindHouseKeepingGenesKey(params);
   return useSWR<FindHouseKeepingGenesResponse, unknown, FindHouseKeepingGenesKey>(key, scFindFetcher);
 }

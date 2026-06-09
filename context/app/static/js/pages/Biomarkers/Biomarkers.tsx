@@ -9,13 +9,19 @@ import BiomarkersPanelList from 'js/components/biomarkers/BiomarkersPanelList';
 import { InternalLink } from 'js/shared-styles/Links';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import { useTrackBiomarkerLandingPage } from 'js/components/biomarkers/hooks';
+import { GeneIcon } from 'js/shared-styles/icons';
 
 export default function Biomarkers() {
   const track = useTrackBiomarkerLandingPage();
   return (
     <BiomarkersSearchProvider>
       <PanelListLandingPage
-        title="Biomarkers"
+        title={
+          <Stack direction="row" alignItems="center" gap={1}>
+            <GeneIcon fontSize="inherit" color="primary" />
+            <span>Biomarkers</span>
+          </Stack>
+        }
         description={
           <Stack gap={1}>
             <Box>

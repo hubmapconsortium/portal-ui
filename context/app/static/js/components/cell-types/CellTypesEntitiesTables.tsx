@@ -4,14 +4,13 @@ import Description from 'js/shared-styles/sections/Description';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { capitalize } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import MolecularDataQueryFormProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
 import MolecularDataQueryFormTrackingProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
-import { SCFindCellTypeQueryResults } from '../cells/SCFindResults';
+import CellTypesDatasetsResults from './CellTypesDatasetsResults';
 
 function CellTypesEntitiesTables() {
   const { cellTypes, name, trackingInfo } = useCellTypesDetailPageContext();
@@ -64,14 +63,8 @@ function CellTypesEntitiesTables() {
             })),
           }}
         >
-          <SelectableTableProvider tableLabel={`Datasets with ${name} - scFind Results`}>
-            <SCFindCellTypeQueryResults
-              trackingInfo={{
-                ...trackingInfo,
-                action: 'Datasets',
-              }}
-            />
-          </SelectableTableProvider>
+          {/* Selection is scoped per results tab inside CellTypesDatasetsResults, so no provider here. */}
+          <CellTypesDatasetsResults />
         </MolecularDataQueryFormProvider>
       </MolecularDataQueryFormTrackingProvider>
     </CollapsibleDetailPageSection>

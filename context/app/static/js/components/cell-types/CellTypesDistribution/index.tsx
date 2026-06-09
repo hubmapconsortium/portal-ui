@@ -1,46 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import Description from 'js/shared-styles/sections/Description';
 import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import { capitalize } from '@mui/material/utils';
+import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 import { CollapsibleDetailPageSection } from '../../detailPage/DetailPageSection';
-import IndexedDatasetsSummary from '../../organ/OrganCellTypes/IndexedDatasetsSummary';
+import { SCFindModalityProvider } from '../../cells/SCFindResults/SCFindModalityContext';
 import { useCellTypesDetailPageContext } from '../CellTypesDetailPageContext';
 import CellTypeDistributionChart from '../../cells/CellTypeDistributionChart';
-import { useIndexedDatasetsForCellTypePage } from '../hooks';
 import MultiOrganCellTypeDistributionChart from './MultiOrganCellTypesDistributionChart';
-
-function CellTypesDistributionSummary() {
-  const indexedDatasetsProps = useIndexedDatasetsForCellTypePage();
-
-  return (
-    <IndexedDatasetsSummary
-      {...indexedDatasetsProps}
-      trackingInfo={{
-        category: 'Cell Type Detail Page',
-      }}
-      context="Cell Type Distribution"
-    >
-      These results are derived from RNAseq datasets that were indexed by the scFind method to identify marker genes
-      associated with the cell type. Not all HuBMAP datasets are currently compatible with this method due to
-      differences in data modalities or the availability of cell annotations. This section gives a summary of the
-      datasets that are used to compute these results.
-    </IndexedDatasetsSummary>
-  );
-}
 
 function Chart() {
   const { organs, cellTypes } = useCellTypesDetailPageContext();
+  const { openTabIndex, handleTabChange } = useTabs();
+  // RNA/ATAC selection is shared across all tabs: the multi-organ chart's toggle drives it, and the
+  // per-organ single charts read it via SCFindModalityProvider.
+  const [dataType, setDataType] = useState<SCFindModality>(undefined);
 
-  if (organs.length > 1) {
-    // Stacked bar chart
-    return <MultiOrganCellTypeDistributionChart organs={organs} cellTypes={cellTypes} hideLinks />;
-  }
-  // fraction chart
+  // Tab 0 is the multi-organ chart (default); tabs 1..N are individual organs' fraction charts.
   return (
-    <Paper sx={{ p: 2 }}>
-      <CellTypeDistributionChart tissue={organs[0]} cellTypes={cellTypes} skipDescription />
-    </Paper>
+    <>
+      <Tabs value={openTabIndex} onChange={handleTabChange} variant={organs.length >= 4 ? 'scrollable' : 'fullWidth'}>
+        <Tab label="All Organs" index={0} />
+        {organs.map((organ, idx) => (
+          <Tab
+            key={organ}
+            index={idx + 1}
+            iconPosition="start"
+            label={
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Box flexShrink={0}>
+                  <OrganIcon organName={organ} />
+                </Box>
+                <Box component="span" sx={{ textTransform: 'capitalize' }}>
+                  {capitalize(organ)}
+                </Box>
+              </Stack>
+            }
+          />
+        ))}
+      </Tabs>
+      <TabPanel value={openTabIndex} index={0}>
+        <MultiOrganCellTypeDistributionChart
+          organs={organs}
+          cellTypes={cellTypes}
+          hideLinks
+          dataType={dataType}
+          onDataTypeChange={setDataType}
+        />
+      </TabPanel>
+      {organs.map((organ, idx) => (
+        <TabPanel key={organ} value={openTabIndex} index={idx + 1}>
+          <SCFindModalityProvider value={dataType}>
+            <Paper sx={{ p: 2 }}>
+              <CellTypeDistributionChart tissue={organ} cellTypes={cellTypes} skipDescription />
+            </Paper>
+          </SCFindModalityProvider>
+        </TabPanel>
+      ))}
+    </>
   );
 }
 
@@ -52,7 +75,7 @@ function CellTypesDistribution() {
       id="cell-type-distribution"
       trackingInfo={trackingInfo}
     >
-      <Description belowTheFold={<CellTypesDistributionSummary />}>
+      <Description>
         This visualization displays the distribution of the cell type across the available organs, as identified by
         Azimuth and indexed by the <SCFindLink />. Only organs that contain at least one indexable dataset containing
         this cell type are included.

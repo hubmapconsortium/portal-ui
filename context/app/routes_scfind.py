@@ -1,4 +1,4 @@
-from functools import cache
+from functools import cache, lru_cache
 import fcntl
 import json
 import os
@@ -13,6 +13,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from .utils import (
     EXTERNAL_REQUEST_TIMEOUT,
     first_n_matches,
+    is_valid_clid,
+    is_valid_gene_symbol,
     make_blueprint,
     parse_pathway_genes_request,
     validate_pathway_genes,
@@ -170,6 +172,13 @@ def warm_scfind_caches(app):
                 # Build both maps so both endpoints serve cache hits.
                 _build_label_to_clid_map()
                 _build_clid_to_label_map()
+                # Warm the page-independent landing payload (and the ATAC cell-type-name set the
+                # landing/detail pages depend on) so the first visitor hits a warm cache.
+                _get_all_cell_type_names('ATAC')
+                landing = _build_cell_types_landing()
+                # Warm the per-organ cell-type counts the distribution chart fetches one-per-organ;
+                # they share `_cached_scfind_get`, so the chart's requests are then served warm.
+                _build_cell_counts_for_tissues(landing['organs'])
                 current_app.logger.info('Finished warming scfind cell type mapping caches.')
             except Exception as e:
                 current_app.logger.warning(f'Failed to warm scfind caches at startup: {e}')
@@ -193,8 +202,9 @@ def _make_scfind_request(endpoint, params=None):
 
     url = f'{base_url}/api/{endpoint}'
 
-    # Add index_version parameter
-    request_params = {'index_version': index_version}
+    # Only pin index_version when one is actually configured; when it's blank, omit it so scfind
+    # resolves the latest index itself (rather than receiving an empty index_version).
+    request_params = {'index_version': index_version} if index_version else {}
     if params:
         request_params.update(params)
 
@@ -208,6 +218,72 @@ def _make_scfind_request(endpoint, params=None):
     except requests.RequestException as e:
         current_app.logger.error(f'Error making SCFIND request to {url}: {e}')
         raise
+
+
+def _make_scfind_post_request(endpoint, body):
+    """
+    POST a JSON body to the SCFIND endpoint.
+
+    Used for the per-operation proxy routes whose front-end hooks fall back to POST when a
+    cell type name contains a comma (which would be ambiguous in a comma-joined GET param).
+    The body is forwarded as-is except that ``index_version`` is injected server-side, so the
+    front-end no longer needs to know or send it.
+    """
+    base_url = current_app.config['SCFIND_ENDPOINT']
+    index_version = current_app.config['SCFIND_DEFAULT_INDEX_VERSION']
+
+    url = f'{base_url}/api/{endpoint}'
+    payload = dict(body or {})
+    # Only pin index_version when one is actually configured (see _make_scfind_request).
+    if index_version:
+        payload.setdefault('index_version', index_version)
+
+    try:
+        response = requests.post(url, json=payload, timeout=EXTERNAL_REQUEST_TIMEOUT)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.Timeout as e:
+        current_app.logger.error(f'Timeout making SCFIND POST request to {url}: {e}')
+        raise
+    except requests.RequestException as e:
+        current_app.logger.error(f'Error making SCFIND POST request to {url}: {e}')
+        raise
+
+
+def _collect_args(allowed):
+    """Return the allowlisted query params present (and non-empty) in the current request."""
+    return {key: request.args[key] for key in allowed if request.args.get(key)}
+
+
+@lru_cache(maxsize=2048)
+def _cached_scfind_get(endpoint, params_items):
+    """
+    Cached scfind GET keyed by ``(endpoint, sorted param items)``.
+
+    ``params_items`` is a hashable tuple of ``(key, value)`` pairs so the result can be memoized.
+    Bounded by ``maxsize`` so the long tail of arbitrary gene/cell-type queries can't grow the
+    cache without limit; the cache is also reset on each server start (fresh worker processes).
+    """
+    params = dict(params_items)
+    return _make_scfind_request(endpoint, params or None)
+
+
+def _proxy_scfind_get(endpoint, allowed):
+    """Forward an allowlisted GET to scfind, served from the shared cache when possible."""
+    params = _collect_args(allowed)
+    return _cached_scfind_get(endpoint, tuple(sorted(params.items())))
+
+
+def _proxy_scfind(endpoint, allowed):
+    """
+    Proxy a single scfind operation, dispatching GET vs POST like the front-end hooks do.
+
+    GET requests forward the allowlisted query params (cached). POST requests forward the JSON
+    body verbatim (the comma-in-cell-type-name workaround); index_version is injected server-side.
+    """
+    if request.method == 'POST' and request.is_json:
+        return _make_scfind_post_request(endpoint, request.get_json())
+    return _proxy_scfind_get(endpoint, allowed)
 
 
 @cache
@@ -276,6 +352,25 @@ def _get_clid_to_label_mapping(clid):
     return response.get('cell_types', [])
 
 
+def _retry(fn, attempts=3, base_delay=0.5):
+    """
+    Call ``fn`` up to ``attempts`` times with exponential backoff, re-raising the last error.
+
+    Used by the map builders so a transient scfind failure during the concurrent fan-out is retried
+    rather than swallowed into a permanent empty entry that then gets cached to disk (which is what
+    previously left most cell types without a CLID, breaking their detail-page links).
+    """
+    delay = base_delay
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception:
+            if attempt == attempts - 1:
+                raise
+            time.sleep(delay)
+            delay *= 2
+
+
 def _build_label_to_clid_map():
     """Return the label-to-CLID map, built once and shared across worker processes."""
     return _get_or_build_map('label_to_clid', _build_label_to_clid_map_uncached)
@@ -298,7 +393,7 @@ def _build_label_to_clid_map_uncached():
         """Helper function to fetch CLIDs for a single cell type."""
         with app.app_context():
             try:
-                clids = _get_label_to_clid_mapping(cell_type)
+                clids = _retry(lambda: _get_label_to_clid_mapping(cell_type))
                 return cell_type, clids
             except Exception as e:
                 current_app.logger.warning(f"Failed to get CLIDs for cell type '{cell_type}': {e}")
@@ -352,7 +447,7 @@ def _build_clid_to_label_map_uncached():
         """Helper function to fetch labels for a single CLID."""
         with app.app_context():
             try:
-                labels = _get_clid_to_label_mapping(clid)
+                labels = _retry(lambda: _get_clid_to_label_mapping(clid))
                 return clid, labels
             except Exception as e:
                 current_app.logger.warning(f"Failed to get labels for CLID '{clid}': {e}")
@@ -401,6 +496,329 @@ def _get_complete_mappings():
     current_app.logger.info(f'Total mapping build time: {end_time - start_time:.2f} seconds')
 
     return label_to_clid_map, clid_to_label_map
+
+
+# ---------------------------------------------------------------------------
+# Per-page aggregate builders.
+#
+# Each "reworked" page (Cell Types landing, Gene detail, Cell Type detail) is served by a single
+# aggregate JSON route that returns all the scfind-derived data the page needs on initial load.
+# The builders compose the same cached leaf helpers the per-operation routes use (so a page visit
+# warms those caches too) and fan out per-organ / per-cell-type requests with a thread pool.
+# ---------------------------------------------------------------------------
+
+
+def _format_cell_type_name(cell_type):
+    """Strip the organ prefix from a cell type name (port of frontend formatCellTypeName)."""
+    return cell_type.split('.')[1] if '.' in cell_type else cell_type
+
+
+def _extract_cell_types_info(cell_types):
+    """
+    Derive name/organs/variants from a CLID's cell type labels.
+
+    Python port of the frontend ``extractCellTypesInfo`` (api/scfind/utils.ts); cell type labels
+    are formatted ``<organ>.<cell_type>:<variant>``.
+    """
+    if not cell_types:
+        return {'name': '', 'organs': [], 'variants': {}}
+    first = cell_types[0].split(':')[0]
+    name_parts = first.split('.')
+    name = name_parts[1] if len(name_parts) > 1 else name_parts[0]
+    organs = []
+    variants = {}
+    for cell_type in cell_types:
+        organ = cell_type.split('.')[0]
+        type_with_variant = cell_type.split('.')[1] if '.' in cell_type else ''
+        variant = type_with_variant.split(':')[1] if ':' in type_with_variant else None
+        if organ not in organs:
+            organs.append(organ)
+        variants.setdefault(organ, [])
+        if variant and variant not in variants[organ]:
+            variants[organ].append(variant)
+    return {'name': name, 'organs': organs, 'variants': variants}
+
+
+def _fan_out(items, fetch_one, label):
+    """
+    Run ``fetch_one(item)`` for each item across a bounded thread pool, returning ``{item: result}``.
+
+    Each task re-enters the app context (worker threads don't inherit it); a per-item failure is
+    logged and the item is dropped from the result rather than failing the whole aggregate.
+    """
+    if not items:
+        return {}
+    app = current_app._get_current_object()
+
+    def run(item):
+        with app.app_context():
+            try:
+                return item, fetch_one(item)
+            except Exception as e:
+                current_app.logger.warning(f'{label} failed for {item!r}: {e}')
+                return item, None
+
+    max_workers = min(current_app.config.get('SCFIND_MAX_WORKERS', 20), len(items))
+    results = {}
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(run, item) for item in items]
+        for future in as_completed(futures):
+            item, result = future.result()
+            if result is not None:
+                results[item] = result
+    return results
+
+
+def _build_cell_counts_for_tissues(organs, modality=None):
+    """Per-organ cellTypeCountForTissue counts (RNA by default), keyed by organ."""
+
+    def fetch(organ):
+        params = {'tissue': organ}
+        if modality:
+            params['modality'] = modality
+        response = _cached_scfind_get('cellTypeCountForTissue', tuple(sorted(params.items())))
+        return response.get('cellTypeCounts', [])
+
+    return _fan_out(organs, fetch, 'cellTypeCountForTissue')
+
+
+def _build_datasets_for_cell_types(cell_types, modality=None):
+    """Per-cell-type findDatasetForCellType payloads ({counts, datasets}), keyed by cell type."""
+
+    def fetch(cell_type):
+        # Comma-containing labels are ambiguous in a GET param, so POST the body (as the hook does).
+        if ',' in cell_type:
+            body = {'cell_type': cell_type}
+            if modality:
+                body['modality'] = modality
+            return _make_scfind_post_request('findDatasetForCellType', body)
+        params = {'cell_type': cell_type}
+        if modality:
+            params['modality'] = modality
+        return _cached_scfind_get('findDatasetForCellType', tuple(sorted(params.items())))
+
+    return _fan_out(cell_types, fetch, 'findDatasetForCellType')
+
+
+def _dataset_counts_for_genes(genes, modality=None):
+    """
+    Number of datasets containing each gene for a modality, via a single findDatasets call.
+
+    Returns ``{gene: dataset_count}``. Used to label the biomarker landing page's Data Type chips.
+    Gene symbols are comma-free, so a GET (cached) is always safe.
+    """
+    genes = [gene for gene in genes if gene]
+    if not genes:
+        return {}
+    params = {'gene_list': ','.join(genes)}
+    if modality:
+        params['modality'] = modality
+    response = _cached_scfind_get('findDatasets', tuple(sorted(params.items())))
+    found = response.get('findDatasets', {})
+    return {gene: len(found.get(gene, [])) for gene in genes}
+
+
+def _cell_type_markers_for(cell_types, modality=None):
+    """Marker genes for a set of cell type labels (GET, or POST when a label contains a comma)."""
+    if not cell_types:
+        return {}
+    if any(',' in cell_type for cell_type in cell_types):
+        body = {
+            'cell_types': list(cell_types),
+            'top_k': 10,
+            'sort_field': 'f1',
+            'include_prefix': True,
+        }
+        if modality:
+            body['modality'] = modality
+        return _make_scfind_post_request('cellTypeMarkers', body)
+    params = {
+        'cell_types': ','.join(cell_types),
+        'top_k': '10',
+        'sort_field': 'f1',
+        'include_prefix': 'true',
+    }
+    if modality:
+        params['modality'] = modality
+    return _cached_scfind_get('cellTypeMarkers', tuple(sorted(params.items())))
+
+
+def _build_dataset_counts(modality=None):
+    """
+    Count, per formatted cell type label, how many datasets contain it for a modality.
+
+    Fans out over datasets rather than cell types: one `cellTypeCountForDataset` call returns every
+    cell type in a dataset, so this is O(#datasets) upstream calls (hundreds) instead of
+    O(#cell-type-names) (thousands). Returns ``{label: dataset_count}``. Shares the
+    `_cached_scfind_get` cache (so the per-dataset counts the distribution charts use are warmed too).
+    """
+    base_params = {}
+    if modality:
+        base_params['modality'] = modality
+    datasets = _cached_scfind_get('getDatasets', tuple(sorted(base_params.items()))).get(
+        'datasets', []
+    )
+
+    def fetch(dataset):
+        params = {'dataset': dataset, **base_params}
+        counts = _cached_scfind_get('cellTypeCountForDataset', tuple(sorted(params.items()))).get(
+            'cellTypeCounts', []
+        )
+        return [c.get('index') for c in counts if isinstance(c, dict) and c.get('index')]
+
+    per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset')
+    label_datasets = {}
+    for dataset, indexes in per_dataset.items():
+        for index in indexes:
+            label_datasets.setdefault(_format_cell_type_name(index), set()).add(dataset)
+    return {label: len(datasets_for_label) for label, datasets_for_label in label_datasets.items()}
+
+
+def _build_cell_type_descriptions(label_to_clid_map):
+    """
+    Fetch Cell Ontology definitions (from UBKG) for every CLID in the label->CLID map.
+
+    Returns ``{clid: definition}`` keyed by the full CLID (e.g. "CL:0000236"). Bundled into the
+    landing payload (and warmed) so the panel's descriptions are cached server-side instead of being
+    fetched from UBKG on every page load. UBKG/network failures degrade to an empty map (the panel
+    then shows its "No description available." fallback).
+    """
+    clids = sorted({clid for clids in label_to_clid_map.values() for clid in clids})
+    if not clids:
+        return {}
+    ubkg_endpoint = current_app.config['UBKG_ENDPOINT']
+    # UBKG's /celltypes endpoint keys by the numeric portion of the CLID (mirrors stripCLIDPrefix).
+    numeric_ids = ','.join(''.join(ch for ch in clid if ch.isdigit()) for clid in clids)
+    url = f'{ubkg_endpoint}/celltypes/{numeric_ids}'
+    try:
+        response = requests.get(url, timeout=EXTERNAL_REQUEST_TIMEOUT)
+        response.raise_for_status()
+        data = response.json()
+    except requests.RequestException as e:
+        current_app.logger.warning(f'Failed to fetch cell type descriptions from UBKG: {e}')
+        return {}
+
+    descriptions = {}
+    for entry in data:
+        cell_type = entry.get('cell_type') or {}
+        clid = cell_type.get('id')
+        definition = cell_type.get('definition')
+        if clid and definition:
+            descriptions[clid] = definition
+    return descriptions
+
+
+def _build_cell_types_landing_uncached():
+    """Assemble the Cell Types landing payload from the cached cell-type-name lists.
+
+    The distribution chart's per-organ counts are intentionally NOT bundled here: the chart fetches
+    them via the `/scfind/cell-type-count-for-tissue.json` route, which shares the same
+    `_cached_scfind_get` cache the warmer populates (see `warm_scfind_caches`), so those requests
+    are served warm without bloating this payload.
+    """
+    rna = [ct for ct in _get_all_cell_type_names() if _format_cell_type_name(ct) != 'other']
+    atac = [ct for ct in _get_all_cell_type_names('ATAC') if _format_cell_type_name(ct) != 'other']
+    organs = []
+    for cell_type in rna:
+        organ = cell_type.split('.')[0]
+        if organ not in organs:
+            organs.append(organ)
+    # Per-label RNAseq/ATACseq dataset counts for the panel's Data Type chips.
+    rna_counts = _build_dataset_counts()
+    atac_counts = _build_dataset_counts('ATAC')
+    dataset_counts = {
+        label: {'rna': rna_counts.get(label, 0), 'atac': atac_counts.get(label, 0)}
+        for label in set(rna_counts) | set(atac_counts)
+    }
+    # Static Cell Ontology descriptions, cached here so the panel doesn't fetch them from UBKG on
+    # every load. Keyed by full CLID (the panel resolves each row's CLID via the label->CLID map).
+    descriptions = _build_cell_type_descriptions(_build_label_to_clid_map())
+    return {
+        'cell_type_names': rna,
+        'cell_type_names_atac': atac,
+        'organs': organs,
+        'dataset_counts': dataset_counts,
+        'descriptions': descriptions,
+    }
+
+
+def _build_cell_types_landing():
+    """Cell Types landing payload, built once and shared across worker processes (disk-cached)."""
+    return _get_or_build_map('cell_types_landing', _build_cell_types_landing_uncached)
+
+
+def _build_gene_detail(gene_symbol):
+    """Assemble the Gene detail payload (hyperQuery + findDatasets + label->CLID subset).
+
+    RNA and ATAC counterparts are both bundled so the page's cell-types and datasets modality tabs
+    (with counts) are served from this single aggregate fetch.
+    """
+    hyper_query = _cached_scfind_get(
+        'hyperQueryCellTypes', (('gene_list', gene_symbol), ('include_prefix', 'true'))
+    ).get('findGeneSignatures', [])
+    hyper_query_atac = _cached_scfind_get(
+        'hyperQueryCellTypes',
+        (('gene_list', gene_symbol), ('include_prefix', 'true'), ('modality', 'ATAC')),
+    ).get('findGeneSignatures', [])
+    find_datasets = _cached_scfind_get('findDatasets', (('gene_list', gene_symbol),))
+    find_datasets_atac = _cached_scfind_get(
+        'findDatasets', (('gene_list', gene_symbol), ('modality', 'ATAC'))
+    )
+
+    def cell_types_of(signatures):
+        return [
+            sig['cell_type']
+            for sig in signatures
+            if isinstance(sig, dict) and sig.get('cell_type')
+        ]
+
+    cell_types = cell_types_of(hyper_query)
+    cell_types_atac = cell_types_of(hyper_query_atac)
+    organs = sorted({ct.split('.')[0] for ct in cell_types if '.' in ct})
+    organs_atac = sorted({ct.split('.')[0] for ct in cell_types_atac if '.' in ct})
+    label_to_clid_map = _build_label_to_clid_map()
+    label_to_clid = {
+        ct: label_to_clid_map.get(ct, []) for ct in set(cell_types) | set(cell_types_atac)
+    }
+    return {
+        'hyper_query': hyper_query,
+        'hyper_query_atac': hyper_query_atac,
+        'find_datasets': find_datasets,
+        'find_datasets_atac': find_datasets_atac,
+        'organs': organs,
+        'organs_atac': organs_atac,
+        'label_to_clid': label_to_clid,
+    }
+
+
+def _build_cell_type_detail(clid):
+    """
+    Assemble the Cell Type detail payload: the CLID's cell type labels (+ derived name/organs/
+    variants), marker genes, and the datasets containing each cell type.
+
+    The distribution chart's per-organ counts and ATAC-availability check are intentionally NOT
+    bundled here — they're served by the per-operation routes that share the warmed
+    `_cached_scfind_get` / cellTypeNames caches (see `warm_scfind_caches`).
+    """
+    clid_to_label_map = _build_clid_to_label_map()
+    cell_types = clid_to_label_map.get(clid, [])
+    info = _extract_cell_types_info(cell_types)
+    return {
+        'cell_types': cell_types,
+        'name': info['name'],
+        'organs': info['organs'],
+        'variants': info['variants'],
+        # RNA + ATAC markers and datasets so the page's biomarker and dataset modality tabs (with
+        # counts) come from this single aggregate fetch.
+        'markers': _cell_type_markers_for(cell_types).get('findGeneSignatures', []),
+        'markers_atac': _cell_type_markers_for(cell_types, modality='ATAC').get(
+            'findGeneSignatures', []
+        ),
+        'datasets_for_cell_types': _build_datasets_for_cell_types(cell_types),
+        'datasets_for_cell_types_atac': _build_datasets_for_cell_types(
+            cell_types, modality='ATAC'
+        ),
+    }
 
 
 @blueprint.route('/scfind/label-to-clid-map.json')
@@ -696,3 +1114,242 @@ def pathway_genes():
         )
     except Exception as e:
         return _handle_scfind_error(e, 'pathway gene validation')
+
+
+# ---------------------------------------------------------------------------
+# Per-operation proxy routes.
+#
+# Each of these mirrors a single scFind API operation that the front-end used to call directly
+# from the browser. They forward an allowlisted set of params (or, for the comma-cell-type-name
+# cases, a POSTed JSON body) to scFind via the shared `_proxy_scfind*` helpers, inject
+# index_version server-side, cache GET responses, and return scFind's response shape unchanged so
+# the consuming hooks need no response-type changes. `jsonify(...)` is kept lexically at each
+# route's return so request-derived data is served as application/json (not an HTML/XSS sink).
+# ---------------------------------------------------------------------------
+
+
+@blueprint.route('/scfind/hyper-query-cell-types.json')
+def hyper_query_cell_types():
+    """Cell types whose marker genes are enriched for the queried gene(s)."""
+    try:
+        return jsonify(
+            _proxy_scfind_get(
+                'hyperQueryCellTypes', ('gene_list', 'dataset_name', 'include_prefix', 'modality')
+            )
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'hyperQueryCellTypes')
+
+
+@blueprint.route('/scfind/find-datasets.json')
+def find_datasets():
+    """Datasets containing the queried gene(s), with per-dataset cell counts."""
+    try:
+        return jsonify(_proxy_scfind_get('findDatasets', ('gene_list', 'modality')))
+    except Exception as e:
+        return _handle_scfind_error(e, 'findDatasets')
+
+
+@blueprint.route('/scfind/find-dataset-for-cell-type.json', methods=['GET', 'POST'])
+def find_dataset_for_cell_type():
+    """Datasets containing the queried cell type, with per-dataset cell counts."""
+    try:
+        return jsonify(_proxy_scfind('findDatasetForCellType', ('cell_type', 'modality')))
+    except Exception as e:
+        return _handle_scfind_error(e, 'findDatasetForCellType')
+
+
+@blueprint.route('/scfind/cell-type-count-for-dataset.json')
+def cell_type_count_for_dataset():
+    """Cell type composition (counts) of a single dataset."""
+    try:
+        return jsonify(_proxy_scfind_get('cellTypeCountForDataset', ('dataset', 'modality')))
+    except Exception as e:
+        return _handle_scfind_error(e, 'cellTypeCountForDataset')
+
+
+@blueprint.route('/scfind/cell-type-count-for-tissue.json')
+def cell_type_count_for_tissue():
+    """Cell type composition (counts) of a single tissue/organ."""
+    try:
+        return jsonify(_proxy_scfind_get('cellTypeCountForTissue', ('tissue', 'modality')))
+    except Exception as e:
+        return _handle_scfind_error(e, 'cellTypeCountForTissue')
+
+
+@blueprint.route('/scfind/cell-type-expression.json')
+def cell_type_expression():
+    """Expression of the queried gene(s) within a cell type (dataset-scoped)."""
+    try:
+        return jsonify(
+            _proxy_scfind_get('getCellTypeExpression', ('gene_list', 'cell_type', 'modality'))
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'getCellTypeExpression')
+
+
+@blueprint.route('/scfind/cell-type-expression-bins.json')
+def cell_type_expression_bins():
+    """Binned expression of the queried gene(s) within a cell type (dataset-scoped)."""
+    try:
+        return jsonify(
+            _proxy_scfind_get(
+                'getCellTypeExpressionBinData',
+                ('gene_list', 'cell_type', 'bin_length', 'modality'),
+            )
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'getCellTypeExpressionBinData')
+
+
+@blueprint.route('/scfind/cell-type-markers.json', methods=['GET', 'POST'])
+def cell_type_markers():
+    """Marker genes for the queried cell type(s), optionally against a background set."""
+    try:
+        return jsonify(
+            _proxy_scfind(
+                'cellTypeMarkers',
+                (
+                    'cell_types',
+                    'background_cell_types',
+                    'top_k',
+                    'sort_field',
+                    'include_prefix',
+                    'modality',
+                ),
+            )
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'cellTypeMarkers')
+
+
+@blueprint.route('/scfind/evaluate-markers.json', methods=['GET', 'POST'])
+def evaluate_markers():
+    """Evaluate the queried gene signature against the queried cell type(s)."""
+    try:
+        return jsonify(
+            _proxy_scfind(
+                'evaluateMarkers',
+                (
+                    'gene_list',
+                    'cell_types',
+                    'background_cell_types',
+                    'sort_field',
+                    'include_prefix',
+                ),
+            )
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'evaluateMarkers')
+
+
+@blueprint.route('/scfind/find-gene-signatures.json', methods=['GET', 'POST'])
+def find_gene_signatures():
+    """Discriminating gene signatures for the queried cell type(s)."""
+    try:
+        return jsonify(
+            _proxy_scfind('findGeneSignatures', ('cell_types', 'min_cells', 'min_fraction'))
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'findGeneSignatures')
+
+
+@blueprint.route('/scfind/find-similar-genes.json')
+def find_similar_genes():
+    """Genes with expression patterns similar to the queried gene(s) in a dataset."""
+    try:
+        return jsonify(
+            _proxy_scfind_get('findSimilarGenes', ('gene_list', 'dataset_name', 'top_k'))
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'findSimilarGenes')
+
+
+@blueprint.route('/scfind/marker-genes.json')
+def marker_genes():
+    """Cell types associated with the queried marker gene(s)."""
+    try:
+        return jsonify(_proxy_scfind_get('marker_genes', ('marker_genes', 'dataset_name')))
+    except Exception as e:
+        return _handle_scfind_error(e, 'marker_genes')
+
+
+@blueprint.route('/scfind/find-housekeeping-genes.json', methods=['GET', 'POST'])
+def find_housekeeping_genes():
+    """Housekeeping genes shared across the queried cell type(s)."""
+    try:
+        return jsonify(
+            _proxy_scfind('findHouseKeepingGenes', ('cell_types', 'min_recall', 'max_genes'))
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'findHouseKeepingGenes')
+
+
+@blueprint.route('/scfind/find-cell-type-specificities.json')
+def find_cell_type_specificities():
+    """Cell type specificity scores for the queried gene(s)."""
+    try:
+        return jsonify(
+            _proxy_scfind_get(
+                'findCellTypeSpecificities',
+                ('gene_list', 'datasets', 'min_cells', 'min_fraction'),
+            )
+        )
+    except Exception as e:
+        return _handle_scfind_error(e, 'findCellTypeSpecificities')
+
+
+@blueprint.route('/scfind/find-tissue-specificities.json')
+def find_tissue_specificities():
+    """Tissue specificity scores for the queried gene(s)."""
+    try:
+        return jsonify(_proxy_scfind_get('findTissueSpecificities', ('gene_list', 'min_cells')))
+    except Exception as e:
+        return _handle_scfind_error(e, 'findTissueSpecificities')
+
+
+@blueprint.route('/scfind/indexed-datasets.json')
+def indexed_datasets():
+    """All datasets indexed by scFind, with per-dataset cell counts."""
+    try:
+        return jsonify(_proxy_scfind_get('getDatasets', ('modality',)))
+    except Exception as e:
+        return _handle_scfind_error(e, 'getDatasets')
+
+
+# ---------------------------------------------------------------------------
+# Per-page aggregate routes (see the builders above). One request returns all the scfind data a
+# reworked page needs on initial load. `jsonify(...)` is kept lexically at each return, and the
+# user-supplied path params are validated at the boundary before reaching scfind.
+# ---------------------------------------------------------------------------
+
+
+@blueprint.route('/scfind/cell-types-landing.json')
+def cell_types_landing():
+    """Aggregate scfind data for the Cell Types landing page (cached + warmed at startup)."""
+    try:
+        return jsonify(_build_cell_types_landing())
+    except Exception as e:
+        return _handle_scfind_error(e, 'cell types landing')
+
+
+@blueprint.route('/scfind/gene-detail/<gene_symbol>.json')
+def gene_detail(gene_symbol):
+    """Aggregate scfind data for the Gene detail page."""
+    try:
+        if not is_valid_gene_symbol(gene_symbol):
+            return jsonify({'error': 'Invalid gene symbol.'}), 400
+        return jsonify(_build_gene_detail(gene_symbol))
+    except Exception as e:
+        return _handle_scfind_error(e, 'gene detail')
+
+
+@blueprint.route('/scfind/cell-type-detail/<clid>.json')
+def cell_type_detail(clid):
+    """Aggregate scfind data for the Cell Type detail page."""
+    try:
+        if not is_valid_clid(clid):
+            return jsonify({'error': 'Invalid cell type ID.'}), 400
+        return jsonify(_build_cell_type_detail(clid))
+    except Exception as e:
+        return _handle_scfind_error(e, 'cell type detail')

@@ -10,11 +10,13 @@ import { trackEvent } from 'js/helpers/trackers';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
+import { Tab, Tabs } from 'js/shared-styles/tabs';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
 import DatasetsOverviewChart from './DatasetsOverviewChart';
 import Alert from '@mui/material/Alert';
+import { SCFindModality } from '../MolecularDataQueryForm/types';
 import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 
 interface DatasetsOverviewProps extends React.PropsWithChildren {
@@ -22,6 +24,9 @@ interface DatasetsOverviewProps extends React.PropsWithChildren {
   belowTheFold?: React.ReactNode;
   trackingInfo?: EventInfo;
   tableDescription?: React.ReactNode;
+  /** Controlled RNA/ATAC value; when `onDataTypeChange` is also provided the chart shows a Data Type switch. */
+  dataType?: SCFindModality;
+  onDataTypeChange?: (dataType: SCFindModality) => void;
 }
 
 export default function DatasetsOverview({
@@ -30,6 +35,8 @@ export default function DatasetsOverview({
   belowTheFold,
   trackingInfo,
   tableDescription,
+  dataType,
+  onDataTypeChange,
 }: DatasetsOverviewProps) {
   const modality = useOptionalSCFindModality();
   const { data: indexedDatasets, isLoading, error } = useIndexedDatasets(modality);
@@ -90,11 +97,29 @@ export default function DatasetsOverview({
         <Stack spacing={3}>
           <Description belowTheFold={belowTheFold}>{children}</Description>
           <ChartLoader isLoading={matched.isLoading || indexed.isLoading || all.isLoading}>
-            <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
+            <DatasetsOverviewChart
+              matched={matched}
+              indexed={indexed}
+              all={all}
+              trackingInfo={trackingInfo}
+              dataType={dataType}
+              onDataTypeChange={onDataTypeChange}
+            />
           </ChartLoader>
-          <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
-            {tableDescription}
-          </DatasetsOverviewTable>
+          <div>
+            {onDataTypeChange && (
+              <Tabs
+                value={dataType === 'ATAC' ? 1 : 0}
+                onChange={(_event, value: number) => onDataTypeChange(value === 1 ? 'ATAC' : undefined)}
+              >
+                <Tab label="RNAseq" index={0} />
+                <Tab label="ATACseq" index={1} />
+              </Tabs>
+            )}
+            <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
+              {tableDescription}
+            </DatasetsOverviewTable>
+          </div>
         </Stack>
       </DetailsAccordion>
     </Box>

@@ -12,6 +12,15 @@ export function getScFindModality(queryMethod: string): SCFindModality {
   return queryMethod === 'scFindATAC' ? 'ATAC' : undefined;
 }
 
+export function makeScFindModalityLabel(modality: SCFindModality): string {
+  return modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
+}
+
+export function getScFindModalityLabel(queryMethod: string): string {
+  const modality = getScFindModality(queryMethod);
+  return makeScFindModalityLabel(modality);
+}
+
 export function getCellVariableNames(
   queryType: string,
   genes: AutocompleteResult[],

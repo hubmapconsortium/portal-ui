@@ -276,6 +276,26 @@ def is_valid_pathway_code(pathway_code):
     return isinstance(pathway_code, str) and PATHWAY_CODE_RE.fullmatch(pathway_code) is not None
 
 
+# HGNC-style gene symbol, e.g. "VIM", "HLA-A", "MT-ND1". The per-page gene-detail route takes the
+# symbol as a URL path segment, so constrain it to identifier characters (letters, digits, hyphen,
+# dot, underscore) to prevent path/URL injection from user-supplied values.
+GENE_SYMBOL_RE = re.compile(r'[A-Za-z0-9][A-Za-z0-9._-]{0,63}')
+
+# Cell Ontology identifier, e.g. "CL:0000236". Taken as a URL path segment by the per-page
+# cell-type-detail route, so bound it to the exact CL:<digits> shape.
+CLID_RE = re.compile(r'CL:\d{1,12}')
+
+
+def is_valid_gene_symbol(gene_symbol):
+    """Return True iff ``gene_symbol`` is a well-formed HGNC-style gene symbol."""
+    return isinstance(gene_symbol, str) and GENE_SYMBOL_RE.fullmatch(gene_symbol) is not None
+
+
+def is_valid_clid(clid):
+    """Return True iff ``clid`` is a well-formed Cell Ontology identifier (e.g. "CL:0000236")."""
+    return isinstance(clid, str) and CLID_RE.fullmatch(clid) is not None
+
+
 @cache
 def fetch_pathway_participants(pathway_code):
     """
