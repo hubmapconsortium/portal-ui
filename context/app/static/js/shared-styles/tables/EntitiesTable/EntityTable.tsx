@@ -48,6 +48,12 @@ interface EntityTableProps<Doc extends Entity> extends Pick<
   initialSortState?: { columnId: string; direction: 'asc' | 'desc' };
   headerActions?: React.ReactNode;
   useDefaultQuery?: boolean;
+  /**
+   * Reserves a fixed container height so the table doesn't collapse to the header height while its
+   * query loads (preventing layout shift, e.g. when switching between RNA/ATAC result tabs). Pair
+   * with `maxHeight` (typically the same value) to make the panel a stable, scrollable height.
+   */
+  minHeight?: number;
 }
 
 const headerRowHeight = 60;
@@ -68,6 +74,7 @@ function EntityTable<Doc extends Entity>({
   collapseTooltip,
   disabledTooltipTitle,
   maxHeight,
+  minHeight,
   numSelected,
   onSelectAllChange,
   onSelectChange,
@@ -138,6 +145,7 @@ function EntityTable<Doc extends Entity>({
         fetchMoreOnBottomReached(event);
       }}
       maxHeight={maxHeight}
+      minHeight={minHeight}
     >
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>

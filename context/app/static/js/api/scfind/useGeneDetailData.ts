@@ -10,8 +10,14 @@ import { DatasetsForGenesResponse } from './useFindDatasetForGenes';
  */
 export interface GeneDetailData {
   hyper_query: GeneSignatureStats[];
+  // ATAC counterpart of `hyper_query` (hyperQueryCellTypes with modality=ATAC).
+  hyper_query_atac: GeneSignatureStats[];
   find_datasets: DatasetsForGenesResponse;
+  // ATAC counterpart of `find_datasets` (findDatasets with modality=ATAC).
+  find_datasets_atac: DatasetsForGenesResponse;
   organs: string[];
+  // Organs derived from the ATAC cell types.
+  organs_atac: string[];
   label_to_clid: Record<string, string[]>;
 }
 

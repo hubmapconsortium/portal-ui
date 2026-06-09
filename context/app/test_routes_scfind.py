@@ -966,6 +966,10 @@ class TestPerPageAggregates:
         assert data['find_datasets'] == mock_find_datasets
         assert data['organs'] == ['kidney']
         assert 'kidney.epithelial cell' in data['label_to_clid']
+        # RNA + ATAC variants for the cell-types and datasets modality tabs (with counts).
+        assert 'hyper_query_atac' in data
+        assert 'find_datasets_atac' in data
+        assert 'organs_atac' in data
 
     @pytest.mark.parametrize('gene_symbol', ['a%20b', '.hidden', 'a%3Bb'])
     def test_gene_detail_invalid_symbol(self, client, mocker, gene_symbol):

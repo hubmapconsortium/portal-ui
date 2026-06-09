@@ -30,6 +30,14 @@ def service_status():
     )
 
 
+@blueprint.route('/scfind/about')
+def scfind_about():
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html', flask_data=flask_data, title='scFind Method'
+    )
+
+
 @blueprint.route('/ccf-eui')
 def ccf_eui():
     return render_template(

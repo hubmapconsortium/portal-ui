@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 
 import { Copy } from 'js/shared-styles/tables/actions';
+import { useDownloadTSV } from 'js/hooks/useDownloadTSV';
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
 import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
@@ -36,7 +37,38 @@ function LineUpButton() {
   );
 }
 
-const downloadMenuID = 'cell-types-datasets-download-menu';
+const downloadMenuID = 'scfind-datasets-download-menu';
+
+/** Downloads a TSV of metadata for the selected datasets (mirrors the search table's action). */
+function DownloadMetadataItem() {
+  const { selectedRows } = useSelectableTableStore();
+  const { closeMenu } = useDropdownMenuStore();
+  const disabled = selectedRows.size === 0;
+
+  // Memoized so useDownloadTSV's "reset on params change" effect doesn't fire every render.
+  const queryParams = useMemo(() => ({ uuids: Array.from(selectedRows), entityType: ENTITY_TYPE }), [selectedRows]);
+  const { initiateDownload, isLoading } = useDownloadTSV({
+    lcPluralType: 'datasets',
+    queryParams,
+    analyticsCategory: 'scFind Datasets',
+  });
+
+  return (
+    <StyledMenuItem
+      disabled={disabled}
+      isLoading={isLoading}
+      tooltip={
+        disabled ? 'Select datasets to download metadata.' : 'Download a TSV of metadata for the selected datasets.'
+      }
+      onClick={() => {
+        initiateDownload();
+        closeMenu();
+      }}
+    >
+      Download Metadata
+    </StyledMenuItem>
+  );
+}
 
 function DownloadMenuInner() {
   const { selectedRows, deselectRows } = useSelectableTableStore();
@@ -50,6 +82,7 @@ function DownloadMenuInner() {
         Download
       </StyledDropdownMenuButton>
       <DropdownMenu id={downloadMenuID}>
+        <DownloadMetadataItem />
         <StyledMenuItem
           disabled={disabled}
           tooltip={disabled ? 'Select datasets for download.' : 'Bulk download files for selected datasets.'}
@@ -69,11 +102,12 @@ function DownloadMenuInner() {
 const DownloadMenu = withDropdownMenuProvider(DownloadMenuInner, false);
 
 /**
- * Table-actions toolbar for the cell type detail page's dataset table — the same set as the main
- * dataset search table (copy, save to list, LineUp, workspaces, download), driven by the selected
- * rows from the surrounding SelectableTableProvider with a fixed `Dataset` entity type.
+ * Table-actions toolbar for the scFind dataset result tables (cell type + gene detail pages) — the
+ * same set as the main dataset search table (copy, save to list, LineUp, workspaces, download),
+ * driven by the selected rows from the surrounding SelectableTableProvider with a fixed `Dataset`
+ * entity type.
  */
-export default function CellTypesDatasetTableActions() {
+export default function SCFindDatasetTableActions() {
   return (
     <Stack direction="row" spacing={1} flexWrap="nowrap" alignItems="center">
       <Copy />

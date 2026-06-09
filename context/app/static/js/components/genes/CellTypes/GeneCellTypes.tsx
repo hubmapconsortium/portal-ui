@@ -28,18 +28,14 @@ import { useCellTypeOntologyDetails } from 'js/hooks/useUBKG';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
-import IndexedDatasetsSummary from 'js/components/organ/OrganCellTypes/IndexedDatasetsSummary';
-import useSearchData from 'js/hooks/useSearchData';
 import Description from 'js/shared-styles/sections/Description';
 import Divider from '@mui/material/Divider';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import { trackEvent } from 'js/helpers/trackers';
-import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import ScientificNotationDisplay from './ScientificNotationDisplay';
 import {
   useGenePageContext,
   useGeneCellTypesData,
-  useGeneDatasetsData,
   useGeneDetailPageTrackingInfo,
   useTrackGeneDetailPage,
 } from '../hooks';
@@ -48,6 +44,8 @@ import Stack from '@mui/material/Stack';
 import { LineClamp } from 'js/shared-styles/text';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
+import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 
 const downloadLabels = ['Cell Type', 'Cells Hit', 'Total Cells', 'Percentage', 'p-value', 'Description'];
 
@@ -75,6 +73,7 @@ const columns = {
       'Proportion of the amount of cells of this type that significantly express this marker gene relative to the total count of this cell type.',
     sort: 'percentage',
     width: 250,
+    noWrap: true,
   },
   pval: {
     id: 'adj-pval',
@@ -83,6 +82,7 @@ const columns = {
     tooltipText: 'Statistical significance of gene expression for this cell type in the context of the selected organ.',
     sort: 'adj-pval',
     width: 150,
+    noWrap: true,
   },
 } as const;
 
@@ -210,7 +210,7 @@ function CellTypesTableHeader({
   );
 }
 
-function CellTypesTable() {
+function CellTypesTable({ modality }: { modality?: SCFindModality }) {
   const { geneSymbol } = useGenePageContext();
 
   const [selectedOrgan, setSelectedOrgan] = useState<string>('');
@@ -221,17 +221,19 @@ function CellTypesTable() {
   });
 
   // All-organs signatures + organ list + label->CLID come from the page aggregate (one request,
-  // warmed/cached server-side).
+  // warmed/cached server-side), scoped to this tab's modality.
   const {
     hyperQuery: allCellTypesForGene,
     organs: cellTypeOrgans,
     labelToClid,
     isLoading: isLoadingAllCellTypes,
-  } = useGeneCellTypesData();
+  } = useGeneCellTypesData(modality);
 
   // Selecting an organ recomputes the statistics, so it's an interactive fetch to the per-operation
   // BFF route — only issued once an organ is chosen; the default view reuses the aggregate.
-  const organKey = selectedOrgan ? createCellTypeNamesKey({ geneList: geneSymbol, organName: selectedOrgan }) : null;
+  const organKey = selectedOrgan
+    ? createCellTypeNamesKey({ geneList: geneSymbol, organName: selectedOrgan, modality })
+    : null;
   const { data: organCellTypes, isLoading: isLoadingOrganCellTypes } = useSWR<
     { findGeneSignatures: GeneSignatureStats[] },
     unknown,
@@ -319,7 +321,7 @@ function CellTypesTable() {
   }
 
   return (
-    <Paper>
+    <Paper sx={{ pt: 2 }}>
       <FormControl fullWidth sx={{ px: 2 }}>
         <InputLabel htmlFor="cell-types-organ-sources" variant="outlined" shrink sx={{ ml: 2 }}>
           Organ Sources
@@ -372,108 +374,46 @@ function CellTypesTable() {
   );
 }
 
-interface DatasetGeneAggregations {
-  datasetTypes: {
-    buckets: {
-      key: string;
-      doc_count: number;
-    }[];
-  };
-  organs: {
-    buckets: {
-      key: string;
-      doc_count: number;
-    }[];
-  };
-}
-
-const useIndexedDatasetsForGene = () => {
-  const { geneSymbol } = useGenePageContext();
-  const { data: datasets, isLoading: isLoadingDatasets } = useGeneDatasetsData();
-
-  const ids = useSCFindIDAdapter(datasets?.findDatasets[geneSymbol] ?? []);
-
-  const query =
-    ids.length > 0
-      ? {
-          bool: {
-            must: [
-              {
-                ids: {
-                  values: ids,
-                },
-              },
-            ],
-          },
-        }
-      : undefined;
-
-  const { searchData, isLoading: isLoadingDatasetTypes } = useSearchData<unknown, DatasetGeneAggregations>({
-    query,
-    aggs: {
-      datasetTypes: {
-        terms: {
-          field: 'raw_dataset_type.keyword',
-          order: {
-            _term: 'asc',
-          },
-          size: 10000,
-        },
-      },
-      organs: {
-        terms: {
-          field: 'origin_samples_unique_mapped_organs.keyword',
-        },
-      },
-    },
-    size: 10000,
-    _source: ['hubmap_id'],
-  });
-
-  const datasetUUIDs = searchData?.hits?.hits.map((h) => h._id) ?? [];
-
-  const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
-
-  const organs = searchData?.aggregations?.organs?.buckets ?? [];
-
-  return {
-    datasets: datasetUUIDs,
-    datasetTypes,
-    scFindParams: {
-      genes: [geneSymbol],
-    },
-    organs,
-    isLoadingDatasets: isLoadingDatasets || isLoadingDatasetTypes,
-  };
-};
-
 export default function CellTypes() {
   const { geneSymbolUpper } = useGenePageContext();
-  const indexedDatasetsInfo = useIndexedDatasetsForGene();
+  const trackingInfo = useGeneDetailPageTrackingInfo();
+  const { openTabIndex, handleTabChange } = useTabs();
+
+  // Tab counts: number of cell types (excluding the 'other' bucket the table hides) per modality,
+  // straight from the page aggregate. Each tab renders its own table instance, so the organ-sources
+  // selection stays scoped to the active modality.
+  const { hyperQuery: rnaCellTypes, isLoading } = useGeneCellTypesData(undefined);
+  const { hyperQuery: atacCellTypes } = useGeneCellTypesData('ATAC');
+  const rnaCount = useMemo(() => rnaCellTypes.filter((ct) => !ct.cell_type.endsWith('other')).length, [rnaCellTypes]);
+  const atacCount = useMemo(
+    () => atacCellTypes.filter((ct) => !ct.cell_type.endsWith('other')).length,
+    [atacCellTypes],
+  );
+
   return (
     <CollapsibleDetailPageSection
       id={cellTypesSection.id}
       title={`Cell Types with ${geneSymbolUpper} as Marker Gene`}
-      trackingInfo={useGeneDetailPageTrackingInfo()}
+      trackingInfo={trackingInfo}
     >
-      <Description
-        belowTheFold={
-          <IndexedDatasetsSummary {...indexedDatasetsInfo}>
-            These results are derived from RNAseq datasets that were indexed by the <SCFindLink /> to identify cell
-            types expressing this gene. Not all HuBMAP datasets are currently compatible with this method due to data
-            modalities or the availability of cell annotations. This section gives a summary of the datasets that are
-            used to compute these results.
-          </IndexedDatasetsSummary>
-        }
-      >
+      <Description>
         The table displays cell types expressing this marker gene as identified by the <SCFindLink />. It calculates
-        cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq datasets with cell
-        type annotations.
+        cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq and ATACseq datasets
+        with cell type annotations.
         <Divider sx={{ opacity: 0, my: 1 }} />
         The table can be filtered by organs and available for download for further analysis. Filtering by organ will
         recompute the results and recalculate statistical values accordingly.
       </Description>
-      <CellTypesTable />
+      <Tabs value={openTabIndex} onChange={handleTabChange}>
+        <Tab label={`RNAseq (${rnaCount})`} index={0} />
+        <Tab label={`ATACseq (${atacCount})`} index={1} disabled={!isLoading && atacCount === 0} />
+      </Tabs>
+      <TabPanel value={openTabIndex} index={0}>
+        <CellTypesTable modality={undefined} />
+      </TabPanel>
+      <TabPanel value={openTabIndex} index={1}>
+        <CellTypesTable modality="ATAC" />
+      </TabPanel>
     </CollapsibleDetailPageSection>
   );
 }

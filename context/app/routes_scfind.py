@@ -748,21 +748,43 @@ def _build_cell_types_landing():
 
 
 def _build_gene_detail(gene_symbol):
-    """Assemble the Gene detail payload (hyperQuery + findDatasets + label->CLID subset)."""
+    """Assemble the Gene detail payload (hyperQuery + findDatasets + label->CLID subset).
+
+    RNA and ATAC counterparts are both bundled so the page's cell-types and datasets modality tabs
+    (with counts) are served from this single aggregate fetch.
+    """
     hyper_query = _cached_scfind_get(
         'hyperQueryCellTypes', (('gene_list', gene_symbol), ('include_prefix', 'true'))
     ).get('findGeneSignatures', [])
+    hyper_query_atac = _cached_scfind_get(
+        'hyperQueryCellTypes',
+        (('gene_list', gene_symbol), ('include_prefix', 'true'), ('modality', 'ATAC')),
+    ).get('findGeneSignatures', [])
     find_datasets = _cached_scfind_get('findDatasets', (('gene_list', gene_symbol),))
-    cell_types = [
-        sig['cell_type'] for sig in hyper_query if isinstance(sig, dict) and sig.get('cell_type')
-    ]
+    find_datasets_atac = _cached_scfind_get(
+        'findDatasets', (('gene_list', gene_symbol), ('modality', 'ATAC'))
+    )
+
+    def cell_types_of(signatures):
+        return [
+            sig['cell_type'] for sig in signatures if isinstance(sig, dict) and sig.get('cell_type')
+        ]
+
+    cell_types = cell_types_of(hyper_query)
+    cell_types_atac = cell_types_of(hyper_query_atac)
     organs = sorted({ct.split('.')[0] for ct in cell_types if '.' in ct})
+    organs_atac = sorted({ct.split('.')[0] for ct in cell_types_atac if '.' in ct})
     label_to_clid_map = _build_label_to_clid_map()
-    label_to_clid = {ct: label_to_clid_map.get(ct, []) for ct in cell_types}
+    label_to_clid = {
+        ct: label_to_clid_map.get(ct, []) for ct in set(cell_types) | set(cell_types_atac)
+    }
     return {
         'hyper_query': hyper_query,
+        'hyper_query_atac': hyper_query_atac,
         'find_datasets': find_datasets,
+        'find_datasets_atac': find_datasets_atac,
         'organs': organs,
+        'organs_atac': organs_atac,
         'label_to_clid': label_to_clid,
     }
 

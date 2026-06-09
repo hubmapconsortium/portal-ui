@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useMemo, useContext as useOptionalContext } from 'react';
 import { createContext, useContext } from 'js/helpers/context';
 import useGeneDetailData, { GeneDetailData } from 'js/api/scfind/useGeneDetailData';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 
 interface GenePageContextProps {
   geneSymbol: string;
@@ -35,21 +36,30 @@ export const useGenePageContext = () => useContext(GenePageContext);
 export const useOptionalGenePageContext = () => useOptionalContext(GenePageContext);
 
 /**
- * Cell-types-section slice of the gene-detail aggregate: the all-organs hyperQuery signatures, the
- * organ list derived from them, and the label->CLID subset for those cell types.
+ * Cell-types-section slice of the gene-detail aggregate, per modality (`'ATAC'` selects the ATAC
+ * variant; `undefined` is RNA): the all-organs hyperQuery signatures, the organ list derived from
+ * them, and the (modality-agnostic) label->CLID subset for those cell types.
  */
-export const useGeneCellTypesData = () => {
+export const useGeneCellTypesData = (modality?: SCFindModality) => {
   const { scFindData, scFindLoading } = useGenePageContext();
+  const isAtac = modality === 'ATAC';
   return {
-    hyperQuery: scFindData?.hyper_query ?? [],
-    organs: scFindData?.organs ?? [],
+    hyperQuery: (isAtac ? scFindData?.hyper_query_atac : scFindData?.hyper_query) ?? [],
+    organs: (isAtac ? scFindData?.organs_atac : scFindData?.organs) ?? [],
     labelToClid: scFindData?.label_to_clid ?? {},
     isLoading: scFindLoading,
   };
 };
 
-/** Datasets slice of the gene-detail aggregate ({counts, findDatasets} from findDatasets). */
-export const useGeneDatasetsData = () => {
+/**
+ * Datasets slice of the gene-detail aggregate ({counts, findDatasets} from findDatasets), per
+ * modality (`'ATAC'` selects the ATAC variant; `undefined` is RNA).
+ */
+export const useGeneDatasetsData = (modality?: SCFindModality) => {
   const { scFindData, scFindLoading } = useGenePageContext();
-  return { data: scFindData?.find_datasets, isLoading: scFindLoading };
+  const isAtac = modality === 'ATAC';
+  return {
+    data: isAtac ? scFindData?.find_datasets_atac : scFindData?.find_datasets,
+    isLoading: scFindLoading,
+  };
 };

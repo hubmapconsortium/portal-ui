@@ -3,14 +3,14 @@ import Stack from '@mui/material/Stack';
 
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import { Tab, TabPanel, Tabs } from 'js/shared-styles/tabs';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
+import SelectableTableProvider, { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 import { SCFindModalityProvider } from 'js/components/cells/SCFindResults/SCFindModalityContext';
 import { SCFindCellTypeQueryDatasetList } from 'js/components/cells/SCFindResults/SCFindCellTypeQueryResults';
 import DatasetsOverview from 'js/components/cells/DatasetsOverview';
 import { DatasetsForCellType } from 'js/api/scfind/useCellTypeDetailData';
-import { useCellTypeDatasetsData } from './CellTypesDetailPageContext';
-import CellTypesDatasetTableActions from './CellTypesDatasetTableActions';
+import SCFindDatasetTableActions from 'js/components/cells/SCFindResults/SCFindDatasetTableActions';
+import { useCellTypeDatasetsData, useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 
 const RNA_TAB = 0;
 const ATAC_TAB = 1;
@@ -33,15 +33,43 @@ function useMatchedDatasets(datasetsForCellTypes: Record<string, DatasetsForCell
 }
 
 /**
+ * A single modality's dataset table. Rendered inside its own SelectableTableProvider (one per tab),
+ * so the row selection and the "N selected" + actions header read from — and reset with — that
+ * provider when the tab unmounts on switch.
+ */
+function CellTypeDatasetsTable({
+  modality,
+  datasetIds,
+  countsMap,
+}: {
+  modality: SCFindModality;
+  datasetIds: { hubmap_id: string }[];
+  countsMap: Record<string, number>;
+}) {
+  const numSelected = useSelectableTableStore((state) => state.selectedRows.size);
+  return (
+    <SCFindModalityProvider value={modality}>
+      <SCFindCellTypeQueryDatasetList
+        datasetIds={datasetIds}
+        countsMap={countsMap}
+        numSelected={numSelected}
+        headerActions={<SCFindDatasetTableActions />}
+      />
+    </SCFindModalityProvider>
+  );
+}
+
+/**
  * Datasets results for the Cell Type detail page. A single RNA/ATAC modality state drives both the
  * datasets overview chart (data-type switch) and the results table (RNAseq/ATACseq tabs); the
  * per-organ distribution charts shown by the shared scFind results component are intentionally
  * omitted here (the Cell Type Distribution section covers that).
+ *
+ * Each results tab mounts its own SelectableTableProvider, so the dataset selection is scoped to a
+ * single modality and resets when switching tabs (matching the rest of the site).
  */
 export default function CellTypesDatasetsResults() {
-  const { selectedRows } = useSelectableTableStore();
-  const numSelected = selectedRows.size;
-
+  const { name } = useCellTypesDetailPageContext();
   const { datasetsForCellTypes: rnaDatasets } = useCellTypeDatasetsData(undefined);
   const { datasetsForCellTypes: atacDatasets } = useCellTypeDatasetsData('ATAC');
 
@@ -69,7 +97,7 @@ export default function CellTypesDatasetsResults() {
   const resultsActive = resultsEffective === 'ATAC' ? atac : rna;
   const resultsTabValue = resultsEffective === 'ATAC' ? ATAC_TAB : RNA_TAB;
 
-  const headerActions = <CellTypesDatasetTableActions />;
+  const tableLabel = `Datasets with ${name ?? 'cell type'} - scFind Results`;
 
   return (
     <Stack spacing={2}>
@@ -95,35 +123,24 @@ export default function CellTypesDatasetsResults() {
             <Tab label={`ATACseq (${atac.ids.length})`} index={ATAC_TAB} />
           </Tabs>
           <TabPanel value={resultsTabValue} index={RNA_TAB} sx={{ mt: 0 }}>
-            <SCFindModalityProvider value={undefined}>
-              <SCFindCellTypeQueryDatasetList
-                datasetIds={rna.datasetIds}
-                countsMap={rna.countsMap}
-                numSelected={numSelected}
-                headerActions={headerActions}
-              />
-            </SCFindModalityProvider>
+            <SelectableTableProvider tableLabel={`${tableLabel} - RNAseq`}>
+              <CellTypeDatasetsTable modality={undefined} datasetIds={rna.datasetIds} countsMap={rna.countsMap} />
+            </SelectableTableProvider>
           </TabPanel>
           <TabPanel value={resultsTabValue} index={ATAC_TAB} sx={{ mt: 0 }}>
-            <SCFindModalityProvider value="ATAC">
-              <SCFindCellTypeQueryDatasetList
-                datasetIds={atac.datasetIds}
-                countsMap={atac.countsMap}
-                numSelected={numSelected}
-                headerActions={headerActions}
-              />
-            </SCFindModalityProvider>
+            <SelectableTableProvider tableLabel={`${tableLabel} - ATACseq`}>
+              <CellTypeDatasetsTable modality="ATAC" datasetIds={atac.datasetIds} countsMap={atac.countsMap} />
+            </SelectableTableProvider>
           </TabPanel>
         </div>
       ) : (
-        <SCFindModalityProvider value={pinnedModality}>
-          <SCFindCellTypeQueryDatasetList
+        <SelectableTableProvider tableLabel={tableLabel}>
+          <CellTypeDatasetsTable
+            modality={pinnedModality}
             datasetIds={resultsActive.datasetIds}
             countsMap={resultsActive.countsMap}
-            numSelected={numSelected}
-            headerActions={headerActions}
           />
-        </SCFindModalityProvider>
+        </SelectableTableProvider>
       )}
     </Stack>
   );

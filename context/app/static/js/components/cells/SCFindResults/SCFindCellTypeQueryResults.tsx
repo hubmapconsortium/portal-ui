@@ -28,6 +28,7 @@ import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { CellTypeCategory } from './types';
 import { useSCFindModality } from './SCFindModalityContext';
 
@@ -64,6 +65,7 @@ export function SCFindCellTypeQueryDatasetList({
   return (
     <EntityTable<Dataset>
       maxHeight={800}
+      minHeight={800}
       isSelectable
       numSelected={numSelected}
       headerActions={headerActions}
@@ -290,32 +292,36 @@ function DatasetListSection() {
   }
 
   return (
-    <div>
-      <DatasetListHeader />
-      <Tabs
-        variant={cellTypeCategories.length >= 5 ? 'scrollable' : 'fullWidth'}
-        onChange={handleTabChange}
-        value={openTabIndex}
-      >
-        {cellTypeCategories.map((cellTypeCategory, idx) => (
-          <CellTypeCategoryTab
-            cellTypeCategory={cellTypeCategory}
-            index={idx}
-            datasetCount={datasets[cellTypeCategory.label]?.length ?? 0}
-            key={cellTypeCategory.label}
-          />
+    // Keyed by the active tab so the provider remounts — and the dataset selection resets — when
+    // switching between cell-type result tabs (selection is scoped to one tab's results).
+    <SelectableTableProvider key={openTabIndex} tableLabel="Cell Type Query - scFind Results">
+      <div>
+        <DatasetListHeader />
+        <Tabs
+          variant={cellTypeCategories.length >= 5 ? 'scrollable' : 'fullWidth'}
+          onChange={handleTabChange}
+          value={openTabIndex}
+        >
+          {cellTypeCategories.map((cellTypeCategory, idx) => (
+            <CellTypeCategoryTab
+              cellTypeCategory={cellTypeCategory}
+              index={idx}
+              datasetCount={datasets[cellTypeCategory.label]?.length ?? 0}
+              key={cellTypeCategory.label}
+            />
+          ))}
+        </Tabs>
+        {cellTypeCategories.map((cellType, idx) => (
+          <TabPanel key={cellType.label} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
+            <SCFindCellTypeQueryDatasetList
+              key={cellType.label}
+              countsMap={countsMaps[cellType.label]}
+              datasetIds={datasets[cellType.label] ?? []}
+            />
+          </TabPanel>
         ))}
-      </Tabs>
-      {cellTypeCategories.map((cellType, idx) => (
-        <TabPanel key={cellType.label} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
-          <SCFindCellTypeQueryDatasetList
-            key={cellType.label}
-            countsMap={countsMaps[cellType.label]}
-            datasetIds={datasets[cellType.label] ?? []}
-          />
-        </TabPanel>
-      ))}
-    </div>
+      </div>
+    </SelectableTableProvider>
   );
 }
 
