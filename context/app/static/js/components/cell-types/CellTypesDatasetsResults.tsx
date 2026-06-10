@@ -91,7 +91,6 @@ export default function CellTypesDatasetsResults() {
 
   const overviewEffective = showModalitySelection ? overviewModality : pinnedModality;
   const overviewActive = overviewEffective === 'ATAC' ? atac : rna;
-  const overviewModalityLabel = overviewEffective === 'ATAC' ? 'ATACseq' : 'RNAseq';
 
   const resultsEffective = showModalitySelection ? resultsModality : pinnedModality;
   const resultsActive = resultsEffective === 'ATAC' ? atac : rna;
@@ -108,9 +107,10 @@ export default function CellTypesDatasetsResults() {
           dataType={overviewEffective}
           onDataTypeChange={showModalitySelection ? setOverviewModality : undefined}
         >
-          These results are derived from {overviewModalityLabel} datasets that were indexed by the <SCFindLink />. Not
-          all HuBMAP datasets are currently compatible with this method due to data modalities or the availability of
-          cell annotations.
+          These are datasets that contain this cell type as identified by Azimuth and indexed by the <SCFindLink /> with
+          uniformly processed HuBMAP RNAseq or ATACseq datasets that contain cell type annotations. The datasets
+          overview plot displays an overview of the datasets metadata compared to either the indexed datasets or all the
+          HuBMAP datasets available. The table is available for download in TSV format for further analysis.
         </DatasetsOverview>
       </SCFindModalityProvider>
       {showModalitySelection ? (
