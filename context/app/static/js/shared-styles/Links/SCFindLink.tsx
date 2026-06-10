@@ -6,5 +6,9 @@ import InternalLink from './InternalLink';
  * original scFind publication; everywhere else points here so users land on the portal's overview.
  */
 export default function SCFindLink({ children = 'scFind method' }: PropsWithChildren) {
-  return <InternalLink href="/scfind/about">{children}</InternalLink>;
+  return (
+    <InternalLink href="/scfind/about" target="_blank">
+      {children}
+    </InternalLink>
+  );
 }
