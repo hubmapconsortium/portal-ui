@@ -414,8 +414,8 @@ export default function CellTypes() {
         recompute the results and recalculate statistical values accordingly.
       </Description>
       <Tabs value={effectiveTabIndex} onChange={handleTabChange}>
-        <Tab label={`RNAseq (${rnaCount})`} index={0} disabled={!isLoading && rnaCount === 0} />
-        <Tab label={`ATACseq (${atacCount})`} index={1} disabled={!isLoading && atacCount === 0} />
+        <Tab label={`RNAseq (${rnaCount} Cell Types)`} index={0} disabled={!isLoading && rnaCount === 0} />
+        <Tab label={`ATACseq (${atacCount} Cell Types)`} index={1} disabled={!isLoading && atacCount === 0} />
       </Tabs>
       <TabPanel value={effectiveTabIndex} index={0}>
         <CellTypesTable modality={undefined} />
