@@ -1,14 +1,15 @@
 import React from 'react';
-import { InfoRounded, ErrorRounded, WarningRounded, CheckCircleRounded } from '@mui/icons-material';
+import { InfoRounded, ErrorRounded, WarningRounded, CheckCircleRounded, UnpublishedRounded } from '@mui/icons-material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
-export type IconStatus = 'info' | 'success' | 'warning' | 'error';
+export type IconStatus = 'info' | 'success' | 'warning' | 'error' | 'retracted';
 
 export const iconSymbolStatusMap: Record<IconStatus, React.ComponentType<SvgIconProps>> = {
   info: InfoRounded,
   success: CheckCircleRounded,
   warning: WarningRounded,
   error: ErrorRounded,
+  retracted: UnpublishedRounded,
 };
 
 function SeverityIcon({

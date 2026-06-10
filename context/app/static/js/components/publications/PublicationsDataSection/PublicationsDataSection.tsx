@@ -4,8 +4,10 @@ import PublicationCollections from 'js/components/publications/PublicationCollec
 import IntegratedDataTables from 'js/components/detailPage/IntegratedData/IntegratedDataTables';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
-import { Collection, Dataset } from 'js/components/types';
+import { Collection, Dataset, isDataset } from 'js/components/types';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import RetractedAlert from 'js/components/detailPage/RetractedAlert';
+import { isRetractedStatus } from 'js/components/detailPage/utils';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 
 interface PublicationsDataSectionProps {
@@ -106,14 +108,38 @@ function PublicationsDataSection({ ancestorIds, associatedCollectionUUID }: Publ
 
   const loadingTableEntities = isLoadingEntities || allEntities.length === 0;
 
+  // Maps each dataset's uuid (its ES doc _id) to a retracted-first sort value so the datasets table
+  // can place retracted datasets at the top by default.
+  const { datasetRetractedSortMap, hasRetractedDatasets } = useMemo(() => {
+    const datasets = allEntities.filter(isDataset);
+    return {
+      datasetRetractedSortMap: Object.fromEntries(
+        datasets.map((d) => [d.uuid, isRetractedStatus(d.mapped_status ?? d.status) ? 0 : 1]),
+      ),
+      hasRetractedDatasets: datasets.some((d) => isRetractedStatus(d.mapped_status ?? d.status)),
+    };
+  }, [allEntities]);
+
   return (
     <CollapsibleDetailPageSection id="data" title="Data">
+      {hasRetractedDatasets && (
+        <RetractedAlert>
+          This publication references retracted datasets, which should no longer be used. Issues affecting the
+          reliability of these datasets were identified, and all processed data derived from them have also been
+          retracted. Replacement datasets may be available with updated data.
+        </RetractedAlert>
+      )}
       {/*
         Publications reference specific dataset versions, including older ones whose
         next_revision_uuid points to newer versions. Disable the default-query filter
         so those referenced versions aren't dropped from the table.
       */}
-      <IntegratedDataTables entities={allEntities} isLoading={loadingTableEntities} useDefaultQuery={false} />
+      <IntegratedDataTables
+        entities={allEntities}
+        isLoading={loadingTableEntities}
+        useDefaultQuery={false}
+        datasetRetractedSortMap={datasetRetractedSortMap}
+      />
       {associatedCollectionUUID && <PublicationCollections collectionsData={collections} isCollectionPublication />}
     </CollapsibleDetailPageSection>
   );

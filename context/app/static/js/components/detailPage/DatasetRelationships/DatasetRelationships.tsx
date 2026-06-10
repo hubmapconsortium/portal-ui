@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { InfoIcon } from 'js/shared-styles/icons';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
+import { isRetractedStatus } from 'js/components/detailPage/utils';
 import { nodeTypes } from './nodeTypes';
 import { applyLayout, makeAriaLabel } from './utils';
 import { NodeLegend, StatusLegend } from './Legend';
@@ -64,6 +65,15 @@ export function DatasetRelationshipsVisualization({
   const { nodes, edges } = applyLayout(initialNodes, initialEdges);
   const statuses = useDatasetStatuses(initialNodes.map(({ data }) => data));
   const types = useDatasetTypes(initialNodes);
+  // Node types that have at least one retracted instance, so the legend can show a matching entry.
+  const retractedNodeKeys = Array.from(
+    new Set(
+      initialNodes
+        .filter((node) => isRetractedStatus((node.data as { status?: string })?.status))
+        .map((node) => node.type)
+        .filter((type): type is string => Boolean(type)),
+    ),
+  );
 
   return (
     <Stack height="100%" width="100%">
@@ -72,7 +82,7 @@ export function DatasetRelationshipsVisualization({
         <ReactFlowBody nodes={nodes} edges={edges} />
       </Box>
       <Stack direction="row" gap={1}>
-        <NodeLegend nodeTypes={types} />
+        <NodeLegend nodeTypes={types} retractedNodeKeys={retractedNodeKeys} />
         <StatusLegend statuses={statuses} />
       </Stack>
     </Stack>

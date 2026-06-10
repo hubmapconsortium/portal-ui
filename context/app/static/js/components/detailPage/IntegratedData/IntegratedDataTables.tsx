@@ -17,6 +17,7 @@ import {
   parentDonorSex,
   parentDonorAge,
   anatomy,
+  status as statusColumn,
 } from 'js/shared-styles/tables/columns';
 import { Copy } from 'js/shared-styles/tables/actions';
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
@@ -67,6 +68,12 @@ interface IntegratedDataTablesProps {
    * `false` because they reference specific older dataset versions.
    */
   useDefaultQuery?: boolean;
+  /**
+   * Optional map of dataset ES doc _id → retracted-first sort value (retracted = 0, others = 1).
+   * When it contains any retracted datasets, the Dataset tab gains a status column that sorts
+   * retracted datasets to the top by default (overridable by clicking another column header).
+   */
+  datasetRetractedSortMap?: Record<string, number>;
 }
 
 function IntegratedDataTables({
@@ -74,9 +81,30 @@ function IntegratedDataTables({
   tableTooltips,
   isLoading,
   useDefaultQuery = true,
+  datasetRetractedSortMap,
 }: IntegratedDataTablesProps) {
   const entitiesTableConfig: EntitiesTabTypes<Entity>[] = useMemo(() => {
     const integratedEntityList = entityList.filter(isIntegratedEntity);
+    // When the publication contains retracted datasets, surface a status column whose client-side
+    // custom sort values place retracted datasets first by default.
+    const hasRetracted = Boolean(
+      datasetRetractedSortMap && Object.values(datasetRetractedSortMap).some((v) => v === 0),
+    );
+    const datasetTabColumns = hasRetracted
+      ? [
+          hubmapID,
+          { ...statusColumn, sort: undefined, customSortValues: datasetRetractedSortMap },
+          assayTypes,
+          organCol,
+          parentDonorAge,
+          parentDonorRace,
+          parentDonorSex,
+          createdTimestamp,
+        ]
+      : datasetColumns;
+    const datasetInitialSortState = hasRetracted
+      ? ({ columnId: 'mapped_status', direction: 'asc' } as const)
+      : initialSortState;
 
     const entityIdsByType = integratedEntityList.reduce<Record<IntegratedEntityTypes, string[]>>(
       (acc, curr) => {
@@ -103,9 +131,9 @@ function IntegratedDataTables({
             },
           },
         },
-        columns: datasetColumns,
+        columns: datasetTabColumns,
         headerActions: getHeaderActions('Dataset', entityIdsByType),
-        initialSortState,
+        initialSortState: datasetInitialSortState,
         tabTooltipText: tableTooltips?.Dataset,
       },
       {
@@ -146,7 +174,7 @@ function IntegratedDataTables({
       },
     ];
     return entities;
-  }, [entityList, tableTooltips]);
+  }, [entityList, tableTooltips, datasetRetractedSortMap]);
 
   const numSelected = useSelectableTableStore((s) => s.selectedRows.size);
 
