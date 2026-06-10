@@ -3,10 +3,14 @@ import { format } from 'date-fns/format';
 
 import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from 'js/typings/search';
 import { InternalLink } from 'js/shared-styles/Links';
+import SeverityIcon from 'js/shared-styles/icons/SeverityIcon';
 import { getDonorAgeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
-import { EventInfo } from 'js/components/types';
+import { Entity, EventInfo } from 'js/components/types';
+import { isRetractedStatus } from 'js/components/detailPage/utils';
+import { getHuBMAPIdDisplayInfo, HuBMAPIdLabel, ViewLatestVersionChip } from 'js/components/search/Results/CellContent';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/CurrentGeneContext';
 import { SecondaryBackgroundTooltip } from '../tooltips';
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -34,12 +38,17 @@ const DatasetAccessWarning = ({ uuid, mapped_status, mapped_data_access_level }:
 };
 
 function HubmapIDCell({
-  hit: { uuid, hubmap_id, mapped_status, mapped_data_access_level, entity_type },
+  hit,
   trackingInfo,
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
+  const { uuid, hubmap_id, mapped_status, mapped_data_access_level, entity_type } = hit;
   const isDataset = entity_type === 'Dataset';
   const markerGene = useOptionalGeneContext();
+
+  // Mirror the search results table: retracted/superseded datasets get colored IDs, a status icon,
+  // and a "View Replacement"/"View Latest Version" link to the superseding dataset.
+  const { isSuperseded, isRetracted, latestRevisionUrl } = getHuBMAPIdDisplayInfo(hit as Partial<Entity>);
 
   const flaskData = useFlaskDataContext();
 
@@ -66,7 +75,7 @@ function HubmapIDCell({
   });
 
   return (
-    <>
+    <Stack direction="column" gap={0.5} alignItems="flex-start">
       {isCurrentEntity ? (
         <>
           <div>{hubmap_id}</div>
@@ -80,9 +89,14 @@ function HubmapIDCell({
           href={href}
           onClick={handleLinkClick}
           variant="body2"
+          sx={isRetracted ? { color: 'retracted.main' } : isSuperseded ? { color: 'warning.main' } : undefined}
         >
-          {hubmap_id}
+          <HuBMAPIdLabel hubmapId={hubmap_id} isSuperseded={isSuperseded} isRetracted={isRetracted} />
         </InternalLink>
+      )}
+
+      {isSuperseded && latestRevisionUrl && (
+        <ViewLatestVersionChip latestRevisionUrl={latestRevisionUrl} isRetracted={isRetracted} />
       )}
 
       {isDataset && (
@@ -92,7 +106,7 @@ function HubmapIDCell({
           mapped_status={mapped_status}
         />
       )}
-    </>
+    </Stack>
   );
 }
 
@@ -148,6 +162,15 @@ export const assayTypes = {
 };
 
 function StatusCell({ hit: { mapped_status, mapped_data_access_level } }: CellContentProps<DatasetDocument>) {
+  // Retracted datasets get the retracted icon + color for emphasis, matching the search results table.
+  if (isRetractedStatus(mapped_status)) {
+    return (
+      <Stack direction="row" gap={0.5} alignItems="center" sx={{ color: 'retracted.main' }}>
+        <SeverityIcon status="retracted" fontSize="small" />
+        {mapped_status}
+      </Stack>
+    );
+  }
   return `${mapped_status} (${mapped_data_access_level})`;
 }
 
