@@ -1,0 +1,2 @@
+- Fix alignment and sizing of figures on data overview page.
+- Improve mobile usability of data overview page.
