@@ -20,8 +20,16 @@ export default function FractionGraphLegend({
   totalCellCount,
 }: FractionGraphLegendProps) {
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="flex-start" mt={1}>
-      <Stack>
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="flex-start"
+      flexWrap="wrap"
+      gap={2}
+      useFlexGap
+      mt={1}
+    >
+      <Stack sx={{ minWidth: 0 }}>
         <Typography variant="body2" color="textSecondary" my={1}>
           Targeted Cell Types
         </Typography>
@@ -46,7 +54,7 @@ export default function FractionGraphLegend({
           )}
         </LegendOrdinal>
       </Stack>
-      <Stack>
+      <Stack sx={{ minWidth: 0 }}>
         <Typography variant="body2" color="textSecondary" my={1}>
           Other Cell Types
         </Typography>

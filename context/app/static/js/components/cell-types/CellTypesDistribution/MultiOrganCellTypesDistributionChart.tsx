@@ -53,7 +53,7 @@ function ChartControls({ atacAvailable }: { atacAvailable: boolean }) {
   const trackingInfo = cellTypeContext?.trackingInfo;
 
   return (
-    <Stack direction="row" spacing={2} alignItems="center">
+    <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
       {atacAvailable && (
         <LabeledPrimarySwitch
           label={
