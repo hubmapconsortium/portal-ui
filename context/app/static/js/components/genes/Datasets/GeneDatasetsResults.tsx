@@ -12,7 +12,6 @@ import { GeneCountsContextProvider } from 'js/components/cells/SCFindResults/Gen
 import { SCFindGeneQueryDatasetList } from 'js/components/cells/SCFindResults/SCFindGeneQueryResults';
 import SCFindDatasetTableActions from 'js/components/cells/SCFindResults/SCFindDatasetTableActions';
 import DatasetsOverview from 'js/components/cells/DatasetsOverview';
-import ViewIndexedDatasetsButton from 'js/components/organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import SelectableTableProvider, { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { DatasetsForGenesResponse } from 'js/api/scfind/useFindDatasetForGenes';
 import { useGeneDatasetsData, useGeneSymbol } from '../hooks';
@@ -130,7 +129,6 @@ export default function GeneDatasetsResults() {
           datasets={overviewActive.ids}
           dataType={overviewEffective}
           onDataTypeChange={showModalitySelection ? setOverviewModality : undefined}
-          belowTheFold={<ViewIndexedDatasetsButton scFindParams={{ scFindOnly: true }} isLoading={false} />}
         >
           This overview summarizes the matched {overviewModalityLabel} datasets and their proportions relative to both
           the scFind-indexed datasets and all HuBMAP datasets, as identified by the <SCFindLink />. The summary is

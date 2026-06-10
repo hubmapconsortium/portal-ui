@@ -7,7 +7,6 @@ import { trackEvent } from 'js/helpers/trackers';
 import { useEventCallback } from '@mui/material/utils';
 import Skeleton from '@mui/material/Skeleton';
 import { StyledDetailsAccordion } from './styles';
-import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
 import { SCFindParams } from '../utils';
 
 interface IndexedDatasetsSummaryProps {
@@ -33,7 +32,6 @@ function IndexedDatasetsSummary({
   children,
   trackingInfo,
   context = 'Cell Types',
-  scFindParams = {},
 }: PropsWithChildren<IndexedDatasetsSummaryProps>) {
   const trackExpandChange = useEventCallback((_, expanded: boolean) => {
     if (trackingInfo) {
@@ -117,13 +115,6 @@ function IndexedDatasetsSummary({
               ))}
         </Stack>
       </StyledDetailsAccordion>
-      <ViewIndexedDatasetsButton
-        context={context}
-        isLoading={isLoadingDatasets}
-        trackingInfo={trackingInfo}
-        scFindParams={scFindParams}
-        sx={{ mt: 2 }}
-      />
     </StyledDetailsAccordion>
   );
 }
