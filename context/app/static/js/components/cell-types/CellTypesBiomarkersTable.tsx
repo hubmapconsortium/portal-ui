@@ -198,8 +198,8 @@ function CellTypesBiomarkersTableSection() {
         annotations. The table can be downloaded in TSV format for further analysis.
       </Description>
       <Tabs value={openTabIndex} onChange={handleTabChange}>
-        <Tab label={`RNAseq (${rnaCount})`} index={0} disabled={rnaCount === 0} />
-        <Tab label={`ATACseq (${atacCount})`} index={1} disabled={atacCount === 0} />
+        <Tab label={`RNAseq (${rnaCount} Biomarkers)`} index={0} disabled={rnaCount === 0} />
+        <Tab label={`ATACseq (${atacCount} Biomarkers)`} index={1} disabled={atacCount === 0} />
       </Tabs>
       <TabPanel value={openTabIndex} index={0}>
         <BiomarkersTable modality={undefined} />
