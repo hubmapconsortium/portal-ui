@@ -177,8 +177,11 @@ def warm_scfind_caches(app):
                 _get_all_cell_type_names('ATAC')
                 landing = _build_cell_types_landing()
                 # Warm the per-organ cell-type counts the distribution chart fetches one-per-organ;
-                # they share `_cached_scfind_get`, so the chart's requests are then served warm.
+                # they share `_cached_scfind_get`, so the chart's requests are then served warm. Warm
+                # both modalities so toggling the chart's RNAseq/ATACseq "Data Type" switch (which the
+                # client also prefetches) is served from cache rather than fetched cold on first use.
                 _build_cell_counts_for_tissues(landing['organs'])
+                _build_cell_counts_for_tissues(landing['organs'], modality='ATAC')
                 current_app.logger.info('Finished warming scfind cell type mapping caches.')
             except Exception as e:
                 current_app.logger.warning(f'Failed to warm scfind caches at startup: {e}')
