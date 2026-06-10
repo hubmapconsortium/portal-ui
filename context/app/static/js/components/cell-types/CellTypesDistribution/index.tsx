@@ -75,7 +75,7 @@ function CellTypesDistribution() {
       id="cell-type-distribution"
       trackingInfo={trackingInfo}
     >
-      <Description>
+      <Description sx={{ mb: 1 }}>
         This visualization displays the distribution of the cell type across the available organs, as identified by
         Azimuth and indexed by the <SCFindLink />. Only organs that contain at least one indexable dataset containing
         this cell type are included.

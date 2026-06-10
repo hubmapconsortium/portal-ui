@@ -192,7 +192,7 @@ function CellTypesBiomarkersTableSection() {
 
   return (
     <CollapsibleDetailPageSection id="biomarkers" title="Biomarkers" trackingInfo={trackingInfo}>
-      <Description>
+      <Description sx={{ mb: 1 }}>
         Explore marker genes associated with the cell type and its statistical metrics as computed by the scFind method.
         It calculates statistical metrics based on uniformly processed HuBMAP RNAseq and ATACseq datasets with cell type
         annotations. The table can be downloaded in TSV format for further analysis.
