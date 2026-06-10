@@ -8,6 +8,7 @@ import { Tab, TabPanel, Tabs } from 'js/shared-styles/tabs';
 import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 import { SCFindModalityProvider } from 'js/components/cells/SCFindResults/SCFindModalityContext';
 import { CurrentGeneContextProvider } from 'js/components/cells/SCFindResults/CurrentGeneContext';
+import { GeneCountsContextProvider } from 'js/components/cells/SCFindResults/GeneCountsContext';
 import { SCFindGeneQueryDatasetList } from 'js/components/cells/SCFindResults/SCFindGeneQueryResults';
 import SCFindDatasetTableActions from 'js/components/cells/SCFindResults/SCFindDatasetTableActions';
 import DatasetsOverview from 'js/components/cells/DatasetsOverview';
@@ -60,15 +61,22 @@ function GeneDatasetsTable({
   countsMap: Record<string, number>;
 }) {
   const numSelected = useSelectableTableStore((state) => state.selectedRows.size);
+  // The matching-gene % column reads the gene's per-dataset cell counts from GeneCountsContext
+  // (keyed by gene -> hubmap_id). Provide it from the aggregate's counts for this modality so the
+  // percentage isn't always 0 (the shared SCFindGeneQueryResultsLoader supplies this on the Cells
+  // query page, but this detail-page table renders the list directly).
+  const geneCounts = useMemo(() => ({ [geneSymbol]: countsMap }), [geneSymbol, countsMap]);
   return (
     <SCFindModalityProvider value={modality}>
       <CurrentGeneContextProvider value={geneSymbol}>
-        <SCFindGeneQueryDatasetList
-          datasetIds={datasetIds}
-          countsMap={countsMap}
-          numSelected={numSelected}
-          headerActions={<SCFindDatasetTableActions />}
-        />
+        <GeneCountsContextProvider value={geneCounts}>
+          <SCFindGeneQueryDatasetList
+            datasetIds={datasetIds}
+            countsMap={countsMap}
+            numSelected={numSelected}
+            headerActions={<SCFindDatasetTableActions />}
+          />
+        </GeneCountsContextProvider>
       </CurrentGeneContextProvider>
     </SCFindModalityProvider>
   );

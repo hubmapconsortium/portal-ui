@@ -971,6 +971,32 @@ class TestPerPageAggregates:
         assert 'find_datasets_atac' in data
         assert 'organs_atac' in data
 
+    def test_gene_detail_atac_only_gene(self, client, mocker):
+        """A gene indexed only in ATAC must not 500: the failing RNA queries degrade to empty."""
+
+        def atac_only_get(url, **kwargs):
+            params = kwargs.get('params', {}) or {}
+            is_atac = params.get('modality') == 'ATAC'
+            # The gene is absent from the RNA index, so its non-modality gene queries error; ATAC
+            # queries and the label->CLID mapping calls succeed via the normal mock.
+            if not is_atac and ('hyperQueryCellTypes' in url or 'findDatasets' in url):
+                raise requests.exceptions.HTTPError('gene not in RNA index')
+            return mock_scfind_get(url, **kwargs)
+
+        mocker.patch('requests.get', side_effect=atac_only_get)
+        mocker.patch('requests.post', side_effect=mock_scfind_post)
+        response = client.get('/scfind/gene-detail/ATAConlyGene.json')
+        assert response.status_code == 200
+        data = response.get_json()
+        # RNA queries degraded to empty rather than failing the page...
+        assert data['hyper_query'] == []
+        assert data['find_datasets'] == {'counts': {}, 'findDatasets': {}}
+        assert data['organs'] == []
+        # ...while the ATAC data is populated so the page can focus on the ATAC modality.
+        assert data['hyper_query_atac'] == mock_hyper_query['findGeneSignatures']
+        assert data['find_datasets_atac'] == mock_find_datasets
+        assert data['organs_atac'] == ['kidney']
+
     @pytest.mark.parametrize('gene_symbol', ['a%20b', '.hidden', 'a%3Bb'])
     def test_gene_detail_invalid_symbol(self, client, mocker, gene_symbol):
         mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)

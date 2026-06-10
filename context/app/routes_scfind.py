@@ -268,6 +268,26 @@ def _cached_scfind_get(endpoint, params_items):
     return _make_scfind_request(endpoint, params or None)
 
 
+def _safe_scfind_get(endpoint, params_items, default):
+    """Like ``_cached_scfind_get`` but returns ``default`` instead of raising on a scfind error.
+
+    A gene (or cell type) present in only one modality's index makes the OTHER modality's query
+    fail — scfind errors on an entity it doesn't know. When assembling a per-page aggregate that
+    queries both modalities, treat such a failure as "no data for this modality" so a
+    single-modality entity still yields a usable payload instead of failing the whole page.
+    """
+    try:
+        return _cached_scfind_get(endpoint, params_items)
+    except requests.RequestException as e:
+        current_app.logger.info(
+            'scfind %s returned no data for params %s (treating as empty): %s',
+            endpoint,
+            dict(params_items),
+            e,
+        )
+        return default
+
+
 def _proxy_scfind_get(endpoint, allowed):
     """Forward an allowlisted GET to scfind, served from the shared cache when possible."""
     params = _collect_args(allowed)
@@ -753,16 +773,23 @@ def _build_gene_detail(gene_symbol):
     RNA and ATAC counterparts are both bundled so the page's cell-types and datasets modality tabs
     (with counts) are served from this single aggregate fetch.
     """
-    hyper_query = _cached_scfind_get(
-        'hyperQueryCellTypes', (('gene_list', gene_symbol), ('include_prefix', 'true'))
+    # A gene may be indexed in only one modality; querying the other modality errors at scfind.
+    # Fetch each modality independently and degrade a failure to "no data" so an ATAC-only (or
+    # RNA-only) gene still returns a usable aggregate instead of 500ing the whole page.
+    empty_find_datasets = {'counts': {}, 'findDatasets': {}}
+    hyper_query = _safe_scfind_get(
+        'hyperQueryCellTypes', (('gene_list', gene_symbol), ('include_prefix', 'true')), {}
     ).get('findGeneSignatures', [])
-    hyper_query_atac = _cached_scfind_get(
+    hyper_query_atac = _safe_scfind_get(
         'hyperQueryCellTypes',
         (('gene_list', gene_symbol), ('include_prefix', 'true'), ('modality', 'ATAC')),
+        {},
     ).get('findGeneSignatures', [])
-    find_datasets = _cached_scfind_get('findDatasets', (('gene_list', gene_symbol),))
-    find_datasets_atac = _cached_scfind_get(
-        'findDatasets', (('gene_list', gene_symbol), ('modality', 'ATAC'))
+    find_datasets = _safe_scfind_get(
+        'findDatasets', (('gene_list', gene_symbol),), empty_find_datasets
+    )
+    find_datasets_atac = _safe_scfind_get(
+        'findDatasets', (('gene_list', gene_symbol), ('modality', 'ATAC')), empty_find_datasets
     )
 
     def cell_types_of(signatures):
