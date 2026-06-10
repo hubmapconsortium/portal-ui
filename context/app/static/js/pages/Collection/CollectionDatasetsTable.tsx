@@ -26,7 +26,9 @@ function CollectionDatasetsTable({ uuids, retractedSortMap }: CollectionDatasets
     return [
       {
         entityType: 'Dataset',
-        query: { query: getIDsQuery([...uuids]) },
+        // The retracted-first default uses client-side custom sorting, which fetches all results at
+        // once (no scroll pagination), so an explicit large size is required to load every dataset.
+        query: { query: getIDsQuery([...uuids]), size: 10000 },
         columns: [hubmapID, organCol, assayTypes, retractedFirstStatusColumn],
         initialSortState: { columnId: 'mapped_status', direction: 'asc' },
       },

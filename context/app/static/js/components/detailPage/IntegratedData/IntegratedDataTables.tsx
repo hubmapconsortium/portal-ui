@@ -130,6 +130,9 @@ function IntegratedDataTables({
               },
             },
           },
+          // Retracted-first sorting is client-side (fetches all rows at once, no scroll pagination),
+          // so request a large size to load every dataset.
+          ...(hasRetracted && { size: 10000 }),
         },
         columns: datasetTabColumns,
         headerActions: getHeaderActions('Dataset', entityIdsByType),
