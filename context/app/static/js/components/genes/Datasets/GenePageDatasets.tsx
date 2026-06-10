@@ -21,7 +21,6 @@ export default function Datasets() {
     <CollapsibleDetailPageSection
       id={datasets.id}
       title={`Datasets with ${geneSymbol}`}
-      iconTooltipText={datasets.tooltip}
       trackingInfo={useGeneDetailPageTrackingInfo()}
     >
       <Description
