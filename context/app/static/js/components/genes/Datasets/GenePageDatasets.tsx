@@ -38,9 +38,9 @@ export default function Datasets() {
         }
       >
         These are datasets that contain this gene as identified by the <SCFindLink /> with uniformly processed HuBMAP
-        RNAseq datasets. Not all HuBMAP datasets are currently compatible with this method due to data modalities or the
-        availability of cell annotations. To find datasets with additional parameters such as finding datasets with
-        multiple genes, use the Biomarker and Cell Type Search tool.
+        RNAseq or ATACseq datasets. Not all HuBMAP datasets are currently compatible with this method due to data
+        modalities or the availability of cell annotations. To find datasets with additional parameters such as finding
+        datasets with multiple genes, use the biomarker and cell type search tool.
       </Description>
       <Box py={1} />
       <MolecularDataQueryFormTrackingProvider category="Gene Detail Page">
