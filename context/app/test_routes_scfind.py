@@ -1055,7 +1055,9 @@ class TestPerPageAggregates:
         get_mock = mocker.patch('requests.get', side_effect=mock_scfind_get)
         post_mock = mocker.patch('requests.post', side_effect=mock_scfind_post)
         with client.application.app_context():
-            clids = routes_scfind._get_label_to_clid_mapping('blood.CD4-positive, alpha-beta T cell')
+            clids = routes_scfind._get_label_to_clid_mapping(
+                'blood.CD4-positive, alpha-beta T cell'
+            )
         assert clids == mock_label_to_clid['CLIDs']
         # The comma-containing lookup went out as a POST, not a GET.
         assert any('CellType2CLID' in call.args[0] for call in post_mock.call_args_list)

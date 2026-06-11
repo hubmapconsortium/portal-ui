@@ -46,7 +46,11 @@ def cell_types_detail_view(cl_id):
     return render_template(
         'base-pages/react-content.html',
         title='Cell Type Details',
-        flask_data={**get_default_flask_data(), 'cell_type': cl_id, 'cell_type_name': cell_type_name},
+        flask_data={
+            **get_default_flask_data(),
+            'cell_type': cl_id,
+            'cell_type_name': cell_type_name,
+        },
     )
 
 

@@ -665,7 +665,9 @@ def _gather(tasks):
 
     results = {}
     with ThreadPoolExecutor(max_workers=len(tasks)) as executor:
-        futures = [executor.submit(run, label, fn, default) for label, (fn, default) in tasks.items()]
+        futures = [
+            executor.submit(run, label, fn, default) for label, (fn, default) in tasks.items()
+        ]
         for future in as_completed(futures):
             label, result = future.result()
             results[label] = result
@@ -919,9 +921,14 @@ def _build_cell_type_detail(clid):
     # (e.g. a high-cardinality cell type scfind rejects) no longer 500s the whole page.
     results = _gather(
         {
-            'markers': (lambda: _cell_type_markers_for(cell_types).get('findGeneSignatures', []), []),
+            'markers': (
+                lambda: _cell_type_markers_for(cell_types).get('findGeneSignatures', []),
+                [],
+            ),
             'markers_atac': (
-                lambda: _cell_type_markers_for(cell_types, modality='ATAC').get('findGeneSignatures', []),
+                lambda: _cell_type_markers_for(cell_types, modality='ATAC').get(
+                    'findGeneSignatures', []
+                ),
                 [],
             ),
             'datasets_for_cell_types': (lambda: _build_datasets_for_cell_types(cell_types), {}),
