@@ -35,7 +35,7 @@ function CollectionDatasetsTable({ uuids, retractedSortMap }: CollectionDatasets
     ];
   }, [uuids, retractedSortMap]);
 
-  return <EntitiesTables entities={entities} isSelectable={false} maxHeight={600} />;
+  return <EntitiesTables entities={entities} isSelectable={false} maxHeight={600} useDefaultQuery={false} />;
 }
 
 export default withSelectableTableProvider(CollectionDatasetsTable, 'collection-datasets');
