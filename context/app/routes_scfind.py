@@ -136,6 +136,33 @@ def _get_or_build_map(name, builder):
     return data
 
 
+def _load_cached_map(name):
+    """
+    Return an already-built aggregate map from the in-process memo or the shared disk cache, WITHOUT
+    building it — returns ``None`` if it hasn't been built yet.
+
+    For latency-sensitive paths (e.g. server-rendering a page) that want the warmed data when it's
+    available but must never trigger the expensive build (which ``_get_or_build_map`` would do).
+    """
+    with _memory_lock:
+        if name in _memory_cache:
+            return _memory_cache[name]
+    path = _scfind_cache_path(name)
+    ttl = current_app.config.get('SCFIND_CACHE_TTL')
+    if not os.path.exists(path):
+        return None
+    if ttl and (time.time() - os.path.getmtime(path)) > ttl:
+        return None
+    try:
+        with open(path) as data_file:
+            data = json.load(data_file)
+    except (OSError, ValueError):
+        return None
+    with _memory_lock:
+        _memory_cache[name] = data
+    return data
+
+
 def warm_scfind_caches(app):
     """
     Pre-build the cell type mappings in a background thread at app startup.
@@ -356,7 +383,14 @@ def _get_label_to_clid_mapping(cell_type):
     Returns:
         List of CLIDs for the given cell type
     """
-    response = _make_scfind_request('CellType2CLID', {'cell_type': cell_type})
+    # A comma in a cell type name (e.g. "CD4-positive, alpha-beta T cell") is parsed as a multi-value
+    # list when sent as a GET query param, yielding the wrong/no CLID — which leaves that cell type
+    # (and its CLID) out of the label<->CLID maps, breaking its detail page. POST the body instead
+    # (the same workaround the front-end uses for comma-containing cell type names).
+    if ',' in cell_type:
+        response = _make_scfind_post_request('CellType2CLID', {'cell_type': cell_type})
+    else:
+        response = _make_scfind_request('CellType2CLID', {'cell_type': cell_type})
     return response.get('CLIDs', [])
 
 
@@ -562,6 +596,22 @@ def _extract_cell_types_info(cell_types):
     return {'name': name, 'organs': organs, 'variants': variants}
 
 
+def peek_cell_type_name(clid):
+    """
+    Best-effort cell type name for a CLID from the already-built CLID->label map, without triggering
+    a build (returns '' if the map isn't cached yet).
+
+    Lets the Cell Type detail page server-render the name from the warmed map (a fast cache hit)
+    instead of waiting on the page's async aggregate fetch, so the title appears immediately. When
+    the map isn't warmed yet it returns '' and the page falls back to the aggregate as before — it
+    never blocks the HTML render on the expensive build.
+    """
+    clid_to_label_map = _load_cached_map('clid_to_label')
+    if not clid_to_label_map:
+        return ''
+    return _extract_cell_types_info(clid_to_label_map.get(clid, []))['name']
+
+
 def _fan_out(items, fetch_one, label):
     """
     Run ``fetch_one(item)`` for each item across a bounded thread pool, returning ``{item: result}``.
@@ -589,6 +639,36 @@ def _fan_out(items, fetch_one, label):
             item, result = future.result()
             if result is not None:
                 results[item] = result
+    return results
+
+
+def _gather(tasks):
+    """
+    Run independent ``{label: (callable, default)}`` tasks concurrently, returning ``{label: result}``.
+
+    Like ``_fan_out`` but for a fixed set of heterogeneous operations (rather than one function over
+    many items): each task runs in its own thread, re-entering the captured app context (worker
+    threads don't inherit it). A task that raises degrades to its ``default`` (logged) instead of
+    failing the whole aggregate, so e.g. one modality's scfind error doesn't 500 the page.
+    """
+    if not tasks:
+        return {}
+    app = current_app._get_current_object()
+
+    def run(label, fn, default):
+        with app.app_context():
+            try:
+                return label, fn()
+            except Exception as e:
+                current_app.logger.warning(f'{label} failed (treating as empty): {e}')
+                return label, default
+
+    results = {}
+    with ThreadPoolExecutor(max_workers=len(tasks)) as executor:
+        futures = [executor.submit(run, label, fn, default) for label, (fn, default) in tasks.items()]
+        for future in as_completed(futures):
+            label, result = future.result()
+            results[label] = result
     return results
 
 
@@ -833,6 +913,24 @@ def _build_cell_type_detail(clid):
     clid_to_label_map = _build_clid_to_label_map()
     cell_types = clid_to_label_map.get(clid, [])
     info = _extract_cell_types_info(cell_types)
+    # The RNA + ATAC markers and datasets are independent, so fetch them concurrently rather than one
+    # after another (the four sequential scfind ops were the bulk of the first-load latency). Each op
+    # degrades to empty on a scfind error so a single failing modality's `cellTypeMarkers` request
+    # (e.g. a high-cardinality cell type scfind rejects) no longer 500s the whole page.
+    results = _gather(
+        {
+            'markers': (lambda: _cell_type_markers_for(cell_types).get('findGeneSignatures', []), []),
+            'markers_atac': (
+                lambda: _cell_type_markers_for(cell_types, modality='ATAC').get('findGeneSignatures', []),
+                [],
+            ),
+            'datasets_for_cell_types': (lambda: _build_datasets_for_cell_types(cell_types), {}),
+            'datasets_for_cell_types_atac': (
+                lambda: _build_datasets_for_cell_types(cell_types, modality='ATAC'),
+                {},
+            ),
+        }
+    )
     return {
         'cell_types': cell_types,
         'name': info['name'],
@@ -840,14 +938,7 @@ def _build_cell_type_detail(clid):
         'variants': info['variants'],
         # RNA + ATAC markers and datasets so the page's biomarker and dataset modality tabs (with
         # counts) come from this single aggregate fetch.
-        'markers': _cell_type_markers_for(cell_types).get('findGeneSignatures', []),
-        'markers_atac': _cell_type_markers_for(cell_types, modality='ATAC').get(
-            'findGeneSignatures', []
-        ),
-        'datasets_for_cell_types': _build_datasets_for_cell_types(cell_types),
-        'datasets_for_cell_types_atac': _build_datasets_for_cell_types(
-            cell_types, modality='ATAC'
-        ),
+        **results,
     }
 
 

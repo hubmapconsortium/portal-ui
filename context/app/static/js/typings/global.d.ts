@@ -27,6 +27,9 @@ interface FlaskData {
   vignette_json?: Record<string, unknown>;
   geneSymbol?: string;
   cell_type?: string;
+  // Cell type name resolved server-side from the warmed CLID->label map, so the detail page title
+  // can render before the async aggregate fetch resolves.
+  cell_type_name?: string;
   redirected_from?: string;
   redirected?: boolean;
   type?: string;

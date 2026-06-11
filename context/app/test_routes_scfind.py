@@ -1021,6 +1021,57 @@ class TestPerPageAggregates:
         assert 'markers_atac' in data
         assert 'datasets_for_cell_types_atac' in data
 
+    def test_cell_type_detail_marker_failure(self, client, mocker):
+        """An scFind error on one modality's markers degrades to empty instead of 500ing the page."""
+
+        def fail_atac_markers_get(url, **kwargs):
+            params = kwargs.get('params', {}) or {}
+            if 'cellTypeMarkers' in url and params.get('modality') == 'ATAC':
+                raise requests.exceptions.HTTPError('cellTypeMarkers failed for ATAC')
+            return mock_scfind_get(url, **kwargs)
+
+        def fail_atac_markers_post(url, **kwargs):
+            body = kwargs.get('json', {}) or {}
+            if 'cellTypeMarkers' in url and body.get('modality') == 'ATAC':
+                raise requests.exceptions.HTTPError('cellTypeMarkers failed for ATAC')
+            return mock_scfind_post(url, **kwargs)
+
+        mocker.patch('requests.get', side_effect=fail_atac_markers_get)
+        mocker.patch('requests.post', side_effect=fail_atac_markers_post)
+        response = client.get('/scfind/cell-type-detail/CL:0000066.json')
+        assert response.status_code == 200
+        data = response.get_json()
+        # The failing ATAC markers op degrades to empty rather than failing the whole aggregate...
+        assert data['markers_atac'] == []
+        # ...while the RNA markers and both datasets slices stay populated.
+        assert data['markers'] == mock_cell_type_markers['findGeneSignatures']
+        assert 'datasets_for_cell_types' in data
+        assert 'datasets_for_cell_types_atac' in data
+
+    def test_label_to_clid_posts_comma_cell_types(self, client, mocker):
+        """A comma in a cell type name (e.g. "CD4-positive, alpha-beta T cell") must be POSTed, not
+        sent as a GET query param scFind would split into multiple cell types — otherwise the cell
+        type's CLID is lost from the label<->CLID maps and its detail page can't resolve."""
+        get_mock = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        post_mock = mocker.patch('requests.post', side_effect=mock_scfind_post)
+        with client.application.app_context():
+            clids = routes_scfind._get_label_to_clid_mapping('blood.CD4-positive, alpha-beta T cell')
+        assert clids == mock_label_to_clid['CLIDs']
+        # The comma-containing lookup went out as a POST, not a GET.
+        assert any('CellType2CLID' in call.args[0] for call in post_mock.call_args_list)
+        assert not any('CellType2CLID' in call.args[0] for call in get_mock.call_args_list)
+
+    def test_peek_cell_type_name(self, client, mocker):
+        """The detail-page name resolves from the warmed CLID->label map without triggering a build."""
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        mocker.patch('requests.post', side_effect=mock_scfind_post)
+        with client.application.app_context():
+            # Map not built/cached yet -> empty name, and no build is triggered.
+            assert routes_scfind.peek_cell_type_name('CL:0000066') == ''
+            # Once the map is built/cached, the name resolves synchronously from cache.
+            routes_scfind._build_clid_to_label_map()
+            assert routes_scfind.peek_cell_type_name('CL:0000066') == 'epithelial cell'
+
     @pytest.mark.parametrize('clid', ['cl:0000236', 'CL:abc', 'CL%3A', '0000236'])
     def test_cell_type_detail_invalid_clid(self, client, mocker, clid):
         mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)

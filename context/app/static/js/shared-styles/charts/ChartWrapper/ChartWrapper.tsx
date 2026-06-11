@@ -100,12 +100,9 @@ function ChartWrapper(
           )}
         </Box>
       )}
-      <Stack
-        direction="row"
-        gap={1}
-        flexWrap="wrap"
-        sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0, minWidth: 0 }}
-      >
+      {/* Keep the X/Y axis selects on a single row; minWidth:0 lets the fullWidth selects shrink to
+          fit on narrow screens rather than wrapping onto separate rows. */}
+      <Stack direction="row" gap={1} sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0, minWidth: 0 }}>
         {xAxisDropdown}
         {yAxisDropdown}
       </Stack>
