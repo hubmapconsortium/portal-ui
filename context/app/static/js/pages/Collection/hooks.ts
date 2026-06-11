@@ -17,7 +17,7 @@ function useCollectionsDatasets({ ids }: CollectionDatasetsHook) {
     size: 10000,
   };
 
-  const { searchHits: datasets } = useSearchHits<Dataset>(query);
+  const { searchHits: datasets } = useSearchHits<Dataset>(query, { useDefaultQuery: false });
   const uuids = useMemo(() => new Set(datasets.map((dataset) => dataset._source.uuid)), [datasets]);
 
   // Maps each dataset's ES doc _id to a retracted-first sort value (retracted = 0 sorts before
