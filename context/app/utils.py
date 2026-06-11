@@ -70,6 +70,7 @@ def get_default_flask_data():
             'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD'),
+        'pinnedPublicationUUIDs': current_app.config.get('PINNED_PUBLICATION_UUIDS', ''),
     }
 
 
