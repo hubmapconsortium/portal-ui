@@ -11,6 +11,8 @@ import DatasetsOverview from 'js/components/cells/DatasetsOverview';
 import { DatasetsForCellType } from 'js/api/scfind/useCellTypeDetailData';
 import SCFindDatasetTableActions from 'js/components/cells/SCFindResults/SCFindDatasetTableActions';
 import { useCellTypeDatasetsData, useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
+import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
+import Typography from '@mui/material/Typography';
 
 const RNA_TAB = 0;
 const ATAC_TAB = 1;
@@ -107,41 +109,47 @@ export default function CellTypesDatasetsResults() {
           dataType={overviewEffective}
           onDataTypeChange={showModalitySelection ? setOverviewModality : undefined}
         >
-          These are datasets that contain this cell type as identified by Azimuth and indexed by the <SCFindLink /> with
-          uniformly processed HuBMAP RNAseq or ATACseq datasets that contain cell type annotations. The datasets
-          overview plot displays an overview of the datasets metadata compared to either the indexed datasets or all the
-          HuBMAP datasets available. The table is available for download in TSV format for further analysis.
+          These results are derived from RNAseq or ATACseq datasets that were indexed by the <SCFindLink />. Not all
+          HuBMAP datasets are currently compatible with this method due to data modalities or the availability of cell
+          annotations.
         </DatasetsOverview>
       </SCFindModalityProvider>
-      {showModalitySelection ? (
-        <div>
-          <Tabs
-            value={resultsTabValue}
-            onChange={(_event, value: number) => setResultsModality(value === ATAC_TAB ? 'ATAC' : undefined)}
-          >
-            <Tab label={`RNAseq (${rna.ids.length})`} index={RNA_TAB} />
-            <Tab label={`ATACseq (${atac.ids.length})`} index={ATAC_TAB} />
-          </Tabs>
-          <TabPanel value={resultsTabValue} index={RNA_TAB} sx={{ mt: 0 }}>
-            <SelectableTableProvider tableLabel={`${tableLabel} - RNAseq`}>
-              <CellTypeDatasetsTable modality={undefined} datasetIds={rna.datasetIds} countsMap={rna.countsMap} />
-            </SelectableTableProvider>
-          </TabPanel>
-          <TabPanel value={resultsTabValue} index={ATAC_TAB} sx={{ mt: 0 }}>
-            <SelectableTableProvider tableLabel={`${tableLabel} - ATACseq`}>
-              <CellTypeDatasetsTable modality="ATAC" datasetIds={atac.datasetIds} countsMap={atac.countsMap} />
-            </SelectableTableProvider>
-          </TabPanel>
-        </div>
-      ) : (
-        <SelectableTableProvider tableLabel={tableLabel}>
-          <CellTypeDatasetsTable
-            modality={pinnedModality}
-            datasetIds={resultsActive.datasetIds}
-            countsMap={resultsActive.countsMap}
-          />
-        </SelectableTableProvider>
-      )}
+
+      <DetailsAccordion
+        summary={<Typography variant="subtitle1">Datasets with {name}</Typography>}
+        defaultExpanded
+        summaryProps={{ sx: { '.MuiAccordionSummary-content': { mr: 'auto' } } }}
+      >
+        {showModalitySelection ? (
+          <div>
+            <Tabs
+              value={resultsTabValue}
+              onChange={(_event, value: number) => setResultsModality(value === ATAC_TAB ? 'ATAC' : undefined)}
+            >
+              <Tab label={`RNAseq (${rna.ids.length})`} index={RNA_TAB} />
+              <Tab label={`ATACseq (${atac.ids.length})`} index={ATAC_TAB} />
+            </Tabs>
+            <TabPanel value={resultsTabValue} index={RNA_TAB} sx={{ mt: 0 }}>
+              <SelectableTableProvider tableLabel={`${tableLabel} - RNAseq`}>
+                <CellTypeDatasetsTable modality={undefined} datasetIds={rna.datasetIds} countsMap={rna.countsMap} />
+              </SelectableTableProvider>
+            </TabPanel>
+            <TabPanel value={resultsTabValue} index={ATAC_TAB} sx={{ mt: 0 }}>
+              <SelectableTableProvider tableLabel={`${tableLabel} - ATACseq`}>
+                <CellTypeDatasetsTable modality="ATAC" datasetIds={atac.datasetIds} countsMap={atac.countsMap} />
+              </SelectableTableProvider>
+            </TabPanel>
+          </div>
+        ) : (
+          <SelectableTableProvider tableLabel={tableLabel}>
+            <CellTypeDatasetsTable
+              modality={pinnedModality}
+              datasetIds={resultsActive.datasetIds}
+              countsMap={resultsActive.countsMap}
+            />
+          </SelectableTableProvider>
+        )}
+      </DetailsAccordion>
     </Stack>
   );
 }
