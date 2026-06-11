@@ -1,0 +1,1 @@
+- Implement Research Powered by HuBMAP section with publication cards and pinning functionality.

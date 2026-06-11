@@ -3,12 +3,12 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 import { RefObject, useCallback } from 'react';
 
-export function useDownloadImage(ref: RefObject<HTMLElement>, chartName = 'chart') {
+export function useDownloadImage(ref: RefObject<HTMLElement>, chartName = 'chart', scale = 2) {
   const { toastError } = useSnackbarActions();
   const downloadImage = useCallback(() => {
     if (!ref.current) return;
 
-    html2canvas(ref.current)
+    html2canvas(ref.current, { scale })
       .then((canvas) => {
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
@@ -21,7 +21,7 @@ export function useDownloadImage(ref: RefObject<HTMLElement>, chartName = 'chart
         console.error('Error downloading image:', error);
         toastError('Failed to download image. Please try again.');
       });
-  }, [ref, toastError, chartName]);
+  }, [ref, toastError, chartName, scale]);
 
   return downloadImage;
 }
