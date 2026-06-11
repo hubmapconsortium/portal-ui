@@ -22,7 +22,7 @@ export const RETRACTED_STATUS = 'Retracted';
  * (not the unrelated `sub_status` field).
  */
 export function isRetractedStatus(status?: string): boolean {
-  return status === RETRACTED_STATUS;
+  return status?.toUpperCase() === RETRACTED_STATUS.toUpperCase();
 }
 
 export function getDonorMetadata(entity: Donor | Sample | Dataset) {
