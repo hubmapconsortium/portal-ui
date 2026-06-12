@@ -7,7 +7,7 @@ import InternalLink from './InternalLink';
  */
 export default function SCFindLink({ children = 'scFind method' }: PropsWithChildren) {
   return (
-    <InternalLink href="/scfind/about" target="_blank">
+    <InternalLink href="/scfind/about" target="_blank" rel="noopener noreferrer">
       {children}
     </InternalLink>
   );

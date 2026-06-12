@@ -664,8 +664,8 @@ def _gather(tasks):
                 return label, default
 
     results = {}
-    with ThreadPoolExecutor(max_workers=len(tasks)) as executor:
-        futures = [
+    max_workers = min(current_app.config.get('SCFIND_MAX_WORKERS', 20), len(tasks))
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
             executor.submit(run, label, fn, default) for label, (fn, default) in tasks.items()
         ]
         for future in as_completed(futures):
