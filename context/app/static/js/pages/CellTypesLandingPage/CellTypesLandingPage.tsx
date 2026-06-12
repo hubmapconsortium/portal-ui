@@ -12,6 +12,7 @@ import MultiOrganCellTypeDistributionChartWithProvider from 'js/components/cell-
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import { trackEvent } from 'js/helpers/trackers';
 import { CellTypeIcon } from 'js/shared-styles/icons';
+import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 
 function CellTypesLandingPageContent() {
   const { cellTypeNames, cellTypeNamesAtac, organs: cellTypeOrgans } = useCellTypesLandingDataContext();
@@ -27,10 +28,17 @@ function CellTypesLandingPageContent() {
       <PanelListLandingPage
         title={
           <>
-            <CellTypeIcon color="primary" fontSize="inherit" /> Cell Types
+            <CellTypeIcon color="primary" fontSize="inherit" /> Cell Types{' '}
           </>
         }
-        subtitle={`${uniqueCellTypes} Cell Types Total`}
+        subtitle={
+          <>
+            {uniqueCellTypes} Cell Types Total{' '}
+            <InfoTooltipIcon
+              iconTooltipText={`${cellTypeNames.length} cell types identified in RNAseq datasets,${cellTypeNamesAtac.length} cell types identified in ATACseq datasets`}
+            />
+          </>
+        }
         noIcon
         description={
           <>

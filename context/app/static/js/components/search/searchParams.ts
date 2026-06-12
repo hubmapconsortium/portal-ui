@@ -48,6 +48,10 @@ const SCFIND_ONLY_PARAM = 'scfind';
 const GENES_PARAM = 'genes';
 /** URL param name for scFind cell-type queries (repeated; values may contain commas). */
 const CELL_TYPES_PARAM = 'cell_types';
+/** URL param name for the scFind modality (e.g. `modality=ATAC`); absent means the default (RNA). */
+const MODALITY_PARAM = 'modality';
+/** URL param name for the scFind "all modalities" flag (union RNA + ATAC results). */
+const ALL_MODALITIES_PARAM = 'all_modalities';
 /** URL param name for an integrated map's data product ID. */
 const DATA_PRODUCT_PARAM = 'data_product';
 
@@ -72,6 +76,12 @@ export function buildScFindAndDataProductParams({
   }
   (scFindParams?.genes ?? []).forEach((gene) => params.append(GENES_PARAM, gene));
   (scFindParams?.cellTypes ?? []).forEach((cellType) => params.append(CELL_TYPES_PARAM, cellType));
+  if (scFindParams?.modality) {
+    params.set(MODALITY_PARAM, scFindParams.modality);
+  }
+  if (scFindParams?.allModalities) {
+    params.set(ALL_MODALITIES_PARAM, 'true');
+  }
   if (dataProductID) {
     params.set(DATA_PRODUCT_PARAM, dataProductID);
   }
@@ -89,12 +99,16 @@ export function parseScFindAndDataProductParams(params: URLSearchParams): {
   const genes = params.getAll(GENES_PARAM).filter(Boolean);
   const cellTypes = params.getAll(CELL_TYPES_PARAM).filter(Boolean);
   const scFindOnly = params.get(SCFIND_ONLY_PARAM) === 'true';
+  const modality = params.get(MODALITY_PARAM);
+  const allModalities = params.get(ALL_MODALITIES_PARAM) === 'true';
   const dataProduct = params.get(DATA_PRODUCT_PARAM);
 
   const scFindParams: SCFindParams = {};
   if (scFindOnly) scFindParams.scFindOnly = true;
   if (genes.length > 0) scFindParams.genes = genes;
   if (cellTypes.length > 0) scFindParams.cellTypes = cellTypes;
+  if (modality) scFindParams.modality = modality;
+  if (allModalities) scFindParams.allModalities = true;
 
   return {
     ...(Object.keys(scFindParams).length > 0 && { scFindParams }),

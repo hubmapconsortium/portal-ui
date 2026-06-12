@@ -154,6 +154,20 @@ describe('parseReadableParams', () => {
     expect(parseReadableParams('?scfind=true').scFindParams).toEqual({ scFindOnly: true });
   });
 
+  test('parses the scFind modality param', () => {
+    expect(parseReadableParams('?genes=CD4&modality=ATAC').scFindParams).toEqual({
+      genes: ['CD4'],
+      modality: 'ATAC',
+    });
+  });
+
+  test('parses the scFind all_modalities flag', () => {
+    expect(parseReadableParams('?genes=CD4&all_modalities=true').scFindParams).toEqual({
+      genes: ['CD4'],
+      allModalities: true,
+    });
+  });
+
   test('parses cell_types without splitting commas inside a value', () => {
     const result = parseReadableParams(
       '?cell_types=Kidney.CD4-positive%2C+alpha-beta+T+cell&cell_types=Liver.podocyte',

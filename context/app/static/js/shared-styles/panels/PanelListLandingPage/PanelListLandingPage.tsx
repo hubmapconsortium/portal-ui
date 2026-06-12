@@ -7,7 +7,7 @@ import { PageWrapper, StyledDescription } from './style';
 
 interface PanelListLandingPageProps extends PropsWithChildren {
   title: React.ReactNode;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   description: React.ReactNode;
   sectionTitle?: string;
   sectionDescription?: React.ReactNode;
