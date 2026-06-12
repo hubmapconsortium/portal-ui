@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.47.0 - 2026-06-12
+
+- Fix Gene detail pages for genes indexed only in ATACseq: the page now uses the ATACseq modality for its lookups instead of erroring against the RNAseq index.
+- Fix 500 errors on Cell Type detail pages for cell types whose names contain commas (e.g. "CD4-positive, alpha-beta T cell").
+- Speed up Cell Type detail page loading by running its scFind queries in parallel and rendering the cell type name immediately from server data.
+- Precache ATACseq cell counts at server start so switching the cell type distribution chart to ATACseq is instant on first use.
+- Fix charts (Datasets Overview, Cell Type Distribution, and others) overflowing their container and getting cut off on smaller screens.
+- Fix alignment of the column headers with their content on the Cell Types and Biomarkers landing pages.
+- Add missing spacing between section descriptions and their content on the Cell Type and Gene detail pages.
+- Open scFind Method links in a new tab.
+- Update the scFind Method page button text to "Biomarker and Cell Type Search".
+- Remove the info tooltip from the "Datasets with 'gene'" section header on the Gene detail page.
+- Clarify the description text for the "Datasets with 'gene'" section.
+- Remove the "View Indexed Datasets" button from the datasets overview.
+- Add a period after the Datasets Overview tooltip text and rename "query" to "results" for clarity.
+- Add "Cell Types" / "Biomarkers" after the count in the result tabs for clarity.
+- Update the "Datasets containing 'cell type'" section description and make the section collapsible.
+- Move the outbound link icon inside the trailing period in the metadata description section.
+
+
+
 ## v1.46.5 - 2026-06-10
 
 - Fix alignment and sizing of figures on data overview page.
