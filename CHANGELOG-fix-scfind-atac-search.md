@@ -1,3 +1,0 @@
-- Fix ATACseq search links for scFind genes and cell types.
-- Hide indexed dataset summary on organ cell types page.
-- Add icon to cell types landing page total with breakdwon for RNA/ATACseq dataset cell type counts.

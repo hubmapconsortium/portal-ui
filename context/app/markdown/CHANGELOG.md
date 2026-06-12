@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.47.1 - 2026-06-12
+
+- Fix ATACseq search links for scFind genes and cell types.
+- Hide indexed dataset summary on organ cell types page.
+- Add icon to cell types landing page total with breakdwon for RNA/ATACseq dataset cell type counts.
+
+
+
 ## v1.47.0 - 2026-06-12
 
 - Fix Gene detail pages for genes indexed only in ATACseq: the page now uses the ATACseq modality for its lookups instead of erroring against the RNAseq index.
