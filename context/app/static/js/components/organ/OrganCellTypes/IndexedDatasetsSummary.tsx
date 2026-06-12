@@ -7,10 +7,8 @@ import { trackEvent } from 'js/helpers/trackers';
 import { useEventCallback } from '@mui/material/utils';
 import Skeleton from '@mui/material/Skeleton';
 import { StyledDetailsAccordion } from './styles';
-import { SCFindParams } from '../utils';
 
 interface IndexedDatasetsSummaryProps {
-  scFindParams: SCFindParams;
   datasetTypes: { key: string; doc_count: number }[];
   organs?: { key: string; doc_count: number }[];
   isLoadingDatasets?: boolean;
