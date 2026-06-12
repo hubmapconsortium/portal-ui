@@ -362,7 +362,7 @@ export default function DatasetsOverviewChart({
           </>
         }
         additionalControls={
-          <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" useFlexGap>
+          <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" flexWrap="wrap" useFlexGap>
             {onDataTypeChange && (
               <LabeledPrimarySwitch
                 label="Data Type"
@@ -387,7 +387,7 @@ export default function DatasetsOverviewChart({
             <SecondaryBackgroundTooltip
               title={showComparison ? undefined : 'Set "Plot Type" to "With Comparison" to toggle these options'}
             >
-              <Stack direction="row" spacing={2} alignItems="center" useFlexGap>
+              <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
                 <LabeledPrimarySwitch
                   label="Comparison Group"
                   checked={compareToAll}

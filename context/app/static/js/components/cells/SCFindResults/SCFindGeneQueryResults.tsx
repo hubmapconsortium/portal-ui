@@ -14,7 +14,6 @@ import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import Description from 'js/shared-styles/sections/Description';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import ViewIndexedDatasetsButton from 'js/components/organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import DatasetsOverview from '../DatasetsOverview';
 
@@ -251,18 +250,7 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
   return (
     <GeneCountsContextProvider value={geneCountsContextValue}>
       {!noResults && (
-        <DatasetsOverview
-          datasets={deduplicatedResults}
-          belowTheFold={
-            <ViewIndexedDatasetsButton
-              scFindParams={{
-                scFindOnly: true,
-              }}
-              isLoading={false}
-            />
-          }
-          trackingInfo={trackingInfo}
-        >
+        <DatasetsOverview datasets={deduplicatedResults} trackingInfo={trackingInfo}>
           This overview provides a summary of the matched datasets and their proportions relative to both indexed
           datasets and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a
           tabular view. Both views can be downloaded, with the visualization available as a PNG and the table as a TSV

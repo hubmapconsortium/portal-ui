@@ -14,6 +14,7 @@ export interface FlaskDataContextType {
   redirectedFromPipeline?: string | null;
   siblingIds?: string[];
   integrated?: boolean; // true if the entity is an integrated dataset
+  cell_type_name?: string; // cell type name seeded server-side for the detail page title
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');

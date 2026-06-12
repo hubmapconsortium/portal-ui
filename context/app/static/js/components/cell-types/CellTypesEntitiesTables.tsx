@@ -45,9 +45,9 @@ function CellTypesEntitiesTables() {
         }
       >
         These are datasets that contain this cell type as identified by Azimuth and indexed by the <SCFindLink /> with
-        uniformly processed HuBMAP RNAseq datasets that contain cell type annotations. The datasets overview plot
-        displays an overview of the datasets metadata compared to either the indexed datasets or all the HuBMAP datasets
-        available. The table is available for download in TSV format for further analysis.
+        uniformly processed HuBMAP RNAseq or ATACseq datasets that contain cell type annotations. The datasets overview
+        plot displays an overview of the datasets metadata compared to either the indexed datasets or all the HuBMAP
+        datasets available. The table is available for download in TSV format for further analysis.
       </Description>
       <Box py={1} />
       <MolecularDataQueryFormTrackingProvider category="Cell Type Detail Page">

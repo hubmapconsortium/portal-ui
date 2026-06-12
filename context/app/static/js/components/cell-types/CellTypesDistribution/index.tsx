@@ -5,6 +5,7 @@ import Description from 'js/shared-styles/sections/Description';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import { capitalize } from '@mui/material/utils';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
@@ -16,11 +17,17 @@ import CellTypeDistributionChart from '../../cells/CellTypeDistributionChart';
 import MultiOrganCellTypeDistributionChart from './MultiOrganCellTypesDistributionChart';
 
 function Chart() {
-  const { organs, cellTypes } = useCellTypesDetailPageContext();
+  const { organs, cellTypes, isLoading } = useCellTypesDetailPageContext();
   const { openTabIndex, handleTabChange } = useTabs();
   // RNA/ATAC selection is shared across all tabs: the multi-organ chart's toggle drives it, and the
   // per-organ single charts read it via SCFindModalityProvider.
   const [dataType, setDataType] = useState<SCFindModality>(undefined);
+
+  // Show a skeleton until the aggregate provides the organs/cell types. Rendering the chart with an
+  // empty organs list paints a blank plot first, which flashes before the real chart appears.
+  if (isLoading) {
+    return <Skeleton variant="rectangular" width="100%" height={500} />;
+  }
 
   // Tab 0 is the multi-organ chart (default); tabs 1..N are individual organs' fraction charts.
   return (
@@ -75,7 +82,7 @@ function CellTypesDistribution() {
       id="cell-type-distribution"
       trackingInfo={trackingInfo}
     >
-      <Description>
+      <Description sx={{ mb: 1 }}>
         This visualization displays the distribution of the cell type across the available organs, as identified by
         Azimuth and indexed by the <SCFindLink />. Only organs that contain at least one indexable dataset containing
         this cell type are included.

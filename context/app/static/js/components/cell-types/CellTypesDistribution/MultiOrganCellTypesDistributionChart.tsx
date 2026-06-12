@@ -13,6 +13,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { unselectedCellColors } from 'js/components/cells/CellTypeDistributionChart/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import { useLabelToCLIDMap } from 'js/api/scfind/useLabelToCLID';
+import { useCellTypeCountForTissues } from 'js/api/scfind/useCellTypeCountForTissue';
 import { useEventCallback } from '@mui/material/utils';
 import { BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
@@ -53,7 +54,7 @@ function ChartControls({ atacAvailable }: { atacAvailable: boolean }) {
   const trackingInfo = cellTypeContext?.trackingInfo;
 
   return (
-    <Stack direction="row" spacing={2} alignItems="center">
+    <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
       {atacAvailable && (
         <LabeledPrimarySwitch
           label={
@@ -208,6 +209,12 @@ function MultiOrganCellTypeDistributionChart({
   const { showOtherCellTypes, showPercentages } = useCellTypesDistributionChartContext();
 
   const atacAvailable = useHasAtacData(cellTypes, organs);
+
+  // Prefetch the ATAC per-organ counts in the background (warms the SWR cache, which the server also
+  // warms at startup) so flipping the "Data Type" switch to ATACseq is instant instead of showing a
+  // loading skeleton on first toggle. RNAseq is the default and already loaded, so only ATAC needs
+  // prefetching; no-op (empty key) when there's no ATAC data for these cell types.
+  useCellTypeCountForTissues(atacAvailable ? organs : [], 'ATAC');
 
   const chartPalette = useChartPalette();
   const chartPaletteSubset = chartPalette.slice(0, targetCellTypeKeys.length);

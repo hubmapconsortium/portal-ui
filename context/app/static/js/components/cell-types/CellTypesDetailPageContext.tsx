@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useMemo, useContext as useOptionalContext } f
 import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeDetailData, { CellTypeMarker, DatasetsForCellType } from 'js/api/scfind/useCellTypeDetailData';
 import { extractCellTypesInfo } from 'js/api/scfind/utils';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 
 interface CellTypesContextProps {
@@ -35,7 +36,11 @@ export default function CellTypesProvider({ children, cellId }: PropsWithChildre
   // while `isLoading`.
   const { data, isLoading, error } = useCellTypeDetailData(cellId);
   const cellTypes = useMemo(() => data?.cell_types ?? [], [data]);
-  const { name, organs, variants } = extractCellTypesInfo(cellTypes);
+  const { name: extractedName, organs, variants } = extractCellTypesInfo(cellTypes);
+  // The name is server-rendered into Flask data (from the warmed CLID->label map), so the title can
+  // show immediately; fall back to it until the aggregate resolves (both derive the same name).
+  const { cell_type_name: flaskCellTypeName } = useFlaskDataContext();
+  const name = extractedName || flaskCellTypeName || '';
   const value = useMemo(
     () => ({
       cellId,

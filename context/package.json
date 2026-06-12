@@ -141,6 +141,10 @@
   "lint-staged": {
     "app/static/js/**/*.{js,jsx,ts,tsx}": [
       "eslint --cache --cache-location node_modules/.cache/eslint/"
+    ],
+    "**/*.py": [
+      "uv run ruff check --fix",
+      "uv run ruff format"
     ]
   },
   "msw": {

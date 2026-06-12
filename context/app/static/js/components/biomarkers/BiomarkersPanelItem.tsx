@@ -41,8 +41,10 @@ function BiomarkerHeaderPanel() {
   if (isMobile) {
     return null;
   }
+  // Match the body rows' default StackTemplate spacing (4) so the header labels line up with the
+  // left edge of each column's content.
   return (
-    <StackTemplate spacing={1}>
+    <StackTemplate spacing={4}>
       <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
       <HeaderCell {...desktopConfig.description}>Description</HeaderCell>
       <HeaderCell {...desktopConfig.dataType}>
