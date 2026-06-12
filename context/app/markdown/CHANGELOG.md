@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.47.2 - 2026-06-12
+
+- Fix scFind ATACseq cell type links including too many organs in their query.
+
+
+
 ## v1.47.1 - 2026-06-12
 
 - Fix ATACseq search links for scFind genes and cell types.
