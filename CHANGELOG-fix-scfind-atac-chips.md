@@ -1,0 +1,1 @@
+- Fix scFind ATACseq cell type links including too many organs in their query.
