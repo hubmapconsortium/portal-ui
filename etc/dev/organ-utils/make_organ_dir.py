@@ -6,11 +6,15 @@ import sys
 from datetime import datetime
 from dataclasses import dataclass
 import re
+import urllib.parse
 from typing import DefaultDict
 
 from jsonschema import validate
 import requests
 from yaml import dump, safe_load
+
+
+OBO_BASE = 'http://purl.obolibrary.org/obo/'
 
 
 def main():
@@ -28,9 +32,9 @@ def main():
         help='ES endpoint to query for organs',
     )
     parser.add_argument(
-        '--azimuth_url',
-        default='https://raw.githubusercontent.com/satijalab/azimuth_website/master/data/azimuth_references.yaml',
-        help='Azimuth references',
+        '--organs_url',
+        default='https://ontology.api.hubmapconsortium.org/organs?application_context=hubmap',
+        help='HuBMAP ontology organs endpoint (canonical organ list + lateralities)',
     )
     parser.add_argument(
         '--ccf_url',
@@ -44,15 +48,21 @@ def main():
     cache_path.mkdir()
 
     descriptions = get_descriptions()
-    uberon_names = {uberon: value['name'] for uberon, value in descriptions.items()}
+
+    # The ontology endpoint links lateralized organs (e.g. "Kidney (Left)") to their parent
+    # organ via the `category` field, replacing the old fuzzy name matching.
+    organs_endpoint = get_organs_endpoint(args.organs_url)
+    term_to_parent_iri = build_term_to_parent_iri(organs_endpoint)
+    child_to_parent_iri = build_child_to_parent_iri(organs_endpoint)
 
     search_organs_by_uberon = rekey_search(
         get_search_organs(get_search_response(args.elasticsearch_url)),
-        uberon_names=uberon_names,
+        term_to_parent_iri=term_to_parent_iri,
+        all_uberon_iris=descriptions.keys(),
     )
-    azimuth_organs_by_uberon = rekey_azimuth(add_vitessce(get_azimuth_yaml(args.azimuth_url)))
     ccf_organs_by_uberon = rekey_ccf(
-        requests.get(args.ccf_url, headers={'accept': 'application/json'}).json()
+        get_ccf_rows(args.ccf_url),
+        child_to_parent_iri=child_to_parent_iri,
     )
     onto_by_uberon = get_ontology_info(descriptions.keys())
 
@@ -65,46 +75,26 @@ def main():
         name=small_dict(descriptions, 'name'),
         asctb=small_dict(descriptions, 'asctb'),
         description={
-            uberon_id: onto_info['annotation']['definition'][0]
+            uberon_id: definition
             for (uberon_id, onto_info) in onto_by_uberon.items()
+            if (definition := get_definition(onto_info))
         },
         icon=small_dict(descriptions, 'icon'),
         has_iu_component={uberon_id: True for uberon_id in ccf_organs_by_uberon.keys()},
         search=search_organs_by_uberon,
-        azimuth=azimuth_organs_by_uberon,
     )
 
-    unmatched = {u.split('/')[-1] for u in merged_data.keys() - descriptions.keys()}
-    expected_unmatched = {
-        # This list should be empty when https://github.com/hubmapconsortium/portal-ui/issues/2945
-        # and https://github.com/hubmapconsortium/portal-ui/issues/2943 are resolved.
-        # Why FMA? Resolve paired organs:
-        'fma7214',
-        'fma7213',
-        'fma24977',
-        'fma24978',
-        'fma57991',
-        'fma57987',
-        'fma323951',
-        # Just resolve paired organs:
-        'UBERON_0004549',
-        'UBERON_0004548',
-        'UBERON_0001222',
-        'UBERON_0001223',
-        'UBERON_0004539',
-        'UBERON_0004538',
-        'UBERON_0001303',
-        'UBERON_0001302',
-        # Other data soures are higher or lower level:
-        'UBERON_0002509',
-        'UBERON_0000079',
-        'UBERON_0001004',
-        'UBERON_0001465',
-    }
-    unexpected_unmatched = unmatched - expected_unmatched
-    if unexpected_unmatched:
-        as_string = ', '.join(sorted(unexpected_unmatched))
-        raise Exception(f'Unexpected unmatched IDs: {as_string}')
+    # CCF tracks many anatomical structures the portal does not surface as organ pages
+    # (whole systems, higher/lower-level structures, organs we have no descriptions entry for).
+    # These resolve to a uberon id that is not in descriptions.yaml; warn rather than fail so the
+    # script stays runnable as CCF grows. To add a page, add an entry to descriptions.yaml.
+    unmatched_organs = sorted(merged_data.keys() - descriptions.keys())
+    if unmatched_organs:
+        as_string = '\n  '.join(unmatched_organs)
+        print(
+            f'Warning: {len(unmatched_organs)} organ(s) from other sources have no '
+            f'descriptions.yaml entry and will not get an organ page:\n  {as_string}'
+        )
 
     organs = [
         Organ(name=data.get('name'), data=data) for data in merged_data.values() if 'name' in data
@@ -112,7 +102,7 @@ def main():
 
     DirectoryWriter(args.target, organs).write()
     organ_schema = safe_load((Path(__file__).parent / 'organ-schema.yaml').read_text())
-    for p in (repo_path / 'context/app/organ').glob('*.yaml'):
+    for p in args.target.glob('*.yaml'):
         organ = safe_load(p.read_text())
         validate(instance=organ, schema=organ_schema)
 
@@ -139,19 +129,56 @@ def merge_data(**kwargs):
     return dict(merged)
 
 
-###### Ontology ######
+###### Ontology organs endpoint ######
 
 
-def get_ontology_info(ids):
-    ontology_info = {}
-    url_base = 'https://www.ebi.ac.uk/ols/api/ontologies/uberon/terms/'
-    for id in ids:
-        # Plain ASCII encoding ("%2F") doesn't work with this service.
-        url = f'{url_base}{id.replace("/", "%252F")}'
-        response = requests.get(url)
-        response.raise_for_status()
-        ontology_info[id] = response.json()
-    return ontology_info
+def get_organs_endpoint(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    return response.json()
+
+
+def normalize_id(identifier):
+    """
+    Reduce a UBERON/FMA CURIE or IRI to a canonical PREFIX_DIGITS form so identifiers
+    from different sources (ontology endpoint, CCF) compare equal.
+
+    >>> normalize_id('UBERON:0002113')
+    'UBERON_0002113'
+    >>> normalize_id('http://purl.obolibrary.org/obo/UBERON_0002113')
+    'UBERON_0002113'
+    >>> normalize_id('http://purl.org/sig/ont/fma/fma24978')
+    'FMA_24978'
+    >>> normalize_id('FMA:24978')
+    'FMA_24978'
+    """
+    tail = identifier.rsplit('/', 1)[-1].rsplit('#', 1)[-1].replace(':', '_')
+    match = re.match(r'([A-Za-z]+)_?(\d+)', tail)
+    return f'{match.group(1).upper()}_{match.group(2)}' if match else tail
+
+
+def obo_iri(identifier):
+    """Normalize any organ identifier to its OBO IRI form (matches descriptions.yaml keys)."""
+    return OBO_BASE + normalize_id(identifier)
+
+
+def parent_of(entry):
+    """
+    The parent organ's uberon CURIE: a lateralized organ (e.g. "Kidney (Left)") carries a
+    `category` pointing at its parent ("Kidney"); an unpaired organ is its own parent.
+    """
+    category = entry.get('category')
+    return category['organ_uberon'] if category else entry['organ_uberon']
+
+
+def build_term_to_parent_iri(organs_endpoint):
+    """Map each organ search term (matching ES `mapped_organ`) to its parent organ's OBO IRI."""
+    return {entry['term']: obo_iri(parent_of(entry)) for entry in organs_endpoint}
+
+
+def build_child_to_parent_iri(organs_endpoint):
+    """Map each organ's own OBO IRI to its parent organ's OBO IRI (lateralized -> parent)."""
+    return {obo_iri(entry['organ_uberon']): obo_iri(parent_of(entry)) for entry in organs_endpoint}
 
 
 ###### Descriptions ######
@@ -160,35 +187,6 @@ def get_ontology_info(ids):
 def get_descriptions():
     descriptions_path = Path(__file__).parent / 'descriptions.yaml'
     return safe_load(descriptions_path.read_text())
-
-
-###### Azimuth #######
-
-
-def get_azimuth_yaml(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    all_azimuth = safe_load(response.text)
-    human_azimuth = [v for v in all_azimuth if v['species'] == 'Human']
-    return human_azimuth
-
-
-def add_vitessce(azimuth_organs):
-    """
-    Given the azimuth references, fetch and integrate the vitessce config for each.
-    """
-    for organ in azimuth_organs:
-        url = organ.get('vitessce_conf_url')
-        if not url:
-            continue
-        response = requests.get(url)
-        response.raise_for_status()
-        organ['vitessce_conf'] = response.json()
-    return azimuth_organs
-
-
-def rekey_azimuth(azimuth_organs):
-    return {organ['uberon_iri']: organ for organ in azimuth_organs if 'uberon_iri' in organ}
 
 
 ###### Search #######
@@ -217,33 +215,93 @@ def get_search_organs(response):
     return [b['key'] for b in response['aggregations'][agg_name]['buckets']]
 
 
-def rekey_search(search_organs, uberon_names):
+def rekey_search(search_organs, term_to_parent_iri, all_uberon_iris):
     """
-    >>> search_organs = ['Kidney (Left)', 'Kidney (Right)', 'Spleen', 'Lung (Right)']
-    >>> uberon_names = {'UBERON_0002113': 'Kidney',
-    ...                 'UBERON_0002106': 'Spleen',
-    ...                 'UBERON_0002048': 'Lungs'}
+    Group the organ names from Elasticsearch under their parent organ's uberon IRI, using the
+    ontology endpoint to resolve lateralized names (e.g. "Kidney (Left)") to their parent organ.
+    Every organ gets a (possibly empty) list.
+
+    >>> search_organs = ['Kidney (Left)', 'Kidney (Right)', 'Spleen', 'Tonsil (Left)']
+    >>> term_to_parent_iri = {
+    ...     'Kidney (Left)': 'iri/Kidney',
+    ...     'Kidney (Right)': 'iri/Kidney',
+    ...     'Spleen': 'iri/Spleen',
+    ...     'Tonsil (Left)': 'iri/Tonsil'}
     >>> from pprint import pp
-    >>> pp(rekey_search(search_organs, uberon_names))
-    {'UBERON_0002113': ['Kidney (Left)', 'Kidney (Right)'],
-     'UBERON_0002106': ['Spleen'],
-     'UBERON_0002048': ['Lung (Right)']}
+    >>> pp(rekey_search(search_organs, term_to_parent_iri, ['iri/Kidney', 'iri/Spleen', 'iri/Lung']))
+    {'iri/Kidney': ['Kidney (Left)', 'Kidney (Right)'],
+     'iri/Spleen': ['Spleen'],
+     'iri/Lung': []}
     """
-    return {
-        uberon_id: [
-            name
-            for name in search_organs
-            if uberon_name in name or uberon_name.rstrip('s') in name
-        ]
-        for uberon_id, uberon_name in uberon_names.items()
-    }
+    by_uberon = {uberon_iri: [] for uberon_iri in all_uberon_iris}
+    for name in search_organs:
+        parent_iri = term_to_parent_iri.get(name)
+        if parent_iri is None:
+            print(
+                f'Warning: search organ "{name}" not found in ontology organs endpoint; skipping.'
+            )
+        elif parent_iri in by_uberon:
+            by_uberon[parent_iri].append(name)
+    return by_uberon
 
 
 ###### CCF ######
 
 
-def rekey_ccf(api_response):
-    return {organ['representation_of']: organ for organ in api_response}
+def get_ccf_rows(url):
+    response = requests.get(url, headers={'accept': 'application/json'})
+    response.raise_for_status()
+    return response.json()['results']['bindings']
+
+
+def rekey_ccf(rows, child_to_parent_iri):
+    """
+    Key CCF reference organs by their parent organ's uberon IRI, resolving lateralized organs
+    (e.g. left/right kidney) to their parent via the ontology endpoint so that has_iu_component
+    lands on the descriptions.yaml organ.
+    """
+    by_uberon = {}
+    for row in rows:
+        organ_iri = obo_iri(row['representation_of']['value'])
+        parent_iri = child_to_parent_iri.get(organ_iri, organ_iri)
+        by_uberon[parent_iri] = row
+    return by_uberon
+
+
+###### Ontology descriptions ######
+
+
+def get_ontology_info(ids):
+    ontology_info = {}
+    url_base = 'https://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/'
+    for id in ids:
+        # OLS expects the IRI to be double-URL-encoded.
+        encoded = urllib.parse.quote(urllib.parse.quote(id, safe=''), safe='')
+        response = requests.get(f'{url_base}{encoded}')
+        response.raise_for_status()
+        ontology_info[id] = response.json()
+    return ontology_info
+
+
+def get_definition(onto_info):
+    """
+    Pull the formal definition (IAO:0000115) for an OLS term. The `description` list also
+    holds editorial comments and taxon notes -- sometimes listed before the definition -- so
+    prefer `obo_definition_citation`, falling back to `description` only if no citation exists.
+
+    >>> get_definition({'obo_definition_citation': [{'definition': 'The real definition.'}],
+    ...                 'description': ['An editorial comment.', 'The real definition.']})
+    'The real definition.'
+    >>> get_definition({'description': ['Only a description.']})
+    'Only a description.'
+    >>> get_definition({}) is None
+    True
+    """
+    citations = onto_info.get('obo_definition_citation') or []
+    if citations:
+        return citations[0].get('definition')
+    description = onto_info.get('description') or []
+    return description[0] if description else None
 
 
 ###### Utils #######

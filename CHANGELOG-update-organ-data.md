@@ -1,0 +1,3 @@
+- Add organ pages for Adipose Tissue, Intervertebral Disc, Larynx, and Tonsil.
+- Remove unused Azimuth reference data from organ pages.
+- Regenerate organ descriptions and dataset search terms (including left/right lateralities) from the HuBMAP ontology, CCF, and OLS sources.

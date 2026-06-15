@@ -26,7 +26,7 @@ interface OrganProps {
   organ: OrganFile;
 }
 
-const { summaryId, hraId, scellopId, cellTypesId, referenceId, assaysId, integratedMapsId, samplesId } = OrganPageIds;
+const { summaryId, hraId, scellopId, cellTypesId, assaysId, integratedMapsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
   const setOrganFile = useEntityStore((state) => state.setOrganFile);
@@ -53,7 +53,6 @@ function Organ({ organ }: OrganProps) {
     [hraId]: Boolean(organ.has_iu_component),
     [scellopId]: scFind.datasets.length > 0,
     [cellTypesId]: cellTypes.length > 0,
-    [referenceId]: false, // TODO: Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
     [assaysId]: assayBuckets.length > 0,
     [integratedMapsId]: dataProducts.length > 0,
     [samplesId]: samplesHits.length > 0,

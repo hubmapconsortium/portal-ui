@@ -1,14 +1,18 @@
-# There is no API that links all the organ information across the different components,
-# so we do it here, and then run make_organ_dir.py to generate the the per-organ yaml files
-# that are used at render time by the organ pages.
+# This file is the source of truth for which organs get a portal page, plus the per-organ
+# metadata that no API provides (name, ASCTB version, icon). The remaining fields
+# (description, search names, has_iu_component) are pulled from external sources by
+# make_organ_dir.py, which generates the per-organ yaml files used at render time.
 #
 # Links to datasets on the organ pages will not be generated until the datasets are public.
-#
-# Azimuth reference information is pulled from source files on github.
 #
 # Find organ icons at the CCF Reference Library:
 # https://hubmapconsortium.github.io/ccf/pages/ccf-3d-reference-library.html
 
+# Added from the ontology organs endpoint; icon/asctb can be curated later.
+http://purl.obolibrary.org/obo/UBERON_0001013:
+  name: Adipose Tissue
+  # icon: not found
+  # asctb: not found
 http://purl.obolibrary.org/obo/UBERON_0000178:
   asctb: blood-v1.3
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
@@ -41,6 +45,10 @@ http://purl.obolibrary.org/obo/UBERON_0000948:
   asctb: heart-v1.2
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-heart.svg
   name: Heart
+http://purl.obolibrary.org/obo/UBERON_0001066:
+  name: Intervertebral Disc
+  # asctb: not found
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
 http://purl.obolibrary.org/obo/UBERON_0002113:
   asctb: kidney-v1.2
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg
@@ -53,6 +61,10 @@ http://purl.obolibrary.org/obo/UBERON_0000059:
   asctb: large-intestine-v1.3
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-large-intestine.svg
   name: Large Intestine
+http://purl.obolibrary.org/obo/UBERON_0001737:
+  name: Larynx
+  # asctb: not found
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-larynx.svg
 http://purl.obolibrary.org/obo/UBERON_0002107:
   asctb: Liver-v1.1
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-liver.svg
@@ -114,6 +126,10 @@ http://purl.obolibrary.org/obo/UBERON_0002370:
   asctb: thymus-v1.3
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-thymus.svg
   name: Thymus
+http://purl.obolibrary.org/obo/UBERON_0002372:
+  asctb: palatine-tonsil-v1.2
+  name: Tonsil
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-palatine%20tonsil.svg
 http://purl.obolibrary.org/obo/UBERON_0003126:
   asctb: Lung-v1.2
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
