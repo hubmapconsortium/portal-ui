@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import { useHash } from 'js/hooks/useHash';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { isRetractedStatus } from 'js/components/detailPage/utils';
 import StatusIcon from '../StatusIcon';
 import { usePipelineInfo } from './hooks';
 import { useProcessedDatasetDetails } from '../ProcessedData/ProcessedDataset/hooks';
@@ -42,6 +43,7 @@ interface NodeTemplateProps extends PropsWithChildren, CommonNodeInfo {
   href?: string;
   toastText?: string;
   tooltipText?: string;
+  isRetracted?: boolean;
 }
 
 export function useNodeColors() {
@@ -77,7 +79,12 @@ function NodeTemplate({
   href,
   toastText,
   tooltipText,
+  isRetracted,
 }: NodeTemplateProps) {
+  const theme = useTheme();
+  // Retracted datasets get a bright red background with white text and icons for emphasis.
+  const effectiveBgColor = isRetracted ? theme.palette.retracted.main : bgColor;
+  const contentColor = isRetracted ? theme.palette.common.white : undefined;
   // Outer wrapper Box makes sure that nodes are always the same height
   const contents = (
     <Box height="4.125rem" display="flex" alignItems="center" sx={{ cursor: href ? 'pointer' : 'default' }}>
@@ -87,15 +94,21 @@ function NodeTemplate({
         py={1}
         borderRadius={rounded ? '1rem' : 0}
         maxWidth="18rem"
-        bgcolor={bgColor}
+        bgcolor={effectiveBgColor}
         boxShadow="0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)"
       >
         <Stack direction="row" gap={1} my="auto" alignItems="center">
-          {Icon && <Icon color="primary" fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
-          <Typography variant="subtitle2">{isLoading ? <Skeleton variant="text" width="10rem" /> : name}</Typography>
-          {status && <StatusIcon status={status} tooltip />}
+          {Icon && <Icon color={isRetracted ? 'white' : 'primary'} fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
+          <Typography variant="subtitle2" sx={{ color: contentColor }}>
+            {isLoading ? <Skeleton variant="text" width="10rem" /> : name}
+          </Typography>
+          {status && <StatusIcon status={status} noColor={isRetracted} tooltip />}
         </Stack>
-        {children && <Typography variant="body2">{children}</Typography>}
+        {children && (
+          <Typography variant="body2" sx={{ color: contentColor }}>
+            {children}
+          </Typography>
+        )}
         {target && <Handle style={{ opacity: 0 }} type="target" position={Position.Left} />}
         {source && <Handle style={{ opacity: 0 }} type="source" position={Position.Right} />}
       </Stack>
@@ -140,7 +153,14 @@ type PrimaryDatasetNodeProps = Node<DatasetNodeInfo, 'primaryDataset'>;
 function PrimaryDatasetNode({ data }: NodeProps<PrimaryDatasetNodeProps>) {
   const colors = useNodeColors();
   return (
-    <NodeTemplate source rounded icon={nodeIcons.primaryDataset} {...data} bgColor={colors.primaryDataset}>
+    <NodeTemplate
+      source
+      rounded
+      icon={nodeIcons.primaryDataset}
+      {...data}
+      bgColor={colors.primaryDataset}
+      isRetracted={isRetractedStatus(data.status)}
+    >
       {data.datasetType}
     </NodeTemplate>
   );
@@ -179,6 +199,7 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
       toastText={`Scrolled to ${datasetDetails?.pipeline}`}
       tooltipText={`Scroll to ${datasetDetails?.pipeline}`}
       {...data}
+      isRetracted={isRetractedStatus(data.status) || isRetractedStatus(datasetDetails?.status)}
     >
       {data.datasetType}
     </NodeTemplate>
@@ -197,6 +218,7 @@ function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
       bgColor={colors.componentDataset}
       isLoading={false}
       {...data}
+      isRetracted={isRetractedStatus(data.status)}
     >
       {data.datasetType}
     </NodeTemplate>

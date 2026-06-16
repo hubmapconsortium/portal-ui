@@ -1,9 +1,15 @@
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 
-const PrimaryColorAccordion = styled(Accordion)(({ theme }) => ({
+// When `$retracted` is set, the summary uses a muted tint of the retracted background with dark
+// content (in both collapsed and expanded states) for processed datasets of a retracted dataset.
+const PrimaryColorAccordion = styled(Accordion, {
+  shouldForwardProp: (prop) => prop !== '$retracted',
+})<{ $retracted?: boolean }>(({ theme, $retracted }) => ({
   '& .MuiAccordionSummary-root': {
-    backgroundColor: theme.palette.secondaryContainer.main,
+    backgroundColor: $retracted
+      ? alpha(theme.palette.retractedBackground.main, 0.2)
+      : theme.palette.secondaryContainer.main,
     flexDirection: 'row',
     '& .MuiAccordionSummary-content': {
       display: 'flex',
@@ -12,18 +18,18 @@ const PrimaryColorAccordion = styled(Accordion)(({ theme }) => ({
       margin: theme.spacing(2),
       color: theme.palette.primary.main,
       '&.Mui-expanded': {
-        color: theme.palette.common.white,
+        color: $retracted ? theme.palette.primary.main : theme.palette.common.white,
       },
     },
     '& .MuiAccordionSummary-expandIconWrapper': {
       marginRight: theme.spacing(2),
       color: theme.palette.primary.main,
       '&.Mui-expanded': {
-        color: theme.palette.common.white,
+        color: $retracted ? theme.palette.primary.main : theme.palette.common.white,
       },
     },
     '&.Mui-expanded': {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: $retracted ? alpha(theme.palette.retractedBackground.main, 0.2) : theme.palette.primary.main,
     },
   },
 }));

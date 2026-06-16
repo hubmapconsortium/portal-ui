@@ -80,6 +80,8 @@ declare module '@mui/material/styles' {
       unmatched: string;
     };
     accent: AccentColors;
+    retracted: PaletteColor;
+    retractedBackground: PaletteColor;
   }
   export interface PaletteOptions {
     black?: BlackVariants;
@@ -93,6 +95,8 @@ declare module '@mui/material/styles' {
       unmatched: string;
     };
     accent?: AccentColors;
+    retracted?: SimplePaletteColorOptions;
+    retractedBackground?: SimplePaletteColorOptions;
   }
 
   export interface PaletteColor {
@@ -137,6 +141,8 @@ declare module '@mui/material/SvgIcon' {
 
   export interface SvgIconPropsColorOverrides {
     white: true;
+    retracted: true;
+    retractedBackground: true;
   }
 }
 
@@ -249,6 +255,14 @@ const theme = createTheme({
       primary90: '#FBEBF3', // primary-90 in figma
       info90: '#EAF0F8', // info-90 in figma
       warning90: '#FBEEEB', // warning-90 in figma
+    },
+    retracted: {
+      main: '#C72C2C',
+      contrastText: '#fff',
+    },
+    retractedBackground: {
+      main: '#E05C5C',
+      contrastText: '#fff',
     },
   },
   typography: {

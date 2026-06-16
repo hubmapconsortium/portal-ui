@@ -7,9 +7,11 @@ import { format } from 'date-fns/format';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { VitessceIcon } from 'js/shared-styles/icons';
+import SeverityIcon from 'js/shared-styles/icons/SeverityIcon';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { Entity } from 'js/components/types';
+import { isRetractedStatus } from 'js/components/detailPage/utils';
 import Typography from '@mui/material/Typography';
 
 export interface HuBMAPIdDisplayInfo {
@@ -27,7 +29,9 @@ export interface HuBMAPIdDisplayInfo {
 export function getHuBMAPIdDisplayInfo(source: Partial<Entity>): HuBMAPIdDisplayInfo {
   const nextRevisionUuid = typeof source.next_revision_uuid === 'string' ? source.next_revision_uuid : undefined;
   const isSuperseded = Boolean(nextRevisionUuid);
-  const isRetracted = Boolean(source.sub_status);
+  const isRetracted = isRetractedStatus(
+    typeof source.mapped_status === 'string' ? source.mapped_status : source.status,
+  );
   const isSupport = source.entity_type === 'Support';
   const hasVisualization = Boolean(source.visualization);
   const latestRevisionUrl =
@@ -53,10 +57,10 @@ export function HuBMAPIdLabel({
   }
   return (
     <SecondaryBackgroundTooltip
-      title={isSuperseded ? 'A newer revision of this entity exists.' : 'This entity has been retracted.'}
+      title={isRetracted ? 'This dataset has been retracted.' : 'A newer revision of this entity exists.'}
     >
       <Stack direction="row" gap={0.5} alignItems="center" component="span">
-        <WarningRounded fontSize="small" />
+        {isRetracted ? <SeverityIcon status="retracted" fontSize="small" /> : <WarningRounded fontSize="small" />}
         {hubmapId}
       </Stack>
     </SecondaryBackgroundTooltip>
@@ -65,13 +69,20 @@ export function HuBMAPIdLabel({
 
 interface ViewLatestChipProps {
   latestRevisionUrl: string;
+  isRetracted?: boolean;
 }
 
-export function ViewLatestVersionChip({ latestRevisionUrl }: ViewLatestChipProps) {
+export function ViewLatestVersionChip({ latestRevisionUrl, isRetracted }: ViewLatestChipProps) {
   return (
-    <SecondaryBackgroundTooltip title="A newer revision of this entity exists. Click to navigate to it.">
+    <SecondaryBackgroundTooltip
+      title={
+        isRetracted
+          ? 'A replacement for this retracted dataset exists. Click to navigate to it.'
+          : 'A newer revision of this entity exists. Click to navigate to it.'
+      }
+    >
       <Chip
-        label="View Latest Version"
+        label={isRetracted ? 'View Replacement' : 'View Latest Version'}
         size="small"
         color="success"
         variant="outlined"
@@ -124,14 +135,13 @@ export function HuBMAPIDCellContent({
   isRetracted,
   latestRevisionUrl,
 }: HuBMAPIDCellContentProps) {
-  const isStale = isSuperseded || isRetracted;
   return (
     <Stack direction="column" gap={0.5} alignItems="flex-start">
       <Stack direction="row" gap={0.5} alignItems="center">
         <InternalLink
           href={`/browse/${hubmapId}`}
           data-testid="hubmap-id-link"
-          sx={isStale ? { color: 'warning.main' } : undefined}
+          sx={isRetracted ? { color: 'retracted.main' } : isSuperseded ? { color: 'warning.main' } : undefined}
         >
           <HuBMAPIdLabel hubmapId={hubmapId} isSuperseded={isSuperseded} isRetracted={isRetracted} />
         </InternalLink>
@@ -141,7 +151,9 @@ export function HuBMAPIDCellContent({
           </SecondaryBackgroundTooltip>
         )}
       </Stack>
-      {isSuperseded && latestRevisionUrl && <ViewLatestVersionChip latestRevisionUrl={latestRevisionUrl} />}
+      {isSuperseded && latestRevisionUrl && (
+        <ViewLatestVersionChip latestRevisionUrl={latestRevisionUrl} isRetracted={isRetracted} />
+      )}
       {isRetracted && !isSuperseded && <RetractedChip />}
     </Stack>
   );
@@ -176,6 +188,17 @@ export function CellContent({
           latestRevisionUrl={latestRevisionUrl}
         />
       );
+    case 'mapped_status':
+      // Add the retracted icon + color only for retracted datasets, for extra emphasis.
+      if (isRetracted) {
+        return (
+          <Stack direction="row" gap={0.5} alignItems="center" sx={{ color: 'retracted.main' }}>
+            <SeverityIcon status="retracted" fontSize="small" />
+            {fieldValue}
+          </Stack>
+        );
+      }
+      return <>{fieldValue}</>;
     case 'last_modified_timestamp':
     case 'published_timestamp':
     case 'created_timestamp':

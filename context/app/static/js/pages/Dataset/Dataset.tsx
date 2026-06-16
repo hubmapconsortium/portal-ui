@@ -11,7 +11,10 @@ import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
-import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
+import { getCombinedDatasetStatus, isRetractedStatus } from 'js/components/detailPage/utils';
+import { RetractedDatasetProvider } from 'js/components/detailPage/RetractedDatasetContext';
+import RetractedAlert from 'js/components/detailPage/RetractedAlert';
+import SeverityIcon from 'js/shared-styles/icons/SeverityIcon';
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Donor, Entity, Sample, isDataset } from 'js/components/types';
@@ -57,6 +60,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     hubmap_id,
     status,
     sub_status,
+    mapped_status,
     mapped_data_access_level,
     mapped_external_group_name,
     contributors,
@@ -75,6 +79,9 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   useRedirectAlert();
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
+  const isRetracted = isRetractedStatus(status) || isRetractedStatus(mapped_status);
+  const nextRevisionUuid =
+    typeof assayMetadata.next_revision_uuid === 'string' ? assayMetadata.next_revision_uuid : undefined;
 
   const { sections, isLoading } = useProcessedDatasetsSections();
   const { searchHits: processedDatasets } = useProcessedDatasets();
@@ -113,40 +120,50 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
       entityType="Dataset"
       mapped_data_access_level={mapped_data_access_level}
     >
-      <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
-        <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
-        {Boolean(is_component) && <ComponentAlert />}
-        <SnareSeq2Alert isHeader />
-        <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-          <Summary
-            entityTypeDisplay="Dataset"
-            status={combinedStatus}
-            mapped_data_access_level={mapped_data_access_level}
-            mapped_external_group_name={mapped_external_group_name}
-            bottomFold={
-              shouldDisplayRelationships ? (
-                <>
-                  <MultiAssayRelationship />
-                  <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
-                    <DatasetRelationships uuid={uuid} processing={processing} />
-                  </Box>
-                </>
-              ) : null
-            }
-          >
-            <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
-          </Summary>
-          <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
-          <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
-          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
-          <ProvSection shouldDisplay={shouldDisplaySection.provenance} additionalUuids={processedDatasetUuids} />
-          <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
-          <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
-          <Attribution>
-            <ContributorsTable contributors={contributors} contacts={contacts} />
-          </Attribution>
-        </DetailLayout>
-      </SelectedVersionStoreProvider>
+      <RetractedDatasetProvider isRetracted={isRetracted}>
+        <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
+          <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
+          {Boolean(is_component) && <ComponentAlert />}
+          <SnareSeq2Alert isHeader />
+          {isRetracted && (
+            <RetractedAlert replacementHref={nextRevisionUuid ? `/browse/dataset/${nextRevisionUuid}` : undefined}>
+              This dataset has been retracted and should no longer be used. Issues affecting the reliability of its data
+              were identified, and all processed data derived from it have also been retracted. A replacement dataset
+              may be available with updated data.
+            </RetractedAlert>
+          )}
+          <DetailLayout sections={shouldDisplaySection} isLoading={isLoading} isRetracted={isRetracted}>
+            <Summary
+              entityTypeDisplay="Dataset"
+              status={combinedStatus}
+              mapped_data_access_level={mapped_data_access_level}
+              mapped_external_group_name={mapped_external_group_name}
+              titlePrefixIcon={isRetracted ? <SeverityIcon status="retracted" sx={{ fontSize: '2rem' }} /> : undefined}
+              bottomFold={
+                shouldDisplayRelationships ? (
+                  <>
+                    <MultiAssayRelationship />
+                    <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
+                      <DatasetRelationships uuid={uuid} processing={processing} />
+                    </Box>
+                  </>
+                ) : null
+              }
+            >
+              <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
+            </Summary>
+            <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+            <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
+            <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
+            <ProvSection shouldDisplay={shouldDisplaySection.provenance} additionalUuids={processedDatasetUuids} />
+            <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
+            <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
+            <Attribution>
+              <ContributorsTable contributors={contributors} contacts={contacts} />
+            </Attribution>
+          </DetailLayout>
+        </SelectedVersionStoreProvider>
+      </RetractedDatasetProvider>
     </DetailContextProvider>
   );
 }

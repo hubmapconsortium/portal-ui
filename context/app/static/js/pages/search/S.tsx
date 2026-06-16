@@ -21,7 +21,7 @@ const sharedTileFields = [
   'entity_type',
   'descendant_counts.entity_type',
   'next_revision_uuid',
-  'sub_status',
+  'mapped_status',
 ];
 
 const sharedAffiliationFilters = [
@@ -51,9 +51,15 @@ function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
       type === 'Dataset'
         ? esb.boolQuery().must([esb.termsQuery('entity_type.keyword', ['Dataset', 'Support'])])
         : undefined,
+    // Retracted datasets are hidden from default search; this filter is bypassed for explicit
+    // HuBMAP-ID / UUID lookups (see `buildQuery`'s `isIdLookupSearch`), so they remain findable by ID.
     latestRevisionFilter: esb
       .boolQuery()
-      .mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]),
+      .mustNot([
+        esb.existsQuery('next_revision_uuid'),
+        esb.existsQuery('sub_status'),
+        esb.termsQuery('mapped_status.keyword', ['Retracted']),
+      ]),
   };
 }
 
