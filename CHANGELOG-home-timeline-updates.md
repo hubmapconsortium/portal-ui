@@ -1,0 +1,1 @@
+- Add recent updates to the homepage "What's New" timeline: scFind ATAC-seq search, Say & See Mode (BETA), the dedicated Integrated Maps page, annotated object type dataset search, new step-by-step tutorials, and the HuBMAP Data Portal preprint.
