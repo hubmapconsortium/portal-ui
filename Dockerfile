@@ -70,8 +70,9 @@ RUN find /app/app/static/public -name '*.map' -delete \
   && rm -f /app/app/static/public/report.html
 
 # Pre-compress static so WhiteNoise serves .br/.gz siblings (replaces nginx
-# gzip_static; extends Vite's .gz to brotli + fonts/svg). Idempotent.
-RUN python -m whitenoise.compress /app/app/static
+# gzip_static; extends Vite's .gz to brotli + fonts/svg). Idempotent. `-q` suppresses the
+# per-file compression output, which otherwise floods the docker build logs in CI.
+RUN python -m whitenoise.compress -q /app/app/static
 
 # ---- Runtime stage --------------------------------------------------------
 # Docker Hardened Image runtime variant: minimal, no shell or package manager,
