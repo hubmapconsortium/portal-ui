@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.47.3 - 2026-06-16
+
+- Add recent updates to the homepage "What's New" timeline: scFind ATAC-seq search, Say & See Mode (BETA), the dedicated Integrated Maps page, annotated object type dataset search, new step-by-step tutorials, and the HuBMAP Data Portal preprint.
+- Make organ descriptions in the organs list expandable, matching the cell types and biomarkers landing pages.
+- Make the cell type descriptions in the organ page cell types table expandable.
+- Add RNAseq/ATACseq tabs to the organ page cell types table and load its data from a single server-side request.
+- Include both RNAseq and ATACseq datasets in the organ page cell population plot.
+- Make the organ page assays table sortable by assay and dataset count.
+- Clean up the organ page assays chart tooltips (omit the dataset type, capitalize "Total").
+- Add a dedicated theme color (`retracted` / `retractedBackground`) and the `UnpublishedRounded` icon for the Retracted dataset status.
+- On the search page, render retracted datasets' HuBMAP IDs and status column in the retracted color with the retracted icon, label the replacement action "View Replacement" when a next revision exists, and only surface retracted datasets when a user looks them up by HuBMAP ID.
+- On unified dataset pages, prefix the page title with the retracted status icon, show a retracted banner (with an optional "View Replacement" action) at the top, collapse all sections by default except processed data, replace section and table-of-contents icons with the retracted icon, collapse processed datasets with a muted retracted summary background, and color retracted nodes (with a matching nodes-legend entry) in the dataset relationship diagram bright red with white text and icons.
+- On collection and publication pages, sort retracted datasets to the top of the datasets table by default (overridable by sorting another column), show a retracted banner above the datasets table, and style retracted rows like the search page (colored HuBMAP ID + status with the retracted icon and a "View Replacement" link to the superseding dataset).
+- Add organ pages for Adipose Tissue, Intervertebral Disc, Larynx, and Tonsil.
+- Remove unused Azimuth reference data from organ pages.
+- Regenerate organ descriptions and dataset search terms (including left/right lateralities) from the HuBMAP ontology, CCF, and OLS sources.
+
+
+
 ## v1.47.2 - 2026-06-12
 
 - Fix scFind ATACseq cell type links including too many organs in their query.
