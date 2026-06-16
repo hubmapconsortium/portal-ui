@@ -950,6 +950,78 @@ def _build_cell_type_detail(clid):
     }
 
 
+def _is_valid_organ_name(organ):
+    """Guard the organ route param (and its cache key) to letters/spaces/hyphens."""
+    return bool(organ) and len(organ) <= 50 and all(ch.isalpha() or ch in ' -' for ch in organ)
+
+
+def _build_organ_cell_types(organ):
+    """Assemble the organ page's cell-types table payload: the organ's cell types (per modality),
+    each with its matched datasets, CLID, and Cell Ontology description.
+
+    Mirrors `_build_cell_type_detail`: RNA + ATAC are bundled so the table's RNAseq/ATACseq modality
+    tabs (with counts) come from this single aggregate fetch. The per-modality "total indexed
+    datasets" denominator is intentionally NOT bundled — the page derives it client-side from the
+    indexed-datasets route crossed with Elasticsearch (for organ scoping).
+    """
+    label_to_clid_map = _build_label_to_clid_map()
+
+    def organ_labels(modality=None):
+        # scfind cell type names are organ-prefixed (e.g. "Kidney.epithelial cell"); match the prefix
+        # case-insensitively, mirroring the client's useCellTypesOfOrgan.
+        return [
+            ct
+            for ct in _get_all_cell_type_names(modality)
+            if '.' in ct
+            and ct.split('.', 1)[0].lower() == organ.lower()
+            and _format_cell_type_name(ct) != 'other'
+        ]
+
+    rna_labels = organ_labels()
+    atac_labels = organ_labels('ATAC')
+
+    # The two modalities' per-cell-type findDatasetForCellType fan-outs are independent — run them
+    # concurrently (each degrades to empty on a scfind error rather than failing the whole table).
+    results = _gather(
+        {
+            'rna': (lambda: _build_datasets_for_cell_types(rna_labels), {}),
+            'atac': (lambda: _build_datasets_for_cell_types(atac_labels, modality='ATAC'), {}),
+        }
+    )
+
+    # Cell Ontology descriptions for every CLID across both modalities, fetched once from UBKG.
+    label_to_clid = {
+        label: label_to_clid_map.get(label, []) for label in set(rna_labels) | set(atac_labels)
+    }
+    descriptions = _build_cell_type_descriptions(label_to_clid)
+
+    def rows(labels, datasets_for_cell_types):
+        result = []
+        for label in labels:
+            clids = label_to_clid_map.get(label, [])
+            clid = clids[0] if clids else None
+            result.append(
+                {
+                    'name': label.split('.', 1)[1],
+                    'clid': clid,
+                    'description': descriptions.get(clid) if clid else None,
+                    'datasets': (datasets_for_cell_types.get(label) or {}).get('datasets', []),
+                }
+            )
+        return result
+
+    return {
+        'cell_types': rows(rna_labels, results['rna']),
+        'cell_types_atac': rows(atac_labels, results['atac']),
+    }
+
+
+def _organ_cell_types(organ):
+    """Return the organ cell-types payload, built once and shared across worker processes."""
+    cache_key = f'organ-cell-types-{organ.lower().replace(" ", "-")}'
+    return _get_or_build_map(cache_key, lambda: _build_organ_cell_types(organ))
+
+
 @blueprint.route('/scfind/label-to-clid-map.json')
 def label_to_clid_map():
     """
@@ -1482,3 +1554,14 @@ def cell_type_detail(clid):
         return jsonify(_build_cell_type_detail(clid))
     except Exception as e:
         return _handle_scfind_error(e, 'cell type detail')
+
+
+@blueprint.route('/scfind/organ-cell-types/<organ>.json')
+def organ_cell_types(organ):
+    """Aggregate scfind data for the organ detail page's cell-types table."""
+    try:
+        if not _is_valid_organ_name(organ):
+            return jsonify({'error': 'Invalid organ.'}), 400
+        return jsonify(_organ_cell_types(organ))
+    except Exception as e:
+        return _handle_scfind_error(e, 'organ cell types')

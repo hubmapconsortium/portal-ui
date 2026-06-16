@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -9,6 +10,7 @@ import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { InternalLink } from 'js/shared-styles/Links';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import { HeaderCell } from 'js/shared-styles/tables';
+import { useSortState } from 'js/hooks/useSortState';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import { OrganPageIds } from 'js/components/organ/types';
@@ -37,6 +39,16 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
     });
   });
 
+  // Default to dataset count descending, matching the order the Elasticsearch aggregation returns.
+  const { sortState, setSort } = useSortState({}, { columnId: 'counts', direction: 'desc' });
+
+  const sortedBucketData = useMemo(() => {
+    const factor = sortState.direction === 'asc' ? 1 : -1;
+    return [...bucketData].sort((a, b) =>
+      sortState.columnId === 'assays' ? a.key.localeCompare(b.key) * factor : (a.doc_count - b.doc_count) * factor,
+    );
+  }, [bucketData, sortState]);
+
   return (
     <OrganDetailSection
       id={OrganPageIds.assaysId}
@@ -56,9 +68,17 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
             { id: 'assays', label: 'Assays' },
             { id: 'counts', label: 'Dataset Count' },
           ].map(({ id, label }) => (
-            <HeaderCell key={id}>{label}</HeaderCell>
+            <HeaderCell key={id}>
+              <TableSortLabel
+                active={sortState.columnId === id}
+                direction={sortState.columnId === id ? sortState.direction : undefined}
+                onClick={() => setSort(id)}
+              >
+                {label}
+              </TableSortLabel>
+            </HeaderCell>
           ))}
-          tableRows={bucketData.map((bucket) => (
+          tableRows={sortedBucketData.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
                 <InternalLink
