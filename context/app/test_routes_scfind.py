@@ -1082,6 +1082,29 @@ class TestPerPageAggregates:
         assert 'Invalid cell type ID' in response.get_json()['error']
         mock_get.assert_not_called()
 
+    def test_organ_cell_types(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        mocker.patch('requests.post', side_effect=mock_scfind_post)
+        response = client.get('/scfind/organ-cell-types/kidney.json')
+        assert response.status_code == 200
+        data = response.get_json()
+        # RNA + ATAC slices for the table's modality tabs.
+        assert 'cell_types' in data
+        assert 'cell_types_atac' in data
+        # The organ's cell types come through (prefix stripped) with the joined per-row fields.
+        names = {row['name'] for row in data['cell_types']}
+        assert 'epithelial cell' in names
+        row = next(r for r in data['cell_types'] if r['name'] == 'epithelial cell')
+        assert set(row) == {'name', 'clid', 'description', 'datasets'}
+
+    @pytest.mark.parametrize('organ', ['a1b', 'a;b', 'x' * 51])
+    def test_organ_cell_types_invalid_organ(self, client, mocker, organ):
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
+        response = client.get(f'/scfind/organ-cell-types/{organ}.json')
+        assert response.status_code == 400
+        assert 'Invalid organ' in response.get_json()['error']
+        mock_get.assert_not_called()
+
 
 class TestSharedMapCache:
     """The aggregate maps are built at most once across processes/calls."""
@@ -1182,6 +1205,7 @@ class TestSharedMapCache:
         ('/scfind/cell-types-landing.json', 'GET', 200),
         ('/scfind/gene-detail/VIM.json', 'GET', 200),
         ('/scfind/cell-type-detail/CL:0000066.json', 'GET', 200),
+        ('/scfind/organ-cell-types/kidney.json', 'GET', 200),
     ],
 )
 def test_endpoint_accessibility(client, mocker, endpoint, method, expected_status):

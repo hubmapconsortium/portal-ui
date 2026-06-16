@@ -1,0 +1,6 @@
+- Make organ descriptions in the organs list expandable, matching the cell types and biomarkers landing pages.
+- Make the cell type descriptions in the organ page cell types table expandable.
+- Add RNAseq/ATACseq tabs to the organ page cell types table and load its data from a single server-side request.
+- Include both RNAseq and ATACseq datasets in the organ page cell population plot.
+- Make the organ page assays table sortable by assay and dataset count.
+- Clean up the organ page assays chart tooltips (omit the dataset type, capitalize "Total").
