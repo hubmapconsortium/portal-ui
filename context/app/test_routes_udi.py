@@ -209,7 +209,7 @@ def test_yac_completions_preflight_from_localhost(client):
         headers={
             'Origin': 'http://localhost:5173',
             'Access-Control-Request-Method': 'POST',
-            'Access-Control-Request-Headers': 'authorization,content-type,x-openai-key',
+            'Access-Control-Request-Headers': 'authorization,content-type,x-openai-key,x-conversation-id',
         },
     )
     assert response.status_code in (200, 204)
@@ -218,6 +218,7 @@ def test_yac_completions_preflight_from_localhost(client):
     assert 'authorization' in allowed_headers
     assert 'x-openai-key' in allowed_headers
     assert 'content-type' in allowed_headers
+    assert 'x-conversation-id' in allowed_headers
     assert 'POST' in response.headers.get('Access-Control-Allow-Methods', '')
 
 
@@ -338,6 +339,88 @@ def test_build_orchestrator_forwards_langfuse_config(client, mocker):
     assert captured['langfuse_secret_key'] == 'sk-lf-test'
     assert captured['langfuse_host'] == 'https://langfuse.example.com'
     assert captured['openai_api_key'] == 'sk-server'
+
+
+def test_yac_completions_propagates_flask_session_id_to_langfuse(client, mocker):
+    """When langfuse is configured, the run is wrapped in a context that tags
+    traces with a stable session_id derived from the Flask session, and the
+    same id is reused across requests sharing the session cookie."""
+    client.application.config['LANGFUSE_PUBLIC_KEY'] = 'pk-lf'
+    client.application.config['LANGFUSE_SECRET_KEY'] = 'sk-lf'
+
+    propagate_calls = []
+
+    def _fake_propagate(*, session_id, **_kwargs):
+        propagate_calls.append(session_id)
+        from contextlib import nullcontext
+
+        return nullcontext()
+
+    mocker.patch('langfuse.propagate_attributes', side_effect=_fake_propagate)
+    _capture_run(mocker)
+
+    first = client.post(
+        '/v1/yac/completions',
+        json=_sample_completion_body,
+        headers={'X-OpenAI-Key': 'sk-anon'},
+    )
+    assert first.status == '200 OK'
+    second = client.post(
+        '/v1/yac/completions',
+        json=_sample_completion_body,
+        headers={'X-OpenAI-Key': 'sk-anon'},
+    )
+    assert second.status == '200 OK'
+
+    assert len(propagate_calls) == 2
+    # Stable id reused across requests within the same session.
+    assert propagate_calls[0] == propagate_calls[1]
+    assert propagate_calls[0]
+
+
+def test_yac_completions_skips_langfuse_context_when_unconfigured(client, mocker):
+    """With no langfuse config, propagate_attributes must never be invoked."""
+    client.application.config['LANGFUSE_PUBLIC_KEY'] = None
+    client.application.config['LANGFUSE_SECRET_KEY'] = None
+    client.application.config['LANGFUSE_BASE_URL'] = None
+
+    propagate = mocker.patch('langfuse.propagate_attributes')
+    _capture_run(mocker)
+
+    response = client.post(
+        '/v1/yac/completions',
+        json=_sample_completion_body,
+        headers={'X-OpenAI-Key': 'sk-anon'},
+    )
+    assert response.status == '200 OK'
+    propagate.assert_not_called()
+
+
+def test_yac_completions_conversation_id_header_overrides_session(client, mocker):
+    """A cross-origin BYOK caller (no persisted session cookie) supplies its
+    own conversation id via X-Conversation-Id, which is used verbatim as the
+    langfuse session_id."""
+    client.application.config['LANGFUSE_PUBLIC_KEY'] = 'pk-lf'
+    client.application.config['LANGFUSE_SECRET_KEY'] = 'sk-lf'
+
+    propagate_calls = []
+
+    def _fake_propagate(*, session_id, **_kwargs):
+        propagate_calls.append(session_id)
+        from contextlib import nullcontext
+
+        return nullcontext()
+
+    mocker.patch('langfuse.propagate_attributes', side_effect=_fake_propagate)
+    _capture_run(mocker)
+
+    response = client.post(
+        '/v1/yac/completions',
+        json=_sample_completion_body,
+        headers={'X-OpenAI-Key': 'sk-anon', 'X-Conversation-Id': 'conv-123'},
+    )
+    assert response.status == '200 OK'
+    assert propagate_calls == ['conv-123']
 
 
 def test_yac_completions_non_hubmap_authed_user_needs_header(client):

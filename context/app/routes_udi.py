@@ -2,6 +2,8 @@ import hashlib
 import json
 import os
 import time
+import uuid
+from contextlib import nullcontext
 
 from flask import current_app, jsonify, make_response, request, session
 
@@ -84,7 +86,7 @@ _UDI_DEV_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
-_UDI_ALLOWED_HEADERS = 'Content-Type, Authorization, X-OpenAI-Key'
+_UDI_ALLOWED_HEADERS = 'Content-Type, Authorization, X-OpenAI-Key, X-Conversation-Id'
 _UDI_ALLOWED_METHODS = 'GET, POST, OPTIONS'
 
 
@@ -112,6 +114,53 @@ def _udi_cors_after_request(response):
         response.headers['Access-Control-Allow-Headers'] = _UDI_ALLOWED_HEADERS
         response.headers['Vary'] = 'Origin'
     return response
+
+
+# Key under which a stable per-Flask-session identifier is stashed in the
+# signed session cookie. Reused across requests so every UDI completion from
+# the same browser session shares one langfuse `session_id`.
+_LANGFUSE_SESSION_KEY = 'udi_langfuse_session_id'
+
+
+def _langfuse_enabled():
+    """Mirror UDIAgent's opt-in: langfuse is active when any of the three
+    config values is set."""
+    return any(
+        current_app.config.get(key)
+        for key in ('LANGFUSE_PUBLIC_KEY', 'LANGFUSE_SECRET_KEY', 'LANGFUSE_BASE_URL')
+    )
+
+
+def _get_session_id():
+    """Return a stable session id to group a user's conversation turns under
+    one langfuse `session_id`.
+
+    Cross-origin BYOK callers (e.g. the standalone udi-yac frontend) don't get
+    a credentialed CORS response, so the Flask session cookie never persists
+    for them. They supply their own conversation id via `X-Conversation-Id`,
+    which takes precedence when present. Same-origin/authenticated callers
+    fall back to a UUID generated and persisted in the Flask session on first
+    use, reused on subsequent requests carrying the session cookie.
+    """
+    header_id = request.headers.get('X-Conversation-Id')
+    if header_id:
+        return header_id
+    session_id = session.get(_LANGFUSE_SESSION_KEY)
+    if not session_id:
+        session_id = uuid.uuid4().hex
+        session[_LANGFUSE_SESSION_KEY] = session_id
+    return session_id
+
+
+def _langfuse_session_context():
+    """Context manager tagging all langfuse traces emitted within it with the
+    current Flask session's id, so they're grouped as one langfuse session.
+    A no-op when langfuse isn't configured."""
+    if not _langfuse_enabled():
+        return nullcontext()
+    from langfuse import propagate_attributes
+
+    return propagate_attributes(session_id=_get_session_id())
 
 
 def _build_orchestrator(openai_api_key):
@@ -304,12 +353,13 @@ def yac_completions():
         ), 401
 
     try:
-        result = orchestrator.run(
-            messages=messages,
-            data_schema=data_schema,
-            data_domains=data_domains,
-            openai_api_key=openai_api_key,
-        )
+        with _langfuse_session_context():
+            result = orchestrator.run(
+                messages=messages,
+                data_schema=data_schema,
+                data_domains=data_domains,
+                openai_api_key=openai_api_key,
+            )
     except Exception as e:
         current_app.logger.exception('UDIAgent orchestrator failed')
         return _get_api_json_error(500, f'UDIAgent orchestration error: {e}'), 500
