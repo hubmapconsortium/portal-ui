@@ -136,6 +136,33 @@ def _get_or_build_map(name, builder):
     return data
 
 
+def _load_cached_map(name):
+    """
+    Return an already-built aggregate map from the in-process memo or the shared disk cache, WITHOUT
+    building it — returns ``None`` if it hasn't been built yet.
+
+    For latency-sensitive paths (e.g. server-rendering a page) that want the warmed data when it's
+    available but must never trigger the expensive build (which ``_get_or_build_map`` would do).
+    """
+    with _memory_lock:
+        if name in _memory_cache:
+            return _memory_cache[name]
+    path = _scfind_cache_path(name)
+    ttl = current_app.config.get('SCFIND_CACHE_TTL')
+    if not os.path.exists(path):
+        return None
+    if ttl and (time.time() - os.path.getmtime(path)) > ttl:
+        return None
+    try:
+        with open(path) as data_file:
+            data = json.load(data_file)
+    except (OSError, ValueError):
+        return None
+    with _memory_lock:
+        _memory_cache[name] = data
+    return data
+
+
 def warm_scfind_caches(app):
     """
     Pre-build the cell type mappings in a background thread at app startup.
@@ -177,8 +204,11 @@ def warm_scfind_caches(app):
                 _get_all_cell_type_names('ATAC')
                 landing = _build_cell_types_landing()
                 # Warm the per-organ cell-type counts the distribution chart fetches one-per-organ;
-                # they share `_cached_scfind_get`, so the chart's requests are then served warm.
+                # they share `_cached_scfind_get`, so the chart's requests are then served warm. Warm
+                # both modalities so toggling the chart's RNAseq/ATACseq "Data Type" switch (which the
+                # client also prefetches) is served from cache rather than fetched cold on first use.
                 _build_cell_counts_for_tissues(landing['organs'])
+                _build_cell_counts_for_tissues(landing['organs'], modality='ATAC')
                 current_app.logger.info('Finished warming scfind cell type mapping caches.')
             except Exception as e:
                 current_app.logger.warning(f'Failed to warm scfind caches at startup: {e}')
@@ -268,6 +298,26 @@ def _cached_scfind_get(endpoint, params_items):
     return _make_scfind_request(endpoint, params or None)
 
 
+def _safe_scfind_get(endpoint, params_items, default):
+    """Like ``_cached_scfind_get`` but returns ``default`` instead of raising on a scfind error.
+
+    A gene (or cell type) present in only one modality's index makes the OTHER modality's query
+    fail — scfind errors on an entity it doesn't know. When assembling a per-page aggregate that
+    queries both modalities, treat such a failure as "no data for this modality" so a
+    single-modality entity still yields a usable payload instead of failing the whole page.
+    """
+    try:
+        return _cached_scfind_get(endpoint, params_items)
+    except requests.RequestException as e:
+        current_app.logger.info(
+            'scfind %s returned no data for params %s (treating as empty): %s',
+            endpoint,
+            dict(params_items),
+            e,
+        )
+        return default
+
+
 def _proxy_scfind_get(endpoint, allowed):
     """Forward an allowlisted GET to scfind, served from the shared cache when possible."""
     params = _collect_args(allowed)
@@ -333,7 +383,14 @@ def _get_label_to_clid_mapping(cell_type):
     Returns:
         List of CLIDs for the given cell type
     """
-    response = _make_scfind_request('CellType2CLID', {'cell_type': cell_type})
+    # A comma in a cell type name (e.g. "CD4-positive, alpha-beta T cell") is parsed as a multi-value
+    # list when sent as a GET query param, yielding the wrong/no CLID — which leaves that cell type
+    # (and its CLID) out of the label<->CLID maps, breaking its detail page. POST the body instead
+    # (the same workaround the front-end uses for comma-containing cell type names).
+    if ',' in cell_type:
+        response = _make_scfind_post_request('CellType2CLID', {'cell_type': cell_type})
+    else:
+        response = _make_scfind_request('CellType2CLID', {'cell_type': cell_type})
     return response.get('CLIDs', [])
 
 
@@ -539,6 +596,22 @@ def _extract_cell_types_info(cell_types):
     return {'name': name, 'organs': organs, 'variants': variants}
 
 
+def peek_cell_type_name(clid):
+    """
+    Best-effort cell type name for a CLID from the already-built CLID->label map, without triggering
+    a build (returns '' if the map isn't cached yet).
+
+    Lets the Cell Type detail page server-render the name from the warmed map (a fast cache hit)
+    instead of waiting on the page's async aggregate fetch, so the title appears immediately. When
+    the map isn't warmed yet it returns '' and the page falls back to the aggregate as before — it
+    never blocks the HTML render on the expensive build.
+    """
+    clid_to_label_map = _load_cached_map('clid_to_label')
+    if not clid_to_label_map:
+        return ''
+    return _extract_cell_types_info(clid_to_label_map.get(clid, []))['name']
+
+
 def _fan_out(items, fetch_one, label):
     """
     Run ``fetch_one(item)`` for each item across a bounded thread pool, returning ``{item: result}``.
@@ -566,6 +639,39 @@ def _fan_out(items, fetch_one, label):
             item, result = future.result()
             if result is not None:
                 results[item] = result
+    return results
+
+
+def _gather(tasks):
+    """
+    Run independent ``{label: (callable, default)}`` tasks concurrently, returning ``{label: result}``.
+
+    Like ``_fan_out`` but for a fixed set of heterogeneous operations (rather than one function over
+    many items): each task runs in its own thread, re-entering the captured app context (worker
+    threads don't inherit it). A task that raises degrades to its ``default`` (logged) instead of
+    failing the whole aggregate, so e.g. one modality's scfind error doesn't 500 the page.
+    """
+    if not tasks:
+        return {}
+    app = current_app._get_current_object()
+
+    def run(label, fn, default):
+        with app.app_context():
+            try:
+                return label, fn()
+            except Exception as e:
+                current_app.logger.warning(f'{label} failed (treating as empty): {e}')
+                return label, default
+
+    results = {}
+    max_workers = min(current_app.config.get('SCFIND_MAX_WORKERS', 20), len(tasks))
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [
+            executor.submit(run, label, fn, default) for label, (fn, default) in tasks.items()
+        ]
+        for future in as_completed(futures):
+            label, result = future.result()
+            results[label] = result
     return results
 
 
@@ -753,16 +859,23 @@ def _build_gene_detail(gene_symbol):
     RNA and ATAC counterparts are both bundled so the page's cell-types and datasets modality tabs
     (with counts) are served from this single aggregate fetch.
     """
-    hyper_query = _cached_scfind_get(
-        'hyperQueryCellTypes', (('gene_list', gene_symbol), ('include_prefix', 'true'))
+    # A gene may be indexed in only one modality; querying the other modality errors at scfind.
+    # Fetch each modality independently and degrade a failure to "no data" so an ATAC-only (or
+    # RNA-only) gene still returns a usable aggregate instead of 500ing the whole page.
+    empty_find_datasets = {'counts': {}, 'findDatasets': {}}
+    hyper_query = _safe_scfind_get(
+        'hyperQueryCellTypes', (('gene_list', gene_symbol), ('include_prefix', 'true')), {}
     ).get('findGeneSignatures', [])
-    hyper_query_atac = _cached_scfind_get(
+    hyper_query_atac = _safe_scfind_get(
         'hyperQueryCellTypes',
         (('gene_list', gene_symbol), ('include_prefix', 'true'), ('modality', 'ATAC')),
+        {},
     ).get('findGeneSignatures', [])
-    find_datasets = _cached_scfind_get('findDatasets', (('gene_list', gene_symbol),))
-    find_datasets_atac = _cached_scfind_get(
-        'findDatasets', (('gene_list', gene_symbol), ('modality', 'ATAC'))
+    find_datasets = _safe_scfind_get(
+        'findDatasets', (('gene_list', gene_symbol),), empty_find_datasets
+    )
+    find_datasets_atac = _safe_scfind_get(
+        'findDatasets', (('gene_list', gene_symbol), ('modality', 'ATAC')), empty_find_datasets
     )
 
     def cell_types_of(signatures):
@@ -803,6 +916,29 @@ def _build_cell_type_detail(clid):
     clid_to_label_map = _build_clid_to_label_map()
     cell_types = clid_to_label_map.get(clid, [])
     info = _extract_cell_types_info(cell_types)
+    # The RNA + ATAC markers and datasets are independent, so fetch them concurrently rather than one
+    # after another (the four sequential scfind ops were the bulk of the first-load latency). Each op
+    # degrades to empty on a scfind error so a single failing modality's `cellTypeMarkers` request
+    # (e.g. a high-cardinality cell type scfind rejects) no longer 500s the whole page.
+    results = _gather(
+        {
+            'markers': (
+                lambda: _cell_type_markers_for(cell_types).get('findGeneSignatures', []),
+                [],
+            ),
+            'markers_atac': (
+                lambda: _cell_type_markers_for(cell_types, modality='ATAC').get(
+                    'findGeneSignatures', []
+                ),
+                [],
+            ),
+            'datasets_for_cell_types': (lambda: _build_datasets_for_cell_types(cell_types), {}),
+            'datasets_for_cell_types_atac': (
+                lambda: _build_datasets_for_cell_types(cell_types, modality='ATAC'),
+                {},
+            ),
+        }
+    )
     return {
         'cell_types': cell_types,
         'name': info['name'],
@@ -810,15 +946,80 @@ def _build_cell_type_detail(clid):
         'variants': info['variants'],
         # RNA + ATAC markers and datasets so the page's biomarker and dataset modality tabs (with
         # counts) come from this single aggregate fetch.
-        'markers': _cell_type_markers_for(cell_types).get('findGeneSignatures', []),
-        'markers_atac': _cell_type_markers_for(cell_types, modality='ATAC').get(
-            'findGeneSignatures', []
-        ),
-        'datasets_for_cell_types': _build_datasets_for_cell_types(cell_types),
-        'datasets_for_cell_types_atac': _build_datasets_for_cell_types(
-            cell_types, modality='ATAC'
-        ),
+        **results,
     }
+
+
+def _is_valid_organ_name(organ):
+    """Guard the organ route param (and its cache key) to letters/spaces/hyphens."""
+    return bool(organ) and len(organ) <= 50 and all(ch.isalpha() or ch in ' -' for ch in organ)
+
+
+def _build_organ_cell_types(organ):
+    """Assemble the organ page's cell-types table payload: the organ's cell types (per modality),
+    each with its matched datasets, CLID, and Cell Ontology description.
+
+    Mirrors `_build_cell_type_detail`: RNA + ATAC are bundled so the table's RNAseq/ATACseq modality
+    tabs (with counts) come from this single aggregate fetch. The per-modality "total indexed
+    datasets" denominator is intentionally NOT bundled — the page derives it client-side from the
+    indexed-datasets route crossed with Elasticsearch (for organ scoping).
+    """
+    label_to_clid_map = _build_label_to_clid_map()
+
+    def organ_labels(modality=None):
+        # scfind cell type names are organ-prefixed (e.g. "Kidney.epithelial cell"); match the prefix
+        # case-insensitively, mirroring the client's useCellTypesOfOrgan.
+        return [
+            ct
+            for ct in _get_all_cell_type_names(modality)
+            if '.' in ct
+            and ct.split('.', 1)[0].lower() == organ.lower()
+            and _format_cell_type_name(ct) != 'other'
+        ]
+
+    rna_labels = organ_labels()
+    atac_labels = organ_labels('ATAC')
+
+    # The two modalities' per-cell-type findDatasetForCellType fan-outs are independent — run them
+    # concurrently (each degrades to empty on a scfind error rather than failing the whole table).
+    results = _gather(
+        {
+            'rna': (lambda: _build_datasets_for_cell_types(rna_labels), {}),
+            'atac': (lambda: _build_datasets_for_cell_types(atac_labels, modality='ATAC'), {}),
+        }
+    )
+
+    # Cell Ontology descriptions for every CLID across both modalities, fetched once from UBKG.
+    label_to_clid = {
+        label: label_to_clid_map.get(label, []) for label in set(rna_labels) | set(atac_labels)
+    }
+    descriptions = _build_cell_type_descriptions(label_to_clid)
+
+    def rows(labels, datasets_for_cell_types):
+        result = []
+        for label in labels:
+            clids = label_to_clid_map.get(label, [])
+            clid = clids[0] if clids else None
+            result.append(
+                {
+                    'name': label.split('.', 1)[1],
+                    'clid': clid,
+                    'description': descriptions.get(clid) if clid else None,
+                    'datasets': (datasets_for_cell_types.get(label) or {}).get('datasets', []),
+                }
+            )
+        return result
+
+    return {
+        'cell_types': rows(rna_labels, results['rna']),
+        'cell_types_atac': rows(atac_labels, results['atac']),
+    }
+
+
+def _organ_cell_types(organ):
+    """Return the organ cell-types payload, built once and shared across worker processes."""
+    cache_key = f'organ-cell-types-{organ.lower().replace(" ", "-")}'
+    return _get_or_build_map(cache_key, lambda: _build_organ_cell_types(organ))
 
 
 @blueprint.route('/scfind/label-to-clid-map.json')
@@ -1353,3 +1554,14 @@ def cell_type_detail(clid):
         return jsonify(_build_cell_type_detail(clid))
     except Exception as e:
         return _handle_scfind_error(e, 'cell type detail')
+
+
+@blueprint.route('/scfind/organ-cell-types/<organ>.json')
+def organ_cell_types(organ):
+    """Aggregate scfind data for the organ detail page's cell-types table."""
+    try:
+        if not _is_valid_organ_name(organ):
+            return jsonify({'error': 'Invalid organ.'}), 400
+        return jsonify(_organ_cell_types(organ))
+    except Exception as e:
+        return _handle_scfind_error(e, 'organ cell types')

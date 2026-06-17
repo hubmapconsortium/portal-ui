@@ -14,7 +14,7 @@ import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import ScFindDatasetsSection from './ScFindDatasetsSection';
 
 const relevantPages = [
-  { link: '/search/biomarkers-cell-types', children: 'Molecular & Cellular Query' },
+  { link: '/search/biomarkers-cell-types', children: 'Biomarker and Cell Type Search' },
   { link: '/cell-types', children: 'Cell Types' },
   { link: '/biomarkers', children: 'Biomarkers' },
 ];

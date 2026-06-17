@@ -64,6 +64,10 @@ export function useCellTypesList() {
             clid: clids.CLIDs?.[0],
             // Unified organ list across modalities (drives both display and the organ filter).
             organs: [...new Set([...rnaOrgans, ...atacOrgans])],
+            // Per-modality organ lists so each Data Type chip queries only the organs that actually
+            // have this cell type for that modality (rather than the unified set).
+            rnaOrgans,
+            atacOrgans,
             hasScfindRna: rnaCellTypeLabels.has(label),
             hasScfindAtac: atacCellTypeLabels.has(label),
             rnaDatasetCount: datasetCounts[label]?.rna ?? 0,

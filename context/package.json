@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "1.46.5",
+  "version": "1.47.3",
   "dependencies": {
     "@dagrejs/dagre": "^1.1.5",
     "@datapunt/matomo-tracker-js": "^0.5.1",
@@ -141,6 +141,10 @@
   "lint-staged": {
     "app/static/js/**/*.{js,jsx,ts,tsx}": [
       "eslint --cache --cache-location node_modules/.cache/eslint/"
+    ],
+    "**/*.py": [
+      "uv run ruff check --fix",
+      "uv run ruff format"
     ]
   },
   "msw": {

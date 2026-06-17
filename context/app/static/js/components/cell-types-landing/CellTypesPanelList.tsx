@@ -51,7 +51,16 @@ export default function CellTypesPanelList() {
         children: <CellTypesPanel.Header />,
       },
       ...sortedCellTypes.map(
-        ({ label, organs: cellTypeOrgans, clid, description, rnaDatasetCount, atacDatasetCount }) => ({
+        ({
+          label,
+          organs: cellTypeOrgans,
+          rnaOrgans,
+          atacOrgans,
+          clid,
+          description,
+          rnaDatasetCount,
+          atacDatasetCount,
+        }) => ({
           panelKey: label,
           noPadding: true,
           noHover: false,
@@ -61,6 +70,8 @@ export default function CellTypesPanelList() {
               href={clid ? `/cell-types/${clid}` : undefined}
               clid={clid}
               organs={cellTypeOrgans}
+              rnaOrgans={rnaOrgans}
+              atacOrgans={atacOrgans}
               description={description}
               rnaDatasetCount={rnaDatasetCount}
               atacDatasetCount={atacDatasetCount}

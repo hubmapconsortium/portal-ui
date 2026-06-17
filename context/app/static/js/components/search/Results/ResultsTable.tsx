@@ -37,8 +37,10 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Enti
   }
 
   const fieldValue = getByPath(source, field);
-  const isHubmapIdField = field.split('.').pop() === 'hubmap_id';
-  const displayInfo = isHubmapIdField ? getHuBMAPIdDisplayInfo(source) : {};
+  const lastFieldSegment = field.split('.').pop();
+  // The status column also needs retracted info to render the retracted icon/color for emphasis.
+  const needsDisplayInfo = lastFieldSegment === 'hubmap_id' || lastFieldSegment === 'mapped_status';
+  const displayInfo = needsDisplayInfo ? getHuBMAPIdDisplayInfo(source) : {};
   const isSupport = source.entity_type === 'Support';
 
   return (

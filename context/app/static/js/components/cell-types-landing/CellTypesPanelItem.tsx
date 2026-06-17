@@ -190,6 +190,8 @@ interface CellTypePanelItemProps {
   href?: string;
   clid?: string;
   organs: string[];
+  rnaOrgans: string[];
+  atacOrgans: string[];
   description?: string;
   rnaDatasetCount: number;
   atacDatasetCount: number;
@@ -241,16 +243,20 @@ function OrganList({ organs }: { organs: string[] }) {
  */
 function DataTypeChips({
   name,
-  organs,
+  rnaOrgans,
+  atacOrgans,
   rnaDatasetCount,
   atacDatasetCount,
 }: {
   name: string;
-  organs: string[];
+  rnaOrgans: string[];
+  atacOrgans: string[];
   rnaDatasetCount: number;
   atacDatasetCount: number;
 }) {
-  const cellTypes = useMemo(() => organs.map((organ) => `${organ}.${name}`), [organs, name]);
+  // Each modality's chip queries only the organs that have this cell type for that modality.
+  const rnaCellTypes = useMemo(() => rnaOrgans.map((organ) => `${organ}.${name}`), [rnaOrgans, name]);
+  const atacCellTypes = useMemo(() => atacOrgans.map((organ) => `${organ}.${name}`), [atacOrgans, name]);
 
   const trackClick = (modality: string) =>
     trackEvent({
@@ -271,7 +277,7 @@ function DataTypeChips({
           variant="outlined"
           clickable
           component="a"
-          href={getSearchURL({ entityType: 'Dataset', scFindParams: { cellTypes } })}
+          href={getSearchURL({ entityType: 'Dataset', scFindParams: { cellTypes: rnaCellTypes } })}
           label={`RNAseq (${rnaDatasetCount})`}
           onClick={() => trackClick('RNAseq')}
         />
@@ -285,7 +291,7 @@ function DataTypeChips({
           variant="outlined"
           clickable
           component="a"
-          href={getSearchURL({ entityType: 'Dataset', scFindParams: { cellTypes, modality: 'ATAC' } })}
+          href={getSearchURL({ entityType: 'Dataset', scFindParams: { cellTypes: atacCellTypes, modality: 'ATAC' } })}
           label={`ATACseq (${atacDatasetCount})`}
           onClick={() => trackClick('ATACseq')}
         />
@@ -302,6 +308,8 @@ function CellTypesPanelItem({
   clid,
   description,
   organs,
+  rnaOrgans,
+  atacOrgans,
   rnaDatasetCount,
   atacDatasetCount,
 }: CellTypePanelItemProps) {
@@ -350,7 +358,8 @@ function CellTypesPanelItem({
       <BodyCell {...desktopConfig.dataType} aria-label="Data Type">
         <DataTypeChips
           name={name}
-          organs={organs}
+          rnaOrgans={rnaOrgans}
+          atacOrgans={atacOrgans}
           rnaDatasetCount={rnaDatasetCount}
           atacDatasetCount={atacDatasetCount}
         />

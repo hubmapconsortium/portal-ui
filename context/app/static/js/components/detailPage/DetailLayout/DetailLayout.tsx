@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
+import UnpublishedRounded from '@mui/icons-material/UnpublishedRounded';
 
 import { leftRouteBoundaryID, rightRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
@@ -13,6 +14,8 @@ type DetailLayoutProps = {
   isLoading?: boolean;
   tableOfContentsTitle?: string;
   tableOfContentsTitleHref?: string;
+  /** When true, every table-of-contents section icon is replaced with the retracted status icon. */
+  isRetracted?: boolean;
 } & PropsWithChildren &
   (
     | {
@@ -77,8 +80,9 @@ function DetailLayout({
   customCurrentSection,
   tableOfContentsTitle,
   tableOfContentsTitleHref,
+  isRetracted = false,
 }: DetailLayoutProps) {
-  const items = customTableOfContents || getSections(sections);
+  const items = customTableOfContents || getSections(sections, isRetracted ? UnpublishedRounded : undefined);
 
   return (
     <>

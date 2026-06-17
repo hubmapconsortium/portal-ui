@@ -32,6 +32,7 @@ import { getEntityCreationInfo } from 'js/helpers/functions';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import AnnotationSummary from 'js/components/detailPage/AnnotationSummary';
 
+import { useRetractedDatasetContext } from 'js/components/detailPage/RetractedDatasetContext';
 import useProcessedDataStore from '../store';
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
@@ -270,7 +271,9 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
     shouldIncludeParent(sectionDataset) ? parent.uuid : undefined,
   );
 
-  const defaultExpanded = sectionDataset.status === 'Published';
+  const { isRetracted } = useRetractedDatasetContext();
+  // On retracted datasets, all processed datasets start collapsed.
+  const defaultExpanded = !isRetracted && sectionDataset.status === 'Published';
 
   return (
     <ProcessedDatasetContextProvider

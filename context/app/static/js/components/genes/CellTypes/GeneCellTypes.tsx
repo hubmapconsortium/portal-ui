@@ -390,6 +390,15 @@ export default function CellTypes() {
     [atacCellTypes],
   );
 
+  // Focus the modality that actually has cell types: an ATAC-only gene (no RNAseq cell types) opens
+  // on the ATACseq tab so its organ-scoped queries hit the ATAC index, instead of an empty RNAseq
+  // tab. When both modalities have data, the user's tab selection is respected.
+  const effectiveTabIndex = useMemo(() => {
+    if (rnaCount === 0 && atacCount > 0) return 1;
+    if (atacCount === 0 && rnaCount > 0) return 0;
+    return openTabIndex;
+  }, [openTabIndex, rnaCount, atacCount]);
+
   return (
     <CollapsibleDetailPageSection
       id={cellTypesSection.id}
@@ -404,14 +413,14 @@ export default function CellTypes() {
         The table can be filtered by organs and available for download for further analysis. Filtering by organ will
         recompute the results and recalculate statistical values accordingly.
       </Description>
-      <Tabs value={openTabIndex} onChange={handleTabChange}>
-        <Tab label={`RNAseq (${rnaCount})`} index={0} />
-        <Tab label={`ATACseq (${atacCount})`} index={1} disabled={!isLoading && atacCount === 0} />
+      <Tabs value={effectiveTabIndex} onChange={handleTabChange}>
+        <Tab label={`RNAseq (${rnaCount} Cell Types)`} index={0} disabled={!isLoading && rnaCount === 0} />
+        <Tab label={`ATACseq (${atacCount} Cell Types)`} index={1} disabled={!isLoading && atacCount === 0} />
       </Tabs>
-      <TabPanel value={openTabIndex} index={0}>
+      <TabPanel value={effectiveTabIndex} index={0}>
         <CellTypesTable modality={undefined} />
       </TabPanel>
-      <TabPanel value={openTabIndex} index={1}>
+      <TabPanel value={effectiveTabIndex} index={1}>
         <CellTypesTable modality="ATAC" />
       </TabPanel>
     </CollapsibleDetailPageSection>

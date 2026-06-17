@@ -8,6 +8,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
+import { useRetractedDatasetContext } from 'js/components/detailPage/RetractedDatasetContext';
 
 import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useInView } from 'react-intersection-observer';
@@ -28,6 +29,7 @@ function LoadingFallback() {
 
 export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const { defaultExpanded, dataset, sectionDataset, conf, isLoading } = useProcessedDatasetContext();
+  const { isRetracted } = useRetractedDatasetContext();
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   const track = useTrackEntityPageEvent();
   const [threshold, setThreshold] = useState(inViewThreshold);
@@ -79,6 +81,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   return (
     <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
       <PrimaryColorAccordion
+        $retracted={isRetracted}
         defaultExpanded={defaultExpanded}
         expanded={isExpanded}
         onChange={(_, expanded) => {
@@ -95,8 +98,16 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
           <Typography variant="subtitle1" color="inherit" component="h4">
             {sectionDataset.pipeline ?? sectionDataset.assay_display_name[0]}
           </Typography>
-          <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
-            <StatusIcon status={sectionDataset.status} noColor={isExpanded} tooltip />
+          <Typography
+            variant="body1"
+            ml="auto"
+            component="div"
+            display="flex"
+            alignItems="center"
+            gap={1}
+            sx={isRetracted ? { color: 'retracted.main' } : undefined}
+          >
+            <StatusIcon status={sectionDataset.status} noColor={!isRetracted && isExpanded} tooltip />
             {dataset?.hubmap_id}
           </Typography>
         </AccordionSummary>
