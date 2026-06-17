@@ -1,5 +1,6 @@
 import { DonorIcon } from 'js/shared-styles/icons';
-import { buildTableData, sortEntities, TableEntity } from './utils';
+import { Dataset, Donor, Sample } from 'js/components/types';
+import { buildTableData, getTableEntities, sortEntities, TableEntity } from './utils';
 
 /**
  * =============================================================================
@@ -66,6 +67,7 @@ test('should remove keys that are not metadata', () => {
 const baseEntity = {
   icon: DonorIcon,
   tableRows: [],
+  hasMetadata: false,
 };
 
 const current: TableEntity = {
@@ -142,4 +144,50 @@ test('should return only the current entity if no other entities are present', (
       uuid: 'current',
     }),
   ).toEqual([current]);
+});
+
+/**
+ * =============================================================================
+ *                                getTableEntities
+ * =============================================================================
+ */
+
+test('should retain entities without metadata and flag them via hasMetadata', () => {
+  const datasetEntity = {
+    entity_type: 'Dataset',
+    uuid: 'dataset',
+    hubmap_id: 'HBM.dataset',
+    assay_display_name: ['Histology'],
+    metadata: { assay_type: 'Histology' },
+  } as unknown as Dataset;
+
+  // Organs carry no sample-level metadata of their own.
+  const organEntity = {
+    entity_type: 'Sample',
+    uuid: 'organ',
+    hubmap_id: 'HBM.organ',
+    sample_category: 'organ',
+  } as unknown as Sample;
+
+  const donorEntity = {
+    entity_type: 'Donor',
+    uuid: 'donor',
+    hubmap_id: 'HBM.donor',
+    mapped_metadata: { sex: 'Female' },
+  } as unknown as Donor;
+
+  const result = getTableEntities({
+    entities: [datasetEntity, organEntity, donorEntity],
+    uuid: 'dataset',
+    fieldDescriptions: {},
+  });
+
+  // No entity is dropped, even when it lacks metadata.
+  expect(result.map((e) => e.uuid).sort()).toEqual(['dataset', 'donor', 'organ']);
+
+  const byUuid = Object.fromEntries(result.map((e) => [e.uuid, e]));
+  expect(byUuid.dataset.hasMetadata).toBe(true);
+  expect(byUuid.donor.hasMetadata).toBe(true);
+  expect(byUuid.organ.hasMetadata).toBe(false);
+  expect(byUuid.organ.tableRows).toEqual([]);
 });
