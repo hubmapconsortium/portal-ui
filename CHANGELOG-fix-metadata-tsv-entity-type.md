@@ -1,0 +1,1 @@
+- Fix the metadata TSV export reporting `entity_type` as `N/A` for entities whose legacy `metadata` lacked the field, by requesting the always-present top-level `entity_type` from Elasticsearch.
