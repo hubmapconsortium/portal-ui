@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.47.4 - 2026-06-18
+
+- Regenerated data overview page counts for portal paper.
+
+
+
 ## v1.47.3 - 2026-06-16
 
 - Add recent updates to the homepage "What's New" timeline: scFind ATAC-seq search, Say & See Mode (BETA), the dedicated Integrated Maps page, annotated object type dataset search, new step-by-step tutorials, and the HuBMAP Data Portal preprint.
