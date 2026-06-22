@@ -845,7 +845,7 @@ wheels = [
 
 [[package]]
 name = "hubmap-portal-ui"
-version = "1.47.5"
+version = "1.47.6"
 source = { editable = "." }
 dependencies = [
     { name = "flask", extra = ["async"] },
