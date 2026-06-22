@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.47.5 - 2026-06-22
+
+- Exclude superseded datasets from all data overview sections.
+- Include donors with unknown sex in counts in panels b/c.
+
+
+
 ## v1.47.4 - 2026-06-18
 
 - Regenerated data overview page counts for portal paper.
