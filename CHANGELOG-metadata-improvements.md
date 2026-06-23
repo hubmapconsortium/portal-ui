@@ -1,0 +1,2 @@
+- On dataset pages, surface every ancestor in the metadata section: ancestors without their own metadata now appear as disabled tabs with a tooltip explaining that metadata is not available for that entity, instead of being omitted.
+- On sample pages, the metadata section now shows the sample and its donor (and any intermediate ancestor samples) as separate tabs rather than collapsing to a single donor-only table, with disabled tabs for entities that lack metadata.
