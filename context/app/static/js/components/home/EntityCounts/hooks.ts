@@ -9,7 +9,7 @@ const entityCountsQuery: SearchRequest = {
       // using `must_not` for this allows entities without a mapped status to still be matched
       must_not: {
         terms: {
-          'mapped_status.keyword': ['Invalid', 'Error', 'New', 'Processing', 'Submitted'],
+          'mapped_status.keyword': ['Invalid', 'Error', 'New', 'Processing', 'Submitted', 'Retracted'],
         },
       },
       // Nested musts are necessary to form an AND of ORs (i.e. a MUST of SHOULDs)
