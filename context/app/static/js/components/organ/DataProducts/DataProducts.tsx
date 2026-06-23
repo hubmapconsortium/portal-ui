@@ -69,6 +69,52 @@ export function sumCellCounts(counts: Record<string, number> | undefined): numbe
 
 type TrackHandler = (args: { action: string; assayName: string; tissueType: string; fileName?: string }) => void;
 
+function DownloadCell({
+  href,
+  action,
+  fileSizeBytes,
+  cellTypeCounts,
+  assayName,
+  tissueType,
+  onTrack,
+}: {
+  href: string;
+  action: string;
+  fileSizeBytes: number;
+  cellTypeCounts?: Record<string, number>;
+  assayName: string;
+  tissueType: string;
+  onTrack?: TrackHandler;
+}) {
+  const fileName = getFileName(href, 'none');
+  if (!fileName) {
+    return <TableCell>—</TableCell>;
+  }
+  const totalCells = sumCellCounts(cellTypeCounts);
+  const cellTypes = Object.keys(cellTypeCounts ?? {}).length;
+  return (
+    <TableCell>
+      <Stack spacing={0.5}>
+        <InternalLink
+          href={href}
+          onClick={() => {
+            onTrack?.({ action, assayName, fileName, tissueType });
+          }}
+          variant="body2"
+        >
+          {fileName}
+        </InternalLink>
+        <Typography variant="caption" color="text.secondary">
+          {fileSizeBytes > 0 ? prettyBytes(fileSizeBytes) : '—'}
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          {totalCells > 0 ? `${totalCells.toLocaleString()} cells, ${cellTypes.toLocaleString()} cell types` : ''}
+        </Typography>
+      </Stack>
+    </TableCell>
+  );
+}
+
 export function DataProductsTable({
   dataProducts,
   onTrack,
@@ -143,14 +189,8 @@ export function DataProductsTable({
       raw_file_size_bytes,
       processed_file_sizes_bytes,
     }) => {
-      const rawFileName = getFileName(download_raw, 'none');
-      const processedFileName = getFileName(download, 'none');
       const { assayName } = assay;
       const { tissuetype: tissueType } = tissue;
-      const totalRawCells = sumCellCounts(raw_cell_type_counts);
-      const rawCellTypes = Object.keys(raw_cell_type_counts ?? {}).length;
-      const totalProcessedCells = sumCellCounts(processed_cell_type_counts);
-      const processedCellTypes = Object.keys(processed_cell_type_counts ?? {}).length;
 
       const normalizedName = tissueType
         .replace(/\s*\((left|right)\)\s*/i, '')
@@ -175,58 +215,26 @@ export function DataProductsTable({
             )}
           </TableCell>
           <TableCell>{assayName}</TableCell>
+          <DownloadCell
+            href={download_raw}
+            action="Download Raw"
+            fileSizeBytes={raw_file_size_bytes}
+            cellTypeCounts={raw_cell_type_counts}
+            assayName={assayName}
+            tissueType={tissueType}
+            onTrack={onTrack}
+          />
+          <DownloadCell
+            href={download}
+            action="Download Processed"
+            fileSizeBytes={processed_file_sizes_bytes}
+            cellTypeCounts={processed_cell_type_counts}
+            assayName={assayName}
+            tissueType={tissueType}
+            onTrack={onTrack}
+          />
           <TableCell>
-            <Stack spacing={0.5}>
-              <InternalLink
-                href={download_raw}
-                onClick={() => {
-                  onTrack?.({ action: 'Download Raw', assayName, fileName: rawFileName, tissueType });
-                }}
-                variant="body2"
-              >
-                {rawFileName}
-              </InternalLink>
-              {rawFileName && rawFileName !== 'none' && (
-                <>
-                  <Typography variant="caption" color="text.secondary">
-                    {raw_file_size_bytes > 0 ? prettyBytes(raw_file_size_bytes) : '—'}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {totalRawCells > 0
-                      ? `${totalRawCells.toLocaleString()} cells, ${rawCellTypes.toLocaleString()} cell types`
-                      : ''}
-                  </Typography>
-                </>
-              )}
-            </Stack>
-          </TableCell>
-          <TableCell>
-            <Stack spacing={0.5}>
-              <InternalLink
-                href={download}
-                onClick={() => {
-                  onTrack?.({ action: 'Download Processed', assayName, fileName: processedFileName, tissueType });
-                }}
-                variant="body2"
-              >
-                {processedFileName}
-              </InternalLink>
-              {processedFileName && processedFileName !== 'none' && (
-                <>
-                  <Typography variant="caption" color="text.secondary">
-                    {processed_file_sizes_bytes > 0 ? prettyBytes(processed_file_sizes_bytes) : '—'}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {totalProcessedCells > 0
-                      ? `${totalProcessedCells.toLocaleString()} cells, ${processedCellTypes.toLocaleString()} cell types`
-                      : ''}
-                  </Typography>
-                </>
-              )}
-            </Stack>
-          </TableCell>
-          <TableCell>
-            {shiny_app && (
+            {shiny_app ? (
               <OutboundIconLink
                 href={shiny_app}
                 onClick={() => {
@@ -236,6 +244,8 @@ export function DataProductsTable({
               >
                 View
               </OutboundIconLink>
+            ) : (
+              '—'
             )}
           </TableCell>
           <TableCell>{format(new Date(creation_time), 'yyyy-MM-dd')}</TableCell>
