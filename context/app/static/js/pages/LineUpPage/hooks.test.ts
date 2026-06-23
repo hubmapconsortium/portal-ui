@@ -65,6 +65,7 @@ const createMockEntity = (sourceOverrides = {}) =>
 const sourceFields = [
   'uuid',
   'hubmap_id',
+  'entity_type',
   'published_timestamp',
   'last_modified_timestamp',
   'created_timestamp',
@@ -242,6 +243,27 @@ describe('useLineupEntities', () => {
       // Should not contain nested field names
       expect(result.current.allKeys).not.toContain('metadata');
       expect(result.current.allKeys).not.toContain('organ_donor_data');
+    });
+
+    it('should source entity_type from the top-level field, not nested metadata', () => {
+      // metadata here intentionally omits entity_type, reproducing real entities
+      // whose legacy metadata lacked the field. The top-level value must still win.
+      const mockEntities = [createMockEntity({ metadata: { assay_type: 'scRNA-seq' } })];
+
+      mockUseSearchHits.mockReturnValue({
+        searchHits: mockEntities,
+        isLoading: false,
+        totalHitsCount: 1,
+      });
+
+      const { result } = renderHook(() =>
+        useLineupEntities({
+          entityType: 'Dataset',
+        }),
+      );
+
+      expect(result.current.allKeys).toContain('entity_type');
+      expect(result.current.entities[0].entity_type).toBe('dataset');
     });
 
     it('should filter entities based on selectedKeys', () => {

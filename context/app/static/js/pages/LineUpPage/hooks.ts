@@ -66,6 +66,10 @@ const nestedFields = [
 const _source = [
   'uuid',
   'hubmap_id',
+  // Top-level entity_type is always present; request it explicitly so the column
+  // isn't sourced from the legacy `metadata.entity_type` field (absent in many
+  // submissions), which left it reading 'N/A' for those entities.
+  'entity_type',
   'published_timestamp',
   'last_modified_timestamp',
   'created_timestamp',
