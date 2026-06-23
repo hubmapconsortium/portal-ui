@@ -360,6 +360,31 @@ def test_langfuse_environment_maps_host(client, host, expected):
         assert routes_udi._langfuse_environment() == expected
 
 
+def test_real_orchestrator_trace_uses_installed_langfuse_api(client, monkeypatch):
+    """Build the orchestrator with the REAL UDIAgent + langfuse (not mocked)
+    and open a trace span, exercising the actual installed langfuse API.
+
+    This is the guard that would have caught the langfuse v3->v4 break: if
+    UDIAgent and the resolved langfuse version disagree on the span API
+    (start_as_current_span vs start_as_current_observation) or the Langfuse()
+    constructor kwargs, entering trace() raises and this test fails. It costs
+    nothing and needs no live langfuse — no OpenAI request is made, and
+    LANGFUSE_TRACING_ENABLED=false skips span export (the real methods are
+    still dispatched, so a future rename/signature change still fails here).
+    """
+    monkeypatch.setenv('LANGFUSE_TRACING_ENABLED', 'false')
+    client.application.config['LANGFUSE_PUBLIC_KEY'] = 'pk-lf-fake'
+    client.application.config['LANGFUSE_SECRET_KEY'] = 'sk-lf-fake'
+    client.application.config['LANGFUSE_BASE_URL'] = 'http://localhost:1'
+    client.application.config['OPENAI_API_KEY'] = 'sk-fake-not-used'
+
+    with client.application.test_request_context():
+        orchestrator = routes_udi._get_hubmap_orchestrator()
+        # The real failure mode: opening a trace against installed langfuse.
+        with orchestrator.agent.trace(session_id='ci-smoke'):
+            pass
+
+
 def test_yac_completions_propagates_flask_session_id_to_langfuse(client, mocker):
     """When langfuse is configured, the run is wrapped in a context that tags
     traces with a stable session_id derived from the Flask session, and the
