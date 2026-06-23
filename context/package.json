@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "1.47.6",
+  "version": "1.47.7",
   "dependencies": {
     "@dagrejs/dagre": "^1.1.5",
     "@datapunt/matomo-tracker-js": "^0.5.1",
