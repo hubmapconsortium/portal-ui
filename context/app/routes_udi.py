@@ -163,6 +163,22 @@ def _langfuse_session_context():
     return propagate_attributes(session_id=_get_session_id())
 
 
+# Maps the portal's deployed hostname to the environment name reported to
+# langfuse. Anything not listed (localhost, 127.0.0.1, branch deploys, etc.)
+# falls back to 'localhost'.
+_LANGFUSE_ENVIRONMENTS = {
+    'portal.hubmapconsortium.org': 'prod',
+    'portal-prod.test.hubmapconsortium.org': 'prod-test',
+    'portal.test.hubmapconsortium.org': 'test',
+    'portal.dev.hubmapconsortium.org': 'dev',
+}
+
+
+def _langfuse_environment():
+    host = request.host.split(':')[0]  # strip any :port
+    return _LANGFUSE_ENVIRONMENTS.get(host, 'localhost')
+
+
 def _build_orchestrator(openai_api_key):
     agent = UDIAgent(
         gpt_model_name=current_app.config.get('UDI_GPT_MODEL_NAME', 'gpt-5.4'),
@@ -170,6 +186,7 @@ def _build_orchestrator(openai_api_key):
         langfuse_public_key=current_app.config.get('LANGFUSE_PUBLIC_KEY'),
         langfuse_secret_key=current_app.config.get('LANGFUSE_SECRET_KEY'),
         langfuse_host=current_app.config.get('LANGFUSE_BASE_URL'),
+        langfuse_environment=_langfuse_environment(),
     )
     return Orchestrator(agent=agent)
 

@@ -339,6 +339,25 @@ def test_build_orchestrator_forwards_langfuse_config(client, mocker):
     assert captured['langfuse_secret_key'] == 'sk-lf-test'
     assert captured['langfuse_host'] == 'https://langfuse.example.com'
     assert captured['openai_api_key'] == 'sk-server'
+    # test_request_context() serves host 'localhost', which maps to 'localhost'.
+    assert captured['langfuse_environment'] == 'localhost'
+
+
+@pytest.mark.parametrize(
+    'host, expected',
+    [
+        ('portal.hubmapconsortium.org', 'prod'),
+        ('portal-prod.test.hubmapconsortium.org', 'prod-test'),
+        ('portal.test.hubmapconsortium.org', 'test'),
+        ('portal.dev.hubmapconsortium.org', 'dev'),
+        ('localhost:5000', 'localhost'),
+        ('127.0.0.1:5001', 'localhost'),
+        ('some-branch-deploy.hubmapconsortium.org', 'localhost'),
+    ],
+)
+def test_langfuse_environment_maps_host(client, host, expected):
+    with client.application.test_request_context(base_url=f'http://{host}'):
+        assert routes_udi._langfuse_environment() == expected
 
 
 def test_yac_completions_propagates_flask_session_id_to_langfuse(client, mocker):
