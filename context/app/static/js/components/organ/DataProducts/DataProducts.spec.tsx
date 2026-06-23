@@ -128,6 +128,12 @@ describe('DataProductsTable', () => {
     expect(screen.getByText('2025-12-16')).toBeInTheDocument();
   });
 
+  test('renders em dashes for empty entries', () => {
+    // Neither product has a Shiny App; Heart has no processed download → 3 empty cells.
+    render(<DataProductsTable dataProducts={products} />);
+    expect(screen.getAllByText('—')).toHaveLength(3);
+  });
+
   describe('standalone mode', () => {
     const organs: Record<string, OrganFile> = {
       kidney: {

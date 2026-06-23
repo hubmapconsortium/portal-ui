@@ -176,57 +176,57 @@ export function DataProductsTable({
           </TableCell>
           <TableCell>{assayName}</TableCell>
           <TableCell>
-            <Stack spacing={0.5}>
-              <InternalLink
-                href={download_raw}
-                onClick={() => {
-                  onTrack?.({ action: 'Download Raw', assayName, fileName: rawFileName, tissueType });
-                }}
-                variant="body2"
-              >
-                {rawFileName}
-              </InternalLink>
-              {rawFileName && rawFileName !== 'none' && (
-                <>
-                  <Typography variant="caption" color="text.secondary">
-                    {raw_file_size_bytes > 0 ? prettyBytes(raw_file_size_bytes) : '—'}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {totalRawCells > 0
-                      ? `${totalRawCells.toLocaleString()} cells, ${rawCellTypes.toLocaleString()} cell types`
-                      : ''}
-                  </Typography>
-                </>
-              )}
-            </Stack>
+            {rawFileName ? (
+              <Stack spacing={0.5}>
+                <InternalLink
+                  href={download_raw}
+                  onClick={() => {
+                    onTrack?.({ action: 'Download Raw', assayName, fileName: rawFileName, tissueType });
+                  }}
+                  variant="body2"
+                >
+                  {rawFileName}
+                </InternalLink>
+                <Typography variant="caption" color="text.secondary">
+                  {raw_file_size_bytes > 0 ? prettyBytes(raw_file_size_bytes) : '—'}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {totalRawCells > 0
+                    ? `${totalRawCells.toLocaleString()} cells, ${rawCellTypes.toLocaleString()} cell types`
+                    : ''}
+                </Typography>
+              </Stack>
+            ) : (
+              '—'
+            )}
           </TableCell>
           <TableCell>
-            <Stack spacing={0.5}>
-              <InternalLink
-                href={download}
-                onClick={() => {
-                  onTrack?.({ action: 'Download Processed', assayName, fileName: processedFileName, tissueType });
-                }}
-                variant="body2"
-              >
-                {processedFileName}
-              </InternalLink>
-              {processedFileName && processedFileName !== 'none' && (
-                <>
-                  <Typography variant="caption" color="text.secondary">
-                    {processed_file_sizes_bytes > 0 ? prettyBytes(processed_file_sizes_bytes) : '—'}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {totalProcessedCells > 0
-                      ? `${totalProcessedCells.toLocaleString()} cells, ${processedCellTypes.toLocaleString()} cell types`
-                      : ''}
-                  </Typography>
-                </>
-              )}
-            </Stack>
+            {processedFileName ? (
+              <Stack spacing={0.5}>
+                <InternalLink
+                  href={download}
+                  onClick={() => {
+                    onTrack?.({ action: 'Download Processed', assayName, fileName: processedFileName, tissueType });
+                  }}
+                  variant="body2"
+                >
+                  {processedFileName}
+                </InternalLink>
+                <Typography variant="caption" color="text.secondary">
+                  {processed_file_sizes_bytes > 0 ? prettyBytes(processed_file_sizes_bytes) : '—'}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {totalProcessedCells > 0
+                    ? `${totalProcessedCells.toLocaleString()} cells, ${processedCellTypes.toLocaleString()} cell types`
+                    : ''}
+                </Typography>
+              </Stack>
+            ) : (
+              '—'
+            )}
           </TableCell>
           <TableCell>
-            {shiny_app && (
+            {shiny_app ? (
               <OutboundIconLink
                 href={shiny_app}
                 onClick={() => {
@@ -236,6 +236,8 @@ export function DataProductsTable({
               >
                 View
               </OutboundIconLink>
+            ) : (
+              '—'
             )}
           </TableCell>
           <TableCell>{format(new Date(creation_time), 'yyyy-MM-dd')}</TableCell>
