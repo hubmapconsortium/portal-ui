@@ -1,1 +1,0 @@
-- Tag UDI agent langfuse traces with a stable `session_id` so multiple completions from the same conversation are grouped together as one session in langfuse. Same-origin/authenticated callers derive it from the Flask session; cross-origin BYOK callers can supply their own via the new `X-Conversation-Id` request header.

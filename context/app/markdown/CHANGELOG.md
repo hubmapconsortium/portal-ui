@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.47.7 - 2026-06-23
+
+- Display em dashes for empty Raw Download, Processed Download, and Shiny App entries in the Integrated Maps table.
+- Fix the metadata TSV export reporting `entity_type` as `N/A` for entities whose legacy `metadata` lacked the field, by requesting the always-present top-level `entity_type` from Elasticsearch.
+- On dataset pages, surface every ancestor in the metadata section: ancestors without their own metadata now appear as disabled tabs with a tooltip explaining that metadata is not available for that entity, instead of being omitted.
+- On sample pages, the metadata section now shows the sample and its donor (and any intermediate ancestor samples) as separate tabs rather than collapsing to a single donor-only table, with disabled tabs for entities that lack metadata.
+- Exclude retracted datasets from homepage counts.
+- Tag UDI agent langfuse traces with a stable `session_id` so multiple completions from the same conversation are grouped together as one session in langfuse. Same-origin/authenticated callers derive it from the Flask session; cross-origin BYOK callers can supply their own via the new `X-Conversation-Id` request header.
+
+
+
 ## v1.47.5 - 2026-06-22
 
 - Exclude superseded datasets from all data overview sections.
