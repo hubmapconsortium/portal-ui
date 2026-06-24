@@ -25,7 +25,6 @@ import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelatio
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { useEntitiesData } from 'js/hooks/useEntityData';
-import { hasMetadata } from 'js/helpers/metadata';
 import SnareSeq2Alert from 'js/components/detailPage/multi-assay/SnareSeq2Alert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import PublicationsSection from 'js/components/detailPage/PublicationsSection';
@@ -72,9 +71,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   } = assayMetadata;
 
   const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
-  const entitiesWithMetadata = entities.filter((e) =>
-    hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
-  );
 
   useRedirectAlert();
 
@@ -152,7 +148,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
             >
               <SummaryDataChildren mapped_data_types={mapped_data_types} origin_samples={origin_samples} />
             </Summary>
-            <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+            <MetadataSection entities={entities} shouldDisplay={shouldDisplaySection.metadata} />
             <ProcessedData shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
             <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
             <ProvSection shouldDisplay={shouldDisplaySection.provenance} additionalUuids={processedDatasetUuids} />

@@ -34,6 +34,9 @@ export interface TableEntity {
   tableRows: TableRows;
   entity_type: ESEntityType;
   hubmap_id: string;
+  // Whether the entity has any displayable metadata. Entities without metadata
+  // are still surfaced (as disabled tabs) so the lineage is visible.
+  hasMetadata: boolean;
 }
 
 interface sortEntitiesProps {
@@ -98,20 +101,22 @@ function getTableEntities({ entities, uuid, fieldDescriptions }: getTableEntitie
   const tableEntities = entities.map((entity) => {
     // Generate a label with the HuBMAP ID if there are multiple samples with the same category
     const label = getEntityLabel({ entity, sampleCategoryCounts });
+    const tableRows = buildTableData(
+      getMetadata({
+        targetEntityType: entity.entity_type,
+        currentEntity: entity,
+      }),
+      fieldDescriptions,
+      { hubmap_id: entity.hubmap_id, label },
+    );
     return {
       uuid: entity.uuid,
       label: label ?? '',
       icon: getEntityIcon(entity),
-      tableRows: buildTableData(
-        getMetadata({
-          targetEntityType: entity.entity_type,
-          currentEntity: entity,
-        }),
-        fieldDescriptions,
-        { hubmap_id: entity.hubmap_id, label },
-      ),
+      tableRows,
       entity_type: entity.entity_type,
       hubmap_id: entity.hubmap_id,
+      hasMetadata: tableRows.length > 0,
     };
   });
 

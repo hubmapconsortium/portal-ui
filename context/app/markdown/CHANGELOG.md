@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.47.7 - 2026-06-23
+
+- Display em dashes for empty Raw Download, Processed Download, and Shiny App entries in the Integrated Maps table.
+- Fix the metadata TSV export reporting `entity_type` as `N/A` for entities whose legacy `metadata` lacked the field, by requesting the always-present top-level `entity_type` from Elasticsearch.
+- On dataset pages, surface every ancestor in the metadata section: ancestors without their own metadata now appear as disabled tabs with a tooltip explaining that metadata is not available for that entity, instead of being omitted.
+- On sample pages, the metadata section now shows the sample and its donor (and any intermediate ancestor samples) as separate tabs rather than collapsing to a single donor-only table, with disabled tabs for entities that lack metadata.
+- Exclude retracted datasets from homepage counts.
+- Tag UDI agent langfuse traces with a stable `session_id` so multiple completions from the same conversation are grouped together as one session in langfuse. Same-origin/authenticated callers derive it from the Flask session; cross-origin BYOK callers can supply their own via the new `X-Conversation-Id` request header.
+
+
+
+## v1.47.5 - 2026-06-22
+
+- Exclude superseded datasets from all data overview sections.
+- Include donors with unknown sex in counts in panels b/c.
+
+
+
+## v1.47.4 - 2026-06-18
+
+- Regenerated data overview page counts for portal paper.
+
+
+
 ## v1.47.3 - 2026-06-16
 
 - Add recent updates to the homepage "What's New" timeline: scFind ATAC-seq search, Say & See Mode (BETA), the dedicated Integrated Maps page, annotated object type dataset search, new step-by-step tutorials, and the HuBMAP Data Portal preprint.

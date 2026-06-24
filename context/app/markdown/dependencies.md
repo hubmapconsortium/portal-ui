@@ -19,8 +19,8 @@ portal-visualization[full]>=0.5.5
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
-udiagent>=0.2.3
-udiagent[langfuse]>=0.2.3
+udiagent>=0.2.6
+udiagent[langfuse]>=0.2.6
 whitenoise[brotli]>=6.9.0
 
 # Development dependencies
