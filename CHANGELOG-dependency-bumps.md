@@ -1,0 +1,1 @@
+- Bumped dependencies to resolve Dependabot alerts: `uuid` (^14), `pytest` (>=9.0.3), `lxml` (>=6.1.0); pnpm overrides for `piscina`, `lodash`, `minimatch`; uv constraints for `aiohttp`, `tornado`, `cryptography`, `pyjwt`, `idna`, `urllib3`, `pillow`.
