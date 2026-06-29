@@ -131,6 +131,8 @@ function SelectableHeaderCells() {
   const sortField = useSearchStore((state) => state.sortField);
   const defaultQuery = useSearchStore((state) => state.defaultQuery);
   const defaultQueryWithAncestorFilter = useSearchStore((state) => state.defaultQueryWithAncestorFilter);
+  const latestRevisionFilter = useSearchStore((state) => state.latestRevisionFilter);
+  const includeSupersededEntities = useSearchStore((state) => state.includeSupersededEntities);
   const type = useSearchStore((state) => state.type);
 
   const mappings = useESmapping();
@@ -145,11 +147,16 @@ function SelectableHeaderCells() {
     sortField,
     defaultQuery,
     defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
     mappings,
     buildAggregations: false,
   });
 
-  const { allSearchIDs, isLoading } = useAllSearchIDs(query);
+  // buildQuery already encodes the latest-revision/superseded logic (matching the table),
+  // so skip addRestrictionsToQuery, which would re-exclude next_revision_uuid/sub_status docs
+  // even when "Include superseded entities" is on.
+  const { allSearchIDs, isLoading } = useAllSearchIDs(query, { useDefaultQuery: false });
 
   const devSearch = isDevSearch(type);
 
