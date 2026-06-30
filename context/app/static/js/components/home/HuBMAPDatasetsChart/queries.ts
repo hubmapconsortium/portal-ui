@@ -133,12 +133,12 @@ const assayTypeQuery: SearchRequest = {
 };
 const donorSexQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggs(['donor.mapped_metadata.sex.keyword', 'donor_sex']),
+  ...getOrganTypesCompositeAggs(['donor_demographics.sex.keyword', 'donor_sex']),
 };
 
 const donorRaceQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggs(['donor.mapped_metadata.race.keyword', 'donor_race']),
+  ...getOrganTypesCompositeAggs(['donor_demographics.race.keyword', 'donor_race']),
 };
 
 const analyteClassQuery: SearchRequest = {

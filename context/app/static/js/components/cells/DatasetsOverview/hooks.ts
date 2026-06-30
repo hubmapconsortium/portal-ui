@@ -142,7 +142,7 @@ export interface DatasetsOverviewDigest {
 
 const agesAgg: AggregationsAggregationContainer = {
   histogram: {
-    field: 'donor.mapped_metadata.age_value',
+    field: 'donor_demographics.age_value',
     interval: 10,
     min_doc_count: 0,
   },
@@ -157,7 +157,7 @@ const agesAgg: AggregationsAggregationContainer = {
 
 const racesAgg: AggregationsAggregationContainer = {
   terms: {
-    field: 'donor.mapped_metadata.race.keyword',
+    field: 'donor_demographics.race.keyword',
   },
   aggs: {
     donor_count: {
@@ -170,7 +170,7 @@ const racesAgg: AggregationsAggregationContainer = {
 
 const sexesAgg: AggregationsAggregationContainer = {
   terms: {
-    field: 'donor.mapped_metadata.sex.keyword',
+    field: 'donor_demographics.sex.keyword',
   },
   aggs: {
     donor_count: {
@@ -220,12 +220,12 @@ const aggs: Record<string, AggregationsAggregationContainer> = {
   },
   average_donor_age: {
     avg: {
-      field: 'donor.mapped_metadata.age_value',
+      field: 'donor_demographics.age_value',
     },
   },
   donors_by_sex: {
     terms: {
-      field: 'donor.mapped_metadata.sex.keyword',
+      field: 'donor_demographics.sex.keyword',
     },
     aggs: {
       ...commonAggs,
@@ -236,7 +236,7 @@ const aggs: Record<string, AggregationsAggregationContainer> = {
   },
   donors_by_age: {
     histogram: {
-      field: 'donor.mapped_metadata.age_value',
+      field: 'donor_demographics.age_value',
       interval: 10,
       min_doc_count: 0,
     },
@@ -249,7 +249,7 @@ const aggs: Record<string, AggregationsAggregationContainer> = {
   },
   donors_by_race: {
     terms: {
-      field: 'donor.mapped_metadata.race.keyword',
+      field: 'donor_demographics.race.keyword',
     },
     aggs: {
       ...commonAggs,

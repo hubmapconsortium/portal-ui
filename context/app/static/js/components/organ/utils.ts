@@ -101,13 +101,13 @@ function getSearchURL({
           },
         }),
       ...(donorRace && {
-        'donor.mapped_metadata.race': {
+        'donor_demographics.race': {
           type: 'TERM',
           values: [donorRace],
         },
       }),
       ...(donorSex && {
-        'donor.mapped_metadata.sex': {
+        'donor_demographics.sex': {
           type: 'TERM',
           values: [donorSex],
         },

@@ -170,7 +170,17 @@ export function buildQuery({
         if (filterHasValues({ filter })) {
           if (filter?.values?.min !== undefined && filter?.values?.max) {
             // TODO: consider using zod in filterHasValues for validation.
-            draft[portalField] = esb.rangeQuery(portalField).gte(filter.values.min).lte(filter.values.max);
+            // Overlap, not point-membership. As two separate range clauses, *different*
+            // array elements can satisfy each bound, so a multi-donor field like
+            // donor_demographics.age_value=[1.42, 78] matches a 20-60 query (span overlaps).
+            // A single combined gte/lte range needs one element inside [min,max] and would
+            // miss it. For scalar fields (dates, single value) this is equivalent.
+            draft[portalField] = esb
+              .boolQuery()
+              .must([
+                esb.rangeQuery(portalField).gte(filter.values.min),
+                esb.rangeQuery(portalField).lte(filter.values.max),
+              ]);
           }
         }
       }

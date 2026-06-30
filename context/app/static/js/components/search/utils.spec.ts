@@ -191,3 +191,31 @@ describe('buildQuery defaultQueryWithAncestorFilter handling', () => {
     expect(serialized).not.toContain('"Support"');
   });
 });
+
+describe('buildQuery range filter overlap', () => {
+  test('emits two separate range clauses so a multi-value span overlaps the query range', () => {
+    const result = buildQuery({
+      filters: {
+        'donor_demographics.age_value': { type: 'RANGE', values: { min: 20, max: 60 } },
+      },
+      facets: {},
+      search: '',
+      size: 18,
+      searchFields: ['all_text'],
+      sourceFields: { table: ['hubmap_id'] },
+      sortField: { field: 'last_modified_timestamp', direction: 'desc' },
+      defaultQuery,
+      latestRevisionFilter,
+      includeSupersededEntities: false,
+      mappings,
+      buildAggregations: false,
+    });
+
+    const serialized = JSON.stringify(result);
+    // gte and lte live in separate range clauses (different array elements may satisfy each)...
+    expect(serialized).toContain('"donor_demographics.age_value":{"gte":20}');
+    expect(serialized).toContain('"donor_demographics.age_value":{"lte":60}');
+    // ...not a single combined range, which would require one element inside [20, 60].
+    expect(serialized).not.toContain('"gte":20,"lte":60');
+  });
+});
