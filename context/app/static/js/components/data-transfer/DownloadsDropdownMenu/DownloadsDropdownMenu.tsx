@@ -7,7 +7,7 @@ import { useEventCallback } from '@mui/material/utils';
 
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
+import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import BulkDownloadDialog from 'js/components/bulkDownload/BulkDownloadDialog';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
@@ -25,7 +25,7 @@ interface DownloadsDropdownMenuProps {
 }
 
 function BulkDownloadMenuItem({ defaultUUIDs, analyticsCategory }: Omit<DownloadsDropdownMenuProps, 'type'>) {
-  const { openDialog, isOpen } = useBulkDownloadDialog();
+  const { openDialog, isOpen } = useBulkDownloadStore();
   const { selectedRows, deselectRows } = useSelectableTableStore();
 
   const actualSelection = useMemo(
@@ -33,11 +33,11 @@ function BulkDownloadMenuItem({ defaultUUIDs, analyticsCategory }: Omit<Download
     [selectedRows, defaultUUIDs],
   );
 
-  const restrictedRows = useGetRestrictedDatasets(actualSelection);
+  const { restrictedRows, isLoading } = useGetRestrictedDatasets(actualSelection);
 
   const allRestricted = useMemo(() => {
-    return actualSelection.size > 0 && actualSelection.size === restrictedRows.length;
-  }, [actualSelection, restrictedRows]);
+    return actualSelection.size > 0 && !isLoading && actualSelection.size === restrictedRows.length;
+  }, [actualSelection, restrictedRows, isLoading]);
 
   const onClick = useEventCallback(() => {
     if (analyticsCategory) {
@@ -52,7 +52,7 @@ function BulkDownloadMenuItem({ defaultUUIDs, analyticsCategory }: Omit<Download
   const label = actualSelection.size === 1 ? 'Dataset' : 'Datasets';
 
   const menuItem = (
-    <MenuItem onClick={onClick} disabled={allRestricted}>
+    <MenuItem onClick={onClick} disabled={allRestricted || isLoading}>
       <ListItemIcon>
         <Download fontSize="small" color="primary" />
       </ListItemIcon>

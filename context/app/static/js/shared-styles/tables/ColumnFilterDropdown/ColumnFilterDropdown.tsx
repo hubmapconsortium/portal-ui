@@ -105,28 +105,31 @@ function ColumnFilterDropdown({
           </Typography>
         </Box>
         <Divider />
+        {/* Menu's keyboard nav iterates via React.Children, which treats a
+            Fragment as a single opaque child -- so we render the loaded
+            items as an array (React.Children flattens those) instead of
+            wrapping in <>...</>. */}
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
             <CircularProgress size={20} />
           </Box>
         ) : (
-          <>
-            <MenuItem onClick={handleClearAll} disabled={selectedCount === 0}>
+          [
+            <MenuItem key="clear-all" onClick={handleClearAll} disabled={selectedCount === 0}>
               <Typography variant="body2" color="text.secondary">
-                Clear all filters {selectedCount > 0 && <>({selectedCount})</>}
+                Clear all filters {selectedCount > 0 && `(${selectedCount})`}
               </Typography>
-            </MenuItem>
-            <Divider />
-            {values.length === 0 ? (
-              <MenuItem disabled>
-                <Typography variant="body2" color="text.secondary">
-                  No values available
-                </Typography>
-              </MenuItem>
-            ) : (
-              values.map(({ value, count }) => {
-                const isSelected = selectedValues.has(value);
-                return (
+            </MenuItem>,
+            <Divider key="divider" />,
+            ...(values.length === 0
+              ? [
+                  <MenuItem key="empty" disabled>
+                    <Typography variant="body2" color="text.secondary">
+                      No values available
+                    </Typography>
+                  </MenuItem>,
+                ]
+              : values.map(({ value, count }) => (
                   <MenuItem
                     key={value}
                     onClick={() => {
@@ -134,7 +137,13 @@ function ColumnFilterDropdown({
                     }}
                     dense
                   >
-                    <Checkbox checked={isSelected} size="small" sx={{ mr: 1, p: 0 }} tabIndex={-1} disableRipple />
+                    <Checkbox
+                      checked={selectedValues.has(value)}
+                      size="small"
+                      sx={{ mr: 1, p: 0 }}
+                      tabIndex={-1}
+                      disableRipple
+                    />
                     <ListItemText
                       primary={
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -157,10 +166,8 @@ function ColumnFilterDropdown({
                       }
                     />
                   </MenuItem>
-                );
-              })
-            )}
-          </>
+                ))),
+          ]
         )}
       </Menu>
     </>

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react-webpack5';
+import type { Meta, StoryObj } from '@storybook/react';
 import { http, passthrough } from 'msw';
 import useCellTypeCountForDataset, { CellTypeCountForDatasetParams } from './useCellTypeCountForDataset';
 
@@ -36,7 +36,7 @@ type Story = StoryObj<typeof CellTypeCountsControl>;
 
 export const CellTypeCountForDataset: Story = {
   args: {
-    dataset: 'HBM444.DXLZ.643',
+    dataset: 'fe0ded5fc0355c95239f9c040dd31e99',
   },
 };
 

@@ -14,6 +14,17 @@ export function getCombinedDatasetStatus({ sub_status, status }: { sub_status?: 
   return sub_status ?? status;
 }
 
+/** The `status` / `mapped_status` value that marks a dataset as retracted. */
+export const RETRACTED_STATUS = 'Retracted';
+
+/**
+ * Whether a dataset is retracted. Retraction is a dedicated `status`/`mapped_status` value
+ * (not the unrelated `sub_status` field).
+ */
+export function isRetractedStatus(status?: string): boolean {
+  return status?.toUpperCase() === RETRACTED_STATUS.toUpperCase();
+}
+
 export function getDonorMetadata(entity: Donor | Sample | Dataset) {
   if (isDonor(entity)) {
     return entity?.mapped_metadata ?? {};

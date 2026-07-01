@@ -14,6 +14,7 @@ interface ViewIndexedDatasetsButtonProps {
   isLoading?: boolean;
   trackingInfo?: EventInfo;
   context?: string;
+  endIcon?: boolean;
   sx?: SxProps;
 }
 
@@ -22,6 +23,7 @@ export function ViewDatasetsButton({
   isLoading = false,
   trackingInfo,
   context = 'Datasets',
+  endIcon = false,
   sx,
 }: ViewIndexedDatasetsButtonProps) {
   return (
@@ -31,7 +33,8 @@ export function ViewDatasetsButton({
       ) : (
         <OutlinedButton
           color="primary"
-          startIcon={<entityIconMap.Dataset />}
+          startIcon={endIcon ? undefined : <entityIconMap.Dataset />}
+          endIcon={endIcon ? <entityIconMap.Dataset /> : undefined}
           href={getSearchURL({
             entityType: 'Dataset',
             scFindParams,

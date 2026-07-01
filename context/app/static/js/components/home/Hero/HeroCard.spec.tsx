@@ -4,7 +4,7 @@ import BubbleChartRoundedIcon from '@mui/icons-material/BubbleChartRounded';
 import { trackEvent } from 'js/helpers/trackers';
 import HeroCard from './HeroCard';
 
-const mockTrackEvent = trackEvent as jest.MockedFunction<typeof trackEvent>;
+const mockTrackEvent = vi.mocked(trackEvent);
 
 const baseProps = {
   icon: BubbleChartRoundedIcon,
@@ -54,14 +54,14 @@ describe('HeroCard', () => {
   });
 
   it('calls onCardHover when the mouse enters the card', () => {
-    const onCardHover = jest.fn();
+    const onCardHover = vi.fn();
     render(<HeroCard {...baseProps} onCardHover={onCardHover} />);
     fireEvent.mouseEnter(screen.getByRole('link'));
     expect(onCardHover).toHaveBeenCalledTimes(1);
   });
 
   it('calls onCardHoverEnd when the mouse leaves the card', () => {
-    const onCardHoverEnd = jest.fn();
+    const onCardHoverEnd = vi.fn();
     render(<HeroCard {...baseProps} onCardHoverEnd={onCardHoverEnd} />);
     fireEvent.mouseLeave(screen.getByRole('link'));
     expect(onCardHoverEnd).toHaveBeenCalledTimes(1);

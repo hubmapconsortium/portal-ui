@@ -11,7 +11,7 @@ function expectLabelsPresent() {
   });
 }
 
-jest.mock('js/components/detailPage/DetailPageSection', () => ({
+vi.mock('js/components/detailPage/DetailPageSection', () => ({
   CollapsibleDetailPageSection: ({ title, children }: { title: string; children: React.ReactNode }) => (
     <div>
       <div>{title}</div>

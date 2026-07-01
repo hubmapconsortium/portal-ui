@@ -1,15 +1,16 @@
+import { type MockedFunction } from 'vitest';
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import { TutorialCard } from './TutorialList';
 import { Tutorial } from './types';
 
 // Mock the utils module
-jest.mock('./utils', () => ({
-  tutorialIsReady: jest.fn(),
+vi.mock('./utils', () => ({
+  tutorialIsReady: vi.fn(),
 }));
 
 // Mock the InternalLink component
-jest.mock('js/shared-styles/Links', () => ({
+vi.mock('js/shared-styles/Links', () => ({
   InternalLink: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
     <a href={href} {...props}>
       {children}
@@ -18,7 +19,7 @@ jest.mock('js/shared-styles/Links', () => ({
 }));
 
 // Mock SelectableCard component
-jest.mock('js/shared-styles/cards/SelectableCard', () => ({
+vi.mock('js/shared-styles/cards/SelectableCard', () => ({
   __esModule: true,
   default: ({
     title,
@@ -45,8 +46,8 @@ jest.mock('js/shared-styles/cards/SelectableCard', () => ({
   ),
 }));
 
-jest.mock('./types', () => ({
-  ...jest.requireActual('./types'),
+vi.mock('./types', async () => ({
+  ...(await vi.importActual<typeof import('./types')>('./types')),
   TUTORIALS: [
     {
       title: 'Featured Tutorial 1',
@@ -87,7 +88,7 @@ jest.mock('./types', () => ({
 // Import after mocking
 import { tutorialIsReady } from './utils';
 
-const mockTutorialIsReady = tutorialIsReady as jest.MockedFunction<typeof tutorialIsReady>;
+const mockTutorialIsReady = tutorialIsReady as MockedFunction<typeof tutorialIsReady>;
 
 describe('TutorialCard', () => {
   beforeEach(() => {

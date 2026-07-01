@@ -1,10 +1,11 @@
+import { type MockedFunction } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent } from 'test-utils/functions';
 import TutorialsSearchBar from './TutorialsSearchBar';
 import { TutorialLandingPageContextProvider } from './TutorialLandingPageContext';
 
 // Mock the SearchBar component
-jest.mock('js/shared-styles/inputs/SearchBar', () => ({
+vi.mock('js/shared-styles/inputs/SearchBar', () => ({
   __esModule: true,
   default: ({
     placeholder,
@@ -31,12 +32,12 @@ jest.mock('js/shared-styles/inputs/SearchBar', () => ({
 }));
 
 // Mock the trackEvent function
-jest.mock('js/helpers/trackers', () => ({
-  trackEvent: jest.fn(),
+vi.mock('js/helpers/trackers', () => ({
+  trackEvent: vi.fn(),
 }));
 
-jest.mock('./types', () => ({
-  ...jest.requireActual('./types'),
+vi.mock('./types', async () => ({
+  ...(await vi.importActual<typeof import('./types')>('./types')),
   TUTORIALS: [
     {
       title: 'Data Tutorial',
@@ -59,7 +60,7 @@ jest.mock('./types', () => ({
 
 // Import the mocked function
 import { trackEvent } from 'js/helpers/trackers';
-const mockTrackEvent = trackEvent as jest.MockedFunction<typeof trackEvent>;
+const mockTrackEvent = trackEvent as MockedFunction<typeof trackEvent>;
 
 describe('TutorialsSearchBar', () => {
   const renderWithProvider = () => {

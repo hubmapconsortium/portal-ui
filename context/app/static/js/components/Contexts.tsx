@@ -4,16 +4,17 @@ import { AllEntities } from './types';
 // TODO: Continue populating these types as we find more of the uses of the flask data and app contexts
 
 export interface FlaskDataContextType {
-  redirected_from: string;
+  redirected_from?: string;
   entity: AllEntities; // Update to handle different entities.
   [key: string]: unknown;
-  title: string; // preview page title
+  title?: string; // preview page title
   vis_lifted_uuid?: string;
   redirected?: boolean;
   redirectedFromId?: string | null;
   redirectedFromPipeline?: string | null;
   siblingIds?: string[];
   integrated?: boolean; // true if the entity is an integrated dataset
+  cell_type_name?: string; // cell type name seeded server-side for the detail page title
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');
@@ -28,7 +29,7 @@ export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataCo
  */
 export const useFlaskDataContext = () => useContext(FlaskDataContext);
 
-interface AppContextType {
+export interface AppContextType {
   assetsEndpoint: string;
   entityEndpoint: string;
   baseElasticsearchEndpoint: string;
@@ -43,6 +44,8 @@ interface AppContextType {
   scFindIndexVersion?: string;
   ukvEndpoint: string;
   dataProductsEndpoint: string;
+  xmodalityEndpoint: string;
+  gatewayEndpoint: string;
   protocolsClientToken: string;
   isAuthenticated: boolean;
   isWorkspacesUser: boolean;
@@ -52,6 +55,7 @@ interface AppContextType {
   userLastName?: string;
   userGlobusId?: string;
   userGlobusAffiliation?: string;
+  enableSaySeeMode?: boolean;
   [key: string]: unknown;
 }
 

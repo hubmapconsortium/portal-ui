@@ -1,4 +1,5 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useProvenanceStore, ProvenanceStoreType } from '../ProvContext';
 import { ESEntityType } from 'js/components/types';
@@ -25,7 +26,7 @@ function ProvGraph({ provData, uuid: currentPageUuid }: ProvGraphProps) {
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
 
-  const { selectedNodeId, nodes } = useProvenanceStore(useProvenanceStoreSelector);
+  const { selectedNodeId, nodes } = useProvenanceStore(useShallow(useProvenanceStoreSelector));
 
   // Find the selected node to display in detail panel
   const selectedNode = nodes.find((node) => node.id === selectedNodeId);

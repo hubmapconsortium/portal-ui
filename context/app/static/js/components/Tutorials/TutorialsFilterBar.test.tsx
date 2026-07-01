@@ -5,7 +5,7 @@ import { TutorialLandingPageContextProvider } from './TutorialLandingPageContext
 import { TUTORIAL_CATEGORIES } from './types';
 
 // Mock SelectableChip component
-jest.mock('js/shared-styles/chips/SelectableChip', () => ({
+vi.mock('js/shared-styles/chips/SelectableChip', () => ({
   __esModule: true,
   default: ({
     label,
@@ -24,8 +24,8 @@ jest.mock('js/shared-styles/chips/SelectableChip', () => ({
   ),
 }));
 
-jest.mock('./types', () => ({
-  ...jest.requireActual('./types'),
+vi.mock('./types', async () => ({
+  ...(await vi.importActual<typeof import('./types')>('./types')),
   TUTORIALS: [
     {
       title: 'Data Tutorial',

@@ -11,6 +11,7 @@ interface VisualizationWrapperProps {
   vitData: object | object[] | undefined;
   trackingInfo: EventWithOptionalCategory;
   uuid?: string;
+  hubmapId?: string;
   hasNotebook?: boolean;
   shouldDisplayHeader?: boolean;
   hasBeenMounted?: boolean;
@@ -19,12 +20,14 @@ interface VisualizationWrapperProps {
   hideTheme?: boolean;
   hideShare?: boolean;
   title?: React.ReactNode;
+  renderBelowFooter?: (args: { activeConfigName?: string }) => React.ReactNode;
 }
 
 function VisualizationWrapper({
   vitData,
   trackingInfo,
   uuid,
+  hubmapId,
   hasNotebook = false,
   shouldDisplayHeader = true,
   hasBeenMounted,
@@ -33,6 +36,7 @@ function VisualizationWrapper({
   hideTheme = false,
   hideShare = false,
   title,
+  renderBelowFooter,
 }: VisualizationWrapperProps) {
   const containerStyles = useMemo(
     () => ({
@@ -50,6 +54,7 @@ function VisualizationWrapper({
           <Visualization
             vitData={vitData}
             uuid={uuid}
+            hubmapId={hubmapId}
             hasNotebook={hasNotebook}
             shouldDisplayHeader={shouldDisplayHeader}
             shouldMountVitessce={hasBeenMounted}
@@ -58,6 +63,7 @@ function VisualizationWrapper({
             hideTheme={hideTheme}
             hideShare={hideShare}
             title={title}
+            renderBelowFooter={renderBelowFooter}
           />
         </Suspense>
       </VisualizationErrorBoundary>

@@ -63,6 +63,7 @@ import GeneIconSVG from 'assets/svg/gene.svg';
 import OrganSVG from 'assets/svg/organ.svg';
 import EuiSVG from 'assets/svg/eui.svg';
 import AsctBSVG from 'assets/svg/asct+b.svg';
+import VitessceSVG from 'assets/svg/vitessce.svg';
 import MenuBookRounded from '@mui/icons-material/MenuBookRounded';
 
 type CustomIconProps<T extends ElementType> = {
@@ -195,6 +196,8 @@ const OrganIcon = withIconStyles(createSvgIcon(<OrganSVG />, 'Organ'));
 
 const EUIIcon = withIconStyles(createSvgIcon(<EuiSVG />, 'EUI'));
 
+const VitessceIcon = withIconStyles(createSvgIcon(<VitessceSVG />, 'Vitessce'));
+
 const AsctBIcon = withIconStyles(createSvgIcon(<AsctBSVG />, 'ASCT+B'));
 
 export {
@@ -257,4 +260,5 @@ export {
   ChecklistIcon,
   FeaturedIcon,
   TutorialIcon,
+  VitessceIcon,
 };

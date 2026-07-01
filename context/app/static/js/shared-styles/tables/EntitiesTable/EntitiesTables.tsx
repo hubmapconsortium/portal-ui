@@ -29,6 +29,7 @@ interface EntitiesTablesProps<Doc extends Entity> {
   onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   resetSelectionOnTabChange?: boolean;
   isLoading?: boolean;
+  useDefaultQuery?: boolean;
 }
 
 /**
@@ -44,8 +45,10 @@ function TabChangeSelectionHandler({ openTabIndex }: { openTabIndex: number }) {
   return <></>;
 }
 
-interface EntitiesTableTabsProps<Doc extends Entity>
-  extends Pick<ReturnType<typeof useTabs>, 'openTabIndex' | 'handleTabChange'> {
+interface EntitiesTableTabsProps<Doc extends Entity> extends Pick<
+  ReturnType<typeof useTabs>,
+  'openTabIndex' | 'handleTabChange'
+> {
   entities: EntitiesTabTypes<Doc>[];
   isLoading?: boolean;
   totalHitsCounts?: number[];
@@ -58,7 +61,24 @@ interface EntitiesTableTabProps<Doc extends Entity> extends EntitiesTabTypes<Doc
   isLoading?: boolean;
 }
 function EntitiesTableTabInternal<Doc extends Entity>(
-  { entityType, tabTooltipText, totalHitsCount = 0, index, isLoading, entities, ...rest }: EntitiesTableTabProps<Doc>,
+  {
+    entityType,
+    tabTooltipText,
+    totalHitsCount = 0,
+    index,
+    isLoading,
+    entities,
+    // Table-only fields from EntitiesTabTypes -- strip so they don't leak
+    // onto <Tab>'s DOM via the spread below.
+    query: _query,
+    columns: _columns,
+    expandedContent: _expandedContent,
+    estimatedExpandedRowHeight: _estimatedExpandedRowHeight,
+    reverseExpandIndicator: _reverseExpandIndicator,
+    headerActions: _headerActions,
+    initialSortState: _initialSortState,
+    ...rest
+  }: EntitiesTableTabProps<Doc>,
   ref: React.Ref<HTMLDivElement>,
 ) {
   const Icon = entityIconMap?.[entityType];
@@ -95,7 +115,7 @@ function EntitiesTableTabInternal<Doc extends Entity>(
 // React doesn't support generic forwardRef, so we need to cast it
 const EntitiesTableTab = forwardRef(EntitiesTableTabInternal) as <Doc extends Entity>(
   props: EntitiesTableTabProps<Doc> & { ref?: React.Ref<HTMLDivElement> },
-) => React.ReactElement;
+) => React.ReactElement<unknown>;
 
 function EntitiesTablesTabs<Doc extends Entity>({
   openTabIndex,
@@ -121,7 +141,8 @@ function EntitiesTablesTabs<Doc extends Entity>({
 }
 
 interface EntitiesTablesBodiesProps<Doc extends Entity>
-  extends EntitiesTableTabsProps<Doc>,
+  extends
+    EntitiesTableTabsProps<Doc>,
     Pick<
       EntitiesTablesProps<Doc>,
       | 'emptyAlert'
@@ -131,6 +152,7 @@ interface EntitiesTablesBodiesProps<Doc extends Entity>
       | 'trackingInfo'
       | 'disabledIDs'
       | 'isSelectable'
+      | 'useDefaultQuery'
     > {}
 
 function EntitiesTablesBodies<Doc extends Entity>({
@@ -139,6 +161,7 @@ function EntitiesTablesBodies<Doc extends Entity>({
   emptyAlert,
   isLoading,
   totalHitsCounts,
+  useDefaultQuery,
   ...restSharedProps
 }: EntitiesTablesBodiesProps<Doc>) {
   return (
@@ -174,7 +197,7 @@ function EntitiesTablesBodies<Doc extends Entity>({
 
         return (
           <TabPanel key={entityType} value={openTabIndex} index={i}>
-            <EntityTable query={query} {...entityTableProps} {...restSharedProps} />
+            <EntityTable query={query} useDefaultQuery={useDefaultQuery} {...entityTableProps} {...restSharedProps} />
           </TabPanel>
         );
       })}
@@ -187,12 +210,14 @@ function EntitiesTables<Doc extends Entity>({
   entities,
   resetSelectionOnTabChange = false,
   isLoading,
+  useDefaultQuery = true,
   ...rest
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
   const { totalHitsCounts, isLoading: isLoadingHitCounts } = useSearchTotalHitsCounts(
     entities.map(({ query }) => query),
+    { useDefaultQuery },
   ) as {
     totalHitsCounts: number[];
     isLoading: boolean;
@@ -212,6 +237,7 @@ function EntitiesTables<Doc extends Entity>({
         handleTabChange={handleTabChange}
         isLoading={isLoading || isLoadingHitCounts}
         totalHitsCounts={totalHitsCounts}
+        useDefaultQuery={useDefaultQuery}
         {...rest}
       />
       {resetSelectionOnTabChange && <TabChangeSelectionHandler openTabIndex={openTabIndex} />}

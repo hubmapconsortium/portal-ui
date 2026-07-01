@@ -125,14 +125,15 @@ function useDatasetsAutocomplete({
   });
 
   const uuids = unfilteredSearchHits.map((hit) => hit._source?.uuid).filter(Boolean);
-  const { accessibleDatasets } = useDatasetsAccess(uuids);
+  const { accessibleDatasets, isLoading } = useDatasetsAccess(uuids);
 
-  const searchHits = !accessibleDatasets
-    ? []
-    : unfilteredSearchHits.filter((hit) => {
-        const uuid = hit._source?.uuid;
-        return uuid && accessibleDatasets[uuid]?.access_allowed;
-      });
+  const searchHits =
+    !accessibleDatasets || isLoading
+      ? []
+      : unfilteredSearchHits.filter((hit) => {
+          const uuid = hit._source?.uuid;
+          return uuid && accessibleDatasets[uuid]?.access_allowed;
+        });
 
   return {
     inputValue,

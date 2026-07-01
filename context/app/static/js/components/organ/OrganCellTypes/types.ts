@@ -1,5 +1,7 @@
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
+
 export interface CellTypesTableProps {
-  cellTypes: string[];
+  modality?: SCFindModality;
 }
 
 export interface CellTypeRowProps {

@@ -10,16 +10,15 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
 const FacetAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  flexDirection: 'column',
-  padding: theme.spacing(0.5, 0.5, 0.5, 1),
+  padding: theme.spacing(0.5, 0, 0.5, 0.5),
+  width: '100%',
 }));
 
 const FacetAccordionSummary = styled(AccordionSummary)<{ $position: 'inner' | 'outer' }>(({ $position, theme }) => ({
-  padding: $position === 'outer' ? theme.spacing(0.5, 0) : 0,
+  padding: $position === 'outer' ? theme.spacing(0.5, 0.625, 0.5, 0) : theme.spacing(0, 0.625, 0, 0.5),
   justifyContent: 'left',
   width: '100%',
   '& > *': {
-    flexGrow: 'unset',
     padding: 0,
     margin: 0,
     color: '#000',
@@ -78,6 +77,8 @@ const HierarchicalAccordionSummary = styled(AccordionSummary)({
   },
 });
 
+const RIGHT_CHEVRON_SIZE = '26px';
+
 export {
   StyledCheckBoxBlankIcon,
   StyledCheckBoxIcon,
@@ -89,4 +90,5 @@ export {
   StyledStack,
   FormLabelText,
   HierarchicalAccordionSummary,
+  RIGHT_CHEVRON_SIZE,
 };

@@ -9,7 +9,7 @@ import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useMolecularDataQueryFormState } from '../hooks';
-import { usePathwayAutocompleteQuery, useSelectedPathwayParticipants } from './hooks';
+import { usePathwayAutocompleteQuery } from './hooks';
 import { PreserveWhiteSpaceListItem } from './styles';
 import { AutocompleteResult } from './types';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
@@ -23,8 +23,6 @@ export default function GenePathwaysAutocomplete() {
     control,
     defaultValue: null,
   });
-
-  useSelectedPathwayParticipants();
 
   const handleSubstringChange = useEventCallback(({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
     setSubstring(value);
@@ -44,20 +42,23 @@ export default function GenePathwaysAutocomplete() {
       title="pathway"
       loading={isLoading}
       getOptionLabel={(option) => option.full}
-      renderOption={(props, option: AutocompleteResult) => (
-        <PreserveWhiteSpaceListItem {...props} key={option.full}>
-          <span>{option.pre}</span>
-          <b>{option.match}</b>
-          <span>{option.post}</span>
-          {'tags' in option && option?.tags && (
-            <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
-              {option.tags.map((tag) => (
-                <Chip key={tag} label={tag} size="small" variant="filled" />
-              ))}
-            </Box>
-          )}
-        </PreserveWhiteSpaceListItem>
-      )}
+      renderOption={(props, option: AutocompleteResult) => {
+        const { key: _propsKey, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
+        return (
+          <PreserveWhiteSpaceListItem key={option.full} {...rest}>
+            <span>{option.pre}</span>
+            <b>{option.match}</b>
+            <span>{option.post}</span>
+            {'tags' in option && option?.tags && (
+              <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
+                {option.tags.map((tag) => (
+                  <Chip key={tag} label={tag} size="small" variant="filled" />
+                ))}
+              </Box>
+            )}
+          </PreserveWhiteSpaceListItem>
+        );
+      }}
       renderInput={({ InputLabelProps, ...params }) => (
         <TextField
           placeholder="Find a pathway by name (e.g. DNA Damage)."

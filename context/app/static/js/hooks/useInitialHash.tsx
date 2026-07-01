@@ -1,14 +1,12 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { useContext, createContext } from 'js/helpers/context';
 
 type InitialHashContextType = string | undefined;
 
 export const InitialHashContext = createContext<InitialHashContextType>('InitialHashContext');
 export function InitialHashContextProvider({ children }: PropsWithChildren) {
-  const [initialHash, setInitialHash] = useState<string>('');
-  useEffect(() => {
-    setInitialHash(window.location.hash);
-  }, []);
+  // Capture the page's initial hash on first render via lazy useState init.
+  const [initialHash] = useState<string>(() => window.location.hash);
   return <InitialHashContext.Provider value={initialHash}>{children}</InitialHashContext.Provider>;
 }
 

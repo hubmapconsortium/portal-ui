@@ -113,6 +113,7 @@ function Fill({
 
 interface HoverPropsWithFocus {
   onMouseEnter: MouseEventHandler<HTMLOrSVGElement>;
+  onMouseMove: MouseEventHandler<HTMLOrSVGElement>;
   onMouseLeave: MouseEventHandler<HTMLOrSVGElement>;
   onFocusCapture: FocusEventHandler<HTMLOrSVGElement>;
   onBlurCapture: FocusEventHandler<HTMLOrSVGElement>;
@@ -125,6 +126,9 @@ const useHoverPropsWithFocus: (hoverProps?: Record<string, unknown>) => HoverPro
     if (hoverProps?.onMouseEnter && hoverProps?.onMouseLeave) {
       return {
         onMouseEnter: hoverProps.onMouseEnter,
+        // Also show on move so the tooltip reliably appears while the pointer is over the bar, even
+        // if the `mouseenter` was missed (fast movement, the bar re-mounting mid-hover, etc.).
+        onMouseMove: hoverProps.onMouseEnter,
         onMouseLeave: hoverProps.onMouseLeave,
         onFocusCapture: hoverProps.onMouseEnter,
         onBlurCapture: hoverProps.onMouseLeave,

@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import { createScFindFlaskKey, stringOrArrayToString } from './utils';
 import { useMemo } from 'react';
 
 export interface DatasetsForGenesResponse {
@@ -10,33 +10,25 @@ export interface DatasetsForGenesResponse {
 
 export interface DatasetsForGenesParams {
   geneList: string | string[];
+  modality?: string;
 }
 
 type DatasetsForGenesKey = string | null;
 
-export function createFindDatasetForGenesKey(
-  scFindEndpoint: string,
-  { geneList }: DatasetsForGenesParams,
-  scFindIndexVersion?: string,
-): DatasetsForGenesKey {
+export function createFindDatasetForGenesKey({ geneList, modality }: DatasetsForGenesParams): DatasetsForGenesKey {
   if (
     (Array.isArray(geneList) && geneList.length === 0) ||
     (typeof geneList === 'string' && geneList.trim().length === 0)
   )
     return null;
-  return createScFindKey(
-    scFindEndpoint,
-    'findDatasets',
-    {
-      gene_list: stringOrArrayToString(geneList) || undefined, // Convert to string or return undefined if empty
-    },
-    scFindIndexVersion,
-  );
+  return createScFindFlaskKey('/scfind/find-datasets.json', {
+    gene_list: stringOrArrayToString(geneList) || undefined, // Convert to string or return undefined if empty
+    modality,
+  });
 }
 
 export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createFindDatasetForGenesKey(scFindEndpoint, props, scFindIndexVersion);
+  const key = createFindDatasetForGenesKey(props);
   const { data, ...rest } = useSWR<DatasetsForGenesResponse, Error, DatasetsForGenesKey>(
     key,
     (url) =>
@@ -44,6 +36,8 @@ export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
         url,
         errorMessages: {
           400: `No results found for ${Array.isArray(props.geneList) ? props.geneList.join(', ') : props.geneList}`,
+          500: 'The scFind server encountered an error. Please try again.',
+          504: 'The scFind server took too long to respond. Please try again.',
         },
       }),
     {

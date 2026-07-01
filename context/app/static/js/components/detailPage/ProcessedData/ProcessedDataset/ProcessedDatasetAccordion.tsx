@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -7,10 +8,12 @@ import Skeleton from '@mui/material/Skeleton';
 
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
+import { useRetractedDatasetContext } from 'js/components/detailPage/RetractedDatasetContext';
 
 import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useInView } from 'react-intersection-observer';
 import { useHash } from 'js/hooks/useHash';
+import { useQueryState, parseAsString } from 'nuqs';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
@@ -26,14 +29,17 @@ function LoadingFallback() {
 
 export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const { defaultExpanded, dataset, sectionDataset, conf, isLoading } = useProcessedDatasetContext();
+  const { isRetracted } = useRetractedDatasetContext();
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   const track = useTrackEntityPageEvent();
   const [threshold, setThreshold] = useState(inViewThreshold);
 
-  const { setCurrentDataset, removeVisibleDataset } = useProcessedDataStore((state) => ({
-    setCurrentDataset: state.setCurrentDataset,
-    removeVisibleDataset: state.removeFromVisibleDatasets,
-  }));
+  const { setCurrentDataset, removeVisibleDataset } = useProcessedDataStore(
+    useShallow((state) => ({
+      setCurrentDataset: state.setCurrentDataset,
+      removeVisibleDataset: state.removeFromVisibleDatasets,
+    })),
+  );
   const { ref } = useInView({
     threshold,
     initialInView: false,
@@ -50,18 +56,32 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   });
   const datasetIdSubstring = datasetSectionId(sectionDataset);
   const [hash] = useHash();
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded || hash.includes(datasetIdSubstring));
+  const [vizParam] = useQueryState('viz', parseAsString);
+  const vizParamMatchesDataset = vizParam?.toLowerCase() === sectionDataset.hubmap_id.toLowerCase();
+  const [isExpanded, setIsExpanded] = useState(
+    defaultExpanded || hash.includes(datasetIdSubstring) || vizParamMatchesDataset,
+  );
 
   useEffect(() => {
     const datasetId = datasetSectionId(sectionDataset);
     if (hash.includes(datasetId)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
       setIsExpanded(true);
     }
   }, [hash, sectionDataset]);
 
+  // Auto-expand when the ?viz= query param targets this dataset
+  useEffect(() => {
+    if (vizParamMatchesDataset) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
+      setIsExpanded(true);
+    }
+  }, [vizParamMatchesDataset]);
+
   return (
     <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
       <PrimaryColorAccordion
+        $retracted={isRetracted}
         defaultExpanded={defaultExpanded}
         expanded={isExpanded}
         onChange={(_, expanded) => {
@@ -78,8 +98,16 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
           <Typography variant="subtitle1" color="inherit" component="h4">
             {sectionDataset.pipeline ?? sectionDataset.assay_display_name[0]}
           </Typography>
-          <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
-            <StatusIcon status={sectionDataset.status} noColor={isExpanded} tooltip />
+          <Typography
+            variant="body1"
+            ml="auto"
+            component="div"
+            display="flex"
+            alignItems="center"
+            gap={1}
+            sx={isRetracted ? { color: 'retracted.main' } : undefined}
+          >
+            <StatusIcon status={sectionDataset.status} noColor={!isRetracted && isExpanded} tooltip />
             {dataset?.hubmap_id}
           </Typography>
         </AccordionSummary>

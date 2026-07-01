@@ -31,6 +31,7 @@ import {
   Y_AXIS_OPTIONS,
   YAxisOptions,
 } from './hooks';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
 import { OverviewChartTooltip } from './DatasetsOverviewChartTooltip';
 
 interface DatasetsOverviewChartProps {
@@ -38,6 +39,10 @@ interface DatasetsOverviewChartProps {
   indexed: DatasetsOverviewDigest;
   all: DatasetsOverviewDigest;
   trackingInfo?: EventInfo;
+  /** Controlled RNA/ATAC value; when `onDataTypeChange` is also provided a Data Type switch is shown. */
+  dataType?: SCFindModality;
+  /** When provided, renders an RNAseq/ATACseq switch in the chart controls and reports changes here. */
+  onDataTypeChange?: (dataType: SCFindModality) => void;
 }
 
 const margin = {
@@ -55,7 +60,7 @@ const graphMargin = {
 
 type StackKeys = 'matched' | 'unmatched';
 
-const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackingInfo?: EventInfo) => {
+const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement | null>, trackingInfo?: EventInfo) => {
   const [yAxis, setYAxis] = useState<YAxisOptions>('Datasets');
 
   const onChangeYAxis = useEventCallback((e: SelectChangeEvent) => {
@@ -68,7 +73,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
         label: trackingInfo.label ? `${trackingInfo.label} ${actionlabel}` : actionlabel,
-      } as EventInfo);
+      });
     }
   });
 
@@ -91,7 +96,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
         label: trackingInfo.label ? `${trackingInfo.label} ${actionlabel}` : actionlabel,
-      } as EventInfo);
+      });
     }
   });
 
@@ -105,7 +110,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
         label: trackingInfo.label ? `${trackingInfo.label} ${actionlabel}` : actionlabel,
-      } as EventInfo);
+      });
     }
   });
 
@@ -121,7 +126,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
           ...trackingInfo,
           action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
           label: trackingInfo.label ? `${trackingInfo.label} ${label}` : label,
-        } as EventInfo);
+        });
       }
       return !prev;
     });
@@ -139,7 +144,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
           ...trackingInfo,
           action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
           label: trackingInfo.label ? `${trackingInfo.label} ${label}` : label,
-        } as EventInfo);
+        });
       }
       return !prev;
     });
@@ -157,7 +162,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
           ...trackingInfo,
           action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
           label: trackingInfo.label ? `${trackingInfo.label} ${label}` : label,
-        } as EventInfo);
+        });
       }
       return !prev;
     });
@@ -180,7 +185,7 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
       trackEvent({
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
-      } as EventInfo);
+      });
     }
   });
 
@@ -205,7 +210,14 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
   };
 };
 
-export default function DatasetsOverviewChart({ matched, indexed, all, trackingInfo }: DatasetsOverviewChartProps) {
+export default function DatasetsOverviewChart({
+  matched,
+  indexed,
+  all,
+  trackingInfo,
+  dataType,
+  onDataTypeChange,
+}: DatasetsOverviewChartProps) {
   const colors = useChartPalette();
 
   const chartRef = useRef<HTMLDivElement>(null);
@@ -353,7 +365,18 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
           </>
         }
         additionalControls={
-          <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" useFlexGap>
+          <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" flexWrap="wrap" useFlexGap>
+            {onDataTypeChange && (
+              <LabeledPrimarySwitch
+                label="Data Type"
+                checked={dataType === 'ATAC'}
+                onChange={(event) => onDataTypeChange(event.target.checked ? 'ATAC' : undefined)}
+                disabledLabel="RNAseq"
+                enabledLabel="ATACseq"
+                ariaLabel="Toggle dataset data type between RNAseq and ATACseq"
+                tooltip="Toggle between RNAseq and ATACseq datasets."
+              />
+            )}
             <LabeledPrimarySwitch
               label="Plot Type"
               checked={showComparison}
@@ -367,7 +390,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
             <SecondaryBackgroundTooltip
               title={showComparison ? undefined : 'Set "Plot Type" to "With Comparison" to toggle these options'}
             >
-              <Stack direction="row" spacing={2} alignItems="center" useFlexGap>
+              <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
                 <LabeledPrimarySwitch
                   label="Comparison Group"
                   checked={compareToAll}

@@ -22,5 +22,5 @@ export default function DownloadDatasetsOverview({ rows }: DownloadDatasetsOverv
     ],
     rows: useDownloadableRows(rows),
   });
-  return <DownloadButton tooltip="Download dataset overview statistics for current query" onClick={downloadTable} />;
+  return <DownloadButton tooltip="Download dataset overview statistics for current results." onClick={downloadTable} />;
 }

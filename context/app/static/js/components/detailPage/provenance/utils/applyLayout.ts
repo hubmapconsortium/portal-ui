@@ -40,7 +40,7 @@ export function applyLayout(nodes: NodeWithoutPosition[], edges: Edge[]): { node
   return {
     nodes: nodes.map((node) => {
       const position = g.node(node.id);
-      return { ...node, position } as Node;
+      return { ...node, position };
     }),
     edges,
   };

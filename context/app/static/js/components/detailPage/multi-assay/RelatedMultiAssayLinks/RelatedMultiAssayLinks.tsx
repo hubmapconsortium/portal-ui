@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
@@ -48,27 +47,36 @@ function MultiAssayLink({
   href,
 }: MultiAssayLinkProps) {
   const link = href ? <InternalLink href={href}>{hubmap_id}</InternalLink> : hubmap_id;
+  // No outer Typography here: callers (e.g. LabelledSectionText) already
+  // wrap their content in a <p>, and a second <Typography>/<p> nested inside
+  // it produces invalid HTML. The inline-flex Stack carries the layout.
   return (
-    <Typography>
-      <Stack direction="row" useFlexGap gap={0.5} alignItems="center">
-        <SecondaryBackgroundTooltip title={tooltipText} disabled={!tooltipText}>
-          <Box display="inline-block" component="span">
-            {assay_display_name}: {link}
-          </Box>
-        </SecondaryBackgroundTooltip>
-        <SecondaryBackgroundTooltip title={`Status: ${status}`}>
-          <Box display="inline-block" component="span">
-            <StatusIcon status={status} />
-          </Box>
-        </SecondaryBackgroundTooltip>
-      </Stack>
-    </Typography>
+    <Stack component="span" direction="row" useFlexGap gap={0.5} alignItems="center" display="inline-flex">
+      <SecondaryBackgroundTooltip title={tooltipText} disabled={!tooltipText}>
+        <Box display="inline-block" component="span">
+          {assay_display_name}: {link}
+        </Box>
+      </SecondaryBackgroundTooltip>
+      <SecondaryBackgroundTooltip title={`Status: ${status}`}>
+        <Box display="inline-block" component="span">
+          <StatusIcon status={status} />
+        </Box>
+      </SecondaryBackgroundTooltip>
+    </Stack>
   );
 }
 
 function CurrentMultiAssayLink({ dataset }: Pick<MultiAssayLinkProps, 'dataset'>) {
+  // Inline-block span so this fits inside the parent <Typography>'s <p>.
   return (
-    <Box sx={(theme) => ({ borderLeft: `2px solid ${theme.palette.success.main}`, pl: 0.5 })}>
+    <Box
+      component="span"
+      sx={(theme) => ({
+        display: 'inline-block',
+        borderLeft: `2px solid ${theme.palette.success.main}`,
+        pl: 0.5,
+      })}
+    >
       <MultiAssayLink dataset={dataset} tooltipText={`${text.current.tooltip} ${dataset.status}`} />
     </Box>
   );
@@ -107,7 +115,9 @@ function RelatedMultiAssayLinks() {
 
     return (
       <LabelledSectionText label={text?.[key]?.label} key={key} iconTooltipText={text?.[key]?.tooltip}>
-        <Stack>
+        {/* LabelledSectionText wraps content in a <p>; keep this column
+            stack inline-block so we don't nest a <div> inside it. */}
+        <Stack component="span" display="inline-flex" flexDirection="column">
           {v.map((dataset) =>
             dataset.uuid === uuid ? (
               <CurrentMultiAssayLink dataset={dataset} key={dataset.uuid} />

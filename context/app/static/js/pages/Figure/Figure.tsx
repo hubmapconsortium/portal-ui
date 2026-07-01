@@ -41,6 +41,10 @@ function HtmlEmbed({ path, sx, ...boxProps }: { path: string } & BoxProps) {
   );
 }
 
+// Below this width each figure row scrolls horizontally instead of squishing the figures; at or
+// above it the row fills the available width (up to the page's ~1232px content cap).
+const FIGURE_MIN_WIDTH = 960;
+
 export default function InlineFigures() {
   const base = '/static/assets/svg/figure';
 
@@ -74,71 +78,77 @@ export default function InlineFigures() {
       </Description>
       <hr />
       <Stack sx={{ bgcolor: 'background.paper', gap: 1 }}>
-        {/* Row 1: a, b, c */}
-        <Stack direction="row" sx={{ alignItems: 'stretch', gap: 1, height: 400, lineHeight: 0 }}>
-          <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 34%' }}>
-            <HtmlEmbed
-              path={`${base}/figure_1a.html`}
-              sx={{
-                width: '100%',
-                height: '100%',
-                lineHeight: 0,
-                '& svg, & img, & iframe': { height: '100%', width: 'auto', display: 'block' },
-              }}
-            />
-          </Box>
+        {/* Each row is its own horizontal-scroll container: below FIGURE_MIN_WIDTH the row keeps its
+            layout and scrolls sideways instead of squishing the figures. */}
+        {/* Row 1: a, b, c — pr/pl + flex-grow so the row spans the same left/right edges as rows 2-3
+            (c's right edge lines up with i and g). */}
+        <Box sx={{ overflowX: 'auto' }}>
+          <Stack
+            direction="row"
+            sx={{ alignItems: 'stretch', gap: 1, height: 400, lineHeight: 0, pr: 3, pl: 3, minWidth: FIGURE_MIN_WIDTH }}
+          >
+            <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '34 1 0' }}>
+              <HtmlEmbed
+                path={`${base}/figure_1a.html`}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  lineHeight: 0,
+                  '& svg, & img, & iframe': { height: '100%', width: 'auto', display: 'block' },
+                }}
+              />
+            </Box>
 
-          {/* B — anchor artwork to top-left */}
-          <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31.2%' }}>
-            <FIGURE_1B
-              preserveAspectRatio="xMinYMin meet"
-              style={{ height: '100%', width: 'auto', display: 'block' }}
-            />
-          </Box>
+            {/* B — anchor artwork to top-left */}
+            <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '31.2 1 0' }}>
+              <FIGURE_1B
+                preserveAspectRatio="xMinYMin meet"
+                style={{ height: '100%', width: 'auto', display: 'block' }}
+              />
+            </Box>
 
-          {/* C — anchor artwork to top-left */}
-          <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31.2%' }}>
-            <FIGURE_1C
-              preserveAspectRatio="xMinYMin meet"
-              style={{ height: '100%', width: 'auto', display: 'block' }}
-            />
-          </Box>
-        </Stack>
+            {/* C — anchor artwork to top-left */}
+            <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '31.2 1 0' }}>
+              <FIGURE_1C
+                preserveAspectRatio="xMinYMin meet"
+                style={{ height: '100%', width: 'auto', display: 'block' }}
+              />
+            </Box>
+          </Stack>
+        </Box>
 
-        {/* Row 2: d, efg */}
-        <Stack
-          direction="row"
-          marginTop={-23}
-          sx={{ justifyContent: 'flex-start', alignItems: 'stretch', gap: 1, height: 400, lineHeight: 0 }}
-        >
-          <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 auto' }}>
-            <FIGURE_1D style={{ height: '100%', width: 'auto', display: 'block' }} />
-          </Box>
-          <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 auto' }}>
-            <FIGURE_1EFG style={{ height: '100%', width: 'auto', display: 'block' }} />
-          </Box>
-        </Stack>
+        {/* Row 2: d, efg — two equal halves. d and efg share an aspect ratio (efg was sized to match
+            d), so equal widths also give equal heights, keeping d's categorical (organ) rows aligned
+            across the two panels. Each half == h's half below, so the columns line up exactly. */}
+        <Box sx={{ overflowX: 'auto', mt: -23 }}>
+          <Stack
+            direction="row"
+            sx={{ alignItems: 'flex-start', gap: 1, lineHeight: 0, pr: 3, pl: 3, minWidth: FIGURE_MIN_WIDTH }}
+          >
+            <Box sx={{ minWidth: 0, flex: '1 1 0' }}>
+              <FIGURE_1D style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </Box>
+            <Box sx={{ minWidth: 0, flex: '1 1 0' }}>
+              <FIGURE_1EFG style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </Box>
+          </Stack>
+        </Box>
 
-        {/* Row 3: h, i */}
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: 'flex-end',
-            alignItems: 'stretch',
-            gap: 1,
-            height: 360,
-            lineHeight: 0,
-            pr: 3,
-            pl: 3,
-          }}
-        >
-          <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 1 auto', flexShrink: 1, maxWidth: '50%' }}>
-            <FIGURE_1H style={{ height: '100%', width: 'auto', maxWidth: '100%', display: 'block' }} />
-          </Box>
-          <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 1 auto', flexShrink: 1, maxWidth: '50%' }}>
-            <FIGURE_1I style={{ height: '100%', width: 'auto', maxWidth: '100%', display: 'block' }} />
-          </Box>
-        </Stack>
+        {/* Row 3: h, i — two equal halves, identical flex math to row 2, so g (efg) and i share the
+            same right edge and h and d share the same left edge. */}
+        <Box sx={{ overflowX: 'auto' }}>
+          <Stack
+            direction="row"
+            sx={{ alignItems: 'flex-start', gap: 1, lineHeight: 0, pr: 3, pl: 3, minWidth: FIGURE_MIN_WIDTH }}
+          >
+            <Box sx={{ minWidth: 0, flex: '1 1 0' }}>
+              <FIGURE_1H style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </Box>
+            <Box sx={{ minWidth: 0, flex: '1 1 0' }}>
+              <FIGURE_1I style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </Box>
+          </Stack>
+        </Box>
       </Stack>
     </Stack>
   );

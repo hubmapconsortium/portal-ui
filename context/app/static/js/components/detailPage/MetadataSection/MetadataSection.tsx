@@ -33,7 +33,7 @@ function DatasetDescriptionNote() {
       &nbsp;Metadata from the donor or sample of this dataset may also be included in this list.
       <br />
       Additional information about the metadata available for each type of dataset can be found in the&nbsp;
-      <OutboundIconLink href="https://docs.hubmapconsortium.org/metadata">HuBMAP documentation.</OutboundIconLink>
+      <OutboundIconLink href="https://docs.hubmapconsortium.org/metadata">HuBMAP documentation</OutboundIconLink>.
     </>
   );
 }

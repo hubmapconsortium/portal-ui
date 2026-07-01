@@ -1,4 +1,5 @@
 import { capitalizeString } from 'js/helpers/functions';
+import { mapObjectType } from 'js/helpers/annotations';
 import { useCallback } from 'react';
 import { SearchStoreState, useSearchStore } from './store';
 
@@ -40,7 +41,8 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
       label: 'Annotation Tools',
     },
     'calculated_metadata.object_types': {
-      label: 'Annotations Available',
+      label: 'Annotated Object Types',
+      valueTransformations: [mapObjectType],
     },
     created_by_user_displayname: {
       label: 'Registered By',
@@ -57,6 +59,9 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
     'descendant_counts.entity_type.Publication': {
       label: `Show Only ${type}s Linked to Publications`,
     },
+    _dataset_features: {
+      label: 'Dataset Features',
+    },
     descendant_ids: {
       label: 'Descendant ID',
     },
@@ -70,6 +75,18 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
       label: 'Donor Race',
     },
     'donor.mapped_metadata.sex': {
+      label: 'Donor Sex',
+    },
+    'donor_demographics.age_value': {
+      label: 'Donor Age',
+    },
+    'donor_demographics.body_mass_index_value': {
+      label: 'Donor BMI',
+    },
+    'donor_demographics.race': {
+      label: 'Donor Race',
+    },
+    'donor_demographics.sex': {
       label: 'Donor Sex',
     },
     entity_type: {

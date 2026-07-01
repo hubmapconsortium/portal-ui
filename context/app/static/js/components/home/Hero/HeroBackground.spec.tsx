@@ -6,13 +6,13 @@ import HeroBackground from './HeroBackground';
 function mockMatchMedia(prefersReducedMotion: boolean) {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn((query: string) => ({
+    value: vi.fn((query: string) => ({
       matches: prefersReducedMotion && query.includes('reduce'),
       media: query,
       onchange: null,
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
 }
@@ -54,14 +54,14 @@ describe('HeroBackground', () => {
 
   describe('auto-cycling', () => {
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
     afterEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it('starts a setInterval with BACKGROUND_CYCLE_INTERVAL_MS', () => {
-      const spy = jest.spyOn(global, 'setInterval');
+      const spy = vi.spyOn(global, 'setInterval');
       render(<HeroBackground />);
       expect(spy).toHaveBeenCalledWith(expect.any(Function), BACKGROUND_CYCLE_INTERVAL_MS);
     });
@@ -70,7 +70,7 @@ describe('HeroBackground', () => {
       // useReducedMotion initialises to false, then updates via matchMedia effect.
       // That causes the running interval to be cleaned up and not restarted.
       mockMatchMedia(true);
-      const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
+      const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
       render(<HeroBackground />);
       expect(clearIntervalSpy).toHaveBeenCalled();
     });

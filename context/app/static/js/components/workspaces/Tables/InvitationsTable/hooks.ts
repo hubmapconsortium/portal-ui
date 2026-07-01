@@ -17,6 +17,7 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
   const [showAccepted, setShowAccepted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setShowPending(pendingInvites.length > 0);
   }, [pendingInvites.length]);
 

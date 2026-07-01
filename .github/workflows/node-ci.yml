@@ -12,24 +12,27 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: "recursive"
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: ".nvmrc"
-          cache: "npm"
-          cache-dependency-path: context/package-lock.json
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
 
-      - run: npm --version
+      - run: pnpm --version
 
       - name: Install node dependencies
-        run: npm ci --prefix context
+        run: pnpm install --frozen-lockfile --filter ./context...
 
       - name: Run type check
-        run: npm run tsc --prefix context
+        run: pnpm --filter ./context run tsc
 
       - name: Run test script
         run: etc/test/test-node.sh

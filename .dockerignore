@@ -1,0 +1,29 @@
+# Build artifacts — produced by the frontend stage, must not be copied from host.
+context/app/static/public
+context/app/static/js/maintenance/public
+
+# Dependencies — installed inside the image.
+**/node_modules
+.pnpm-store
+
+# Python venvs and caches that shouldn't ship.
+.venv
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+
+# VCS / editor.
+.git
+.husky
+.claude
+.vscode
+
+# CI / docs scratch.
+# (end-to-end is kept in the build context because the frontend stage needs
+# end-to-end/package.json to install the pnpm workspace; its heavy contents
+# are excluded above via **/node_modules and the cypress/screenshots gitignore.)
+end-to-end/cypress
+figure-generation
+scratch
+tmp

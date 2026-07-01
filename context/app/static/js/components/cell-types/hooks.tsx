@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 
 import { useCellTypeOntologyDetail, useGeneOntologyDetails } from 'js/hooks/useUBKG';
-import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
 import useSearchData from 'js/hooks/useSearchData';
-import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
-import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
 import { isError } from 'js/helpers/is-error';
 import Skeleton from '@mui/material/Skeleton';
-import { extractCellTypesInfo } from 'js/api/scfind/utils';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
-import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
+import {
+  useCellTypesDetailPageContext,
+  useCellTypeMarkersData,
+  useCellTypeDatasetsData,
+} from './CellTypesDetailPageContext';
 import { Entity } from '../types';
 
 /**
@@ -31,9 +32,9 @@ export const useCellTypeInfo = () => {
  * @returns {object} An object containing the cell type name, organs, and variants for each organ.
  */
 export function useExtractedCellTypeInfo() {
-  const { cellId } = useCellTypesDetailPageContext();
-  const { data: cellTypes = [] } = useCLIDToLabel({ clid: cellId });
-  return useMemo(() => extractCellTypesInfo(cellTypes), [cellTypes]);
+  // name/organs/variants are derived once in the provider from the page aggregate's cell types.
+  const { name, organs, variants } = useCellTypesDetailPageContext();
+  return useMemo(() => ({ name, organs, variants }), [name, organs, variants]);
 }
 
 /**
@@ -79,15 +80,13 @@ export function useIndexedDatasetsForCellType({
   cellTypes: string[];
   trackingInfo?: { category: string; label: string };
 }) {
-  const {
-    data,
-    isLoading: isLoadingScFind,
-    ...rest
-  } = useFindDatasetForCellTypes({
-    cellTypes,
-  });
+  // Datasets-per-cell-type come from the page aggregate (CellTypesDetailPageContext).
+  const { datasetsForCellTypes, isLoading: isLoadingScFind } = useCellTypeDatasetsData();
 
-  const scFindIds = data?.map((d) => d.datasets).flat() ?? [];
+  const scFindIds = useMemo(
+    () => cellTypes.flatMap((cellType) => datasetsForCellTypes[cellType]?.datasets ?? []),
+    [cellTypes, datasetsForCellTypes],
+  );
 
   const ids = useSCFindIDAdapter(scFindIds);
 
@@ -149,7 +148,6 @@ export function useIndexedDatasetsForCellType({
     scFindParams: {
       scFindOnly: true,
     },
-    ...rest,
   };
 }
 
@@ -158,18 +156,11 @@ export function useIndexedDatasetsForCellTypePage() {
   return useIndexedDatasetsForCellType({ cellTypes, trackingInfo });
 }
 
-export function useBiomarkersTableData() {
-  const { cellTypes } = useCellTypesDetailPageContext();
-  const { data, isLoading } = useCellTypeMarkers({
-    cellTypes,
-  });
+export function useBiomarkersTableData(modality?: SCFindModality) {
+  // Marker genes come from the page aggregate (CellTypesDetailPageContext), per modality.
+  const { markers, isLoading } = useCellTypeMarkersData(modality);
 
-  const geneIds = useMemo(() => {
-    if (!data?.findGeneSignatures) {
-      return [];
-    }
-    return data.findGeneSignatures.map(({ genes }) => genes);
-  }, [data]);
+  const geneIds = useMemo(() => markers.map(({ genes }) => genes), [markers]);
 
   // Fetch gene descriptions for the gene IDs
   const { data: descriptions, isLoading: isLoadingDescriptions } = useGeneOntologyDetails(geneIds);
@@ -194,10 +185,7 @@ export function useBiomarkersTableData() {
   }, [descriptions, geneIds]);
 
   const rows = useMemo(() => {
-    if (!data?.findGeneSignatures) {
-      return [];
-    }
-    return data.findGeneSignatures.map(({ genes: geneName, precision, recall, f1 }) => ({
+    return markers.map(({ genes: geneName, precision, recall, f1 }) => ({
       genes: geneName,
       precision,
       recall,
@@ -205,6 +193,6 @@ export function useBiomarkersTableData() {
       description:
         restructuredDescriptions[geneName] ?? (isLoadingDescriptions ? <Skeleton /> : 'No description available.'),
     }));
-  }, [data, isLoadingDescriptions, restructuredDescriptions]);
-  return { data, isLoading, isLoadingDescriptions, rows };
+  }, [markers, isLoadingDescriptions, restructuredDescriptions]);
+  return { isLoading, isLoadingDescriptions, rows };
 }

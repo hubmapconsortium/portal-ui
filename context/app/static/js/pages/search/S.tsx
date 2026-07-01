@@ -7,7 +7,7 @@ import { EntityWithType, isDonor } from 'js/components/types';
 import { useAppContext } from 'js/components/Contexts';
 
 const sharedConfig = {
-  searchFields: ['all_text', 'description'],
+  searchFields: ['all_text'],
   // TODO: figure out how to make assertion unnecessary.
   size: 18,
 };
@@ -20,6 +20,8 @@ const sharedTileFields = [
   'published_timestamp',
   'entity_type',
   'descendant_counts.entity_type',
+  'next_revision_uuid',
+  'mapped_status',
 ];
 
 const sharedAffiliationFilters = [
@@ -27,25 +29,37 @@ const sharedAffiliationFilters = [
   { field: 'created_by_user_displayname', type: FACETS.term },
 ];
 
-function makeDonorMetadataFilters(e: EntityWithType) {
-  const isDonorEntity = isDonor(e);
-
-  const pathPrefix = isDonorEntity ? '' : 'donor.';
+export function makeDonorMetadataFilters(e: EntityWithType) {
+  // A Donor entity is a single donor (top-level mapped_metadata). Datasets/Samples can have
+  // multiple donors, so they filter on the aggregated donor_demographics object instead, which
+  // includes every donor's values (categorical sets + numeric value arrays).
+  const basePath = isDonor(e) ? 'mapped_metadata' : 'donor_demographics';
   return [
-    { field: `${pathPrefix}mapped_metadata.sex`, type: FACETS.term },
-    { field: `${pathPrefix}mapped_metadata.age_value`, type: FACETS.range },
-    { field: `${pathPrefix}mapped_metadata.race`, type: FACETS.term },
-    { field: `${pathPrefix}mapped_metadata.body_mass_index_value`, type: FACETS.range },
+    { field: `${basePath}.sex`, type: FACETS.term },
+    { field: `${basePath}.age_value`, type: FACETS.range },
+    { field: `${basePath}.race`, type: FACETS.term },
+    { field: `${basePath}.body_mass_index_value`, type: FACETS.range },
   ];
 }
 
 function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
   return {
-    defaultQuery: esb
+    defaultQuery: esb.boolQuery().must([esb.termsQuery('entity_type.keyword', [type])]),
+    // When filtering the dataset search by ancestor_ids (e.g. coming from a "View Derived Datasets"
+    // link in a parent entity's prov section), also include Support entities so the result set
+    // matches the descendant count shown upstream.
+    defaultQueryWithAncestorFilter:
+      type === 'Dataset'
+        ? esb.boolQuery().must([esb.termsQuery('entity_type.keyword', ['Dataset', 'Support'])])
+        : undefined,
+    // Retracted datasets are hidden from default search; this filter is bypassed for explicit
+    // HuBMAP-ID / UUID lookups (see `buildQuery`'s `isIdLookupSearch`), so they remain findable by ID.
+    latestRevisionFilter: esb
       .boolQuery()
-      .must([
-        esb.termsQuery('entity_type.keyword', [type]),
-        esb.boolQuery().mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]),
+      .mustNot([
+        esb.existsQuery('next_revision_uuid'),
+        esb.existsQuery('sub_status'),
+        esb.termsQuery('mapped_status.keyword', ['Retracted']),
       ]),
   };
 }
@@ -143,10 +157,32 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
       },
       { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
       {
-        field: 'descendant_counts.entity_type.Publication',
-        type: FACETS.exists,
-        invert: false,
-        default: false,
+        field: '_dataset_features',
+        type: FACETS.booleanGroup,
+        items: [
+          {
+            field: 'descendant_counts.entity_type.Publication',
+            label: 'Linked to Publications',
+            queryType: 'exists' as const,
+          },
+          {
+            field: 'visualization',
+            label: 'Visualization Available',
+            queryType: 'term' as const,
+            value: 'true',
+          },
+          {
+            field: 'calculated_metadata.object_types',
+            label: 'Cell Type Annotations Available',
+            queryType: 'term' as const,
+            value: 'CL:0000000',
+          },
+          {
+            field: 'spatial',
+            label: 'Spatial Data Available',
+            queryType: 'exists' as const,
+          },
+        ],
       },
       { field: 'published_timestamp', type: FACETS.date },
       { field: 'last_modified_timestamp', type: FACETS.date, visible: isHubmapUser },
@@ -161,10 +197,6 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
         type: FACETS.term,
       },
       {
-        field: 'visualization',
-        type: FACETS.term,
-      },
-      {
         field: 'processing_type',
         type: FACETS.term,
       },
@@ -174,9 +206,7 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
       },
       {
         field: 'calculated_metadata.object_types',
-        type: FACETS.exists,
-        invert: false,
-        default: false,
+        type: FACETS.term,
       },
       {
         field: 'calculated_metadata.annotation_tools',
@@ -200,6 +230,8 @@ function buildDatasetConfig(isHubmapUser: boolean) {
         'mapped_status',
         isHubmapUser ? 'last_modified_timestamp' : 'published_timestamp',
       ],
+      // visualization is fetched for the icon next to hubmap_id but not displayed as its own column
+      _extra: ['visualization'],
       tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
     },
     sortField: isHubmapUser

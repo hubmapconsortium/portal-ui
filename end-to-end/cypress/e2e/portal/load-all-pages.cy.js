@@ -62,7 +62,9 @@ describe("Entity detail page all load", () => {
     pages.forEach((page) => {
       it(`loads a ${page.name} detail page`, () => {
         cy.visit(page.url);
-        cy.findAllByTestId(page.testId, { timeout: 10000 }).first().click();
+        // live ES search results routinely take ~10s in CI (Donor/Publication/Sample
+        // all landed at 9-11s); 20s headroom removes the flake. Lower it if CI gets faster.
+        cy.findAllByTestId(page.testId, { timeout: 20000 }).first().click();
         cy.findByTestId("entity-title").should("exist").and("be.visible");
       });
     });

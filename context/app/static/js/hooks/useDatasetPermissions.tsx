@@ -1,34 +1,12 @@
+import { useMemo } from 'react';
 import useSWR from 'swr';
 
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
-import { getIDsQuery, getTermClause } from 'js/helpers/queries';
-import { Dataset } from 'js/components/types';
-import { useSearchHits } from './useSearchData';
-import { useMemo } from 'react';
+import { hashUuidSet } from 'js/helpers/swr/keys';
+import { getAuthHeader } from 'js/helpers/functions';
 
-type DatasetAccessLevelHit = Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>;
-
-function useGetNonPublicDatasets(ids: string[]) {
-  const query = {
-    query: {
-      bool: {
-        must: [getIDsQuery(ids)],
-        must_not: [getTermClause('mapped_data_access_level.keyword', 'Public')],
-      },
-    },
-    _source: false,
-    size: ids.length,
-  };
-
-  const { searchHits } = useSearchHits<DatasetAccessLevelHit>(query);
-
-  return useMemo(() => {
-    const nonPublicUUIDs = searchHits.map((s) => s._id);
-    const publicUUIDs = ids.filter((i) => !nonPublicUUIDs.includes(i));
-    return { nonPublicUUIDs, publicUUIDs };
-  }, [searchHits, ids]);
-}
+const BATCH_SIZE = 10_000;
 
 interface DatasetPermissionsRequest {
   url: string;
@@ -36,13 +14,13 @@ interface DatasetPermissionsRequest {
   groupsToken: string;
 }
 
-interface DatasetPermission {
-  access_allowed: boolean;
+export interface DatasetPermission {
   valid_id: boolean;
-  uuid: string;
-  hubmap_id: string;
-  entity_type: string;
-  file_system_path: string;
+  access_allowed?: boolean;
+  uuid?: string;
+  hubmap_id?: string;
+  entity_type?: string;
+  file_system_path?: string;
 }
 
 export type DatasetPermissionsResponse = Record<string, DatasetPermission>;
@@ -54,11 +32,32 @@ export async function fetchDatasetPermissions({ url, data, groupsToken }: Datase
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${groupsToken}`,
+        ...getAuthHeader(groupsToken),
       },
       body: JSON.stringify(data),
     },
   });
+}
+
+async function fetchBatchedDatasetPermissions({
+  url,
+  data,
+  groupsToken,
+}: DatasetPermissionsRequest): Promise<DatasetPermissionsResponse> {
+  if (data.length === 0) return {};
+
+  if (data.length <= BATCH_SIZE) {
+    return fetchDatasetPermissions({ url, data, groupsToken });
+  }
+
+  const batches: string[][] = [];
+  for (let i = 0; i < data.length; i += BATCH_SIZE) {
+    batches.push(data.slice(i, i + BATCH_SIZE));
+  }
+
+  const results = await Promise.all(batches.map((batch) => fetchDatasetPermissions({ url, data: batch, groupsToken })));
+
+  return Object.assign({}, ...results) as DatasetPermissionsResponse;
 }
 
 interface UseDatasetAccessReturn {
@@ -66,55 +65,31 @@ interface UseDatasetAccessReturn {
   isLoading: boolean;
 }
 
-function makePermissionObject(allowed: boolean, uuid: string) {
-  return {
-    access_allowed: allowed,
-    valid_id: true,
-    uuid,
-    hubmap_id: '',
-    entity_type: 'dataset',
-    file_system_path: '',
-  };
-}
+const EMPTY_PERMISSIONS: DatasetPermissionsResponse = {};
 
 function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
   const { groupsToken, softAssayEndpoint } = useAppContext();
 
-  const { nonPublicUUIDs, publicUUIDs } = useGetNonPublicDatasets(uuids);
+  // Use a fast hash for the SWR key instead of joining all UUIDs into a large string.
+  // For 15k UUIDs, this avoids creating a ~555KB key string and an O(N log N) sort.
+  const swrKey = useMemo(() => {
+    if (uuids.length === 0 || !softAssayEndpoint) return null;
+    return `dataset-access:${hashUuidSet(uuids)}`;
+  }, [uuids, softAssayEndpoint]);
 
-  const shouldFetch = Boolean(nonPublicUUIDs.length && softAssayEndpoint && groupsToken);
-
-  const { data = {}, isLoading } = useSWR(
-    shouldFetch ? ['dataset-access', [...nonPublicUUIDs].sort(), groupsToken] : null,
-    () =>
-      fetchDatasetPermissions({
-        url: softAssayEndpoint,
-        data: nonPublicUUIDs,
-        groupsToken,
-      }),
+  const { data = EMPTY_PERMISSIONS, isLoading } = useSWR(swrKey, () =>
+    fetchBatchedDatasetPermissions({
+      url: softAssayEndpoint,
+      data: uuids,
+      groupsToken,
+    }),
   );
 
-  const accessibleDatasets = useMemo(() => {
-    return {
-      // Default to hiding non-public datasets
-      ...Object.fromEntries(nonPublicUUIDs.map((uuid) => [uuid, makePermissionObject(false, uuid)])),
-      // If user has access to any of the non-public datasets, this spread overwrites the defaults
-      ...data,
-      // Default to showing public datasets
-      ...Object.fromEntries(publicUUIDs.map((uuid) => [uuid, makePermissionObject(true, uuid)])),
-    };
-  }, [data, nonPublicUUIDs, publicUUIDs]);
-
-  return { accessibleDatasets, isLoading };
+  return { accessibleDatasets: data, isLoading };
 }
 
 export function useDatasetsAccess(uuids: string[]) {
-  const { accessibleDatasets, isLoading } = useDatasetAccessInternal(uuids);
-
-  return {
-    accessibleDatasets,
-    isLoading,
-  };
+  return useDatasetAccessInternal(uuids);
 }
 
 export function useDatasetAccess(uuid: string) {

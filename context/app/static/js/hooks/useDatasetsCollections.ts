@@ -61,6 +61,7 @@ function useDatasetsCollectionsTabs() {
         const { uuid } = processedDatasetTab;
         const collectionsForDataset = collectionsMap[uuid];
         if (collectionsForDataset?.length > 0) {
+          // eslint-disable-next-line react-hooks/immutability -- Intentional in-place mutation of a local accumulator.
           atLeastOneCollection = true;
         }
         return {

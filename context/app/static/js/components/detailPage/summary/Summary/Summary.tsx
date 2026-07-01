@@ -11,6 +11,7 @@ interface SummaryProps extends PropsWithChildren {
   entityTypeDisplay?: string;
   mapped_external_group_name?: string;
   bottomFold?: React.ReactNode;
+  titlePrefixIcon?: React.ReactNode;
 }
 
 function Summary({
@@ -21,6 +22,7 @@ function Summary({
   entityTypeDisplay,
   children,
   bottomFold,
+  titlePrefixIcon,
 }: SummaryProps) {
   const {
     entity: { hubmap_id, entity_type },
@@ -35,6 +37,7 @@ function Summary({
         status={status ?? 'Missing status'}
         mapped_data_access_level={mapped_data_access_level ?? 'Missing access level'}
         mapped_external_group_name={mapped_external_group_name}
+        titlePrefixIcon={titlePrefixIcon}
       >
         {children}
       </SummaryData>

@@ -3,7 +3,7 @@ import React, { useCallback, PropsWithChildren, useMemo, ReactElement } from 're
 import { useAccordionStepsStore } from '../AccordionSteps/store';
 
 interface AccordionStepContextType {
-  completeStep: (text: string | ReactElement) => void;
+  completeStep: (text: string | ReactElement<unknown>) => void;
 }
 
 const AccordionStepContext = createContext<AccordionStepContextType>('Accordion Step Context');
@@ -17,7 +17,7 @@ export default function AccordionStepProvider({ children, index }: AccordionStep
   const { completeStep } = useAccordionStepsStore();
 
   const handleCompleteStep = useCallback(
-    (text: string | ReactElement) => {
+    (text: string | ReactElement<unknown>) => {
       completeStep(index, text);
     },
     [completeStep, index],

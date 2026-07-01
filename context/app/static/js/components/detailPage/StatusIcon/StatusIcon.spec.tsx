@@ -6,10 +6,12 @@ const blue = '#2A6FB8';
 const red = '#DA348A';
 const orange = '#D25435';
 const green = '#6C8938';
+const retracted = '#C72C2C';
 
 test.each([
   ['Reopened', blue],
   ['QA', blue],
+  ['Approval', blue],
   ['Locked', blue],
   ['Processing', blue],
   ['Hold', blue],
@@ -18,6 +20,7 @@ test.each([
   ['Unpublished', orange],
   ['Deprecated', orange],
   ['Published', green],
+  ['Retracted', retracted],
 ])('status %s displays correct color %s', (status, color) => {
   render(<StatusIcon status={status} />);
 

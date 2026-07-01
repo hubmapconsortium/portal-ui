@@ -40,30 +40,45 @@ export default function CellTypesPanelList() {
       return [
         {
           children: <>No results found. Try searching for a different cell type.</>,
-          key: 'no-results',
+          panelKey: 'no-results',
         },
       ];
     }
     const propsList: PanelProps[] = [
       {
-        key: 'header',
+        panelKey: 'header',
         noPadding: true,
         children: <CellTypesPanel.Header />,
       },
-      ...sortedCellTypes.map(({ label, organs: cellTypeOrgans, clid, description }) => ({
-        key: label,
-        noPadding: true,
-        noHover: false,
-        children: (
-          <CellTypesPanel.Item
-            name={label}
-            href={`/cell-types/${clid}`}
-            clid={clid}
-            organs={cellTypeOrgans}
-            description={description}
-          />
-        ),
-      })),
+      ...sortedCellTypes.map(
+        ({
+          label,
+          organs: cellTypeOrgans,
+          rnaOrgans,
+          atacOrgans,
+          clid,
+          description,
+          rnaDatasetCount,
+          atacDatasetCount,
+        }) => ({
+          panelKey: label,
+          noPadding: true,
+          noHover: false,
+          children: (
+            <CellTypesPanel.Item
+              name={label}
+              href={clid ? `/cell-types/${clid}` : undefined}
+              clid={clid}
+              organs={cellTypeOrgans}
+              rnaOrgans={rnaOrgans}
+              atacOrgans={atacOrgans}
+              description={description}
+              rnaDatasetCount={rnaDatasetCount}
+              atacDatasetCount={atacDatasetCount}
+            />
+          ),
+        }),
+      ),
     ];
     return propsList;
   }, [sortedCellTypes, isLoading]);

@@ -1,8 +1,7 @@
-/* eslint-disable jest/no-export */
 import { FlaskDataContextType } from 'js/components/Contexts';
 import { UnprocessedFile } from './types';
 
-export const fakeOpenDUA = jest.fn();
+export const fakeOpenDUA = vi.fn();
 
 export const uuid = 'fakeuuid';
 
@@ -52,7 +51,7 @@ export const testFiles: UnprocessedFile[] = [
 ];
 
 // This file just builds test fixtures: it has no tests of its own.
-// eslint-disable-next-line jest/no-disabled-tests, jest/expect-expect
+// eslint-disable-next-line vitest/no-disabled-tests
 test.skip('skip', () => {
   /* purposely left empty */
 });

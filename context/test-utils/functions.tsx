@@ -1,9 +1,8 @@
 import React, { PropsWithChildren } from 'react';
-import { render, RenderOptions, act } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { vi } from 'vitest';
+import { render, renderHook, RenderHookOptions, RenderOptions, act } from '@testing-library/react';
 import Providers from 'js/components/Providers';
 import { enableMapSet } from 'immer';
-import { RenderHookOptions } from '@testing-library/react-hooks/lib/types';
 
 enableMapSet();
 
@@ -17,27 +16,28 @@ const isWorkspacesUser = false;
 const appProviderToken = 'fakeGroupsToken';
 
 // Mock tracking helpers
-jest.mock('js/helpers/trackers');
-jest.mock('@grafana/faro-web-sdk', () => ({
+vi.mock('js/helpers/trackers');
+vi.mock('@grafana/faro-web-sdk', () => ({
   faro: {
     api: {
-      pushError: jest.fn(),
+      pushError: vi.fn(),
     },
   },
 }));
 
 interface AllTheProvidersProps extends PropsWithChildren {
-  flaskData?: unknown;
+  flaskData?: FlaskData;
 }
 
 export function AllTheProviders({
   children,
   flaskData = {
+    endpoints: {},
     entity: {
       hubmap_id: 'HBM123.ABC',
       entity_type: 'Entity',
     },
-  },
+  } as FlaskData,
 }: AllTheProvidersProps) {
   return (
     <Providers
@@ -46,20 +46,13 @@ export function AllTheProviders({
       isWorkspacesUser={isWorkspacesUser}
       flaskData={flaskData}
       isAuthenticated={false}
-      userEmail={undefined}
-      workspacesToken={undefined}
-      isHubmapUser={undefined}
-      userFirstName={undefined}
-      userLastName={undefined}
-      userGlobusId={undefined}
-      userGlobusAffiliation={undefined}
     >
       {children}
     </Providers>
   );
 }
 
-const customRender = (ui: React.ReactNode, options?: Exclude<RenderOptions, 'wrapper'> & { flaskData?: unknown }) =>
+const customRender = (ui: React.ReactNode, options?: Exclude<RenderOptions, 'wrapper'> & { flaskData?: FlaskData }) =>
   render(ui, {
     wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
     ...options,
@@ -67,10 +60,9 @@ const customRender = (ui: React.ReactNode, options?: Exclude<RenderOptions, 'wra
 
 const customRenderHook = <TProps, TResult>(
   callback: (props: TProps) => TResult,
-  options?: Partial<RenderHookOptions<TProps>> & { flaskData?: unknown },
+  options?: Partial<RenderHookOptions<TProps>> & { flaskData?: FlaskData },
 ) =>
   renderHook(callback, {
-    // @ts-expect-error - TS is causing issues with the wrapper prop type
     wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
     ...options,
   });

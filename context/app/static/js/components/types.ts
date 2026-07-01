@@ -5,14 +5,18 @@ import { UnprocessedFile } from './detailPage/files/types';
 export interface EventInfo {
   category: string;
   action?: string;
-  label?: string | number;
-  value?: string | number;
+  label?: string;
+  value?: unknown;
+  [key: string]: unknown;
 }
 
 // Interface intended for use in tracking events via trackEntityPageEvent, which takes care of
-// adding the category to the event.
-export interface EventWithOptionalCategory extends Omit<EventInfo, 'category'> {
+// adding the category to the event. `action` is required here since all call sites provide it.
+export interface EventWithOptionalCategory {
+  action: string;
   category?: string;
+  label?: string;
+  value?: unknown;
 }
 
 export type DonorEntityType = 'Donor';
@@ -42,6 +46,15 @@ export interface IngestPipelineLink {
 }
 
 export type DagProvenanceType = CWLPipelineLink | IngestPipelineLink;
+
+export interface SegmentationMetadataEntry {
+  ACVF: number;
+  Mean_SNZ: number;
+  Image?: string;
+  CellSegmentationChannels: string[];
+  NucleusSegmentationChannels: string[];
+  QualityScore: number;
+}
 
 export interface Entity {
   entity_type: ESEntityType;
@@ -94,7 +107,7 @@ export interface Donor extends Entity {
     race: string[];
     body_mass_index_value: string;
     body_mass_index_unit: string;
-  }>;
+  }> & { [key: string]: unknown };
   group_name: string;
   protocol_url: string;
   organ_donor_data: Record<string, unknown>;
@@ -153,6 +166,16 @@ export interface Dataset extends Entity {
   source_samples: Sample[];
   data_types: string[];
   is_integrated: boolean;
+  calculated_metadata?: {
+    annotation_tools?: string[];
+    object_types?: string[];
+  };
+  ingest_metadata: {
+    dag_provenance_list: DagProvenanceType[];
+    workflow_description?: string;
+    workflow_version?: string;
+    segmentation_metadata?: SegmentationMetadataEntry[];
+  };
 }
 
 export interface Collection extends Entity {

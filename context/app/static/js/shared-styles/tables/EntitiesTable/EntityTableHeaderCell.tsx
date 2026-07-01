@@ -100,7 +100,14 @@ export default function EntityHeaderCell<Doc>({
         },
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'start',
+          whiteSpace: column.noWrap ? 'nowrap' : undefined,
+        }}
+      >
         <TableSortLabel
           active={active}
           direction={active ? sortState.direction : undefined}

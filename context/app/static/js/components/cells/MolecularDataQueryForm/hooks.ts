@@ -1,8 +1,25 @@
 import { queryTypes } from 'js/components/cells/queryTypes';
 import { useFormContext } from 'react-hook-form';
-import { MolecularDataQueryFormState, QueryType } from './types';
+import { MolecularDataQueryFormState, QueryType, SCFindModality } from './types';
 import { AutocompleteResult } from './AutocompleteEntity/types';
 import { GetDatasetsProps } from '../CellsService';
+
+export function isScFindMethod(queryMethod: string): boolean {
+  return queryMethod === 'scFind' || queryMethod === 'scFindATAC';
+}
+
+export function getScFindModality(queryMethod: string): SCFindModality {
+  return queryMethod === 'scFindATAC' ? 'ATAC' : undefined;
+}
+
+export function makeScFindModalityLabel(modality: SCFindModality): string {
+  return modality === 'ATAC' ? 'ATACseq' : 'RNAseq';
+}
+
+export function getScFindModalityLabel(queryMethod: string): string {
+  const modality = getScFindModality(queryMethod);
+  return makeScFindModalityLabel(modality);
+}
 
 export function getCellVariableNames(
   queryType: string,

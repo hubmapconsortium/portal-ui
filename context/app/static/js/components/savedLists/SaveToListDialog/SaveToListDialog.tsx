@@ -74,7 +74,13 @@ function SaveToListDialog({
           >
             Cancel
           </Button>
-          <OptDisabledButton onClick={handleSubmit} color="primary" disabled={selectedLists.size === 0}>
+          <OptDisabledButton
+            onClick={() => {
+              void handleSubmit();
+            }}
+            color="primary"
+            disabled={selectedLists.size === 0}
+          >
             Save
           </OptDisabledButton>
         </>

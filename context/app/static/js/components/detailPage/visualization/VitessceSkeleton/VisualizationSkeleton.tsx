@@ -1,6 +1,6 @@
 import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { vitessceFixedHeight } from '../style';
 
 function VisualizationSkeleton() {

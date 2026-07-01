@@ -22,15 +22,18 @@ const Results = React.memo(function Results({
   isLoading: boolean;
   view: string;
 }) {
-  if (!isLoading && !length) {
-    return <NoResults />;
-  }
+  const noResults = !isLoading && !length;
 
   if (view === 'tile') {
-    return <ResultsTiles />;
+    return noResults ? <NoResults /> : <ResultsTiles />;
   }
 
-  return <ResultsTable isLoading={isLoading} />;
+  return (
+    <>
+      <ResultsTable isLoading={isLoading} />
+      {noResults && <NoResults />}
+    </>
+  );
 });
 
 function R() {

@@ -13,20 +13,20 @@ import IntegratedMaps from 'js/components/organ/DataProducts';
 import { OrganContextProvider } from 'js/components/organ/contexts';
 import useEntityStore from 'js/stores/useEntityStore';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
+import useOrganCellTypesData from 'js/api/scfind/useOrganCellTypesData';
 import {
   useAssayBucketsQuery,
   useDataProducts,
   useHasSamplesQuery,
-  useCellTypesOfOrgan,
   useSearchItems,
-  useIndexedDatasetsForOrgan,
+  useCombinedIndexedDatasetsForOrgan,
 } from './hooks';
 
 interface OrganProps {
   organ: OrganFile;
 }
 
-const { summaryId, hraId, scellopId, cellTypesId, referenceId, assaysId, integratedMapsId, samplesId } = OrganPageIds;
+const { summaryId, hraId, scellopId, cellTypesId, assaysId, integratedMapsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
   const setOrganFile = useEntityStore((state) => state.setOrganFile);
@@ -34,9 +34,13 @@ function Organ({ organ }: OrganProps) {
   const searchItems = useSearchItems(organ);
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
-  const scFind = useIndexedDatasetsForOrgan(searchItems, organ.name);
+  const scFind = useCombinedIndexedDatasetsForOrgan(searchItems, organ.name);
   const { dataProducts, isLoading, isLateral } = useDataProducts(organ);
-  const cellTypes = useCellTypesOfOrgan(organ.name);
+  // Shared (SWR-deduped) with the cell-types section's provider; used here to decide whether to show
+  // the section, accounting for both modalities (e.g. an ATAC-only organ).
+  const { data: organCellTypesData } = useOrganCellTypesData(organ.name);
+  const hasCellTypes =
+    (organCellTypesData?.cell_types.length ?? 0) > 0 || (organCellTypesData?.cell_types_atac.length ?? 0) > 0;
 
   // Set the organ file in the entity store for the header
   useEffect(() => {
@@ -52,8 +56,7 @@ function Organ({ organ }: OrganProps) {
     [summaryId]: Boolean(organ?.description),
     [hraId]: Boolean(organ.has_iu_component),
     [scellopId]: scFind.datasets.length > 0,
-    [cellTypesId]: cellTypes.length > 0,
-    [referenceId]: false, // TODO: Azimuth reference data are currently broken - we will restore this once we have updated data for pan-organ
+    [cellTypesId]: hasCellTypes,
     [assaysId]: assayBuckets.length > 0,
     [integratedMapsId]: dataProducts.length > 0,
     [samplesId]: samplesHits.length > 0,
@@ -71,11 +74,12 @@ function Organ({ organ }: OrganProps) {
         <Description shouldDisplay={shouldDisplaySection[summaryId]} />
         <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[hraId]} />
         <CellPopulationPlot
-          uuids={scFind.datasets}
+          rnaUuids={scFind.rnaDatasets}
+          atacUuids={scFind.atacDatasets}
           shouldDisplay={shouldDisplaySection[scellopId]}
           organ={organ.name}
         />
-        <CellTypes shouldDisplay={shouldDisplaySection[cellTypesId]} cellTypes={cellTypes} />
+        <CellTypes shouldDisplay={shouldDisplaySection[cellTypesId]} />
         <Assays organTerms={searchItems} bucketData={assayBuckets} shouldDisplay={shouldDisplaySection[assaysId]} />
         <IntegratedMaps
           dataProducts={dataProducts}

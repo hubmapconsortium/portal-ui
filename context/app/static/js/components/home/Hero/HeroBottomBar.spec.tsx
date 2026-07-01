@@ -5,9 +5,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import HeroBottomBar from './HeroBottomBar';
 import { BOTTOM_BAR_ITEMS } from './const';
 
-jest.mock('@mui/material/useMediaQuery');
-const mockUseMediaQuery = useMediaQuery as jest.MockedFunction<typeof useMediaQuery>;
-const mockTrackEvent = trackEvent as jest.MockedFunction<typeof trackEvent>;
+vi.mock('@mui/material/useMediaQuery');
+const mockUseMediaQuery = vi.mocked(useMediaQuery);
+const mockTrackEvent = vi.mocked(trackEvent);
 
 let intersectionObserverCallback: IntersectionObserverCallback;
 
@@ -21,8 +21,8 @@ beforeEach(() => {
     disconnect() {}
   } as unknown as typeof IntersectionObserver;
 
-  jest.spyOn(window, 'scrollTo').mockImplementation(jest.fn());
-  jest.spyOn(document, 'getElementById').mockReturnValue({
+  vi.spyOn(window, 'scrollTo').mockImplementation(vi.fn());
+  vi.spyOn(document, 'getElementById').mockReturnValue({
     getBoundingClientRect: () => ({ top: 200 }),
   } as unknown as HTMLElement);
 });

@@ -6,6 +6,12 @@ import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
 import { SCFindParams } from '../organ/utils';
 import { SearchTypeProps } from './utils';
+import {
+  READABLE_PARAM_FIELDS,
+  encodeHierarchical,
+  serializeReadableParams,
+  buildScFindAndDataProductParams,
+} from './searchParams';
 
 export interface SortField {
   field: string;
@@ -19,6 +25,7 @@ export const FACETS = {
   range: 'RANGE',
   date: 'DATE',
   exists: 'EXISTS',
+  booleanGroup: 'BOOLEAN_GROUP',
 } as const;
 
 export interface FacetConfig {
@@ -49,6 +56,30 @@ export interface ExistsConfig extends FacetConfig {
 export interface ExistsValues {
   values: boolean;
   type: typeof FACETS.exists;
+}
+
+export interface BooleanGroupItem {
+  field: string;
+  label: string;
+  queryType: 'exists' | 'term';
+  value?: string;
+}
+
+export interface BooleanGroupConfig extends FacetConfig {
+  type: typeof FACETS.booleanGroup;
+  items: BooleanGroupItem[];
+}
+
+export interface BooleanGroupValues<V = Set<string>> {
+  values: V;
+  type: typeof FACETS.booleanGroup;
+}
+
+export function getBooleanGroupItemKey(item: BooleanGroupItem): string {
+  if (item.queryType === 'exists') {
+    return item.field;
+  }
+  return `${item.field}::${item.value}`;
 }
 
 export interface HierarchicalTermConfig extends FacetConfig {
@@ -94,8 +125,9 @@ export type Filter<V = Set<string>> =
   | HierarchicalTermValues<V>
   | RangeValues
   | DateValues
-  | ExistsValues;
-export type Facet = TermConfig | HierarchicalTermConfig | RangeConfig | DateConfig | ExistsConfig;
+  | ExistsValues
+  | BooleanGroupValues<V>;
+export type Facet = TermConfig | HierarchicalTermConfig | RangeConfig | DateConfig | ExistsConfig | BooleanGroupConfig;
 
 export type FiltersType<V = Set<string>> = Record<string, Filter<V>>;
 export type FacetsType = Record<string, Facet>;
@@ -107,6 +139,12 @@ export interface SearchState<V> {
   initialFilters: FiltersType<V>;
   facets: FacetsType;
   defaultQuery?: esb.Query;
+  // Used as the default query when filters.ancestor_ids has values. Lets the dataset search
+  // include Support entities when navigating from a "View Derived Datasets" link so the
+  // results match the descendant counts shown in the parent entity's prov section.
+  defaultQueryWithAncestorFilter?: esb.Query;
+  latestRevisionFilter?: esb.Query;
+  includeSupersededEntities?: boolean;
   search: string;
   searchFields: string[];
   sortField: SortField;
@@ -118,6 +156,9 @@ export interface SearchState<V> {
   type: SearchTypeProps['type'];
   analyticsCategory: string;
   scFindParams?: SCFindParams;
+  // Set when navigating from a data product's "View Datasets" link. The search page resolves it
+  // into a `uuid` filter; retained here so the page can explain the filtered results to the user.
+  dataProductID?: string;
 }
 
 // Used to validate URL Search
@@ -153,9 +194,21 @@ const existsFilterSchema = z.object({
   type: z.literal(FACETS.exists),
 });
 
+const booleanGroupFilterSchema = z.object({
+  values: z.array(z.string()),
+  type: z.literal(FACETS.booleanGroup),
+});
+
 const filtersSchema = z.record(
   z.string(),
-  z.union([dateFilterSchema, rangeFilterSchema, termFilterSchema, hierarchicalTermFilterSchema, existsFilterSchema]),
+  z.union([
+    dateFilterSchema,
+    rangeFilterSchema,
+    termFilterSchema,
+    hierarchicalTermFilterSchema,
+    existsFilterSchema,
+    booleanGroupFilterSchema,
+  ]),
 );
 
 const sortFieldSchema = z.object({
@@ -168,13 +221,17 @@ const searchURLStateSchema = z
     search: z.string(),
     sortField: sortFieldSchema,
     filters: filtersSchema,
+    includeSupersededEntities: z.boolean(),
     scFindParams: z
       .object({
         genes: z.array(z.string()).optional(),
         cellTypes: z.array(z.string()).optional(),
         scFindOnly: z.boolean().optional(),
+        modality: z.string().optional(),
+        allModalities: z.boolean().optional(),
       })
       .optional(),
+    dataProductID: z.string().optional(),
   })
   .partial();
 
@@ -218,6 +275,8 @@ export interface SearchStoreActions {
   filterRange: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterExists: ({ field }: { field: string }) => void;
+  filterBooleanGroupItem: ({ field, itemKey }: { field: string; itemKey: string }) => void;
+  setIncludeSupersededEntities: (value: boolean) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -262,6 +321,14 @@ export function isExistsFilter<V = Set<string>>(filter: Filter<V>): filter is Ex
   return filter.type === 'EXISTS';
 }
 
+export function isBooleanGroupFacet(facet: Facet): facet is BooleanGroupConfig {
+  return facet.type === 'BOOLEAN_GROUP';
+}
+
+export function isBooleanGroupFilter<V = Set<string>>(filter: Filter<V>): filter is BooleanGroupValues<V> {
+  return filter.type === 'BOOLEAN_GROUP';
+}
+
 export function filterHasValues({ filter }: { filter: Filter }) {
   if (isTermFilter(filter)) {
     return filter.values.size;
@@ -282,6 +349,10 @@ export function filterHasValues({ filter }: { filter: Filter }) {
   if (isExistsFilter(filter)) {
     return filter.values;
   }
+
+  if (isBooleanGroupFilter(filter)) {
+    return filter.values.size > 0;
+  }
   return false;
 }
 
@@ -289,17 +360,54 @@ export function buildSearchLink({
   entity_type,
   filters,
   scFindParams = {},
+  dataProductID,
 }: {
   entity_type: 'Donor' | 'Dataset' | 'Sample';
   filters?: FiltersType<string[]>;
   scFindParams?: SCFindParams;
+  dataProductID?: string;
 }) {
-  const search =
-    filters || scFindParams
-      ? `?${LZString.compressToEncodedURIComponent(JSON.stringify({ filters, scFindParams }))}`
-      : '';
+  if (!filters && !Object.keys(scFindParams).length && !dataProductID) {
+    return `/search/${entity_type.toLowerCase()}s`;
+  }
 
-  return `/search/${entity_type.toLowerCase()}s${search}`;
+  const readableParamValues: Record<string, string[]> = {};
+  const remainingFilters: FiltersType<string[]> = {};
+
+  if (filters) {
+    for (const [field, filter] of Object.entries(filters)) {
+      const paramName = READABLE_PARAM_FIELDS[field as keyof typeof READABLE_PARAM_FIELDS];
+      if (paramName) {
+        if (filter.type === 'TERM') {
+          readableParamValues[paramName] = filter.values;
+        } else if (filter.type === 'HIERARCHICAL') {
+          readableParamValues[paramName] = encodeHierarchical(
+            Object.fromEntries(Object.entries(filter.values).map(([k, v]) => [k, new Set(v)])),
+          );
+        } else {
+          remainingFilters[field] = filter;
+        }
+      } else {
+        remainingFilters[field] = filter;
+      }
+    }
+  }
+
+  // scFind queries and the data product ID are emitted as readable params (below), not in `q`.
+  const qValue =
+    Object.keys(remainingFilters).length > 0
+      ? LZString.compressToEncodedURIComponent(JSON.stringify({ filters: remainingFilters }))
+      : null;
+
+  const urlParams = serializeReadableParams(buildScFindAndDataProductParams({ scFindParams, dataProductID }), {
+    organ: readableParamValues['organ'] ?? [],
+    analyte: readableParamValues['analyte'] ?? [],
+    dataset_type: readableParamValues['dataset_type'] ?? [],
+    status: readableParamValues['status'] ?? [],
+    q: qValue,
+  });
+
+  return `/search/${entity_type.toLowerCase()}s${urlParams}`;
 }
 
 export function createDatasetSearchLink(values: Record<string, string[]>) {
@@ -315,25 +423,49 @@ export function createDatasetSearchLink(values: Record<string, string[]>) {
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, filters } = state;
+  const { search, sortField, filters, includeSupersededEntities, scFindParams, dataProductID } = state;
 
-  const filtersWithValues = Object.fromEntries(
-    Object.entries(filters).filter(([, v]) => filterHasValues({ filter: v })),
-  );
+  // When the uuid filter was derived from scFind / data product params, keep those compact readable
+  // params as the source of truth (re-resolved on load) rather than serializing every UUID into `q`.
+  const uuidIsDerived = Boolean(scFindParams && Object.keys(scFindParams).length > 0) || Boolean(dataProductID);
 
-  const urlState = {
-    search,
-    sortField,
-    filters: filtersWithValues,
-  };
+  const readableParamValues: Record<string, string[]> = {};
+  const remainingFilters: FiltersType = {};
 
-  const urlStateWithArrays: string = JSON.stringify(urlState, (_key, value: unknown) =>
-    value instanceof Set ? [...value] : value,
-  );
+  for (const [field, filter] of Object.entries(filters)) {
+    if (!filterHasValues({ filter })) continue;
+    if (uuidIsDerived && field === 'uuid') continue;
+    const paramName = READABLE_PARAM_FIELDS[field as keyof typeof READABLE_PARAM_FIELDS];
+    if (paramName) {
+      if (isTermFilter(filter)) {
+        readableParamValues[paramName] = [...filter.values];
+      } else if (isHierarchicalFilter(filter)) {
+        readableParamValues[paramName] = encodeHierarchical(filter.values);
+      }
+    } else {
+      remainingFilters[field] = filter;
+    }
+  }
 
-  const { pathname } = history.location;
+  const hasRemaining = search || Object.keys(remainingFilters).length > 0 || includeSupersededEntities;
+  const qValue = hasRemaining
+    ? LZString.compressToEncodedURIComponent(
+        JSON.stringify(
+          { search, sortField, filters: remainingFilters, includeSupersededEntities },
+          (_key, value: unknown) => (value instanceof Set ? [...value] : value),
+        ),
+      )
+    : null;
 
-  history.push(`${pathname}?${LZString.compressToEncodedURIComponent(urlStateWithArrays)}`);
+  const urlParams = serializeReadableParams(buildScFindAndDataProductParams({ scFindParams, dataProductID }), {
+    organ: readableParamValues['organ'] ?? [],
+    analyte: readableParamValues['analyte'] ?? [],
+    dataset_type: readableParamValues['dataset_type'] ?? [],
+    status: readableParamValues['status'] ?? [],
+    q: qValue,
+  });
+
+  history.push(`${history.location.pathname}${urlParams}`);
 }
 
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>
@@ -341,6 +473,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     ...initialState,
     resetFilters: () => {
       set((state) => {
+        state.includeSupersededEntities = false;
         state.filters = state.initialFilters;
         replaceURLSearchParams(state);
       });
@@ -476,6 +609,28 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         }
 
         filter.values = !filter.values;
+        replaceURLSearchParams(state);
+      });
+    },
+    filterBooleanGroupItem: ({ field, itemKey }) => {
+      set((state) => {
+        const filter = state?.filters[field];
+
+        if (!isBooleanGroupFilter(filter)) {
+          return;
+        }
+
+        if (filter.values.has(itemKey)) {
+          filter.values.delete(itemKey);
+        } else {
+          filter.values.add(itemKey);
+        }
+        replaceURLSearchParams(state);
+      });
+    },
+    setIncludeSupersededEntities: (value) => {
+      set((state) => {
+        state.includeSupersededEntities = value;
         replaceURLSearchParams(state);
       });
     },

@@ -4,7 +4,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Hero from './Hero';
 
-jest.mock('js/shared-styles/icons', () => {
+vi.mock('js/shared-styles/icons', () => {
   const MockIcon = () => null;
   return {
     OrganIcon: MockIcon,
@@ -16,9 +16,9 @@ jest.mock('js/shared-styles/icons', () => {
   };
 });
 
-jest.mock('@mui/material/useMediaQuery');
-const mockUseMediaQuery = useMediaQuery as jest.MockedFunction<typeof useMediaQuery>;
-const mockTrackEvent = trackEvent as jest.MockedFunction<typeof trackEvent>;
+vi.mock('@mui/material/useMediaQuery');
+const mockUseMediaQuery = vi.mocked(useMediaQuery);
+const mockTrackEvent = vi.mocked(trackEvent);
 
 beforeEach(() => {
   // Render the desktop pill bar to avoid rendering the Select dropdown
@@ -26,17 +26,17 @@ beforeEach(() => {
   // HeroBackground uses matchMedia for prefers-reduced-motion
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn((query: string) => ({
+    value: vi.fn((query: string) => ({
       matches: false,
       media: query,
       onchange: null,
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
-  jest.spyOn(window, 'scrollTo').mockImplementation(jest.fn());
-  jest.spyOn(document, 'getElementById').mockReturnValue({
+  vi.spyOn(window, 'scrollTo').mockImplementation(vi.fn());
+  vi.spyOn(document, 'getElementById').mockReturnValue({
     getBoundingClientRect: () => ({ top: 200 }),
   } as unknown as HTMLElement);
 });

@@ -1,6 +1,13 @@
 import useSWR from 'swr';
-import { fetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import {
+  cellTypeNameContainsComma,
+  createScFindFlaskKey,
+  createScFindFlaskPostRequest,
+  ScFindRequest,
+  scFindFetcher,
+  stringOrArrayToString,
+  toArray,
+} from './utils';
 
 interface CellTypeMarkerInfo {
   cellType: string;
@@ -19,9 +26,10 @@ export interface CellTypeMarkersParams {
   topK?: number;
   sortField?: keyof CellTypeMarkerInfo;
   includePrefix?: boolean;
+  modality?: string;
 }
 
-type CellTypeMarkersKey = string | null;
+type CellTypeMarkersKey = ScFindRequest | null;
 
 interface CellTypeMarkersResponse {
   // This is the correct name for the property based on the API response, even though it doesn't
@@ -29,26 +37,34 @@ interface CellTypeMarkersResponse {
   findGeneSignatures: CellTypeMarkerInfo[];
 }
 
-export function createCellTypeMarkersKey(
-  scFindEndpoint: string,
-  { cellTypes, topK, backgroundCellTypes, sortField, includePrefix }: CellTypeMarkersParams,
-  scFindIndexVersion?: string,
-): CellTypeMarkersKey {
+export function createCellTypeMarkersKey({
+  cellTypes,
+  topK,
+  backgroundCellTypes,
+  sortField,
+  includePrefix,
+  modality,
+}: CellTypeMarkersParams): CellTypeMarkersKey {
   if (!cellTypes || cellTypes.length === 0) {
     return null;
   }
-  return createScFindKey(
-    scFindEndpoint,
-    'cellTypeMarkers',
-    {
-      cell_types: stringOrArrayToString(cellTypes),
-      background_cell_types: backgroundCellTypes ? stringOrArrayToString(backgroundCellTypes) : undefined,
-      top_k: topK ? topK.toString() : undefined,
-      include_prefix: includePrefix ? String(includePrefix) : undefined,
+  if (cellTypeNameContainsComma(cellTypes) || cellTypeNameContainsComma(backgroundCellTypes)) {
+    return createScFindFlaskPostRequest('/scfind/cell-type-markers.json', {
+      cell_types: toArray(cellTypes),
+      background_cell_types: backgroundCellTypes,
+      top_k: topK,
+      include_prefix: includePrefix,
       sort_field: sortField,
-    },
-    scFindIndexVersion,
-  );
+    });
+  }
+  return createScFindFlaskKey('/scfind/cell-type-markers.json', {
+    cell_types: stringOrArrayToString(cellTypes),
+    background_cell_types: backgroundCellTypes ? stringOrArrayToString(backgroundCellTypes) : undefined,
+    top_k: topK ? topK.toString() : undefined,
+    include_prefix: includePrefix ? String(includePrefix) : undefined,
+    sort_field: sortField,
+    modality,
+  });
 }
 
 export default function useCellTypeMarkers({
@@ -57,11 +73,6 @@ export default function useCellTypeMarkers({
   includePrefix = true,
   ...params
 }: CellTypeMarkersParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCellTypeMarkersKey(
-    scFindEndpoint,
-    { topK, sortField, includePrefix, ...params },
-    scFindIndexVersion,
-  );
-  return useSWR<CellTypeMarkersResponse, unknown, CellTypeMarkersKey>(key, (url) => fetcher({ url }));
+  const key = createCellTypeMarkersKey({ topK, sortField, includePrefix, ...params });
+  return useSWR<CellTypeMarkersResponse, unknown, CellTypeMarkersKey>(key, scFindFetcher);
 }

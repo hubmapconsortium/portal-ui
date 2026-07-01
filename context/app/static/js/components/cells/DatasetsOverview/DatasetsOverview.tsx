@@ -9,16 +9,24 @@ import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
+import { Tab, Tabs } from 'js/shared-styles/tabs';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
 import DatasetsOverviewChart from './DatasetsOverviewChart';
+import Alert from '@mui/material/Alert';
+import { SCFindModality } from '../MolecularDataQueryForm/types';
+import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 
 interface DatasetsOverviewProps extends React.PropsWithChildren {
   datasets: string[];
   belowTheFold?: React.ReactNode;
   trackingInfo?: EventInfo;
   tableDescription?: React.ReactNode;
+  /** Controlled RNA/ATAC value; when `onDataTypeChange` is also provided the chart shows a Data Type switch. */
+  dataType?: SCFindModality;
+  onDataTypeChange?: (dataType: SCFindModality) => void;
 }
 
 export default function DatasetsOverview({
@@ -27,8 +35,11 @@ export default function DatasetsOverview({
   belowTheFold,
   trackingInfo,
   tableDescription,
+  dataType,
+  onDataTypeChange,
 }: DatasetsOverviewProps) {
-  const { data: indexedDatasets, isLoading, error } = useIndexedDatasets();
+  const modality = useOptionalSCFindModality();
+  const { data: indexedDatasets, isLoading, error } = useIndexedDatasets(modality);
   const indexed = useDatasetsOverview(indexedDatasets?.datasets ?? []);
   const all = useDatasetsOverview();
   const matched = useDatasetsOverview(datasets);
@@ -58,7 +69,7 @@ export default function DatasetsOverview({
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
         label: trackingInfo.label ? `${trackingInfo.label} Expand` : 'Expand',
-      } as EventInfo);
+      });
     }
   });
 
@@ -66,7 +77,7 @@ export default function DatasetsOverview({
     return <Skeleton variant="rectangular" width="100%" height={300} />;
   }
   if (error) {
-    return <div>Error: {error?.message}</div>;
+    return <Alert severity="error">Failed to load indexed datasets overview. {error?.message}</Alert>;
   }
 
   return (
@@ -85,10 +96,30 @@ export default function DatasetsOverview({
       >
         <Stack spacing={3}>
           <Description belowTheFold={belowTheFold}>{children}</Description>
-          <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
-          <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
-            {tableDescription}
-          </DatasetsOverviewTable>
+          <ChartLoader isLoading={matched.isLoading || indexed.isLoading || all.isLoading}>
+            <DatasetsOverviewChart
+              matched={matched}
+              indexed={indexed}
+              all={all}
+              trackingInfo={trackingInfo}
+              dataType={dataType}
+              onDataTypeChange={onDataTypeChange}
+            />
+          </ChartLoader>
+          <div>
+            {onDataTypeChange && (
+              <Tabs
+                value={dataType === 'ATAC' ? 1 : 0}
+                onChange={(_event, value: number) => onDataTypeChange(value === 1 ? 'ATAC' : undefined)}
+              >
+                <Tab label="RNAseq" index={0} />
+                <Tab label="ATACseq" index={1} />
+              </Tabs>
+            )}
+            <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
+              {tableDescription}
+            </DatasetsOverviewTable>
+          </div>
         </Stack>
       </DetailsAccordion>
     </Box>

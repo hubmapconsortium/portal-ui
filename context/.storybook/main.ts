@@ -1,55 +1,34 @@
-import type { StorybookConfig } from '@storybook/react-webpack5';
-import { merge } from 'webpack-merge';
-import { alias } from '../build-utils/alias';
-import { HuBMAPGlobals } from '../build-utils/webpack.plugins';
+import type { StorybookConfig } from '@storybook/react-vite';
+import { mergeConfig } from 'vite';
+import { resolve } from 'node:path';
+import svgr from 'vite-plugin-svgr';
+import { readFileSync } from 'node:fs';
+
+const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf8')) as { version: string };
 
 const config: StorybookConfig = {
-  framework: '@storybook/react-webpack5',
+  framework: '@storybook/react-vite',
   stories: ['../app/static/js/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: [
-    '@storybook/addon-links',
-    'storybook-addon-swc',
-    '@storybook/addon-webpack5-compiler-swc',
-    '@storybook/addon-docs',
-  ],
+  addons: ['@storybook/addon-links', '@storybook/addon-docs'],
   staticDirs: ['../app/static/assets', '../app/static/storybook-public'],
-  webpackFinal: async (webpackConfig) => {
-    // exclude svgs from the default file loader
-    webpackConfig.module?.rules?.forEach((rule) => {
-      if (
-        // Typescript really wants us to make sure rule is an object
-        typeof rule === 'object' &&
-        rule != null &&
-        'test' in rule &&
-        rule.test instanceof RegExp &&
-        // Here's the actual checks
-        rule.test.test('.svg')
-      ) {
-        rule.exclude = /\.svg$/;
-      }
-    });
-
-    // add aliases and svgr loader
-    return merge(webpackConfig, {
-      module: {
-        rules: [
-          {
-            test: /\.svg$/,
-            use: [
-              {
-                loader: '@svgr/webpack',
-              },
-            ],
-          },
-        ],
-      },
+  viteFinal: async (viteConfig) =>
+    mergeConfig(viteConfig, {
       resolve: {
-        alias: alias,
+        alias: {
+          js: resolve(__dirname, '../app/static/js'),
+          assets: resolve(__dirname, '../app/static/assets'),
+          'shared-styles': resolve(__dirname, '../app/static/js/shared-styles'),
+          package: resolve(__dirname, '../package.json'),
+          '@mui/styled-engine': '@mui/styled-engine-sc',
+        },
+        dedupe: ['react', 'react-dom', '@mui/material', 'styled-components'],
       },
-      plugins: [HuBMAPGlobals],
-    });
-  },
-
+      define: {
+        CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
+        PACKAGE_VERSION: JSON.stringify(pkg.version),
+      },
+      plugins: [svgr({ svgrOptions: { exportType: 'default' }, include: '**/*.svg' })],
+    }),
   typescript: {
     check: true,
     reactDocgen: 'react-docgen',

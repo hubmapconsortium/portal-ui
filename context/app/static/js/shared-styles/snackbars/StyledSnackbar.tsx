@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { useShallow } from 'zustand/react/shallow';
 import { useSnackbarStore } from './store';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
@@ -8,11 +9,13 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 });
 
 export default function StyledSnackbar() {
-  const { message, snackbarOpen, closeSnackbar } = useSnackbarStore((state) => ({
-    message: state.message,
-    snackbarOpen: state.snackbarOpen,
-    closeSnackbar: state.closeSnackbar,
-  }));
+  const { message, snackbarOpen, closeSnackbar } = useSnackbarStore(
+    useShallow((state) => ({
+      message: state.message,
+      snackbarOpen: state.snackbarOpen,
+      closeSnackbar: state.closeSnackbar,
+    })),
+  );
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

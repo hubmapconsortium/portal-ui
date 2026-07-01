@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { multiFetcher } from 'js/helpers/swr';
+import { VitessceConfig } from 'vitessce';
 import { fillUrls } from './utils';
 import { PublicationVignette } from '../types';
 
@@ -35,8 +36,9 @@ export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }:
       return {};
     };
     // Formats the vitessce config data to replace the {{ base_url }} placeholder with the actual url.
-    // TODO: Improve this `object` type; I couldn't figure out how to import the appropriate `VitessceConfig` type from Vitessce.
-    const formattedData: object[] = data.map((d) => fillUrls(d as object, urlHandler, requestInitHandler));
+    const formattedData: VitessceConfig[] = data.map((d) =>
+      fillUrls(d as VitessceConfig, urlHandler, requestInitHandler),
+    );
     return formattedData;
   }
   return undefined;

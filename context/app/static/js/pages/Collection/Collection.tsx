@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 
@@ -17,7 +17,8 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
 import { buildSearchLink } from 'js/components/search/store';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
-import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
+import RetractedAlert from 'js/components/detailPage/RetractedAlert';
+import CollectionDatasetsTable from './CollectionDatasetsTable';
 
 const descriptions = {
   contributors: 'This is the list of contributors affiliated with this collection.',
@@ -38,14 +39,9 @@ function Summary({ title }: { title: string }) {
 }
 
 function Datasets({ datasets }: { datasets?: Dataset[] }) {
-  const {
-    datasets: data,
-    columns,
-    uuids,
-  } = useCollectionsDatasets({
+  const { uuids, retractedSortMap, hasRetracted } = useCollectionsDatasets({
     ids: datasets?.map((d) => d.uuid) ?? [],
   });
-  const [openIndex, setOpenIndex] = useState(0);
 
   const searchPageHref = useMemo(
     () =>
@@ -72,22 +68,16 @@ function Datasets({ datasets }: { datasets?: Dataset[] }) {
       icon={sectionIconMap.datasets}
       buttons={<RelatedEntitiesSectionActions searchPageHref={searchPageHref} uuids={uuids} />}
     >
+      {hasRetracted && (
+        <RetractedAlert>
+          This collection contains retracted datasets, which should no longer be used. Issues affecting the reliability
+          of these datasets were identified, and all processed data derived from them have also been retracted.
+          Replacement datasets may be available with updated data.
+        </RetractedAlert>
+      )}
       <SectionDescription>{descriptions.datasets}</SectionDescription>
       <Paper>
-        <RelatedEntitiesTabs
-          entities={[
-            {
-              entityType: 'Dataset' as const,
-              tabLabel: 'Datasets',
-              data,
-              columns,
-            },
-          ]}
-          openIndex={openIndex}
-          setOpenIndex={setOpenIndex}
-          ariaLabel="Derived Data Tabs"
-          renderWarningMessage={(tableEntityType) => `No ${tableEntityType.toLowerCase()}s for this collection.`}
-        />
+        <CollectionDatasetsTable uuids={uuids} retractedSortMap={retractedSortMap} />
       </Paper>
     </CollapsibleDetailPageSection>
   );

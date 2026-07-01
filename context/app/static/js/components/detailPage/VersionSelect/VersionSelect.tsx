@@ -1,4 +1,5 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { StyledButton, OverflowEllipsis, EmptyFullWidthDiv } from './style';
@@ -19,11 +20,13 @@ function VersionSelect() {
   const { sectionDataset } = useProcessedDatasetContext();
   const track = useTrackEntityPageEvent();
 
-  const { versions, setSelectedVersion, currentSelectedVersion } = useSelectedVersionStore((state) => ({
-    versions: state.versions.get(sectionDataset.uuid) ?? [],
-    currentSelectedVersion: state.selectedVersions.get(sectionDataset.uuid),
-    setSelectedVersion: state.setSelectedVersion,
-  }));
+  const { versions, setSelectedVersion, currentSelectedVersion } = useSelectedVersionStore(
+    useShallow((state) => ({
+      versions: state.versions.get(sectionDataset.uuid) ?? [],
+      currentSelectedVersion: state.selectedVersions.get(sectionDataset.uuid),
+      setSelectedVersion: state.setSelectedVersion,
+    })),
+  );
 
   const selectedVersionIndex = versions.findIndex((version) => version.uuid === currentSelectedVersion?.uuid);
 
