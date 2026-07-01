@@ -25,9 +25,9 @@ whitenoise[brotli]>=6.9.0
 
 # Development dependencies
 boto3>=1.39.3
-lxml>=6.0.0
+lxml>=6.1.0
 pytest-mock>=3.15.1
-pytest>=8.4.2
+pytest>=9.0.3
 ruff>=0.14.0
 ```
 
@@ -93,7 +93,7 @@ ruff>=0.14.0
 "udi-yac": "^0.1.6",
 "universal-cookie": "^7.1.2",
 "use-resize-observer": "^9.1.0",
-"uuid": "^11.1.1",
+"uuid": "^14.0.0",
 "vega": "^6.2.0",
 "vega-embed": "^7.1.0",
 "vitessce": "4.0.0-test.3",
