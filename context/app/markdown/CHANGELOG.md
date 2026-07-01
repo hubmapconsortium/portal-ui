@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.48.0 - 2026-07-01
+
+- Bumped dependencies to resolve Dependabot alerts: `uuid` (^14), `pytest` (>=9.0.3), `lxml` (>=6.1.0); pnpm overrides for `piscina`, `lodash`, `minimatch`; uv constraints for `aiohttp`, `tornado`, `cryptography`, `pyjwt`, `idna`, `urllib3`, `pillow`.
+- Support datasets with **multiple donors**. Donor demographic filters, table columns, and charts previously reflected only the first donor; they now read a new aggregated `donor_demographics` object (produced by search-api) so an entity is accurately represented for *every* donor.
+  - **Search facets** (`pages/search/S.tsx`): Dataset/Sample "Donor Metadata" Sex/Age/Race/BMI filters target `donor_demographics.*` (categorical sets + numeric value arrays) instead of `donor.mapped_metadata.*`; Donor searches still use the donor's own `mapped_metadata`. So a multi-donor dataset matches a filter when *any* donor's value qualifies.
+  - **Table columns** (`shared-styles/tables/columns.tsx`): the parent-donor Age/Sex/Race columns render aggregated values — sets (e.g. "Female, Male") and numeric ranges (e.g. "30-70 years", via the new `getDemographicRangeString` helper). Donor-entity columns are unchanged.
+  - **Charts/analytics** (`components/cells/DatasetsOverview/hooks.ts`, `components/home/HuBMAPDatasetsChart/queries.ts`, `components/organ/utils.ts`): donor demographic bucketing/filtering uses `donor_demographics.*`, so a mixed-demographic dataset is counted under each of its donors' values. (The per-bucket unique-donor count still keys on the primary donor's `donor.uuid`; exact multi-donor counts are a future follow-up.)
+  - The Diversity page and Donor tiles are unchanged (both are single-donor / Donor-index paths). The dataset detail "Donor" section and the cell-population plot still show the primary donor's metadata — a follow-up.
+- Fixed search "select all" excluding retracted/superseded datasets that have a `next_revision_uuid` or `sub_status`, even when "Include superseded entities" was enabled. The select-all query now mirrors the displayed table results.
+
+
+
 ## v1.47.7 - 2026-06-23
 
 - Display em dashes for empty Raw Download, Processed Download, and Shiny App entries in the Integrated Maps table.

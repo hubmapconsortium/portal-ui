@@ -1,1 +1,0 @@
-- Fixed search "select all" excluding retracted/superseded datasets that have a `next_revision_uuid` or `sub_status`, even when "Include superseded entities" was enabled. The select-all query now mirrors the displayed table results.
