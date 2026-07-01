@@ -1,107 +1,81 @@
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
-import { Theme, useTheme } from '@mui/material/styles';
-import { DownloadIcon, LightbulbIcon, SearchIcon, VisualizationIcon } from 'js/shared-styles/icons';
-import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { buildSearchLink } from 'js/components/search/store';
-import HeroTimelineSlide from './HeroTimelineSlide';
-import HeroTab, { HeroTabProps } from './HeroTab';
-import { HeroImageSlide } from './HeroImageSlide';
-import { HeroGridContainer } from './styles';
-import { HeroTabContextProvider } from './HeroTabsContext';
+import React from 'react';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
-const fontSize = {
-  fontSize: '1.5rem',
-} as const;
+import { trackEvent } from 'js/helpers/trackers';
+import HeroBackground from './HeroBackground';
+import HeroCard from './HeroCard';
+import HeroBottomBar from './HeroBottomBar';
+import { HERO_CARDS } from './const';
+import { HeroSection, HeroContentContainer } from './styles';
 
-const themedHeroTabs = (theme: Theme) =>
-  [
-    {
-      title: 'Discover',
-      description:
-        'Find data with our faceted search or explore by biological entities of organs, molecules or cell types.',
-      icon: <SearchIcon color="success" {...fontSize} />,
-      actions: [
-        {
-          title: 'Explore datasets',
-          icon: <entityIconMap.Dataset {...fontSize} />,
-          href: buildSearchLink({
-            entity_type: 'Dataset',
-          }),
-        },
-        {
-          title: 'Explore molecules/cell types',
-          icon: <entityIconMap.Gene {...fontSize} />,
-          href: '/search/biomarkers-cell-types',
-        },
-      ],
-      bgColor: theme.palette.accent.success90,
-      content: HeroImageSlide,
-    },
-    {
-      title: 'Visualize',
-      description:
-        'Explore spatial and single-cell data through powerful visualizations to gain deeper insights for your research.',
-      icon: <VisualizationIcon color="error" {...fontSize} />,
-      actions: [
-        {
-          title: 'Visualize data with Workspaces',
-          icon: <entityIconMap.Workspace {...fontSize} />,
-          href: '/workspaces',
-        },
-      ],
-      bgColor: theme.palette.accent.primary90,
-      content: HeroImageSlide,
-    },
-    {
-      title: 'Download',
-      description:
-        'Preview files with our built-in file browser and download datasets from Globus or dbGaP straight to your device.',
-      icon: <DownloadIcon color="info" {...fontSize} />,
-      actions: [
-        {
-          title: 'Find datasets to download',
-          icon: <entityIconMap.Dataset {...fontSize} />,
-          href: buildSearchLink({
-            entity_type: 'Dataset',
-          }),
-        },
-      ],
-      bgColor: theme.palette.accent.info90,
-      content: HeroImageSlide,
-    },
-    {
-      title: "What's New?",
-      description: 'Stay up to date with the latest HuBMAP Data Portal developments.',
-      icon: <LightbulbIcon color="warning" {...fontSize} />,
-      bgColor: theme.palette.accent.warning90,
-      content: HeroTimelineSlide,
-    },
-  ] satisfies Partial<HeroTabProps>[];
+function HeroLeftColumn() {
+  return (
+    <Stack spacing={3} justifyContent="start" maxWidth={{ lg: 450 }}>
+      <Typography variant="subtitle1" color="primary">
+        Human BioMolecular Atlas Program Data Portal
+      </Typography>
+      <Typography variant="h1" component="h1" data-testid="home-page-title" fontWeight={300}>
+        Explore Healthy Human Single-Cell and Spatial Data
+      </Typography>
+      <Typography variant="h4" component="p" color="text.secondary">
+        An open-source platform to discover standardized organ, cell type, gene, and tissue data across the human body.
+      </Typography>
+      <Stack direction="row" spacing={2}>
+        <Button
+          variant="contained"
+          href="/search/datasets"
+          onClick={() => {
+            trackEvent({ category: 'Homepage', action: 'Hero / Explore All Datasets Button' });
+          }}
+        >
+          Explore All Datasets
+        </Button>
+        <Button
+          variant="outlined"
+          // Can't make it white without !important due to MUI specificity, but it doesn't cause any issues in this case since it's only used here and we want it to be white
+          sx={{ backgroundColor: 'white !important' }}
+          href="/workspaces"
+          onClick={() => {
+            trackEvent({ category: 'Homepage', action: 'Hero / Launch Workspaces Button' });
+          }}
+        >
+          Launch Workspaces
+        </Button>
+      </Stack>
+    </Stack>
+  );
+}
+
+// Left over from the "transition backgrounds on hover as well" experiment;
+// May be worth revisiting in the future if we want to add more interactivity
+interface HeroRightColumnProps {
+  onCardHover?: (index: number) => void;
+  onCardHoverEnd?: () => void;
+}
+
+function HeroRightColumn({ onCardHover, onCardHoverEnd }: HeroRightColumnProps) {
+  return (
+    <Stack spacing={2} justifyContent="center" maxWidth={{ lg: 420 }} ml="auto">
+      {HERO_CARDS.map((card, index) => (
+        <HeroCard key={card.title} {...card} onCardHover={() => onCardHover?.(index)} onCardHoverEnd={onCardHoverEnd} />
+      ))}
+    </Stack>
+  );
+}
 
 export default function Hero() {
-  const [activeTab, setActiveTab] = useState(0);
-  const theme = useTheme();
-  const heroTabs = themedHeroTabs(theme);
-
   return (
-    <Paper component="section" aria-label="HuBMAP Introduction">
-      <HeroTabContextProvider activeTab={activeTab} setActiveTab={setActiveTab}>
-        <HeroGridContainer $activeSlide={activeTab} role="tablist">
-          {heroTabs.map((tab, index) => (
-            <HeroTab
-              key={tab.title}
-              title={tab.title}
-              description={tab.description}
-              icon={tab.icon}
-              actions={tab.actions}
-              index={index}
-              bgColor={tab.bgColor}
-              content={tab.content}
-            />
-          ))}
-        </HeroGridContainer>
-      </HeroTabContextProvider>
-    </Paper>
+    <>
+      <HeroSection aria-label="HuBMAP Data Portal Introduction">
+        <HeroBackground />
+        <HeroContentContainer maxWidth="lg">
+          <HeroLeftColumn />
+          <HeroRightColumn />
+        </HeroContentContainer>
+      </HeroSection>
+      <HeroBottomBar />
+    </>
   );
 }
