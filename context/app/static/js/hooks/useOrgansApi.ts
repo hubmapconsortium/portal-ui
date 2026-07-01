@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { OrganFile } from 'js/components/organ/types';
 import { fetcher } from 'js/helpers/swr';
 import { SWRError } from 'js/helpers/swr/errors';
@@ -5,6 +7,9 @@ import useSWR from 'swr/immutable';
 
 export const useOrganApiLinks = () => ({
   organDetails(organName: string) {
+    if (!organName) {
+      return null;
+    }
     return `/organs/${organName}.json`;
   },
   get organList() {
@@ -31,7 +36,7 @@ export const useOrgansAPI = (organsToFetch: string[]) => {
 };
 
 export function useOrgan(organName: string) {
-  const { data, error } = useSWR<OrganFile, SWRError, { url: string }>(
+  const { data, error } = useSWR<OrganFile, SWRError, { url: string | null }>(
     { url: useOrganApiLinks().organDetails(organName) },
     fetcher,
   );
@@ -41,4 +46,22 @@ export function useOrgan(organName: string) {
     isError: Boolean(error),
     error,
   };
+}
+
+/**
+ * Builds a mapping from normalized tissue names (and search aliases) to organ keys.
+ * Mirrors the Python `get_organ_name_mapping()` in utils.py.
+ */
+export function useOrganNameMapping(organs: Record<string, OrganFile> | undefined) {
+  return useMemo(() => {
+    if (!organs) return {};
+    const mapping: Record<string, string> = {};
+    for (const [key, organ] of Object.entries(organs)) {
+      mapping[key] = key;
+      for (const term of organ.search) {
+        mapping[term.toLowerCase()] = key;
+      }
+    }
+    return mapping;
+  }, [organs]);
 }

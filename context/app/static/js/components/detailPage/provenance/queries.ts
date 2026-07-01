@@ -18,7 +18,7 @@ export const getAncestorsQuery = (uuid: string) => ({
         },
         {
           terms: {
-            'mapped_status.keyword': ['QA', 'Published'],
+            'mapped_status.keyword': ['QA', 'Approval', 'Published'],
           },
         },
         {
@@ -62,7 +62,7 @@ export const getDescendantsQuery = (uuid: string | string[]): SearchRequest => (
         },
         {
           terms: {
-            'mapped_status.keyword': ['QA', 'Published'],
+            'mapped_status.keyword': ['QA', 'Approval', 'Published'],
           },
         },
       ],

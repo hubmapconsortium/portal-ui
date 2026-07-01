@@ -1,11 +1,11 @@
-import React from 'react';
-import Box from '@mui/material/Box';
+import React, { useState } from 'react';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
+import { ExpandableDescription } from 'js/shared-styles/text';
 import { OrganFileWithDescendants } from 'js/components/organ/types';
 import { useOrgansSearchState, useOrgansSearchActions } from './OrgansSearchContext';
 import Stack from '@mui/material/Stack';
@@ -107,8 +107,12 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
 
   const cellTypes = useCellTypesOfOrgan(organ.name);
 
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+
   return (
-    <StackTemplate>
+    // Rows are a fixed height by default; when the description is expanded, let the row grow to fit
+    // its full text (top-aligning the cells) instead of clipping it.
+    <StackTemplate {...(descriptionExpanded ? { height: 'auto', minHeight: 52, alignItems: 'flex-start' } : {})}>
       <BodyCell {...desktopConfig.name} aria-label="Organ" hideMobileLabel>
         <InternalLink
           href={href}
@@ -139,19 +143,11 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
         </InternalLink>
       </BodyCell>
       <BodyCell {...desktopConfig.description} aria-label="Description" hideMobileLabel>
-        <Box
-          sx={{
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        </Box>
+        <ExpandableDescription
+          description={description}
+          expanded={descriptionExpanded}
+          onToggle={() => setDescriptionExpanded((prev) => !prev)}
+        />
       </BodyCell>
       {!isMobile && (
         <>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Grid2 from '@mui/material/Grid2';
+import Grid2 from '@mui/material/Grid';
 import List from '@mui/material/List';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';

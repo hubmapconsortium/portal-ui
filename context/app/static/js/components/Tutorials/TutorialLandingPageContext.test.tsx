@@ -13,8 +13,8 @@ import {
 } from './TutorialLandingPageContext';
 
 // Mock the TUTORIALS constant
-jest.mock('./types', () => ({
-  ...jest.requireActual('./types'),
+vi.mock('./types', async () => ({
+  ...(await vi.importActual<typeof import('./types')>('./types')),
   TUTORIALS: [
     {
       title: 'Test Tutorial 1',

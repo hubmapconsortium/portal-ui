@@ -11,11 +11,12 @@ import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
 import { Publication as PublicationType } from 'js/components/types';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
+import { PublicationVignette } from 'js/components/publications/types';
 
 interface PublicationProps {
   publication: PublicationType;
   vignette_json: {
-    vignettes: { name: string; directory_name: string }[];
+    vignettes: PublicationVignette[];
   };
 }
 
@@ -33,10 +34,6 @@ function Publication({ publication, vignette_json }: PublicationProps) {
 
   useTrackID({ entity_type, hubmap_id });
 
-  const associatedCollectionUUID = associated_collection?.uuid;
-
-  const shouldDisplayProvenance = !associatedCollectionUUID;
-
   const shouldDisplaySection = {
     summary: true,
     data: true,
@@ -44,14 +41,14 @@ function Publication({ publication, vignette_json }: PublicationProps) {
     files: Boolean(files?.length),
     'bulk-data-transfer': true,
     authors: true,
-    provenance: shouldDisplayProvenance,
+    provenance: true,
   };
 
   return (
     <DetailContextProvider uuid={uuid} hubmap_id={hubmap_id} mapped_data_access_level="Public" entityType="Publication">
       <DetailLayout sections={shouldDisplaySection}>
         <PublicationSummary />
-        <PublicationsDataSection datasetUUIDs={ancestor_ids} associatedCollectionUUID={associatedCollectionUUID} />
+        <PublicationsDataSection ancestorIds={ancestor_ids} associatedCollectionUUID={associated_collection?.uuid} />
         {shouldDisplaySection.visualizations && (
           <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
         )}
@@ -60,7 +57,7 @@ function Publication({ publication, vignette_json }: PublicationProps) {
           <BulkDataTransfer customUUIDs={new Set(ancestor_ids)} integratedEntityUUID={uuid} />
         )}
         <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
-        {shouldDisplaySection.provenance && <ProvSection />}
+        <ProvSection />
       </DetailLayout>
     </DetailContextProvider>
   );

@@ -12,6 +12,7 @@ import { useGeneCountsContext } from './GeneCountsContext';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { useOptionalGeneContext } from './CurrentGeneContext';
+import { useSCFindModality } from './SCFindModalityContext';
 
 interface CellCountColumnProps {
   hit: DatasetDocument;
@@ -22,7 +23,8 @@ interface CellCountColumnProps {
  * Helper wrapper which fetches cell type counts for a dataset and renders them using the provided display component.
  */
 function CellCountColumn({ hit: { hubmap_id, uuid }, renderDisplay: Display }: CellCountColumnProps) {
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
+  const modality = useSCFindModality();
+  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid, modality });
 
   if (isLoading) {
     return <Skeleton variant="text" width={100} />;

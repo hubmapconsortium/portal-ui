@@ -1,6 +1,7 @@
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import React, { ComponentProps, useId, useMemo } from 'react';
-import { CellPop } from 'cellpop';
+import { useShallow } from 'zustand/react/shallow';
+import { Scellop } from 'scellop';
 import { CellTypeIcon, DatasetIcon } from 'js/shared-styles/icons';
 import Paper from '@mui/material/Paper';
 import { ExpandableDiv } from 'js/components/detailPage/visualization/Visualization/style';
@@ -20,7 +21,8 @@ import CellPopActions from './CellPopActions';
 import { useTrackCellpop } from './hooks';
 
 interface CellPopulationPlotProps {
-  uuids: string[];
+  rnaUuids: string[];
+  atacUuids: string[];
   organ: string;
 }
 
@@ -33,7 +35,7 @@ function visualizationSelector(store: VisualizationStore) {
 
 const { scellopId } = OrganPageIds;
 
-type CellPopProps = ComponentProps<typeof CellPop>;
+type CellPopProps = ComponentProps<typeof Scellop>;
 type CellPopData = CellPopProps['data'];
 
 const useCellTypeNames = (data: Record<string, CellTypeCountForDataset[]> | undefined) => {
@@ -73,23 +75,37 @@ const getFirstValue = (value: unknown): string | number => {
 const getFirstAnatomyValue = (anatomy_1: unknown, anatomy_2: unknown): string | number => {
   const anatomy2 = getFirstValue(anatomy_2);
   if (anatomy2 && anatomy2 !== '—') {
-    return anatomy2 as string;
+    return anatomy2;
   }
   return getFirstValue(anatomy_1);
 };
 
 const useCellPopDataForOrgan = (
-  datasets: string[] | undefined = [],
+  rnaUuids: string[] = [],
+  atacUuids: string[] = [],
 ): {
   data: CellPopData | undefined;
   isLoading: boolean;
 } => {
-  const { data, isLoading: isLoadingDatasetCellCounts } = useCellTypeCountForDatasets({ datasets });
+  // Cell type counts are modality-specific in scFind, so each modality's datasets must be queried
+  // with its own modality (querying ATAC datasets without the flag returns no counts). The two
+  // count maps are then merged; RNA and ATAC datasets have distinct UUIDs, so there is no overlap.
+  const { data: rnaCounts, isLoading: isLoadingRnaCounts } = useCellTypeCountForDatasets({ datasets: rnaUuids });
+  const { data: atacCounts, isLoading: isLoadingAtacCounts } = useCellTypeCountForDatasets({
+    datasets: atacUuids,
+    modality: 'ATAC',
+  });
+  const data = useMemo(() => ({ ...rnaCounts, ...atacCounts }), [rnaCounts, atacCounts]);
+  const isLoadingDatasetCellCounts = isLoadingRnaCounts || isLoadingAtacCounts;
+
+  // Dataset metadata (title, assay, donor, anatomy) is modality-independent, so a single query over
+  // the union of both modalities' datasets suffices.
+  const datasets = useMemo(() => [...new Set([...rnaUuids, ...atacUuids])], [rnaUuids, atacUuids]);
 
   const { searchHits: datasetMetadata, isLoading: isLoadingDatasetMetadata } = useSearchHits<Dataset>({
     query: {
       ids: {
-        values: datasets || [],
+        values: datasets,
       },
     },
     _source: [
@@ -113,7 +129,7 @@ const useCellPopDataForOrgan = (
     formatCellTypeNames: true,
   });
 
-  // Format data for CellPop component
+  // Format data for Scellop component
   const formattedData = useMemo(() => {
     if (!data || Object.keys(data).length === 0 || !datasetMetadata) {
       return undefined;
@@ -126,8 +142,7 @@ const useCellPopDataForOrgan = (
     datasetMetadata.forEach((dataset) => {
       const { _id: uuid, _source: source } = dataset;
       const { hubmap_id, title, assay_display_name, anatomy_1, anatomy_2, donor } = source;
-      // Type assertion to handle the flexible nature of mapped_metadata
-      const dmm = donor?.mapped_metadata as Record<string, unknown> | undefined;
+      const dmm = donor?.mapped_metadata;
 
       uuidToHubmapId.set(uuid, hubmap_id);
 
@@ -241,12 +256,12 @@ const xAxisConfig: CellPopProps['xAxis'] = {
   icon: <CellTypeIcon />,
 };
 
-const initialProportions: ComponentProps<typeof CellPop>['initialProportions'] = [
+const initialProportions: ComponentProps<typeof Scellop>['initialProportions'] = [
   [0.4, 0.5, 0.1],
   [0.3, 0.6, 0.1],
 ];
 
-const tooltipFields: ComponentProps<typeof CellPop>['tooltipFields'] = [
+const tooltipFields: ComponentProps<typeof Scellop>['tooltipFields'] = [
   'Cell Ontology ID',
   'title',
   'assay',
@@ -256,7 +271,7 @@ const tooltipFields: ComponentProps<typeof CellPop>['tooltipFields'] = [
   'donor_race',
 ];
 
-const disabledControls: ComponentProps<typeof CellPop>['disabledControls'] = ['theme'];
+const disabledControls: ComponentProps<typeof Scellop>['disabledControls'] = ['theme'];
 
 function CellPopSkeleton() {
   const id = useId();
@@ -277,8 +292,8 @@ function CellPopSkeleton() {
   );
 }
 
-function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
-  const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
+function CellPopulationPlot({ rnaUuids, atacUuids, organ }: CellPopulationPlotProps) {
+  const { fullscreenVizId, theme } = useVisualizationStore(useShallow(visualizationSelector));
   const vizIsFullscreen = fullscreenVizId === scellopId;
 
   const trackEvent = useTrackCellpop();
@@ -286,7 +301,7 @@ function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
   // Extra "isLoading" workaround is necessary to ensure that all data is loaded before being provided to Cellpop
   // Currently, if the component is mounted before all of the metadata is loaded, Cellpop receives incomplete data
   // and does not update it when the data changes
-  const { data, isLoading } = useCellPopDataForOrgan(uuids);
+  const { data, isLoading } = useCellPopDataForOrgan(rnaUuids, atacUuids);
 
   return (
     <OrganDetailSection title="Cell Population Plot" id={scellopId} icon={CellTypeIcon}>
@@ -297,7 +312,7 @@ function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
           {isLoading ? (
             <CellPopSkeleton />
           ) : (
-            <CellPop
+            <Scellop
               data={data}
               theme={theme}
               yAxis={yAxisConfig}

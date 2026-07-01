@@ -1,4 +1,5 @@
 import React, { forwardRef, useEffect, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Tab, TabPanel, TabProps, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, organCol, hubmapID } from 'js/shared-styles/tables/columns';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
@@ -16,7 +17,7 @@ import { decimal, percent } from 'js/helpers/number-format';
 import Divider from '@mui/material/Divider';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
+import { makeScFindModalityLabel, useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import CellTypeDistributionChart from '../CellTypeDistributionChart/CellTypeDistributionChart';
@@ -26,12 +27,27 @@ import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { CellTypeCategory } from './types';
+import { useSCFindModality } from './SCFindModalityContext';
+import SCFindErrorAlert from './SCFindQueryErrorAlert';
 
-function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
+interface DatasetListExtraProps {
+  /** Renders the "N selected" + actions header row above the table when provided. */
+  numSelected?: number;
+  headerActions?: React.ReactNode;
+}
+
+export function SCFindCellTypeQueryDatasetList({
+  datasetIds,
+  countsMap,
+  numSelected,
+  headerActions,
+}: SCFindQueryResultsListProps & DatasetListExtraProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+  const modality = useSCFindModality();
 
-  const { data } = useIndexedDatasets();
+  const { data } = useIndexedDatasets(modality);
 
   const allCountsMap = data?.countsMap;
 
@@ -49,7 +65,10 @@ function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryRe
   return (
     <EntityTable<Dataset>
       maxHeight={800}
+      minHeight={800}
       isSelectable
+      numSelected={numSelected}
+      headerActions={headerActions}
       columns={columns}
       query={{
         query: {
@@ -88,11 +107,15 @@ interface HelperPanelProps {
 }
 
 function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) {
-  const { datasetStats, cellTypeStats } = useSCFindResultsStatisticsStore((state) => ({
-    datasetStats: state.datasetStats,
-    cellTypeStats: state.cellTypeStats,
-  }));
+  const { datasetStats, cellTypeStats } = useSCFindResultsStatisticsStore(
+    useShallow((state) => ({
+      datasetStats: state.datasetStats,
+      cellTypeStats: state.cellTypeStats,
+    })),
+  );
   const cellTypes = useCellVariableNames();
+  const modality = useSCFindModality();
+  const modalityLabel = makeScFindModalityLabel(modality);
 
   return (
     <HelperPanel shouldDisplay={shouldDisplay} sx={{ minWidth: shouldDisplay ? 192 : 0 }}>
@@ -103,7 +126,7 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
       <HelperPanel.BodyItem label="Cell Type Distribution">
         <div>
           This chart shows the distribution of cell types across {currentTissue} for the selected tissue. These results
-          are derived from RNAseq datasets that were indexed by the <SCFindLink />.
+          are derived from {modalityLabel} datasets that were indexed by the <SCFindLink />.
         </div>
         {/* For some reason, `py: 1` leads to the divider being vertically misaligned; pt:1 and mb: 1 are a workaround */}
         <Divider sx={{ pt: 1, mb: 1 }} />
@@ -126,6 +149,8 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
 function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: EventInfo }) {
   const { openTabIndex, handleTabChange } = useTabs();
   const cellTypes = useCellVariableNames();
+  const modality = useSCFindModality();
+  const modalityLabel = makeScFindModalityLabel(modality);
   const tissues = useMemo(() => {
     const uniqueTissues = new Set<string>();
     cellTypes.forEach((cellType) => {
@@ -209,8 +234,9 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
           </>
         }
       >
-        These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP datasets
-        are currently compatible with this method due to data modalities or the availability of cell annotations.
+        These results are derived from {modalityLabel} datasets that were indexed by the <SCFindLink />. Not all HuBMAP
+        datasets are currently compatible with this method due to data modalities or the availability of cell
+        annotations.
       </DatasetsOverview>
       <ResultsHelperPanel shouldDisplay={displayHelper} currentTissue={currentTissue} />
     </div>
@@ -246,11 +272,15 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
 
 function DatasetListSection() {
   const cellTypes = useCellVariableNames();
-  const { datasets, cellTypeCategories, isLoading, countsMaps } = useSCFindCellTypeResults(cellTypes);
+  const { datasets, cellTypeCategories, isLoading, error, countsMaps } = useSCFindCellTypeResults(cellTypes);
   const { openTabIndex, handleTabChange } = useTabs();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (error) {
+    return <SCFindErrorAlert error={error} />;
   }
 
   if (!datasets) {
@@ -258,32 +288,36 @@ function DatasetListSection() {
   }
 
   return (
-    <div>
-      <DatasetListHeader />
-      <Tabs
-        variant={cellTypeCategories.length >= 5 ? 'scrollable' : 'fullWidth'}
-        onChange={handleTabChange}
-        value={openTabIndex}
-      >
-        {cellTypeCategories.map((cellTypeCategory, idx) => (
-          <CellTypeCategoryTab
-            cellTypeCategory={cellTypeCategory}
-            index={idx}
-            datasetCount={datasets[cellTypeCategory.label]?.length ?? 0}
-            key={cellTypeCategory.label}
-          />
+    // Keyed by the active tab so the provider remounts — and the dataset selection resets — when
+    // switching between cell-type result tabs (selection is scoped to one tab's results).
+    <SelectableTableProvider key={openTabIndex} tableLabel="Cell Type Query - scFind Results">
+      <div>
+        <DatasetListHeader />
+        <Tabs
+          variant={cellTypeCategories.length >= 5 ? 'scrollable' : 'fullWidth'}
+          onChange={handleTabChange}
+          value={openTabIndex}
+        >
+          {cellTypeCategories.map((cellTypeCategory, idx) => (
+            <CellTypeCategoryTab
+              cellTypeCategory={cellTypeCategory}
+              index={idx}
+              datasetCount={datasets[cellTypeCategory.label]?.length ?? 0}
+              key={cellTypeCategory.label}
+            />
+          ))}
+        </Tabs>
+        {cellTypeCategories.map((cellType, idx) => (
+          <TabPanel key={cellType.label} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
+            <SCFindCellTypeQueryDatasetList
+              key={cellType.label}
+              countsMap={countsMaps[cellType.label]}
+              datasetIds={datasets[cellType.label] ?? []}
+            />
+          </TabPanel>
         ))}
-      </Tabs>
-      {cellTypeCategories.map((cellType, idx) => (
-        <TabPanel key={cellType.label} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
-          <SCFindCellTypeQueryDatasetList
-            key={cellType.label}
-            countsMap={countsMaps[cellType.label]}
-            datasetIds={datasets[cellType.label] ?? []}
-          />
-        </TabPanel>
-      ))}
-    </div>
+      </div>
+    </SelectableTableProvider>
   );
 }
 
@@ -306,6 +340,10 @@ function SCFindCellTypeQueryResultsLoader({ trackingInfo }: SCFindCellTypeQueryR
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (error) {
+    return <SCFindErrorAlert error={error} />;
   }
 
   if (!datasets) {

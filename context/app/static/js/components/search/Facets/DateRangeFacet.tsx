@@ -10,6 +10,7 @@ import { useSearch } from '../Search';
 import { isDateFilter, useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import FacetAccordion from './FacetAccordion';
+import { RIGHT_CHEVRON_SIZE } from './style';
 
 interface DateRangeFacetProps {
   field: string;
@@ -19,7 +20,7 @@ function DatePickerComponent({
   minDate,
   maxDate,
   ...rest
-}: DatePickerProps<Date> & Partial<Pick<DatePickerProps<Date>, 'minDate' | 'maxDate'>>) {
+}: DatePickerProps & Partial<Pick<DatePickerProps, 'minDate' | 'maxDate'>>) {
   const [error, setError] = useState<DateValidationError | null>(null);
 
   const errorMessage = useMemo(() => {
@@ -48,7 +49,8 @@ function DatePickerComponent({
           fontSize: theme.typography.subtitle2.fontSize,
         },
       })}
-      views={['month', 'year']}
+      views={['year', 'month']}
+      openTo="year"
       onError={setError}
       minDate={minDate}
       maxDate={maxDate}
@@ -93,7 +95,13 @@ function DatePickerComponent({
   );
 }
 
-function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number; max: number }) {
+function DateRangeFacet({
+  field,
+  min,
+  max,
+  aggMin,
+  aggMax,
+}: DateRangeFacetProps & { min: number; max: number; aggMin: number; aggMax: number }) {
   const filterDate = useSearchStore((state) => state.filterDate);
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
@@ -102,6 +110,7 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
 
   // Reset slider position when filter chip is deleted.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setValues([min, max]);
   }, [min, max, setValues]);
 
@@ -114,8 +123,13 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
           label: field,
         });
 
-        // Set to first moment of the month
-        const startOfMonth = new Date(value.getFullYear(), value.getMonth(), 1);
+        // x-date-pickers v8 + AdapterDateFns hand back a Date at UTC midnight
+        // of the selected month, which would shift to the previous month for
+        // any user east of UTC if read via local-time accessors. Read year /
+        // month in UTC, then construct first-of-month at local midnight.
+        const year = value.getUTCFullYear();
+        const month = value.getUTCMonth();
+        const startOfMonth = new Date(year, month, 1);
         const newMin = startOfMonth.getTime();
         setValues([newMin, values[1]]);
         if (newMin <= values[1]) {
@@ -135,8 +149,12 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
           label: field,
         });
 
-        // Set to last moment of the month, but not in the future
-        const endOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0, 23, 59, 59, 999);
+        // Same UTC-read / local-construct pattern as filterMin; clamp the
+        // resulting last-moment-of-month to "now" so future months don't
+        // slip in.
+        const year = value.getUTCFullYear();
+        const month = value.getUTCMonth();
+        const endOfMonth = new Date(year, month + 1, 0, 23, 59, 59, 999);
         const now = new Date();
         const newMax = Math.min(endOfMonth.getTime(), now.getTime());
         setValues([values[0], newMax]);
@@ -148,22 +166,31 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
     [filterDate, min, field, setValues, values, analyticsCategory],
   );
 
+  // Hard outer bounds = the data's actual extent (aggregation min/max).
+  // The end picker also clamps to "now" so future months never become
+  // selectable even if the upstream aggregation reports stale data.
+  const lowerBound = useMemo(() => new Date(aggMin), [aggMin]);
+  // eslint-disable-next-line react-hooks/purity -- Pattern is read-during-render by design.
+  const upperBound = useMemo(() => new Date(Math.min(aggMax, Date.now())), [aggMax]);
+
   return (
     <FacetAccordion title={getFieldLabel(field)} position="inner">
-      <Stack spacing={1.5} mt={1}>
+      <Stack spacing={1.5} mt={1} pr={RIGHT_CHEVRON_SIZE}>
         <DatePickerComponent
           label="Start"
           value={new Date(values[0])}
           onAccept={filterMin}
+          minDate={lowerBound}
           maxDate={new Date(values[1])}
         />
         <DatePickerComponent
           label="End"
           value={new Date(values[1])}
-          views={['month', 'year']}
+          views={['year', 'month']}
+          openTo="year"
           onAccept={filterMax}
           minDate={new Date(values[0])}
-          maxDate={new Date()}
+          maxDate={upperBound}
         />
       </Stack>
     </FacetAccordion>
@@ -195,7 +222,16 @@ function DateRangeFacetGuard({ field, ...rest }: DateRangeFacetProps) {
     return null;
   }
 
-  return <DateRangeFacet field={field} min={min ?? aggMin.value} max={max ?? aggMax.value} {...rest} />;
+  return (
+    <DateRangeFacet
+      field={field}
+      min={min ?? aggMin.value}
+      max={max ?? aggMax.value}
+      aggMin={aggMin.value}
+      aggMax={aggMax.value}
+      {...rest}
+    />
+  );
 }
 
 export default DateRangeFacetGuard;

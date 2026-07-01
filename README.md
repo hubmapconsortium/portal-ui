@@ -112,8 +112,8 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
     - Install dependencies with `uv sync --dev` (to include development dependencies) or `uv sync` (production only).
 - `nodejs/npm`: Suggest installing a node version manager and then using it to install the appropriate node version:
   - [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating)
-    - `` nvm install `cat .nvmrc`  ``
-    - `` nvm use `cat .nvmrc`  ``
+    - ``nvm install `cat .nvmrc` ``
+    - ``nvm use `cat .nvmrc` ``
   - [`n`](https://github.com/tj/n#installation)
     - `` n `cat .nvmrc` ``
 
@@ -245,7 +245,11 @@ To build and run the docker image locally:
 etc/dev/docker.sh 5001 --follow
 ```
 
-Our base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
+The image is a multi-stage build on a [Docker Hardened Image](https://docs.docker.com/dhi/) Python
+base (`dhi.io/python`, pulled via `docker login dhi.io`). The runtime stage is minimal and non-root;
+[gunicorn](context/gunicorn.conf.py) serves the Flask app on port 8080 and [WhiteNoise](context/app/main.py)
+serves static assets (gzip/brotli + immutable caching) — replacing the nginx + uWSGI + supervisor that
+the old base image bundled.
 
 </details>
 
@@ -280,3 +284,29 @@ Particular to HuBMAP:
 - [`portal-visualization`](https://github.com/hubmapconsortium/portal-visualization): Given HuBMAP Dataset JSON, creates a Vitessce configuration.
 - [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.
 - [`airflow-dev`](https://github.com/hubmapconsortium/airflow-dev): CWL pipelines wrapping those Docker containers.
+
+### Langfuse
+
+Langfuse is used to track user interactions with the Say and See mode. To run it against the shared dev instance locally:
+
+1. Open an SSH tunnel through the PSC login node, forwarding the remote Langfuse to local port `13001`:
+
+```
+ssh -f -N -L 13001:vm001.hive.psc.edu:3001 {your_username_here}@hive.psc.edu
+```
+
+2. Add the Langfuse config to `context/instance/app.conf` (keys are in 1Password):
+
+```
+LANGFUSE_BASE_URL = 'https://langfuse.b2-workspaces-pt.dev.hubmapconsortium.org:13001'
+LANGFUSE_SECRET_KEY = (see 1Password)
+LANGFUSE_PUBLIC_KEY = (see 1Password)
+```
+
+3. Add an `/etc/hosts` entry pointing that hostname at the tunnel:
+
+```
+echo '127.0.0.1 langfuse.b2-workspaces-pt.dev.hubmapconsortium.org' | sudo tee -a /etc/hosts
+```
+
+The tunnel listens on the loopback, but Langfuse's TLS cert isn't valid for `localhost` — so we point a name covered by the cert's wildcard SAN (`*.b2-workspaces-pt.dev.hubmapconsortium.org`) at `127.0.0.1`, which lets cert verification pass without disabling it. Use this exact `BASE_URL`; reverting it to `localhost` reintroduces the SSL error.

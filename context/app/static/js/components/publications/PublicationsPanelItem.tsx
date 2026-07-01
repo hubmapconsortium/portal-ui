@@ -52,7 +52,7 @@ function PublicationPanelItem({
     <StackTemplate>
       <BodyCell {...desktopConfig.title} aria-label="Title">
         <Stack>
-          <InternalLink href={href} data-testId="panel-title">
+          <InternalLink href={href} data-testid="panel-title">
             <Typography>{title}</Typography>
           </InternalLink>
           <Typography>{buildSecondaryText(publicationVenue, contributors?.map(normalizeContributor))}</Typography>

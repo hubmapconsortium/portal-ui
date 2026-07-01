@@ -8,18 +8,25 @@ import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 
-import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
 import { StyledFormLabel } from 'js/components/bulkDownload/style';
+
+interface DownloadOption {
+  key: string;
+  label: string;
+  count: number;
+}
 
 type BulkDownloadOptionsFieldProps<FormType extends FieldValues> = Pick<
   UseControllerProps<FormType>,
   'name' | 'control'
->;
+> & {
+  downloadOptions: DownloadOption[];
+};
 function BulkDownloadOptionsField<FormType extends FieldValues>({
   control,
   name,
+  downloadOptions,
 }: BulkDownloadOptionsFieldProps<FormType>) {
-  const { downloadOptions } = useBulkDownloadDialog();
   const { field } = useController({
     name,
     control,

@@ -9,12 +9,11 @@ import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import LZString from 'lz-string';
 import merge from 'deepmerge';
 import history from 'history/browser';
+import { isLegacyCompressedURL, parseReadableParams } from './searchParams';
 
 import { useAppContext } from 'js/components/Contexts';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
-import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
-import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
-import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
+import { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -22,6 +21,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
+import useDataProduct from 'js/api/dataProducts/useDataProduct';
 import { ListsIcon } from 'js/shared-styles/icons';
 import {
   SearchStoreProvider,
@@ -38,19 +38,21 @@ import {
   Facet,
   isDateFilter,
   isExistsFilter,
+  isBooleanGroupFilter,
 } from './store';
 import Results from './Results';
 import Facets from './Facets/Facets';
-import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
-import FilterChips from './Facets/FilterChips';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
-import { TilesSortSelect } from './Results/ResultsTiles';
-import MetadataMenu from './MetadataMenu';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
 import { isDevSearch, SearchTypeProps } from './utils';
+import SaySeeAlert from './SaySeeAlert';
+import SearchModeTabs from './SearchModeTabs';
+import SaySeePanel from './SaySeePanel';
+import { useSearchMode } from './useSearchMode';
+import Paper from '@mui/material/Paper';
 
 interface OuterBucket {
   doc_count: number;
@@ -81,6 +83,9 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
   }: SearchStoreState = useSearchStore();
 
   return useScrollSearchHits<Partial<Entity>, Aggregations>({
@@ -94,6 +99,9 @@ export function useSearch() {
     sourceFields,
     sortField,
     defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
   });
 }
 
@@ -125,6 +133,11 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
           draft.facets[curr.field] = curr;
         }
 
+        if (curr.type === FACETS.booleanGroup) {
+          draft.filters[curr.field] = { values: new Set([]), type: curr.type };
+          draft.facets[curr.field] = curr;
+        }
+
         return draft;
       });
     },
@@ -142,6 +155,8 @@ type SearchConfig = Pick<
   | 'size'
   | 'type'
   | 'defaultQuery'
+  | 'defaultQueryWithAncestorFilter'
+  | 'latestRevisionFilter'
   | 'analyticsCategory'
 > & {
   facets: FacetGroups;
@@ -150,6 +165,7 @@ type SearchConfig = Pick<
 function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
+    includeSupersededEntities: false,
     ...buildFacets({ facetGroups: facets }),
     swrConfig,
     sourceFields,
@@ -180,33 +196,25 @@ function Header({ type }: SearchTypeProps) {
   );
 }
 
-function Bar({ type }: SearchTypeProps) {
+function TileViewBar() {
   const view = useSearchStore((state) => state.view);
+  if (view !== 'tile') return null;
   return (
-    <Stack direction="row" spacing={1}>
-      <Box flexGrow={1}>
-        <SearchBar type={type} />
-      </Box>
-      <MetadataMenu type={type} />
-      {!isDevSearch(type) && (
-        <>
-          <WorkspacesDropdownMenu type={type} />
-          {view === 'tile' && <TilesSortSelect />}
-          {view === 'table' && (
-            <>
-              <SaveEntitiesButtonFromSearch entity_type={type} />
-              <BulkDownloadButtonFromSearch type={type} />
-            </>
-          )}
-          <DefaultSearchViewSwitch />
-        </>
-      )}
+    <Stack direction="row" justifyContent="flex-end">
+      <DefaultSearchViewSwitch />
     </Stack>
   );
 }
 
-function Body({ facetGroups }: { facetGroups: FacetGroups }) {
-  return (
+function Body({ facetGroups, withPaper }: { facetGroups: FacetGroups; withPaper?: boolean }) {
+  return withPaper ? (
+    <Paper component={Stack} direction="row" spacing={2} p={2}>
+      <Facets facetGroups={facetGroups} />
+      <Box flexGrow={1}>
+        <Results />
+      </Box>
+    </Paper>
+  ) : (
     <Stack direction="row" spacing={2}>
       <Facets facetGroups={facetGroups} />
       <Box flexGrow={1}>
@@ -223,14 +231,20 @@ function SCFindAlert() {
     return null;
   }
 
+  const modalityLabel = scFindParams.allModalities
+    ? ' (all modalities)'
+    : scFindParams.modality === 'ATAC'
+      ? ' (ATAC)'
+      : ' (RNA)';
+
   if (scFindParams.scFindOnly) {
-    return <Alert severity="info">Displaying all entities indexed in scFind.</Alert>;
+    return <Alert severity="info">Displaying all entities indexed in scFind{modalityLabel}.</Alert>;
   }
 
   if (scFindParams.genes) {
     return (
       <Alert severity="info">
-        Displaying all entities indexed in scFind for genes: {scFindParams.genes.join(', ')}.
+        Displaying scFind{modalityLabel} datasets for genes: {scFindParams.genes.join(', ')}.
       </Alert>
     );
   }
@@ -238,7 +252,7 @@ function SCFindAlert() {
   if (scFindParams.cellTypes) {
     return (
       <Alert severity="info">
-        Displaying all entities indexed in scFind for cell types: {scFindParams.cellTypes.join(', ')}.
+        Displaying scFind{modalityLabel} datasets for cell types: {scFindParams.cellTypes.join(', ')}.
       </Alert>
     );
   }
@@ -246,20 +260,46 @@ function SCFindAlert() {
   return null;
 }
 
+function DataProductAlert() {
+  const dataProductID = useSearchStore((state) => state.dataProductID);
+  // Reuses the SWR cache populated while resolving the data product's datasets, so no extra request is made.
+  const { dataProduct } = useDataProduct(dataProductID);
+
+  if (!dataProductID) {
+    return null;
+  }
+
+  const mapName = dataProduct
+    ? `the ${dataProduct.tissue.tissuetype} ${dataProduct.assay.assayName} integrated map`
+    : 'the selected integrated map';
+
+  return <Alert severity="info">Displaying datasets included in {mapName}.</Alert>;
+}
+
 const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
+  const [mode] = useSearchMode();
+  const { enableSaySeeMode } = useAppContext();
+  const effectiveMode = enableSaySeeMode ? mode : 'filter';
   return (
     <Stack spacing={2} mb={4}>
+      {enableSaySeeMode && <SaySeeAlert />}
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
+      <DataProductAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
-        <Box>
-          <SearchNote />
-          <Bar type={type} />
-        </Box>
-        <FilterChips />
-        <Body facetGroups={facetGroups} />
+        <SearchNote />
+        <div>
+          {enableSaySeeMode && <SearchModeTabs />}
+          {effectiveMode === 'filter' && (
+            <>
+              <TileViewBar />
+              <Body facetGroups={facetGroups} withPaper={enableSaySeeMode} />
+            </>
+          )}
+          {effectiveMode === 'say-see' && <SaySeePanel />}
+        </div>
       </Stack>
     </Stack>
   );
@@ -314,6 +354,12 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
         };
       }
 
+      if (isBooleanGroupFilter<string[] | Set<string>>(v)) {
+        const urlStateValues =
+          URLStateFilter && isBooleanGroupFilter<string[]>(URLStateFilter) ? URLStateFilter.values : [];
+        draft[k] = { ...v, values: new Set([...v.values, ...urlStateValues]) };
+      }
+
       return draft;
     });
   }, {});
@@ -336,22 +382,50 @@ function useInitialURLState() {
   // scFind hooks are conditionally enabled based on URL parameters
   const [scFindParams, setScFindParams] = useState<SCFindParams | null>(null);
 
+  // Data product lookup is conditionally enabled based on URL parameters
+  const [dataProductID, setDataProductID] = useState<string | null>(null);
+
   const shouldCallIndexedDatasets = Boolean(scFindParams?.scFindOnly);
   const shouldCallGeneDatasets = Boolean(scFindParams?.genes?.length);
   const shouldCallCellTypeDatasets = Boolean(scFindParams?.cellTypes?.length);
+  const isAllModalities = Boolean(scFindParams?.allModalities);
 
-  const indexedDatasets = useIndexedDatasets();
+  const indexedDatasets = useIndexedDatasets(scFindParams?.modality);
   const geneDatasets = useFindDatasetForGenes({
     geneList: shouldCallGeneDatasets ? (scFindParams?.genes ?? []) : [],
+    modality: scFindParams?.modality,
+  });
+  // When allModalities is set, also fetch ATAC gene datasets to union with the default (RNA) results
+  const atacGeneDatasets = useFindDatasetForGenes({
+    geneList: shouldCallGeneDatasets && isAllModalities ? (scFindParams?.genes ?? []) : [],
+    modality: 'ATAC',
   });
   const cellTypeDatasets = useFindDatasetForCellTypes({
     cellTypes: shouldCallCellTypeDatasets ? (scFindParams?.cellTypes ?? []) : [],
+    modality: scFindParams?.modality,
   });
+  // When allModalities is set, also fetch ATAC cell type datasets to union with the default (RNA) results
+  const atacCellTypeDatasets = useFindDatasetForCellTypes({
+    cellTypes: shouldCallCellTypeDatasets && isAllModalities ? (scFindParams?.cellTypes ?? []) : [],
+    modality: 'ATAC',
+  });
+  const { datasetUUIDs: dataProductDatasetUUIDs, isLoading: isLoadingDataProduct } = useDataProduct(
+    dataProductID ?? undefined,
+  );
 
   useEffect(() => {
-    const searchParams = history?.location?.search
-      ? parseURLState(LZString.decompressFromEncodedURIComponent(history?.location?.search?.slice(1)))
-      : {};
+    const locationSearch = history?.location?.search ?? '';
+    let searchParams: Partial<SearchURLState>;
+
+    if (!locationSearch) {
+      searchParams = {};
+    } else if (isLegacyCompressedURL(locationSearch)) {
+      // Old format: entire query string is a single LZString-compressed blob
+      searchParams = parseURLState(LZString.decompressFromEncodedURIComponent(locationSearch.slice(1)));
+    } else {
+      // New format: named readable params + optional compressed q param
+      searchParams = parseReadableParams(locationSearch);
+    }
 
     let isDoneLoading = true;
 
@@ -360,11 +434,20 @@ function useInitialURLState() {
       const parsedScFindParams = searchParams.scFindParams;
       if (parsedScFindParams) {
         isDoneLoading = false;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setScFindParams({
           scFindOnly: parsedScFindParams.scFindOnly,
           genes: parsedScFindParams.genes,
           cellTypes: parsedScFindParams.cellTypes,
+          modality: parsedScFindParams.modality,
+          allModalities: parsedScFindParams.allModalities,
         });
+      }
+
+      // Check if a data product ID exists in the parsed state; its datasets are resolved below.
+      if (searchParams.dataProductID) {
+        isDoneLoading = false;
+        setDataProductID(searchParams.dataProductID);
       }
 
       setInitialUrlState({ filters: {}, ...searchParams });
@@ -387,16 +470,32 @@ function useInitialURLState() {
         isDataReady = true;
       }
     } else if (scFindParams.genes && shouldCallGeneDatasets) {
-      if (geneDatasets.data) {
+      if (isAllModalities) {
+        // Combine RNA + ATAC results when allModalities is set
+        if (geneDatasets.data && atacGeneDatasets.data) {
+          const rnaDatasets = Object.values(geneDatasets.data.findDatasets).flat();
+          const atacDatasets = Object.values(atacGeneDatasets.data.findDatasets).flat();
+          datasetUUIDs = [...new Set([...rnaDatasets, ...atacDatasets])];
+          isDataReady = true;
+        }
+      } else if (geneDatasets.data) {
         // Extract datasets from gene search results
         const allDatasets = Object.values(geneDatasets.data.findDatasets).flat();
         datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
         isDataReady = true;
       }
     } else if (scFindParams.cellTypes && shouldCallCellTypeDatasets) {
-      if (cellTypeDatasets.data) {
+      if (isAllModalities) {
+        // Combine RNA + ATAC results when allModalities is set
+        if (cellTypeDatasets.data && atacCellTypeDatasets.data) {
+          const rnaDatasets = cellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
+          const atacDatasets = atacCellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
+          datasetUUIDs = [...new Set([...rnaDatasets, ...atacDatasets])];
+          isDataReady = true;
+        }
+      } else if (cellTypeDatasets.data) {
         // Extract datasets from cell type search results
-        const allDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
+        const allDatasets = cellTypeDatasets.data.flatMap((response) => response?.datasets ?? []);
         datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
         isDataReady = true;
       }
@@ -407,6 +506,7 @@ function useInitialURLState() {
 
     if (isDataReady) {
       if (datasetUUIDs.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
         setInitialUrlState((prevState) => ({
           ...prevState,
           filters: {
@@ -424,11 +524,36 @@ function useInitialURLState() {
     scFindParams,
     indexedDatasets.data,
     geneDatasets.data,
+    atacGeneDatasets.data,
     cellTypeDatasets.data,
+    atacCellTypeDatasets.data,
     shouldCallIndexedDatasets,
     shouldCallGeneDatasets,
     shouldCallCellTypeDatasets,
+    isAllModalities,
   ]);
+
+  // Effect to update the initial URL state with UUID filters resolved from a data product
+  useEffect(() => {
+    if (!dataProductID || isLoadingDataProduct) {
+      return;
+    }
+
+    if (dataProductDatasetUUIDs.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
+      setInitialUrlState((prevState) => ({
+        ...prevState,
+        filters: {
+          ...prevState.filters,
+          uuid: {
+            type: FACETS.term,
+            values: dataProductDatasetUUIDs,
+          },
+        },
+      }));
+    }
+    setHasLoadedURLState(true);
+  }, [dataProductID, dataProductDatasetUUIDs, isLoadingDataProduct]);
 
   return { initialUrlState, hasLoadedURLState };
 }
@@ -437,7 +562,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
-  const { search, sortField, filters, ...rest } = buildInitialSearchState({
+  const { search, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
     ...config,
     endpoint: elasticsearchEndpoint,
     analyticsCategory: `${type}s Search Page Interactions`,
@@ -450,7 +575,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   }
 
   const initialState = {
-    ...merge({ search, sortField, filters }, initialUrlState, options),
+    ...merge({ search, sortField, filters, includeSupersededEntities }, initialUrlState, options),
     ...rest,
     initialFilters: filters,
   };

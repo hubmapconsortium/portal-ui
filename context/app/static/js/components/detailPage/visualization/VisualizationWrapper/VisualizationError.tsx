@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from 'react';
-import { FaroErrorBoundary, faro } from '@grafana/faro-react';
+import React, { PropsWithChildren, type JSX } from 'react';
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
 
 import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -8,7 +8,8 @@ import { VisualizationErrorBoundaryBackground } from './style';
 import { VizContainerStyleContext } from './ContainerStylingContext';
 import { StyledSectionHeader } from '../Visualization/style';
 
-function VisualizationFallback(error: Error): JSX.Element {
+function VisualizationFallback({ error }: FallbackProps): JSX.Element {
+  const err = error as Error | null;
   // Since react error boundaries don't work with hooks, we need to use a context consumer to determine how to
   // style the error message's container.
   return (
@@ -21,9 +22,9 @@ function VisualizationFallback(error: Error): JSX.Element {
           <VisualizationErrorBoundaryBackground>
             <div>The Vitessce visualization encountered an error. Please try again or contact support.</div>
             <DetailsAccordion summary="Click to expand error details">
-              <div>{error?.name}</div>
-              <div>{error?.message}</div>
-              <div>{error?.stack}</div>
+              <div>{err?.name}</div>
+              <div>{err?.message}</div>
+              <div>{err?.stack}</div>
             </DetailsAccordion>
           </VisualizationErrorBoundaryBackground>
         </DetailPageSection>
@@ -33,18 +34,7 @@ function VisualizationFallback(error: Error): JSX.Element {
 }
 
 function VisualizationErrorBoundary({ children }: PropsWithChildren) {
-  return (
-    <FaroErrorBoundary
-      fallback={VisualizationFallback}
-      beforeCapture={() => {
-        faro.api.setView({
-          name: 'Vitessce Visualization',
-        });
-      }}
-    >
-      {children}
-    </FaroErrorBoundary>
-  );
+  return <ErrorBoundary FallbackComponent={VisualizationFallback}>{children}</ErrorBoundary>;
 }
 
 export default VisualizationErrorBoundary;

@@ -68,8 +68,7 @@ def details(type, uuid):
     if should_redirect_entity(entity):
         raw_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))
 
-        pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
-        anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
+        anchor = quote(f'section-{entity.get("hubmap_id")}').lower()
 
         if raw_dataset is None or len(raw_dataset) == 0:
             abort(404)
@@ -144,17 +143,9 @@ def details_vitessce(type, uuid):
     marker = request.args.get('marker') or None
     minimal = request.args.get('minimal') == 'True'
     parent = client.get_entity(parent_uuid) if parent_uuid else None
-    epic_uuid = None
-    if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get('status') != 'Error':
-        if parent is None:
-            ancestors = entity.get('immediate_ancestor_ids')
-            if len(ancestors) > 0:
-                parent = ancestors[0]
-        if 'epic' in entity.get('vitessce-hints'):
-            epic_uuid = uuid
 
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
-        entity, marker=marker, parent=parent, epic_uuid=epic_uuid, minimal=minimal
+        entity, marker=marker, parent=parent, minimal=minimal
     ).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)

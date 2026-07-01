@@ -15,12 +15,30 @@ import {
   isDateFacet,
   isExistsFilter,
   isExistsFacet,
+  isBooleanGroupFilter,
+  isBooleanGroupFacet,
+  getBooleanGroupItemKey,
 } from './store';
 import { getESField, isESMapping, Mappings, UseESMappingType } from './useEsMapping';
 
 const maxAggSize = 10000;
 
 type FilterClauses = Record<string, esb.Query>;
+
+// Canonical HuBMAP ID format, e.g. "HBM123.ABCD.456" — three dot-separated parts,
+// with exactly 3 digits in each numeric segment.
+const HBM_ID_FORMAT_REGEX = /^HBM\d{3}\.[A-Z0-9]+\.\d{3}$/i;
+
+// HuBMAP UUIDs are exactly 32 hex characters with no dashes.
+const UUID_FORMAT_REGEX = /^[a-f0-9]{32}$/i;
+
+export function isHbmIdFormat(value: string): boolean {
+  return HBM_ID_FORMAT_REGEX.test(value);
+}
+
+export function isUuidFormat(value: string): boolean {
+  return UUID_FORMAT_REGEX.test(value);
+}
 
 function buildFilterAggregation({
   field,
@@ -69,11 +87,24 @@ export function buildQuery({
   sourceFields,
   sortField,
   defaultQuery,
+  defaultQueryWithAncestorFilter,
+  latestRevisionFilter,
+  includeSupersededEntities,
   mappings,
   buildAggregations = true,
 }: { buildAggregations?: boolean; mappings: UseESMappingType } & Pick<
   SearchStoreState,
-  'filters' | 'facets' | 'search' | 'size' | 'searchFields' | 'sourceFields' | 'sortField' | 'defaultQuery'
+  | 'filters'
+  | 'facets'
+  | 'search'
+  | 'size'
+  | 'searchFields'
+  | 'sourceFields'
+  | 'sortField'
+  | 'defaultQuery'
+  | 'defaultQueryWithAncestorFilter'
+  | 'latestRevisionFilter'
+  | 'includeSupersededEntities'
 >) {
   if (!isESMapping(mappings)) {
     return null;
@@ -86,12 +117,41 @@ export function buildQuery({
 
   const hasTextQuery = search.length > 0;
 
-  const freeTextQueries = hasTextQuery ? [esb.simpleQueryStringQuery(search).fields(searchFields)] : [];
-  const defaultQueries = defaultQuery ? [defaultQuery] : [];
+  // Entity-id lookups bypass the "latest revision only" filter so superseded entities
+  // can still be found by ID. Detection covers:
+  //   - wildcard form `*...*` (column-header HuBMAP ID popover)
+  //   - canonical HuBMAP ID format `HBM###.XXXX.###`
+  //   - 32-hex-char UUIDs
+  //   - legacy quoted-HBM form `"HBM..."` (preserved for backward compat with old URLs)
+  const isWildcardIdSearch = hasTextQuery && /^\*.*\*$/.test(search);
+  const isHbmIdFormatSearch = hasTextQuery && isHbmIdFormat(search);
+  const isUuidFormatSearch = hasTextQuery && isUuidFormat(search);
+  const isQuotedHbmIdSearch = hasTextQuery && /^"\s*HBM\S+\s*"$/i.test(search);
+  const isIdLookupSearch = isWildcardIdSearch || isHbmIdFormatSearch || isUuidFormatSearch || isQuotedHbmIdSearch;
 
-  query.query(esb.boolQuery().must([...defaultQueries, ...freeTextQueries]));
+  // ES keyword fields are case-sensitive; HuBMAP IDs are stored uppercase and UUIDs
+  // lowercase, so normalize the search term to the canonical case before exact match.
+  const freeTextQueries = hasTextQuery
+    ? isWildcardIdSearch
+      ? [esb.wildcardQuery(getESField({ field: 'hubmap_id', mappings }), search)]
+      : isHbmIdFormatSearch
+        ? [esb.termQuery(getESField({ field: 'hubmap_id', mappings }), search.toUpperCase())]
+        : isUuidFormatSearch
+          ? [esb.termQuery(getESField({ field: 'uuid', mappings }), search.toLowerCase())]
+          : [esb.simpleQueryStringQuery(search).fields(searchFields)]
+    : [];
+  const ancestorIdsFilter = filters?.ancestor_ids;
+  const hasAncestorIdsFilter = Boolean(ancestorIdsFilter && filterHasValues({ filter: ancestorIdsFilter }));
+  const effectiveDefaultQuery =
+    hasAncestorIdsFilter && defaultQueryWithAncestorFilter ? defaultQueryWithAncestorFilter : defaultQuery;
+  const defaultQueries = effectiveDefaultQuery ? [effectiveDefaultQuery] : [];
+  const revisionFilterQueries =
+    latestRevisionFilter && !isIdLookupSearch && !includeSupersededEntities ? [latestRevisionFilter] : [];
 
-  if (hasTextQuery) {
+  query.query(esb.boolQuery().must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries]));
+
+  // Highlight only for free-text queries; exact-match ID lookups don't need highlighting.
+  if (hasTextQuery && !isWildcardIdSearch && !isHbmIdFormatSearch && !isUuidFormatSearch) {
     query.highlight(esb.highlight(searchFields));
   }
 
@@ -110,7 +170,17 @@ export function buildQuery({
         if (filterHasValues({ filter })) {
           if (filter?.values?.min !== undefined && filter?.values?.max) {
             // TODO: consider using zod in filterHasValues for validation.
-            draft[portalField] = esb.rangeQuery(portalField).gte(filter.values.min).lte(filter.values.max);
+            // Overlap, not point-membership. As two separate range clauses, *different*
+            // array elements can satisfy each bound, so a multi-donor field like
+            // donor_demographics.age_value=[1.42, 78] matches a 20-60 query (span overlaps).
+            // A single combined gte/lte range needs one element inside [min,max] and would
+            // miss it. For scalar fields (dates, single value) this is equivalent.
+            draft[portalField] = esb
+              .boolQuery()
+              .must([
+                esb.rangeQuery(portalField).gte(filter.values.min),
+                esb.rangeQuery(portalField).lte(filter.values.max),
+              ]);
           }
         }
       }
@@ -140,6 +210,27 @@ export function buildQuery({
         else if (facetConfig?.invert) {
           if (!(hasValues && facetConfig?.invert)) {
             draft[portalField] = esb.existsQuery(field);
+          }
+        }
+      }
+
+      if (isBooleanGroupFilter(filter) && isBooleanGroupFacet(facetConfig)) {
+        if (filterHasValues({ filter })) {
+          const mustQueries: esb.Query[] = [];
+          for (const itemKey of filter.values) {
+            const item = facetConfig.items.find((i) => getBooleanGroupItemKey(i) === itemKey);
+            if (!item) continue;
+            const itemPortalField = getESField({ field: item.field, mappings });
+            if (item.queryType === 'exists') {
+              mustQueries.push(esb.existsQuery(item.field));
+            } else {
+              mustQueries.push(esb.termQuery(itemPortalField, item.value));
+            }
+          }
+          if (mustQueries.length === 1) {
+            draft[field] = mustQueries[0];
+          } else if (mustQueries.length > 1) {
+            draft[field] = esb.boolQuery().must(mustQueries);
           }
         }
       }
@@ -220,6 +311,26 @@ export function buildQuery({
                     .order(order?.type ?? '_count', order?.dir ?? 'desc'),
                 ),
             ],
+            filters: { ...allFilters },
+            field,
+          }),
+        );
+      }
+
+      if (isBooleanGroupFacet(facet)) {
+        const itemAggregations = facet.items.map((item) => {
+          const itemKey = getBooleanGroupItemKey(item);
+          const itemPortalField = getESField({ field: item.field, mappings });
+          if (item.queryType === 'exists') {
+            return esb.filterAggregation(itemKey, esb.existsQuery(item.field));
+          }
+          return esb.filterAggregation(itemKey, esb.termQuery(itemPortalField, item.value));
+        });
+
+        query.agg(
+          buildFilterAggregation({
+            portalFields: [field],
+            aggregations: itemAggregations,
             filters: { ...allFilters },
             field,
           }),

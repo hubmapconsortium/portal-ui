@@ -3,7 +3,7 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 import { RefObject, useCallback } from 'react';
 
-export function useDownloadImage(ref: RefObject<HTMLElement>, chartName = 'chart', scale = 2) {
+export function useDownloadImage(ref: RefObject<HTMLElement | null>, chartName = 'chart', scale = 2) {
   const { toastError } = useSnackbarActions();
   const downloadImage = useCallback(() => {
     if (!ref.current) return;

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import FilesConditionalLink from './FilesConditionalLink';
 
-const fakeOpenDUA = jest.fn();
+const fakeOpenDUA = vi.fn();
 
 test('the element is a link when dua has been agreed to', () => {
   render(
@@ -23,7 +23,7 @@ test('the element is button when dua has not been agreed to', () => {
 });
 
 test('the button has on click works', async () => {
-  const mockOpenDUA = jest.fn();
+  const mockOpenDUA = vi.fn();
   render(<FilesConditionalLink openDUA={mockOpenDUA} href="fakeref" fileName="file.txt" onClick={() => {}} />);
   expect(mockOpenDUA).toHaveBeenCalledTimes(0);
   await userEvent.click(screen.getByRole('button'));

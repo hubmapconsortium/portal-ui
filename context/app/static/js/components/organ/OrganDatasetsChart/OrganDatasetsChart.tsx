@@ -12,9 +12,40 @@ import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks'
 import { mustHaveOrganClause } from 'js/pages/Organ/queries';
 import { trackEvent } from 'js/helpers/trackers';
 import { useOrganContext } from 'js/components/organ/contexts';
+import Typography from '@mui/material/Typography';
+import { capitalize } from '@mui/material/utils';
+import { TooltipData } from 'js/shared-styles/charts/types';
 import { OrganFile } from '../types';
 import { datasetTypeForOrganTermsQuery, DatasetTypeOrganQueryAggs } from './queries';
 import { getSearchURL } from '../utils';
+
+interface OrganDatasetTypeDatum {
+  datasetType: string;
+  total: number;
+  [organ: string]: string | number;
+}
+
+// Omits the internal `datasetType` field (already shown as the bar's axis label) and capitalizes the
+// remaining keys (e.g. "Total"). Used as the chart's TooltipContent so the bar-segment and axis-tick
+// tooltips render consistently.
+function OrganDatasetsChartTooltip({ tooltipData }: { tooltipData: TooltipData<OrganDatasetTypeDatum> }) {
+  if (!tooltipData?.bar || !tooltipData.key) {
+    return null;
+  }
+  const entries = Object.entries(tooltipData.bar.data).filter(([key]) => key !== 'datasetType');
+  return (
+    <>
+      <Typography variant="h6" component="p" color="textPrimary">
+        {tooltipData.key}
+      </Typography>
+      {entries.map(([key, value]) => (
+        <Typography key={key} variant="body2" component="p" color="textSecondary">
+          {capitalize(key)}: {value}
+        </Typography>
+      ))}
+    </>
+  );
+}
 
 const margin = { top: 40, right: 10, bottom: 40, left: 10 };
 
@@ -35,7 +66,7 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
   const { searchData: assayOrganTypeData } = useSearchData<unknown, DatasetTypeOrganQueryAggs>(updatedQuery);
 
   const formattedOrganDatasetTypeData =
-    assayOrganTypeData.aggregations?.dataset_type_map.raw_dataset_type.buckets.map((bucket) => {
+    assayOrganTypeData.aggregations?.dataset_type_map.raw_dataset_type.buckets.map((bucket): OrganDatasetTypeDatum => {
       const datasetType = bucket.key;
 
       const organTypeCounts: Record<string, number> = {};
@@ -71,6 +102,7 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
       colorScale={colorScale}
       keys={search}
       margin={margin}
+      TooltipContent={OrganDatasetsChartTooltip}
       yAxisTickLabels={formattedOrganDatasetTypeData.map((d) => d.datasetType)}
       getY={(d) => d.datasetType}
       yAxisLabel="Assay Type"

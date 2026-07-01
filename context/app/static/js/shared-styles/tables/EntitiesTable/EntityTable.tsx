@@ -28,8 +28,10 @@ function TablePaddingRow({ padding }: { padding: number }) {
   );
 }
 
-interface EntityTableProps<Doc extends Entity>
-  extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns' | 'expandedContent'> {
+interface EntityTableProps<Doc extends Entity> extends Pick<
+  EntitiesTabTypes<Doc>,
+  'query' | 'columns' | 'expandedContent'
+> {
   isSelectable?: boolean;
   numSelected?: number;
   disabledIDs?: Set<string>;
@@ -45,6 +47,13 @@ interface EntityTableProps<Doc extends Entity>
   estimatedExpandedRowHeight?: number;
   initialSortState?: { columnId: string; direction: 'asc' | 'desc' };
   headerActions?: React.ReactNode;
+  useDefaultQuery?: boolean;
+  /**
+   * Reserves a fixed container height so the table doesn't collapse to the header height while its
+   * query loads (preventing layout shift, e.g. when switching between RNA/ATAC result tabs). Pair
+   * with `maxHeight` (typically the same value) to make the panel a stable, scrollable height.
+   */
+  minHeight?: number;
 }
 
 const headerRowHeight = 60;
@@ -65,6 +74,7 @@ function EntityTable<Doc extends Entity>({
   collapseTooltip,
   disabledTooltipTitle,
   maxHeight,
+  minHeight,
   numSelected,
   onSelectAllChange,
   onSelectChange,
@@ -73,6 +83,7 @@ function EntityTable<Doc extends Entity>({
   estimatedExpandedRowHeight,
   initialSortState = { columnId: 'last_modified_timestamp', direction: 'desc' },
   headerActions,
+  useDefaultQuery = true,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -104,6 +115,7 @@ function EntityTable<Doc extends Entity>({
     columns,
     isExpandable,
     estimatedExpandedRowHeight,
+    useDefaultQuery,
   });
 
   // Create a combined onExpand handler that tracks expansion state and calls the external callback
@@ -133,6 +145,7 @@ function EntityTable<Doc extends Entity>({
         fetchMoreOnBottomReached(event);
       }}
       maxHeight={maxHeight}
+      minHeight={minHeight}
     >
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>

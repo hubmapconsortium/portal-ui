@@ -4,14 +4,13 @@ import Description from 'js/shared-styles/sections/Description';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { capitalize } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import MolecularDataQueryFormProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
 import MolecularDataQueryFormTrackingProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
-import { SCFindCellTypeQueryResults } from '../cells/SCFindResults';
+import CellTypesDatasetsResults from './CellTypesDatasetsResults';
 
 function CellTypesEntitiesTables() {
   const { cellTypes, name, trackingInfo } = useCellTypesDetailPageContext();
@@ -46,9 +45,9 @@ function CellTypesEntitiesTables() {
         }
       >
         These are datasets that contain this cell type as identified by Azimuth and indexed by the <SCFindLink /> with
-        uniformly processed HuBMAP RNAseq datasets that contain cell type annotations. The datasets overview plot
-        displays an overview of the datasets metadata compared to either the indexed datasets or all the HuBMAP datasets
-        available. The table is available for download in TSV format for further analysis.
+        uniformly processed HuBMAP RNAseq or ATACseq datasets that contain cell type annotations. The datasets overview
+        plot displays an overview of the datasets metadata compared to either the indexed datasets or all the HuBMAP
+        datasets available. The table is available for download in TSV format for further analysis.
       </Description>
       <Box py={1} />
       <MolecularDataQueryFormTrackingProvider category="Cell Type Detail Page">
@@ -64,14 +63,8 @@ function CellTypesEntitiesTables() {
             })),
           }}
         >
-          <SelectableTableProvider tableLabel={`Datasets with ${name} - scFind Results`}>
-            <SCFindCellTypeQueryResults
-              trackingInfo={{
-                ...trackingInfo,
-                action: 'Datasets',
-              }}
-            />
-          </SelectableTableProvider>
+          {/* Selection is scoped per results tab inside CellTypesDatasetsResults, so no provider here. */}
+          <CellTypesDatasetsResults />
         </MolecularDataQueryFormProvider>
       </MolecularDataQueryFormTrackingProvider>
     </CollapsibleDetailPageSection>

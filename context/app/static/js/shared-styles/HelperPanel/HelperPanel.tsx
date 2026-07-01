@@ -28,7 +28,9 @@ export function HelperPanelBodyItem({ label, children, noWrap }: HelperPanelBody
   return (
     <Stack direction="column">
       <Typography variant="overline">{label}</Typography>
-      <Typography variant="body2">{body}</Typography>
+      <Typography component="div" variant="body2">
+        {body}
+      </Typography>
     </Stack>
   );
 }

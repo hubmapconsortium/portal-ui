@@ -1,7 +1,4 @@
-/* eslint-disable jest/no-disabled-tests */
-/* eslint-disable jest/expect-expect */
-/* eslint-disable jest/no-export */
-
+/* eslint-disable vitest/no-disabled-tests */
 import realProv from './real-prov.json';
 import realCwl from './real-cwl.json';
 import complexProv from './complex-prov.json';

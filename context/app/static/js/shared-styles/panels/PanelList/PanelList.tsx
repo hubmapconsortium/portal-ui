@@ -3,15 +3,15 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 
 import Panel, { PanelProps } from 'js/shared-styles/panels/Panel';
-import { PanelScrollBox } from './style';
+import { PanelScrollBox, PanelHeaderBox } from './style';
 
 interface PanelListProps {
   panelsProps: PanelProps[];
 }
 
 function PanelList({ panelsProps }: PanelListProps) {
-  const headerProps = panelsProps.find((p) => 'key' in p && p.key === 'header');
-  const itemProps = panelsProps.filter((p) => !('key' in p && p.key === 'header'));
+  const headerProps = panelsProps.find((p) => 'panelKey' in p && p.panelKey === 'header');
+  const itemProps = panelsProps.filter((p) => !('panelKey' in p && p.panelKey === 'header'));
 
   return (
     <Stack
@@ -22,10 +22,15 @@ function PanelList({ panelsProps }: PanelListProps) {
         minHeight: 0,
       }}
     >
-      {headerProps && <Panel {...headerProps} />}
+      {headerProps && (
+        <PanelHeaderBox>
+          <Panel {...headerProps} />
+        </PanelHeaderBox>
+      )}
       <PanelScrollBox>
         {itemProps.map((props) => (
-          <Panel key={'key' in props ? props.key : props.title} {...props} />
+          // React's reserved `key` must be passed directly, not via spread.
+          <Panel key={'panelKey' in props ? props.panelKey : props.title} {...props} />
         ))}
       </PanelScrollBox>
     </Stack>

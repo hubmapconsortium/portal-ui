@@ -99,7 +99,7 @@ function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
           trackingInfo={{
             category: currentEventCategory,
             action: `Datasets / Navigate to Dataset`,
-            label: currentWorkspaceItemId,
+            label: String(currentWorkspaceItemId),
           }}
           hideTableIfEmpty
           openLinksInNewTab
@@ -145,7 +145,7 @@ function InvitationPageContent({ invitationId }: InvitationPageProps) {
     trackEvent({
       category: WorkspacesEventCategories.WorkspaceDetailPreviewPage,
       action,
-      label: invitationId,
+      label: String(invitationId),
     });
   });
 
@@ -182,7 +182,7 @@ function InvitationPageContent({ invitationId }: InvitationPageProps) {
       <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
       <DetailLayout
         sections={shouldDisplaySection}
-        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPreviewPage, label: invitationId }}
+        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPreviewPage, label: String(invitationId) }}
       >
         <StyledAlert
           severity="info"

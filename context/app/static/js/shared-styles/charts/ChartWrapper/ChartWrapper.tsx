@@ -77,8 +77,14 @@ function ChartWrapper(
       sx={{
         display: 'grid',
         gridTemplateAreas: fullWidthGraph ? fullWidthGraphTemplateAreas : defaultGridTemplateAreas,
-        overflow: 'none',
-        gridTemplateColumns: 'auto auto auto minmax(175px, auto)',
+        overflow: 'hidden',
+        // Fit the container and let the chart-area columns shrink below their (SVG-driven) content
+        // width, so the chart fills the available space instead of pushing the layout wider than the
+        // viewport on smaller screens.
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(175px, auto)',
         gridTemplateRows: `auto auto minmax(0, auto) ${chartHeight}px minmax(0, auto)`,
         ...sx,
       }}
@@ -94,11 +100,13 @@ function ChartWrapper(
           )}
         </Box>
       )}
-      <Stack direction="row" gap={1} sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0 }}>
+      {/* Keep the X/Y axis selects on a single row; minWidth:0 lets the fullWidth selects shrink to
+          fit on narrow screens rather than wrapping onto separate rows. */}
+      <Stack direction="row" gap={1} sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0, minWidth: 0 }}>
         {xAxisDropdown}
         {yAxisDropdown}
       </Stack>
-      <Box sx={{ gridArea: 'chart' }}>{children}</Box>
+      <Box sx={{ gridArea: 'chart', minWidth: 0 }}>{children}</Box>
       <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid' }}>
         <Stack direction="column" px={1}>
           {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}
@@ -182,7 +190,7 @@ function ChartWrapper(
           </Box>
         </Stack>
       </Box>
-      <Box sx={{ gridArea: 'top-controls' }}>{additionalControls}</Box>
+      <Box sx={{ gridArea: 'top-controls', minWidth: 0 }}>{additionalControls}</Box>
       <Box sx={{ gridArea: 'caption', p: 1 }}>
         <Typography variant="caption" color="textSecondary">
           {caption}

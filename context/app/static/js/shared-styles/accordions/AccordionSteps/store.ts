@@ -5,15 +5,15 @@ import { createStore } from 'zustand';
 
 export interface AccordionStepsState {
   openStepIndex: number;
-  completedStepsText: Record<number, string | ReactElement>;
+  completedStepsText: Record<number, string | ReactElement<unknown>>;
   stepsLength: number;
 }
 
 interface AccordionStepsActions {
   setOpenStepIndex: (stepIndex: number) => void;
   expandStep: (stepIndex: number) => void;
-  setCompletedStepsText: (completedStepsText: Record<number, string | ReactElement>) => void;
-  completeStep: (stepIndex: number, completedStepText: string | ReactElement) => void;
+  setCompletedStepsText: (completedStepsText: Record<number, string | ReactElement<unknown>>) => void;
+  completeStep: (stepIndex: number, completedStepText: string | ReactElement<unknown>) => void;
   resetStore: () => void;
 }
 
@@ -42,7 +42,7 @@ function handleCompleteStep({
   payload: { stepIndex, completedStepText },
   state,
 }: {
-  payload: { stepIndex: number; completedStepText: string | ReactElement };
+  payload: { stepIndex: number; completedStepText: string | ReactElement<unknown> };
   state: AccordionStepsState;
 }) {
   const previousStepIndexes = [...Array(stepIndex).keys()];

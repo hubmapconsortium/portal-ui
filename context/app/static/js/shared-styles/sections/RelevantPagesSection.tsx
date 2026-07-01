@@ -13,7 +13,7 @@ interface RelevantPagesSectionProps {
 }
 function RelevantPagesSection({ pages }: RelevantPagesSectionProps) {
   return (
-    <LabelledSectionText label="Relevant Pages" spacing={1}>
+    <LabelledSectionText label="Relevant Pages" spacing={1} childContainerComponent="div">
       <Stack direction="row" spacing={1}>
         {pages.map((page) => {
           return <OutlinedLinkButton key={page.link} {...page} />;

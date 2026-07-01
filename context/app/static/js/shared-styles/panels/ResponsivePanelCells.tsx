@@ -61,6 +61,6 @@ export function HeaderCell({ children, ...props }: React.ComponentProps<typeof B
 }
 
 export const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
-  key: `skeleton-${index}`,
-  children: <Skeleton width="100%" height={32} variant="rounded" key={Math.random()} />,
+  panelKey: `skeleton-${index}`,
+  children: <Skeleton width="100%" height={32} variant="rounded" />,
 }));

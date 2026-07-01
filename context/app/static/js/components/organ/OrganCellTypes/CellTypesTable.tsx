@@ -48,8 +48,8 @@ function CellTypeRow({
   );
 }
 
-function CellTypesTable({ cellTypes }: CellTypesTableProps) {
-  const { rows, isLoading, isLoadingDescriptions } = useCellTypeRows(cellTypes);
+function CellTypesTable({ modality }: CellTypesTableProps) {
+  const { rows, isLoading, isLoadingDescriptions } = useCellTypeRows(modality);
 
   const { organ } = useOrganContext();
 

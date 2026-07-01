@@ -24,6 +24,7 @@ export type ProcessedDatasetDetails = ProcessedDatasetInfo &
     | 'dataset_type'
     | 'mapped_consortium'
     | 'mapped_data_access_level'
+    | 'calculated_metadata'
   >;
 
 export function useProcessedDatasetDetails(uuid: string) {
@@ -52,6 +53,7 @@ export function useProcessedDatasetDetails(uuid: string) {
       'ingest_metadata.dag_provenance_list',
       'ingest_metadata.workflow_description',
       'ingest_metadata.workflow_version',
+      'ingest_metadata.segmentation_metadata',
       'metadata',
       'protocol_url',
       'dataset_type',
@@ -60,6 +62,7 @@ export function useProcessedDatasetDetails(uuid: string) {
       'contributors',
       'contacts',
       'mapped_data_access_level',
+      'calculated_metadata',
     ],
     size: 10000,
   };

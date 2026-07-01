@@ -10,7 +10,7 @@ import Chip from '@mui/material/Chip';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { TutorialCategory, TUTORIAL_CATEGORY_DATA, TUTORIAL_CATEGORIES, Tutorial } from 'js/components/Tutorials/types';
 import { TutorialCard } from 'js/components/Tutorials/TutorialList';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import { TableOfContentsItems, TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
 import { tutorialIsReady } from 'js/components/Tutorials/utils';

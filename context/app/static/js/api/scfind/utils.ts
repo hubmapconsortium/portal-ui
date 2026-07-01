@@ -1,4 +1,4 @@
-import { useAppContext } from 'js/components/Contexts';
+import { fetcher, multiFetcher, MultiFetchOptionsType } from 'js/helpers/swr';
 
 // NOTE: This is the dev endpoint. We can't use flaskdata to provide this in Storybook because it doesn't exist in the Storybook environment.
 export const SCFIND_BASE_STORYBOOK = 'https://scfind.dev.hubmapconsortium.org';
@@ -29,6 +29,138 @@ export function createScFindKey(
   }
   const fullUrl = new URL(`${scFindApiUrl}/api/${endpoint}?${urlParams.toString()}`);
   return fullUrl.toString();
+}
+
+/**
+ * POST-flavored scFind request key. Used as a workaround when cell type names contain
+ * commas, which would otherwise be ambiguous when joined into a comma-separated GET param.
+ */
+export interface ScFindPostRequest {
+  url: string;
+  body: Record<string, unknown>;
+}
+
+export type ScFindRequest = string | ScFindPostRequest;
+
+/**
+ * Builds a POST-flavored scFind request: endpoint URL with no query params, and all
+ * parameters (including index_version) in the JSON body. Undefined values are dropped.
+ */
+export function createScFindPostRequest(
+  scFindApiUrl: string,
+  endpoint: string,
+  body: Record<string, unknown>,
+  indexVersion?: string,
+): ScFindPostRequest {
+  const url = new URL(`${scFindApiUrl}/api/${endpoint}`).toString();
+  const fullBody: Record<string, unknown> = {};
+  Object.entries(body).forEach(([key, value]) => {
+    if (value !== undefined) {
+      fullBody[key] = value;
+    }
+  });
+  if (indexVersion) {
+    fullBody.index_version = indexVersion;
+  }
+  return { url, body: fullBody };
+}
+
+/**
+ * Builds a GET key for a Flask scFind BFF route. Unlike {@link createScFindKey}, the URL is a
+ * relative path to our own Flask backend (e.g. `/scfind/find-datasets.json`) rather than the
+ * upstream scFind API, and `index_version` is injected server-side, so callers neither know nor
+ * send it. Undefined/empty params are dropped. Returns the relative URL string used as the SWR key.
+ */
+export function createScFindFlaskKey(route: string, params: Record<string, string | undefined> = {}): string {
+  const urlParams = new URLSearchParams();
+  Object.entries(params)
+    .filter(([, value]) => value)
+    .forEach(([key, value]) => {
+      urlParams.append(key, value!);
+    });
+  const queryString = urlParams.toString();
+  return queryString ? `${route}?${queryString}` : route;
+}
+
+/**
+ * POST-flavored counterpart to {@link createScFindFlaskKey}, used (as with the upstream API) when a
+ * cell type name contains a comma that would be ambiguous in a comma-joined GET param. The route is
+ * a relative Flask path and the body carries all parameters; `index_version` is injected server-side.
+ * Undefined values are dropped.
+ */
+export function createScFindFlaskPostRequest(route: string, body: Record<string, unknown>): ScFindPostRequest {
+  const fullBody: Record<string, unknown> = {};
+  Object.entries(body).forEach(([key, value]) => {
+    if (value !== undefined) {
+      fullBody[key] = value;
+    }
+  });
+  return { url: route, body: fullBody };
+}
+
+/**
+ * Wraps a single value in an array if it isn't already one; passes `undefined` through.
+ * Useful for normalizing `string | string[]` params to arrays for JSON request bodies.
+ */
+export function toArray<T>(input: T | T[]): T[];
+export function toArray<T>(input: T | T[] | undefined): T[] | undefined;
+export function toArray<T>(input: T | T[] | undefined): T[] | undefined {
+  if (input === undefined) return undefined;
+  return Array.isArray(input) ? input : [input];
+}
+
+/**
+ * Returns true if any cell type name in the input contains a comma. Comma-containing
+ * names break the default GET behavior because they collide with the array separator
+ * used when joining multiple cell types into a single query param.
+ */
+export function cellTypeNameContainsComma(value: string | string[] | undefined): boolean {
+  if (!value) return false;
+  if (Array.isArray(value)) return value.some((v) => v.includes(','));
+  return value.includes(',');
+}
+
+function requestInitForKey(key: ScFindRequest | null): RequestInit {
+  if (key === null || typeof key === 'string') return {};
+  return {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(key.body),
+  };
+}
+
+/**
+ * SWR fetcher that dispatches GET vs. POST based on the shape of the scFind request key.
+ */
+export async function scFindFetcher<T>(key: ScFindRequest): Promise<T> {
+  if (typeof key === 'string') {
+    return fetcher<T>({ url: key });
+  }
+  return fetcher<T>({ url: key.url, requestInit: requestInitForKey(key) });
+}
+
+/**
+ * Multi-URL SWR fetcher for scFind. Accepts an array of GET/POST request keys (or null
+ * to skip a slot) and dispatches each appropriately. The returned array has the same length
+ * as the input, with `undefined` in any slot whose key was null, so callers can rely on
+ * input-index alignment.
+ */
+export async function scFindMultiFetcher<T>(
+  keys: (ScFindRequest | null)[],
+  options?: Omit<MultiFetchOptionsType, 'urls' | 'requestInits'>,
+): Promise<(T | undefined)[]> {
+  const activeSlots: { key: ScFindRequest; index: number }[] = [];
+  keys.forEach((key, index) => {
+    if (key !== null) activeSlots.push({ key, index });
+  });
+  const urls = activeSlots.map(({ key }) => (typeof key === 'string' ? key : key.url));
+  const requestInits = activeSlots.map(({ key }) => requestInitForKey(key));
+  const results = await multiFetcher<T>({ ...options, urls, requestInits });
+  const aligned: (T | undefined)[] = keys.map(() => undefined);
+  activeSlots.forEach((slot, i) => {
+    aligned[slot.index] = results[i];
+  });
+  return aligned;
 }
 
 /**
@@ -121,13 +253,4 @@ export function stringOrArrayToString(input: string | string[]): string {
     return input.join(',');
   }
   return input;
-}
-
-/**
- * Convenience function for accessing SCFind API keys from context.
- * @returns An object containing the SCFind API endpoint and index version.
- */
-export function useScFindKey() {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
-  return { scFindEndpoint, scFindIndexVersion };
 }

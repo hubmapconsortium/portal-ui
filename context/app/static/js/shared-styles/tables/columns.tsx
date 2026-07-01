@@ -1,12 +1,16 @@
-import React, { ComponentType, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { format } from 'date-fns/format';
 
 import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from 'js/typings/search';
 import { InternalLink } from 'js/shared-styles/Links';
-import { getDonorAgeString } from 'js/helpers/functions';
+import SeverityIcon from 'js/shared-styles/icons/SeverityIcon';
+import { getDonorAgeString, getDemographicRangeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
-import { EventInfo } from 'js/components/types';
+import { Entity, EventInfo } from 'js/components/types';
+import { isRetractedStatus } from 'js/components/detailPage/utils';
+import { getHuBMAPIdDisplayInfo, HuBMAPIdLabel, ViewLatestVersionChip } from 'js/components/search/Results/CellContent';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/CurrentGeneContext';
 import { SecondaryBackgroundTooltip } from '../tooltips';
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -34,12 +38,17 @@ const DatasetAccessWarning = ({ uuid, mapped_status, mapped_data_access_level }:
 };
 
 function HubmapIDCell({
-  hit: { uuid, hubmap_id, mapped_status, mapped_data_access_level, entity_type },
+  hit,
   trackingInfo,
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
+  const { uuid, hubmap_id, mapped_status, mapped_data_access_level, entity_type } = hit;
   const isDataset = entity_type === 'Dataset';
   const markerGene = useOptionalGeneContext();
+
+  // Mirror the search results table: retracted/superseded datasets get colored IDs, a status icon,
+  // and a "View Replacement"/"View Latest Version" link to the superseding dataset.
+  const { isSuperseded, isRetracted, latestRevisionUrl } = getHuBMAPIdDisplayInfo(hit as Partial<Entity>);
 
   const flaskData = useFlaskDataContext();
 
@@ -60,13 +69,13 @@ function HubmapIDCell({
         action: trackingInfo.action
           ? `${trackingInfo.action} / Select ${trackingInfo.action}`
           : 'Navigate to Dataset from Table',
-        label: `${trackingInfo.label} ${hubmap_id}`,
+        label: `${trackingInfo?.label} ${hubmap_id}`,
       });
     }
   });
 
   return (
-    <>
+    <Stack direction="column" gap={0.5} alignItems="flex-start">
       {isCurrentEntity ? (
         <>
           <div>{hubmap_id}</div>
@@ -80,9 +89,14 @@ function HubmapIDCell({
           href={href}
           onClick={handleLinkClick}
           variant="body2"
+          sx={isRetracted ? { color: 'retracted.main' } : isSuperseded ? { color: 'warning.main' } : undefined}
         >
-          {hubmap_id}
+          <HuBMAPIdLabel hubmapId={hubmap_id} isSuperseded={isSuperseded} isRetracted={isRetracted} />
         </InternalLink>
+      )}
+
+      {isSuperseded && latestRevisionUrl && (
+        <ViewLatestVersionChip latestRevisionUrl={latestRevisionUrl} isRetracted={isRetracted} />
       )}
 
       {isDataset && (
@@ -92,7 +106,7 @@ function HubmapIDCell({
           mapped_status={mapped_status}
         />
       )}
-    </>
+    </Stack>
   );
 }
 
@@ -148,6 +162,15 @@ export const assayTypes = {
 };
 
 function StatusCell({ hit: { mapped_status, mapped_data_access_level } }: CellContentProps<DatasetDocument>) {
+  // Retracted datasets get the retracted icon + color for emphasis, matching the search results table.
+  if (isRetractedStatus(mapped_status)) {
+    return (
+      <Stack direction="row" gap={0.5} alignItems="center" sx={{ color: 'retracted.main' }}>
+        <SeverityIcon status="retracted" fontSize="small" />
+        {mapped_status}
+      </Stack>
+    );
+  }
   return `${mapped_status} (${mapped_data_access_level})`;
 }
 
@@ -174,21 +197,22 @@ export const organCol = {
   filterable: true,
 };
 
-function withParentDonor(Component: ComponentType<{ hit: DonorDocument }>) {
-  return function D({ hit: { donor } }: CellContentProps<SampleDocument | DatasetDocument>) {
-    return <Component hit={donor} />;
-  };
-}
+// Donor-entity cell components read the single donor's own mapped_metadata.
+// Parent (Dataset/Sample) cell components read donor_demographics, aggregated across all donors.
 
 function DonorAge({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata && getDonorAgeString(hit?.mapped_metadata);
 }
 
+function ParentDonorAge({ hit: { donor_demographics } }: CellContentProps<SampleDocument | DatasetDocument>) {
+  return getDemographicRangeString(donor_demographics?.age, donor_demographics?.age_unit);
+}
+
 export const parentDonorAge = {
-  id: 'donor.mapped_metadata.age_value',
+  id: 'donor_demographics.age_value',
   label: 'Donor Age',
-  sort: 'donor.mapped_metadata.age_value',
-  cellContent: withParentDonor(DonorAge),
+  sort: 'donor_demographics.age_value',
+  cellContent: ParentDonorAge,
   width: 150,
   filterable: true,
 };
@@ -217,11 +241,15 @@ function DonorSex({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.sex;
 }
 
+function ParentDonorSex({ hit: { donor_demographics } }: CellContentProps<SampleDocument | DatasetDocument>) {
+  return (donor_demographics?.sex ?? []).join(', ');
+}
+
 export const parentDonorSex = {
-  id: 'donor.mapped_metadata.sex',
+  id: 'donor_demographics.sex',
   label: 'Donor Sex',
-  sort: 'donor.mapped_metadata.sex.keyword',
-  cellContent: withParentDonor(DonorSex),
+  sort: 'donor_demographics.sex.keyword',
+  cellContent: ParentDonorSex,
   width: 150,
   filterable: true,
 };
@@ -237,11 +265,15 @@ function DonorRace({ hit }: CellContentProps<DonorDocument>) {
   return hit?.mapped_metadata?.race;
 }
 
+function ParentDonorRace({ hit: { donor_demographics } }: CellContentProps<SampleDocument | DatasetDocument>) {
+  return (donor_demographics?.race ?? []).join(', ');
+}
+
 export const parentDonorRace = {
-  id: 'donor.mapped_metadata.race',
+  id: 'donor_demographics.race',
   label: 'Donor Race',
-  sort: 'donor.mapped_metadata.race.keyword',
-  cellContent: withParentDonor(DonorRace),
+  sort: 'donor_demographics.race.keyword',
+  cellContent: ParentDonorRace,
   width: 150,
   filterable: true,
 };

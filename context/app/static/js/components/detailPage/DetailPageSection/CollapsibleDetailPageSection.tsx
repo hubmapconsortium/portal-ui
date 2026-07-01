@@ -8,12 +8,15 @@ import { SvgIconComponent } from '@mui/icons-material';
 import { useEventCallback } from '@mui/material/utils';
 import Stack from '@mui/material/Stack';
 
+import UnpublishedRounded from '@mui/icons-material/UnpublishedRounded';
+
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
 import { sectionIconMap, sectionImageIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
+import { useRetractedDatasetContext } from 'js/components/detailPage/RetractedDatasetContext';
 
 import DetailPageSection from './DetailPageSection';
 import { DetailPageSectionAccordion, StyledExternalImageIconContainer, StyledSvgIcon } from './style';
@@ -32,9 +35,14 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
 interface IconDisplayProps {
   icon?: SvgIconComponent;
   id: string;
+  isRetracted?: boolean;
 }
 
-function IconDisplay({ icon: IconOverride, id }: IconDisplayProps) {
+function IconDisplay({ icon: IconOverride, id, isRetracted }: IconDisplayProps) {
+  // On retracted datasets, every section icon is replaced with the retracted status icon.
+  if (isRetracted) {
+    return <StyledSvgIcon as={UnpublishedRounded} fontSize="medium" sx={{ color: 'retracted.main' }} />;
+  }
   if (Boolean(IconOverride) || sectionIconMap[id]) {
     return <StyledSvgIcon as={IconOverride ?? sectionIconMap[id]} fontSize="medium" color="primary" />;
   }
@@ -61,8 +69,11 @@ export default function CollapsibleDetailPageSection({
   buttons,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
+  const { isRetracted } = useRetractedDatasetContext();
+  // On retracted datasets, collapse every section by default except the processed data section.
+  const initiallyExpanded = isRetracted ? rest.id === 'processed-data' : true;
   // Handle expanded state manually in order to track the event
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(initiallyExpanded);
 
   const handleAccordionToggle = useEventCallback(() => {
     const newExpandedState = !expanded;
@@ -88,7 +99,7 @@ export default function CollapsibleDetailPageSection({
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Stack direction="row" sx={{ alignItems: 'center', flexGrow: 1 }}>
             <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
-              <IconDisplay icon={icon} id={rest.id!} />
+              <IconDisplay icon={icon} id={rest.id!} isRetracted={isRetracted} />
               <Typography variant={variant} component={component}>
                 {title}
               </Typography>

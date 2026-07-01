@@ -27,8 +27,28 @@ export interface DonorDocument extends EntityDocument {
   entity_type: 'Donor';
 }
 
+export interface DemographicStats {
+  min: number;
+  max: number;
+  mean: number;
+}
+
+// Donor demographics aggregated across *all* of an entity's donors: categorical fields become
+// sets, numeric fields keep the array of every donor's value plus a min/max/mean stats object.
+export interface DonorDemographics {
+  sex?: string[];
+  race?: string[];
+  age_value?: number[];
+  age_unit?: string[];
+  age?: DemographicStats;
+  body_mass_index_value?: number[];
+  body_mass_index_unit?: string[];
+  body_mass_index?: DemographicStats;
+}
+
 interface SampleDatasetSharedFields {
   donor: DonorDocument;
+  donor_demographics?: DonorDemographics;
   origin_samples_unique_mapped_organs: string[];
 }
 

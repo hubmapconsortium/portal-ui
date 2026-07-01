@@ -92,7 +92,7 @@ interface ColorOption {
 
 interface HuBMAPDatasetsChartProps {
   getBarHrefOverride?: ColorOption['getBarHref'];
-  chartRef?: RefObject<HTMLDivElement>;
+  chartRef?: RefObject<HTMLDivElement | null>;
   onSelectionChange?: (label: string) => void;
 }
 

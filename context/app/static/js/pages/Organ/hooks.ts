@@ -149,8 +149,8 @@ interface IndexedDatasetsForOrganAggs {
   };
 }
 
-export function useIndexedDatasetsForOrgan(searchItems: string[], organName: string) {
-  const { data = { datasets: [] }, isLoading: isLoadingIndexed, ...rest } = useIndexedDatasets();
+export function useIndexedDatasetsForOrgan(searchItems: string[], organName: string, modality?: string) {
+  const { data = { datasets: [] }, isLoading: isLoadingIndexed, ...rest } = useIndexedDatasets(modality);
 
   const ids = useSCFindIDAdapter(data?.datasets);
 
@@ -208,12 +208,31 @@ export function useIndexedDatasetsForOrgan(searchItems: string[], organName: str
 }
 
 /**
+ * Union of the RNAseq and ATACseq indexed datasets for an organ. Used by the cell population
+ * plot, which displays datasets from both modalities together.
+ */
+export function useCombinedIndexedDatasetsForOrgan(searchItems: string[], organName: string) {
+  const rna = useIndexedDatasetsForOrgan(searchItems, organName);
+  const atac = useIndexedDatasetsForOrgan(searchItems, organName, 'ATAC');
+  const { datasets: rnaDatasets } = rna;
+  const { datasets: atacDatasets } = atac;
+  const datasets = useMemo(() => [...new Set([...rnaDatasets, ...atacDatasets])], [rnaDatasets, atacDatasets]);
+  return {
+    datasets,
+    rnaDatasets,
+    atacDatasets,
+    isLoadingDatasets: rna.isLoadingDatasets || atac.isLoadingDatasets,
+  };
+}
+
+/**
  * Returns a list of the dataset IDs indexed in scFind for the current organ.
  * @param organ
+ * @param modality Optional scFind modality (`'ATAC'`; omit for RNAseq).
  * @returns
  */
-export function useIndexedDatasetsForCurrentOrgan() {
+export function useIndexedDatasetsForCurrentOrgan(modality?: string) {
   const { organ } = useOrganContext();
   const searchItems = useSearchItems(organ);
-  return useIndexedDatasetsForOrgan(searchItems, organ.name);
+  return useIndexedDatasetsForOrgan(searchItems, organ.name, modality);
 }

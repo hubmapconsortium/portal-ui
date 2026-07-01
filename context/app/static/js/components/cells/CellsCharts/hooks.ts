@@ -5,6 +5,7 @@ import { useExpandableRowStore } from 'js/shared-styles/tables/ExpandableRow/sto
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import { useMemo } from 'react';
 import { extractCLID } from '../CrossModalityResults/utils';
+import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
 
 interface CellsChartsDataProps {
   uuid: string;
@@ -84,7 +85,8 @@ function useCellTypesChartsData({ uuid, cellVariableNames: cellNames }: UseCellT
 // to handle the first version of the index using HBM IDs and subsequent versions using UUIDs
 // https://hms-dbmi.atlassian.net/browse/CAT-1339
 const useTotalCells = (dataset: string) => {
-  const { data: { cellTypeCounts } = { cellTypeCounts: [] } } = useCellTypeCountForDataset({ dataset });
+  const modality = useOptionalSCFindModality();
+  const { data: { cellTypeCounts } = { cellTypeCounts: [] } } = useCellTypeCountForDataset({ dataset, modality });
 
   const totalCells = useMemo(() => {
     if (!cellTypeCounts) {

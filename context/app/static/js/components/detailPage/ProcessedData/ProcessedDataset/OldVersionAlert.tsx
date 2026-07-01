@@ -1,4 +1,5 @@
 import React from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { InternalLink } from 'js/shared-styles/Links';
 import { DetailPageAlert } from '../../style';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
@@ -8,11 +9,13 @@ import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 export function OldVersionAlert() {
   const { sectionDataset } = useProcessedDatasetContext();
 
-  const { versions, setSelectedVersion, currentSelectedVersion } = useSelectedVersionStore((state) => ({
-    versions: state.versions.get(sectionDataset.uuid) ?? [],
-    currentSelectedVersion: state.selectedVersions.get(sectionDataset.uuid),
-    setSelectedVersion: state.setSelectedVersion,
-  }));
+  const { versions, setSelectedVersion, currentSelectedVersion } = useSelectedVersionStore(
+    useShallow((state) => ({
+      versions: state.versions.get(sectionDataset.uuid) ?? [],
+      currentSelectedVersion: state.selectedVersions.get(sectionDataset.uuid),
+      setSelectedVersion: state.setSelectedVersion,
+    })),
+  );
 
   const isLatest = versions.length === 0 || currentSelectedVersion?.uuid === sectionDataset.uuid;
 

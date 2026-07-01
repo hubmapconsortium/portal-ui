@@ -112,6 +112,11 @@ export interface BasicGeneInfo {
   approved_name: string;
   approved_symbol: string;
   summary: string;
+  has_scfind_rna?: boolean | null;
+  has_scfind_atac?: boolean | null;
+  // Number of scFind-indexed datasets containing this gene, per modality (for the Data Type chips).
+  scfind_rna_dataset_count?: number;
+  scfind_atac_dataset_count?: number;
 }
 
 /**
@@ -239,7 +244,6 @@ export const useGeneOntologyDetails = (geneSymbols: string[]) => {
  * @returns The list of genes.
  */
 export const useGeneOntologyList = (starts_with: string) => {
-  const apiUrls = useUbkg();
   const query = useMemo(
     () => ({
       genes_per_page: '10',
@@ -262,7 +266,7 @@ export const useGeneOntologyList = (starts_with: string) => {
       starts_with === previousPageData.pagination.starts_with
     )
       return null;
-    return `${apiUrls.geneList}?${new URLSearchParams({ ...query, page: String(pageIndex + 1) }).toString()}`;
+    return `/biomarkers/genes-info.json?${new URLSearchParams({ ...query, page: String(pageIndex + 1) }).toString()}`;
   };
   return useSWRInfinite<GeneListResponse>(getKey, (url: string) => fetcher({ url }), {
     revalidateAll: false,

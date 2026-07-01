@@ -2,39 +2,40 @@
 import React, { useRef } from 'react';
 import { renderHook } from 'test-utils/functions';
 import { act } from '@testing-library/react';
+import { type Mock, type MockInstance } from 'vitest';
 
 import { useDownloadImage } from './useDownloadImage';
 
 // Mock snackbar actions
-const mockToastError = jest.fn();
-jest.mock('js/shared-styles/snackbars', () => ({
+const mockToastError = vi.fn();
+vi.mock('js/shared-styles/snackbars', () => ({
   useSnackbarActions: () => ({ toastError: mockToastError }),
 }));
 
 // Mock html2canvas
-const mockHtml2canvas = jest.fn();
-jest.mock('html2canvas', () => ({
+const mockHtml2canvas = vi.fn();
+vi.mock('html2canvas', () => ({
   __esModule: true,
   default: (...args: unknown[]) => mockHtml2canvas(...args),
 }));
 
 describe('useDownloadImage', () => {
-  let mockClick: jest.Mock;
-  let appendChildSpy: jest.SpyInstance;
-  let removeChildSpy: jest.SpyInstance;
+  let mockClick: Mock<() => void>;
+  let appendChildSpy: MockInstance<typeof document.body.appendChild>;
+  let removeChildSpy: MockInstance<typeof document.body.removeChild>;
 
   beforeEach(() => {
     mockToastError.mockClear();
     mockHtml2canvas.mockClear();
-    mockClick = jest.fn();
+    mockClick = vi.fn();
 
-    appendChildSpy = jest.spyOn(document.body, 'appendChild').mockImplementation((node) => {
+    appendChildSpy = vi.spyOn(document.body, 'appendChild').mockImplementation((node) => {
       if (node instanceof HTMLAnchorElement) {
         node.click = mockClick;
       }
       return node;
     });
-    removeChildSpy = jest.spyOn(document.body, 'removeChild').mockImplementation((node) => node);
+    removeChildSpy = vi.spyOn(document.body, 'removeChild').mockImplementation((node) => node);
   });
 
   afterEach(() => {
@@ -57,7 +58,7 @@ describe('useDownloadImage', () => {
 
   test('calls html2canvas with default scale of 2', async () => {
     const div = document.createElement('div');
-    const mockCanvas = { toDataURL: jest.fn().mockReturnValue('data:image/png;base64,test') };
+    const mockCanvas = { toDataURL: vi.fn().mockReturnValue('data:image/png;base64,test') };
     mockHtml2canvas.mockResolvedValue(mockCanvas);
 
     const { result } = renderHook(() => {
@@ -75,7 +76,7 @@ describe('useDownloadImage', () => {
 
   test('calls html2canvas with custom scale', async () => {
     const div = document.createElement('div');
-    const mockCanvas = { toDataURL: jest.fn().mockReturnValue('data:image/png;base64,test') };
+    const mockCanvas = { toDataURL: vi.fn().mockReturnValue('data:image/png;base64,test') };
     mockHtml2canvas.mockResolvedValue(mockCanvas);
 
     const { result } = renderHook(() => {
@@ -93,7 +94,7 @@ describe('useDownloadImage', () => {
 
   test('downloads image with correct filename', async () => {
     const div = document.createElement('div');
-    const mockCanvas = { toDataURL: jest.fn().mockReturnValue('data:image/png;base64,test') };
+    const mockCanvas = { toDataURL: vi.fn().mockReturnValue('data:image/png;base64,test') };
     mockHtml2canvas.mockResolvedValue(mockCanvas);
 
     const { result } = renderHook(() => {

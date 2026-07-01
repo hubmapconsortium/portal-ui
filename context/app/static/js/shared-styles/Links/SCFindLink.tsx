@@ -1,6 +1,14 @@
 import React, { PropsWithChildren } from 'react';
-import OutboundIconLink from './iconLinks/OutboundIconLink';
+import InternalLink from './InternalLink';
 
+/**
+ * Links to the in-app scFind Method page (`/scfind/about`). That page itself links out to the
+ * original scFind publication; everywhere else points here so users land on the portal's overview.
+ */
 export default function SCFindLink({ children = 'scFind method' }: PropsWithChildren) {
-  return <OutboundIconLink href="https://www.nature.com/articles/s41592-021-01076-9">{children}</OutboundIconLink>;
+  return (
+    <InternalLink href="/scfind/about" target="_blank" rel="noopener noreferrer">
+      {children}
+    </InternalLink>
+  );
 }

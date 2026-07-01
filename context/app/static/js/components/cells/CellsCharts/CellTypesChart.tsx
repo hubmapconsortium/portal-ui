@@ -6,6 +6,8 @@ import { TooltipData } from 'js/shared-styles/charts/types';
 import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import { Dataset } from 'js/components/types';
+import { useOptionalSCFindModality } from '../SCFindResults/SCFindModalityContext';
+import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { decimal, percent } from 'js/helpers/number-format';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
@@ -162,6 +164,7 @@ function CellTypesChart({
       const GeneTooltipWrapper = (props: { tooltipData: TooltipData<{ value: number }> }) => (
         <GeneTooltipContent {...props} cellTypeGeneAssociations={cellTypeGeneAssociations} />
       );
+      // eslint-disable-next-line react-hooks/immutability -- Intentional in-place mutation of a local accumulator.
       GeneTooltipWrapper.displayName = 'GeneTooltipWrapper';
       return GeneTooltipWrapper;
     }
@@ -262,7 +265,8 @@ export function SCFindCellTypesChart({
   cellTypeGeneAssociations = [],
 }: SCFindCellTypesChartProps) {
   const cellVariableNames = useCellVariableNames();
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
+  const modality = useOptionalSCFindModality();
+  const { data, isLoading, error } = useCellTypeCountForDataset({ dataset: uuid, modality });
   const isCellTypesQuery = useIsQueryType('cell-type');
   const cellNames = useMemo(() => {
     if (isCellTypesQuery) {
@@ -288,6 +292,10 @@ export function SCFindCellTypesChart({
     const total = data.cellTypeCounts.reduce((acc, result) => acc + result.count, 0);
     return [counts, total] as const;
   }, [data]);
+
+  if (error) {
+    return <Alert severity="error">Failed to load cell type distribution data.</Alert>;
+  }
 
   return (
     <CellTypesChart

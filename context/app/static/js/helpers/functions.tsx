@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { SearchRequest } from 'js/typings/elasticsearch';
+import type { DemographicStats } from 'js/typings/search';
 import { format } from 'date-fns/format';
 import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
 import { Dataset, ESEntityType, Entity, isDataset } from 'js/components/types';
@@ -181,6 +182,17 @@ export function getDonorAgeString({ age_value, age_unit }: DonorAge) {
     return '';
   }
   return [age_value, age_unit].join(' ');
+}
+
+// Formats an aggregated numeric demographic (e.g. age/BMI across all of an entity's donors) as a
+// "min-max unit" range, collapsing to a single value when every donor shares it.
+export function getDemographicRangeString(stats?: DemographicStats, units?: string[]): string {
+  if (!stats) {
+    return '';
+  }
+  const unit = units?.[0] ? ` ${units[0]}` : '';
+  const range = stats.min === stats.max ? `${stats.min}` : `${stats.min}-${stats.max}`;
+  return `${range}${unit}`;
 }
 
 export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, keys: (string | K)[]) {

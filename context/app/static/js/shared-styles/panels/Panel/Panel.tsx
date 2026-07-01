@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
 import Box from '@mui/material/Box';
-import Hidden from '@mui/material/Hidden';
 import { PanelBox, LeftTextWrapper, TruncatedLink, TruncatedText, RightTextWrapper } from './style';
 
 interface BasicPanelProps {
@@ -14,12 +13,16 @@ interface BasicPanelProps {
   noPadding?: boolean;
   noHover?: boolean;
   small?: boolean;
+  panelKey?: string;
 }
 
 interface CustomPanelProps extends PropsWithChildren {
   noPadding?: boolean;
   noHover?: boolean;
-  key: string;
+  // Identifier used by PanelList for React reconciliation and to mark the
+  // optional `header` panel. Named ``panelKey`` (not ``key``) so React 19's
+  // strict-mode doesn't warn about ``key`` flowing through a spread.
+  panelKey: string;
 }
 
 export type PanelProps = BasicPanelProps | CustomPanelProps;
@@ -30,10 +33,14 @@ function isCustomPanel(props: PanelProps): props is CustomPanelProps {
 
 function Panel(props: PanelProps) {
   if (isCustomPanel(props)) {
-    return <PanelBox {...props} />;
+    // Strip panelKey before spreading -- it's metadata for PanelList, not a
+    // DOM attribute.
+    const { panelKey: _panelKey, ...rest } = props;
+    return <PanelBox {...rest} />;
   }
 
-  const { title, href, secondaryText, rightText, icon, small, ...panelBoxProps } = props;
+  // Strip panelKey -- it's metadata for PanelList, not a DOM attribute.
+  const { title, href, secondaryText, rightText, icon, small, panelKey: _panelKey, ...panelBoxProps } = props;
 
   const titleTextVariant = small ? 'subtitle2' : 'subtitle1';
 
@@ -51,13 +58,17 @@ function Panel(props: PanelProps) {
         <TruncatedText variant="body2" color="secondary" data-testid="panel-secondary">
           {secondaryText}
         </TruncatedText>
-        <Hidden mdUp>
-          {/* This workaround keeps icons lined up with the rest of the text
-              while allowing the truncation to continue working at all sizes */}
-          <TruncatedText variant="body2" color="secondary" data-testid="panel-secondary-right-text">
-            {rightText}
-          </TruncatedText>
-        </Hidden>
+        {/* This workaround keeps icons lined up with the rest of the text
+            while allowing the truncation to continue working at all sizes.
+            Hidden on md and up; matches the visibility of RightTextWrapper. */}
+        <TruncatedText
+          variant="body2"
+          color="secondary"
+          data-testid="panel-secondary-right-text"
+          sx={{ display: { xs: 'block', md: 'none' } }}
+        >
+          {rightText}
+        </TruncatedText>
       </LeftTextWrapper>
       <RightTextWrapper data-testid="panel-right-text">{rightText}</RightTextWrapper>
     </PanelBox>

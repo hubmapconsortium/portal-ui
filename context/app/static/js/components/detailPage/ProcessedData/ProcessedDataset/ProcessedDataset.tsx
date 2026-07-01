@@ -14,13 +14,14 @@ import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useVitessceConf } from 'js/pages/Dataset/hooks';
-import { isSupport } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import { DatasetAttributionDescription } from 'js/components/detailPage/Attribution/Attribution';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
+import SegmentationChannelsAndQuality from 'js/components/detailPage/SegmentationChannelsAndQuality/SegmentationChannelsAndQuality';
 import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 // import Protocol from 'js/components/detailPage/Protocol';
 import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
@@ -29,7 +30,9 @@ import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/Processed
 import FilesTabs from 'js/components/detailPage/files/FilesTabs';
 import { getEntityCreationInfo } from 'js/helpers/functions';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import AnnotationSummary from 'js/components/detailPage/AnnotationSummary';
 
+import { useRetractedDatasetContext } from 'js/components/detailPage/RetractedDatasetContext';
 import useProcessedDataStore from '../store';
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
@@ -41,6 +44,7 @@ import {
 } from './ProcessedDatasetContext';
 import { useProcessedDatasetDetails } from './hooks';
 import { OldVersionAlert } from './OldVersionAlert';
+import { shouldIncludeParent } from './utils';
 
 function ProcessedDatasetDescription() {
   const {
@@ -70,6 +74,18 @@ function Contact() {
   );
 }
 
+function AnnotationInfo() {
+  const {
+    dataset: { calculated_metadata },
+  } = useProcessedDatasetContext();
+
+  if (!calculated_metadata?.object_types?.length || !calculated_metadata?.annotation_tools?.length) {
+    return null;
+  }
+
+  return <AnnotationSummary calculatedMetadata={calculated_metadata} />;
+}
+
 function SummaryAccordion() {
   const { dataset } = useProcessedDatasetContext();
   const { group_name, mapped_consortium, creation_action } = dataset;
@@ -85,6 +101,7 @@ function SummaryAccordion() {
         <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>
         <Contact />
         <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
+        <AnnotationInfo />
       </Stack>
     </Subsection>
   );
@@ -138,12 +155,17 @@ function FilesAccordion() {
 
 function VisualizationAccordion() {
   const {
+    dataset,
     dataset: { uuid },
+    sectionDataset,
     sectionDataset: { hubmap_id },
     conf,
   } = useProcessedDatasetContext();
 
   const hasBeenSeen = useProcessedDataStore((state) => state.hasBeenSeen(hubmap_id));
+
+  const segmentationMetadata = dataset.ingest_metadata?.segmentation_metadata;
+  const workflowDetailsHref = `#${datasetSectionId(sectionDataset, 'protocols-and-workflow-details')}`;
 
   if (!conf) {
     return null;
@@ -159,9 +181,17 @@ function VisualizationAccordion() {
         vitData={conf}
         trackingInfo={{ action: 'Vitessce' }}
         uuid={uuid}
+        hubmapId={hubmap_id}
         shouldDisplayHeader={false}
         hasBeenMounted={hasBeenSeen}
         hasNotebook
+        renderBelowFooter={({ activeConfigName }) => (
+          <SegmentationChannelsAndQuality
+            segmentationMetadata={segmentationMetadata}
+            activeConfigName={activeConfigName}
+            workflowDetailsHref={workflowDetailsHref}
+          />
+        )}
       />
     </Subsection>
   );
@@ -238,10 +268,12 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
 
   const { data: conf, isLoading: loadingVitessceConf } = useVitessceConf(
     selectedDatasetVersionUUID,
-    isSupport(sectionDataset) ? parent.uuid : undefined,
+    shouldIncludeParent(sectionDataset) ? parent.uuid : undefined,
   );
 
-  const defaultExpanded = sectionDataset.status === 'Published';
+  const { isRetracted } = useRetractedDatasetContext();
+  // On retracted datasets, all processed datasets start collapsed.
+  const defaultExpanded = !isRetracted && sectionDataset.status === 'Published';
 
   return (
     <ProcessedDatasetContextProvider

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { donorAge, donorBMI, donorSex, donorRace } from './columns';
-import { DonorDocument } from 'js/typings/search';
+import { donorAge, donorBMI, donorSex, donorRace, parentDonorAge, parentDonorSex, parentDonorRace } from './columns';
+import { DonorDocument, SampleDocument } from 'js/typings/search';
 
 describe('Donor Column Cell Content Functions', () => {
   describe('DonorAge', () => {
@@ -253,6 +253,51 @@ describe('Donor Column Cell Content Functions', () => {
         filterable: true,
       });
       expect(donorRace.cellContent).toBeDefined();
+    });
+  });
+
+  describe('Parent Donor Column Cell Content (aggregated donor_demographics)', () => {
+    const mockHit: Partial<SampleDocument> = {
+      donor_demographics: {
+        sex: ['Female', 'Male'],
+        race: ['Asian', 'White'],
+        age_value: [30, 70],
+        age_unit: ['years'],
+        age: { min: 30, max: 70, mean: 50 },
+      },
+    };
+
+    it('ParentDonorAge renders the aggregated age range with unit', () => {
+      const { cellContent: Cell } = parentDonorAge;
+      const { container } = render(<Cell hit={mockHit as SampleDocument} />);
+      expect(container).toHaveTextContent('30-70 years');
+    });
+
+    it("ParentDonorSex renders the set of all donors' sexes", () => {
+      const { cellContent: Cell } = parentDonorSex;
+      const { container } = render(<Cell hit={mockHit as SampleDocument} />);
+      expect(container).toHaveTextContent('Female, Male');
+    });
+
+    it("ParentDonorRace renders the set of all donors' races", () => {
+      const { cellContent: Cell } = parentDonorRace;
+      const { container } = render(<Cell hit={mockHit as SampleDocument} />);
+      expect(container).toHaveTextContent('Asian, White');
+    });
+
+    it('renders nothing when donor_demographics is missing', () => {
+      const { cellContent: Cell } = parentDonorAge;
+      const { container } = render(<Cell hit={{} as SampleDocument} />);
+      expect(container).toHaveTextContent('');
+    });
+
+    it('parent donor columns target the aggregated donor_demographics fields', () => {
+      expect(parentDonorAge).toMatchObject({
+        id: 'donor_demographics.age_value',
+        sort: 'donor_demographics.age_value',
+      });
+      expect(parentDonorSex).toMatchObject({ id: 'donor_demographics.sex', sort: 'donor_demographics.sex.keyword' });
+      expect(parentDonorRace).toMatchObject({ id: 'donor_demographics.race', sort: 'donor_demographics.race.keyword' });
     });
   });
 });

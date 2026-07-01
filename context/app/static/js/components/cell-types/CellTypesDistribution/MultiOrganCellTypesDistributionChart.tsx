@@ -13,9 +13,11 @@ import Skeleton from '@mui/material/Skeleton';
 import { unselectedCellColors } from 'js/components/cells/CellTypeDistributionChart/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import { useLabelToCLIDMap } from 'js/api/scfind/useLabelToCLID';
+import { useCellTypeCountForTissues } from 'js/api/scfind/useCellTypeCountForTissue';
 import { useEventCallback } from '@mui/material/utils';
 import { BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
-import { useCellTypeCountData, useYScale } from './hooks';
+import { SCFindModality } from 'js/components/cells/MolecularDataQueryForm/types';
+import { useCellTypeCountData, useHasAtacData, useYScale } from './hooks';
 import CellTypesDistributionChartContextProvider, {
   useCellTypesDistributionChartContext,
   CellTypeDataContextProvider,
@@ -29,9 +31,13 @@ interface MultiOrganCellTypeDistributionChartProps {
   organs: string[];
   hideLegend?: boolean;
   hideLinks?: boolean;
+  /** Controlled data-type value. Only takes effect when `onDataTypeChange` is also provided. */
+  dataType?: SCFindModality;
+  /** When provided, the data-type toggle becomes controlled and changes are reported here. */
+  onDataTypeChange?: (dataType: SCFindModality) => void;
 }
 
-function ChartControls() {
+function ChartControls({ atacAvailable }: { atacAvailable: boolean }) {
   const {
     showPercentages,
     setShowPercentages,
@@ -39,6 +45,8 @@ function ChartControls() {
     setShowOtherCellTypes,
     symLogScale,
     setSymLogScale,
+    dataType,
+    setDataType,
   } = useCellTypesDistributionChartContext();
 
   const cellTypeContext = useOptionalCellTypesDetailPageContext();
@@ -46,7 +54,29 @@ function ChartControls() {
   const trackingInfo = cellTypeContext?.trackingInfo;
 
   return (
-    <Stack direction="row" spacing={2} alignItems="center">
+    <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
+      {atacAvailable && (
+        <LabeledPrimarySwitch
+          label={
+            <InfoTextTooltip tooltipTitle="Toggle between RNAseq and ATACseq data." infoIconSize="large">
+              Data Type
+            </InfoTextTooltip>
+          }
+          disabledLabel="RNAseq"
+          enabledLabel="ATACseq"
+          checked={dataType === 'ATAC'}
+          onChange={(e) => {
+            setDataType(e.target.checked ? 'ATAC' : undefined);
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: 'Cell Type Distribution / Toggle Data Type',
+              });
+            }
+          }}
+          ariaLabel="Data Type"
+        />
+      )}
       <LabeledPrimarySwitch
         label={
           <InfoTextTooltip
@@ -178,6 +208,14 @@ function MultiOrganCellTypeDistributionChart({
 
   const { showOtherCellTypes, showPercentages } = useCellTypesDistributionChartContext();
 
+  const atacAvailable = useHasAtacData(cellTypes, organs);
+
+  // Prefetch the ATAC per-organ counts in the background (warms the SWR cache, which the server also
+  // warms at startup) so flipping the "Data Type" switch to ATACseq is instant instead of showing a
+  // loading skeleton on first toggle. RNAseq is the default and already loaded, so only ATAC needs
+  // prefetching; no-op (empty key) when there's no ATAC data for these cell types.
+  useCellTypeCountForTissues(atacAvailable ? organs : [], 'ATAC');
+
   const chartPalette = useChartPalette();
   const chartPaletteSubset = chartPalette.slice(0, targetCellTypeKeys.length);
   const targetColorScale = useOrdinalScale(targetCellTypeKeys, {
@@ -238,7 +276,7 @@ function MultiOrganCellTypeDistributionChart({
           dividersInLegend
           margin={margin}
           dropdown={hideLegend ? undefined : <Typography variant="body1">Cell Types</Typography>}
-          additionalControls={<ChartControls />}
+          additionalControls={<ChartControls atacAvailable={atacAvailable} />}
           fullWidthGraph={hideLegend}
         >
           <VerticalStackedBarChart
@@ -265,11 +303,13 @@ function MultiOrganCellTypeDistributionChart({
   );
 }
 
-export default function MultiOrganCellTypeDistributionChartWithProvider(
-  props: MultiOrganCellTypeDistributionChartProps,
-) {
+export default function MultiOrganCellTypeDistributionChartWithProvider({
+  dataType,
+  onDataTypeChange,
+  ...props
+}: MultiOrganCellTypeDistributionChartProps) {
   return (
-    <CellTypesDistributionChartContextProvider>
+    <CellTypesDistributionChartContextProvider dataType={dataType} onDataTypeChange={onDataTypeChange}>
       <MultiOrganCellTypeDistributionChart {...props} />
     </CellTypesDistributionChartContextProvider>
   );

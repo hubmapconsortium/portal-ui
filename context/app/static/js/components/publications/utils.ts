@@ -55,7 +55,6 @@ function buildPublicationPanelProps(
   };
 
   return {
-    key: uuid,
     href: `/browse/publication/${uuid}`,
     onClick,
     title,

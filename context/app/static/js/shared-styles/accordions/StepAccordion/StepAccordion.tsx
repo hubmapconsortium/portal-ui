@@ -5,8 +5,8 @@ import IndependentStepAccordion from './IndependentStepAccordion';
 
 interface StepAccordionProps {
   index: number;
-  summaryHeading: string | React.ReactElement;
-  content?: React.ReactElement;
+  summaryHeading: string | React.ReactElement<unknown>;
+  content?: React.ReactElement<unknown>;
   id: string;
 }
 

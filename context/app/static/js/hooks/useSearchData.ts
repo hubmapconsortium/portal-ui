@@ -8,6 +8,7 @@ import { useAppContext } from 'js/components/Contexts';
 
 import { AggregationsAggregate, SearchHit, SearchRequest, SearchResponseBody } from 'js/typings/elasticsearch';
 import { SWRError } from 'js/helpers/swr/errors';
+import { hashString } from 'js/helpers/swr/keys';
 
 export interface Hit<Doc extends object | Record<string, unknown>> {
   _source: Doc;
@@ -64,8 +65,10 @@ interface RequestInitArgs {
 }
 function useRequestInit({ query, useDefaultQuery }: RequestInitArgs) {
   const authHeader = useAuthHeader();
-  const body = createSearchRequestBody({ query, useDefaultQuery });
-  return buildSearchRequestInit({ body, authHeader });
+  return useMemo(() => {
+    const body = createSearchRequestBody({ query, useDefaultQuery });
+    return buildSearchRequestInit({ body, authHeader });
+  }, [query, useDefaultQuery, authHeader]);
 }
 
 interface UseSearchDataConfig extends SWRConfiguration {
@@ -94,8 +97,9 @@ export async function fetchSearchData<Documents, Aggs>(
   query: SearchRequest,
   url: string,
   token: string,
+  useDefaultQuery: boolean = true,
 ): Promise<SearchResponseBody<Documents, Aggs>> {
-  const body = createSearchRequestBody({ query, useDefaultQuery: true });
+  const body = createSearchRequestBody({ query, useDefaultQuery });
   const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
   const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
     url,
@@ -112,16 +116,23 @@ export default function useSearchData<Documents, Aggs>(
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
     shouldFetch = true,
-    fetcher = defaultConfig.fetcher,
+    fetcher: fetchFn = defaultConfig.fetcher,
     ...swrConfig
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseSearchData<Documents, Aggs> {
   const requestInit = useRequestInit({ query, useDefaultQuery });
   const { elasticsearchEndpoint } = useAppContext();
 
+  // Use a hashed string key to avoid SWR's stableHash serialization and
+  // large string allocation when the query body contains many UUIDs.
+  const swrKey = useMemo(() => {
+    if (!shouldFetch) return null;
+    return `search:${elasticsearchEndpoint}:${hashString(requestInit.body as string)}`;
+  }, [shouldFetch, elasticsearchEndpoint, requestInit]);
+
   const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
-    shouldFetch ? { query, requestInit, url: elasticsearchEndpoint } : null,
-    fetcher,
+    swrKey,
+    () => fetchFn({ url: elasticsearchEndpoint, requestInit }) as Promise<SearchResponseBody<Documents, Aggs>>,
     swrConfig,
   );
 
@@ -129,6 +140,7 @@ export default function useSearchData<Documents, Aggs>(
   return { searchData: data!, isLoading };
 }
 
+const EMPTY_HITS: never[] = [];
 export function useSearchHits<Documents>(
   query: SearchRequest,
   {
@@ -139,7 +151,7 @@ export function useSearchHits<Documents>(
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseHitsData<Documents> {
   const { searchData, isLoading } = useSearchData(query, { useDefaultQuery, shouldFetch, fetcher, ...swrConfig });
-  const searchHits = (searchData?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
+  const searchHits = (searchData?.hits?.hits ?? EMPTY_HITS) as Required<SearchHit<Documents>>[];
   return { searchHits, isLoading };
 }
 
@@ -229,6 +241,7 @@ async function* fetchAllPages(
   elasticsearchEndpoint: string,
   groupsToken: string,
   numberOfPagesToRequest: number,
+  useDefaultQuery: boolean,
 ) {
   const q = query;
 
@@ -237,7 +250,7 @@ async function* fetchAllPages(
     while (i < numberOfPagesToRequest) {
       // disabling eslint rule because that's the whole point of this generator
 
-      const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken);
+      const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken, useDefaultQuery);
       yield firstPageResults;
       q.search_after = getSearchAfterSort(firstPageResults.hits.hits);
       i += 1;
@@ -270,11 +283,16 @@ async function fetchAllIDs({
   useDefaultQuery: boolean;
   numberOfPagesToRequest: number;
 }) {
-  const query = useDefaultQuery ? addRestrictionsToQuery(q) : q;
   const ids = new Set<string>();
   // For await loop is the clearest way to fetch all pages sequentially.
 
-  for await (const results of fetchAllPages(query, elasticsearchEndpoint, groupsToken, numberOfPagesToRequest)) {
+  for await (const results of fetchAllPages(
+    q,
+    elasticsearchEndpoint,
+    groupsToken,
+    numberOfPagesToRequest,
+    useDefaultQuery,
+  )) {
     extractIDs(results).forEach((id) => ids.add(id));
   }
   return Array.from(ids);
@@ -303,11 +321,16 @@ async function fetchAllHits<Documents>({
   useDefaultQuery: boolean;
   numberOfPagesToRequest: number;
 }) {
-  const query = useDefaultQuery ? addRestrictionsToQuery(q) : q;
   const hits: Required<SearchHit<Documents>>[] = [];
   // For await loop is the clearest way to fetch all pages sequentially.
 
-  for await (const results of fetchAllPages(query, elasticsearchEndpoint, groupsToken, numberOfPagesToRequest)) {
+  for await (const results of fetchAllPages(
+    q,
+    elasticsearchEndpoint,
+    groupsToken,
+    numberOfPagesToRequest,
+    useDefaultQuery,
+  )) {
     const pageHits = (results?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
     hits.push(...pageHits);
   }
@@ -477,8 +500,7 @@ export function useScrollSearchHits<Doc, Aggs>(
     SWRError
   >(
     getKey,
-    (args: [SearchRequest, string, string, boolean, number]) =>
-      fetcher(...args) as Promise<SearchResponseBody<Doc, Aggs>>,
+    (args: [SearchRequest, string, string, boolean]) => fetcher(...args) as Promise<SearchResponseBody<Doc, Aggs>>,
     {
       fallbackData: [],
       revalidateAll: false,

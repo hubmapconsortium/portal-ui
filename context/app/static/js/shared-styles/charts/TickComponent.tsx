@@ -21,9 +21,11 @@ function TickComponent<T>({ handleMouseEnter, handleMouseLeave, data }: TickComp
         key,
         bar: data && data[key] ? { data: data[key] } : undefined,
       };
+      const showTooltip = handleMouseEnter(tooltipData);
 
       return (
-        <Text onMouseEnter={handleMouseEnter(tooltipData)} onMouseLeave={handleMouseLeave} {...tickProps}>
+        // Also show on move so the tooltip reliably appears while the pointer is over the label.
+        <Text onMouseEnter={showTooltip} onMouseMove={showTooltip} onMouseLeave={handleMouseLeave} {...tickProps}>
           {trimStringWithMiddleEllipsis(formattedValue)}
         </Text>
       );

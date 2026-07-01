@@ -1,0 +1,392 @@
+import hashlib
+import json
+import os
+import time
+import uuid
+from contextlib import nullcontext
+
+from flask import current_app, jsonify, make_response, request, session
+
+from udiagent import Orchestrator, UDIAgent
+
+from .routes_api import (
+    _first_fields,
+    _generate_tsv_response,
+    _get_api_json_error,
+    _get_entities,
+    _get_recent_description,
+)
+from .utils import (
+    get_allowed_cors_origin,
+    get_client,
+    get_url_base_from_request,
+    make_blueprint,
+)
+from .utils_datapackage import build_resource, resolve_field_type
+
+
+blueprint = make_blueprint(__name__)
+
+# Matches the permission key used in routes_auth.py's permission_groups dict.
+HUBMAP_READ_GROUP = 'HuBMAP'
+
+_UDI_CACHE_TTL = 43200  # 12 hours
+_udi_cache = {}
+
+# Two orchestrators: one pre-configured with the server's OPENAI_API_KEY
+# (for HuBMAP-Read users), and one without a default key (per-request
+# X-OpenAI-Key required).
+_udi_orchestrator_hubmap = None
+_udi_orchestrator_byok = None
+
+
+def _is_authenticated():
+    return bool(session.get('groups_token'))
+
+
+def _is_hubmap_read_user():
+    return _is_authenticated() and HUBMAP_READ_GROUP in (session.get('user_groups') or [])
+
+
+def _get_cached(key):
+    if key in _udi_cache:
+        ts, data = _udi_cache[key]
+        if time.time() - ts < _UDI_CACHE_TTL:
+            return data
+        del _udi_cache[key]
+    return None
+
+
+def _set_cached(key, data):
+    _udi_cache[key] = (time.time(), data)
+
+
+# Fields to strip from UDI responses. `assaytype` overlaps semantically with the
+# dataset_type field and creates confusion in the chat UI's schema.
+_UDI_EXCLUDED_FIELDS = ['assaytype']
+
+
+def _apply_cache_headers(response, *, public, etag_payload=None):
+    """Cacheable on the public routes (`/metadata/v0/udi/...`); `private,
+    no-store` on the consortium routes so per-user data is never shared."""
+    if public:
+        response.headers['Cache-Control'] = f'public, max-age={_UDI_CACHE_TTL}'
+        if etag_payload is not None:
+            response.headers['ETag'] = f'"{hashlib.md5(etag_payload).hexdigest()}"'  # noqa: S324  (non-security ETag)
+    else:
+        response.headers['Cache-Control'] = 'private, no-store'
+    return response
+
+
+_UDI_ALLOWED_ORIGINS = ['https://hms-dbmi.github.io']
+# Extra origins allowed when the app is running in dev/test mode (Flask's
+# --debug flag or TESTING=True) so the standalone chat frontend on Vite's
+# default port can call the API locally.
+_UDI_DEV_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+]
+_UDI_ALLOWED_HEADERS = 'Content-Type, Authorization, X-OpenAI-Key, X-Conversation-Id'
+_UDI_ALLOWED_METHODS = 'GET, POST, OPTIONS'
+
+
+def _udi_cors_origin():
+    allowed_origins = list(_UDI_ALLOWED_ORIGINS)
+    if current_app.debug or current_app.testing:
+        allowed_origins.extend(_UDI_DEV_ALLOWED_ORIGINS)
+    request_origin = request.headers.get('Origin', '')
+    return get_allowed_cors_origin(
+        request_origin,
+        allowed_origins=allowed_origins,
+        allowed_domain_suffixes=['.hubmapconsortium.org'],
+    )
+
+
+@blueprint.after_request
+def _udi_cors_after_request(response):
+    # Runs on every response from this blueprint — including Flask's
+    # auto-generated OPTIONS preflight — so individual view functions don't
+    # need to set CORS headers themselves.
+    cors_origin = _udi_cors_origin()
+    if cors_origin:
+        response.headers['Access-Control-Allow-Origin'] = cors_origin
+        response.headers['Access-Control-Allow-Methods'] = _UDI_ALLOWED_METHODS
+        response.headers['Access-Control-Allow-Headers'] = _UDI_ALLOWED_HEADERS
+        response.headers['Vary'] = 'Origin'
+    return response
+
+
+# Key under which a stable per-Flask-session identifier is stashed in the
+# signed session cookie. Reused across requests so every UDI completion from
+# the same browser session shares one langfuse `session_id`.
+_LANGFUSE_SESSION_KEY = 'udi_langfuse_session_id'
+
+
+def _langfuse_enabled():
+    """Mirror UDIAgent's opt-in: langfuse is active when any of the three
+    config values is set."""
+    return any(
+        current_app.config.get(key)
+        for key in ('LANGFUSE_PUBLIC_KEY', 'LANGFUSE_SECRET_KEY', 'LANGFUSE_BASE_URL')
+    )
+
+
+def _get_session_id():
+    """Return a stable session id to group a user's conversation turns under
+    one langfuse `session_id`.
+
+    Cross-origin BYOK callers (e.g. the standalone udi-yac frontend) don't get
+    a credentialed CORS response, so the Flask session cookie never persists
+    for them. They supply their own conversation id via `X-Conversation-Id`,
+    which takes precedence when present. Same-origin/authenticated callers
+    fall back to a UUID generated and persisted in the Flask session on first
+    use, reused on subsequent requests carrying the session cookie.
+    """
+    header_id = request.headers.get('X-Conversation-Id')
+    if header_id:
+        return header_id
+    session_id = session.get(_LANGFUSE_SESSION_KEY)
+    if not session_id:
+        session_id = uuid.uuid4().hex
+        session[_LANGFUSE_SESSION_KEY] = session_id
+    return session_id
+
+
+def _langfuse_session_context():
+    """Context manager tagging all langfuse traces emitted within it with the
+    current Flask session's id, so they're grouped as one langfuse session.
+    A no-op when langfuse isn't configured."""
+    if not _langfuse_enabled():
+        return nullcontext()
+    from langfuse import propagate_attributes
+
+    return propagate_attributes(session_id=_get_session_id())
+
+
+# Maps the portal's deployed hostname to the environment name reported to
+# langfuse. Anything not listed (localhost, 127.0.0.1, branch deploys, etc.)
+# falls back to 'localhost'.
+_LANGFUSE_ENVIRONMENTS = {
+    'portal.hubmapconsortium.org': 'prod',
+    'portal-prod.test.hubmapconsortium.org': 'prod-test',
+    'portal.test.hubmapconsortium.org': 'test',
+    'portal.dev.hubmapconsortium.org': 'dev',
+}
+
+
+def _langfuse_environment():
+    host = request.host.split(':')[0]  # strip any :port
+    return _LANGFUSE_ENVIRONMENTS.get(host, 'localhost')
+
+
+def _build_orchestrator(openai_api_key):
+    agent = UDIAgent(
+        gpt_model_name=current_app.config.get('UDI_GPT_MODEL_NAME', 'gpt-5.4'),
+        openai_api_key=openai_api_key,
+        langfuse_public_key=current_app.config.get('LANGFUSE_PUBLIC_KEY'),
+        langfuse_secret_key=current_app.config.get('LANGFUSE_SECRET_KEY'),
+        langfuse_host=current_app.config.get('LANGFUSE_BASE_URL'),
+        langfuse_environment=_langfuse_environment(),
+    )
+    return Orchestrator(agent=agent)
+
+
+def _get_hubmap_orchestrator():
+    """Return a cached Orchestrator whose agent is pre-configured with the
+    server-side OPENAI_API_KEY (from app config)."""
+    global _udi_orchestrator_hubmap
+    if _udi_orchestrator_hubmap is None:
+        _udi_orchestrator_hubmap = _build_orchestrator(current_app.config.get('OPENAI_API_KEY'))
+    return _udi_orchestrator_hubmap
+
+
+def _get_byok_orchestrator():
+    """Return a cached Orchestrator whose agent has no default key.
+    Callers must supply an OpenAI key per-request via X-OpenAI-Key."""
+    global _udi_orchestrator_byok
+    if _udi_orchestrator_byok is None:
+        _udi_orchestrator_byok = _build_orchestrator(None)
+    return _udi_orchestrator_byok
+
+
+def _pick_orchestrator():
+    """Route a /v1/yac/completions request to the right orchestrator.
+
+    Returns (orchestrator, per_request_key_or_None). The per-request key is
+    None for HuBMAP-Read users (the agent already has the server key); for
+    everyone else it's the X-OpenAI-Key header value. Returns (None, None) if
+    the caller has no usable key.
+    """
+    if _is_hubmap_read_user() and current_app.config.get('OPENAI_API_KEY'):
+        return _get_hubmap_orchestrator(), None
+    header_key = request.headers.get('X-OpenAI-Key')
+    if not header_key:
+        return None, None
+    return _get_byok_orchestrator(), header_key
+
+
+# UDI exposes two parallel endpoint trees:
+#
+#   /metadata/v0/udi/...             → public-scope only, shared 12-hour cache.
+#                                       Anyone (anon or authed) gets the same
+#                                       cached payload, generated with no
+#                                       groups_token. Safe for the udi-yac
+#                                       grammar component to load by default.
+#
+#   /metadata/v0/udi/consortium/...  → uses the current session's auth as-is.
+#                                       Authed HuBMAP users see their full
+#                                       access; anon callers get the public
+#                                       view. Never cached, since responses
+#                                       are per-user-scoped.
+#
+# Splitting these into separate URL prefixes (instead of a `?public=1` query
+# param on a single endpoint) gives udi-yac stable, query-string-free TSV
+# paths to derive from `udi:path`.
+
+
+def _serve_tsv(entity_type, *, consortium):
+    if not consortium:
+        cached = _get_cached(f'tsv:{entity_type}')
+        if cached:
+            tsv, filename = cached
+            response = make_response(tsv)
+            response.headers['Content-Type'] = 'text/tab-separated-values; charset=utf-8'
+            response.headers['Content-Disposition'] = f'attachment; filename={filename}'
+            return _apply_cache_headers(response, public=True, etag_payload=tsv.encode('utf-8'))
+
+    response = _generate_tsv_response(
+        entity_type,
+        with_descriptions=False,
+        use_groups_token=consortium,
+        excluded_fields=_UDI_EXCLUDED_FIELDS,
+        exclude_revisions=True,
+    )
+
+    if not consortium:
+        tsv = response.get_data(as_text=True)
+        filename = response.headers.get('Content-Disposition', '').split('filename=')[-1]
+        _set_cached(f'tsv:{entity_type}', (tsv, filename))
+        return _apply_cache_headers(response, public=True, etag_payload=tsv.encode('utf-8'))
+
+    return _apply_cache_headers(response, public=False)
+
+
+# This endpoint is for the UDI demo site - produces plain TSV without descriptions and
+# uses the blueprint's normal CORS handling for allowed origins.
+@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_plain_tsv(entity_type):
+    return _serve_tsv(entity_type, consortium=False)
+
+
+@blueprint.route('/metadata/v0/udi/consortium/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_plain_tsv_consortium(entity_type):
+    return _serve_tsv(entity_type, consortium=True)
+
+
+def _serve_datapackage(*, consortium):
+    if not consortium:
+        cached = _get_cached('datapackage')
+        if cached:
+            response = jsonify(cached)
+            return _apply_cache_headers(
+                response,
+                public=True,
+                etag_payload=json.dumps(cached, sort_keys=True).encode('utf-8'),
+            )
+
+    client = get_client(use_groups_token=consortium)
+
+    field_descriptions_raw = client.get_metadata_descriptions()
+    descriptions_dict = {
+        d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions_raw
+    }
+
+    field_types_raw = client.get_metadata_field_types()
+    types_dict = {ft['name']: resolve_field_type(ft) for ft in field_types_raw}
+
+    resources = []
+    for entity_type in ['donors', 'samples', 'datasets']:
+        entities = _get_entities(
+            entity_type,
+            use_groups_token=consortium,
+            excluded_fields=_UDI_EXCLUDED_FIELDS,
+            exclude_revisions=True,
+        )
+        resource = build_resource(
+            entity_type, entities, descriptions_dict, types_dict, _first_fields
+        )
+        resources.append(resource)
+
+    # `udi:path` is the base URL the udi-yac client joins with each resource's
+    # `path` (e.g. `donors.tsv`) to build TSV URLs. It must match this route's
+    # own prefix so consortium responses never link back to the public TSV
+    # endpoints (and vice-versa).
+    udi_path_suffix = 'consortium/' if consortium else ''
+    datapackage = {
+        'name': 'hubmap_metadata',
+        'resources': resources,
+        'udi:name': 'hubmap_api',
+        'udi:path': f'{get_url_base_from_request()}/metadata/v0/udi/{udi_path_suffix}',
+    }
+
+    response = jsonify(datapackage)
+    if not consortium:
+        _set_cached('datapackage', datapackage)
+        return _apply_cache_headers(
+            response,
+            public=True,
+            etag_payload=json.dumps(datapackage, sort_keys=True).encode('utf-8'),
+        )
+
+    return _apply_cache_headers(response, public=False)
+
+
+@blueprint.route('/metadata/v0/udi/datapackage.json', methods=['GET'])
+def udi_datapackage():
+    return _serve_datapackage(consortium=False)
+
+
+@blueprint.route('/metadata/v0/udi/consortium/datapackage.json', methods=['GET'])
+def udi_datapackage_consortium():
+    return _serve_datapackage(consortium=True)
+
+
+@blueprint.route('/v1/yac/completions', methods=['POST'])
+def yac_completions():
+    body = request.get_json(silent=True) or {}
+    messages = body.get('messages')
+    data_schema = body.get('dataSchema')
+    data_domains = body.get('dataDomains')
+    if messages is None or data_schema is None or data_domains is None:
+        return _get_api_json_error(
+            400, 'Request body must include messages, dataSchema, and dataDomains.'
+        ), 400
+
+    orchestrator, openai_api_key = _pick_orchestrator()
+    if orchestrator is None:
+        return _get_api_json_error(
+            401,
+            'OpenAI key required: enter your OpenAI key, or sign in as a HuBMAP member.',
+        ), 401
+
+    try:
+        with _langfuse_session_context():
+            result = orchestrator.run(
+                messages=messages,
+                data_schema=data_schema,
+                data_domains=data_domains,
+                openai_api_key=openai_api_key,
+            )
+    except Exception as e:
+        current_app.logger.exception('UDIAgent orchestrator failed')
+        return _get_api_json_error(500, f'UDIAgent orchestration error: {e}'), 500
+
+    return jsonify(result.tool_calls)
+
+
+@blueprint.route('/v1/yac/examples', methods=['GET'])
+def yac_examples():
+    examples_path = os.path.join(os.path.dirname(__file__), 'udi_example_prompts.json')
+    with open(examples_path) as f:
+        prompts = json.load(f)
+    return jsonify(prompts)

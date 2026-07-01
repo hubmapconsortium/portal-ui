@@ -21,16 +21,19 @@ function SearchBar({ type }: SearchTypeProps) {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      setSearch(/^\s*HBM\S+\s*$/i.exec(input) ? `"${input}"` : input);
+      // Trim incidental whitespace so HuBMAP-ID and UUID format detection in buildQuery
+      // can match the canonical formats exactly.
+      const trimmed = input.trim();
+      setSearch(trimmed);
 
       const action = 'Free Text Search';
 
-      if (input) {
-        trackSiteSearch(input, action);
+      if (trimmed) {
+        trackSiteSearch(trimmed, action);
         trackEvent({
           category: analyticsCategory,
           action,
-          label: input,
+          label: trimmed,
         });
       }
     },

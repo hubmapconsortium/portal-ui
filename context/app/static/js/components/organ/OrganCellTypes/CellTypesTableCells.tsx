@@ -1,10 +1,10 @@
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import Skeleton from '@mui/material/Skeleton';
-import { LineClamp } from 'js/shared-styles/text';
+import { ExpandableDescription } from 'js/shared-styles/text';
 import ViewEntitiesButton from '../ViewEntitiesButton';
 import { useUUIDsFromHubmapIds } from '../hooks';
 import { CellTypeRowProps } from './types';
@@ -71,7 +71,18 @@ export function DescriptionCell({
   description: string;
   isLoadingDescriptions: boolean;
 }) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (isLoadingDescriptions) {
+    return <Skeleton />;
+  }
+
   return (
-    <LineClamp lines={2}>{isLoadingDescriptions ? <Skeleton /> : description || 'No description available'}</LineClamp>
+    <ExpandableDescription
+      description={description}
+      expanded={expanded}
+      onToggle={() => setExpanded((prev) => !prev)}
+      color="text.primary"
+    />
   );
 }

@@ -1,12 +1,13 @@
 import useSWR, { SWRConfiguration } from 'swr';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
-import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import { createScFindFlaskKey, stringOrArrayToString } from './utils';
 import { useMemo } from 'react';
 
 export interface HyperQueryCellTypesParams {
   geneList: string | string[];
   organName?: string | string[];
   includePrefix?: boolean;
+  modality?: string;
 }
 
 export interface GeneSignatureStats {
@@ -23,28 +24,24 @@ interface CellTypeNamesResponse {
 
 type HyperQueryCellTypesKey = string;
 
-export function createCellTypeNamesKey(
-  scFindEndpoint: string,
-  { geneList, organName, includePrefix = true }: HyperQueryCellTypesParams,
-  scFindIndexVersion?: string,
-): HyperQueryCellTypesKey {
-  return createScFindKey(
-    scFindEndpoint,
-    'hyperQueryCellTypes',
-    {
-      gene_list: stringOrArrayToString(geneList),
-      // The API parameter is `dataset_name` but the actual expected values are organ names
-      // because these calculations are run either across all datasets, or all datasets of a specific organ.
-      dataset_name: organName ? stringOrArrayToString(organName) : undefined,
-      include_prefix: includePrefix ? 'true' : 'false',
-    },
-    scFindIndexVersion,
-  );
+export function createCellTypeNamesKey({
+  geneList,
+  organName,
+  includePrefix = true,
+  modality,
+}: HyperQueryCellTypesParams): HyperQueryCellTypesKey {
+  return createScFindFlaskKey('/scfind/hyper-query-cell-types.json', {
+    gene_list: stringOrArrayToString(geneList),
+    // The API parameter is `dataset_name` but the actual expected values are organ names
+    // because these calculations are run either across all datasets, or all datasets of a specific organ.
+    dataset_name: organName ? stringOrArrayToString(organName) : undefined,
+    include_prefix: includePrefix ? 'true' : 'false',
+    modality,
+  });
 }
 
 export default function useHyperQueryCellTypes(params: HyperQueryCellTypesParams, swrConfig?: SWRConfiguration) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCellTypeNamesKey(scFindEndpoint, params, scFindIndexVersion);
+  const key = createCellTypeNamesKey(params);
   return useSWR<CellTypeNamesResponse, unknown, HyperQueryCellTypesKey>(key, (url) => fetcher({ url }), swrConfig);
 }
 
@@ -56,14 +53,10 @@ export function useMultiGeneHyperQueryCellTypes(
   params: Omit<HyperQueryCellTypesParams, 'geneList'> & { genes: string[] },
   swrConfig?: SWRConfiguration,
 ) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-
   // Create separate SWR keys for each gene
   const urls = useMemo(() => {
-    return params.genes.map((gene) =>
-      createCellTypeNamesKey(scFindEndpoint, { ...params, geneList: gene }, scFindIndexVersion),
-    );
-  }, [scFindEndpoint, params, scFindIndexVersion]);
+    return params.genes.map((gene) => createCellTypeNamesKey({ ...params, geneList: gene }));
+  }, [params]);
 
   // Use SWR with multiFetcher to fetch all gene queries at once and combine results
   return useSWR<Record<string, GeneSignatureStats[]>, unknown, string[] | null>(

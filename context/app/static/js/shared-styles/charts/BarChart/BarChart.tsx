@@ -14,8 +14,11 @@ interface MultiGeneAssociation {
   colors: string[];
 }
 
-interface BarChartProps<T extends { value: number }, K extends string, D extends Record<K, T>>
-  extends WithParentSizeProvidedProps {
+interface BarChartProps<
+  T extends { value: number },
+  K extends string,
+  D extends Record<K, T>,
+> extends WithParentSizeProvidedProps {
   data: D;
   highlightedKeys?: K[];
   margin?: { top: number; right: number; bottom: number; left: number };
@@ -89,7 +92,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
 
   // Function to create patterns for multi-gene associations similar to StackedBar
   const createPattern = (key: K, id: string) => {
-    const geneAssociation = cellTypeToGenes.get(key as string);
+    const geneAssociation = cellTypeToGenes.get(key);
 
     if (!geneAssociation || geneAssociation.genes.length <= 1) {
       // Single gene or no association - use solid color
@@ -159,6 +162,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
             const barY = yScale(value) as number;
             const barHeight = yHeight - barY;
             const patternId = createSafeId(key);
+            const showTooltip = handleMouseEnter({ key, bar: { data: data[key] } });
 
             return (
               <rect
@@ -168,7 +172,9 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
                 width={barWidth}
                 height={barHeight}
                 fill={`url(#${patternId})`}
-                onMouseEnter={handleMouseEnter({ key, bar: { data: data[key] } })}
+                onMouseEnter={showTooltip}
+                // Also show on move so the tooltip reliably appears while the pointer is over the bar.
+                onMouseMove={showTooltip}
                 onMouseLeave={handleMouseLeave}
               />
             );

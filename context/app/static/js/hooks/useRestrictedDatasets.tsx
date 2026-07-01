@@ -4,19 +4,22 @@ import useHubmapIds from 'js/hooks/useHubmapIds';
 import { useDatasetsAccess } from 'js/hooks/useDatasetPermissions';
 
 /**
- * Returns a list of dataset UUIDs that the user does not have access to for workspaces or bulk download.
+ * Returns a list of dataset UUIDs that the user does not have access to for workspaces or bulk download,
+ * along with any datasets whose UUID/HuBMAP ID differs from the originally selected value.
  * @param datasetUUIDs The UUIDs of the datasets to check access for
- * @returns A list of restricted dataset UUIDs
  */
+const EMPTY_RESTRICTED_ROWS: string[] = [];
 function useGetRestrictedDatasets(datasetUUIDs: Set<string>) {
-  const uuidsArray = Array.from(datasetUUIDs);
-  const { accessibleDatasets } = useDatasetsAccess(uuidsArray);
+  const uuidsArray = useMemo(() => Array.from(datasetUUIDs), [datasetUUIDs]);
+  const { accessibleDatasets, isLoading } = useDatasetsAccess(uuidsArray);
 
-  const protectedDatasetUUIDs = !accessibleDatasets
-    ? []
-    : uuidsArray.filter((uuid) => !accessibleDatasets[uuid]?.access_allowed);
+  const restrictedRows = useMemo(() => {
+    if (isLoading || !accessibleDatasets) return EMPTY_RESTRICTED_ROWS;
+    const filtered = uuidsArray.filter((uuid) => !accessibleDatasets[uuid]?.access_allowed);
+    return filtered.length > 0 ? filtered : EMPTY_RESTRICTED_ROWS;
+  }, [isLoading, accessibleDatasets, uuidsArray]);
 
-  return protectedDatasetUUIDs;
+  return { restrictedRows, isLoading };
 }
 
 interface useRestrictedDatasetsFormProps {
@@ -31,12 +34,12 @@ function useRestrictedDatasetsForm({
 }: useRestrictedDatasetsFormProps) {
   const { toastSuccessRemoveRestrictedDatasets } = useWorkspaceToasts();
   // Restricted rows are those that the current user does not have access to in a workspace or bulk download.
-  const restrictedRows = useGetRestrictedDatasets(selectedRows);
+  const { restrictedRows, isLoading } = useGetRestrictedDatasets(selectedRows);
 
   const { hubmapIds: restrictedHubmapIds } = useHubmapIds(restrictedRows);
 
   const errorMessages = useMemo(() => {
-    if (restrictedHubmapIds.length === 0) return [];
+    if (restrictedHubmapIds.length === 0) return EMPTY_RESTRICTED_ROWS;
 
     return [restrictedDatasetsErrorMessage(restrictedHubmapIds)];
   }, [restrictedHubmapIds, restrictedDatasetsErrorMessage]);
@@ -52,6 +55,7 @@ function useRestrictedDatasetsForm({
     removeRestrictedDatasets,
     restrictedRows,
     selectedRows,
+    isLoading,
   };
 }
 

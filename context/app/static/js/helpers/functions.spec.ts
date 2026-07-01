@@ -4,6 +4,7 @@ import {
   replaceUnderscore,
   getArrayRange,
   getDonorAgeString,
+  getDemographicRangeString,
   filterObjectByKeys,
   getOriginSamplesOrgan,
   NOT_CAPITALIZED_WORDS,
@@ -62,6 +63,17 @@ test('getArrayRange', () => {
 test('getDonorAgeString', () => {
   const donor = { age_value: 35, age_unit: 'years' };
   expect(getDonorAgeString(donor)).toEqual('35 years');
+});
+
+test('getDemographicRangeString', () => {
+  // Multiple distinct donor values render as a "min-max unit" range.
+  expect(getDemographicRangeString({ min: 30, max: 70, mean: 50 }, ['years'])).toEqual('30-70 years');
+  // A single shared value collapses to that value.
+  expect(getDemographicRangeString({ min: 40, max: 40, mean: 40 }, ['years'])).toEqual('40 years');
+  // No unit available.
+  expect(getDemographicRangeString({ min: 22, max: 30, mean: 26 })).toEqual('22-30');
+  // No stats available.
+  expect(getDemographicRangeString(undefined, ['years'])).toEqual('');
 });
 
 test('filterObjectByKeys', () => {

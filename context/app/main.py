@@ -1,9 +1,15 @@
+import logging
+import re
+
 from flask import Flask, session, render_template, redirect, request
+from werkzeug.middleware.proxy_fix import ProxyFix
+from whitenoise import WhiteNoise
 
 from . import (
     routes_main,
     routes_browse,
     routes_api,
+    routes_udi,
     routes_file_based,
     routes_auth,
     routes_cells,
@@ -71,11 +77,20 @@ def create_app(testing=False):
         # We should not load the gitignored app.conf during tests.
         app.config.from_pyfile('app.conf')
 
+    # Trust X-Forwarded-* headers when running behind a reverse proxy. In dev,
+    # the Vite dev server (port 5001) proxies non-asset requests to Flask;
+    # without this, ``url_for(..., _external=True)`` would build redirects
+    # targeting the upstream Flask port (5000) instead of the browser-facing
+    # one, breaking OAuth login round-trips. In prod, the external gateway nginx
+    # sits in front of gunicorn (one hop) and sets the same headers.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
+
     flask_static_digest.init_app(app)
 
     app.register_blueprint(routes_main.blueprint)
     app.register_blueprint(routes_browse.blueprint)
     app.register_blueprint(routes_api.blueprint)
+    app.register_blueprint(routes_udi.blueprint)
     app.register_blueprint(routes_file_based.blueprint)
     app.register_blueprint(routes_cells.blueprint)
     app.register_blueprint(routes_auth.blueprint)
@@ -84,6 +99,21 @@ def create_app(testing=False):
     app.register_blueprint(routes_workspaces.blueprint)
     app.register_blueprint(routes_cell_types.blueprint)
     app.register_blueprint(routes_scfind.blueprint)
+
+    # Route Flask's app logger through gunicorn's handlers so server-side app
+    # logs (scfind warming/timing, slow-query notes, errors) reach stdout and
+    # thus CloudWatch in prod. The old base image wired this up for us; gunicorn
+    # does not attach the Flask logger by default. Done before warming starts so
+    # the warmer's logs (including early failures) are captured. No-op outside
+    # gunicorn (dev/tests), where ``gunicorn.error`` has no handlers.
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    if gunicorn_logger.handlers:
+        app.logger.handlers = gunicorn_logger.handlers
+        app.logger.setLevel(gunicorn_logger.level)
+
+    # Pre-build the scfind cell type mappings in the background so the first user
+    # to open cell-type pages does not wait tens of seconds for them to build.
+    routes_scfind.warm_scfind_caches(app)
 
     app.register_error_handler(400, bad_request)
     app.register_error_handler(401, unauthorized)
@@ -112,7 +142,6 @@ def create_app(testing=False):
             'user_email': session.get('user_email'),
             'workspaces_token': session.get('workspaces_token'),
             'user_groups': session.get('user_groups'),
-            'sentry_env': app.config['SENTRY_ENV'],
         }
 
     @app.before_request
@@ -129,4 +158,21 @@ def create_app(testing=False):
     return app
 
 
+# Files whose name embeds a content hash (Vite emits ``main.<hash>.js`` etc.)
+# can be cached forever; their URL changes when the content does.
+_HASHED_ASSET = re.compile(r'\.[0-9A-Za-z_-]{8,}\.(?:js|css|woff2?|ttf|eot|svg)$')
+
 app = create_app()
+
+# Serve /static/* directly from the WSGI layer, replacing the nginx the old base
+# image bundled. WhiteNoise serves precompressed .br/.gz siblings with
+# ``Vary: Accept-Encoding`` and sets Cache-Control: short by default, immutable +
+# far-future for content-hashed bundles under public/assets/. Wrapped outside
+# ProxyFix so static requests skip it; dynamic requests fall through to Flask.
+app.wsgi_app = WhiteNoise(
+    app.wsgi_app,
+    root=app.static_folder,
+    prefix='static/',
+    max_age=300,
+    immutable_file_test=lambda path, url: bool(_HASHED_ASSET.search(url)),
+)

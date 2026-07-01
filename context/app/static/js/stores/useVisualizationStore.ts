@@ -6,10 +6,14 @@ interface VisualizationStoreState {
   fullscreenVizId: string | null;
   vizEscSnackbarIsOpen: boolean;
   vizTheme: VizTheme;
+  // vitessceState is only used for the fullscreen header share button sync.
+  // Each Visualization instance manages its own local state via useVitessceConfig.
   vitessceState: unknown;
   onCopyUrlWarning: string;
   vizNotebookId: string | null;
   vitessceVisualization?: boolean;
+  // Identifier for the currently fullscreen visualization, used by the header share button
+  vizHubmapId: string | null;
 }
 
 interface VisualizationStoreActions {
@@ -21,6 +25,7 @@ interface VisualizationStoreActions {
   setVitessceStateDebounced: (val: unknown) => void;
   setOnCopyUrlWarning: (val: string) => void;
   setVizNotebookId: (val: string) => void;
+  setVizHubmapId: (val: string | null) => void;
 }
 
 export type VisualizationStore = VisualizationStoreState & VisualizationStoreActions;
@@ -63,6 +68,10 @@ export const useVisualizationStore = create<VisualizationStore>((set) => ({
   vizNotebookId: null,
   setVizNotebookId: (val) => {
     set({ vizNotebookId: val });
+  },
+  vizHubmapId: null,
+  setVizHubmapId: (val) => {
+    set({ vizHubmapId: val });
   },
 }));
 

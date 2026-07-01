@@ -1,5 +1,7 @@
 import React, { useEffect, useCallback, useId } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Vitessce } from 'vitessce';
+import { useQueryState, parseAsBoolean } from 'nuqs';
 
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -30,15 +32,17 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
   expandViz: state.expandViz,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
-  setVitessceState: state.setVitessceState,
   setVizNotebookId: state.setVizNotebookId,
-  setVitessceStateDebounced: state.setVitessceStateDebounced,
+  // Global store vitessceState is only used for fullscreen header sync
+  setVitessceState: state.setVitessceState,
+  setVizHubmapId: state.setVizHubmapId,
 });
 
 interface VisualizationProps {
   vitData?: object | object[];
   trackingInfo: EventWithOptionalCategory;
   uuid?: string;
+  hubmapId?: string;
   hasNotebook: boolean;
   shouldDisplayHeader: boolean;
   shouldMountVitessce?: boolean;
@@ -46,12 +50,14 @@ interface VisualizationProps {
   hideTheme?: boolean;
   hideShare?: boolean;
   title?: React.ReactNode;
+  renderBelowFooter?: (args: { activeConfigName?: string }) => React.ReactNode;
 }
 
 function Visualization({
   vitData,
   trackingInfo,
   uuid,
+  hubmapId,
   hasNotebook,
   shouldDisplayHeader,
   shouldMountVitessce = true,
@@ -59,9 +65,10 @@ function Visualization({
   hideTheme = false,
   hideShare = false,
   title = 'Visualization',
+  renderBelowFooter,
 }: VisualizationProps) {
-  const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
-    useVisualizationStore(visualizationStoreSelector);
+  const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVizNotebookId, setVizHubmapId } =
+    useVisualizationStore(useShallow(visualizationStoreSelector));
 
   const id = useId();
   const vizIsFullscreen = fullscreenVizId === id;
@@ -103,12 +110,38 @@ function Visualization({
   }, [vizIsFullscreen, toastInfo]);
 
   // Get the vitessce configuration from the url if available and set the selection if it is a multi-dataset.
-  const { vitessceConfig, vitessceSelection, setVitessceSelection, isMultiDataset, parentUuid, currentConfig } =
-    useVitessceConfig({
-      vitData,
-      setVitessceState,
-      markerGene,
-    });
+  const {
+    vitessceConfig,
+    vitessceSelection,
+    setVitessceSelection,
+    isMultiDataset,
+    parentUuid,
+    currentConfig,
+    localVitessceState,
+    setLocalVitessceStateDebounced,
+    isTargetViz,
+  } = useVitessceConfig({
+    vitData,
+    markerGene,
+    hubmapId,
+  });
+
+  // Auto-expand to fullscreen when loaded from a shared URL with ?fullscreen=true
+  const [fullscreenParam] = useQueryState('fullscreen', parseAsBoolean);
+  useEffect(() => {
+    if (fullscreenParam && isTargetViz && vitessceConfig) {
+      expandViz(id, true);
+    }
+  }, [fullscreenParam, isTargetViz, vitessceConfig, expandViz, id]);
+
+  // Sync local vitessce state to the global store when in fullscreen mode,
+  // so the header share button (VisualizationShareButtonWrapper) can access it.
+  useEffect(() => {
+    if (vizIsFullscreen && localVitessceState) {
+      setVitessceState(localVitessceState);
+      setVizHubmapId(hubmapId ?? null);
+    }
+  }, [vizIsFullscreen, localVitessceState, setVitessceState, setVizHubmapId, hubmapId]);
 
   const setSelectionAndClearErrors = useCallback(
     ({ i }: { i: number }) => {
@@ -118,7 +151,7 @@ function Visualization({
   );
 
   const expandVisualization = useCallback(() => {
-    expandViz(id);
+    expandViz(id, true);
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Full Screen` });
   }, [expandViz, id, trackEntityPageEvent, trackingInfo]);
 
@@ -138,8 +171,11 @@ function Visualization({
               <VisualizationShareButton
                 trackingInfo={trackingInfo}
                 uuid={uuid}
+                hubmapId={hubmapId}
                 hasNotebook={hasNotebook}
                 parentUuid={parentUuid}
+                vitessceState={localVitessceState}
+                isFullscreen={vizIsFullscreen}
                 shouldDisplay={!hideShare}
               />
               <VisualizationThemeSwitch trackingInfo={trackingInfo} shouldDisplay={!hideTheme} />
@@ -168,9 +204,14 @@ function Visualization({
             {shouldMountVitessce && (
               <VisualizationTracker>
                 <Vitessce
+                  // Force a fresh Vitessce instance when the multi-dataset
+                  // selection changes; swapping the `config` prop in place
+                  // leaves stale internal state and crashes getLayers in
+                  // vitessce@4.0.0-test.2.
+                  key={isMultiDataset ? vitessceSelection : undefined}
                   config={currentConfig}
                   theme={vizTheme}
-                  onConfigChange={setVitessceStateDebounced}
+                  onConfigChange={setLocalVitessceStateDebounced}
                   height={vizIsFullscreen ? null : vitessceFixedHeight}
                   onWarn={handleWarning}
                 />
@@ -179,6 +220,7 @@ function Visualization({
           </ExpandableDiv>
         </Paper>
         <VisualizationFooter />
+        {renderBelowFooter?.({ activeConfigName: (currentConfig as { name?: string } | undefined)?.name })}
         <BodyExpandedCSS id={id} />
       </StyledDetailPageSection>
     )

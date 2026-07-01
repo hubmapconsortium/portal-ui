@@ -1,6 +1,5 @@
-import packageInfo from 'package';
-
+// VITESSCE_VERSION is injected at build/dev time by Vite's `define` in
+// vite.config.mts -- already with any ^/~ range prefix stripped.
 export function getVitessceVersion(): string {
-  const version = packageInfo.dependencies.vitessce.replace('^', '');
-  return version;
+  return VITESSCE_VERSION;
 }

@@ -18,8 +18,11 @@ export function SectionDescription({ addendum, children, subsection }: SectionDe
         <Box>
           <InfoIcon color="primary" fontSize={iconSize} />
         </Box>
-        {/* Align icon with the first line of text */}
-        <Typography variant="body1" marginTop={0.5}>
+        {/* Align icon with the first line of text. Render as a <div> rather
+            than the default <p> so callers can pass arbitrary block-level
+            content (Stacks, additional Typography, action buttons, etc.)
+            without producing invalid <p>-inside-<p> HTML. */}
+        <Typography component="div" variant="body1" marginTop={0.5}>
           {children}
         </Typography>
       </Stack>

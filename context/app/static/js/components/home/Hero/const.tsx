@@ -10,6 +10,7 @@ import {
   WorkspacesIcon,
   GeneIcon,
   CellTypeIcon,
+  DataProductsIcon,
 } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
@@ -43,6 +44,83 @@ const COMBINED_DATASET_LINK = createDatasetSearchLink({
 });
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
+  {
+    title: 'ATAC-seq Data Now Searchable with scFind',
+    titleHref: '/search/biomarkers-cell-types',
+    description: (
+      <>
+        <InternalLink href="/search/biomarkers-cell-types">Biomarker and Cell Type Search</InternalLink> now indexes
+        ATAC-seq datasets with scFind. Cell type and gene detail pages surface ATAC-seq results alongside RNA-seq
+        through dedicated data type tabs.
+      </>
+    ),
+    date: 'June 2026',
+    img: <CellTypeIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Say & See Mode (BETA) Now Available',
+    titleHref: '/search/datasets?mode=say-see',
+    description: (
+      <>
+        Explore <InternalLink href="/search/datasets?mode=say-see">donor, sample, and dataset search</InternalLink>{' '}
+        using natural-language chat. Ask questions in plain language and see matching datasets without building filters
+        by hand.
+      </>
+    ),
+    date: 'April 2026',
+    img: <SearchIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Dedicated Integrated Maps Page',
+    titleHref: '/integrated-maps',
+    description: (
+      <>
+        Browse the full list of HuBMAP-wide <InternalLink href="/integrated-maps">integrated maps</InternalLink> on a
+        new dedicated page, with consolidated data products aggregated across datasets by assay type and tissue.
+      </>
+    ),
+    date: 'March 2026',
+    img: <DataProductsIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Search Datasets by Annotated Cell & Tissue Types',
+    titleHref: '/search/datasets',
+    description: (
+      <>
+        A new “Annotated Object Types” facet on <InternalLink href="/search/datasets">dataset search</InternalLink> lets
+        you filter by annotated cell types and anatomical structures, with annotation summaries shown on dataset pages.
+      </>
+    ),
+    date: 'March 2026',
+    img: <DatasetIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'New Step-by-Step Tutorials',
+    titleHref: '/tutorials',
+    description: (
+      <>
+        Follow new <InternalLink href="/tutorials">tutorials</InternalLink> covering cell type search, gene and pathway
+        search, data download, and exploring organs.
+      </>
+    ),
+    date: 'January 2026',
+    img: <entityIconMap.Tutorial {...timelineIconProps} />,
+  },
+  {
+    title: 'HuBMAP Data Portal Preprint Now Available',
+    titleHref: '/browse/publication/6c9a473b6c49b85d58f1cdfd159a934b',
+    description: (
+      <>
+        Read the{' '}
+        <InternalLink href="/browse/publication/6c9a473b6c49b85d58f1cdfd159a934b">
+          HuBMAP Data Portal preprint
+        </InternalLink>
+        , describing multi-modal spatial and single-cell data of healthy human tissues.
+      </>
+    ),
+    date: 'November 2025',
+    img: <entityIconMap.Publication {...timelineIconProps} />,
+  },
   {
     title: 'New Cell Type Pages',
     titleHref: '/cell-types',

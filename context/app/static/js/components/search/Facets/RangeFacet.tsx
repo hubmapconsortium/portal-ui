@@ -42,6 +42,7 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
 
   // Reset slider position when filter chip is deleted.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
     setSelectedValues([values.min, values.max]);
   }, [values, setSelectedValues]);
 
@@ -89,7 +90,7 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
 
   return (
     <FacetAccordion title={getFieldLabel(field)} position="inner">
-      <Box sx={{ width: '90%' }}>
+      <Box sx={{ pl: 2, pr: 4, width: '100%' }}>
         <Stack direction="row" sx={{ height: 50 }} alignItems="end">
           {bins.map((bin) => {
             const key = parseInt(bin.key, 10);

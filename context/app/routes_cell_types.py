@@ -3,6 +3,7 @@ from asyncio import gather, to_thread
 
 from .routes_file_based import _get_organ_list
 from .routes_cells import _get_client
+from .routes_scfind import peek_cell_type_name
 
 from .utils import make_blueprint, get_client, get_default_flask_data
 
@@ -34,10 +35,22 @@ def cell_types_view():
 
 @blueprint.route('/cell-types/<cl_id>')
 def cell_types_detail_view(cl_id):
+    # Seed the cell type name from the warmed CLID->label map so the page title renders immediately,
+    # rather than waiting on the page's async scfind aggregate fetch. Best-effort: a cache miss (or
+    # any error) yields no name and the page falls back to the aggregate; it never blocks rendering.
+    try:
+        cell_type_name = peek_cell_type_name(cl_id)
+    except Exception as e:
+        current_app.logger.warning(f'Failed to resolve cell type name for {cl_id}: {e}')
+        cell_type_name = ''
     return render_template(
         'base-pages/react-content.html',
         title='Cell Type Details',
-        flask_data={**get_default_flask_data(), 'cell_type': cl_id},
+        flask_data={
+            **get_default_flask_data(),
+            'cell_type': cl_id,
+            'cell_type_name': cell_type_name,
+        },
     )
 
 

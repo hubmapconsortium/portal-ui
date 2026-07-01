@@ -44,6 +44,9 @@ export default function FractionRect({
       filter={isHoveredCellType ? 'brightness(120%) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.5))' : undefined}
       style={{ transition: 'filter 0.2s ease-in-out' }}
       onMouseEnter={onMouseEnter}
+      // Also show on move so the tooltip reliably appears while the pointer is over the segment,
+      // even if the `mouseenter` was missed.
+      onMouseMove={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onFocus={onMouseEnter as unknown as FocusEventHandler<SVGRectElement>}
       onBlur={onMouseLeave}

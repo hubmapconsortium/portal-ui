@@ -5,10 +5,14 @@ import { ComponentType } from 'react';
 
 interface StyledTableContainerProps extends TableContainerProps {
   maxHeight?: number;
+  minHeight?: number;
 }
 
-const StyledTableContainer = styled(TableContainer)<StyledTableContainerProps>(({ theme, maxHeight = 340 }) => ({
+const StyledTableContainer = styled(TableContainer, {
+  shouldForwardProp: (prop) => prop !== 'maxHeight' && prop !== 'minHeight',
+})<StyledTableContainerProps>(({ theme, maxHeight = 340, minHeight }) => ({
   maxHeight,
+  minHeight,
   overflowY: 'auto',
   '& .MuiTableCell-root': {
     backgroundColor: theme.palette.white,

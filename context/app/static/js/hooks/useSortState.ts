@@ -18,7 +18,7 @@ type SortAction =
 const defaultInitialSortState: SortState = {
   columnId: undefined,
   direction: undefined,
-} as SortState;
+};
 
 function sortReducer(state: SortState, action: SortAction): SortState {
   switch (action.type) {
@@ -32,7 +32,7 @@ function sortReducer(state: SortState, action: SortAction): SortState {
       return {
         columnId: action.payload,
         direction: 'desc',
-      } as SortState;
+      };
     case 'reset':
       return action.payload;
     default:

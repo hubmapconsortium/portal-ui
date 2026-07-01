@@ -166,6 +166,12 @@ export const dataLinks: DrawerSection[] = [
         href: '/publications',
         icon: <entityIconMap.Publication color="primary" />,
       },
+      {
+        label: 'HuBMAP Integrated Maps',
+        description: INTEGRATED_MAPS_DESCRIPTION_SHORT,
+        href: '/integrated-maps',
+        icon: <DataProductsIcon color="primary" />,
+      },
     ],
   },
   {
@@ -217,12 +223,6 @@ export const toolsAndAppsLinks: DrawerSection[] = [
           'Explore, visualize and download consortium-generated spatial and single cell data for the human body.',
         href: '/',
         icon: <ExternalImageIcon icon="dataPortal" />,
-      },
-      {
-        label: 'HuBMAP Integrated Maps',
-        description: INTEGRATED_MAPS_DESCRIPTION_SHORT,
-        href: 'https://data-products.hubmapconsortium.org/data_products/',
-        icon: <DataProductsIcon color="primary" />,
       },
     ],
   },
