@@ -74,5 +74,11 @@ describe('HeroBackground', () => {
       render(<HeroBackground />);
       expect(spy).not.toHaveBeenCalledWith(expect.any(Function), BACKGROUND_CYCLE_INTERVAL_MS);
     });
+
+    it('pauses the cycle interval while a card is hovered', () => {
+      const spy = vi.spyOn(global, 'setInterval');
+      render(<HeroBackground hoveredIndex={1} />);
+      expect(spy).not.toHaveBeenCalledWith(expect.any(Function), BACKGROUND_CYCLE_INTERVAL_MS);
+    });
   });
 });

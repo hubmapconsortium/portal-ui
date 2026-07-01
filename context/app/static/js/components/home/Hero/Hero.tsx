@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -48,8 +48,6 @@ function HeroLeftColumn() {
   );
 }
 
-// Left over from the "transition backgrounds on hover as well" experiment;
-// May be worth revisiting in the future if we want to add more interactivity
 interface HeroRightColumnProps {
   onCardHover?: (index: number) => void;
   onCardHoverEnd?: () => void;
@@ -66,15 +64,19 @@ function HeroRightColumn({ onCardHover, onCardHoverEnd }: HeroRightColumnProps) 
 }
 
 export default function Hero() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   return (
     <>
       <HeroSection aria-label="HuBMAP Data Portal Introduction">
-        <HeroBackground />
+        <HeroBackground hoveredIndex={hoveredIndex} />
         <HeroContentContainer maxWidth="lg">
           <HeroLeftColumn />
-          <HeroRightColumn />
+          <HeroRightColumn onCardHover={setHoveredIndex} onCardHoverEnd={() => setHoveredIndex(null)} />
         </HeroContentContainer>
       </HeroSection>
+      {/* Sibling of HeroSection (not nested) so its sticky positioning is bounded by the
+          page root, not the short hero — otherwise it un-sticks and hides behind the top bar */}
       <HeroBottomBar />
     </>
   );

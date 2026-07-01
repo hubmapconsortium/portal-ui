@@ -13,12 +13,11 @@ import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 
 import EntityCounts from 'js/components/home/EntityCounts';
 import Hero from 'js/components/home/Hero';
-import { GridAreaContainer, UpperGrid, UpperLowerGrid, BottomLowerGrid } from './style';
+import { UpperLowerGrid, BottomLowerGrid } from './style';
 import { BiotechRounded, BuildRounded, FormatQuoteRounded, PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import HomepageSection from 'js/components/home/HomepageSection';
-import Title from 'js/components/home/Title';
 import Box from '@mui/material/Box';
 
 function Home() {
@@ -48,17 +47,10 @@ function Home() {
 
   return (
     <>
-      <UpperGrid>
-        <GridAreaContainer maxWidth="lg" $gridArea="title">
-          <Title />
-        </GridAreaContainer>
-        <GridAreaContainer maxWidth="lg" $gridArea="carousel">
-          <Hero />
-        </GridAreaContainer>
-        <Box gridArea="counts">
-          <EntityCounts />
-        </Box>
-      </UpperGrid>
+      <Hero />
+      <Box gridArea="counts">
+        <EntityCounts />
+      </Box>
       {isLargerThanMd && (
         <UpperLowerGrid maxWidth="lg">
           <HomepageSection

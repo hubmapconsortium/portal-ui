@@ -4,8 +4,6 @@ import Paper from '@mui/material/Paper';
 import HomepageRelatedLink from 'js/components/home/HomepageRelatedLink';
 import Stack from '@mui/material/Stack';
 import { externalIconMap } from 'js/shared-styles/icons/externalImageIcons';
-import { DataProductsIcon } from 'js/shared-styles/icons';
-import { INTEGRATED_MAPS_DESCRIPTION_SHORT } from 'js/global-constants';
 
 const { avr, azimuth, fusion, googleScholar, hra, hubmapConsortium, nih, protocols } = externalIconMap;
 
@@ -49,13 +47,6 @@ const relatedResources: ExternalLinkPropsAdapter[] = [
 ];
 
 const relatedTools: ExternalLinkPropsAdapter[] = [
-  {
-    linkText: 'HuBMAP Integrated Maps',
-    ...hubmapConsortium,
-    icon: <DataProductsIcon color="primary" sx={{ width: 56, height: 56 }} />,
-    linkHref: '/integrated-maps',
-    description: INTEGRATED_MAPS_DESCRIPTION_SHORT,
-  },
   {
     linkText: 'Human Reference Atlas',
     ...hra,

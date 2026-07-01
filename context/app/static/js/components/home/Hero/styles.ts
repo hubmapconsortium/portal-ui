@@ -5,8 +5,11 @@ export const HeroSection = styled('section')(({ theme }) => ({
   position: 'relative',
   width: '100%',
   overflow: 'hidden',
-  // Extra bottom padding so the background extends behind the overlapping pill bar
-  paddingBottom: theme.spacing(5),
+  // Extends the background down behind the overlapping pill bar to the counts bar.
+  // Pairs with PillBarOuter's marginTop: this padding sets how far the background
+  // reaches (and the card→bar gap); the marginTop closes the gap to the counts bar.
+  // ponytail: eyeball both against the live page.
+  paddingBottom: theme.spacing(8),
 }));
 
 export const HeroContentContainer = styled(Container)(({ theme }) => ({
@@ -104,7 +107,11 @@ export const PillBarOuter = styled('div')(({ theme }) => ({
   zIndex: theme.zIndex.header - 1,
   display: 'flex',
   justifyContent: 'center',
-  marginTop: theme.spacing(-11.5), // overlap the hero section's extra bottom padding
+  // Pulls the bar up to overlap the hero background. Its magnitude should ~match the
+  // bar's own height so the section's background meets the counts bar with no gap
+  // (too little → white gap below the bar; too much → background overlaps counts).
+  // Card→bar spacing is tuned via HeroSection's paddingBottom. ponytail: eyeball both.
+  marginTop: theme.spacing(-13),
   paddingBottom: theme.spacing(3),
   maxWidth: theme.breakpoints.values.lg,
   width: '100%',

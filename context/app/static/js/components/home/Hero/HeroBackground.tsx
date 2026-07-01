@@ -29,20 +29,29 @@ function buildSrcSet(imageName: string, ext: string): string {
   ].join(', ');
 }
 
-export default function HeroBackground() {
-  const [activeIndex, setActiveIndex] = useState(0);
+interface HeroBackgroundProps {
+  /** Index of the currently hovered card, or null when none is hovered. */
+  hoveredIndex?: number | null;
+}
+
+export default function HeroBackground({ hoveredIndex = null }: HeroBackgroundProps) {
+  const [cycleIndex, setCycleIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+  const isHovered = hoveredIndex !== null;
 
   // Auto-cycle — paused while any card is hovered
   useEffect(() => {
-    if (prefersReducedMotion) return undefined;
+    if (prefersReducedMotion || isHovered) return undefined;
 
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % HERO_CARDS.length);
+      setCycleIndex((prev) => (prev + 1) % HERO_CARDS.length);
     }, BACKGROUND_CYCLE_INTERVAL_MS);
 
     return () => clearInterval(interval);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, isHovered]);
+
+  // While hovering, show that card's background; otherwise follow the cycle.
+  const activeIndex = hoveredIndex ?? cycleIndex;
 
   return (
     <BackgroundContainer aria-hidden="true">
