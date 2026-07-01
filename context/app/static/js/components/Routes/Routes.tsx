@@ -62,7 +62,6 @@ function Routes({ flaskData }: RoutesProps) {
     errorCode,
     list_uuid,
     organs,
-    organs_count,
     organ,
     vignette_json,
     geneSymbol,
@@ -129,7 +128,7 @@ function Routes({ flaskData }: RoutesProps) {
   if (urlPath === '/') {
     return (
       <Route disableWidthConstraint>
-        <Home organsCount={organs_count!} />
+        <Home />
       </Route>
     );
   }

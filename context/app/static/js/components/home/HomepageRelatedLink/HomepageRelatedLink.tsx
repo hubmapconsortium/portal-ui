@@ -16,7 +16,7 @@ interface ExternalLinkProps {
   icon?: React.ReactNode;
 }
 
-function ExternalLink({ img, title, linkText, linkHref, description, icon }: ExternalLinkProps) {
+function HomepageRelatedLink({ img, title, linkText, linkHref, description, icon }: ExternalLinkProps) {
   const handleTrack = useEventCallback(() => {
     trackEvent({
       category: 'Homepage',
@@ -44,4 +44,4 @@ function ExternalLink({ img, title, linkText, linkHref, description, icon }: Ext
   );
 }
 
-export default ExternalLink;
+export default HomepageRelatedLink;

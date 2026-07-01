@@ -1,9 +1,8 @@
 import React from 'react';
 import Paper from '@mui/material/Paper';
 
-import ExternalLink from 'js/components/home/ExternalLink';
+import HomepageRelatedLink from 'js/components/home/HomepageRelatedLink';
 import Stack from '@mui/material/Stack';
-import { SectionHeader } from 'js/pages/Home/style';
 import { externalIconMap } from 'js/shared-styles/icons/externalImageIcons';
 import { DataProductsIcon } from 'js/shared-styles/icons';
 import { INTEGRATED_MAPS_DESCRIPTION_SHORT } from 'js/global-constants';
@@ -94,19 +93,16 @@ const relatedTools: ExternalLinkPropsAdapter[] = [
 ];
 
 interface LinkSectionContainerProps {
-  title: string;
   links: ExternalLinkPropsAdapter[];
+  title: string;
 }
 
-function LinkSectionContainer({ title, links }: LinkSectionContainerProps) {
+function LinkSectionContainer({ links, title }: LinkSectionContainerProps) {
   return (
-    <Stack direction="column" maxWidth={{ md: '50%' }}>
-      <SectionHeader variant="h4" component="h3">
-        {title}
-      </SectionHeader>
+    <Stack direction="column">
       <Paper>
         {links.map(({ src, alt, ...rest }) => (
-          <ExternalLink
+          <HomepageRelatedLink
             key={rest.linkText}
             img={<img src={src} alt={alt} height={56} width={56} />}
             title={title}
@@ -118,20 +114,25 @@ function LinkSectionContainer({ title, links }: LinkSectionContainerProps) {
   );
 }
 
-function ExternalLinks() {
+function RelatedToolsAndResources() {
   return (
-    <Stack
-      direction={{
-        xs: 'column',
-        md: 'row',
-      }}
-      alignItems="start"
-      gap={4}
-    >
-      <LinkSectionContainer title="Related Tools" links={relatedTools} />
-      <LinkSectionContainer title="Related Resources" links={relatedResources} />
+    <Stack>
+      <Stack
+        direction={{
+          xs: 'column',
+          md: 'row',
+        }}
+        alignItems="start"
+        gap={{
+          xs: 0,
+          md: 4,
+        }}
+      >
+        <LinkSectionContainer links={relatedTools} title="Related Tools" />
+        <LinkSectionContainer links={relatedResources} title="Related Resources" />
+      </Stack>
     </Stack>
   );
 }
 
-export default ExternalLinks;
+export default RelatedToolsAndResources;

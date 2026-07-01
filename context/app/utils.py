@@ -74,6 +74,7 @@ def get_default_flask_data():
             'enableSaySeeMode': bool(current_app.config.get('ENABLE_SAY_SEE_MODE')),
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD'),
+        'pinnedPublicationUUIDs': current_app.config.get('PINNED_PUBLICATION_UUIDS', ''),
     }
 
 

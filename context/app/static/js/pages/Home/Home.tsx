@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
@@ -7,18 +7,19 @@ import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import Title from 'js/components/home/Title';
 import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
-import ExternalLinks from 'js/components/home/ExternalLinks';
-import RecentEntities from 'js/components/home/RecentEntities';
-import ExploreTools from 'js/components/home/ExploreTools';
+import ResearchPoweredByHuBMAP from 'js/components/home/ResearchPoweredByHuBMAP';
+import { useDownloadImage } from 'js/hooks/useDownloadImage';
+import { trackEvent } from 'js/helpers/trackers';
+import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 
 import Hero from 'js/components/home/Hero';
-import { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader, UpperGrid, GridAreaContainer } from './style';
+import { LowerContainerGrid, UpperGrid, GridAreaContainer } from './style';
+import { BiotechRounded, BuildRounded, PrivacyTipRounded } from '@mui/icons-material';
+import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import HomepageSection from 'js/components/home/HomepageSection';
 
-interface HomeProps {
-  organsCount: number;
-}
-
-function Home({ organsCount }: HomeProps) {
+function Home() {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -27,6 +28,21 @@ function Home({ organsCount }: HomeProps) {
       node.scrollIntoView({ behavior: 'auto', block: 'start' });
     }
   }, []);
+
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [selectionLabel, setSelectionLabel] = useState('Dataset vs Assay Type');
+
+  const chartName = `HuBMAP Datasets - ${selectionLabel} - ${new Date().toISOString().slice(0, 10)}`;
+  const downloadPNG = useDownloadImage(chartRef, chartName);
+
+  const handleDownload = useCallback(() => {
+    downloadPNG();
+    trackEvent({
+      category: 'Homepage',
+      action: 'HuBMAP Datasets / Download Datasets Graph',
+      label: selectionLabel,
+    });
+  }, [downloadPNG, selectionLabel]);
 
   return (
     <>
@@ -38,34 +54,38 @@ function Home({ organsCount }: HomeProps) {
           <Hero />
         </GridAreaContainer>
         <Box gridArea="counts">
-          <EntityCounts organsCount={organsCount} />
+          <EntityCounts />
         </Box>
       </UpperGrid>
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
-          <Box gridArea="bar-chart">
-            <OffsetDatasetsHeader variant="h4" component="h3" id="hubmap-datasets" ref={scrollToBarChart}>
-              HuBMAP Datasets
-            </OffsetDatasetsHeader>
-            <HuBMAPDatasetsChart />
-          </Box>
+          <HomepageSection
+            title="HuBMAP Datasets"
+            icon={entityIconMap.Dataset}
+            gridArea="bar-chart"
+            useOffset
+            id="hubmap-datasets"
+            headerRef={scrollToBarChart}
+            actionButtons={
+              <DownloadButton
+                onClick={handleDownload}
+                tooltip="Download chart as PNG"
+                aria-label="Download Chart as PNG"
+              />
+            }
+          >
+            <HuBMAPDatasetsChart chartRef={chartRef} onSelectionChange={setSelectionLabel} />
+          </HomepageSection>
         )}
-        <RecentEntities />
-        <Box gridArea="explore-tools">
-          <SectionHeader variant="h4" component="h3">
-            Explore Tools and Resources for Data Visualization & Analysis
-          </SectionHeader>
-          <ExploreTools />
-        </Box>
-        <Box gridArea="guidelines">
-          <SectionHeader variant="h4" component="h3">
-            Data Use Guidelines
-          </SectionHeader>
+        <HomepageSection title="Research Powered by HuBMAP" icon={BiotechRounded} gridArea="explore-tools">
+          <ResearchPoweredByHuBMAP />
+        </HomepageSection>
+        <HomepageSection title="Data Use Guidelines" icon={PrivacyTipRounded} gridArea="guidelines">
           <DataUseGuidelines />
-        </Box>
-        <Box gridArea="external-links">
-          <ExternalLinks />
-        </Box>
+        </HomepageSection>
+        <HomepageSection title="Related Tools & Resources" icon={BuildRounded} gridArea="related-tools-and-resources">
+          <RelatedToolsAndResources />
+        </HomepageSection>
       </LowerContainerGrid>
     </>
   );
