@@ -41,7 +41,7 @@ function MobileBar() {
       maxWidth="lg"
       sx={(theme) => ({
         position: 'sticky',
-        top: 112,
+        top: headerHeight + 8,
         zIndex: theme.zIndex.appBar - 1,
         py: 1,
       })}

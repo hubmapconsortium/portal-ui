@@ -100,7 +100,7 @@ export const PillBar = styled('nav')(({ theme }) => ({
 
 export const PillBarOuter = styled('div')(({ theme }) => ({
   position: 'sticky',
-  top: 112, // headerHeight (appBarHeight 64 + bannerHeight 40)
+  top: 112, // headerHeight (appBarHeight 64 + bannerHeight 40 + 8px spacing)
   zIndex: theme.zIndex.header - 1,
   display: 'flex',
   justifyContent: 'center',
@@ -114,7 +114,7 @@ export const PillBarOuter = styled('div')(({ theme }) => ({
   [`& ${PillBar}`]: {
     maxWidth: '100%',
     width: '100%',
-    py: 1,
+    paddingY: 1,
     transition: theme.transitions.create(['max-width', 'box-shadow', 'border-radius', 'padding', 'margin']),
     margin: 0,
 
@@ -129,7 +129,7 @@ export const PillBarOuter = styled('div')(({ theme }) => ({
       maxWidth: 700,
       boxShadow: theme.shadows[3],
       borderRadius: theme.spacing(0.5),
-      py: 0,
+      paddingY: 0,
       // Add margin to bar to compensate for reduced padding on the links
       // This prevents scrolling from causing a layout shift due to the
       // change in height when the bar becomes sticky

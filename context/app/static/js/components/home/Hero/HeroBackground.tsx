@@ -4,11 +4,14 @@ import { BACKGROUND_CYCLE_INTERVAL_MS, BACKGROUND_FADE_DURATION_MS, HERO_CARDS }
 import { BackgroundContainer, BackgroundImageLayer, BackgroundOverlay } from './styles';
 
 function useReducedMotion() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  // Read synchronously on mount so the effect only subscribes to later changes —
+  // setting state inside the effect body trips react-hooks/set-state-in-effect.
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
 
   useEffect(() => {
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mql.matches);
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mql.addEventListener('change', handler);
     return () => mql.removeEventListener('change', handler);
@@ -56,7 +59,8 @@ export default function HeroBackground() {
               sizes="100vw"
               src={`${CDN_URL}/v3/${imageName}-100.png`}
               alt=""
-              loading="eager"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
             />
           </picture>
         </BackgroundImageLayer>

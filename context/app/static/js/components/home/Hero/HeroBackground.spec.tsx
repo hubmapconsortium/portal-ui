@@ -66,13 +66,13 @@ describe('HeroBackground', () => {
       expect(spy).toHaveBeenCalledWith(expect.any(Function), BACKGROUND_CYCLE_INTERVAL_MS);
     });
 
-    it('clears and does not restart the interval when prefers-reduced-motion is active', () => {
-      // useReducedMotion initialises to false, then updates via matchMedia effect.
-      // That causes the running interval to be cleaned up and not restarted.
+    it('does not start the cycle interval when prefers-reduced-motion is active', () => {
+      // useReducedMotion reads the preference synchronously on mount, so the
+      // auto-cycle effect bails out before ever scheduling an interval.
       mockMatchMedia(true);
-      const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
+      const spy = vi.spyOn(global, 'setInterval');
       render(<HeroBackground />);
-      expect(clearIntervalSpy).toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalledWith(expect.any(Function), BACKGROUND_CYCLE_INTERVAL_MS);
     });
   });
 });

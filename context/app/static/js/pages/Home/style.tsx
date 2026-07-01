@@ -1,32 +1,37 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import Container from '@mui/material/Container';
+import Container, { ContainerProps } from '@mui/material/Container';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { MUIIcon } from 'js/shared-styles/icons/entityIconMap';
 
-const LowerContainerGrid = styled(Container)(({ theme }) => ({
+interface GridAreaContainerProps extends ContainerProps {
+  $gridArea: string;
+}
+
+const GridAreaContainer = styled(Container)<GridAreaContainerProps>(({ $gridArea }) => ({
+  gridArea: $gridArea,
+}));
+
+const UpperGrid = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gridGap: theme.spacing(5),
+  gridTemplateAreas: '"title" "carousel" "counts"',
+  marginBottom: theme.spacing(5),
+}));
+
+const UpperLowerGrid = styled(Container)(({ theme }) => ({
   display: 'grid',
   gridGap: theme.spacing(3),
-  gridTemplateAreas: `
-    "analysis-and-visualizations"
-    "publications"
-    "testimonials"
-    "guidelines"
-    "related-tools-and-resources"
-  `,
-  marginBottom: theme.spacing(5),
+  gridTemplateAreas: '"bar-chart"',
+  marginBottom: theme.spacing(3),
+})) as typeof Container;
 
-  [theme.breakpoints.up('md')]: {
-    gridTemplateAreas: `
-      "bar-chart"
-      "analysis-and-visualizations"
-      "publications"
-      "testimonials"
-      "guidelines"
-      "related-tools-and-resources"
-    `,
-  },
+const BottomLowerGrid = styled(Container)(({ theme }) => ({
+  display: 'grid',
+  gridGap: theme.spacing(3),
+  gridTemplateAreas: '"research-powered-by-hubmap" "guidelines" "related-tools-and-resources"',
+  marginBottom: theme.spacing(5),
 })) as typeof Container;
 
 const SectionHeaderInternal = styled(Typography)(({ theme }) => ({
@@ -54,4 +59,4 @@ const OffsetDatasetsHeader = styled(SectionHeader)({
   scrollMarginTop: `${headerHeight + 10}px`,
 }) as typeof SectionHeader;
 
-export { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader };
+export { GridAreaContainer, UpperGrid, UpperLowerGrid, BottomLowerGrid, SectionHeader, OffsetDatasetsHeader };
