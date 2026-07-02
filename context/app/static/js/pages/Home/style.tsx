@@ -25,6 +25,7 @@ const UpperLowerGrid = styled(Container)(({ theme }) => ({
   gridGap: theme.spacing(3),
   gridTemplateAreas: '"bar-chart"',
   marginBottom: theme.spacing(3),
+  marginTop: theme.spacing(3),
 })) as typeof Container;
 
 const BottomLowerGrid = styled(Container)(({ theme }) => ({
