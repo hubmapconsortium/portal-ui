@@ -1,0 +1,2 @@
+- Update portal-visualization to 0.5.6.
+- Update vitessce to 4.0.0.
