@@ -48,9 +48,11 @@ export const StickySlideContent = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.up('md')]: {
     position: 'sticky',
-    // Sit below the sticky header (banner + app bar) and fill the rest of the viewport.
+    // Sit below the sticky header (banner + app bar) and fill the rest of the viewport,
+    // but grow taller if the content needs it (min-height, not a fixed height) so nothing
+    // is clipped on shorter viewports.
     top: headerHeight,
-    height: `calc(100vh - ${headerHeight}px)`,
+    minHeight: `calc(100vh - ${headerHeight}px)`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

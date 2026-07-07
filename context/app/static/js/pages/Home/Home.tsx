@@ -80,6 +80,7 @@ function Home() {
             title="Research Powered by HuBMAP"
             icon={BiotechRounded}
             gridArea="research-powered-by-hubmap"
+            id="publications"
           >
             <ResearchPoweredByHuBMAP />
           </HomepageSection>

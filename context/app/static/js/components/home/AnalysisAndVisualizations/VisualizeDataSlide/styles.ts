@@ -13,10 +13,6 @@ export const VisualizeScrollRunway = styled(Box)(({ theme }) => ({
   position: 'relative',
 
   [theme.breakpoints.up('md')]: {
-    // Same runway as the other slides — the dwell here is no longer "dead" because the
-    // bottom sections (ParallaxCover) scroll up and cover this slide, like the slides
-    // cover each other.
-    height: '180vh',
     // Overlap the previous slide by one viewport so this slide slides up and covers it
     // (paired with its higher zIndex). Matches ScrollRunway's overlap.
     marginTop: '-100vh',
@@ -24,7 +20,11 @@ export const VisualizeScrollRunway = styled(Box)(({ theme }) => ({
 }));
 
 /**
- * Inner sticky content for the visualize slide.
+ * Inner content for the visualize slide. Unlike the other two slides this one does NOT
+ * pin: it holds a lot of content (title, description, 4-item selector, carousel) that can
+ * exceed the viewport on short screens. A pinned slide taller than the viewport can't
+ * scroll to reveal its bottom, so it flows normally instead — growing to fit its content
+ * and scrolling through like a regular section, so nothing is clipped.
  */
 export const VisualizeSlideContent = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -35,17 +35,17 @@ export const VisualizeSlideContent = styled(Box)(({ theme }) => ({
   isolation: 'isolate',
 
   [theme.breakpoints.up('md')]: {
-    position: 'sticky',
-    // Sit below the sticky header (banner + app bar) and fill the rest of the viewport.
-    top: headerHeight,
-    height: `calc(100vh - ${headerHeight}px)`,
+    // At least the viewport (below the sticky header); grows taller to fit its content.
+    minHeight: `calc(100vh - ${headerHeight}px)`,
+    // The gradient (AnimatedGradientLayer, inset 0) fills this padding too, so it reads as
+    // the slide continuing rather than a blank gap. This tail is the runway the bottom
+    // sections (ParallaxCover) slide up over: the 100vh matches ParallaxCover's -100vh
+    // overlap, and the extra spacing leaves a breathing gap below the content so the cover
+    // lands just past the selector instead of flush against it.
+    paddingBottom: `calc(100vh + ${theme.spacing(8)})`,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    // Promote to a compositor layer so scrolling the stacked sticky slides composites
-    // instead of repainting the full-viewport content each frame.
-    willChange: 'transform',
   },
 }));
 

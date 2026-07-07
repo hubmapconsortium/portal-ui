@@ -15,8 +15,9 @@ function AnalysisAndVisualizations() {
   const { prominentIndex, slideRef } = useProminentSlideIndex(3);
 
   return (
-    <Box component="section" aria-label="Analysis and Visualizations">
-      <Container maxWidth="lg" sx={{ mb: 2 }}>
+    <Box component="section" id="analysis-and-visualizations" aria-label="Analysis and Visualizations">
+      {/* Title/description are redundant on mobile where the slides carry their own headings */}
+      <Container maxWidth="lg" sx={{ mb: 2, display: { xs: 'none', md: 'block' } }}>
         <SectionHeader variant="h2" component="h3" icon={QueryStatsRounded}>
           Analysis and Visualizations
         </SectionHeader>
