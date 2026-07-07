@@ -45,10 +45,14 @@ describe('ParallaxSlide', () => {
     expect(launchButton).toHaveClass('MuiButton-outlined');
   });
 
-  test('renders images with correct alt text', () => {
+  test('renders slide media as looping muted videos', () => {
     render(<ParallaxSlide config={CLOUD_WORKSPACES_SLIDE} zIndex={3} />);
     CLOUD_WORKSPACES_SLIDE.images.forEach((image) => {
-      expect(screen.getByAltText(image.alt)).toBeInTheDocument();
+      const video = screen.getByLabelText(image.alt);
+      expect(video.tagName).toBe('VIDEO');
+      expect(video).toHaveAttribute('src', image.videoSrc);
+      expect(video).toHaveAttribute('loop');
+      expect(video).toHaveAttribute('playsinline');
     });
   });
 

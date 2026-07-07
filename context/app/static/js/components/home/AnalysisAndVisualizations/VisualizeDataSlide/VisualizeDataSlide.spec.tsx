@@ -87,6 +87,23 @@ describe('VisualizeDataSlide', () => {
     render(<VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={1} />);
     expect(screen.getByRole('region', { name: VISUALIZE_DATA_SLIDE.sectionTitle })).toBeInTheDocument();
   });
+
+  test('single-cell view renders the Vitessce carousel with assay thumbnails and a link to the selected visualization', () => {
+    render(<VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={1} />);
+    const carousel = VISUALIZE_DATA_SLIDE.views[0].carousel!;
+    // Every item appears as a thumbnail with its assay caption.
+    carousel.forEach((item) => {
+      expect(screen.getByText(item.assay)).toBeInTheDocument();
+    });
+    // The main image links to the first (selected) visualization.
+    const links = screen.getAllByRole('link');
+    expect(links.some((link) => link.getAttribute('href') === carousel[0].href)).toBe(true);
+  });
+
+  test('includes the Integrated Maps view linking to /integrated-maps', () => {
+    render(<VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={1} />);
+    expect(screen.getByRole('link', { name: 'Download Integrated Maps' })).toHaveAttribute('href', '/integrated-maps');
+  });
 });
 
 describe('VisualizeDataSlide - Mobile', () => {

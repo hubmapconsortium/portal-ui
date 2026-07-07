@@ -2,10 +2,12 @@ import React, { useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 
 import { trackEvent } from 'js/helpers/trackers';
 import { ViewConfig } from '../types';
 import ParallaxImage from '../ParallaxImage';
+import VitessceCarousel from './VitessceCarousel';
 import { ViewOptionContainer, SwipeContainer, SwipeTrack, SwipePanel, PaginationDot, ImageArea } from './styles';
 
 interface ViewSelectorProps {
@@ -25,7 +27,7 @@ function DesktopViewSelector({
   onViewChange,
 }: Omit<ViewSelectorProps, 'isDesktop' | 'progress' | 'isReducedMotion'>) {
   return (
-    <Stack spacing={1} role="tablist" aria-label="Visualization tools">
+    <Stack spacing={1} divider={<Divider />} role="tablist" aria-label="Visualization tools">
       {views.map((view, index) => {
         const Icon = view.icon;
         const isActive = index === activeIndex;
@@ -33,7 +35,6 @@ function DesktopViewSelector({
         return (
           <ViewOptionContainer
             key={view.id}
-            $isActive={isActive}
             onMouseEnter={() => onViewChange(index)}
             onClick={() => onViewChange(index)}
             role="tab"
@@ -157,11 +158,20 @@ function MobileViewSelector({
                   >
                     {view.ctaButton.label}
                   </Button>
-                  <ImageArea>
-                    {view.images.map((image) => (
-                      <ParallaxImage key={image.alt} {...image} progress={progress} isReducedMotion={isReducedMotion} />
-                    ))}
-                  </ImageArea>
+                  {view.carousel ? (
+                    <VitessceCarousel items={view.carousel} />
+                  ) : (
+                    <ImageArea>
+                      {view.images.map((image) => (
+                        <ParallaxImage
+                          key={image.alt}
+                          {...image}
+                          progress={progress}
+                          isReducedMotion={isReducedMotion}
+                        />
+                      ))}
+                    </ImageArea>
+                  )}
                 </Stack>
               </SwipePanel>
             );

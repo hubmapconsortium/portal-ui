@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -9,6 +10,7 @@ import { MultiViewSlideConfig } from '../types';
 import { accentColorMap } from '../ParallaxSlide/styles';
 import ParallaxImage from '../ParallaxImage';
 import ViewSelector from './ViewSelector';
+import VitessceCarousel from './VitessceCarousel';
 import {
   VisualizeScrollRunway,
   VisualizeSlideContent,
@@ -66,23 +68,35 @@ function VisualizeDataSlide({ config, zIndex }: VisualizeDataSlideProps) {
             isReducedMotion={isReducedMotion}
           />
 
-          {/* Desktop image area - shows active view's images */}
-          {isDesktop && (
-            <ImageArea
-              role="tabpanel"
-              id={`visualize-tabpanel-${activeView.id}`}
-              aria-label={`${activeView.title} images`}
-            >
-              {activeView.images.map((image) => (
-                <ParallaxImage
-                  key={`${activeView.id}-${image.alt}`}
-                  {...image}
-                  progress={progress}
-                  isReducedMotion={isReducedMotion}
-                />
-              ))}
-            </ImageArea>
-          )}
+          {/* Desktop media area — a carousel for the single-cell view, otherwise the view's media */}
+          {isDesktop &&
+            (activeView.carousel ? (
+              <Box
+                role="tabpanel"
+                id={`visualize-tabpanel-${activeView.id}`}
+                aria-label={`${activeView.title} visualizations`}
+                // Match ImageArea's height so this view's slide is the same height as the
+                // others and the section title above doesn't shift when it becomes active.
+                sx={{ display: 'flex', alignItems: 'center', minHeight: { md: 400 } }}
+              >
+                <VitessceCarousel items={activeView.carousel} />
+              </Box>
+            ) : (
+              <ImageArea
+                role="tabpanel"
+                id={`visualize-tabpanel-${activeView.id}`}
+                aria-label={`${activeView.title} media`}
+              >
+                {activeView.images.map((image) => (
+                  <ParallaxImage
+                    key={`${activeView.id}-${image.alt}`}
+                    {...image}
+                    progress={progress}
+                    isReducedMotion={isReducedMotion}
+                  />
+                ))}
+              </ImageArea>
+            ))}
         </SlideContentGrid>
       </VisualizeSlideContent>
     </VisualizeScrollRunway>

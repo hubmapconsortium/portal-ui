@@ -27,6 +27,10 @@ export const ScrollRunway = styled(Box)<ScrollRunwayProps>(({ theme, $zIndex }) 
     // Extra height creates scroll space for image animations
     height: '180vh',
     zIndex: $zIndex,
+    // Every slide after the first is pulled up by one viewport so it overlaps the
+    // previous slide's runway and — with the higher zIndex + opaque gradient — slides
+    // up and covers it, instead of the two just scrolling past each other.
+    marginTop: $zIndex > 1 ? '-100vh' : 0,
   },
 }));
 
@@ -88,19 +92,15 @@ export const SlideGrid = styled(Box)<SlideGridProps>(({ theme, $layout }) => ({
 }));
 
 /**
- * Text column that sticks within the slide viewport on desktop,
- * staying centered vertically while the user scrolls.
+ * Text column. Top-aligned with the media column (via SlideGrid's `alignItems: start`)
+ * so the video lines up with the full text block — title and icon included. The whole
+ * slide is vertically centered by StickySlideContent, so the text needs no separate
+ * centering of its own.
  */
-export const TextContent = styled(Box)(({ theme }) => ({
+export const TextContent = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
-
-  [theme.breakpoints.up('md')]: {
-    position: 'sticky',
-    top: '50%',
-    transform: 'translateY(-50%)',
-  },
-}));
+});
 
 interface ImageGroupProps {
   $layout: 'text-left' | 'text-right';
@@ -108,7 +108,8 @@ interface ImageGroupProps {
 
 export const ImageGroup = styled(Box)<ImageGroupProps>(({ theme, $layout }) => ({
   display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
+  // Single full-width media (video) filling this column — not a grid of thumbnails.
+  gridTemplateColumns: '1fr',
   gap: theme.spacing(2),
   position: 'relative',
 

@@ -61,10 +61,11 @@ describe('AnalysisAndVisualizations', () => {
     expect(screen.getByRole('link', { name: 'Launch Advanced Search' })).toHaveAttribute('href', '/cells');
   });
 
-  test('Visualize Data slide has all three view CTAs', () => {
+  test('Explore HuBMAP Data slide has all four view CTAs', () => {
     render(<AnalysisAndVisualizations />);
     expect(screen.getByRole('link', { name: 'View Visualizations' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Visualize Cell Populations' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Explore Data' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Download Integrated Maps' })).toHaveAttribute('href', '/integrated-maps');
   });
 });
