@@ -57,7 +57,8 @@ export const SlideContentGrid = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.up('md')]: {
     display: 'grid',
-    gridTemplateColumns: '4fr 5fr',
+    // Selector/side text takes 1/3, the media content takes 2/3.
+    gridTemplateColumns: '1fr 2fr',
     gap: theme.spacing(4),
     alignItems: 'center',
   },
@@ -84,18 +85,11 @@ export const ViewOptionContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const ImageArea = styled(Box)(({ theme }) => ({
-  display: 'grid',
-  // Non-carousel views show a single image or webm; one full-width column.
-  gridTemplateColumns: '1fr',
-  gap: theme.spacing(2),
+// Wraps a non-carousel view's single image/webm so the optional CTA button can overlay it.
+export const ViewMediaWrapper = styled(Box)({
   position: 'relative',
-  minHeight: 300,
-
-  [theme.breakpoints.up('md')]: {
-    minHeight: 400,
-  },
-}));
+  width: '100%',
+});
 
 export const SwipeContainer = styled(Box)({
   width: '100%',
@@ -145,7 +139,7 @@ export const CarouselRoot = styled(Box)(({ theme }) => ({
   // Cap the width so the 16:9 main image stays a contained size (its height follows
   // the width, so this also caps the carousel's height to fit the media area without
   // distorting the 16:9 ratio). Centered within the right-hand column.
-  maxWidth: 600,
+  maxWidth: 780,
   margin: '0 auto',
   display: 'flex',
   flexDirection: 'column',
@@ -209,12 +203,12 @@ export const ThumbButton = styled('button')<{ $isActive: boolean }>(({ theme, $i
   padding: 0,
   cursor: 'pointer',
   textAlign: 'left',
-  background: theme.palette.background.paper,
-  border: `2px solid ${$isActive ? theme.palette.primary.main : 'transparent'}`,
-  borderRadius: Number(theme.shape.borderRadius),
-  overflow: 'hidden',
-  opacity: $isActive ? 1 : 0.75,
-  transition: theme.transitions.create(['opacity', 'border-color']),
+  // Transparent — the caption sits on the slide's background, and the active outline
+  // lives on the image itself (see ThumbImage), not around the whole button.
+  background: 'transparent',
+  border: 'none',
+  opacity: $isActive ? 1 : 0.7,
+  transition: theme.transitions.create('opacity'),
 
   '&:hover': {
     opacity: 1,
@@ -225,13 +219,17 @@ export const ThumbButton = styled('button')<{ $isActive: boolean }>(({ theme, $i
   },
 }));
 
-export const ThumbImage = styled('img')({
+export const ThumbImage = styled('img')<{ $isActive: boolean }>(({ theme, $isActive }) => ({
   width: '100%',
   // 16:9 like the source screenshots, so previews aren't stretched.
   aspectRatio: '16 / 9',
   objectFit: 'cover',
   display: 'block',
-});
+  // Rounded preview with the active outline drawn only around the image.
+  borderRadius: Number(theme.shape.borderRadius),
+  border: `2px solid ${$isActive ? theme.palette.primary.main : 'transparent'}`,
+  boxSizing: 'border-box',
+}));
 
 export const ThumbCaption = styled(Box)(({ theme }) => ({
   display: 'flex',

@@ -3,12 +3,12 @@ import Box from '@mui/material/Box';
 
 import { ThemeColorKey } from '../types';
 
-// Map theme color keys to their accent90 palette keys
+// Gradient accent color per theme key. The gradient runs from this color to white.
 export const accentColorMap: Record<ThemeColorKey, string> = {
-  info: 'info90',
-  warning: 'warning90',
-  success: 'success90',
-  error: 'primary90', // error uses primary90 in the theme
+  info: '#bdcfe9', // Cloud Workspaces, Metadata Exploration
+  warning: '#f1cac0', // Biomarkers & Cell Types, Integrated Maps
+  success: '#d1dac1', // Single-Cell and Spatial Data Visualizations
+  error: '#f4c0db', // Cell Populations Viewer
 };
 
 /**
@@ -56,9 +56,6 @@ interface GradientBackgroundProps {
 }
 
 export const GradientBackground = styled('div')<GradientBackgroundProps>(({ theme, $theme }) => {
-  const accentKey = accentColorMap[$theme] as keyof typeof theme.palette.accent;
-  const accentColor = theme.palette.accent[accentKey];
-
   return {
     position: 'absolute',
     top: 0,
@@ -66,7 +63,7 @@ export const GradientBackground = styled('div')<GradientBackgroundProps>(({ them
     right: 0,
     bottom: 0,
     zIndex: -1,
-    background: `linear-gradient(135deg, ${accentColor} 0%, ${theme.palette.common.white} 100%)`,
+    background: `linear-gradient(135deg, ${accentColorMap[$theme]} 0%, ${theme.palette.common.white} 100%)`,
   };
 });
 

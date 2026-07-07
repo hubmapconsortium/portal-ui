@@ -18,7 +18,8 @@ function ParallaxImage({ src, alt, delay = 0, videoSrc, poster, progress, isRedu
   const adjustedProgress = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
 
   const springProps = useSpring({
-    opacity: isReducedMotion ? 1 : adjustedProgress,
+    // Videos are always fully opaque; only images fade in with scroll progress.
+    opacity: isReducedMotion || videoSrc ? 1 : adjustedProgress,
     transform: isReducedMotion ? 'translateY(0px)' : `translateY(${(1 - adjustedProgress) * 40}px)`,
     config: { tension: 280, friction: 60 },
   });

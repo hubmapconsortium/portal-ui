@@ -60,6 +60,12 @@ export interface ViewConfig {
    * (used by the single-cell view) instead of the `images` media.
    */
   carousel?: CarouselItem[];
+  /** Optional CTA button overlaid on the bottom-right of the view's image, like the carousel's. */
+  imageCta?: {
+    label: string;
+    href: string;
+    trackingLabel: string;
+  };
 }
 
 export interface MultiViewSlideConfig {

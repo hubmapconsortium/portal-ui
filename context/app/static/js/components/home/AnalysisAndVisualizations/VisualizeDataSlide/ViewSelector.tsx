@@ -6,9 +6,9 @@ import Divider from '@mui/material/Divider';
 
 import { trackEvent } from 'js/helpers/trackers';
 import { ViewConfig } from '../types';
-import ParallaxImage from '../ParallaxImage';
 import VitessceCarousel from './VitessceCarousel';
-import { ViewOptionContainer, SwipeContainer, SwipeTrack, SwipePanel, PaginationDot, ImageArea } from './styles';
+import ViewMedia from './ViewMedia';
+import { ViewOptionContainer, SwipeContainer, SwipeTrack, SwipePanel, PaginationDot } from './styles';
 
 interface ViewSelectorProps {
   views: ViewConfig[];
@@ -161,16 +161,7 @@ function MobileViewSelector({
                   {view.carousel ? (
                     <VitessceCarousel items={view.carousel} />
                   ) : (
-                    <ImageArea>
-                      {view.images.map((image) => (
-                        <ParallaxImage
-                          key={image.alt}
-                          {...image}
-                          progress={progress}
-                          isReducedMotion={isReducedMotion}
-                        />
-                      ))}
-                    </ImageArea>
+                    <ViewMedia view={view} progress={progress} isReducedMotion={isReducedMotion} />
                   )}
                 </Stack>
               </SwipePanel>

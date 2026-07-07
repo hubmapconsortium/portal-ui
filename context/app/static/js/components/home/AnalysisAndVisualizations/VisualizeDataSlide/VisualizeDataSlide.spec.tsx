@@ -100,6 +100,16 @@ describe('VisualizeDataSlide', () => {
     expect(links.some((link) => link.getAttribute('href') === carousel[0].href)).toBe(true);
   });
 
+  test('overlays a CTA button on a view media when the view defines imageCta', () => {
+    render(<VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={1} />);
+    // Activate the Cell Populations view, which defines an imageCta overlay.
+    fireEvent.mouseEnter(screen.getByRole('tab', { name: /Cell Populations Viewer/i }));
+    expect(screen.getByRole('link', { name: 'Visualize Kidney Cell Populations' })).toHaveAttribute(
+      'href',
+      '/organs/kidney#cell-population-plot',
+    );
+  });
+
   test('includes the Integrated Maps view linking to /integrated-maps', () => {
     render(<VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={1} />);
     expect(screen.getByRole('link', { name: 'Download Integrated Maps' })).toHaveAttribute('href', '/integrated-maps');

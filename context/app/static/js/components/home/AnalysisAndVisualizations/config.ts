@@ -194,10 +194,15 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
         variant: 'contained',
         trackingLabel: 'Visualize / Visualize Cell Populations',
       },
+      imageCta: {
+        label: 'Visualize Kidney Cell Populations',
+        href: '/organs/kidney#cell-population-plot',
+        trackingLabel: 'Visualize / Visualize Kidney Cell Populations',
+      },
       images: [
         {
-          src: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&auto=format',
-          alt: 'Cell population counts histogram and dataset heatmap',
+          src: `${CDN_URL}/v3/scellop_kidney.webp`,
+          alt: 'Cell population plot for kidney datasets',
           delay: 0,
         },
       ],
@@ -216,7 +221,7 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
       },
       images: [
         {
-          src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format',
+          src: `${CDN_URL}/v3/lineup_datasets.webp`,
           alt: 'LineUp metadata table with column summaries and filtering',
           delay: 0,
         },
@@ -236,8 +241,7 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
       },
       images: [
         {
-          // TODO: replace with the real Integrated Maps screenshot or webm.
-          src: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=800&auto=format',
+          src: `${CDN_URL}/v3/integrated_maps.webp`,
           alt: 'Integrated map of consolidated data for an assay type and tissue',
           delay: 0,
         },

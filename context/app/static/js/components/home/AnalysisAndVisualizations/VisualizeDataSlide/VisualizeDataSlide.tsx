@@ -8,16 +8,10 @@ import { useSpring } from '@react-spring/web';
 import { useScrollProgress, usePrefersReducedMotion } from '../hooks';
 import { MultiViewSlideConfig } from '../types';
 import { accentColorMap } from '../ParallaxSlide/styles';
-import ParallaxImage from '../ParallaxImage';
 import ViewSelector from './ViewSelector';
 import VitessceCarousel from './VitessceCarousel';
-import {
-  VisualizeScrollRunway,
-  VisualizeSlideContent,
-  AnimatedGradientLayer,
-  SlideContentGrid,
-  ImageArea,
-} from './styles';
+import ViewMedia from './ViewMedia';
+import { VisualizeScrollRunway, VisualizeSlideContent, AnimatedGradientLayer, SlideContentGrid } from './styles';
 
 interface VisualizeDataSlideProps {
   config: MultiViewSlideConfig;
@@ -33,21 +27,23 @@ function VisualizeDataSlide({ config, zIndex }: VisualizeDataSlideProps) {
   const isReducedMotion = usePrefersReducedMotion();
 
   const activeView = config.views[activeViewIndex];
-  const accentKey = accentColorMap[activeView.theme] as keyof typeof theme.palette.accent;
-  const targetColor = theme.palette.accent[accentKey];
+  const targetColor = accentColorMap[activeView.theme];
 
   const Icon = config.icon;
 
-  // Animate background gradient between view accent colors
-  const backgroundSpring = useSpring({
-    background: `linear-gradient(135deg, ${targetColor} 0%, ${theme.palette.common.white} 100%)`,
-    config: { duration: 400 },
-  });
+  // Animate the accent color between views and build the gradient from it. react-spring
+  // interpolates a color reliably but not a full `linear-gradient(...)` string, so we
+  // animate the color and compose the gradient via `.to()`.
+  const { color } = useSpring({ color: targetColor, config: { duration: 400 } });
 
   return (
     <VisualizeScrollRunway ref={runwayRef} sx={{ zIndex }}>
       <VisualizeSlideContent role="region" aria-label={config.sectionTitle}>
-        <AnimatedGradientLayer style={backgroundSpring} />
+        <AnimatedGradientLayer
+          style={{
+            background: color.to((c) => `linear-gradient(135deg, ${c} 0%, ${theme.palette.common.white} 100%)`),
+          }}
+        />
 
         {/* Section title and description centered */}
         <Typography variant="h4" component="h3" align="center" gutterBottom fontWeight={400} sx={{ mb: 0.5 }}>
@@ -68,35 +64,23 @@ function VisualizeDataSlide({ config, zIndex }: VisualizeDataSlideProps) {
             isReducedMotion={isReducedMotion}
           />
 
-          {/* Desktop media area — a carousel for the single-cell view, otherwise the view's media */}
-          {isDesktop &&
-            (activeView.carousel ? (
-              <Box
-                role="tabpanel"
-                id={`visualize-tabpanel-${activeView.id}`}
-                aria-label={`${activeView.title} visualizations`}
-                // Match ImageArea's height so this view's slide is the same height as the
-                // others and the section title above doesn't shift when it becomes active.
-                sx={{ display: 'flex', alignItems: 'center', minHeight: { md: 400 } }}
-              >
+          {/* Desktop media area — a carousel for the single-cell view, otherwise the view's media.
+              Fixed min-height keeps every view's slide the same height so the section title
+              above doesn't shift when the active view changes. */}
+          {isDesktop && (
+            <Box
+              role="tabpanel"
+              id={`visualize-tabpanel-${activeView.id}`}
+              aria-label={`${activeView.title} media`}
+              sx={{ display: 'flex', alignItems: 'center', minHeight: { md: 400 } }}
+            >
+              {activeView.carousel ? (
                 <VitessceCarousel items={activeView.carousel} />
-              </Box>
-            ) : (
-              <ImageArea
-                role="tabpanel"
-                id={`visualize-tabpanel-${activeView.id}`}
-                aria-label={`${activeView.title} media`}
-              >
-                {activeView.images.map((image) => (
-                  <ParallaxImage
-                    key={`${activeView.id}-${image.alt}`}
-                    {...image}
-                    progress={progress}
-                    isReducedMotion={isReducedMotion}
-                  />
-                ))}
-              </ImageArea>
-            ))}
+              ) : (
+                <ViewMedia view={activeView} progress={progress} isReducedMotion={isReducedMotion} />
+              )}
+            </Box>
+          )}
         </SlideContentGrid>
       </VisualizeSlideContent>
     </VisualizeScrollRunway>

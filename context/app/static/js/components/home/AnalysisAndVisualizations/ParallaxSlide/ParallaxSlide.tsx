@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -35,13 +36,20 @@ function ParallaxSlide({ config, zIndex }: ParallaxSlideProps) {
               {description}
             </Typography>
             {bulletPoints && (
-              <Stack component="ul" spacing={0.5} sx={{ pl: 2.5, mb: 2, listStyleType: 'disc' }}>
+              // list-style is set on each <li> (a class selector) to override the global
+              // `li { list-style: none }` reset in components/globalStyles.tsx.
+              <Box component="ul" sx={{ m: 0, mb: 2, pl: 2.5 }}>
                 {bulletPoints.map((point) => (
-                  <Typography component="li" variant="body2" key={point} sx={{ display: 'list-item' }}>
+                  <Typography
+                    component="li"
+                    variant="body2"
+                    key={point}
+                    sx={{ display: 'list-item', listStyleType: 'disc', mb: 0.5 }}
+                  >
                     {point}
                   </Typography>
                 ))}
-              </Stack>
+              </Box>
             )}
             <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
               {ctaButtons.map((button) => (

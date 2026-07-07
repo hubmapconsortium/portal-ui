@@ -87,7 +87,7 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
                 aria-label={`Show ${item.assay} visualization`}
                 aria-pressed={index === selectedIndex}
               >
-                <ThumbImage src={item.src} alt="" />
+                <ThumbImage src={item.src} alt="" $isActive={index === selectedIndex} />
                 <ThumbCaption>
                   <Typography variant="caption" fontWeight={600} noWrap>
                     {item.assay}
