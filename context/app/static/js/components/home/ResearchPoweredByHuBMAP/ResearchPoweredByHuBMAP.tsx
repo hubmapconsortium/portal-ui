@@ -25,7 +25,7 @@ function ResearchPoweredByHuBMAP() {
   if (isLoading) return null;
 
   return (
-    <Stack spacing={2} mt={3}>
+    <Stack spacing={2}>
       <Typography variant="subtitle1">
         Trusted by top institutions to advance spatial and single-cell biomedical research.
       </Typography>

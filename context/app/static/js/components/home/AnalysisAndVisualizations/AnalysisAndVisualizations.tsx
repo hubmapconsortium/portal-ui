@@ -7,9 +7,13 @@ import { QueryStatsRounded } from '@mui/icons-material';
 import { SectionHeader } from 'js/pages/Home/style';
 import ParallaxSlide from './ParallaxSlide';
 import VisualizeDataSlide from './VisualizeDataSlide';
+import { useProminentSlideIndex } from './hooks';
 import { CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE, VISUALIZE_DATA_SLIDE } from './config';
 
 function AnalysisAndVisualizations() {
+  // Only the slide crossing the viewport middle is "prominent" — used to play its video.
+  const { prominentIndex, slideRef } = useProminentSlideIndex(3);
+
   return (
     <Box component="section" aria-label="Analysis and Visualizations">
       <Container maxWidth="lg" sx={{ mb: 2 }}>
@@ -23,9 +27,19 @@ function AnalysisAndVisualizations() {
 
       {/* Parallax scroll container - tall enough for all 3 slides to scroll through */}
       <Box>
-        <ParallaxSlide config={CLOUD_WORKSPACES_SLIDE} zIndex={1} />
-        <ParallaxSlide config={BIOMARKERS_SLIDE} zIndex={2} />
-        <VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={3} />
+        <ParallaxSlide
+          config={CLOUD_WORKSPACES_SLIDE}
+          zIndex={1}
+          isProminent={prominentIndex === 0}
+          stickyRef={slideRef(0)}
+        />
+        <ParallaxSlide
+          config={BIOMARKERS_SLIDE}
+          zIndex={2}
+          isProminent={prominentIndex === 1}
+          stickyRef={slideRef(1)}
+        />
+        <VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={3} stickyRef={slideRef(2)} />
       </Box>
     </Box>
   );

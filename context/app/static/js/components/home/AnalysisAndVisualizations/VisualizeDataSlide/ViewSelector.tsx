@@ -15,7 +15,6 @@ interface ViewSelectorProps {
   activeIndex: number;
   onViewChange: (index: number) => void;
   isDesktop: boolean;
-  progress: number;
   isReducedMotion: boolean;
 }
 
@@ -25,7 +24,7 @@ function DesktopViewSelector({
   views,
   activeIndex,
   onViewChange,
-}: Omit<ViewSelectorProps, 'isDesktop' | 'progress' | 'isReducedMotion'>) {
+}: Omit<ViewSelectorProps, 'isDesktop' | 'isReducedMotion'>) {
   return (
     <Stack spacing={1} divider={<Divider />} role="tablist" aria-label="Visualization tools">
       {views.map((view, index) => {
@@ -90,7 +89,6 @@ function MobileViewSelector({
   views,
   activeIndex,
   onViewChange,
-  progress,
   isReducedMotion,
 }: Omit<ViewSelectorProps, 'isDesktop'>) {
   const startX = useRef(0);
@@ -161,7 +159,7 @@ function MobileViewSelector({
                   {view.carousel ? (
                     <VitessceCarousel items={view.carousel} />
                   ) : (
-                    <ViewMedia view={view} progress={progress} isReducedMotion={isReducedMotion} />
+                    <ViewMedia view={view} isReducedMotion={isReducedMotion} />
                   )}
                 </Stack>
               </SwipePanel>

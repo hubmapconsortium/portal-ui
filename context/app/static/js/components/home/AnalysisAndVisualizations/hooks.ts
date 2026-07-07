@@ -1,45 +1,45 @@
-import { useEffect, useState, useRef, useCallback, RefObject } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
- * Returns a 0-1 scroll progress value for an element based on its position in the viewport.
- * Progress is 0 when the element enters the viewport from the bottom,
- * and approaches 1 as it scrolls past the top.
+ * Tracks which of `count` stacked slides is "prominent" — the top-most slide currently
+ * crossing the vertical middle of the viewport. Because the slides stack with increasing
+ * z-index, the highest index crossing the middle is the one visually on top. Returns the
+ * prominent index and `slideRef(index)`, a stable ref callback to attach to each slide.
  */
-export function useScrollProgress(ref: RefObject<HTMLElement | null>): number {
-  const [progress, setProgress] = useState(0);
-  const rafId = useRef<number>(0);
+export function useProminentSlideIndex(count: number) {
+  const [prominentIndex, setProminentIndex] = useState(0);
+  const els = useRef<(HTMLElement | null)[]>([]);
+  const visible = useRef<Set<number>>(new Set());
 
-  const handleScroll = useCallback(() => {
-    if (rafId.current) {
-      cancelAnimationFrame(rafId.current);
-    }
-
-    rafId.current = requestAnimationFrame(() => {
-      const element = ref.current;
-      if (!element) return;
-
-      const rect = element.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // Calculate progress: 0 when element top is at bottom of viewport,
-      // 1 when element top has scrolled past the top of the viewport by its height
-      const rawProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
-      setProgress(Math.min(1, Math.max(0, rawProgress)));
-    });
-  }, [ref]);
+  // Stable per-index ref callbacks; the element mutation stays inside the hook.
+  const refCallbacks = useMemo(
+    () =>
+      Array.from({ length: count }, (_, index) => (el: HTMLElement | null) => {
+        els.current[index] = el;
+      }),
+    [count],
+  );
 
   useEffect(() => {
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (rafId.current) {
-        cancelAnimationFrame(rafId.current);
-      }
-    };
-  }, [handleScroll]);
+    const observers: IntersectionObserver[] = [];
+    els.current.forEach((el, index) => {
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) visible.current.add(index);
+          else visible.current.delete(index);
+          setProminentIndex(visible.current.size > 0 ? Math.max(...visible.current) : 0);
+        },
+        // A zero-height band at the vertical middle: fires when a slide spans the middle.
+        { rootMargin: '-50% 0px -50% 0px' },
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+    return () => observers.forEach((observer) => observer.disconnect());
+  }, [count]);
 
-  return progress;
+  return { prominentIndex, slideRef: (index: number) => refCallbacks[index] };
 }
 
 /**

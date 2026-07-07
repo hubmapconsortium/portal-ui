@@ -7,19 +7,18 @@ import { ViewMediaWrapper, ViewVizButton } from './styles';
 
 interface ViewMediaProps {
   view: ViewConfig;
-  progress: number;
   isReducedMotion: boolean;
 }
 
 // A non-carousel view's image/webm, with an optional CTA button overlaid on its
 // bottom-right (mirrors the carousel's "View … Visualization" link).
-function ViewMedia({ view, progress, isReducedMotion }: ViewMediaProps) {
+function ViewMedia({ view, isReducedMotion }: ViewMediaProps) {
   const { imageCta } = view;
 
   return (
     <ViewMediaWrapper>
       {view.images.map((image) => (
-        <ParallaxImage key={image.alt} {...image} progress={progress} isReducedMotion={isReducedMotion} />
+        <ParallaxImage key={image.alt} {...image} isReducedMotion={isReducedMotion} />
       ))}
       {imageCta && (
         <ViewVizButton

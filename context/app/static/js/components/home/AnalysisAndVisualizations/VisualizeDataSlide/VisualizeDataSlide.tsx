@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useSpring } from '@react-spring/web';
 
-import { useScrollProgress, usePrefersReducedMotion } from '../hooks';
+import { usePrefersReducedMotion } from '../hooks';
 import { MultiViewSlideConfig } from '../types';
 import { accentColorMap } from '../ParallaxSlide/styles';
 import ViewSelector from './ViewSelector';
@@ -16,14 +16,14 @@ import { VisualizeScrollRunway, VisualizeSlideContent, AnimatedGradientLayer, Sl
 interface VisualizeDataSlideProps {
   config: MultiViewSlideConfig;
   zIndex: number;
+  /** Ref to the sticky content, used to track slide prominence. */
+  stickyRef?: (el: HTMLElement | null) => void;
 }
 
-function VisualizeDataSlide({ config, zIndex }: VisualizeDataSlideProps) {
+function VisualizeDataSlide({ config, zIndex, stickyRef }: VisualizeDataSlideProps) {
   const [activeViewIndex, setActiveViewIndex] = useState(0);
-  const runwayRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
-  const progress = useScrollProgress(runwayRef);
   const isReducedMotion = usePrefersReducedMotion();
 
   const activeView = config.views[activeViewIndex];
@@ -37,8 +37,8 @@ function VisualizeDataSlide({ config, zIndex }: VisualizeDataSlideProps) {
   const { color } = useSpring({ color: targetColor, config: { duration: 400 } });
 
   return (
-    <VisualizeScrollRunway ref={runwayRef} sx={{ zIndex }}>
-      <VisualizeSlideContent role="region" aria-label={config.sectionTitle}>
+    <VisualizeScrollRunway sx={{ zIndex }}>
+      <VisualizeSlideContent ref={stickyRef} role="region" aria-label={config.sectionTitle}>
         <AnimatedGradientLayer
           style={{
             background: color.to((c) => `linear-gradient(135deg, ${c} 0%, ${theme.palette.common.white} 100%)`),
@@ -60,7 +60,6 @@ function VisualizeDataSlide({ config, zIndex }: VisualizeDataSlideProps) {
             activeIndex={activeViewIndex}
             onViewChange={setActiveViewIndex}
             isDesktop={isDesktop}
-            progress={progress}
             isReducedMotion={isReducedMotion}
           />
 
@@ -77,7 +76,7 @@ function VisualizeDataSlide({ config, zIndex }: VisualizeDataSlideProps) {
               {activeView.carousel ? (
                 <VitessceCarousel items={activeView.carousel} />
               ) : (
-                <ViewMedia view={activeView} progress={progress} isReducedMotion={isReducedMotion} />
+                <ViewMedia view={activeView} isReducedMotion={isReducedMotion} />
               )}
             </Box>
           )}

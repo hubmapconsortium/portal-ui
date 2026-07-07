@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import { trackEvent } from 'js/helpers/trackers';
-import { useScrollProgress, usePrefersReducedMotion } from '../hooks';
+import { usePrefersReducedMotion } from '../hooks';
 import { SlideConfig } from '../types';
 import ParallaxImage from '../ParallaxImage';
 import { ScrollRunway, StickySlideContent, GradientBackground, SlideGrid, TextContent, ImageGroup } from './styles';
@@ -13,18 +13,20 @@ import { ScrollRunway, StickySlideContent, GradientBackground, SlideGrid, TextCo
 interface ParallaxSlideProps {
   config: SlideConfig;
   zIndex: number;
+  /** Whether this slide is the prominent one in view (gates video playback). */
+  isProminent?: boolean;
+  /** Ref to the sticky content, used to track slide prominence. */
+  stickyRef?: (el: HTMLElement | null) => void;
 }
 
-function ParallaxSlide({ config, zIndex }: ParallaxSlideProps) {
-  const runwayRef = useRef<HTMLDivElement>(null);
-  const progress = useScrollProgress(runwayRef);
+function ParallaxSlide({ config, zIndex, isProminent = true, stickyRef }: ParallaxSlideProps) {
   const isReducedMotion = usePrefersReducedMotion();
 
   const { theme, icon: Icon, title, description, bulletPoints, ctaButtons, images, layout } = config;
 
   return (
-    <ScrollRunway ref={runwayRef} $zIndex={zIndex}>
-      <StickySlideContent role="region" aria-label={title}>
+    <ScrollRunway $zIndex={zIndex}>
+      <StickySlideContent ref={stickyRef} role="region" aria-label={title}>
         <GradientBackground $theme={theme} />
         <SlideGrid $layout={layout}>
           <TextContent>
@@ -73,7 +75,7 @@ function ParallaxSlide({ config, zIndex }: ParallaxSlideProps) {
           </TextContent>
           <ImageGroup $layout={layout}>
             {images.map((image) => (
-              <ParallaxImage key={image.alt} {...image} progress={progress} isReducedMotion={isReducedMotion} />
+              <ParallaxImage key={image.alt} {...image} isReducedMotion={isReducedMotion} isProminent={isProminent} />
             ))}
           </ImageGroup>
         </SlideGrid>

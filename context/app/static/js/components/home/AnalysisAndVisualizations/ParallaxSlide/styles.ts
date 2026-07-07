@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { ThemeColorKey } from '../types';
 
 // Gradient accent color per theme key. The gradient runs from this color to white.
@@ -40,14 +41,22 @@ export const ScrollRunway = styled(Box)<ScrollRunwayProps>(({ theme, $zIndex }) 
 export const StickySlideContent = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(4, 2),
+  // Own stacking context so the z-index:-1 gradient stays behind THIS slide's content
+  // rather than the page. On desktop `position: sticky` already provides one, but on
+  // mobile there's no sticky, so without this the gradient disappears behind the page.
+  isolation: 'isolate',
 
   [theme.breakpoints.up('md')]: {
     position: 'sticky',
-    top: 0,
-    height: '100vh',
+    // Sit below the sticky header (banner + app bar) and fill the rest of the viewport.
+    top: headerHeight,
+    height: `calc(100vh - ${headerHeight}px)`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    // Promote to a compositor layer so scrolling the stacked sticky slides composites
+    // instead of repainting the full-viewport content each frame.
+    willChange: 'transform',
   },
 }));
 

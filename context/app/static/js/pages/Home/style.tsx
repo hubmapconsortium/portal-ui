@@ -34,6 +34,7 @@ const BottomLowerGrid = styled(Container)(({ theme }) => ({
   gridTemplateAreas: '"research-powered-by-hubmap" "testimonials" "guidelines" "related-tools-and-resources"',
   marginBottom: theme.spacing(5),
   width: '100%',
+  marginTop: theme.spacing(2),
 })) as typeof Container;
 
 const SectionHeaderInternal = styled(Typography)(({ theme }) => ({

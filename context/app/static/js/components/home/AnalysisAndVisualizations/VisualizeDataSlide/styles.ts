@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
+
 /**
  * Outer scroll runway for the visualize slide.
  */
@@ -11,7 +13,10 @@ export const VisualizeScrollRunway = styled(Box)(({ theme }) => ({
   position: 'relative',
 
   [theme.breakpoints.up('md')]: {
-    height: '180vh',
+    // Shorter than the other slides' runways: this is the last slide, so nothing covers
+    // it while pinned. A shorter runway means it only holds briefly before releasing to
+    // the content below, instead of a long stretch of "dead" scrolling.
+    height: '120vh',
     // Overlap the previous slide by one viewport so this slide slides up and covers it
     // (paired with its higher zIndex). Matches ScrollRunway's overlap.
     marginTop: '-100vh',
@@ -25,15 +30,22 @@ export const VisualizeSlideContent = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(4, 2),
   overflow: 'hidden',
+  // Own stacking context so the z-index:-1 gradient stays behind this slide's content
+  // (matches the parallax slides; needed on mobile where there's no sticky positioning).
+  isolation: 'isolate',
 
   [theme.breakpoints.up('md')]: {
     position: 'sticky',
-    top: 0,
-    height: '100vh',
+    // Sit below the sticky header (banner + app bar) and fill the rest of the viewport.
+    top: headerHeight,
+    height: `calc(100vh - ${headerHeight}px)`,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    // Promote to a compositor layer so scrolling the stacked sticky slides composites
+    // instead of repainting the full-viewport content each frame.
+    willChange: 'transform',
   },
 }));
 
