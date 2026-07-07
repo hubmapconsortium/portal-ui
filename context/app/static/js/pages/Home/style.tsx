@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 import Container, { ContainerProps } from '@mui/material/Container';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
@@ -37,6 +38,21 @@ const BottomLowerGrid = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(2),
 })) as typeof Container;
 
+// Full-width, opaque wrapper so the bottom sections scroll up and cover the last parallax
+// slide, matching how the parallax slides cover each other (instead of the last slide
+// holding with dead scroll while nothing covers it).
+const ParallaxCover = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  backgroundColor: theme.palette.background.default,
+
+  [theme.breakpoints.up('md')]: {
+    // Higher zIndex than the slides (which use 1-3) + a one-viewport overlap so it slides
+    // up over the last (pinned) slide.
+    zIndex: 4,
+    marginTop: '-100vh',
+  },
+}));
+
 const SectionHeaderInternal = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1.5),
   display: 'flex',
@@ -62,4 +78,12 @@ const OffsetDatasetsHeader = styled(SectionHeader)({
   scrollMarginTop: `${headerHeight + 10}px`,
 }) as typeof SectionHeader;
 
-export { GridAreaContainer, UpperGrid, UpperLowerGrid, BottomLowerGrid, SectionHeader, OffsetDatasetsHeader };
+export {
+  GridAreaContainer,
+  UpperGrid,
+  UpperLowerGrid,
+  BottomLowerGrid,
+  ParallaxCover,
+  SectionHeader,
+  OffsetDatasetsHeader,
+};

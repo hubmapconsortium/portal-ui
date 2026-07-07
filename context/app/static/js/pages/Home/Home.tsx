@@ -13,7 +13,7 @@ import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 
 import EntityCounts from 'js/components/home/EntityCounts';
 import Hero from 'js/components/home/Hero';
-import { UpperLowerGrid, BottomLowerGrid } from './style';
+import { UpperLowerGrid, BottomLowerGrid, ParallaxCover } from './style';
 import { BiotechRounded, BuildRounded, FormatQuoteRounded, PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -73,22 +73,29 @@ function Home() {
         </UpperLowerGrid>
       )}
       <AnalysisAndVisualizations />
-      <BottomLowerGrid maxWidth="lg">
-        <HomepageSection title="Research Powered by HuBMAP" icon={BiotechRounded} gridArea="research-powered-by-hubmap">
-          <ResearchPoweredByHuBMAP />
-        </HomepageSection>
-        <HomepageSection title="Testimonials" icon={FormatQuoteRounded} gridArea="testimonials" id="testimonials">
-          <Typography variant="body1" color="text.secondary">
-            Coming soon.
-          </Typography>
-        </HomepageSection>
-        <HomepageSection title="Data Use Guidelines" icon={PrivacyTipRounded} gridArea="guidelines">
-          <DataUseGuidelines />
-        </HomepageSection>
-        <HomepageSection title="Related Tools & Resources" icon={BuildRounded} gridArea="related-tools-and-resources">
-          <RelatedToolsAndResources />
-        </HomepageSection>
-      </BottomLowerGrid>
+      {/* Scrolls up over the last parallax slide (see ParallaxCover), continuing the parallax. */}
+      <ParallaxCover>
+        <BottomLowerGrid maxWidth="lg">
+          <HomepageSection
+            title="Research Powered by HuBMAP"
+            icon={BiotechRounded}
+            gridArea="research-powered-by-hubmap"
+          >
+            <ResearchPoweredByHuBMAP />
+          </HomepageSection>
+          <HomepageSection title="Testimonials" icon={FormatQuoteRounded} gridArea="testimonials" id="testimonials">
+            <Typography variant="body1" color="text.secondary">
+              Coming soon.
+            </Typography>
+          </HomepageSection>
+          <HomepageSection title="Data Use Guidelines" icon={PrivacyTipRounded} gridArea="guidelines">
+            <DataUseGuidelines />
+          </HomepageSection>
+          <HomepageSection title="Related Tools & Resources" icon={BuildRounded} gridArea="related-tools-and-resources">
+            <RelatedToolsAndResources />
+          </HomepageSection>
+        </BottomLowerGrid>
+      </ParallaxCover>
     </>
   );
 }

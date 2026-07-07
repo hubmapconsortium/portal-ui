@@ -13,10 +13,10 @@ export const VisualizeScrollRunway = styled(Box)(({ theme }) => ({
   position: 'relative',
 
   [theme.breakpoints.up('md')]: {
-    // Shorter than the other slides' runways: this is the last slide, so nothing covers
-    // it while pinned. A shorter runway means it only holds briefly before releasing to
-    // the content below, instead of a long stretch of "dead" scrolling.
-    height: '120vh',
+    // Same runway as the other slides — the dwell here is no longer "dead" because the
+    // bottom sections (ParallaxCover) scroll up and cover this slide, like the slides
+    // cover each other.
+    height: '180vh',
     // Overlap the previous slide by one viewport so this slide slides up and covers it
     // (paired with its higher zIndex). Matches ScrollRunway's overlap.
     marginTop: '-100vh',
