@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.48.1 - 2026-07-08
+
+- Update portal-visualization to 0.5.6.
+- Update vitessce to 4.0.0.
+
+
+
 ## v1.48.0 - 2026-07-01
 
 - Bumped dependencies to resolve Dependabot alerts: `uuid` (^14), `pytest` (>=9.0.3), `lxml` (>=6.1.0); pnpm overrides for `piscina`, `lodash`, `minimatch`; uv constraints for `aiohttp`, `tornado`, `cryptography`, `pyjwt`, `idna`, `urllib3`, `pillow`.
