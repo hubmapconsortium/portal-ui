@@ -212,7 +212,9 @@ export const ThumbSlide = styled(Box)(({ theme }) => ({
 export const ThumbButton = styled('button')<{ $isActive: boolean }>(({ theme, $isActive }) => ({
   display: 'block',
   width: '100%',
-  padding: 0,
+  // Small inset so the focus ring can sit in a gap around the image + caption.
+  padding: theme.spacing(0.5),
+  borderRadius: Number(theme.shape.borderRadius) * 2,
   cursor: 'pointer',
   textAlign: 'left',
   // Transparent — the caption sits on the slide's background, and the active outline
@@ -226,8 +228,11 @@ export const ThumbButton = styled('button')<{ $isActive: boolean }>(({ theme, $i
     opacity: 1,
   },
   '&:focus-visible': {
+    // Drawn INSET (negative offset) so the ring wraps the image + caption without being
+    // clipped by the carousel viewport's `overflow: hidden` — a non-inset ring gets its
+    // top/bottom edges clipped, leaving only the vertical segments visible.
     outline: `2px solid ${theme.palette.primary.main}`,
-    outlineOffset: 2,
+    outlineOffset: -2,
   },
 }));
 

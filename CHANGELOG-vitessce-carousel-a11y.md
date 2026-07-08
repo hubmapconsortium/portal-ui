@@ -1,0 +1,1 @@
+- Improve the accessibility of the homepage Vitessce visualization carousel with a labeled carousel group, per-slide position labels, descriptive thumbnail labels, and a live region that announces the current slide.

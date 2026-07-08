@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRounded from '@mui/icons-material/ChevronRightRounded';
@@ -24,6 +25,19 @@ interface VitessceCarouselProps {
   items: CarouselItem[];
 }
 
+// Visually-hidden style for the live-region status (mirrors MUI's `visuallyHidden`).
+const srOnly = {
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: '1px',
+  margin: '-1px',
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: '1px',
+} as const;
+
 // Example Vitessce visualizations for the single-cell view: a large selected image
 // (linking to the original visualization) above a scrollable strip of assay/analyte
 // thumbnail previews. Selecting a thumbnail (or the arrows) changes the main image.
@@ -31,6 +45,8 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   // `loop` wraps the preview strip so the first item reappears after the last (and vice versa).
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', dragFree: true, loop: true });
+  // Refs to the thumbnail buttons so arrow-key navigation can move focus (roving tabindex).
+  const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const selected = items[selectedIndex];
 
@@ -51,9 +67,32 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
     [select, selectedIndex, items.length],
   );
 
+  // Arrow keys move between thumbnails (Home/End jump to the ends), moving focus and
+  // selection together so the main image follows.
+  const handleThumbKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const lastIndex = items.length - 1;
+      let nextIndex: number | null = null;
+      if (e.key === 'ArrowRight') nextIndex = selectedIndex === lastIndex ? 0 : selectedIndex + 1;
+      else if (e.key === 'ArrowLeft') nextIndex = selectedIndex === 0 ? lastIndex : selectedIndex - 1;
+      else if (e.key === 'Home') nextIndex = 0;
+      else if (e.key === 'End') nextIndex = lastIndex;
+
+      if (nextIndex === null) return;
+      e.preventDefault();
+      select(nextIndex);
+      thumbRefs.current[nextIndex]?.focus();
+    },
+    [items.length, selectedIndex, select],
+  );
+
   return (
-    <CarouselRoot>
-      <MainImageWrapper>
+    <CarouselRoot role="group" aria-roledescription="carousel" aria-label="Example Vitessce visualizations">
+      <MainImageWrapper
+        role="group"
+        aria-roledescription="slide"
+        aria-label={`${selectedIndex + 1} of ${items.length}`}
+      >
         <MainImage src={selected.src} alt={selected.alt} />
         <CarouselButton $side="left" size="small" onClick={selectPrev} aria-label="Previous visualization">
           <ChevronLeftRounded />
@@ -76,15 +115,24 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
         </ViewVizButton>
       </MainImageWrapper>
 
+      {/* Announce slide changes — including via the arrows, which don't move focus. */}
+      <Box sx={srOnly} role="status">
+        {`Showing ${selectedIndex + 1} of ${items.length}: ${selected.assay}, ${selected.analyte}`}
+      </Box>
+
       <CarouselViewport ref={emblaRef}>
-        <CarouselContainer>
+        <CarouselContainer role="group" aria-label="Select a visualization to view" onKeyDown={handleThumbKeyDown}>
           {items.map((item, index) => (
             <ThumbSlide key={item.src}>
               <ThumbButton
                 type="button"
+                ref={(el: HTMLButtonElement | null) => {
+                  thumbRefs.current[index] = el;
+                }}
+                tabIndex={index === selectedIndex ? 0 : -1}
                 $isActive={index === selectedIndex}
                 onClick={() => select(index)}
-                aria-label={`Show ${item.assay} visualization`}
+                aria-label={`${item.assay}, ${item.analyte}, ${index + 1} of ${items.length}`}
                 aria-pressed={index === selectedIndex}
               >
                 <ThumbImage src={item.src} alt="" $isActive={index === selectedIndex} />
