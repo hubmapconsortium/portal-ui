@@ -1,12 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Typography from '@mui/material/Typography';
-
 import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ResearchPoweredByHuBMAP from 'js/components/home/ResearchPoweredByHuBMAP';
 import AnalysisAndVisualizations from 'js/components/home/AnalysisAndVisualizations';
+import Testimonials from 'js/components/home/Testimonials';
 import { useDownloadImage } from 'js/hooks/useDownloadImage';
 import { trackEvent } from 'js/helpers/trackers';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
@@ -14,7 +13,7 @@ import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import EntityCounts from 'js/components/home/EntityCounts';
 import Hero from 'js/components/home/Hero';
 import { UpperLowerGrid, BottomLowerGrid, ParallaxCover } from './style';
-import { BiotechRounded, BuildRounded, FormatQuoteRounded, PrivacyTipRounded } from '@mui/icons-material';
+import { BiotechRounded, BuildRounded, StarRounded, PrivacyTipRounded } from '@mui/icons-material';
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import HomepageSection from 'js/components/home/HomepageSection';
@@ -84,10 +83,13 @@ function Home() {
           >
             <ResearchPoweredByHuBMAP />
           </HomepageSection>
-          <HomepageSection title="Testimonials" icon={FormatQuoteRounded} gridArea="testimonials" id="testimonials">
-            <Typography variant="body1" color="text.secondary">
-              Coming soon.
-            </Typography>
+          <HomepageSection
+            title="Why Researchers Use the HuBMAP Data Portal"
+            icon={StarRounded}
+            gridArea="testimonials"
+            id="testimonials"
+          >
+            <Testimonials />
           </HomepageSection>
           <HomepageSection title="Data Use Guidelines" icon={PrivacyTipRounded} gridArea="guidelines">
             <DataUseGuidelines />
