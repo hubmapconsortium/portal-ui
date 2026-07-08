@@ -16,6 +16,7 @@
     "@mui/system": "^7.3.11",
     "@mui/x-date-pickers": "^8.28.7",
     "@react-spring/web": "^10.0.3",
+    "@react-three/xr": "^6.0.0",
     "@tanstack/react-virtual": "^3.2.0",
     "@visx/axis": "^3.10.1",
     "@visx/event": "^3.3.0",

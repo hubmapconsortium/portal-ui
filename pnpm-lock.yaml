@@ -65,6 +65,9 @@ importers:
       '@react-spring/web':
         specifier: ^10.0.3
         version: 10.0.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@react-three/xr':
+        specifier: ^6.0.0
+        version: 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       '@tanstack/react-virtual':
         specifier: ^3.2.0
         version: 3.13.24(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -208,7 +211,7 @@ importers:
         version: 7.1.0(vega-lite@6.4.3(vega@6.2.0))(vega@6.2.0)
       vitessce:
         specifier: 4.0.0
-        version: 4.0.0(ceafde3d777e893e91814a2f7ef8ee78)
+        version: 4.0.0(b21f30cde06e0bca19c53938cf41ea22)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -574,6 +577,9 @@ packages:
   '@bramus/specificity@2.4.2':
     resolution: {integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==}
     hasBin: true
+
+  '@bufbuild/protobuf@2.12.1':
+    resolution: {integrity: sha512-BvAMfS6LrgZiryOAZ4pBYucu4wG/Ei/9o9DZ9akbREnMLbPJiom2i8b9C8IsKErQoiKqVhrerzt3kOT/RrzLHg==}
 
   '@choojs/findup@0.2.1':
     resolution: {integrity: sha512-YstAqNb0MCN8PjdLCDfRsBcGVRN41f3vgLvaI0IrIcBp4AqILRSS0DeWNGkicC+f/zRIPJLc+9RURVSepwvfBw==}
@@ -1393,6 +1399,25 @@ packages:
   '@fontsource-variable/jetbrains-mono@5.2.8':
     resolution: {integrity: sha512-WBA9elru6Jdp5df2mES55wuOO0WIrn3kpXnI4+W2ek5u3ZgLS9XS4gmIlcQhiZOWEKl95meYdvK7xI+ETLCq/Q==}
 
+  '@fortawesome/fontawesome-common-types@6.6.0':
+    resolution: {integrity: sha512-xyX0X9mc0kyz9plIyryrRbl7ngsA9jz77mCZJsUkLl+ZKs0KWObgaEBoSgQiYWAsSmjz/yjl0F++Got0Mdp4Rw==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/fontawesome-svg-core@6.6.0':
+    resolution: {integrity: sha512-KHwPkCk6oRT4HADE7smhfsKudt9N/9lm6EJ5BVg0tD1yPA5hht837fB87F8pn15D8JfTqQOjhKTktwmLMiD7Kg==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/free-solid-svg-icons@6.6.0':
+    resolution: {integrity: sha512-IYv/2skhEDFc2WGUcqvFJkeK39Q+HyPf5GHUrT/l2pKbtgEIv1al1TKd6qStR5OIwQdN1GZP54ci3y4mroJWjA==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/react-fontawesome@0.2.2':
+    resolution: {integrity: sha512-EnkrprPNqI6SXJl//m29hpaNzOp1bruISWaOiRtkMi/xSvHJlzc2j2JAYS7egxt/EbjSNV/k6Xy0AQI6vB2+1g==}
+    deprecated: v0.2.x is no longer supported. Unless you are still using FontAwesome 5, please update to v3.1.1 or greater.
+    peerDependencies:
+      '@fortawesome/fontawesome-svg-core': ~1 || ~6
+      react: ^19.2.6
+
   '@hms-dbmi/viv@0.16.1':
     resolution: {integrity: sha512-jHl7pczz4CU2PWALIEirVH7e6vLSG/lJMe2ougi/v45dTHd4LMS1Fo48gqAGfrgJZD1Q6TjWoSFQW5zTKaN05Q==}
 
@@ -1486,6 +1511,16 @@ packages:
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
+
+  '@iwer/devui@1.1.2':
+    resolution: {integrity: sha512-ggF1lXSX14BTYP0QzB4xaurySr2PC+3+rtK/dpCR++giWquzFv2mBw3LW/PaCtdl5mqkZMrQ2GSwfUNg9ZoO+w==}
+    peerDependencies:
+      iwer: ^2.0.1
+
+  '@iwer/sem@0.2.5':
+    resolution: {integrity: sha512-vMCfpu/7Qqc+hkBiGD9pxjeObgrhXOrL0KX94CA3yzJaU0dq0y49HXZT6fC+6X/jOmjaM3hjyE1m2h7ZmLzzyA==}
+    peerDependencies:
+      iwer: ^2.0.0
 
   '@janelia-flyem/neuroglancer@2.37.5':
     resolution: {integrity: sha512-pLLhJBcoXXpQMmpRfyl1QFTHdS6jGDqiMuaW0SQiF8s1daVMa8R5qzOZnMw9afHeqFjp+sLRYUYTnxmqCgTNoA==}
@@ -2417,6 +2452,17 @@ packages:
   '@placemarkio/flat-drop-files@1.0.2':
     resolution: {integrity: sha512-nx9S/59s756N+BSIfuyidaQYYHva2QoWihqgfm6oYcQ8g+26Gg2qbcToROOxxDK4mKgKbOjnw04VsXMKFqqX6w==}
 
+  '@pmndrs/handle@6.6.30':
+    resolution: {integrity: sha512-KPutdaLpCNPZoqXX2HvlRc+cQMETXdHTF0nKqFHMrJrne34apqELRVig53lO469rJhheedsRVepfdyo4g9Rukw==}
+
+  '@pmndrs/pointer-events@6.6.30':
+    resolution: {integrity: sha512-YD2jWdgEqqAWJNOOZ1WZMunUby8jwuQyOMk8zbeqC39R4nkZnGvu1Pa5EMGbV1zd2vZTxXDxYcAVxtQuhVwf3g==}
+
+  '@pmndrs/xr@6.6.30':
+    resolution: {integrity: sha512-qy0UQHaXdZs192awbYkde+O/eKn15fz88X08+7EhlVIdsMfPAORR2JDocTzfYmtz8bKyE4z1JMUUvXb9DyUrzg==}
+    peerDependencies:
+      three: '*'
+
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
@@ -2803,6 +2849,14 @@ packages:
         optional: true
       react-native:
         optional: true
+
+  '@react-three/xr@6.6.30':
+    resolution: {integrity: sha512-C+PYxnDsWvF2WG669DXwlcKnxcy7O+FMhxlaOq75HrRSJRtk4T5iZCv6qak2+8ztcYrip8t79W9E+LSV3P93hA==}
+    peerDependencies:
+      '@react-three/fiber': '>=8'
+      react: ^19.2.6
+      react-dom: ^19.2.6
+      three: '*'
 
   '@react-types/shared@3.34.0':
     resolution: {integrity: sha512-gp6xo/s2lX54AlTjOiqwDnxA7UW79BNvI9dB9pr3LZTzRKCd1ZA+ZbgKw/ReIiWuvvVw/8QFJpnqeeFyLocMcQ==}
@@ -5240,6 +5294,10 @@ packages:
   cartocolor@4.0.2:
     resolution: {integrity: sha512-+Gh9mb6lFxsDOLQlBLPxAHCnWXlg2W8q3AcVwqRcy95TdBbcOU89Wrb6h2Hd/6Ww1Kc1pzXmUdpnWD+xeCG0dg==}
 
+  case-anything@2.1.13:
+    resolution: {integrity: sha512-zlOQ80VrQ2Ue+ymH5OuM/DlDq64mEm+B9UTdHULv5osUMD6HalNTblf2b1u/m6QecjsnOkBpqVZ+XPwIVsy7Ng==}
+    engines: {node: '>=12.13'}
+
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
 
@@ -6214,6 +6272,9 @@ packages:
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
+
+  dprint-node@1.0.8:
+    resolution: {integrity: sha512-iVKnUtYfGrYcW1ZAlfR/F59cUVL8QIhWoBJoSjkkdua/dkWIgjZfiLMeTjiB06X0ZLkQ0M2C1VbUj/CxkIf1zg==}
 
   draco3d@1.5.5:
     resolution: {integrity: sha512-JVuNV0EJzD3LBYhGyIXJLeBID/EVtmFO1ZNhAYflTgiMiAJlbhXQmRRda/azjc8MRVMHh0gqGhiqHUo5dIXM8Q==}
@@ -7831,6 +7892,9 @@ packages:
     resolution: {integrity: sha512-KLViCmWx94zOvpLwSlsx6yOCeMhZYaxrJV87Po5k/FoZzcPSahvK5qJ7fYhS61sZi5ikmh2S3Hz55A2l3U69ng==}
     peerDependencies:
       react: ^19.2.6
+
+  iwer@2.2.1:
+    resolution: {integrity: sha512-TBGgUlOpYsJpYmBCDRrW2KDHC70XZeFrlOwlDNiso+dp83wwRyCLaeN50/qo4JRIKyn08+cD6iaw5+t+D7U+uQ==}
 
   jackspeak@3.4.3:
     resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
@@ -10673,6 +10737,9 @@ packages:
     peerDependencies:
       three: '>=0.128.0'
 
+  three@0.165.0:
+    resolution: {integrity: sha512-cc96IlVYGydeceu0e5xq70H8/yoVT/tXBxV/W8A/U6uOq7DXc4/s1Mkmnu6SqoYGhSRWWYFOhVwvq6V0VtbplA==}
+
   three@0.184.0:
     resolution: {integrity: sha512-wtTRjG92pM5eUg/KuUnHsqSAlPM296brTOcLgMRqEeylYTh/CdtvKUvCyyCQTzFuStieWxvZb8mVTMvdPyUpxg==}
 
@@ -10836,6 +10903,16 @@ packages:
 
   ts-morph@26.0.0:
     resolution: {integrity: sha512-ztMO++owQnz8c/gIENcM9XfCEzgoGphTv+nKpYNM1bgsdOVC/jRZuEBf6N+mLLDNg68Kl+GgUZfOySaRiG1/Ug==}
+
+  ts-poet@6.12.0:
+    resolution: {integrity: sha512-xo+iRNMWqyvXpFTaOAvLPA5QAWO6TZrSUs5s4Odaya3epqofBu/fMLHEWl8jPmjhA0s9sgj9sNvF1BmaQlmQkA==}
+
+  ts-proto-descriptors@2.1.0:
+    resolution: {integrity: sha512-S5EZYEQ6L9KLFfjSRpZWDIXDV/W7tAj8uW7pLsihIxyr62EAVSiKuVPwE8iWnr849Bqa53enex1jhDUcpgquzA==}
+
+  ts-proto@2.12.0:
+    resolution: {integrity: sha512-ezMxg57ZiK/ZTW14U7y38+qyWHJr8cn8ELKuppANER666YnUteuNFO/mM1qI+9/wAHoTAfRadnIwtVdp1xw0jQ==}
+    hasBin: true
 
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
@@ -11628,6 +11705,9 @@ packages:
       webpack-cli:
         optional: true
 
+  webxr-layers-polyfill@1.1.0:
+    resolution: {integrity: sha512-GqWE6IFlut8a1Lnh9t1RPnOXud1rZ7wLPvWp7mqTDOYtgorXqlNMhEnI9EqjU33grBx0v3jm0Oc13opkAdmgMQ==}
+
   whatwg-encoding@1.0.5:
     resolution: {integrity: sha512-b5lim54JOPN9HtzvK9HFXvBma/rnfFeqsic0hSpjtDbVxR3dJKLc+KB4V6GgiGOvl7CY/KNh8rxSo9DKQrnUEw==}
     deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
@@ -12178,6 +12258,8 @@ snapshots:
   '@bramus/specificity@2.4.2':
     dependencies:
       css-tree: 3.2.1
+
+  '@bufbuild/protobuf@2.12.1': {}
 
   '@choojs/findup@0.2.1':
     dependencies:
@@ -12924,6 +13006,22 @@ snapshots:
 
   '@fontsource-variable/jetbrains-mono@5.2.8': {}
 
+  '@fortawesome/fontawesome-common-types@6.6.0': {}
+
+  '@fortawesome/fontawesome-svg-core@6.6.0':
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.6.0
+
+  '@fortawesome/free-solid-svg-icons@6.6.0':
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.6.0
+
+  '@fortawesome/react-fontawesome@0.2.2(@fortawesome/fontawesome-svg-core@6.6.0)(react@19.2.6)':
+    dependencies:
+      '@fortawesome/fontawesome-svg-core': 6.6.0
+      prop-types: 15.8.1
+      react: 19.2.6
+
   '@hms-dbmi/viv@0.16.1(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)':
     dependencies:
       '@vivjs/constants': 0.16.1
@@ -13028,6 +13126,30 @@ snapshots:
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
+
+  '@iwer/devui@1.1.2(@types/react@19.2.15)(immer@10.2.0)(iwer@2.2.1)':
+    dependencies:
+      '@fortawesome/fontawesome-svg-core': 6.6.0
+      '@fortawesome/free-solid-svg-icons': 6.6.0
+      '@fortawesome/react-fontawesome': 0.2.2(@fortawesome/fontawesome-svg-core@6.6.0)(react@19.2.6)
+      '@pmndrs/handle': 6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+      '@pmndrs/pointer-events': 6.6.30
+      iwer: 2.2.1
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      styled-components: 6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      three: 0.165.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - css-to-react-native
+      - immer
+      - react-native
+
+  '@iwer/sem@0.2.5(iwer@2.2.1)':
+    dependencies:
+      iwer: 2.2.1
+      three: 0.165.0
+      ts-proto: 2.12.0
 
   '@janelia-flyem/neuroglancer@2.37.5':
     dependencies:
@@ -14088,6 +14210,33 @@ snapshots:
 
   '@placemarkio/flat-drop-files@1.0.2': {}
 
+  '@pmndrs/handle@6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)':
+    dependencies:
+      '@pmndrs/pointer-events': 6.6.30
+      zustand: 4.5.7(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+      - react
+
+  '@pmndrs/pointer-events@6.6.30': {}
+
+  '@pmndrs/xr@6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)(three@0.184.0)':
+    dependencies:
+      '@iwer/devui': 1.1.2(@types/react@19.2.15)(immer@10.2.0)(iwer@2.2.1)
+      '@iwer/sem': 0.2.5(iwer@2.2.1)
+      '@pmndrs/pointer-events': 6.6.30
+      iwer: 2.2.1
+      meshline: 3.3.1(three@0.184.0)
+      three: 0.184.0
+      zustand: 4.5.7(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+    transitivePeerDependencies:
+      - '@types/react'
+      - css-to-react-native
+      - immer
+      - react
+      - react-native
+
   '@polka/url@1.0.0-next.29': {}
 
   '@popperjs/core@2.11.8': {}
@@ -14481,6 +14630,23 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - immer
+
+  '@react-three/xr@6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)':
+    dependencies:
+      '@pmndrs/pointer-events': 6.6.30
+      '@pmndrs/xr': 6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)(three@0.184.0)
+      '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      suspend-react: 0.1.3(react@19.2.6)
+      three: 0.184.0
+      tunnel-rat: 0.1.2(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+      zustand: 4.5.7(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+    transitivePeerDependencies:
+      - '@types/react'
+      - css-to-react-native
+      - immer
+      - react-native
 
   '@react-types/shared@3.34.0(react@19.2.6)':
     dependencies:
@@ -16218,7 +16384,7 @@ snapshots:
     dependencies:
       '@vitessce/globals': 4.0.0
 
-  '@vitessce/all@4.0.0(ceafde3d777e893e91814a2f7ef8ee78)':
+  '@vitessce/all@4.0.0(b21f30cde06e0bca19c53938cf41ea22)':
     dependencies:
       '@vitessce/abstract': 4.0.0
       '@vitessce/biomarker-select': 4.0.0(912341db4d8234a5448d466bcfe7a3ea)
@@ -16244,8 +16410,8 @@ snapshots:
       '@vitessce/schemas': 4.0.0
       '@vitessce/spatial': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
       '@vitessce/spatial-accelerated': 4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-beta': 4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-three': 4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)
+      '@vitessce/spatial-beta': 4.0.0(c32044757a1279d7e5cc62ea476be4a6)
+      '@vitessce/spatial-three': 4.0.0(c32044757a1279d7e5cc62ea476be4a6)
       '@vitessce/spatial-zarr': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
       '@vitessce/statistical-plots': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
       '@vitessce/status': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
@@ -16257,6 +16423,7 @@ snapshots:
     optionalDependencies:
       '@react-three/drei': 10.7.7(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(@types/three@0.184.1)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      '@react-three/xr': 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       three: 0.184.0
     transitivePeerDependencies:
       - '@deck.gl/core'
@@ -17089,7 +17256,7 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/spatial-beta@4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)':
+  '@vitessce/spatial-beta@4.0.0(c32044757a1279d7e5cc62ea476be4a6)':
     dependencies:
       '@vitessce/constants-internal': 4.0.0
       '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -17098,7 +17265,7 @@ snapshots:
       '@vitessce/scatterplot': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@vitessce/sets-utils': 4.0.0
       '@vitessce/spatial-accelerated': 4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-three': 4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)
+      '@vitessce/spatial-three': 4.0.0(c32044757a1279d7e5cc62ea476be4a6)
       '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
@@ -17135,7 +17302,7 @@ snapshots:
       - three
       - use-sync-external-store
 
-  '@vitessce/spatial-three@4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)':
+  '@vitessce/spatial-three@4.0.0(c32044757a1279d7e5cc62ea476be4a6)':
     dependencies:
       '@react-three/drei': 10.7.7(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(@types/three@0.184.1)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
@@ -17156,6 +17323,8 @@ snapshots:
       react: 19.2.6
       short-number: 1.0.7
       three: 0.184.0
+    optionalDependencies:
+      '@react-three/xr': 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
     transitivePeerDependencies:
       - '@deck.gl/core'
       - '@deck.gl/geo-layers'
@@ -18480,6 +18649,8 @@ snapshots:
     dependencies:
       colorbrewer: 1.0.0
 
+  case-anything@2.1.13: {}
+
   caseless@0.12.0: {}
 
   ccount@2.0.1: {}
@@ -19555,6 +19726,10 @@ snapshots:
       tslib: 2.8.1
 
   dotenv@17.4.2: {}
+
+  dprint-node@1.0.8:
+    dependencies:
+      detect-libc: 1.0.3
 
   draco3d@1.5.5: {}
 
@@ -21594,6 +21769,11 @@ snapshots:
       react: 19.2.6
     transitivePeerDependencies:
       - '@types/react'
+
+  iwer@2.2.1:
+    dependencies:
+      gl-matrix: 3.4.4
+      webxr-layers-polyfill: 1.1.0
 
   jackspeak@3.4.3:
     dependencies:
@@ -25095,6 +25275,8 @@ snapshots:
       potpack: 1.0.2
       three: 0.184.0
 
+  three@0.165.0: {}
+
   three@0.184.0: {}
 
   throttleit@1.0.1: {}
@@ -25231,6 +25413,21 @@ snapshots:
     dependencies:
       '@ts-morph/common': 0.27.0
       code-block-writer: 13.0.3
+
+  ts-poet@6.12.0:
+    dependencies:
+      dprint-node: 1.0.8
+
+  ts-proto-descriptors@2.1.0:
+    dependencies:
+      '@bufbuild/protobuf': 2.12.1
+
+  ts-proto@2.12.0:
+    dependencies:
+      '@bufbuild/protobuf': 2.12.1
+      case-anything: 2.1.13
+      ts-poet: 6.12.0
+      ts-proto-descriptors: 2.1.0
 
   tsconfig-paths@3.15.0:
     dependencies:
@@ -26246,10 +26443,10 @@ snapshots:
       terser: 5.48.0
       yaml: 2.9.0
 
-  vitessce@4.0.0(ceafde3d777e893e91814a2f7ef8ee78):
+  vitessce@4.0.0(b21f30cde06e0bca19c53938cf41ea22):
     dependencies:
       '@vitessce/abstract': 4.0.0
-      '@vitessce/all': 4.0.0(ceafde3d777e893e91814a2f7ef8ee78)
+      '@vitessce/all': 4.0.0(b21f30cde06e0bca19c53938cf41ea22)
       '@vitessce/config': 4.0.0
       '@vitessce/constants': 4.0.0
       '@vitessce/error': 4.0.0(react@19.2.6)
@@ -26259,6 +26456,7 @@ snapshots:
     optionalDependencies:
       '@react-three/drei': 10.7.7(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(@types/three@0.184.1)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      '@react-three/xr': 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       three: 0.184.0
     transitivePeerDependencies:
       - '@deck.gl/core'
@@ -26409,6 +26607,10 @@ snapshots:
       - lightningcss
       - postcss
       - uglify-js
+
+  webxr-layers-polyfill@1.1.0:
+    dependencies:
+      gl-matrix: 3.4.4
 
   whatwg-encoding@1.0.5:
     dependencies:
