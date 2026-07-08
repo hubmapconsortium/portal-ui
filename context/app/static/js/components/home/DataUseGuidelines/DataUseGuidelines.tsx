@@ -3,15 +3,21 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import HomepageOutboundLink from 'js/components/home/HomepageOutboundLink';
 import { StyledPaper, StyledTypography } from './style';
 
-const paragraphs = [
+interface Paragraph {
+  key: string;
+  component: React.ReactNode;
+  mt?: number;
+}
+
+const paragraphs: Paragraph[] = [
   {
     key: 'intro',
     component: (
       <>
-        The HuBMAP Data Portal allows access to both open and restricted access data and will be guided by the rules set
-        by existing NIH GDH Policy and other applicable laws. There may be both controlled and uncontrolled access data
-        available through the Data Portal. Permission to access controlled data will be reviewed and granted by a
-        designated NIH Data Access Committee.
+        The HuBMAP Data Portal provides access to both open and restricted-access data, governed by existing NIH Genomic
+        Data Sharing (GDS) Policy and other applicable laws. Both controlled- and open-access data may be available
+        through the Data Portal. Access to controlled data requires review and approval by a designated NIH Data Access
+        Committee.
       </>
     ),
   },
@@ -20,9 +26,9 @@ const paragraphs = [
     key: 'users',
     component: (
       <>
-        Users of HuBMAP open-data or processed data agree not to use the requested datasets, either alone or in concert
-        with any other information, to identify or contact individual participants (or family members) from whom data
-        and/or samples were collected.
+        Users of HuBMAP open or processed data agree not to use the requested datasets, alone or in combination with any
+        other information, to identify or contact individual participants (or their family members) from whom the data
+        or samples were collected.
       </>
     ),
   },
@@ -33,25 +39,40 @@ const paragraphs = [
       <>
         All published HuBMAP data is licensed under a{' '}
         <HomepageOutboundLink href="https://creativecommons.org/licenses/by/4.0/">
-          Creative Commons Attribution 4.0 International License (CC BY 4.0).
+          Creative Commons Attribution 4.0 International License (CC BY 4.0)
         </HomepageOutboundLink>{' '}
-        Data is also governed by the{' '}
+        and is further governed by the{' '}
         <HomepageOutboundLink href="https://hubmapconsortium.org/policies/external-data-sharing-policy/">
           External Data Sharing Policy
         </HomepageOutboundLink>
-        .
+        . HuBMAP data is managed and published in the Data Portal and Human Reference Atlas in accordance with FAIR
+        Principles, including standardized processing through reproducible pipelines; HuBMAP data may also be processed
+        using other methods in scientific results published by HuBMAP consortium collaborations.
       </>
     ),
   },
 
   {
-    key: 'fair-principles',
+    key: 'cite-heading',
+    component: <strong>How to cite?</strong>,
+  },
+  {
+    key: 'cite',
+    mt: 0.5,
     component: (
       <>
-        HuBMAP data is managed and published in the Data Portal and Human Reference Atlas according to{' '}
-        <HomepageOutboundLink href="https://www.go-fair.org/fair-principles/">FAIR Principles</HomepageOutboundLink>,
-        including standardized processing with reproducible pipelines. HuBMAP data may also be processed by other
-        methods in scientific results published by HuBMAP consortium collaborations.
+        Please cite the{' '}
+        <HomepageOutboundLink href="https://arxiv.org/abs/2511.05708">HuBMAP Data Portal paper</HomepageOutboundLink>{' '}
+        (preprint:{' '}
+        <HomepageOutboundLink href="https://doi.org/10.48550/arXiv.2511.05708">
+          https://doi.org/10.48550/arXiv.2511.05708
+        </HomepageOutboundLink>
+        ) when HuBMAP data were used in the study, portal tools were used in methods or analysis, or the portal is used
+        as a data repository per journal requirements. See our{' '}
+        <HomepageOutboundLink href="https://hubmapconsortium.org/acknowledgement-in-publications/">
+          citation guidance
+        </HomepageOutboundLink>{' '}
+        for full details.
       </>
     ),
   },
@@ -68,8 +89,8 @@ const paragraphs = [
 function DataUseGuidelines() {
   return (
     <StyledPaper>
-      {paragraphs.map(({ key, component }, i) => (
-        <StyledTypography key={key} $mt={i === 0 ? 1 : 2}>
+      {paragraphs.map(({ key, component, mt }, i) => (
+        <StyledTypography key={key} $mt={mt ?? (i === 0 ? 1 : 2)}>
           {component}
         </StyledTypography>
       ))}

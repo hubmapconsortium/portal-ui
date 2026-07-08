@@ -1,0 +1,2 @@
+- Update the homepage Data Use Guidelines language, including a new "How to cite?" section referencing the HuBMAP Data Portal paper.
+- Update the acknowledgement/citation language in the bulk data transfer Data Use Agreement dialog to reference the HuBMAP Data Portal paper.
