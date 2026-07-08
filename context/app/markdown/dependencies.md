@@ -15,7 +15,7 @@ globus-sdk>=3.59.0
 gunicorn>=23.0.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
-portal-visualization[full]>=0.5.5
+portal-visualization[full]>=0.5.6
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
@@ -49,6 +49,7 @@ ruff>=0.14.0
 "@mui/system": "^7.3.11",
 "@mui/x-date-pickers": "^8.28.7",
 "@react-spring/web": "^10.0.3",
+"@react-three/xr": "^6.0.0",
 "@tanstack/react-virtual": "^3.2.0",
 "@visx/axis": "^3.10.1",
 "@visx/event": "^3.3.0",
@@ -96,7 +97,7 @@ ruff>=0.14.0
 "uuid": "^14.0.0",
 "vega": "^6.2.0",
 "vega-embed": "^7.1.0",
-"vitessce": "4.0.0-test.3",
+"vitessce": "4.0.0",
 "zod": "^3.25.76",
 "zustand": "^5.0.13"
 }
