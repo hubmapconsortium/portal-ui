@@ -52,7 +52,7 @@ importers:
         version: 7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@mui/styled-engine':
         specifier: npm:@mui/styled-engine-sc@latest
-        version: '@mui/styled-engine-sc@9.0.1(@types/react@19.2.15)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))'
+        version: '@mui/styled-engine-sc@9.1.1(@types/react@19.2.15)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))'
       '@mui/styled-engine-sc':
         specifier: ^7.3.10
         version: 7.3.10(@types/react@19.2.15)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))
@@ -65,6 +65,9 @@ importers:
       '@react-spring/web':
         specifier: ^10.0.3
         version: 10.0.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@react-three/xr':
+        specifier: ^6.0.0
+        version: 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       '@tanstack/react-virtual':
         specifier: ^3.2.0
         version: 3.13.24(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -207,8 +210,8 @@ importers:
         specifier: ^7.1.0
         version: 7.1.0(vega-lite@6.4.3(vega@6.2.0))(vega@6.2.0)
       vitessce:
-        specifier: 4.0.0-test.3
-        version: 4.0.0-test.3(ceafde3d777e893e91814a2f7ef8ee78)
+        specifier: 4.0.0
+        version: 4.0.0(b21f30cde06e0bca19c53938cf41ea22)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -574,6 +577,9 @@ packages:
   '@bramus/specificity@2.4.2':
     resolution: {integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==}
     hasBin: true
+
+  '@bufbuild/protobuf@2.12.1':
+    resolution: {integrity: sha512-BvAMfS6LrgZiryOAZ4pBYucu4wG/Ei/9o9DZ9akbREnMLbPJiom2i8b9C8IsKErQoiKqVhrerzt3kOT/RrzLHg==}
 
   '@choojs/findup@0.2.1':
     resolution: {integrity: sha512-YstAqNb0MCN8PjdLCDfRsBcGVRN41f3vgLvaI0IrIcBp4AqILRSS0DeWNGkicC+f/zRIPJLc+9RURVSepwvfBw==}
@@ -1393,6 +1399,25 @@ packages:
   '@fontsource-variable/jetbrains-mono@5.2.8':
     resolution: {integrity: sha512-WBA9elru6Jdp5df2mES55wuOO0WIrn3kpXnI4+W2ek5u3ZgLS9XS4gmIlcQhiZOWEKl95meYdvK7xI+ETLCq/Q==}
 
+  '@fortawesome/fontawesome-common-types@6.6.0':
+    resolution: {integrity: sha512-xyX0X9mc0kyz9plIyryrRbl7ngsA9jz77mCZJsUkLl+ZKs0KWObgaEBoSgQiYWAsSmjz/yjl0F++Got0Mdp4Rw==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/fontawesome-svg-core@6.6.0':
+    resolution: {integrity: sha512-KHwPkCk6oRT4HADE7smhfsKudt9N/9lm6EJ5BVg0tD1yPA5hht837fB87F8pn15D8JfTqQOjhKTktwmLMiD7Kg==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/free-solid-svg-icons@6.6.0':
+    resolution: {integrity: sha512-IYv/2skhEDFc2WGUcqvFJkeK39Q+HyPf5GHUrT/l2pKbtgEIv1al1TKd6qStR5OIwQdN1GZP54ci3y4mroJWjA==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/react-fontawesome@0.2.2':
+    resolution: {integrity: sha512-EnkrprPNqI6SXJl//m29hpaNzOp1bruISWaOiRtkMi/xSvHJlzc2j2JAYS7egxt/EbjSNV/k6Xy0AQI6vB2+1g==}
+    deprecated: v0.2.x is no longer supported. Unless you are still using FontAwesome 5, please update to v3.1.1 or greater.
+    peerDependencies:
+      '@fortawesome/fontawesome-svg-core': ~1 || ~6
+      react: ^19.2.6
+
   '@hms-dbmi/viv@0.16.1':
     resolution: {integrity: sha512-jHl7pczz4CU2PWALIEirVH7e6vLSG/lJMe2ougi/v45dTHd4LMS1Fo48gqAGfrgJZD1Q6TjWoSFQW5zTKaN05Q==}
 
@@ -1486,6 +1511,16 @@ packages:
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
+
+  '@iwer/devui@1.1.2':
+    resolution: {integrity: sha512-ggF1lXSX14BTYP0QzB4xaurySr2PC+3+rtK/dpCR++giWquzFv2mBw3LW/PaCtdl5mqkZMrQ2GSwfUNg9ZoO+w==}
+    peerDependencies:
+      iwer: ^2.0.1
+
+  '@iwer/sem@0.2.5':
+    resolution: {integrity: sha512-vMCfpu/7Qqc+hkBiGD9pxjeObgrhXOrL0KX94CA3yzJaU0dq0y49HXZT6fC+6X/jOmjaM3hjyE1m2h7ZmLzzyA==}
+    peerDependencies:
+      iwer: ^2.0.0
 
   '@janelia-flyem/neuroglancer@2.37.5':
     resolution: {integrity: sha512-pLLhJBcoXXpQMmpRfyl1QFTHdS6jGDqiMuaW0SQiF8s1daVMa8R5qzOZnMw9afHeqFjp+sLRYUYTnxmqCgTNoA==}
@@ -1796,8 +1831,8 @@ packages:
     peerDependencies:
       styled-components: ^6.0.0
 
-  '@mui/styled-engine-sc@9.0.1':
-    resolution: {integrity: sha512-v2gPwdxbdRLtS2Vg56YfD5UXYqen6hpWK+QOpa/TTG1t6tAsu2HnYljWOSfW5/3Pf+69oZxpCa6EnmU4CES3Jg==}
+  '@mui/styled-engine-sc@9.1.1':
+    resolution: {integrity: sha512-exYYEpBelwi/cDFqOKCzbVOHbROFXnUdffCeiU9hZMaTGXxQocQmYgtiXUG8raOJUzGMpV73qjzZg1+5xr/G/w==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       styled-components: ^6.0.0
@@ -2417,6 +2452,17 @@ packages:
   '@placemarkio/flat-drop-files@1.0.2':
     resolution: {integrity: sha512-nx9S/59s756N+BSIfuyidaQYYHva2QoWihqgfm6oYcQ8g+26Gg2qbcToROOxxDK4mKgKbOjnw04VsXMKFqqX6w==}
 
+  '@pmndrs/handle@6.6.30':
+    resolution: {integrity: sha512-KPutdaLpCNPZoqXX2HvlRc+cQMETXdHTF0nKqFHMrJrne34apqELRVig53lO469rJhheedsRVepfdyo4g9Rukw==}
+
+  '@pmndrs/pointer-events@6.6.30':
+    resolution: {integrity: sha512-YD2jWdgEqqAWJNOOZ1WZMunUby8jwuQyOMk8zbeqC39R4nkZnGvu1Pa5EMGbV1zd2vZTxXDxYcAVxtQuhVwf3g==}
+
+  '@pmndrs/xr@6.6.30':
+    resolution: {integrity: sha512-qy0UQHaXdZs192awbYkde+O/eKn15fz88X08+7EhlVIdsMfPAORR2JDocTzfYmtz8bKyE4z1JMUUvXb9DyUrzg==}
+    peerDependencies:
+      three: '*'
+
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
@@ -2803,6 +2849,14 @@ packages:
         optional: true
       react-native:
         optional: true
+
+  '@react-three/xr@6.6.30':
+    resolution: {integrity: sha512-C+PYxnDsWvF2WG669DXwlcKnxcy7O+FMhxlaOq75HrRSJRtk4T5iZCv6qak2+8ztcYrip8t79W9E+LSV3P93hA==}
+    peerDependencies:
+      '@react-three/fiber': '>=8'
+      react: ^19.2.6
+      react-dom: ^19.2.6
+      three: '*'
 
   '@react-types/shared@3.34.0':
     resolution: {integrity: sha512-gp6xo/s2lX54AlTjOiqwDnxA7UW79BNvI9dB9pr3LZTzRKCd1ZA+ZbgKw/ReIiWuvvVw/8QFJpnqeeFyLocMcQ==}
@@ -4238,11 +4292,11 @@ packages:
   '@vitessce/abstract@3.9.9':
     resolution: {integrity: sha512-l4wz/GyEF0nf1/D2Jjp5V26SMXYBl2mRCWwCZGdtPj8l8JrwG5ZHzBntHnff7syIpDEaCnrlJKbS2dSAq0wtxA==}
 
-  '@vitessce/abstract@4.0.0-test.3':
-    resolution: {integrity: sha512-AtP9xx6vOWgYSOGMB5gEp1LKpZM+TjO3lGIy5nJGG+ynfEGz6qPn8/qLmiTLoTgWZVPw+q5RrGzhpp36VywUKA==}
+  '@vitessce/abstract@4.0.0':
+    resolution: {integrity: sha512-CbfK4e+nv5MYFvDGcn8CHX7ObyAkT14p1zgOkuCVn6MRhFGhYY6eW6Msn41Wf3lWiKnmaVWrdbYcppO1Xz9Mpg==}
 
-  '@vitessce/all@4.0.0-test.3':
-    resolution: {integrity: sha512-4Stl3SPYkJj/riCMBHfebY5mHPCFThsl88J9O3tJktmYOr8XQi4kdpSz7uqSfg/EJuzggML6WDs3YiT4zeN9nQ==}
+  '@vitessce/all@4.0.0':
+    resolution: {integrity: sha512-hhjYvpeP+6A2QzK4MJrQHSik449leYVftRrq63sAxFfIfx8glhfTvx5EhY80HJtAeRcQLyWh6MXR1ue+l0HmNg==}
     peerDependencies:
       '@react-three/drei': ^9.0.0 || ^10.0.0
       '@react-three/fiber': ^8.0.0 || ^9.0.0
@@ -4259,34 +4313,34 @@ packages:
       three:
         optional: true
 
-  '@vitessce/biomarker-select@4.0.0-test.3':
-    resolution: {integrity: sha512-gN2DjguKxFmRjg2AUr8sdIx8c16WTgXucQ3fcq7gntgiLy17BCGsmyJg12lkVSe7E3BViEpjrFaaSUkR5cI86Q==}
+  '@vitessce/biomarker-select@4.0.0':
+    resolution: {integrity: sha512-IQARSlBQHr0fG9EINIeFTUHM+UcPmFd3fvgd9eUtlKh36HNiHCRX89ldoq9P440IGaI5W8lQJwwLI/SlC8gIaQ==}
     peerDependencies:
       react: ^19.2.6
 
   '@vitessce/config@3.9.9':
     resolution: {integrity: sha512-MrtgFVChrrz1x8FR9sXV3WGbq0cI3u+v+rTsdlFJeMgaMcqhQ45ZIUnvW/zrjF7C4HwnuDKMhufJnWl2pwN/kA==}
 
-  '@vitessce/config@4.0.0-test.3':
-    resolution: {integrity: sha512-6qgLUJHiCeEc3y3y7+71pEKqoltiIh7IzvXk2oNzNazt3YxxRQSEf1ab9zjM810yZ5fOWQpOtECvlbsoFJ3j9A==}
+  '@vitessce/config@4.0.0':
+    resolution: {integrity: sha512-ekE4Vz/dAu5FxKiDsYMA92fv0C1vFaK9greXT1/zCKwHz5a6hLQNZdKB5R8TFIXS6cppDVMWFpuHsyZbBDAm7A==}
 
   '@vitessce/constants-internal@3.9.9':
     resolution: {integrity: sha512-ZUbl7Zgu3++1/IFTsoggj+epFKMNsS3Eb6v85YIitFkieGU60Ei8tEEKIpjT8AHmuvUWWtk6U/hHZRSY50RAWw==}
 
-  '@vitessce/constants-internal@4.0.0-test.3':
-    resolution: {integrity: sha512-8PAxlAAbE3RA4dPrywabYJ67rEN97NHxLe3GjgGqm8ENUOOy6ueVyzeOwhpbdg5qDdnJbHVK+kfbntGg+cuxMg==}
+  '@vitessce/constants-internal@4.0.0':
+    resolution: {integrity: sha512-LfiRjB+b/aosaa9Gvhm2mmJNWvtAngAmlnH26kLnDgUcoiahz6Rvdshim+VYR1LATiVf9qoBCFMoiYzu2tGf7g==}
 
   '@vitessce/constants@3.9.9':
     resolution: {integrity: sha512-0aDp4Giy1I/Id4kcy9X9MHDXQ3+ZKQWNOnLKcX4Ugjup0r21pQbapsz/MY3Jox+NS4gdyjFxgC+YKR6jNRREzA==}
 
-  '@vitessce/constants@4.0.0-test.3':
-    resolution: {integrity: sha512-4pnXQ7eBI5vr6PJGoWwUxGrIUtW/TJS0qPxNyIndwJRkfTPHI8GX4aVC+69G/Wam2Fm9vf6CpRgkPYsXwxNCeA==}
+  '@vitessce/constants@4.0.0':
+    resolution: {integrity: sha512-Qqi54zp9fnmvJdnS2A3aYnd0/5089BL5ipPzfEPhnxzxVd+/eu69UBKahgMcVwocivBOIr9bSI8R4Vqd5VsUaw==}
 
-  '@vitessce/csv@4.0.0-test.3':
-    resolution: {integrity: sha512-M2giccPRAbuEwPvqMPRqbcHiB+J9dlrjT0ApwsQH3PWSMgq4ppG0sf8BRzNXZagMdiw3R8hc2WfR24r6+fwd2w==}
+  '@vitessce/csv@4.0.0':
+    resolution: {integrity: sha512-a5mw6J/0vMHeLFUl4SwRSaW9VtKcAoGFvUc+P0iGfeNeMl+SctP5Bz+MdYsjdEdVFuE1zSB9eEkUUgzAgrZ38A==}
 
-  '@vitessce/description@4.0.0-test.3':
-    resolution: {integrity: sha512-ln4DHxyo1LB+Gt+dCIgGT4zqRfz++Ae+iBi8nvaWoEKR0ty1f25kARLK4CNtvojGUTQmqNLTQZsf+D6k2zEk7Q==}
+  '@vitessce/description@4.0.0':
+    resolution: {integrity: sha512-f8hOGdTOLCbpM1n7DcfwLvzJ+rI4OLVJvzyvOe65mU9shoDxkSEotGz+XamquYVscIEOi9U6el0HC1J7UJzYZQ==}
     peerDependencies:
       react: ^19.2.6
 
@@ -4295,21 +4349,21 @@ packages:
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/error@4.0.0-test.3':
-    resolution: {integrity: sha512-qrRaEz8pkTuEtOnpNxtJ+lGMQsengy4tjkbCceYBOw4ejt6338sNJ2YuqMhExENUCU9j29oouRzGf7gsggNJBA==}
+  '@vitessce/error@4.0.0':
+    resolution: {integrity: sha512-RlwJVKk15iX4Ln8+/hU27OWyO1kzQYS01eAKU34dBglBfJqUYIijLmAzMZDDRNJ2yZCttVjyE2DGPSDKf0bheg==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/export-utils@4.0.0-test.3':
-    resolution: {integrity: sha512-RH45z/04/mZZrdab1T88LJvFGYi+NkTcktFYOS696LoZP78RxTRYyJm2ATg5tRl63Qa9hQbNPd9JRu8j2FhMlA==}
+  '@vitessce/export-utils@4.0.0':
+    resolution: {integrity: sha512-ATNoyQzA0MC099AgloBxd7Rh9j/1Pm2oiJr72LbjwtFgGNUi1k1WrEvSjMc/P4MUp4UnaoQsRjAtFXhXUoqbwQ==}
 
-  '@vitessce/feature-list@4.0.0-test.3':
-    resolution: {integrity: sha512-3u+icGw4kGiXhgd6LCeIQMYOBox+d8ueqCEMmQ5Dfp9V/L4Czb3XOGn1AGYiUbuodZ9KonaNU033HxvnJVfKwg==}
+  '@vitessce/feature-list@4.0.0':
+    resolution: {integrity: sha512-68yDSzeYBL1P7o151ZFN27IGYNM4GfUDIVv/IDUjXv6IkCPccOCnz2yvvnPmpR2rIi/8iAO+e0W76ydLfcsWGQ==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/genomic-profiles@4.0.0-test.3':
-    resolution: {integrity: sha512-387boCu6aMAJcxwPn2wFYi1+SypsN0ecmQE5DLscajrN7hYK5VNOH9xeSdlX5C76FeTlu+C7VXO2JMAQGZutHg==}
+  '@vitessce/genomic-profiles@4.0.0':
+    resolution: {integrity: sha512-etUifplnJynmqBcEL+bPJvM/4EVsylOzG+86ER138bWCImoSFMqMDz6eaoXkweyGFc2u9vNP3I58QfJ2gSCpZw==}
     peerDependencies:
       react: ^19.2.6
       react-dom: ^19.2.6
@@ -4317,11 +4371,11 @@ packages:
   '@vitessce/gl@3.9.9':
     resolution: {integrity: sha512-R5ghJssuzokFIKzX8hzFPhNVddVKRO2Lb9ynELOGn6PcM/afY1uUDN623skNF5oeDnA5o9d2EHvle8X3DjgJkQ==}
 
-  '@vitessce/gl@4.0.0-test.3':
-    resolution: {integrity: sha512-h+0uUzP9TaV5hTRGfGJ6pwx4rG3k+20Uv6iPhc6/doaSR8VuO9HaVPBtpASFL+zCl9pijbRpMDVumMkKjVcxWA==}
+  '@vitessce/gl@4.0.0':
+    resolution: {integrity: sha512-J9qJeFDxLfsnVmx0OFY/Lvnlj4QS1WsKTYAAjD7uOareQH6FXHBWm5XDp0YSm2n3Qfr8CNcRWwjKozO5b/ub6Q==}
 
-  '@vitessce/glb@4.0.0-test.3':
-    resolution: {integrity: sha512-xwB6L3hC/uTUwLl4SKIF/5V5W9H+V04gni3DYj6ytCK2nr+ak3KZa2vV5+E5NSGIZmmGMr41TYe68ULdAx0wyw==}
+  '@vitessce/glb@4.0.0':
+    resolution: {integrity: sha512-JFurPcCJbFW5U2roSPlgxbIx2p3Y36hyxvkBSHy/p54lG8jQR4KU+nphbyxqXlh5IKj5jxBKlxhXMTIDsnvhYw==}
     peerDependencies:
       three: '>=0.159.0'
     peerDependenciesMeta:
@@ -4331,100 +4385,95 @@ packages:
   '@vitessce/globals@3.9.9':
     resolution: {integrity: sha512-Gi0kfoZ/vziBD1I8KuTAhsowYWe1s/SKMYjB8k8p/fH7GAkZDToGCQGyDlVEdAEHM1vd40HgWbLLky3KrYA9jA==}
 
-  '@vitessce/globals@4.0.0-test.3':
-    resolution: {integrity: sha512-1vY9NagI7PDFTYQEH7TK74i0iKsIid+Pzy/WjZQE7nt6Vx5wO/3x/YiTuvCK4F9TlwzaV4UxhecSDMoIQRoHgg==}
+  '@vitessce/globals@4.0.0':
+    resolution: {integrity: sha512-dJri/zKqcI91GzeB+9/UXX0LnPH6ofop+wR3+p2+dR2iu2BlBAe39TCPZoWKrR9htk3zgrYN9nxcZ+O/w0CcOw==}
 
-  '@vitessce/heatmap@4.0.0-test.3':
-    resolution: {integrity: sha512-q5HuqmXuaCge6MM/Y87UobhM49rMVnH2FgLO8aDtFc0stOQ1dniArw0cFLVO5zOop2n3LKX+H6OEzPFSPVjTBQ==}
+  '@vitessce/heatmap@4.0.0':
+    resolution: {integrity: sha512-8SN97hwZY8+94LLblywyAnqamBDK6+VTSOOXfpoxn1s7tpK8A72bBbmE8AWOiuhNL1z3ug4pfijidS4U4pqBYQ==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/icons@4.0.0-test.3':
-    resolution: {integrity: sha512-v2zqNDMY0k2ZvpMPiBAjzxG5g/duf8KGvHQpN5yL1Gvz8GkZbzpIcWyzzpF1/RJV9CnArjOwxAnD/5rq1OjSrw==}
+  '@vitessce/icons@4.0.0':
+    resolution: {integrity: sha512-NpT08PYPWkXxO0lShs/dkvP7rGop3YV2B99qKbsNhWy0b7XKj2M9EukB1/YdqKuUmKfThCx5Mh0Tld6dXvZplQ==}
 
   '@vitessce/image-utils@3.9.9':
     resolution: {integrity: sha512-JIt+Vt9rNC87H+jW+ZkQ91tyPF03X5bG3slyo3PSeAKbXxjapBe2cAJmFsXBL8aWg1+hhph8M6LEPYN71Pf5CA==}
 
-  '@vitessce/image-utils@4.0.0-test.3':
-    resolution: {integrity: sha512-e7/HDexJk81FwqNI783chDzDNU42bPGyQ/SDC1uUm8hVn37UlYGtzpnd7Ny04+pKBxNvT5Nnv0w4QZY7eHGwfA==}
+  '@vitessce/image-utils@4.0.0':
+    resolution: {integrity: sha512-9Jq3tisjEPRlpq8BhkaljsJL+CTZyuLOz9C7t3OQ652Dd/CZa7mKon44ua++iDF37GD6RetcZ36plAgdAVfUog==}
 
-  '@vitessce/json@4.0.0-test.3':
-    resolution: {integrity: sha512-jOL9qkwpuK43kZFhK/63GPVmAvzJ8vP3udwmeLn9kd2VkfWyIWjVR3KI1kGfqcjly8OxbKHFVvGWljumGW0hww==}
+  '@vitessce/json@4.0.0':
+    resolution: {integrity: sha512-SOrFOC0VMqFXnD/vLBC3DnQlsAjXomW5aA+Duu1HQhTVYjFXCnYnNOpnZWudF/D4aYr55OCNe4ZK8RkY/Cl7Bg==}
 
-  '@vitessce/layer-controller-beta@4.0.0-test.3':
-    resolution: {integrity: sha512-uD/HBh9rWMQ4XoFKVz2i7J6rEktLrtYUrN6e8CSVAjCQ59emHDWo7W/J/iXhxCe9Ubsyf1wKvpHSFo6m83JOmw==}
+  '@vitessce/layer-controller-beta@4.0.0':
+    resolution: {integrity: sha512-qAiFrk2bCaURF8EN6fEIxujoX6/2Ce7s3iao9YqWQifA/q2AjrfOqusrdwFPle12n8z6jIlEH/KoGvuLm9psoA==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/layer-controller@4.0.0-test.3':
-    resolution: {integrity: sha512-4M5+f/EXZUg1fM/PtYJsfGVjaCH1IMhc8scc6YubvD+JsWQVpSdFQpsKQ2Knguqb5oMBTgVWSed0C8tUV+VJiA==}
+  '@vitessce/layer-controller@4.0.0':
+    resolution: {integrity: sha512-PwrJPJrVkHk1RBSwB+tIuCtMC9QckLrs3OBws7XnVy/jz4nk+iL5XYc1vN5XoXPPP8L1SrObg5hiaGE/MLnq9g==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/legend@4.0.0-test.3':
-    resolution: {integrity: sha512-zLeMQKpK2dxuvKL1rmvbq3L+YaXaE1zI6nRf1NHRI8Wl0MdV37ib1539lSm1zynQzHurVHlm7BLBnsMS6OIFJA==}
+  '@vitessce/legend@4.0.0':
+    resolution: {integrity: sha512-qqlyHXZZrBX5lVfRIjymAoGqsNJb1k1Zmgf/o48j8TvwaoWN9gC+wsubfp2WZy0rBAP9vcmZfMwLdFFtre4rCg==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/link-controller@4.0.0-test.3':
-    resolution: {integrity: sha512-slM8SMGSNOqntwVt1xhS8WdMmzQSEhU+N5nclDBPzxa0IGdfq9pRn7qrd8YzLjJbSwZ1Uyi+FibNO0ZaoT/dkg==}
+  '@vitessce/link-controller@4.0.0':
+    resolution: {integrity: sha512-Xsd07/GovOO5cUT/42FXroxSVC+RnQNLzGgtLC62SxTlJnzgB4Q1mrtGZPgxtnEdfMVOvfvuzKe0l7flB9b3+w==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/neuroglancer-workers@4.0.0-test.3':
-    resolution: {integrity: sha512-ZJpoEvBlZIlChq+sgeOWYiRziRmqMVrDtx5v+3BUhPAz8kzknbyz4v5GS3gYq+YadtBcTPLo1Jba1qGRM0/+tw==}
+  '@vitessce/neuroglancer-workers@4.0.0':
+    resolution: {integrity: sha512-ukh7Wvle9swZQ3sq6e5PcS7KPl0Rs5GYIdEbyq917h6zgb2WKZQrn30q5Z1JToe/tu16+ly/oMRjer3g+1pjbg==}
 
-  '@vitessce/neuroglancer@4.0.0-test.3':
-    resolution: {integrity: sha512-kffZqKoduG1yX6/Lv6zVqoqWM9c7LPywnkSExiV3x2xKiBcdCsjfQOziZMaWzBai89UCrMYDYIIfa7Bnm3QFVg==}
-    peerDependencies:
-      three: '>=0.159.0'
-    peerDependenciesMeta:
-      three:
-        optional: true
+  '@vitessce/neuroglancer@4.0.0':
+    resolution: {integrity: sha512-a50B3KKJzQLCovCvTb23v7fkl7C+8inWeL9wajDeVDPk0gx8wVNZnyWTc8i+LHksj9ha5uK8tfD8jI3cQDHsTA==}
 
-  '@vitessce/obs-sets-manager@4.0.0-test.3':
-    resolution: {integrity: sha512-wkPd17+k4NC/DDOuwY18PCl1YBvUOX9Z6ihfh9xtExuhMsrwkLaO3vndtZJAGofPVBQN25fLO5tixXOWsUwfaA==}
+  '@vitessce/obs-sets-manager@4.0.0':
+    resolution: {integrity: sha512-zcbnAAE9H/cfF21m4+4g30T/OYTzKSbJGqPmeRk1brM37t9LaeuYG3FoL1kJkf74ywTW2rHk/Hdhh3HQZsnj/g==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/ome-tiff@4.0.0-test.3':
-    resolution: {integrity: sha512-fEQ13wtRRQgtPrbxM2zsh4Jmp2n18a8QMwngD2X5qw2htRm3Skwp0vbvrBW4QRCUTBiC4HxRYuovaoi+PyO6gg==}
+  '@vitessce/ome-tiff@4.0.0':
+    resolution: {integrity: sha512-CrUUIIXQJ/WyhepcWH8bycRHg3ZniCLpC5S2TBojpH7t7VLqcjuDGEaxAi9XFBJWcBHEkvtssLMRLX7i/597Tw==}
 
   '@vitessce/plugins@3.9.9':
     resolution: {integrity: sha512-urKbNHwqkp6b+xm/4LiELzB8xl0cYzVxoSL4GZw5OXxJdsGpQWU/1OGg59N465DaOoJTiT8xTlo+9w1hMWuIkw==}
 
-  '@vitessce/plugins@4.0.0-test.3':
-    resolution: {integrity: sha512-UwKC7ThdjRK75FzjrbAVvxDmdXhV+mR6jho+F4zV75h1/VRpVtWvPKIabjV8xhiKm4qKgpKMA40F/FmKm1+lOA==}
+  '@vitessce/plugins@4.0.0':
+    resolution: {integrity: sha512-K8fcmuxjT3Ajaor+7JcLbhrzt7oJZUV9MsEpesrF10gz2U0QBmHjywTEFFUzbcobtljbI2bNMVXE4Q7ujBqaaA==}
 
-  '@vitessce/scatterplot-embedding@4.0.0-test.3':
-    resolution: {integrity: sha512-QIXEFH6htnTfdkmRD3ra2Om6BLClpV0mlZbwkuZbuNrpkudWTktdD5P00qyqYIEZdzTJ0VHBZZPJD1gmnZf+hA==}
+  '@vitessce/scatterplot-embedding@4.0.0':
+    resolution: {integrity: sha512-Q3EUZE4I/ZG3IeDLcYm9+B9Kvmd8o9zS7ps3OKkfjZkjGodzdJ+izUBGESHZZpm5tZMPW7GThspuU0dbmgZCMQ==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/scatterplot-gating@4.0.0-test.3':
-    resolution: {integrity: sha512-MgjsQ4fJQ2JKlt2xF/witTyD3cFxJLKYVAxwGuEUeqUaFJos7Ka7eI0x5ZcjKAvbzsfdqALaENv7eabDOm1Bpg==}
+  '@vitessce/scatterplot-gating@4.0.0':
+    resolution: {integrity: sha512-xbHdooYDULzwEcGjTPsMlmPRUZYMioKjQl/yboIj4HNC4UncHRK6DSPDbnoPj2n3shH7iEY7yhYauUMjGYclgg==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/scatterplot@4.0.0-test.3':
-    resolution: {integrity: sha512-CbASPcSk7/7nJX0OfluiDmQ3bv81nne0V9OAQFgxIkwJ7NyKk2fULns8JUPBlkOSOgA6a3cevcjsTh3CUEgdGA==}
+  '@vitessce/scatterplot@4.0.0':
+    resolution: {integrity: sha512-CoHSov0nHBz+U/qnb/zmSFmhZRHgVrIRlZWUmTjElhZ7yAu6b1iiDKMOJYFN9E7DJCEj2/SlK1Y0rnmlEZxN/g==}
     peerDependencies:
       react: ^19.2.6
 
   '@vitessce/schemas@3.9.9':
     resolution: {integrity: sha512-f6xiu7uUGpg1fJq5urJ/u1WPGtF6oPN38exdFQ/34aMQ/8QT/JA/Uy1cJa+B1+oXcQNJ+4yNp3RCUSsQgtNUYg==}
 
-  '@vitessce/schemas@4.0.0-test.3':
-    resolution: {integrity: sha512-MxTj2eUoOvSED7XtzCpiGB5PES3eKn6Jzmb1X9pyOQLKikC6MSKbz5CXcCX614C7cdAZAC59WTEQtP1D/8ojSw==}
+  '@vitessce/schemas@4.0.0':
+    resolution: {integrity: sha512-xPdrmb/k+EjvIMjvXhmGxxc9rsRgGXRFsvXe377KjlvYn0Hxmxc/iSL4XwtcUJviTheNiKUm3RxGCk8NntSS0Q==}
 
   '@vitessce/sets-utils@3.9.9':
     resolution: {integrity: sha512-oaxO8w/LTdRKtF9BAdHjP4oEkFZx9hdZUA+0jIp5kxDYQCHAJM7NQ7WOmYMhCZdt1Z+SoJ/HJM7F1F2nEXcZFQ==}
 
-  '@vitessce/sets-utils@4.0.0-test.3':
-    resolution: {integrity: sha512-BVJ82lRLlBl0RCrg7n+rd2FDZtGoEZ09/5w852i/jrKSriIsJB9PvVrk0z/7Rafz9dbiJ35t1Gi2QIZh6RszzA==}
+  '@vitessce/sets-utils@4.0.0':
+    resolution: {integrity: sha512-JXVkiFUGADc+8lu3tjmnT5L0a27uE9QBweVV5NzeiVdXsH/NwGPms31jtLGCGUCgt+6OUyR8V+eInpwJtrjJ9w==}
 
-  '@vitessce/spatial-accelerated@4.0.0-test.3':
-    resolution: {integrity: sha512-xbfj8jCrWQoLG1S8Iwa2RM4oD+zNkN74fIQ6IzyYYQYnAEgLEC4v6NV1xp83mMZZa7uIzm91oHpki7MEO/4P8g==}
+  '@vitessce/spatial-accelerated@4.0.0':
+    resolution: {integrity: sha512-amMF/fW+zVXiwutpspP8CuA+e50MP3hFyw+4y8QrEG0MtSFO8cQ1jW9OpwGGW9zMaSbyFkz24Jp25kO3cWwdbQ==}
     peerDependencies:
       '@react-three/drei': ^9.0.0 || ^10.0.0
       '@react-three/fiber': ^8.0.0 || ^9.0.0
@@ -4438,13 +4487,13 @@ packages:
       three:
         optional: true
 
-  '@vitessce/spatial-beta@4.0.0-test.3':
-    resolution: {integrity: sha512-piea3xsF+PumboWfsAVgwIm+7LJeSMyQMAvpyhWJU9s4d3eoT9FOrvG6Rv7E816VyrigNdEbKs03+DDjtMp1DQ==}
+  '@vitessce/spatial-beta@4.0.0':
+    resolution: {integrity: sha512-OKn+C8peNImMOSFRb7sjGfTNkrzMjxJqLrtwKEjdSrQ5vrDn/iz7X1C87bRqp0eNzzxlPP8ykMOv146by4WYHQ==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/spatial-three@4.0.0-test.3':
-    resolution: {integrity: sha512-S5qRIWO2Gf7K1maJuDB4WjAM+xXLoBPVhiX2YUQf5r9LbbrS3LzLHgyNkTxprb+QgEaOrbMGscIj1yKPpt71Dw==}
+  '@vitessce/spatial-three@4.0.0':
+    resolution: {integrity: sha512-eFfd+K61PzbHfPkkSz1JVXlHNnGSDB4d70BR94Wx7jozKbVpzDF5sH0zKzjLlEznl46bPFOXV6zVmvB1ss5VSQ==}
     peerDependencies:
       '@react-three/drei': ^9.0.0 || ^10.0.0
       '@react-three/fiber': ^8.0.0 || ^9.0.0
@@ -4458,73 +4507,73 @@ packages:
   '@vitessce/spatial-utils@3.9.9':
     resolution: {integrity: sha512-ef6MSRxLkyN2NYZ3ceqDGt3q9Qnq1mFU+1yrC+hU6utZRWfaHqiP1i9Cft+YVmw+XyRya/C/bLIhuT1npLyTvA==}
 
-  '@vitessce/spatial-utils@4.0.0-test.3':
-    resolution: {integrity: sha512-PMSK4pDOKprDzOEeER/P2a+n4lIsn4cetibr8rr3bLiPA4hg4Cu+hrEvoEsSYuzCi3d5BccIUerEg9A5hyInJQ==}
+  '@vitessce/spatial-utils@4.0.0':
+    resolution: {integrity: sha512-NAyTzSJr1ciZ2ytRlLH5H5mVooLGsymIIw58GZV/tb6Nb6V4/RYLGmszxzU9pqrPuoJU62kSnbmODrPnZsF+9A==}
 
-  '@vitessce/spatial-zarr@4.0.0-test.3':
-    resolution: {integrity: sha512-ogSi7FfZQD56I7Q+Uuj9l/aYygLo1lzOiwFO1eYDmskp2GbqIoCH0Yvg74W2st41hUhWXPzKmha4xRBlKiZSJg==}
+  '@vitessce/spatial-zarr@4.0.0':
+    resolution: {integrity: sha512-8viiQvJVvVl7XJqB205jy3KrY0j8YMYKZeWN5W84m9KXwmQzgC9OPl3NyF2xkE58RXoCeseTK7IenDeP1Mo5Mw==}
 
-  '@vitessce/spatial@4.0.0-test.3':
-    resolution: {integrity: sha512-w5UyfXbmS/hoRq+487QpViNn7ZXhQRLFF+vaKVJvV2bRAdxe1OCvZX7xitWv95lckixcLKUUvDWEjezuFQZe7A==}
+  '@vitessce/spatial@4.0.0':
+    resolution: {integrity: sha512-EwOaA0FXnEYYgC9F7I6ssRoghxhrAx9STcDTjvcgH7bmo9Xf7Q3P3mjD0PwyVKGnOVm6sWDtEwHT/zI++QjNMw==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/statistical-plots@4.0.0-test.3':
-    resolution: {integrity: sha512-wBbE6bPTTo47/VOPOnNAqcJuUoBkK2jcsaCvY7Zb6wx33w9pEWgrhZkEOQFfKe+6IBs/4ptZaXuWvxIi1VrR9Q==}
+  '@vitessce/statistical-plots@4.0.0':
+    resolution: {integrity: sha512-ZhN17Fc7Caj6+js9VVG6gSeZaZhE4JyQvl1KxQYZZP+PMMYyh2AMh83JF5pN8KKfKuc35KAg2mXJkEfpkbyOmQ==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/status@4.0.0-test.3':
-    resolution: {integrity: sha512-C7YMsvdPqkRLBFomebtwlm2+MMuBe2/s8gNBC9UISLNnoaPhNycGXuTphO1QPZWHJFWaKYGo9hemEtr8G7McFA==}
+  '@vitessce/status@4.0.0':
+    resolution: {integrity: sha512-BFAi0okbEijkv/xkxTOMFYtJn7ZM4HsA3zPet/aaNpCwG8JmhaPeapHEYJx6lME14S5obl1SZFfq7RAESBwmlA==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/styles@4.0.0-test.3':
-    resolution: {integrity: sha512-IKalFUwoJGS+XDuqIt5X4FyieDtGB2ttT3MjZq6kPP0wD/kCCTNPXVZsvr1RF5JaXrQ1i3psvUjsenG7RQ/DCA==}
+  '@vitessce/styles@4.0.0':
+    resolution: {integrity: sha512-8XwpIXS5qr9FeNafbuNv7hLKgQoKILM2EY9R3BJHg2MCDsH+RTk4N41usbdmI/39CcFP71BbzSVCwll4DY5z5g==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/tooltip@4.0.0-test.3':
-    resolution: {integrity: sha512-ozc8+0AjrAFNsR/NYXmrKZjwqgBlusu125yjxHytMxqqEKZ40tsOOm+c39OSH/ewbIiARcn1bS5gtcIyXQDqjg==}
+  '@vitessce/tooltip@4.0.0':
+    resolution: {integrity: sha512-K1/QPAWP1OpnvAtcLTzQKHFkcDN0r6ymuSv/kY5xFVlmB5HLUG6EklhySFUX/5YqQVe+QeKgqkpBMzE0N6F7Vw==}
     peerDependencies:
       react: ^19.2.6
 
   '@vitessce/types@3.9.9':
     resolution: {integrity: sha512-R5Y6T6pzQi6Q6t53lNU0XGxKCQx0oWO1tEY1cf/TEOfk15Uptxjxfebxtgh6/GfMsrD2ilCC8KEa/Vag4uycBA==}
 
-  '@vitessce/types@4.0.0-test.3':
-    resolution: {integrity: sha512-IxdsLel48dpum/w02K9lYPCNKj8nacU7fYEz6XBtwW7cxjC3lVLRFYCL3Ccofp/ICwz9TyYa1ToTw26z3YwlIg==}
+  '@vitessce/types@4.0.0':
+    resolution: {integrity: sha512-9C2mW8sq+TMtDfVosRfCrj4r1fT3YO/A1Csv6uS2djnUirrQMQo7BK858Yvyb47bnnQrF4X7yK3KPFP5EKZUYA==}
 
   '@vitessce/utils@3.9.9':
     resolution: {integrity: sha512-hH4jkxBrAfolVg5Po2PhDj5w34TAPCajUvxTxWRQcnpdkH8wzEmKLNZ3oFjoki8EbSKtzh+8eH1PUSuvoXxZCg==}
 
-  '@vitessce/utils@4.0.0-test.3':
-    resolution: {integrity: sha512-l6sR5JC9mmo9ANKMqtGv0Cqex0K9PpKAGeIyttj+Cn9i9u+VVkho6vW2SAiE6lcN6I9TiokeLVTadRp9BjdXoA==}
+  '@vitessce/utils@4.0.0':
+    resolution: {integrity: sha512-JcOsyqOkkUCoFQ9v/21vJA7m/21R4tCgkMbIu0b9D7XffmW/6kirKZ+x79qIOAullDwykytco+sXP1DwlvGxjw==}
 
-  '@vitessce/vega@4.0.0-test.3':
-    resolution: {integrity: sha512-NEQ/k6H9OZWzwyXbxb0IeyPnS6qWQhTWoarJgCiEN4NX/iDYcxEbWaxpOnvpVQ35igLwsryLFORoXdyCfnAWmQ==}
+  '@vitessce/vega@4.0.0':
+    resolution: {integrity: sha512-4DHwD1FtXjQC8tNFd4Xe2m2qerEIXvqNgIfpWdIdru0ZQfuait8FouDheSpKRiDUw2Nck83aL/ZSDkrie9lH4A==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/vit-s@4.0.0-test.3':
-    resolution: {integrity: sha512-EVhW07WovtyhWflUxSYRDi9ivhhiZTyi1kFBLWUQ1xK4DyRO073ZVW+c/Wssk8Bgnxo+QVfI0fqWC7BcTVX+Ew==}
+  '@vitessce/vit-s@4.0.0':
+    resolution: {integrity: sha512-fIRc8JY1OsRjLj0ngURc2fhSmB0AmqfvZRFqTgnUJ5v7wBIDyrXenWIiRfOCdbh7NNZZnePqfjGHtrnaj1j42A==}
     peerDependencies:
       react: ^19.2.6
 
-  '@vitessce/workers@4.0.0-test.3':
-    resolution: {integrity: sha512-h0vmM3aUoiVxw6sFG0wafXDOD0EpEfHIxhdzEU4S2kWtItq7rBa6YKHvitF75BFQ655CJs3qlSAWfx7XLvcBKw==}
+  '@vitessce/workers@4.0.0':
+    resolution: {integrity: sha512-V/twD94W9OZ6KX3Jmwjx9NPzmWsH2eJEsjyInRYXd6V5epCdjpqEq7UvjV1RArQ8B7oP4swJCIzIKc2sd8b3KQ==}
 
   '@vitessce/zarr-utils@3.9.9':
     resolution: {integrity: sha512-HMWLdIf6zBkMvQswdbfiT2CFlTqeOGInqht8DxloXbAeUo1xVsXx9piKZN/k+/oL9/mGVuXpXO94PzUPjYHguQ==}
 
-  '@vitessce/zarr-utils@4.0.0-test.3':
-    resolution: {integrity: sha512-XJkaEXK39JZ1HH/ggBoQtLg755HYHHNO9KEYB9UZ6s68i5eXVNxjPXFecBVhYbEuNVwmO02cm+NOd9dgsU6UFg==}
+  '@vitessce/zarr-utils@4.0.0':
+    resolution: {integrity: sha512-/gUeLoTDxCfeQURC+qLD2enFLWohBQvboTsDFqzD5Y5KZkFh043qZkqNGXCEcArLhnLeHISJ2z/eiC6VoHk19g==}
 
   '@vitessce/zarr@3.9.9':
     resolution: {integrity: sha512-ySDbm8wRn6pAHhoPYamrvYdn7BrS/TewrizXYSWF3rl1dhE5VnjZt1ZhpFjXIaAHi1aaPKJ0DfgENH6SfG7+Gw==}
 
-  '@vitessce/zarr@4.0.0-test.3':
-    resolution: {integrity: sha512-VMn3kmPi0C+LXNXblysztjy+rR7FWAV6HF1vahvaZPG5Bhs8gLLEPEd4DPVwID5PnDVjIZzhyOyhaUIR8KYEEg==}
+  '@vitessce/zarr@4.0.0':
+    resolution: {integrity: sha512-ttq3rMkwK+bk7KSOVejv4OHvdatU7/jNf4Ke2rMqi9eEpkLUbolF1TkewAb1bkjBB10gnHIn410gQA6GtBjfGw==}
 
   '@vitest/eslint-plugin@1.6.17':
     resolution: {integrity: sha512-sIVY9ZeVcXyPxFCNRkIt8Yw4keKIcUyp9/8qnmuomPwE+ST1htw5sZsbqdUMTiah9SmCg1JYoK9RqdDtPeNYYg==}
@@ -5244,6 +5293,10 @@ packages:
 
   cartocolor@4.0.2:
     resolution: {integrity: sha512-+Gh9mb6lFxsDOLQlBLPxAHCnWXlg2W8q3AcVwqRcy95TdBbcOU89Wrb6h2Hd/6Ww1Kc1pzXmUdpnWD+xeCG0dg==}
+
+  case-anything@2.1.13:
+    resolution: {integrity: sha512-zlOQ80VrQ2Ue+ymH5OuM/DlDq64mEm+B9UTdHULv5osUMD6HalNTblf2b1u/m6QecjsnOkBpqVZ+XPwIVsy7Ng==}
+    engines: {node: '>=12.13'}
 
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
@@ -6220,6 +6273,9 @@ packages:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
 
+  dprint-node@1.0.8:
+    resolution: {integrity: sha512-iVKnUtYfGrYcW1ZAlfR/F59cUVL8QIhWoBJoSjkkdua/dkWIgjZfiLMeTjiB06X0ZLkQ0M2C1VbUj/CxkIf1zg==}
+
   draco3d@1.5.5:
     resolution: {integrity: sha512-JVuNV0EJzD3LBYhGyIXJLeBID/EVtmFO1ZNhAYflTgiMiAJlbhXQmRRda/azjc8MRVMHh0gqGhiqHUo5dIXM8Q==}
 
@@ -6828,6 +6884,9 @@ packages:
   fetch-blob@3.2.0:
     resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
     engines: {node: ^12.20 || >= 14.13}
+
+  fetch-jsonp@1.4.0:
+    resolution: {integrity: sha512-SmOI6UshTUzQ1O+1CJDg31AE4VUIfAO4xfVAy/sH03h4Obml3BnuhTopdFaJMI21T94RfRvfTgTIvV0X8GnJ2A==}
 
   fflate@0.6.10:
     resolution: {integrity: sha512-IQrh3lEPM93wVCEczc9SaAOvkmcoQn/G8Bo1e8ZPlY3X3bnAxWaBdvTdvM1hP62iZp0BXWDy4vTAy4fF0+Dlpg==}
@@ -7833,6 +7892,9 @@ packages:
     resolution: {integrity: sha512-KLViCmWx94zOvpLwSlsx6yOCeMhZYaxrJV87Po5k/FoZzcPSahvK5qJ7fYhS61sZi5ikmh2S3Hz55A2l3U69ng==}
     peerDependencies:
       react: ^19.2.6
+
+  iwer@2.2.1:
+    resolution: {integrity: sha512-TBGgUlOpYsJpYmBCDRrW2KDHC70XZeFrlOwlDNiso+dp83wwRyCLaeN50/qo4JRIKyn08+cD6iaw5+t+D7U+uQ==}
 
   jackspeak@3.4.3:
     resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
@@ -10675,6 +10737,9 @@ packages:
     peerDependencies:
       three: '>=0.128.0'
 
+  three@0.165.0:
+    resolution: {integrity: sha512-cc96IlVYGydeceu0e5xq70H8/yoVT/tXBxV/W8A/U6uOq7DXc4/s1Mkmnu6SqoYGhSRWWYFOhVwvq6V0VtbplA==}
+
   three@0.184.0:
     resolution: {integrity: sha512-wtTRjG92pM5eUg/KuUnHsqSAlPM296brTOcLgMRqEeylYTh/CdtvKUvCyyCQTzFuStieWxvZb8mVTMvdPyUpxg==}
 
@@ -10838,6 +10903,16 @@ packages:
 
   ts-morph@26.0.0:
     resolution: {integrity: sha512-ztMO++owQnz8c/gIENcM9XfCEzgoGphTv+nKpYNM1bgsdOVC/jRZuEBf6N+mLLDNg68Kl+GgUZfOySaRiG1/Ug==}
+
+  ts-poet@6.12.0:
+    resolution: {integrity: sha512-xo+iRNMWqyvXpFTaOAvLPA5QAWO6TZrSUs5s4Odaya3epqofBu/fMLHEWl8jPmjhA0s9sgj9sNvF1BmaQlmQkA==}
+
+  ts-proto-descriptors@2.1.0:
+    resolution: {integrity: sha512-S5EZYEQ6L9KLFfjSRpZWDIXDV/W7tAj8uW7pLsihIxyr62EAVSiKuVPwE8iWnr849Bqa53enex1jhDUcpgquzA==}
+
+  ts-proto@2.12.0:
+    resolution: {integrity: sha512-ezMxg57ZiK/ZTW14U7y38+qyWHJr8cn8ELKuppANER666YnUteuNFO/mM1qI+9/wAHoTAfRadnIwtVdp1xw0jQ==}
+    hasBin: true
 
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
@@ -11492,11 +11567,24 @@ packages:
       yaml:
         optional: true
 
-  vitessce@4.0.0-test.3:
-    resolution: {integrity: sha512-IzZnjEU+ARgCwa38z3H8pey5Dhh61L6YqPu7bDXVZvN6VXmGdpTIkdUQwB80rKOYPd8tSLhix6j6Db5GGSuvQg==}
+  vitessce@4.0.0:
+    resolution: {integrity: sha512-5qaX2jfwStWtWMVtR+M0av47asjK1VATd3y35kTnqzXzg3lVeHIOejGaUpjA/U2HoYwXFJnxExVyPCDvooZqcw==}
     peerDependencies:
+      '@react-three/drei': ^9.0.0 || ^10.0.0
+      '@react-three/fiber': ^8.0.0 || ^9.0.0
+      '@react-three/xr': ^6.0.0
       react: ^19.2.6
       react-dom: ^19.2.6
+      three: '>=0.159.0'
+    peerDependenciesMeta:
+      '@react-three/drei':
+        optional: true
+      '@react-three/fiber':
+        optional: true
+      '@react-three/xr':
+        optional: true
+      three:
+        optional: true
 
   vitest@4.1.7:
     resolution: {integrity: sha512-flYyaFd2CgoCoU+0UKt3pxksgC+S02iTDN0n3LtqaMeXsI9SBcdNujc2k0DeFLzUn/0k538yNjOSdwgCqcrwJA==}
@@ -11616,6 +11704,9 @@ packages:
     peerDependenciesMeta:
       webpack-cli:
         optional: true
+
+  webxr-layers-polyfill@1.1.0:
+    resolution: {integrity: sha512-GqWE6IFlut8a1Lnh9t1RPnOXud1rZ7wLPvWp7mqTDOYtgorXqlNMhEnI9EqjU33grBx0v3jm0Oc13opkAdmgMQ==}
 
   whatwg-encoding@1.0.5:
     resolution: {integrity: sha512-b5lim54JOPN9HtzvK9HFXvBma/rnfFeqsic0hSpjtDbVxR3dJKLc+KB4V6GgiGOvl7CY/KNh8rxSo9DKQrnUEw==}
@@ -12167,6 +12258,8 @@ snapshots:
   '@bramus/specificity@2.4.2':
     dependencies:
       css-tree: 3.2.1
+
+  '@bufbuild/protobuf@2.12.1': {}
 
   '@choojs/findup@0.2.1':
     dependencies:
@@ -12913,6 +13006,22 @@ snapshots:
 
   '@fontsource-variable/jetbrains-mono@5.2.8': {}
 
+  '@fortawesome/fontawesome-common-types@6.6.0': {}
+
+  '@fortawesome/fontawesome-svg-core@6.6.0':
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.6.0
+
+  '@fortawesome/free-solid-svg-icons@6.6.0':
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.6.0
+
+  '@fortawesome/react-fontawesome@0.2.2(@fortawesome/fontawesome-svg-core@6.6.0)(react@19.2.6)':
+    dependencies:
+      '@fortawesome/fontawesome-svg-core': 6.6.0
+      prop-types: 15.8.1
+      react: 19.2.6
+
   '@hms-dbmi/viv@0.16.1(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)':
     dependencies:
       '@vivjs/constants': 0.16.1
@@ -13017,6 +13126,30 @@ snapshots:
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
+
+  '@iwer/devui@1.1.2(@types/react@19.2.15)(immer@10.2.0)(iwer@2.2.1)':
+    dependencies:
+      '@fortawesome/fontawesome-svg-core': 6.6.0
+      '@fortawesome/free-solid-svg-icons': 6.6.0
+      '@fortawesome/react-fontawesome': 0.2.2(@fortawesome/fontawesome-svg-core@6.6.0)(react@19.2.6)
+      '@pmndrs/handle': 6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+      '@pmndrs/pointer-events': 6.6.30
+      iwer: 2.2.1
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      styled-components: 6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      three: 0.165.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - css-to-react-native
+      - immer
+      - react-native
+
+  '@iwer/sem@0.2.5(iwer@2.2.1)':
+    dependencies:
+      iwer: 2.2.1
+      three: 0.165.0
+      ts-proto: 2.12.0
 
   '@janelia-flyem/neuroglancer@2.37.5':
     dependencies:
@@ -13481,7 +13614,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mui/styled-engine-sc@9.0.1(@types/react@19.2.15)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))':
+  '@mui/styled-engine-sc@9.1.1(@types/react@19.2.15)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))':
     dependencies:
       '@babel/runtime': 7.29.2
       '@types/hoist-non-react-statics': 3.3.7(@types/react@19.2.15)
@@ -14077,6 +14210,33 @@ snapshots:
 
   '@placemarkio/flat-drop-files@1.0.2': {}
 
+  '@pmndrs/handle@6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)':
+    dependencies:
+      '@pmndrs/pointer-events': 6.6.30
+      zustand: 4.5.7(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+      - react
+
+  '@pmndrs/pointer-events@6.6.30': {}
+
+  '@pmndrs/xr@6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)(three@0.184.0)':
+    dependencies:
+      '@iwer/devui': 1.1.2(@types/react@19.2.15)(immer@10.2.0)(iwer@2.2.1)
+      '@iwer/sem': 0.2.5(iwer@2.2.1)
+      '@pmndrs/pointer-events': 6.6.30
+      iwer: 2.2.1
+      meshline: 3.3.1(three@0.184.0)
+      three: 0.184.0
+      zustand: 4.5.7(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+    transitivePeerDependencies:
+      - '@types/react'
+      - css-to-react-native
+      - immer
+      - react
+      - react-native
+
   '@polka/url@1.0.0-next.29': {}
 
   '@popperjs/core@2.11.8': {}
@@ -14470,6 +14630,23 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - immer
+
+  '@react-three/xr@6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)':
+    dependencies:
+      '@pmndrs/pointer-events': 6.6.30
+      '@pmndrs/xr': 6.6.30(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)(three@0.184.0)
+      '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      suspend-react: 0.1.3(react@19.2.6)
+      three: 0.184.0
+      tunnel-rat: 0.1.2(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+      zustand: 4.5.7(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)
+    transitivePeerDependencies:
+      - '@types/react'
+      - css-to-react-native
+      - immer
+      - react-native
 
   '@react-types/shared@3.34.0(react@19.2.6)':
     dependencies:
@@ -16203,49 +16380,50 @@ snapshots:
     dependencies:
       '@vitessce/globals': 3.9.9
 
-  '@vitessce/abstract@4.0.0-test.3':
+  '@vitessce/abstract@4.0.0':
     dependencies:
-      '@vitessce/globals': 4.0.0-test.3
+      '@vitessce/globals': 4.0.0
 
-  '@vitessce/all@4.0.0-test.3(ceafde3d777e893e91814a2f7ef8ee78)':
+  '@vitessce/all@4.0.0(b21f30cde06e0bca19c53938cf41ea22)':
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/biomarker-select': 4.0.0-test.3(912341db4d8234a5448d466bcfe7a3ea)
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/csv': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/description': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/feature-list': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/genomic-profiles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(pixi.js@6.5.10)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/glb': 4.0.0-test.3(2505af357bb87d456157b983186b4c46)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/heatmap': 4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)
-      '@vitessce/json': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/layer-controller': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/layer-controller-beta': 4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)
-      '@vitessce/link-controller': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/neuroglancer': 4.0.0-test.3(f8a4fe59e8e969db01c4b814b0b7a9ac)
-      '@vitessce/obs-sets-manager': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(father@4.6.19(@babel/core@7.29.0)(@types/node@25.9.1)(less-loader@12.3.3(less@4.6.4)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(less@4.6.4)(postcss@8.5.15)(resolve-url-loader@5.0.0)(sass-loader@13.3.3(sass@1.54.0)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(sass@1.54.0)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(styled-jsx@5.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react@19.2.6))(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/ome-tiff': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/plugins': 4.0.0-test.3
-      '@vitessce/scatterplot-embedding': 4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)
-      '@vitessce/scatterplot-gating': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/schemas': 4.0.0-test.3
-      '@vitessce/spatial': 4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)
-      '@vitessce/spatial-accelerated': 4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-beta': 4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-three': 4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-zarr': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/statistical-plots': 4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)
-      '@vitessce/status': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/zarr': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/biomarker-select': 4.0.0(912341db4d8234a5448d466bcfe7a3ea)
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/csv': 4.0.0(react@19.2.6)
+      '@vitessce/description': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/feature-list': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/genomic-profiles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(pixi.js@6.5.10)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/glb': 4.0.0(2505af357bb87d456157b983186b4c46)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/heatmap': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
+      '@vitessce/json': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/layer-controller': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/layer-controller-beta': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
+      '@vitessce/link-controller': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/neuroglancer': 4.0.0(a01aa4cb484498283abf7ed417d52fa4)
+      '@vitessce/obs-sets-manager': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(father@4.6.19(@babel/core@7.29.0)(@types/node@25.9.1)(less-loader@12.3.3(less@4.6.4)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(less@4.6.4)(postcss@8.5.15)(resolve-url-loader@5.0.0)(sass-loader@13.3.3(sass@1.54.0)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(sass@1.54.0)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(styled-jsx@5.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react@19.2.6))(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/ome-tiff': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/plugins': 4.0.0
+      '@vitessce/scatterplot-embedding': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
+      '@vitessce/scatterplot-gating': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/schemas': 4.0.0
+      '@vitessce/spatial': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
+      '@vitessce/spatial-accelerated': 4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)
+      '@vitessce/spatial-beta': 4.0.0(c32044757a1279d7e5cc62ea476be4a6)
+      '@vitessce/spatial-three': 4.0.0(c32044757a1279d7e5cc62ea476be4a6)
+      '@vitessce/spatial-zarr': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/statistical-plots': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
+      '@vitessce/status': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/zarr': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
       react: 19.2.6
       zod: 3.25.76
     optionalDependencies:
       '@react-three/drei': 10.7.7(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(@types/three@0.184.1)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      '@react-three/xr': 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       three: 0.184.0
     transitivePeerDependencies:
       - '@deck.gl/core'
@@ -16272,13 +16450,13 @@ snapshots:
       - use-sync-external-store
       - utf-8-validate
 
-  '@vitessce/biomarker-select@4.0.0-test.3(912341db4d8234a5448d466bcfe7a3ea)':
+  '@vitessce/biomarker-select@4.0.0(912341db4d8234a5448d466bcfe7a3ea)':
     dependencies:
       '@tanstack/react-query': 5.100.11(react@19.2.6)
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/types': 4.0.0-test.3(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/types': 4.0.0(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       clsx: 1.2.1
       d3-dsv: 1.2.0
       fuse.js: 7.3.0
@@ -16312,46 +16490,47 @@ snapshots:
       '@zarrita/storage': 0.1.4
       zarrita: 0.6.1
 
-  '@vitessce/config@4.0.0-test.3':
+  '@vitessce/config@4.0.0':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/zarr-utils': 4.0.0-test.3
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/globals': 4.0.0
+      '@vitessce/utils': 4.0.0
+      '@vitessce/zarr-utils': 4.0.0
       '@zarrita/storage': 0.1.4
+      fetch-jsonp: 1.4.0
       zarrita: 0.6.1
 
   '@vitessce/constants-internal@3.9.9': {}
 
-  '@vitessce/constants-internal@4.0.0-test.3': {}
+  '@vitessce/constants-internal@4.0.0': {}
 
   '@vitessce/constants@3.9.9':
     dependencies:
       '@vitessce/constants-internal': 3.9.9
       '@vitessce/globals': 3.9.9
 
-  '@vitessce/constants@4.0.0-test.3':
+  '@vitessce/constants@4.0.0':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/globals': 4.0.0-test.3
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/globals': 4.0.0
 
-  '@vitessce/csv@4.0.0-test.3(react@19.2.6)':
+  '@vitessce/csv@4.0.0(react@19.2.6)':
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/config': 4.0.0-test.3
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/sets-utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/config': 4.0.0
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/sets-utils': 4.0.0
       d3-array: 2.12.1
       d3-dsv: 1.2.0
     transitivePeerDependencies:
       - react
 
-  '@vitessce/description@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/description@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       react: 19.2.6
       react-markdown: 9.1.0(@types/react@19.2.15)(react@19.2.6)
     transitivePeerDependencies:
@@ -16368,22 +16547,22 @@ snapshots:
     dependencies:
       react: 19.2.6
 
-  '@vitessce/error@4.0.0-test.3(react@19.2.6)':
+  '@vitessce/error@4.0.0(react@19.2.6)':
     dependencies:
       react: 19.2.6
 
-  '@vitessce/export-utils@4.0.0-test.3':
+  '@vitessce/export-utils@4.0.0':
     dependencies:
-      '@vitessce/globals': 4.0.0-test.3
+      '@vitessce/globals': 4.0.0
       bowser: 2.14.1
       lz-string: 1.5.0
 
-  '@vitessce/feature-list@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/feature-list@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       clsx: 1.2.1
       lodash-es: 4.18.1
       react: 19.2.6
@@ -16400,12 +16579,12 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/genomic-profiles@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(pixi.js@6.5.10)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/genomic-profiles@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(pixi.js@6.5.10)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       higlass: 2.3.4(pixi.js@6.5.10)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       higlass-register: 0.3.0
@@ -16474,7 +16653,7 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/gl@4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@vitessce/gl@4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@deck.gl/aggregation-layers': 8.8.27(@deck.gl/core@8.8.27)(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@luma.gl/core@8.5.21)
       '@deck.gl/core': 8.8.27
@@ -16509,8 +16688,8 @@ snapshots:
       '@turf/invariant': 7.3.5
       '@turf/meta': 7.3.5
       '@turf/union': 7.3.5
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/utils': 4.0.0-test.3
+      '@vitessce/globals': 4.0.0
+      '@vitessce/utils': 4.0.0
       d3-array: 2.12.1
       deck.gl: 8.8.27(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21)(@math.gl/core@3.6.3)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       glslify: 7.1.1
@@ -16525,16 +16704,16 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/glb@4.0.0-test.3(2505af357bb87d456157b983186b4c46)':
+  '@vitessce/glb@4.0.0(2505af357bb87d456157b983186b4c46)':
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/image-utils': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/image-utils': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
       d3-array: 2.12.1
       lodash-es: 4.18.1
     optionalDependencies:
@@ -16558,21 +16737,21 @@ snapshots:
     dependencies:
       loglevel: 1.9.2
 
-  '@vitessce/globals@4.0.0-test.3':
+  '@vitessce/globals@4.0.0':
     dependencies:
       loglevel: 1.9.2
 
-  '@vitessce/heatmap@4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)':
+  '@vitessce/heatmap@4.0.0(517c2976f870ad1f973ceec8b05c3b9d)':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/workers': 4.0.0-test.3
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/workers': 4.0.0
       lodash-es: 4.18.1
       react: 19.2.6
       react-aria: 3.48.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -16597,7 +16776,7 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/icons@4.0.0-test.3': {}
+  '@vitessce/icons@4.0.0': {}
 
   '@vitessce/image-utils@3.9.9(5267ebf2c45c13a5bb929a1ec6c07312)':
     dependencies:
@@ -16621,13 +16800,13 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/image-utils@4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)':
+  '@vitessce/image-utils@4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)':
     dependencies:
       '@hms-dbmi/viv': 0.16.1(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/types': 4.0.0-test.3(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
+      '@vitessce/globals': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/types': 4.0.0(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)
+      '@vitessce/utils': 4.0.0
     transitivePeerDependencies:
       - '@deck.gl/core'
       - '@deck.gl/geo-layers'
@@ -16643,19 +16822,19 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/json@4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@vitessce/json@4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/config': 4.0.0-test.3
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/schemas': 4.0.0-test.3
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/zarr-utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/config': 4.0.0
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/schemas': 4.0.0
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/zarr-utils': 4.0.0
       d3-array: 2.12.1
       lodash-es: 4.18.1
       zarrita: 0.6.1
@@ -16667,19 +16846,19 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/layer-controller-beta@4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)':
+  '@vitessce/layer-controller-beta@4.0.0(517c2976f870ad1f973ceec8b05c3b9d)':
     dependencies:
       '@tanstack/react-query': 5.100.11(react@19.2.6)
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/icons': 4.0.0-test.3
-      '@vitessce/layer-controller': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/icons': 4.0.0
+      '@vitessce/layer-controller': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       clsx: 1.2.1
       lodash-es: 4.18.1
       math.gl: 3.6.3
@@ -16707,14 +16886,14 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/layer-controller@4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/layer-controller@4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       lodash-es: 4.18.1
       math.gl: 3.6.3
       react: 19.2.6
@@ -16731,12 +16910,12 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/legend@4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)':
+  '@vitessce/legend@4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)':
     dependencies:
-      '@vitessce/image-utils': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
+      '@vitessce/image-utils': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
       clsx: 1.2.1
       colormap: 2.3.2
       d3-axis: 3.0.0
@@ -16765,12 +16944,12 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@vitessce/link-controller@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/link-controller@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/globals': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       react: 19.2.6
       zustand: 5.0.13(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
     transitivePeerDependencies:
@@ -16783,28 +16962,26 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/neuroglancer-workers@4.0.0-test.3':
+  '@vitessce/neuroglancer-workers@4.0.0':
     dependencies:
       '@janelia-flyem/neuroglancer': 2.37.5
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@vitessce/neuroglancer@4.0.0-test.3(f8a4fe59e8e969db01c4b814b0b7a9ac)':
+  '@vitessce/neuroglancer@4.0.0(a01aa4cb484498283abf7ed417d52fa4)':
     dependencies:
       '@janelia-flyem/neuroglancer': 2.37.5
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/neuroglancer-workers': 4.0.0-test.3
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/neuroglancer-workers': 4.0.0
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       lodash-es: 4.18.1
       react: 19.2.6
-    optionalDependencies:
-      three: 0.184.0
     transitivePeerDependencies:
       - '@deck.gl/core'
       - '@deck.gl/geo-layers'
@@ -16827,15 +17004,15 @@ snapshots:
       - use-sync-external-store
       - utf-8-validate
 
-  '@vitessce/obs-sets-manager@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(father@4.6.19(@babel/core@7.29.0)(@types/node@25.9.1)(less-loader@12.3.3(less@4.6.4)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(less@4.6.4)(postcss@8.5.15)(resolve-url-loader@5.0.0)(sass-loader@13.3.3(sass@1.54.0)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(sass@1.54.0)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(styled-jsx@5.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react@19.2.6))(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/obs-sets-manager@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(father@4.6.19(@babel/core@7.29.0)(@types/node@25.9.1)(less-loader@12.3.3(less@4.6.4)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(less@4.6.4)(postcss@8.5.15)(resolve-url-loader@5.0.0)(sass-loader@13.3.3(sass@1.54.0)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(sass@1.54.0)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(styled-jsx@5.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react@19.2.6))(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
       '@rc-component/tooltip': 1.2.0(father@4.6.19(@babel/core@7.29.0)(@types/node@25.9.1)(less-loader@12.3.3(less@4.6.4)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(less@4.6.4)(postcss@8.5.15)(resolve-url-loader@5.0.0)(sass-loader@13.3.3(sass@1.54.0)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(sass@1.54.0)(styled-components@6.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(styled-jsx@5.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react@19.2.6))(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/icons': 4.0.0-test.3
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/icons': 4.0.0
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       clsx: 1.2.1
       lodash-es: 4.18.1
       rc-tree: 2.1.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -16852,18 +17029,18 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/ome-tiff@4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)':
+  '@vitessce/ome-tiff@4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)':
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/config': 4.0.0-test.3
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/image-utils': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/config': 4.0.0
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/image-utils': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
       d3-array: 2.12.1
       lodash-es: 4.18.1
     transitivePeerDependencies:
@@ -16885,20 +17062,20 @@ snapshots:
     dependencies:
       zod: 3.25.76
 
-  '@vitessce/plugins@4.0.0-test.3':
+  '@vitessce/plugins@4.0.0':
     dependencies:
       zod: 3.25.76
 
-  '@vitessce/scatterplot-embedding@4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)':
+  '@vitessce/scatterplot-embedding@4.0.0(517c2976f870ad1f973ceec8b05c3b9d)':
     dependencies:
       '@turf/circle': 7.3.5
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/scatterplot': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/scatterplot': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       lodash-es: 4.18.1
       react: 19.2.6
@@ -16923,14 +17100,14 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/scatterplot-gating@4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/scatterplot-gating@4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/scatterplot': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/scatterplot': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       lodash-es: 4.18.1
       react: 19.2.6
@@ -16947,15 +17124,15 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/scatterplot@4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/scatterplot@4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/icons': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/icons': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       clsx: 1.2.1
       d3-force: 2.1.1
       d3-quadtree: 1.0.7
@@ -16989,16 +17166,16 @@ snapshots:
       uuid: 9.0.1
       zod: 3.25.76
 
-  '@vitessce/schemas@4.0.0-test.3':
+  '@vitessce/schemas@4.0.0':
     dependencies:
       '@types/lodash-es': 4.17.12
       '@types/semver': 7.7.1
       '@types/uuid': 9.0.8
-      '@vitessce/constants': 4.0.0-test.3
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/plugins': 4.0.0-test.3
-      '@vitessce/utils': 4.0.0-test.3
+      '@vitessce/constants': 4.0.0
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/globals': 4.0.0
+      '@vitessce/plugins': 4.0.0
+      '@vitessce/utils': 4.0.0
       lodash-es: 4.18.1
       semver: 7.8.1
       uuid: 9.0.1
@@ -17019,13 +17196,13 @@ snapshots:
       tinycolor2: 1.6.0
       uuid: 9.0.1
 
-  '@vitessce/sets-utils@4.0.0-test.3':
+  '@vitessce/sets-utils@4.0.0':
     dependencies:
       '@turf/centroid': 7.3.5
       '@turf/helpers': 7.3.5
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/schemas': 4.0.0-test.3
-      '@vitessce/utils': 4.0.0-test.3
+      '@vitessce/globals': 4.0.0
+      '@vitessce/schemas': 4.0.0
+      '@vitessce/utils': 4.0.0
       concaveman: 1.2.1
       d3-dsv: 1.2.0
       internmap: 2.0.3
@@ -17034,18 +17211,18 @@ snapshots:
       tinycolor2: 1.6.0
       uuid: 9.0.1
 
-  '@vitessce/spatial-accelerated@4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)':
+  '@vitessce/spatial-accelerated@4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       internmap: 2.0.3
       lodash-es: 4.18.1
@@ -17079,21 +17256,21 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/spatial-beta@4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)':
+  '@vitessce/spatial-beta@4.0.0(c32044757a1279d7e5cc62ea476be4a6)':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/scatterplot': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-accelerated': 4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-three': 4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/scatterplot': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-accelerated': 4.0.0(4bbb2e01e8f2ce8a7b57adfee20906ec)
+      '@vitessce/spatial-three': 4.0.0(c32044757a1279d7e5cc62ea476be4a6)
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       lodash-es: 4.18.1
       math.gl: 3.6.3
@@ -17125,19 +17302,19 @@ snapshots:
       - three
       - use-sync-external-store
 
-  '@vitessce/spatial-three@4.0.0-test.3(4bbb2e01e8f2ce8a7b57adfee20906ec)':
+  '@vitessce/spatial-three@4.0.0(c32044757a1279d7e5cc62ea476be4a6)':
     dependencies:
       '@react-three/drei': 10.7.7(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(@types/three@0.184.1)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
       '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       lodash-es: 4.18.1
       math.gl: 3.6.3
@@ -17146,6 +17323,8 @@ snapshots:
       react: 19.2.6
       short-number: 1.0.7
       three: 0.184.0
+    optionalDependencies:
+      '@react-three/xr': 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
     transitivePeerDependencies:
       - '@deck.gl/core'
       - '@deck.gl/geo-layers'
@@ -17186,14 +17365,14 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/spatial-utils@4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@vitessce/spatial-utils@4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/zarr-utils': 4.0.0-test.3
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/utils': 4.0.0
+      '@vitessce/zarr-utils': 4.0.0
       internmap: 2.0.3
       lodash-es: 4.18.1
       math.gl: 3.6.3
@@ -17206,17 +17385,17 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/spatial-zarr@4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)':
+  '@vitessce/spatial-zarr@4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)':
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/config': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/image-utils': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/zarr': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/zarr-utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/config': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/image-utils': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/zarr': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/zarr-utils': 4.0.0
       apache-arrow: 17.0.0
       d3-array: 2.12.1
       lodash-es: 4.18.1
@@ -17238,19 +17417,19 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/spatial@4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)':
+  '@vitessce/spatial@4.0.0(517c2976f870ad1f973ceec8b05c3b9d)':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/scatterplot': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/spatial-utils': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/scatterplot': 4.0.0(@loaders.gl/gltf@3.4.15)(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(gl-matrix@3.4.4)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/spatial-utils': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       lodash-es: 4.18.1
       math.gl: 3.6.3
@@ -17278,15 +17457,15 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/statistical-plots@4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)':
+  '@vitessce/statistical-plots@4.0.0(517c2976f870ad1f973ceec8b05c3b9d)':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/gl': 4.0.0-test.3(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vega': 4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/gl': 4.0.0(@loaders.gl/gltf@3.4.15)(@types/react@19.2.15)(gl-matrix@3.4.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vega': 4.0.0(517c2976f870ad1f973ceec8b05c3b9d)
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       d3-array: 2.12.1
       d3-axis: 3.0.0
       d3-format: 3.1.2
@@ -17321,11 +17500,11 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/status@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/status@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       clsx: 1.2.1
       react: 19.2.6
     transitivePeerDependencies:
@@ -17338,7 +17517,7 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/styles@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@vitessce/styles@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@emotion/cache': 11.14.0
       '@emotion/react': 11.14.0(@types/react@19.2.15)(react@19.2.6)
@@ -17359,11 +17538,11 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@vitessce/tooltip@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/tooltip@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/vit-s': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/vit-s': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       react: 19.2.6
     transitivePeerDependencies:
       - '@emotion/server'
@@ -17390,7 +17569,7 @@ snapshots:
       - '@luma.gl/webgl'
       - react
 
-  '@vitessce/types@4.0.0-test.3(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)':
+  '@vitessce/types@4.0.0(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)':
     dependencies:
       '@hms-dbmi/viv': 0.16.1(@deck.gl/core@8.8.27)(@deck.gl/geo-layers@8.8.27(@deck.gl/core@8.8.27)(@deck.gl/extensions@8.8.27(@deck.gl/core@8.8.27)(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(gl-matrix@3.4.4))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/mesh-layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/webgl@8.5.21))(@loaders.gl/core@3.4.15)(@loaders.gl/gltf@3.4.15)(@loaders.gl/images@3.4.15)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/gltools@8.5.21)(@luma.gl/shadertools@8.5.21)(@luma.gl/webgl@8.5.21))(@deck.gl/layers@8.8.27(@deck.gl/core@8.8.27)(@loaders.gl/core@3.4.15)(@luma.gl/core@8.5.21))(@deck.gl/react@8.8.27(@deck.gl/core@8.8.27)(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@luma.gl/constants@8.5.21)(@luma.gl/core@8.5.21)(@luma.gl/engine@8.5.21)(@luma.gl/webgl@8.5.21)(react@19.2.6)
       zarrita: 0.6.1
@@ -17414,20 +17593,20 @@ snapshots:
       lz-string: 1.5.0
       pluralize: 8.0.0
 
-  '@vitessce/utils@4.0.0-test.3':
+  '@vitessce/utils@4.0.0':
     dependencies:
-      '@vitessce/globals': 4.0.0-test.3
+      '@vitessce/globals': 4.0.0
       bowser: 2.14.1
       d3-array: 2.12.1
       lodash-es: 4.18.1
       lz-string: 1.5.0
       pluralize: 8.0.0
 
-  '@vitessce/vega@4.0.0-test.3(517c2976f870ad1f973ceec8b05c3b9d)':
+  '@vitessce/vega@4.0.0(517c2976f870ad1f973ceec8b05c3b9d)':
     dependencies:
-      '@vitessce/legend': 4.0.0-test.3(3f8cbb6f4a09aff7b2b5cc62b63269e2)
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/tooltip': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@vitessce/legend': 4.0.0(3f8cbb6f4a09aff7b2b5cc62b63269e2)
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/tooltip': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       clsx: 1.2.1
       react: 19.2.6
       react-vega: 7.7.1(react@19.2.6)(vega-lite@5.23.0(vega@5.33.1))(vega@5.33.1)
@@ -17455,21 +17634,21 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/vit-s@4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
+  '@vitessce/vit-s@4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))':
     dependencies:
       '@placemarkio/flat-drop-files': 1.0.2
       '@tanstack/react-query': 5.100.11(react@19.2.6)
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/config': 4.0.0-test.3
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/plugins': 4.0.0-test.3
-      '@vitessce/schemas': 4.0.0-test.3
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/styles': 4.0.0-test.3(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/zarr-utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/config': 4.0.0
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/plugins': 4.0.0
+      '@vitessce/schemas': 4.0.0
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/styles': 4.0.0(@mui/system@7.3.11(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@vitessce/utils': 4.0.0
+      '@vitessce/zarr-utils': 4.0.0
       '@zarrita/storage': 0.1.4
       clsx: 1.2.1
       d3-array: 2.12.1
@@ -17494,7 +17673,7 @@ snapshots:
       - supports-color
       - use-sync-external-store
 
-  '@vitessce/workers@4.0.0-test.3':
+  '@vitessce/workers@4.0.0':
     dependencies:
       lodash-es: 4.18.1
 
@@ -17504,9 +17683,9 @@ snapshots:
       '@zarrita/storage': 0.1.4
       zarrita: 0.6.1
 
-  '@vitessce/zarr-utils@4.0.0-test.3':
+  '@vitessce/zarr-utils@4.0.0':
     dependencies:
-      '@vitessce/globals': 4.0.0-test.3
+      '@vitessce/globals': 4.0.0
       '@zarrita/storage': 0.1.4
       zarrita: 0.6.1
 
@@ -17542,17 +17721,17 @@ snapshots:
       - react
       - react-dom
 
-  '@vitessce/zarr@4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)':
+  '@vitessce/zarr@4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)':
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/config': 4.0.0-test.3
-      '@vitessce/constants-internal': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/globals': 4.0.0-test.3
-      '@vitessce/image-utils': 4.0.0-test.3(5267ebf2c45c13a5bb929a1ec6c07312)
-      '@vitessce/sets-utils': 4.0.0-test.3
-      '@vitessce/utils': 4.0.0-test.3
-      '@vitessce/zarr-utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/config': 4.0.0
+      '@vitessce/constants-internal': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/globals': 4.0.0
+      '@vitessce/image-utils': 4.0.0(5267ebf2c45c13a5bb929a1ec6c07312)
+      '@vitessce/sets-utils': 4.0.0
+      '@vitessce/utils': 4.0.0
+      '@vitessce/zarr-utils': 4.0.0
       apache-arrow: 17.0.0
       d3-array: 2.12.1
       lodash-es: 4.18.1
@@ -18469,6 +18648,8 @@ snapshots:
   cartocolor@4.0.2:
     dependencies:
       colorbrewer: 1.0.0
+
+  case-anything@2.1.13: {}
 
   caseless@0.12.0: {}
 
@@ -19546,6 +19727,10 @@ snapshots:
 
   dotenv@17.4.2: {}
 
+  dprint-node@1.0.8:
+    dependencies:
+      detect-libc: 1.0.3
+
   draco3d@1.5.5: {}
 
   draco3d@1.5.7: {}
@@ -20449,6 +20634,8 @@ snapshots:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.3.3
+
+  fetch-jsonp@1.4.0: {}
 
   fflate@0.6.10: {}
 
@@ -21582,6 +21769,11 @@ snapshots:
       react: 19.2.6
     transitivePeerDependencies:
       - '@types/react'
+
+  iwer@2.2.1:
+    dependencies:
+      gl-matrix: 3.4.4
+      webxr-layers-polyfill: 1.1.0
 
   jackspeak@3.4.3:
     dependencies:
@@ -25083,6 +25275,8 @@ snapshots:
       potpack: 1.0.2
       three: 0.184.0
 
+  three@0.165.0: {}
+
   three@0.184.0: {}
 
   throttleit@1.0.1: {}
@@ -25219,6 +25413,21 @@ snapshots:
     dependencies:
       '@ts-morph/common': 0.27.0
       code-block-writer: 13.0.3
+
+  ts-poet@6.12.0:
+    dependencies:
+      dprint-node: 1.0.8
+
+  ts-proto-descriptors@2.1.0:
+    dependencies:
+      '@bufbuild/protobuf': 2.12.1
+
+  ts-proto@2.12.0:
+    dependencies:
+      '@bufbuild/protobuf': 2.12.1
+      case-anything: 2.1.13
+      ts-poet: 6.12.0
+      ts-proto-descriptors: 2.1.0
 
   tsconfig-paths@3.15.0:
     dependencies:
@@ -26234,16 +26443,21 @@ snapshots:
       terser: 5.48.0
       yaml: 2.9.0
 
-  vitessce@4.0.0-test.3(ceafde3d777e893e91814a2f7ef8ee78):
+  vitessce@4.0.0(b21f30cde06e0bca19c53938cf41ea22):
     dependencies:
-      '@vitessce/abstract': 4.0.0-test.3
-      '@vitessce/all': 4.0.0-test.3(ceafde3d777e893e91814a2f7ef8ee78)
-      '@vitessce/config': 4.0.0-test.3
-      '@vitessce/constants': 4.0.0-test.3
-      '@vitessce/error': 4.0.0-test.3(react@19.2.6)
-      '@vitessce/export-utils': 4.0.0-test.3
+      '@vitessce/abstract': 4.0.0
+      '@vitessce/all': 4.0.0(b21f30cde06e0bca19c53938cf41ea22)
+      '@vitessce/config': 4.0.0
+      '@vitessce/constants': 4.0.0
+      '@vitessce/error': 4.0.0(react@19.2.6)
+      '@vitessce/export-utils': 4.0.0
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
+    optionalDependencies:
+      '@react-three/drei': 10.7.7(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(@types/three@0.184.1)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      '@react-three/fiber': 9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      '@react-three/xr': 6.6.30(@react-three/fiber@9.6.1(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0))(@types/react@19.2.15)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(three@0.184.0)
+      three: 0.184.0
     transitivePeerDependencies:
       - '@deck.gl/core'
       - '@deck.gl/geo-layers'
@@ -26257,9 +26471,6 @@ snapshots:
       - '@luma.gl/webgl'
       - '@mui/material-pigment-css'
       - '@mui/system'
-      - '@react-three/drei'
-      - '@react-three/fiber'
-      - '@react-three/xr'
       - '@types/react'
       - bufferutil
       - encoding
@@ -26268,7 +26479,6 @@ snapshots:
       - immer
       - pixi.js
       - supports-color
-      - three
       - use-sync-external-store
       - utf-8-validate
 
@@ -26397,6 +26607,10 @@ snapshots:
       - lightningcss
       - postcss
       - uglify-js
+
+  webxr-layers-polyfill@1.1.0:
+    dependencies:
+      gl-matrix: 3.4.4
 
   whatwg-encoding@1.0.5:
     dependencies:
