@@ -91,8 +91,13 @@ function SaySeePanel() {
   });
 
   const onEvent = useEventCallback((name: string, properties?: Record<string, unknown>) => {
-    const sessionId = properties?.sessionId as string | undefined;
-    trackEvent({ name, ...properties }, sessionId);
+    // UDIChat emits events as (name, properties) with no category/action, but
+    // both Matomo and GA require category + action or they drop the event. Map
+    // every chat event under the shared "Say & See" category with the event
+    // name as the action. `action` is placed after the spread so it wins over
+    // any incidental `action` a call site includes in its properties.
+    const { sessionId, ...rest } = properties ?? {};
+    trackEvent({ ...rest, category: 'Say & See', action: name }, sessionId as string | undefined);
   });
 
   return (

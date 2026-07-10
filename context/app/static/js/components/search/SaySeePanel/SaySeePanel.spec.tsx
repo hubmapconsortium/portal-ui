@@ -1,9 +1,10 @@
 import React, { PropsWithChildren } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider } from '@mui/material/styles';
 
 import { useAppContext } from 'js/components/Contexts';
 import { useSavedPreferences } from 'js/components/savedLists/hooks';
+import { trackEvent } from 'js/helpers/trackers';
 import theme from 'js/theme/theme';
 
 import SaySeePanel from './SaySeePanel';
@@ -21,8 +22,20 @@ vi.mock('js/components/savedLists/hooks', () => ({
 }));
 vi.mock('udi-yac', () => ({
   __esModule: true,
-  UDIChat: ({ dataPackagePath }: { dataPackagePath: string }) => (
-    <div data-testid="udi-chat" data-path={dataPackagePath} />
+  UDIChat: ({
+    dataPackagePath,
+    onEvent,
+  }: {
+    dataPackagePath: string;
+    onEvent?: (name: string, properties?: Record<string, unknown>) => void;
+  }) => (
+    <div data-testid="udi-chat" data-path={dataPackagePath}>
+      <button
+        type="button"
+        data-testid="fire-event"
+        onClick={() => onEvent?.('message_sent', { foo: 'bar', sessionId: 'abc' })}
+      />
+    </div>
   ),
 }));
 vi.mock('udi-yac/style.css', () => ({}));
@@ -41,6 +54,7 @@ vi.mock('./OpenInWorkspacesFromYAC', () => ({
 
 const mockUseAppContext = vi.mocked(useAppContext);
 const mockUseSavedPreferences = vi.mocked(useSavedPreferences);
+const mockTrackEvent = vi.mocked(trackEvent);
 
 interface AppContextOverrides {
   isAuthenticated?: boolean;
@@ -126,5 +140,14 @@ describe('SaySeePanel', () => {
     setup({ isAuthenticated: true, isHubmapUser: true, isWorkspacesUser: true });
     render(<SaySeePanel />, { wrapper: Wrapper });
     expect(await screen.findByTestId('open-in-workspaces')).toBeInTheDocument();
+  });
+
+  it('maps UDIChat events into the Say & See category with the event name as the action', async () => {
+    setup({ isAuthenticated: true, isHubmapUser: true });
+    render(<SaySeePanel />, { wrapper: Wrapper });
+    fireEvent.click(await screen.findByTestId('fire-event'));
+    // Both Matomo and GA require category + action; the sessionId is threaded
+    // through as the id arg, not left in the event body.
+    expect(mockTrackEvent).toHaveBeenCalledWith({ foo: 'bar', category: 'Say & See', action: 'message_sent' }, 'abc');
   });
 });
