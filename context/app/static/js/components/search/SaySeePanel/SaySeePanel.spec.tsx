@@ -25,11 +25,18 @@ vi.mock('udi-yac', () => ({
   UDIChat: ({
     dataPackagePath,
     onEvent,
+    palette,
   }: {
     dataPackagePath: string;
     onEvent?: (name: string, properties?: Record<string, unknown>) => void;
+    palette?: { category?: unknown[]; mark?: string };
   }) => (
-    <div data-testid="udi-chat" data-path={dataPackagePath}>
+    <div
+      data-testid="udi-chat"
+      data-path={dataPackagePath}
+      data-palette-count={palette?.category?.length}
+      data-palette-mark={palette?.mark}
+    >
       <button
         type="button"
         data-testid="fire-event"
@@ -149,5 +156,15 @@ describe('SaySeePanel', () => {
     // Both Matomo and GA require category + action; the sessionId is threaded
     // through as the id arg, not left in the event body.
     expect(mockTrackEvent).toHaveBeenCalledWith({ foo: 'bar', category: 'Say & See', action: 'message_sent' }, 'abc');
+  });
+
+  it('passes the portal brand palette to UDIChat', async () => {
+    setup({ isAuthenticated: true, isHubmapUser: true });
+    render(<SaySeePanel />, { wrapper: Wrapper });
+    const chat = await screen.findByTestId('udi-chat');
+    // 18 theme-derived categorical colors (6 palette colors × light/main/dark)
+    // and brand primary as the single-mark color.
+    expect(chat).toHaveAttribute('data-palette-count', '18');
+    expect(chat).toHaveAttribute('data-palette-mark', theme.palette.primary.main);
   });
 });

@@ -1,5 +1,6 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { Suspense, lazy, useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import { useTheme } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
@@ -23,6 +24,7 @@ import useSaySeeDownloadActions from './saySeeDownloadActions';
 import 'udi-yac/style.css';
 
 import { DatasetIcon, DonorIcon, SampleIcon } from 'js/shared-styles/icons';
+import { getChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -90,6 +92,16 @@ function SaySeePanel() {
     }
   });
 
+  // Match Say & See charts to the rest of the portal: same categorical ordering
+  // every other chart uses, brand primary for single-series marks. Memoized on
+  // the theme so the reference stays stable (UDIVis re-pushes the palette to the
+  // chart on every identity change).
+  const muiTheme = useTheme();
+  const palette = useMemo(() => {
+    const categorical = getChartPalette(muiTheme.palette);
+    return { category: categorical, ordinal: categorical, mark: muiTheme.palette.primary.main };
+  }, [muiTheme]);
+
   const onEvent = useEventCallback((name: string, properties?: Record<string, unknown>) => {
     // UDIChat emits events as (name, properties) with no category/action, but
     // both Matomo and GA require category + action or they drop the event. Map
@@ -133,6 +145,7 @@ function SaySeePanel() {
                 entityIcons={ENTITY_ICONS}
                 mascot={<HuBMAPPerson style={{ width: 300, height: 'auto' }} />}
                 onEvent={onEvent}
+                palette={palette}
                 downloadActions={downloadActions}
                 downloadButtonLabel="Download Metadata"
               />
