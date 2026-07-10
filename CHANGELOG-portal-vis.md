@@ -1,1 +1,0 @@
-- Bump portal-visualization to 0.5.8 to resolve issues with seqFish and ATACseq datasets' configurations.

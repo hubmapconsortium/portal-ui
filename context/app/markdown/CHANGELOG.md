@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.48.2 - 2026-07-10
+
+- Bump portal-visualization to 0.5.8 to resolve issues with seqFish and ATACseq datasets' configurations.
+
+
+
 ## v1.48.1 - 2026-07-08
 
 - Update portal-visualization to 0.5.6.
