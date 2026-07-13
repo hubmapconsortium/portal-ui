@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.48.3 - 2026-07-13
+
+- Improve CellDIVE/MIBI visualization build speed by parallelizing requests.
+
+
+
 ## v1.48.2 - 2026-07-10
 
 - Bump portal-visualization to 0.5.8 to resolve issues with seqFish and ATACseq datasets' configurations.
