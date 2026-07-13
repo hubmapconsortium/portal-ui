@@ -95,7 +95,9 @@ cd $CONTEXT
 # build. No-op when the dir is already absent.
 pnpm run clean
 
-FLASK_APP="app/main.py" python -m flask run --debug &
+# --no-sync: this script already syncs above (unless -p/--no-uv-install is passed), so let uv
+# use the existing env rather than re-syncing and undoing the skip-install flag.
+FLASK_APP="app/main.py" uv run --no-sync python -m flask run --debug &
 
 pnpm run lint || die 'Try "pnpm run lint:fix"'
 pnpm run dev-server &
