@@ -7,22 +7,37 @@ import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { datasets } from '../constants';
-import { useGeneDetailPageTrackingInfo, useGeneSymbol, useTrackGeneDetailPage } from '../hooks';
+import { useGeneDatasetsData, useGeneDetailPageTrackingInfo, useGeneSymbol, useTrackGeneDetailPage } from '../hooks';
 import GeneDatasetsResults from './GeneDatasetsResults';
+import { useGeneMatchedDatasets } from './hooks';
 
 export default function Datasets() {
   const geneSymbol = useGeneSymbol();
+  const trackingInfo = useGeneDetailPageTrackingInfo();
+
+  const { data: rnaData, isLoading } = useGeneDatasetsData(undefined);
+  const { data: atacData } = useGeneDatasetsData('ATAC');
+  const rna = useGeneMatchedDatasets(rnaData);
+  const atac = useGeneMatchedDatasets(atacData);
+  const hasNoDatasets = !isLoading && rna.ids.length === 0 && atac.ids.length === 0;
 
   const trackExploreWithBiomarkerAndCellTypeSearchTool = useTrackGeneDetailPage({
     action: 'Datasets / Select "Explore with Molecular and Cellular Query" button',
   });
 
+  if (hasNoDatasets) {
+    return (
+      <CollapsibleDetailPageSection id={datasets.id} title={`Datasets with ${geneSymbol}`} trackingInfo={trackingInfo}>
+        <Description>
+          No datasets containing this gene were identified by the <SCFindLink /> within uniformly processed HuBMAP
+          RNAseq or ATACseq datasets.
+        </Description>
+      </CollapsibleDetailPageSection>
+    );
+  }
+
   return (
-    <CollapsibleDetailPageSection
-      id={datasets.id}
-      title={`Datasets with ${geneSymbol}`}
-      trackingInfo={useGeneDetailPageTrackingInfo()}
-    >
+    <CollapsibleDetailPageSection id={datasets.id} title={`Datasets with ${geneSymbol}`} trackingInfo={trackingInfo}>
       <Description
         belowTheFold={
           <Box mt={2}>
