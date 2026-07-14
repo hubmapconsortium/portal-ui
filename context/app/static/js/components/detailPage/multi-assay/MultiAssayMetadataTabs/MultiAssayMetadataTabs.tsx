@@ -106,7 +106,7 @@ function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] 
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Tabs value={openTabIndex} onChange={handleTabChange} variant={entities.length > 5 ? 'scrollable' : 'fullWidth'}>
+      <Tabs value={openTabIndex} onChange={handleTabChange} variant={entities.length > 6 ? 'scrollable' : 'fullWidth'}>
         {disambiguatedEntities.map(({ label, uuid, icon, hasMetadata }, index) => (
           <MetadataTab label={label} uuid={uuid} index={index} key={uuid} icon={icon} disabled={!hasMetadata} />
         ))}
