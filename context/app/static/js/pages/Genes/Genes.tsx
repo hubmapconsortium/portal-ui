@@ -29,8 +29,8 @@ function GeneDetails({ geneSymbol }: Props) {
         <SummaryTitle entityIcon="Gene">Gene</SummaryTitle>
         <GenePageTitle />
         <Summary />
-        {shouldDisplaySection[cellTypes] && <CellTypes />}
-        {shouldDisplaySection[datasets] && <Datasets />}
+        <CellTypes />
+        <Datasets />
       </DetailLayout>
     </GenePageProvider>
   );
