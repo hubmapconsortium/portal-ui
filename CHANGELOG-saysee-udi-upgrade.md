@@ -1,1 +1,0 @@
-- Upgraded `udi-yac` (Say & See chat) from 0.1.6 to 0.2.4 and wired the portal's brand chart palette into the new `palette` config, so Say & See charts use the same categorical colors as the rest of the portal's visualizations.

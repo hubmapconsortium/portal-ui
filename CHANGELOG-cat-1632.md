@@ -1,1 +1,0 @@
-- Fix the tutorial card "View Tutorial" button text displaying in the link color instead of white in production builds.

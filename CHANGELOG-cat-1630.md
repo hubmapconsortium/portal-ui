@@ -1,1 +1,0 @@
-- Fix auto-scrolling from iframe focus trap for most clients.

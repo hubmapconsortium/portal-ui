@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.48.4 - 2026-07-14
+
+- Improve login to restore hash/URL parameters after navigating back to portal.
+- Improve display of datasets with many associated organs.
+- Show a placeholder dash in search result table cells (e.g. donor age/BMI/sex/race) when no value is available.
+- Fix protocols section on integrated datasets page to have 16-px padding.
+- Fix auto-scrolling from iframe focus trap for most clients.
+- Fix the tutorial card "View Tutorial" button text displaying in the link color instead of white in production builds.
+- Grey out icons for entities in metadata tables with no available metadata.
+- Show an empty-state message on the biomarker detail page's Cell Types and Datasets sections when no scFind results exist for the gene in either modality.
+- Stop blocking processed dataset section content (summary, files, protocols, attribution) while the Vitessce visualization configuration is loading; the visualization subsection now shows its own loading skeleton instead.
+- Fixed Say & See analytics events being silently dropped: chat interaction events (messages sent, responses received, visualizations pinned, filters changed, downloads, etc.) were emitted without a `category`/`action`, which Matomo and GA both require, so nothing was recorded. Say & See events now report under the "Say & See" category with the event name as the action. Also hardened `trackEvent` so a category/action-less event degrades to GA-only instead of throwing and dropping both destinations.
+- Upgraded `udi-yac` (Say & See chat) from 0.1.6 to 0.2.4 and wired the portal's brand chart palette into the new `palette` config, so Say & See charts use the same categorical colors as the rest of the portal's visualizations.
+
+
+
 ## v1.48.3 - 2026-07-13
 
 - Improve CellDIVE/MIBI visualization build speed by parallelizing requests.

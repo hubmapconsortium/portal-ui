@@ -1,1 +1,0 @@
-- Show an empty-state message on the biomarker detail page's Cell Types and Datasets sections when no scFind results exist for the gene in either modality.
