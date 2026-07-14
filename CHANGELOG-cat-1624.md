@@ -1,0 +1,1 @@
+- Improve login to restore hash/URL parameters after navigating back to portal.
