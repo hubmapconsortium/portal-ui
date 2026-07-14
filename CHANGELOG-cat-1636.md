@@ -1,0 +1,1 @@
+- Grey out icons for entities in metadata tables with no available metadata.

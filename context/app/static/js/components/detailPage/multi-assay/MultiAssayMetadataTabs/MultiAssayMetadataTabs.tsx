@@ -33,7 +33,7 @@ interface MultiAssayEntityTabProps {
 function MetadataTab({ label, uuid, index, icon: Icon, disabled, ...props }: MultiAssayEntityTabProps) {
   const tab = (
     <Tab
-      icon={<Icon fontSize="1.5rem" color="primary" />}
+      icon={<Icon fontSize="1.5rem" color={disabled ? 'inherit' : 'primary'} />}
       label={label}
       index={index}
       iconPosition="start"
