@@ -13,7 +13,6 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import SelectableCard from 'js/shared-styles/cards/SelectableCard';
 import Typography from '@mui/material/Typography';
-import { InternalLink } from 'js/shared-styles/Links';
 import Button from '@mui/material/Button';
 import { tutorialIsReady } from './utils';
 
@@ -32,13 +31,7 @@ function TutorialButton({ tutorial }: TutorialDisplayProps) {
     );
   } else {
     return (
-      <Button
-        component={InternalLink}
-        href={`/tutorials/${tutorial.route}`}
-        fullWidth
-        variant="contained"
-        color="primary"
-      >
+      <Button href={`/tutorials/${tutorial.route}`} fullWidth variant="contained" color="primary">
         View Tutorial
       </Button>
     );
