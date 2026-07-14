@@ -17,7 +17,10 @@ const ENTITY_LABELS = {
 type EntitySource = keyof typeof ENTITY_LABELS;
 
 function getRowsForSource(ctx: DownloadActionContext, source: EntitySource): Record<string, unknown>[] {
-  return ctx.rowsBySource.find((r) => r.source === source)?.rows ?? [];
+  // udi-yac types these as Row[] (= Record<string, unknown>[]), but the alias
+  // surfaces as `any` through the package's type boundary under typescript-eslint,
+  // so assert the documented shape. extractHubmapIds still guards each field.
+  return (ctx.rowsBySource.find((r) => r.source === source)?.rows ?? []) as Record<string, unknown>[];
 }
 
 function extractHubmapIds(rows: Record<string, unknown>[]): string[] {
