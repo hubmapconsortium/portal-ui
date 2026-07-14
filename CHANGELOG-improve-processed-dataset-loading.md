@@ -1,0 +1,1 @@
+- Stop blocking processed dataset section content (summary, files, protocols, attribution) while the Vitessce visualization configuration is loading; the visualization subsection now shows its own loading skeleton instead.
