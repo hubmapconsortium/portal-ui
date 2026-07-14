@@ -1,0 +1,1 @@
+- Show a placeholder dash in search result table cells (e.g. donor age/BMI/sex/race) when no value is available.
