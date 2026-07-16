@@ -93,7 +93,7 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
         aria-roledescription="slide"
         aria-label={`${selectedIndex + 1} of ${items.length}`}
       >
-        <MainImage src={selected.src} alt={selected.alt} />
+        <MainImage src={selected.src} alt={selected.alt} loading="lazy" decoding="async" />
         <CarouselButton $side="left" size="small" onClick={selectPrev} aria-label="Previous visualization">
           <ChevronLeftRounded />
         </CarouselButton>
@@ -135,7 +135,7 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
                 aria-label={`${item.assay}, ${item.analyte}, ${index + 1} of ${items.length}`}
                 aria-pressed={index === selectedIndex}
               >
-                <ThumbImage src={item.src} alt="" $isActive={index === selectedIndex} />
+                <ThumbImage src={item.src} alt="" $isActive={index === selectedIndex} loading="lazy" decoding="async" />
                 <ThumbCaption>
                   <Typography variant="caption" fontWeight={600} noWrap>
                     {item.assay}

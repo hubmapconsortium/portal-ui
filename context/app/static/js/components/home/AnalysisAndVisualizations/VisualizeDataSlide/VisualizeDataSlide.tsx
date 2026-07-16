@@ -86,4 +86,6 @@ function VisualizeDataSlide({ config, zIndex, stickyRef }: VisualizeDataSlidePro
   );
 }
 
-export default VisualizeDataSlide;
+// Memoized so prominence flips in the parent don't re-render the heavy carousel tree
+// (all props are stable — this slide doesn't take isProminent).
+export default React.memo(VisualizeDataSlide);

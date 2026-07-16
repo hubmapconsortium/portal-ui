@@ -40,7 +40,8 @@ export interface SlideConfig {
   theme: ThemeColorKey;
   icon: MUIIcon;
   title: string;
-  description: string;
+  /** One paragraph, or several rendered as separate paragraphs. */
+  description: string | string[];
   bulletPoints?: string[];
   ctaButtons: CTAButton[];
   images: SlideImage[];

@@ -2,11 +2,45 @@ import BarChartRounded from '@mui/icons-material/BarChartRounded';
 import ScatterPlotRounded from '@mui/icons-material/ScatterPlot';
 import DescriptionRounded from '@mui/icons-material/DescriptionRounded';
 import { SlideConfig, MultiViewSlideConfig } from './types';
-import { GeneIcon, WorkspacesIcon, FileIcon } from 'js/shared-styles/icons';
+import { DatasetIcon, GeneIcon, WorkspacesIcon, FileIcon } from 'js/shared-styles/icons';
+
+export const DATASETS_SEARCH_SLIDE: SlideConfig = {
+  id: 'datasets-search',
+  theme: 'info',
+  icon: DatasetIcon,
+  title: 'Find Data Your Way',
+  description: [
+    'Filter your way through 9,000+ datasets across 40+ facets with organs, assays, donor demographics, and more.',
+    'Or just ask directly. Chat with Say & See mode about donor, sample, or dataset metadata and get instant interactive visualizations.',
+  ],
+  ctaButtons: [
+    {
+      label: 'Explore Datasets',
+      href: '/search/datasets',
+      variant: 'contained',
+      trackingLabel: 'Datasets Search / Explore Datasets',
+    },
+    {
+      label: 'Chat with Say & See',
+      href: '/search/datasets?mode=say-see',
+      variant: 'outlined',
+      trackingLabel: 'Datasets Search / Chat with Say & See',
+    },
+  ],
+  images: [
+    {
+      videoSrc: `${CDN_URL}/v3/datasets_search.webm`,
+      src: '',
+      alt: 'Dataset search page with filters and Say & See chat mode',
+      delay: 0,
+    },
+  ],
+  layout: 'text-left',
+};
 
 export const CLOUD_WORKSPACES_SLIDE: SlideConfig = {
   id: 'cloud-workspaces',
-  theme: 'info',
+  theme: 'success',
   icon: WorkspacesIcon,
   title: 'Analyze Datasets in Cloud-based Workspaces',
   description:
@@ -39,7 +73,7 @@ export const CLOUD_WORKSPACES_SLIDE: SlideConfig = {
       delay: 0,
     },
   ],
-  layout: 'text-left',
+  layout: 'text-right',
 };
 
 export const BIOMARKERS_SLIDE: SlideConfig = {
@@ -70,7 +104,7 @@ export const BIOMARKERS_SLIDE: SlideConfig = {
       delay: 0,
     },
   ],
-  layout: 'text-right',
+  layout: 'text-left',
 };
 
 export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {

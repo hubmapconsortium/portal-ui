@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import ParallaxSlide from './ParallaxSlide';
-import { CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE } from '../config';
+import { CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE, DATASETS_SEARCH_SLIDE } from '../config';
 
 // Mock SVG-based icons that fail in test environment due to SVG file mocking.
 // SvgIcon is imported inside the factory because vi.mock is hoisted above imports.
@@ -19,7 +19,16 @@ describe('ParallaxSlide', () => {
 
   test('renders slide description', () => {
     render(<ParallaxSlide config={CLOUD_WORKSPACES_SLIDE} zIndex={3} />);
-    expect(screen.getByText(CLOUD_WORKSPACES_SLIDE.description)).toBeInTheDocument();
+    [CLOUD_WORKSPACES_SLIDE.description].flat().forEach((paragraph) => {
+      expect(screen.getByText(paragraph)).toBeInTheDocument();
+    });
+  });
+
+  test('renders multi-paragraph description as separate paragraphs', () => {
+    render(<ParallaxSlide config={DATASETS_SEARCH_SLIDE} zIndex={1} />);
+    [DATASETS_SEARCH_SLIDE.description].flat().forEach((paragraph) => {
+      expect(screen.getByText(paragraph)).toBeInTheDocument();
+    });
   });
 
   test('renders bullet points', () => {

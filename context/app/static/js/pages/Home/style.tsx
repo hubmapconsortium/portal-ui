@@ -46,9 +46,9 @@ const ParallaxCover = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
 
   [theme.breakpoints.up('md')]: {
-    // Higher zIndex than the slides (which use 1-3) + a one-viewport overlap so it slides
+    // Higher zIndex than the slides (which use 1-4) + a one-viewport overlap so it slides
     // up over the last (pinned) slide.
-    zIndex: 4,
+    zIndex: 5,
     marginTop: '-100vh',
   },
 }));

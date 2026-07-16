@@ -34,9 +34,11 @@ function ParallaxSlide({ config, zIndex, isProminent = true, stickyRef }: Parall
             <Typography variant="h4" component="h3" gutterBottom fontWeight={400}>
               {title}
             </Typography>
-            <Typography variant="body1" color="text.secondary" paragraph>
-              {description}
-            </Typography>
+            {(Array.isArray(description) ? description : [description]).map((paragraph) => (
+              <Typography key={paragraph} variant="body1" color="text.secondary" paragraph>
+                {paragraph}
+              </Typography>
+            ))}
             {bulletPoints && (
               // list-style is set on each <li> (a class selector) to override the global
               // `li { list-style: none }` reset in components/globalStyles.tsx.
@@ -84,4 +86,6 @@ function ParallaxSlide({ config, zIndex, isProminent = true, stickyRef }: Parall
   );
 }
 
-export default ParallaxSlide;
+// Memoized so prominence flips in the parent don't re-render unaffected slides
+// (config/zIndex/stickyRef are stable; only isProminent changes).
+export default React.memo(ParallaxSlide);

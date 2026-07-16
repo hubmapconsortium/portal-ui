@@ -17,7 +17,9 @@ import { BiotechRounded, BuildRounded, StarRounded, PrivacyTipRounded } from '@m
 import RelatedToolsAndResources from 'js/components/home/RelatedToolsAndResources';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import HomepageSection from 'js/components/home/HomepageSection';
+import { InternalLink } from 'js/shared-styles/Links';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 function Home() {
   const theme = useTheme();
@@ -67,6 +69,11 @@ function Home() {
               />
             }
           >
+            <Typography variant="body1" color="text.secondary" mb={2}>
+              Explore HuBMAP datasets through the Filter &amp; Browse Mode or ask questions about our data with natural
+              language with our new{' '}
+              <InternalLink href="/search/datasets?mode=say-see">Say &amp; See Mode.</InternalLink>
+            </Typography>
             <HuBMAPDatasetsChart chartRef={chartRef} onSelectionChange={setSelectionLabel} />
           </HomepageSection>
         </UpperLowerGrid>

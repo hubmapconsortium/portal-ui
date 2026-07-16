@@ -46,6 +46,9 @@ export const VisualizeSlideContent = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    // Promote to a compositor layer (matches StickySlideContent) so sliding up over the
+    // pinned previous slide composites instead of repainting the ~2-viewport gradient.
+    willChange: 'transform',
   },
 }));
 

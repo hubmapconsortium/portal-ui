@@ -6,9 +6,9 @@ import { ThemeColorKey } from '../types';
 
 // Gradient accent color per theme key. The gradient runs from this color to white.
 export const accentColorMap: Record<ThemeColorKey, string> = {
-  info: '#bdcfe9', // Cloud Workspaces, Metadata Exploration
+  info: '#bdcfe9', // Datasets Search, Metadata Exploration
   warning: '#f1cac0', // Biomarkers & Cell Types, Integrated Maps
-  success: '#d1dac1', // Single-Cell and Spatial Data Visualizations
+  success: '#d1dac1', // Cloud Workspaces, Single-Cell and Spatial Data Visualizations
   error: '#f4c0db', // Cell Populations Viewer
 };
 
