@@ -10,6 +10,7 @@ export interface ProcessedDataVisualizationProps {
 
 interface ProcessedDatasetContext extends ProcessedDataVisualizationProps {
   conf?: object;
+  isLoadingConf?: boolean;
   dataset: ProcessedDatasetDetails;
   defaultExpanded: boolean;
 }

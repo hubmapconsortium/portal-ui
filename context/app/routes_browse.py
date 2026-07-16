@@ -1,5 +1,7 @@
 from functools import cache
+from importlib.metadata import version
 import json
+import time
 from urllib.parse import urlparse, quote
 from .utils import get_organs, get_valid_tutorial_routes
 
@@ -144,9 +146,18 @@ def details_vitessce(type, uuid):
     minimal = request.args.get('minimal') == 'True'
     parent = client.get_entity(parent_uuid) if parent_uuid else None
 
+    # ponytail: temporary timer to verify the multi-region SPRM build speedup. Logs which
+    # portal-visualization is actually loaded, so a slow time on the pre-fix wheel is obvious.
+    build_start = time.perf_counter()
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
         entity, marker=marker, parent=parent, minimal=minimal
     ).vitessce_conf
+    current_app.logger.info(
+        'vitessce conf build for %s took %.2fs (portal-visualization %s)',
+        uuid,
+        time.perf_counter() - build_start,
+        version('portal-visualization'),
+    )
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
     response.headers.add('Access-Control-Allow-Origin', '*')

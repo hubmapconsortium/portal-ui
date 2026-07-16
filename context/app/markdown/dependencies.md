@@ -15,7 +15,7 @@ globus-sdk>=3.59.0
 gunicorn>=23.0.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
-portal-visualization[full]>=0.5.6
+portal-visualization[full]>=0.5.9
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
@@ -91,7 +91,7 @@ ruff>=0.14.0
 "scellop": "^0.1.1",
 "styled-components": "^6.1.12",
 "swr": "^2.4.1",
-"udi-yac": "^0.1.6",
+"udi-yac": "^0.2.4",
 "universal-cookie": "^7.1.2",
 "use-resize-observer": "^9.1.0",
 "uuid": "^14.0.0",

@@ -28,7 +28,7 @@ function LoadingFallback() {
 }
 
 export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
-  const { defaultExpanded, dataset, sectionDataset, conf, isLoading } = useProcessedDatasetContext();
+  const { defaultExpanded, dataset, sectionDataset, conf, isLoading, isLoadingConf } = useProcessedDatasetContext();
   const { isRetracted } = useRetractedDatasetContext();
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   const track = useTrackEntityPageEvent();
@@ -94,7 +94,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
         slotProps={{ transition: { unmountOnExit: true } }}
       >
         <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
-          {isLoading ? iconPlaceholder : visualizationIcon}
+          {isLoading || isLoadingConf ? iconPlaceholder : visualizationIcon}
           <Typography variant="subtitle1" color="inherit" component="h4">
             {sectionDataset.pipeline ?? sectionDataset.assay_display_name[0]}
           </Typography>

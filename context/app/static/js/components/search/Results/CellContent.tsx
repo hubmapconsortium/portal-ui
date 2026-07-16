@@ -174,7 +174,8 @@ export function CellContent({
   latestRevisionUrl,
 }: CellContentProps) {
   if (!fieldValue) {
-    return null;
+    // Placeholder so columns without a value (e.g. a donor missing age/BMI/sex/race) aren't blank.
+    return <>—</>;
   }
 
   switch (field.split('.').pop() ?? '') {

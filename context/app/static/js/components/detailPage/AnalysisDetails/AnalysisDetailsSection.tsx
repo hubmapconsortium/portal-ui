@@ -45,7 +45,7 @@ function AnalysisDetailsSection({ isExternal, protocolUrl, dataset }: AnalysisDe
       title="Protocols & Workflow Details"
       icon={sectionIconMap['protocols-and-workflow-details']}
     >
-      <Paper sx={{ px: 2, py: 1 }}>
+      <Paper sx={{ p: 2 }}>
         {protocolUrl && <Protocol protocol_url={protocolUrl} />}
         <AnalysisDetailsWrapper isExternal={isExternal} dataset={dataset} />
       </Paper>

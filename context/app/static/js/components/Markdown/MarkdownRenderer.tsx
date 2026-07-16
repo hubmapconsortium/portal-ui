@@ -83,6 +83,12 @@ const baseComponents: NonNullable<Options['components']> = {
     </Box>
   ),
   img: ({ src, alt }) => <Box component="img" src={src} alt={alt} sx={{ maxWidth: '100%' }} />,
+  // Defer off-screen iframes so a focus-trapping embed can't scroll the page
+  // to itself on load (e.g. publication vignette embeds). Author-set `loading`
+  // wins. ponytail: loading="lazy" handles the below-the-fold case; add a
+  // scroll-restore wrapper only if an above-the-fold embed still jumps.
+  // eslint-disable-next-line jsx-a11y/iframe-has-title
+  iframe: (props) => <iframe loading="lazy" {...props} />,
   table: ({ children }) => (
     <Box
       component="table"

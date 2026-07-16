@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import Box from '@mui/material/Box';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
@@ -41,7 +42,9 @@ function Summary({
       >
         {children}
       </SummaryData>
-      <SummaryBody />
+      <Box mt={1}>
+        <SummaryBody />
+      </Box>
       {bottomFold}
     </DetailPageSection>
   );
