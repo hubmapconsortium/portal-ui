@@ -195,8 +195,8 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1(react@19.2.6)
       udi-yac:
-        specifier: ^0.1.6
-        version: 0.1.6(@types/node@25.9.1)(@types/react@19.2.15)(ag-grid-community@33.2.4)(babel-plugin-macros@3.1.0)(date-fns@4.3.0)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)(use-sync-external-store@1.6.0(react@19.2.6))(vue@3.5.34(typescript@6.0.3))
+        specifier: ^0.2.4
+        version: 0.2.4(@types/node@25.9.1)(@types/react@19.2.15)(ag-grid-community@33.2.4)(babel-plugin-macros@3.1.0)(date-fns@4.3.0)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)(use-sync-external-store@1.6.0(react@19.2.6))(vue@3.5.34(typescript@6.0.3))
       universal-cookie:
         specifier: ^7.1.2
         version: 7.2.2
@@ -7403,10 +7403,6 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
-  hono@4.12.21:
-    resolution: {integrity: sha512-uV63apnb0kyPtAUwoWgaGh9HyIFcv8lgmzPZSiTBQAFOFGIzka5EZ1dZocmGnn0XdX0+XTqJ6Tqv7selMuGLRQ==}
-    engines: {node: '>=16.9.0'}
-
   hono@4.12.22:
     resolution: {integrity: sha512-7fvVPbB92zNRsQke+uiRGwtTuef0tB2Dg4hWxYfFNvkQhIltWoyi0ONReM5LWA+jJWS3nfT5lTq+qbsIpX0IQw==}
     engines: {node: '>=16.9.0'}
@@ -9841,6 +9837,12 @@ packages:
       react: ^19.2.6
       react-dom: ^19.2.6
 
+  react-resizable@4.0.2:
+    resolution: {integrity: sha512-jZD9ghYRmyJCw0+awYctSZ+9pmX1WXQvzDrTovELYc8obC/BShTI2r4c14LIVzeQ+vJZNb0yKM7bG2eqv7Vfyg==}
+    peerDependencies:
+      react: ^19.2.6
+      react-dom: ^19.2.6
+
   react-simple-code-editor@0.13.1:
     resolution: {integrity: sha512-XYeVwRZwgyKtjNIYcAEgg2FaQcCZwhbarnkJIV20U2wkCU9q/CPFBo8nRXrK4GXUz3AvbqZFsZRrpUTkqqEYyQ==}
     peerDependencies:
@@ -11066,9 +11068,9 @@ packages:
     resolution: {integrity: sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==}
     hasBin: true
 
-  udi-toolkit@0.0.55:
-    resolution: {integrity: sha512-+OiC1Iiw3nA7sUUyRsRKyjycDjhwubAMicRrReF3lyJlHDO8hDVlLJzi3zC5tsRnpdRyYCHjyT+JWXB72sqb3Q==}
-    engines: {node: ^28 || ^26 || ^24 || ^22 || ^20, npm: '>= 6.13.4', yarn: '>= 1.21.1'}
+  udi-toolkit@0.0.69:
+    resolution: {integrity: sha512-b0ECTjiUXHuMGcwFNTigu9+lN5M60zIe32F8ufyh6+pvcUM2BvEtWW1v+qG39pjIZT+RT3wSB0a4xLsTKRAnrQ==}
+    engines: {node: ^28 || ^26 || ^24 || ^22, npm: '>= 6.13.4'}
     peerDependencies:
       ag-grid-community: 33.2.4
       pinia: ^3.0.1
@@ -11082,8 +11084,8 @@ packages:
       vue:
         optional: true
 
-  udi-yac@0.1.6:
-    resolution: {integrity: sha512-WpRJiqVNHC2m5/ihOQjZHTs4AUT56gNsnNSLxTfLW4Iwz0+mr98wwbdCPBch8csGZrdtTKGeOWniQnI8U+oWuQ==}
+  udi-yac@0.2.4:
+    resolution: {integrity: sha512-JK7BAycOcx3t5YC+tWHSlFgnGndMNOBadDHIgH4d3Wkv3Fy54oERHJ5wYClqMiBRNH7vmKumvivb617LYpIvRQ==}
     peerDependencies:
       react: ^19.2.6
       react-dom: ^19.2.6
@@ -13058,13 +13060,13 @@ snapshots:
       - '@luma.gl/webgl'
       - react
 
-  '@hono/node-server@1.19.14(hono@4.12.21)':
+  '@hono/node-server@1.19.14(hono@4.12.22)':
     dependencies:
-      hono: 4.12.21
+      hono: 4.12.22
 
   '@hono/node-ws@1.3.1(@hono/node-server@1.19.14(hono@4.12.22))(hono@4.12.22)':
     dependencies:
-      '@hono/node-server': 1.19.14(hono@4.12.21)
+      '@hono/node-server': 1.19.14(hono@4.12.22)
       hono: 4.12.22
       ws: 8.21.0
     transitivePeerDependencies:
@@ -13489,7 +13491,7 @@ snapshots:
 
   '@modelcontextprotocol/sdk@1.29.0(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 1.19.14(hono@4.12.21)
+      '@hono/node-server': 1.19.14(hono@4.12.22)
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
       content-type: 1.0.5
@@ -13499,7 +13501,7 @@ snapshots:
       eventsource-parser: 3.0.8
       express: 5.2.1
       express-rate-limit: 8.5.2(express@5.2.1)
-      hono: 4.12.21
+      hono: 4.12.22
       jose: 6.2.3
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
@@ -16217,7 +16219,7 @@ snapshots:
   '@utoo/pack@1.3.11(less-loader@12.3.3(less@4.6.4)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(less@4.6.4)(postcss@8.5.15)(resolve-url-loader@5.0.0)(sass-loader@13.3.3(sass@1.54.0)(webpack@5.107.1(@swc/core@1.13.5(@swc/helpers@0.5.21))(esbuild@0.25.12)(postcss@8.5.15)))(sass@1.54.0)(styled-jsx@5.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react@19.2.6))':
     dependencies:
       '@babel/code-frame': 7.22.5
-      '@hono/node-server': 1.19.14(hono@4.12.21)
+      '@hono/node-server': 1.19.14(hono@4.12.22)
       '@hono/node-ws': 1.3.1(@hono/node-server@1.19.14(hono@4.12.22))(hono@4.12.22)
       '@swc/helpers': 0.5.15
       '@utoo/pack-shared': 1.3.11
@@ -21315,8 +21317,6 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  hono@4.12.21: {}
-
   hono@4.12.22: {}
 
   hpack.js@2.1.6:
@@ -24181,6 +24181,13 @@ snapshots:
       react-dom: 19.2.6(react@19.2.6)
       react-draggable: 4.5.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
 
+  react-resizable@4.0.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+    dependencies:
+      prop-types: 15.8.1
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      react-draggable: 4.5.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+
   react-simple-code-editor@0.13.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
       react: 19.2.6
@@ -25603,7 +25610,7 @@ snapshots:
 
   ua-parser-js@1.0.41: {}
 
-  udi-toolkit@0.0.55(ag-grid-community@33.2.4)(react@19.2.6)(vue@3.5.34(typescript@6.0.3)):
+  udi-toolkit@0.0.69(ag-grid-community@33.2.4)(react@19.2.6)(vue@3.5.34(typescript@6.0.3)):
     dependencies:
       '@types/d3-scale': 4.0.9
       '@types/d3-scale-chromatic': 3.1.0
@@ -25621,11 +25628,10 @@ snapshots:
       react: 19.2.6
       vue: 3.5.34(typescript@6.0.3)
 
-  udi-yac@0.1.6(@types/node@25.9.1)(@types/react@19.2.15)(ag-grid-community@33.2.4)(babel-plugin-macros@3.1.0)(date-fns@4.3.0)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)(use-sync-external-store@1.6.0(react@19.2.6))(vue@3.5.34(typescript@6.0.3)):
+  udi-yac@0.2.4(@types/node@25.9.1)(@types/react@19.2.15)(ag-grid-community@33.2.4)(babel-plugin-macros@3.1.0)(date-fns@4.3.0)(immer@10.2.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)(use-sync-external-store@1.6.0(react@19.2.6))(vue@3.5.34(typescript@6.0.3)):
     dependencies:
       '@base-ui/react': 1.5.0(@types/react@19.2.15)(date-fns@4.3.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@fontsource-variable/geist': 5.2.9
-      arquero: 8.0.3
       class-variance-authority: 0.7.1
       clsx: 2.1.1
       jszip: 3.10.1
@@ -25633,11 +25639,13 @@ snapshots:
       lz-string: 1.5.0
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
+      react-grid-layout: 2.2.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react-markdown: 10.1.0(@types/react@19.2.15)(react@19.2.6)
+      react-resizable: 4.0.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       shadcn: 4.8.0(@types/node@25.9.1)(babel-plugin-macros@3.1.0)(typescript@6.0.3)
       tailwind-merge: 3.6.0
       tw-animate-css: 1.4.0
-      udi-toolkit: 0.0.55(ag-grid-community@33.2.4)(react@19.2.6)(vue@3.5.34(typescript@6.0.3))
+      udi-toolkit: 0.0.69(ag-grid-community@33.2.4)(react@19.2.6)(vue@3.5.34(typescript@6.0.3))
       zustand: 5.0.13(@types/react@19.2.15)(immer@10.2.0)(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
     transitivePeerDependencies:
       - '@cfworker/json-schema'

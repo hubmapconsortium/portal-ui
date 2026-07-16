@@ -13,35 +13,11 @@ import { SCFindGeneQueryDatasetList } from 'js/components/cells/SCFindResults/SC
 import SCFindDatasetTableActions from 'js/components/cells/SCFindResults/SCFindDatasetTableActions';
 import DatasetsOverview from 'js/components/cells/DatasetsOverview';
 import SelectableTableProvider, { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { DatasetsForGenesResponse } from 'js/api/scfind/useFindDatasetForGenes';
 import { useGeneDatasetsData, useGeneSymbol } from '../hooks';
+import { useGeneMatchedDatasets } from './hooks';
 
 const RNA_TAB = 0;
 const ATAC_TAB = 1;
-
-/**
- * Collapse a `findDatasets` aggregate slice into the matched-dataset id list + a hubmap_id -> count
- * map for the table's matching-gene column. The gene-detail aggregate queries a single gene, so we
- * read the one entry regardless of the exact key casing scFind echoes back.
- */
-function useGeneMatchedDatasets(data: DatasetsForGenesResponse | undefined) {
-  return useMemo(() => {
-    const findDatasets = data?.findDatasets ?? {};
-    const allCounts = data?.counts ?? {};
-    const key = Object.keys(findDatasets)[0];
-    const datasets = key ? findDatasets[key] : [];
-    const counts = key ? (allCounts[key] ?? []) : [];
-
-    const countsMap: Record<string, number> = {};
-    datasets.forEach((hubmapId, index) => {
-      if (hubmapId) {
-        countsMap[hubmapId] = counts[index] ?? 0;
-      }
-    });
-    const ids = Object.keys(countsMap);
-    return { ids, countsMap, datasetIds: ids.map((hubmap_id) => ({ hubmap_id })) };
-  }, [data]);
-}
 
 /**
  * A single modality's dataset table. Rendered inside its own SelectableTableProvider (one per tab),

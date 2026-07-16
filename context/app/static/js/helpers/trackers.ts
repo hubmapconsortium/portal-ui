@@ -128,7 +128,13 @@ function formatEvent(event: TrackingEvent, id?: string): StringifiedEvent {
 
 function trackEvent(event: TrackingEvent, id?: string, matomo = true) {
   const formattedEvent = formatEvent(event, id);
-  if (matomo) tracker.trackEvent(formattedEvent as unknown as Parameters<typeof tracker.trackEvent>[0]);
+  // Matomo's trackEvent throws when category/action are missing; guard it so a
+  // malformed event degrades to GA-only instead of throwing and taking the GA
+  // call below down with it. (GA also silently drops category/action-less
+  // events, so the real fix is always to supply both at the call site.)
+  if (matomo && formattedEvent.category && formattedEvent.action) {
+    tracker.trackEvent(formattedEvent as unknown as Parameters<typeof tracker.trackEvent>[0]);
+  }
   ReactGA.event(formattedEvent as unknown as Parameters<typeof ReactGA.event>[0]);
 }
 

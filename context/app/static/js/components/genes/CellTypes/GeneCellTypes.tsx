@@ -399,30 +399,42 @@ export default function CellTypes() {
     return openTabIndex;
   }, [openTabIndex, rnaCount, atacCount]);
 
+  const hasNoCellTypes = !isLoading && rnaCount === 0 && atacCount === 0;
+
   return (
     <CollapsibleDetailPageSection
       id={cellTypesSection.id}
       title={`Cell Types with ${geneSymbolUpper} as Marker Gene`}
       trackingInfo={trackingInfo}
     >
-      <Description>
-        The table displays cell types expressing this marker gene as identified by the <SCFindLink />. It calculates
-        cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq and ATACseq datasets
-        with cell type annotations.
-        <Divider sx={{ opacity: 0, my: 1 }} />
-        The table can be filtered by organs and available for download for further analysis. Filtering by organ will
-        recompute the results and recalculate statistical values accordingly.
-      </Description>
-      <Tabs value={effectiveTabIndex} onChange={handleTabChange}>
-        <Tab label={`RNAseq (${rnaCount} Cell Types)`} index={0} disabled={!isLoading && rnaCount === 0} />
-        <Tab label={`ATACseq (${atacCount} Cell Types)`} index={1} disabled={!isLoading && atacCount === 0} />
-      </Tabs>
-      <TabPanel value={effectiveTabIndex} index={0}>
-        <CellTypesTable modality={undefined} />
-      </TabPanel>
-      <TabPanel value={effectiveTabIndex} index={1}>
-        <CellTypesTable modality="ATAC" />
-      </TabPanel>
+      {hasNoCellTypes ? (
+        <Description>
+          No cell types expressing this marker gene were identified by the <SCFindLink />, which calculates cell count
+          proportions and statistical metrics based on uniformly processed HuBMAP RNAseq or ATACseq datasets with cell
+          type annotations.
+        </Description>
+      ) : (
+        <>
+          <Description>
+            The table displays cell types expressing this marker gene as identified by the <SCFindLink />. It calculates
+            cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq and ATACseq
+            datasets with cell type annotations.
+            <Divider sx={{ opacity: 0, my: 1 }} />
+            The table can be filtered by organs and available for download for further analysis. Filtering by organ will
+            recompute the results and recalculate statistical values accordingly.
+          </Description>
+          <Tabs value={effectiveTabIndex} onChange={handleTabChange}>
+            <Tab label={`RNAseq (${rnaCount} Cell Types)`} index={0} disabled={!isLoading && rnaCount === 0} />
+            <Tab label={`ATACseq (${atacCount} Cell Types)`} index={1} disabled={!isLoading && atacCount === 0} />
+          </Tabs>
+          <TabPanel value={effectiveTabIndex} index={0}>
+            <CellTypesTable modality={undefined} />
+          </TabPanel>
+          <TabPanel value={effectiveTabIndex} index={1}>
+            <CellTypesTable modality="ATAC" />
+          </TabPanel>
+        </>
+      )}
     </CollapsibleDetailPageSection>
   );
 }

@@ -160,12 +160,21 @@ function VisualizationAccordion() {
     sectionDataset,
     sectionDataset: { hubmap_id },
     conf,
+    isLoadingConf,
   } = useProcessedDatasetContext();
 
   const hasBeenSeen = useProcessedDataStore((state) => state.hasBeenSeen(hubmap_id));
 
   const segmentationMetadata = dataset.ingest_metadata?.segmentation_metadata;
   const workflowDetailsHref = `#${datasetSectionId(sectionDataset, 'protocols-and-workflow-details')}`;
+
+  if (isLoadingConf) {
+    return (
+      <Subsection title="Visualization" icon={<VisualizationIcon />}>
+        <Skeleton variant="rectangular" height={500} />
+      </Subsection>
+    );
+  }
 
   if (!conf) {
     return null;
@@ -278,9 +287,10 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
   return (
     <ProcessedDatasetContextProvider
       conf={conf}
+      isLoadingConf={loadingVitessceConf}
       dataset={datasetDetails}
       sectionDataset={sectionDataset}
-      isLoading={isLoading || loadingVitessceConf}
+      isLoading={isLoading}
       defaultExpanded={defaultExpanded}
     >
       <ProcessedDatasetAccordion>
