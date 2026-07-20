@@ -81,7 +81,7 @@
     {
       "label": "Flask Server",
       "type": "shell",
-      "command": "${command:python.interpreterPath} -m flask run --debug",
+      "command": "${workspaceFolder}/.venv/bin/python -m flask run --debug",
       "dependsOn": ["Copy app configuration", "Clean build output"],
       "options": {
         "cwd": "${workspaceFolder}/context",
