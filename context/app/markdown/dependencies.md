@@ -15,7 +15,7 @@ globus-sdk>=3.59.0
 gunicorn>=23.0.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
-portal-visualization[full]>=0.5.9
+portal-visualization[full]>=0.5.10
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
@@ -67,6 +67,7 @@ ruff>=0.14.0
 "date-fns": "^4.3.0",
 "deepmerge": "^4.3.1",
 "elastic-builder": "^2.29.0",
+"embla-carousel-react": "^8.6.0",
 "history": "^5.3.0",
 "html-react-parser": "^5.1.10",
 "html2canvas": "^1.4.1",
