@@ -1,7 +1,10 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { decodeURLParamsToConf, VitessceConfig } from 'vitessce';
 import { useQueryState, parseAsString } from 'nuqs';
+import useSWR from 'swr';
 
+import { fetcher } from 'js/helpers/swr';
+import { cdnUrl } from 'js/helpers/cdn';
 import { useSnackbarActions, useSnackbarStore } from 'js/shared-styles/snackbars';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { debounce } from 'js/helpers/nodash';
@@ -48,6 +51,14 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
     [vizParam, hubmapId],
   );
 
+  // `?vitessce-conf=<slug>` references a static config hosted on the CDN, used as the config
+  // override in place of an inline `#vitessce_conf=` hash blob (see the effect below). Hosting
+  // it on the CDN lets configs be updated without a portal redeploy. The slug is restricted to a
+  // plain filename token so it can't be used to point the fetch at an arbitrary URL.
+  const [confSlug] = useQueryState('vitessce-conf', parseAsString);
+  const staticConfUrl = confSlug && /^[a-z0-9_-]+$/i.test(confSlug) ? cdnUrl(`vitessce/${confSlug}.json`) : null;
+  const { data: staticConf } = useSWR(staticConfUrl, (url: string) => fetcher({ url }));
+
   const headerOffset = useTotalHeaderOffset();
   const headerOffsetRef = useRef(headerOffset);
   useEffect(() => {
@@ -92,19 +103,31 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
 
     if (vitData) {
       const fragment = window.location.hash.substring(1);
-      if (!isTargetViz || !fragment.startsWith('vitessce_conf_')) {
-        // Not the target visualization, or this is an anchor link like "#attribution"
+      const hasHashConf = fragment.startsWith('vitessce_conf_');
+      if (!isTargetViz || (!confSlug && !hasHashConf)) {
+        // Not the target visualization, or a plain anchor link like "#attribution" with no override
         setVitessceDefaults(vitData);
         return undefined;
       }
+
       let vitessceURLConf: object | null;
-      try {
-        vitessceURLConf = fragment.length > 0 ? (decodeURLParamsToConf(fragment) as unknown as object) : null;
-      } catch {
-        // If URL cannot be parsed, display error and show Vitessce.
-        toastError('View configuration from URL was not able to be parsed.');
-        setVitessceDefaults(vitData);
-        return undefined;
+      if (confSlug) {
+        // Static config referenced by ?vitessce-conf=<slug>. While it's still loading — or if the
+        // slug was rejected / the fetch failed — show defaults; the effect re-runs once it resolves.
+        if (!staticConf) {
+          setVitessceDefaults(vitData);
+          return undefined;
+        }
+        vitessceURLConf = staticConf;
+      } else {
+        try {
+          vitessceURLConf = fragment.length > 0 ? (decodeURLParamsToConf(fragment) as unknown as object) : null;
+        } catch {
+          // If URL cannot be parsed, display error and show Vitessce.
+          toastError('View configuration from URL was not able to be parsed.');
+          setVitessceDefaults(vitData);
+          return undefined;
+        }
       }
 
       let initializedVitDataFromUrl: object | object[];
@@ -151,7 +174,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
     };
     // markerGene is included to re-initialize when it changes (e.g., gene search)
-  }, [vitData, toastError, markerGene, isTargetViz, vizParam, hubmapId]);
+  }, [vitData, toastError, markerGene, isTargetViz, vizParam, hubmapId, confSlug, staticConf]);
 
   const currentConfig = useMemo(() => {
     if (isMultiDataset && Array.isArray(vitessceConfig) && Number.isInteger(vitessceSelection)) {

@@ -1,0 +1,1 @@
+- Add the "Why Researchers Use the HuBMAP Data Portal" testimonials section to the homepage, with cards linking to datasets search, workspaces, and biomarkers/cell types search.
