@@ -4,6 +4,7 @@ import { useQueryState, parseAsString } from 'nuqs';
 import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
+import { cdnUrl } from 'js/helpers/cdn';
 import { useSnackbarActions, useSnackbarStore } from 'js/shared-styles/snackbars';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { debounce } from 'js/helpers/nodash';
@@ -55,7 +56,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
   // it on the CDN lets configs be updated without a portal redeploy. The slug is restricted to a
   // plain filename token so it can't be used to point the fetch at an arbitrary URL.
   const [confSlug] = useQueryState('vitessce-conf', parseAsString);
-  const staticConfUrl = confSlug && /^[a-z0-9_-]+$/i.test(confSlug) ? `${CDN_URL}/v3/vitessce/${confSlug}.json` : null;
+  const staticConfUrl = confSlug && /^[a-z0-9_-]+$/i.test(confSlug) ? cdnUrl(`vitessce/${confSlug}.json`) : null;
   const { data: staticConf } = useSWR(staticConfUrl, (url: string) => fetcher({ url }));
 
   const headerOffset = useTotalHeaderOffset();

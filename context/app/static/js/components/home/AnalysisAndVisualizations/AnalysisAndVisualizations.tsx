@@ -10,9 +10,13 @@ import VisualizeDataSlide from './VisualizeDataSlide';
 import { useProminentSlideIndex } from './hooks';
 import { DATASETS_SEARCH_SLIDE, CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE, VISUALIZE_DATA_SLIDE } from './config';
 
+// Order drives each slide's zIndex and prominence index. The multi-view Explore slide below is
+// a different component with a different config type, so it stays explicit after the map.
+const PARALLAX_SLIDES = [DATASETS_SEARCH_SLIDE, CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE];
+
 function AnalysisAndVisualizations() {
   // Only the slide crossing the viewport middle is "prominent" — used to play its video.
-  const { prominentIndex, slideRef } = useProminentSlideIndex(4);
+  const { prominentIndex, slideRef } = useProminentSlideIndex(PARALLAX_SLIDES.length + 1);
 
   return (
     <Box component="section" id="analysis-and-visualizations" aria-label="Analysis and Visualizations">
@@ -28,25 +32,20 @@ function AnalysisAndVisualizations() {
 
       {/* Parallax scroll container - tall enough for all 3 slides to scroll through */}
       <Box>
-        <ParallaxSlide
-          config={DATASETS_SEARCH_SLIDE}
-          zIndex={1}
-          isProminent={prominentIndex === 0}
-          stickyRef={slideRef(0)}
+        {PARALLAX_SLIDES.map((config, index) => (
+          <ParallaxSlide
+            key={config.id}
+            config={config}
+            zIndex={index + 1}
+            isProminent={prominentIndex === index}
+            stickyRef={slideRef(index)}
+          />
+        ))}
+        <VisualizeDataSlide
+          config={VISUALIZE_DATA_SLIDE}
+          zIndex={PARALLAX_SLIDES.length + 1}
+          stickyRef={slideRef(PARALLAX_SLIDES.length)}
         />
-        <ParallaxSlide
-          config={CLOUD_WORKSPACES_SLIDE}
-          zIndex={2}
-          isProminent={prominentIndex === 1}
-          stickyRef={slideRef(1)}
-        />
-        <ParallaxSlide
-          config={BIOMARKERS_SLIDE}
-          zIndex={3}
-          isProminent={prominentIndex === 2}
-          stickyRef={slideRef(2)}
-        />
-        <VisualizeDataSlide config={VISUALIZE_DATA_SLIDE} zIndex={4} stickyRef={slideRef(3)} />
       </Box>
     </Box>
   );

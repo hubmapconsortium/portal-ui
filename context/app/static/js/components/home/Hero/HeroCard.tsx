@@ -6,6 +6,7 @@ import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
 import { useEventCallback } from '@mui/material/utils';
 
 import { trackEvent } from 'js/helpers/trackers';
+import { cdnUrl } from 'js/helpers/cdn';
 import { MUIIcon } from 'js/shared-styles/icons/entityIconMap';
 import { CardContainer, CardVideoContainer } from './styles';
 
@@ -76,8 +77,8 @@ export default function HeroCard({
           ) : (
             thumbnailName && (
               <picture>
-                <source type="image/webp" srcSet={`${CDN_URL}/v3/thumbnail_${thumbnailName}-25.webp`} />
-                <img src={`${CDN_URL}/v3/thumbnail_${thumbnailName}-25.png`} alt="" />
+                <source type="image/webp" srcSet={cdnUrl(`thumbnail_${thumbnailName}-25.webp`)} />
+                <img src={cdnUrl(`thumbnail_${thumbnailName}-25.png`)} alt="" />
               </picture>
             )
           )}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { cdnUrl } from 'js/helpers/cdn';
 import { BACKGROUND_CYCLE_INTERVAL_MS, BACKGROUND_FADE_DURATION_MS, HERO_CARDS } from './const';
 import { BackgroundContainer, BackgroundImageLayer, BackgroundOverlay } from './styles';
 
@@ -22,10 +23,10 @@ function useReducedMotion() {
 
 function buildSrcSet(imageName: string, ext: string): string {
   return [
-    `${CDN_URL}/v3/${imageName}-25.${ext} 640w`,
-    `${CDN_URL}/v3/${imageName}-50.${ext} 1280w`,
-    `${CDN_URL}/v3/${imageName}-75.${ext} 1920w`,
-    `${CDN_URL}/v3/${imageName}-100.${ext} 2560w`,
+    `${cdnUrl(`${imageName}-25.${ext}`)} 640w`,
+    `${cdnUrl(`${imageName}-50.${ext}`)} 1280w`,
+    `${cdnUrl(`${imageName}-75.${ext}`)} 1920w`,
+    `${cdnUrl(`${imageName}-100.${ext}`)} 2560w`,
   ].join(', ');
 }
 
@@ -66,7 +67,7 @@ export default function HeroBackground({ hoveredIndex = null }: HeroBackgroundPr
             <img
               srcSet={buildSrcSet(imageName, 'png')}
               sizes="100vw"
-              src={`${CDN_URL}/v3/${imageName}-100.png`}
+              src={cdnUrl(`${imageName}-100.png`)}
               alt=""
               loading={index === 0 ? 'eager' : 'lazy'}
               fetchPriority={index === 0 ? 'high' : 'auto'}

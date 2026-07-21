@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { trackEvent } from 'js/helpers/trackers';
+import { cdnUrl } from 'js/helpers/cdn';
 
 interface Testimonial {
   quote: string;
@@ -20,7 +21,7 @@ const TESTIMONIALS: Testimonial[] = [
     quote:
       '“The ability to rapidly inspect datasets provides a valuable sanity check. Without it, I’d need to download and process the full dataset before realizing it wasn’t useful. This helps prevents unnecessary work and streamlines my analysis.”',
     role: 'Bioinformatician',
-    image: `${CDN_URL}/v3/testimonials/datasets.webp`,
+    image: cdnUrl('testimonials/datasets.webp'),
     buttonLabel: 'Explore HuBMAP Datasets',
     href: '/search/datasets',
   },
@@ -28,7 +29,7 @@ const TESTIMONIALS: Testimonial[] = [
     quote:
       '“HuBMAP’s pipelines and Workspaces make it easy to bring in datasets and start analyzing immediately. I adapted the cell-space workflow and used Workspaces to annotate data directly for my latest project.”',
     role: 'PhD Student in Biomedical Engineering',
-    image: `${CDN_URL}/v3/testimonials/biomarkers.webp`,
+    image: cdnUrl('testimonials/biomarkers.webp'),
     buttonLabel: 'Explore Workspaces',
     href: '/workspaces',
   },
@@ -36,7 +37,7 @@ const TESTIMONIALS: Testimonial[] = [
     quote:
       '“The biological context is incredibly valuable because it reveals patterns beyond the tissue I’m actively studying. Seeing how a gene expresses itself across multiple organs gave me a much broader understanding of the data and helped me think more strategically about my experimental design. I didn’t fully appreciate these cross-organ patterns until using this tool.”',
     role: 'Instructor in Medicine',
-    image: `${CDN_URL}/v3/testimonials/workspaces.webp`,
+    image: cdnUrl('testimonials/workspaces.webp'),
     buttonLabel: 'Explore Biomarker and Cell Type Search',
     href: '/search/biomarkers-cell-types',
   },

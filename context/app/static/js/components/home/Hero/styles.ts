@@ -84,7 +84,7 @@ export const CardVideoContainer = styled('div')(({ theme }) => ({
   borderRadius: 4,
   overflow: 'hidden',
   flexShrink: 0,
-  backgroundColor: '#f5f5f5',
+  backgroundColor: theme.palette.common.white,
   // On small screens the fixed-width media crowds out the card text (causing overflow), so
   // shrink it to leave room for the title and description.
   [theme.breakpoints.down('sm')]: {
