@@ -31,7 +31,7 @@ const UpperLowerGrid = styled(Container)(({ theme }) => ({
 
 const BottomLowerGrid = styled(Container)(({ theme }) => ({
   display: 'grid',
-  gridGap: theme.spacing(3),
+  gridGap: theme.spacing(4),
   gridTemplateAreas: '"research-powered-by-hubmap" "testimonials" "guidelines" "related-tools-and-resources"',
   marginBottom: theme.spacing(5),
   width: '100%',

@@ -75,7 +75,9 @@ export const SlideContentGrid = styled(Box)(({ theme }) => ({
     // Selector/side text takes 1/3, the media content takes 2/3.
     gridTemplateColumns: '1fr 2fr',
     gap: theme.spacing(4),
-    alignItems: 'center',
+    // Top-align the columns (not center) so switching to the taller carousel view grows the
+    // media downward instead of re-centering the row and shifting the selector column.
+    alignItems: 'start',
   },
 }));
 

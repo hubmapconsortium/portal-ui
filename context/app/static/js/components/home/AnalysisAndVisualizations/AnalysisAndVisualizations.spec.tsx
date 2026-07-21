@@ -52,7 +52,10 @@ describe('AnalysisAndVisualizations', () => {
 
   test('Cloud Workspaces slide has Sign Up and Launch Workspaces buttons', () => {
     render(<AnalysisAndVisualizations />);
-    expect(screen.getByRole('link', { name: 'Sign Up' })).toHaveAttribute('href', '/register');
+    expect(screen.getByRole('link', { name: 'Sign Up' })).toHaveAttribute(
+      'href',
+      'https://hubmapconsortium.org/workspaces-sign-up/',
+    );
     expect(screen.getByRole('link', { name: 'Launch Workspaces' })).toHaveAttribute('href', '/workspaces');
   });
 

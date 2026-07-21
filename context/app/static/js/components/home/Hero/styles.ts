@@ -78,19 +78,25 @@ export const CardContainer = styled('a')(({ theme }) => ({
   },
 }));
 
-export const CardVideoContainer = styled('div')({
+export const CardVideoContainer = styled('div')(({ theme }) => ({
   width: 180,
   height: 135,
   borderRadius: 4,
   overflow: 'hidden',
   flexShrink: 0,
   backgroundColor: '#f5f5f5',
+  // On small screens the fixed-width media crowds out the card text (causing overflow), so
+  // shrink it to leave room for the title and description.
+  [theme.breakpoints.down('sm')]: {
+    width: 100,
+    height: 75,
+  },
   '& video, & img': {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
   },
-});
+}));
 
 export const PillBar = styled('nav')(({ theme }) => ({
   display: 'flex',

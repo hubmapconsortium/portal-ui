@@ -64,7 +64,9 @@ function DesktopViewSelector({
             </Typography>
             <Button
               variant={isActive ? 'contained' : 'outlined'}
-              color={view.theme}
+              // Outlined (inactive) buttons use primary for legibility — themed outline colors
+              // (e.g. warning/success) don't meet contrast against the light gradient.
+              color={isActive ? view.theme : 'primary'}
               size="small"
               href={view.ctaButton.href}
               onClick={(e: React.MouseEvent) => {

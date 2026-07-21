@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useSpring } from '@react-spring/web';
@@ -45,11 +46,14 @@ function VisualizeDataSlide({ config, zIndex, stickyRef }: VisualizeDataSlidePro
           }}
         />
 
-        {/* Section title and description centered */}
-        <Typography variant="h4" component="h3" align="center" gutterBottom fontWeight={400} sx={{ mb: 0.5 }}>
+        {/* Section title and description centered. Icon + title share a flex row so the icon stays
+            vertically centered with the heading rather than baseline-aligned inside the Typography. */}
+        <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" sx={{ mb: 0.5 }}>
           <Icon color={activeView.theme} />
-          {config.sectionTitle}
-        </Typography>
+          <Typography variant="h4" component="h3" fontWeight={400}>
+            {config.sectionTitle}
+          </Typography>
+        </Stack>
         <Typography variant="body1" color="text.secondary" align="center" sx={{ mb: 3, maxWidth: 700, mx: 'auto' }}>
           {config.sectionDescription}
         </Typography>

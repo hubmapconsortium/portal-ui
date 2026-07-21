@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import PushPinRounded from '@mui/icons-material/PushPinRounded';
 import { useEventCallback } from '@mui/material/utils';
 
-import { InternalLink } from 'js/shared-styles/Links';
 import { trackEvent } from 'js/helpers/trackers';
 import { buildSecondaryText } from 'js/components/publications/utils';
 import { ContributorAPIResponse, normalizeContributor } from 'js/components/detailPage/ContributorsTable/utils';
@@ -37,7 +36,35 @@ function PublicationCard({ publication, isPinned }: PublicationCardProps) {
   });
 
   return (
-    <Paper variant="outlined" sx={{ p: 2, height: '100%' }}>
+    <Paper
+      component="a"
+      variant="outlined"
+      href={`/browse/publication/${uuid}`}
+      onClick={handleClick}
+      sx={(theme) => ({
+        display: 'block',
+        p: 2,
+        height: '100%',
+        color: 'inherit',
+        textDecoration: 'none',
+        transition: theme.transitions.create(['transform', 'box-shadow'], {
+          duration: theme.transitions.duration.shorter,
+        }),
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: theme.shadows[4],
+        },
+        '&:focus-visible': {
+          outline: `2px solid ${theme.palette.primary.main}`,
+          outlineOffset: 2,
+        },
+        // Respect reduced-motion: keep the shadow cue, drop the movement.
+        '@media (prefers-reduced-motion: reduce)': {
+          transition: 'none',
+          '&:hover': { transform: 'none', boxShadow: theme.shadows[4] },
+        },
+      })}
+    >
       <Box display="flex" height="100%">
         <Stack spacing={2} flex={1} minWidth={0}>
           <Typography
@@ -58,9 +85,10 @@ function PublicationCard({ publication, isPinned }: PublicationCardProps) {
               <Typography variant="body2" color="text.secondary">
                 {secondaryText}
               </Typography>
-              <InternalLink href={`/browse/publication/${uuid}`} onClick={handleClick}>
+              {/* Visual affordance only — the whole card is the link, so this is not a nested anchor. */}
+              <Typography variant="body2" color="primary" fontWeight={500}>
                 View Publication &rarr;
-              </InternalLink>
+              </Typography>
             </Stack>
             {isPinned && (
               <Box display="flex" alignItems="flex-end">

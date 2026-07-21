@@ -2,6 +2,7 @@ import React from 'react';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import HomepageOutboundLink from 'js/components/home/HomepageOutboundLink';
 import { StyledPaper, StyledTypography } from './style';
+import Typography from '@mui/material/Typography';
 
 interface Paragraph {
   key: string;
@@ -54,7 +55,7 @@ const paragraphs: Paragraph[] = [
 
   {
     key: 'cite-heading',
-    component: <strong>How to cite?</strong>,
+    component: <Typography variant="subtitle2">How to cite?</Typography>,
   },
   {
     key: 'cite',

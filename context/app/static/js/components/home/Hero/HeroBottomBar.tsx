@@ -18,6 +18,9 @@ function scrollToSection(anchorId: string) {
     const offset = headerHeight + 60; // header + sticky bar height
     const top = element.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top, behavior: 'smooth' });
+    // Reflect the section in the URL (shareable/deep-linkable) without a native hash jump,
+    // which would fight the smooth scroll above.
+    window.history.replaceState(null, '', `#${anchorId}`);
   }
 }
 
