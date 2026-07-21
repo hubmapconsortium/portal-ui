@@ -54,7 +54,7 @@ export const CLOUD_WORKSPACES_SLIDE: SlideConfig = {
   ctaButtons: [
     {
       label: 'Sign Up',
-      href: '/register',
+      href: 'https://hubmapconsortium.org/workspaces-sign-up/',
       variant: 'contained',
       trackingLabel: 'Cloud Workspaces / Sign Up',
     },
@@ -250,7 +250,7 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
       description: 'Dive deep into dataset metadata.',
       ctaButton: {
         label: 'Explore Data',
-        href: '/lineup',
+        href: '/lineup/datasets',
         variant: 'contained',
         trackingLabel: 'Visualize / Explore Data',
       },
