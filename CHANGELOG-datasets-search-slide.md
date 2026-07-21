@@ -1,3 +1,0 @@
-- Add a "Find Data Your Way" datasets search slide to the start of the homepage parallax section, highlighting Filter & Browse and Say & See search modes.
-- Add a description with a Say & See Mode link above the HuBMAP Datasets chart on the homepage.
-- Improve homepage parallax scroll performance: lazy-load carousel images, compositor-promote the visualize slide's gradient, and memoize slide components.

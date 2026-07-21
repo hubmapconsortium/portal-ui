@@ -1,0 +1,5 @@
+- Add parallax slides demonstrating core site functionalities.
+- Add the "Explore HuBMAP Data" section, with parallax slides for finding data, cloud workspaces, biomarkers, and single-cell/spatial visualizations — including autoplaying in-view videos and an "Integrated Maps" subsection.
+- Add a "Find Data Your Way" datasets search slide highlighting the Filter & Browse and Say & See search modes.
+- Add an accessible carousel of example Vitessce visualizations in the single-cell/spatial view, with per-visualization links and assay/analyte captions.
+- Load the carousel's customized Vitessce configurations from static files on the CDN (via a `?vitessce-conf=<slug>` URL parameter) so they can be updated without a portal redeploy.

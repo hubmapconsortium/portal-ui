@@ -1,9 +1,0 @@
-- Align the Visualize Data slide's section-title icon with its heading via a flex container.
-- Update the URL hash when navigating the homepage via the hero section's navigation bar.
-- Use the primary color for inactive (outlined) buttons on the Visualize Data slide for legibility.
-- Use the primary color for the "How to cite?" heading in the Data Use Guidelines.
-- Increase the spacing between the post-parallax homepage sections to 32px.
-- Make the full body of "Research Powered by HuBMAP" publication cards a link, with a floating hover effect.
-- Add 16px of top padding above all charts (shared ChartWrapper component).
-- Fix a layout shift on the Visualize Data slide when switching to the Vitessce carousel view.
-- Fix the hero cards' text overflowing the viewport width on small screens.

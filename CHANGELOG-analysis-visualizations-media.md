@@ -1,4 +1,0 @@
-- Play autoplaying, looping, muted videos (in-view) on the Cloud Workspaces and Biomarkers homepage slides.
-- Add a carousel of example Vitessce visualizations to the Single-Cell and Spatial Data Visualizations view, with links to each visualization and assay/analyte captions.
-- Add an "Integrated Maps" subsection to the "Explore HuBMAP Data" homepage section, linking to `/integrated-maps`.
-- Rename the homepage section from "Visualize HuBMAP Data" to "Explore HuBMAP Data".
