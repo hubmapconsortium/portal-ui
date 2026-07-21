@@ -1,0 +1,1 @@
+- Add the "Research Powered by HuBMAP" section with publication cards, including pinned/highlighted publications; each card is fully clickable and lifts slightly on hover.

@@ -1,0 +1,81 @@
+import React, { useEffect, useState } from 'react';
+
+import { cdnUrl } from 'js/helpers/cdn';
+import { BACKGROUND_CYCLE_INTERVAL_MS, BACKGROUND_FADE_DURATION_MS, HERO_CARDS } from './const';
+import { BackgroundContainer, BackgroundImageLayer, BackgroundOverlay } from './styles';
+
+function useReducedMotion() {
+  // Read synchronously on mount so the effect only subscribes to later changes —
+  // setting state inside the effect body trips react-hooks/set-state-in-effect.
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+
+  return prefersReducedMotion;
+}
+
+function buildSrcSet(imageName: string, ext: string): string {
+  return [
+    `${cdnUrl(`${imageName}-25.${ext}`)} 640w`,
+    `${cdnUrl(`${imageName}-50.${ext}`)} 1280w`,
+    `${cdnUrl(`${imageName}-75.${ext}`)} 1920w`,
+    `${cdnUrl(`${imageName}-100.${ext}`)} 2560w`,
+  ].join(', ');
+}
+
+interface HeroBackgroundProps {
+  /** Index of the currently hovered card, or null when none is hovered. */
+  hoveredIndex?: number | null;
+}
+
+export default function HeroBackground({ hoveredIndex = null }: HeroBackgroundProps) {
+  const [cycleIndex, setCycleIndex] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+  const isHovered = hoveredIndex !== null;
+
+  // Auto-cycle — paused while any card is hovered
+  useEffect(() => {
+    if (prefersReducedMotion || isHovered) return undefined;
+
+    const interval = setInterval(() => {
+      setCycleIndex((prev) => (prev + 1) % HERO_CARDS.length);
+    }, BACKGROUND_CYCLE_INTERVAL_MS);
+
+    return () => clearInterval(interval);
+  }, [prefersReducedMotion, isHovered]);
+
+  // While hovering, show that card's background; otherwise follow the cycle.
+  const activeIndex = hoveredIndex ?? cycleIndex;
+
+  return (
+    <BackgroundContainer aria-hidden="true">
+      {HERO_CARDS.map(({ imageName }, index) => (
+        <BackgroundImageLayer
+          key={imageName}
+          $active={index === activeIndex}
+          $transitionDuration={BACKGROUND_FADE_DURATION_MS}
+        >
+          <picture>
+            <source type="image/webp" srcSet={buildSrcSet(imageName, 'webp')} sizes="100vw" />
+            <img
+              srcSet={buildSrcSet(imageName, 'png')}
+              sizes="100vw"
+              src={cdnUrl(`${imageName}-100.png`)}
+              alt=""
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
+            />
+          </picture>
+        </BackgroundImageLayer>
+      ))}
+      <BackgroundOverlay />
+    </BackgroundContainer>
+  );
+}

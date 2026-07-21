@@ -77,6 +77,8 @@ function ChartWrapper(
       sx={{
         display: 'grid',
         gridTemplateAreas: fullWidthGraph ? fullWidthGraphTemplateAreas : defaultGridTemplateAreas,
+        // 16px of breathing room above every chart (global — see homepage review feedback).
+        pt: 2,
         overflow: 'hidden',
         // Fit the container and let the chart-area columns shrink below their (SVG-driven) content
         // width, so the chart fills the available space instead of pushing the layout wider than the

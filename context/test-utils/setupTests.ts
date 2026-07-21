@@ -22,3 +22,19 @@ class MockResizeObserver {
   disconnect() {}
 }
 globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+
+// jsdom doesn't implement matchMedia; provide a no-op default so libraries that read
+// it at runtime (embla-carousel, MUI useMediaQuery) don't throw. Individual tests can
+// still override window.matchMedia to drive specific media-query behavior.
+if (typeof globalThis.matchMedia !== 'function') {
+  globalThis.matchMedia = ((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  })) as unknown as typeof globalThis.matchMedia;
+}

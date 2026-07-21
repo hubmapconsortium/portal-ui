@@ -1,12 +1,25 @@
 import { renderHook, act } from 'test-utils/functions';
+import useSWR from 'swr';
 
 import { useVitessceConfig } from './hooks';
 
+// The hook fetches a static config via SWR when ?vitessce-conf= is present; mock only the
+// default `useSWR` (keep SWRConfig etc., which the test render wrapper's Providers use) so the
+// data is deterministic. Mirror real SWR: a null key (rejected slug) yields no data.
+vi.mock('swr', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('swr')>()),
+  default: vi.fn(),
+}));
+const mockedUseSWR = vi.mocked(useSWR);
+
 describe('useVitessceConfig', () => {
   let originalLocation: Location;
+  let staticConfData: unknown;
 
   beforeEach(() => {
     originalLocation = window.location;
+    staticConfData = undefined;
+    mockedUseSWR.mockImplementation((key) => ({ data: key ? staticConfData : undefined }) as ReturnType<typeof useSWR>);
   });
 
   afterEach(() => {
@@ -94,6 +107,35 @@ describe('useVitessceConfig', () => {
     expect(result.current.isMultiDataset).toBe(false);
     expect(result.current.localVitessceState).toEqual({ name: 'single-conf', datasets: [] });
     expect(result.current.currentConfig).toEqual({ name: 'single-conf', datasets: [] });
+  });
+
+  test('applies the static config from ?vitessce-conf= once it resolves', () => {
+    mockWindowLocation('', '?vitessce-conf=codex');
+    staticConfData = { name: 'static-codex' };
+    const vitData = { name: 'server-default' };
+    const { result } = renderHook(() => useVitessceConfig({ vitData }));
+
+    expect(result.current.currentConfig).toEqual({ name: 'static-codex' });
+    expect(result.current.localVitessceState).toEqual({ name: 'static-codex' });
+  });
+
+  test('uses defaults while the static config is still loading', () => {
+    mockWindowLocation('', '?vitessce-conf=codex');
+    // staticConfData stays undefined = not yet resolved (from beforeEach)
+    const vitData = { name: 'server-default' };
+    const { result } = renderHook(() => useVitessceConfig({ vitData }));
+
+    expect(result.current.currentConfig).toEqual({ name: 'server-default' });
+  });
+
+  test('rejects an invalid ?vitessce-conf= slug and uses defaults', () => {
+    mockWindowLocation('', '?vitessce-conf=../secret');
+    // A slug failing validation builds a null SWR key, so nothing is fetched even if staged.
+    staticConfData = { name: 'should-not-be-used' };
+    const vitData = { name: 'server-default' };
+    const { result } = renderHook(() => useVitessceConfig({ vitData }));
+
+    expect(result.current.currentConfig).toEqual({ name: 'server-default' });
   });
 
   test('returns debounced setter for vitessce state', () => {

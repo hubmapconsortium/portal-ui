@@ -7,6 +7,7 @@ const Background = styled('div')({
 });
 
 const FlexContainer = styled(Container)(({ theme }) => ({
+  padding: theme.spacing(0, 0),
   [theme.breakpoints.up('sm')]: {
     display: 'flex',
     flexWrap: 'wrap',
