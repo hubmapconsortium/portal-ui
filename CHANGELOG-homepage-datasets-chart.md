@@ -1,3 +1,0 @@
-- Add a download button to the HuBMAP Datasets chart.
-- Add a description above the HuBMAP Datasets chart introducing the Filter & Browse and new Say & See search modes.
-- Add consistent top padding above all charts.

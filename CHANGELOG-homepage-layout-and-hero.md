@@ -1,4 +1,0 @@
-- Refresh the homepage design, adding icons to the section headers and combining Related Tools and Related Resources into a single section.
-- Update the homepage entity counts to show donors, samples, datasets, collections, and publications.
-- Reflect the current section in the URL when navigating via the hero section's navigation bar.
-- Fix the hero cards' text overflowing the viewport on small screens, and increase the spacing between the lower homepage sections.

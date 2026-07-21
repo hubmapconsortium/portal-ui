@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.49.0 - 2026-07-21
+
+- Add parallax slides demonstrating core site functionalities.
+- Add the "Explore HuBMAP Data" section, with parallax slides for finding data, cloud workspaces, biomarkers, and single-cell/spatial visualizations — including autoplaying in-view videos and an "Integrated Maps" subsection.
+- Add a "Find Data Your Way" datasets search slide highlighting the Filter & Browse and Say & See search modes.
+- Add an accessible carousel of example Vitessce visualizations in the single-cell/spatial view, with per-visualization links and assay/analyte captions.
+- Load the carousel's customized Vitessce configurations from static files on the CDN (via a `?vitessce-conf=<slug>` URL parameter) so they can be updated without a portal redeploy.
+- Add a download button to the HuBMAP Datasets chart.
+- Add a description above the HuBMAP Datasets chart introducing the Filter & Browse and new Say & See search modes.
+- Add consistent top padding above all charts.
+- Update the homepage Data Use Guidelines language, adding a "How to cite?" section that references the HuBMAP Data Portal paper.
+- Update the acknowledgement/citation language in the bulk data transfer Data Use Agreement dialog to reference the HuBMAP Data Portal paper.
+- Refresh the homepage design, adding icons to the section headers and combining Related Tools and Related Resources into a single section.
+- Update the homepage entity counts to show donors, samples, datasets, collections, and publications.
+- Reflect the current section in the URL when navigating via the hero section's navigation bar.
+- Fix the hero cards' text overflowing the viewport on small screens, and increase the spacing between the lower homepage sections.
+- Add the "Research Powered by HuBMAP" section with publication cards, including pinned/highlighted publications; each card is fully clickable and lifts slightly on hover.
+- Add the "Why Researchers Use the HuBMAP Data Portal" testimonials section, with cards linking to datasets search, workspaces, and biomarker/cell type search.
+
+
+
 ## v1.48.4 - 2026-07-14
 
 - Improve login to restore hash/URL parameters after navigating back to portal.
