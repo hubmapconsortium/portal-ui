@@ -123,7 +123,7 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
       description: 'Visualize single-cell and spatial data with Vitessce',
       ctaButton: {
         label: 'View Visualizations',
-        href: '/search?mapped_data_types[0]=scRNA-seq%20%5BSalmon%5D&entity_type[0]=Dataset',
+        href: '/search/datasets?q=N4IgzgpghgTgxgCxALhCANOA9jALgMQEsIAbAExVADNjyUQAHAVwCMTCwEIyB9XQgLYQwuKAIYYQZQjAhx%2BWAHb0ywuJMhwlZWAE8ipCsmq0jIAVAYNuPEVFxMwk6bPmElKtSAC%2B3zDRJcCBgnYxAeHVFIXB4qaAdZUNAANygSJmF6AGUIXAAKAB0QZI4mNMIAL3t3RWRkXBgMooBKSVxda3oAIQB5HoAZAFEAQQA5HgBxACUegFUABR8-EEJFOHTVLKZrEO5uQcV%2BfkzkKjTIbyA',
         variant: 'contained',
         trackingLabel: 'Visualize / View Visualizations',
       },
