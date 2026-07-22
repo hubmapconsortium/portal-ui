@@ -64,8 +64,8 @@ function Home() {
             actionButtons={
               <DownloadButton
                 onClick={handleDownload}
-                tooltip="Download chart as PNG"
-                aria-label="Download Chart as PNG"
+                tooltip="Download chart as PNG."
+                aria-label="Download Chart as PNG."
               />
             }
           >

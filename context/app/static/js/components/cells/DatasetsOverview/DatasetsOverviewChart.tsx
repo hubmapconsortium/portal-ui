@@ -419,8 +419,8 @@ export default function DatasetsOverviewChart({
             <Box ml="auto">
               <DownloadButton
                 onClick={downloadImage}
-                tooltip="Download chart as PNG"
-                aria-label="Download Chart as PNG"
+                tooltip="Download chart as PNG."
+                aria-label="Download Chart as PNG."
               />
             </Box>
           </Stack>
