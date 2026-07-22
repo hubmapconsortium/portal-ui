@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -6,6 +6,7 @@ import { QueryStatsRounded } from '@mui/icons-material';
 
 import { SectionHeader } from 'js/pages/Home/style';
 import { useAppContext } from 'js/components/Contexts';
+import { useWorkspacesSignUpHref } from 'js/shared-styles/Links/SignUpForWorkspacesLink';
 import ParallaxSlide from './ParallaxSlide';
 import VisualizeDataSlide from './VisualizeDataSlide';
 import { useProminentSlideIndex } from './hooks';
@@ -19,15 +20,27 @@ import {
 
 function AnalysisAndVisualizations() {
   const { isWorkspacesUser } = useAppContext();
+  const signUpHref = useWorkspacesSignUpHref();
+
+  // Users with workspace access get the variant without the Sign Up button; everyone else
+  // gets a Sign Up link with their details prefilled when signed in. Memoized so the
+  // memoized slide keeps a stable config identity.
+  const workspacesSlide = useMemo(
+    () =>
+      isWorkspacesUser
+        ? CLOUD_WORKSPACES_SLIDE_WITH_ACCESS
+        : {
+            ...CLOUD_WORKSPACES_SLIDE,
+            ctaButtons: CLOUD_WORKSPACES_SLIDE.ctaButtons.map((button) =>
+              button.label === 'Sign Up' ? { ...button, href: signUpHref } : button,
+            ),
+          },
+    [isWorkspacesUser, signUpHref],
+  );
 
   // Order drives each slide's zIndex and prominence index. The multi-view Explore slide below is
   // a different component with a different config type, so it stays explicit after the map.
-  // Users with workspace access get the variant without the Sign Up button.
-  const parallaxSlides = [
-    DATASETS_SEARCH_SLIDE,
-    isWorkspacesUser ? CLOUD_WORKSPACES_SLIDE_WITH_ACCESS : CLOUD_WORKSPACES_SLIDE,
-    BIOMARKERS_SLIDE,
-  ];
+  const parallaxSlides = [DATASETS_SEARCH_SLIDE, workspacesSlide, BIOMARKERS_SLIDE];
 
   // Only the slide crossing the viewport middle is "prominent" — used to play its video.
   const { prominentIndex, slideRef } = useProminentSlideIndex(parallaxSlides.length + 1);

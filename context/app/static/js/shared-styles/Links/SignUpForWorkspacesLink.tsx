@@ -4,7 +4,11 @@ import { LinkProps } from '@mui/material/Link';
 import { useAppContext } from 'js/components/Contexts';
 import OutboundLink from './OutboundLink';
 
-function SignUpForWorkspacesLink({ children, ...props }: Omit<LinkProps, 'href'>) {
+/**
+ * The workspaces sign-up form URL, with the user's details prefilled as query params
+ * when they are signed in.
+ */
+export function useWorkspacesSignUpHref() {
   const { userEmail, userFirstName, userLastName, userGlobusAffiliation, userGlobusId } = useAppContext();
 
   const queryParams = new URLSearchParams();
@@ -30,7 +34,11 @@ function SignUpForWorkspacesLink({ children, ...props }: Omit<LinkProps, 'href'>
   }
 
   const queryString = queryParams.toString();
-  const href = `https://hubmapconsortium.org/workspaces-sign-up/${queryString ? `?${queryString}` : ''}`;
+  return `https://hubmapconsortium.org/workspaces-sign-up/${queryString ? `?${queryString}` : ''}`;
+}
+
+function SignUpForWorkspacesLink({ children, ...props }: Omit<LinkProps, 'href'>) {
+  const href = useWorkspacesSignUpHref();
 
   return (
     <OutboundLink {...props} href={href}>
