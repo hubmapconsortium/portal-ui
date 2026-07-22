@@ -50,12 +50,19 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
 
   const selected = items[selectedIndex];
 
+  // All selection paths (arrows, thumbnails, keyboard) route through here, so one
+  // event covers which visualizations users browse to.
   const select = useCallback(
     (index: number) => {
       setSelectedIndex(index);
       emblaApi?.scrollTo(index);
+      trackEvent({
+        category: 'Homepage',
+        action: 'Analysis and Visualizations / visualize-data',
+        label: `Visualize / Carousel / Browse / ${items[index].assay}`,
+      });
     },
-    [emblaApi],
+    [emblaApi, items],
   );
 
   const selectPrev = useCallback(

@@ -72,7 +72,12 @@ function Home() {
             <Typography variant="body1" color="text.secondary" mb={2}>
               Explore HuBMAP datasets through the Filter &amp; Browse Mode or ask questions about our data with natural
               language with our new{' '}
-              <InternalLink href="/search/datasets?mode=say-see">Say &amp; See Mode.</InternalLink>
+              <InternalLink
+                href="/search/datasets?mode=say-see"
+                onClick={() => trackEvent({ category: 'Homepage', action: 'HuBMAP Datasets / Say & See Mode Link' })}
+              >
+                Say &amp; See Mode.
+              </InternalLink>
             </Typography>
             <HuBMAPDatasetsChart chartRef={chartRef} onSelectionChange={setSelectionLabel} />
           </HomepageSection>

@@ -1,0 +1,3 @@
+- Close homepage analytics gaps: fix dataset chart bar-click events never firing, track the Say & See Mode link, Vitessce carousel browsing, Explore-slide view switching, and the Data Use Guidelines contact link.
+- Remove the unused RecentEntities homepage components.
+- Restore the hover state on the hero "Launch Workspaces" button.

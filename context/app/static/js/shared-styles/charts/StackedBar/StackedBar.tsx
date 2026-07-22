@@ -146,6 +146,7 @@ function StackedBar({
   ariaLabelText,
   colorScale,
   canBeMultipleKeys,
+  onClick,
 }: StackedBarProps) {
   const maxBarThickness = 65;
 
@@ -173,6 +174,7 @@ function StackedBar({
         {...barProps}
         $showHover={Boolean(hoverProps) || Boolean(href)}
         {...hoverPropsWithFocus}
+        onClick={onClick}
         data-bar={JSON.stringify(bar)}
       />
     </>

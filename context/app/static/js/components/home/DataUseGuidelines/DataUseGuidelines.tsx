@@ -1,5 +1,6 @@
 import React from 'react';
-import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import { trackEvent } from 'js/helpers/trackers';
+import ContactUsLink, { contactUsUrl } from 'js/shared-styles/Links/ContactUsLink';
 import HomepageOutboundLink from 'js/components/home/HomepageOutboundLink';
 import { StyledPaper, StyledTypography } from './style';
 import Typography from '@mui/material/Typography';
@@ -81,7 +82,15 @@ const paragraphs: Paragraph[] = [
     key: 'help',
     component: (
       <>
-        Please <ContactUsLink iconFontSize="1.1rem"> contact us with any questions</ContactUsLink>.
+        Please{' '}
+        <ContactUsLink
+          iconFontSize="1.1rem"
+          onClick={() => trackEvent({ category: 'Homepage', action: 'Data Use Guidelines', label: contactUsUrl })}
+        >
+          {' '}
+          contact us with any questions
+        </ContactUsLink>
+        .
       </>
     ),
   },

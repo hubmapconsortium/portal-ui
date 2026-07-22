@@ -20,6 +20,16 @@ interface ViewSelectorProps {
 
 const SWIPE_THRESHOLD = 50;
 
+// Tracks deliberate view switches (click, keyboard, swipe, pagination dots). Hover also
+// switches views on desktop but is intentionally untracked to avoid flooding analytics.
+function trackViewSelect(view: ViewConfig) {
+  trackEvent({
+    category: 'Homepage',
+    action: 'Analysis and Visualizations / visualize-data',
+    label: `Visualize / Select View / ${view.title}`,
+  });
+}
+
 function DesktopViewSelector({
   views,
   activeIndex,
@@ -35,22 +45,24 @@ function DesktopViewSelector({
           <ViewOptionContainer
             key={view.id}
             onMouseEnter={() => onViewChange(index)}
-            onClick={() => onViewChange(index)}
+            onClick={() => {
+              trackViewSelect(view);
+              onViewChange(index);
+            }}
             role="tab"
             aria-selected={isActive}
             aria-controls={`visualize-tabpanel-${view.id}`}
             tabIndex={isActive ? 0 : -1}
             onKeyDown={(e: React.KeyboardEvent) => {
-              if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                onViewChange((index + 1) % views.length);
-              } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                onViewChange((index - 1 + views.length) % views.length);
-              } else if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onViewChange(index);
-              }
+              let nextIndex: number | null = null;
+              if (e.key === 'ArrowDown') nextIndex = (index + 1) % views.length;
+              else if (e.key === 'ArrowUp') nextIndex = (index - 1 + views.length) % views.length;
+              else if (e.key === 'Enter' || e.key === ' ') nextIndex = index;
+
+              if (nextIndex === null) return;
+              e.preventDefault();
+              trackViewSelect(views[nextIndex]);
+              onViewChange(nextIndex);
             }}
           >
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
@@ -109,13 +121,10 @@ function MobileViewSelector({
     const diff = startX.current - currentX.current;
 
     if (Math.abs(diff) > SWIPE_THRESHOLD) {
-      if (diff > 0) {
-        // Swipe left - next view (wraps to first)
-        onViewChange((activeIndex + 1) % views.length);
-      } else {
-        // Swipe right - previous view (wraps to last)
-        onViewChange((activeIndex - 1 + views.length) % views.length);
-      }
+      // Swipe left - next view (wraps to first); swipe right - previous view (wraps to last)
+      const nextIndex = diff > 0 ? (activeIndex + 1) % views.length : (activeIndex - 1 + views.length) % views.length;
+      trackViewSelect(views[nextIndex]);
+      onViewChange(nextIndex);
     }
   };
 
@@ -174,7 +183,10 @@ function MobileViewSelector({
           <PaginationDot
             key={view.id}
             $isActive={index === activeIndex}
-            onClick={() => onViewChange(index)}
+            onClick={() => {
+              trackViewSelect(view);
+              onViewChange(index);
+            }}
             aria-label={`View ${view.title}`}
           />
         ))}

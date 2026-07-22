@@ -34,8 +34,13 @@ function HeroLeftColumn() {
         </Button>
         <Button
           variant="outlined"
-          // Can't make it white without !important due to MUI specificity, but it doesn't cause any issues in this case since it's only used here and we want it to be white
-          sx={{ backgroundColor: 'white !important' }}
+          // Can't make it white without !important due to MUI specificity, but it doesn't cause any issues in this case since it's only used here and we want it to be white.
+          // The !important also suppresses the default outlined hover tint, so restore a
+          // hover state (grey[100], matching the theme's `elevated` variant on white).
+          sx={(theme) => ({
+            backgroundColor: 'white !important',
+            '&:hover': { backgroundColor: `${theme.palette.grey[100]} !important` },
+          })}
           href="/workspaces"
           onClick={() => {
             trackEvent({ category: 'Homepage', action: 'Hero / Launch Workspaces Button' });
