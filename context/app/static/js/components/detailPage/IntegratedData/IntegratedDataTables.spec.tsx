@@ -1,4 +1,5 @@
 import { Dataset, Donor, Sample, Entity } from 'js/components/types';
+import { getDisplayedDatasetIds } from './IntegratedDataTables';
 
 // Helper function to create mock entities
 function createMockDataset(uuid: string, partial?: Partial<Dataset>): Dataset {
@@ -254,6 +255,30 @@ describe('IntegratedDataTables utility functions', () => {
 
       expect(uuids).toEqual(['uuid-1', 'uuid-1', 'uuid-2']);
       expect(uuids.length).toBe(3);
+    });
+  });
+
+  describe('getDisplayedDatasetIds (direct vs. ancestor datasets)', () => {
+    const allDatasetIds = ['direct-1', 'direct-2', 'ancestor-1', 'ancestor-2'];
+    const directDatasetIds = new Set(['direct-1', 'direct-2']);
+
+    it('shows only direct datasets by default', () => {
+      expect(getDisplayedDatasetIds(allDatasetIds, directDatasetIds, false)).toEqual(['direct-1', 'direct-2']);
+    });
+
+    it('shows all datasets when the ancestor-datasets toggle is on', () => {
+      expect(getDisplayedDatasetIds(allDatasetIds, directDatasetIds, true)).toEqual(allDatasetIds);
+    });
+
+    it('shows all datasets when no direct set is provided (backward compatible)', () => {
+      expect(getDisplayedDatasetIds(allDatasetIds, undefined, false)).toEqual(allDatasetIds);
+    });
+
+    it('preserves original order of the direct datasets', () => {
+      expect(getDisplayedDatasetIds(['ancestor-1', 'direct-2', 'direct-1'], directDatasetIds, false)).toEqual([
+        'direct-2',
+        'direct-1',
+      ]);
     });
   });
 });

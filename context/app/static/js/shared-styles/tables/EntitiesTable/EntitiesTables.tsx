@@ -16,6 +16,13 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 
+// Approximate table dimensions used to reserve loading-placeholder height so the panel doesn't
+// collapse while its data loads (which would pull content below the table up into view).
+const ESTIMATED_ROW_HEIGHT = 48;
+const ESTIMATED_HEADER_HEIGHT = 108; // action row (~48) + sticky column header (~60)
+const FALLBACK_MAX_HEIGHT = 600;
+const MAX_SKELETON_ROWS = 12;
+
 interface EntitiesTablesProps<Doc extends Entity> {
   isSelectable?: boolean;
   numSelected?: number;
@@ -162,6 +169,7 @@ function EntitiesTablesBodies<Doc extends Entity>({
   isLoading,
   totalHitsCounts,
   useDefaultQuery,
+  maxHeight,
   ...restSharedProps
 }: EntitiesTablesBodiesProps<Doc>) {
   return (
@@ -170,15 +178,22 @@ function EntitiesTablesBodies<Doc extends Entity>({
         const queryItems = totalHitsCounts?.[i] ?? 0;
 
         if (isLoading) {
-          const minRows = 3;
-          const maxRows = 6;
-          const rows = Math.min(Math.max(queryItems, minRows), maxRows);
+          const cap = maxHeight ?? FALLBACK_MAX_HEIGHT;
+          // Reserve the height the loaded table will occupy. When the row count is known (e.g. the
+          // count query has resolved), size to it; otherwise hold the full height so slower parent
+          // fetches don't leave the panel collapsed and pull content below into the viewport.
+          const reservedHeight =
+            queryItems > 0 ? Math.min(ESTIMATED_HEADER_HEIGHT + queryItems * ESTIMATED_ROW_HEIGHT, cap) : cap;
+          const skeletonRows = Math.min(
+            Math.max(Math.round(reservedHeight / ESTIMATED_ROW_HEIGHT), 3),
+            MAX_SKELETON_ROWS,
+          );
 
           return (
             <TabPanel key={entityType} value={openTabIndex} index={i}>
-              <Stack width="100%">
-                {Array.from({ length: rows }).map((_, idx) => (
-                  <Skeleton height={30} key={idx} width="100%" />
+              <Stack width="100%" minHeight={reservedHeight} spacing={0.5}>
+                {Array.from({ length: skeletonRows }).map((_, idx) => (
+                  <Skeleton height={ESTIMATED_ROW_HEIGHT} key={idx} width="100%" />
                 ))}
               </Stack>
             </TabPanel>
@@ -197,7 +212,13 @@ function EntitiesTablesBodies<Doc extends Entity>({
 
         return (
           <TabPanel key={entityType} value={openTabIndex} index={i}>
-            <EntityTable query={query} useDefaultQuery={useDefaultQuery} {...entityTableProps} {...restSharedProps} />
+            <EntityTable
+              query={query}
+              useDefaultQuery={useDefaultQuery}
+              maxHeight={maxHeight}
+              {...entityTableProps}
+              {...restSharedProps}
+            />
           </TabPanel>
         );
       })}
