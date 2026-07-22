@@ -58,6 +58,7 @@ export const CLOUD_WORKSPACES_SLIDE: SlideConfig = {
       href: 'https://hubmapconsortium.org/workspaces-sign-up/',
       variant: 'contained',
       trackingLabel: 'Cloud Workspaces / Sign Up',
+      outbound: true,
     },
     {
       label: 'Launch Workspaces',
@@ -75,6 +76,13 @@ export const CLOUD_WORKSPACES_SLIDE: SlideConfig = {
     },
   ],
   layout: 'text-right',
+};
+
+// Shown instead of CLOUD_WORKSPACES_SLIDE for users who already have workspace access:
+// no Sign Up button, and Launch Workspaces is promoted to the primary (contained) action.
+export const CLOUD_WORKSPACES_SLIDE_WITH_ACCESS: SlideConfig = {
+  ...CLOUD_WORKSPACES_SLIDE,
+  ctaButtons: [{ ...CLOUD_WORKSPACES_SLIDE.ctaButtons[1], variant: 'contained' }],
 };
 
 export const BIOMARKERS_SLIDE: SlideConfig = {

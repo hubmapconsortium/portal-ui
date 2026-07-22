@@ -5,18 +5,32 @@ import Container from '@mui/material/Container';
 import { QueryStatsRounded } from '@mui/icons-material';
 
 import { SectionHeader } from 'js/pages/Home/style';
+import { useAppContext } from 'js/components/Contexts';
 import ParallaxSlide from './ParallaxSlide';
 import VisualizeDataSlide from './VisualizeDataSlide';
 import { useProminentSlideIndex } from './hooks';
-import { DATASETS_SEARCH_SLIDE, CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE, VISUALIZE_DATA_SLIDE } from './config';
-
-// Order drives each slide's zIndex and prominence index. The multi-view Explore slide below is
-// a different component with a different config type, so it stays explicit after the map.
-const PARALLAX_SLIDES = [DATASETS_SEARCH_SLIDE, CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE];
+import {
+  DATASETS_SEARCH_SLIDE,
+  CLOUD_WORKSPACES_SLIDE,
+  CLOUD_WORKSPACES_SLIDE_WITH_ACCESS,
+  BIOMARKERS_SLIDE,
+  VISUALIZE_DATA_SLIDE,
+} from './config';
 
 function AnalysisAndVisualizations() {
+  const { isWorkspacesUser } = useAppContext();
+
+  // Order drives each slide's zIndex and prominence index. The multi-view Explore slide below is
+  // a different component with a different config type, so it stays explicit after the map.
+  // Users with workspace access get the variant without the Sign Up button.
+  const parallaxSlides = [
+    DATASETS_SEARCH_SLIDE,
+    isWorkspacesUser ? CLOUD_WORKSPACES_SLIDE_WITH_ACCESS : CLOUD_WORKSPACES_SLIDE,
+    BIOMARKERS_SLIDE,
+  ];
+
   // Only the slide crossing the viewport middle is "prominent" — used to play its video.
-  const { prominentIndex, slideRef } = useProminentSlideIndex(PARALLAX_SLIDES.length + 1);
+  const { prominentIndex, slideRef } = useProminentSlideIndex(parallaxSlides.length + 1);
 
   return (
     <Box component="section" id="analysis-and-visualizations" aria-label="Analysis and Visualizations">
@@ -32,7 +46,7 @@ function AnalysisAndVisualizations() {
 
       {/* Parallax scroll container - tall enough for all 3 slides to scroll through */}
       <Box>
-        {PARALLAX_SLIDES.map((config, index) => (
+        {parallaxSlides.map((config, index) => (
           <ParallaxSlide
             key={config.id}
             config={config}
@@ -43,8 +57,8 @@ function AnalysisAndVisualizations() {
         ))}
         <VisualizeDataSlide
           config={VISUALIZE_DATA_SLIDE}
-          zIndex={PARALLAX_SLIDES.length + 1}
-          stickyRef={slideRef(PARALLAX_SLIDES.length)}
+          zIndex={parallaxSlides.length + 1}
+          stickyRef={slideRef(parallaxSlides.length)}
         />
       </Box>
     </Box>
