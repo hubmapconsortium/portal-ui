@@ -27,7 +27,7 @@ function HeroLeftColumn() {
           variant="contained"
           href="/search/datasets"
           onClick={() => {
-            trackEvent({ category: 'Homepage', action: 'Hero / Explore All Datasets Button' });
+            trackEvent({ category: 'Homepage', action: 'Hero', label: 'Explore All Datasets Button' });
           }}
         >
           Explore All Datasets
@@ -43,7 +43,7 @@ function HeroLeftColumn() {
           })}
           href="/workspaces"
           onClick={() => {
-            trackEvent({ category: 'Homepage', action: 'Hero / Launch Workspaces Button' });
+            trackEvent({ category: 'Homepage', action: 'Hero', label: 'Launch Workspaces Button' });
           }}
         >
           Launch Workspaces

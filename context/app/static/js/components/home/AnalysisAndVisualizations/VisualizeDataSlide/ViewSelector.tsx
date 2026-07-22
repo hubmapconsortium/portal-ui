@@ -25,8 +25,8 @@ const SWIPE_THRESHOLD = 50;
 function trackViewSelect(view: ViewConfig) {
   trackEvent({
     category: 'Homepage',
-    action: 'Analysis and Visualizations / visualize-data',
-    label: `Visualize / Select View / ${view.title}`,
+    action: 'Analysis and Visualizations / Visualize',
+    label: `Select View / ${view.title}`,
   });
 }
 
@@ -85,7 +85,7 @@ function DesktopViewSelector({
                 e.stopPropagation();
                 trackEvent({
                   category: 'Homepage',
-                  action: 'Analysis and Visualizations / visualize-data',
+                  action: 'Analysis and Visualizations / Visualize',
                   label: view.ctaButton.trackingLabel,
                 });
               }}
@@ -160,7 +160,7 @@ function MobileViewSelector({
                     onClick={() =>
                       trackEvent({
                         category: 'Homepage',
-                        action: 'Analysis and Visualizations / visualize-data',
+                        action: 'Analysis and Visualizations / Visualize',
                         label: view.ctaButton.trackingLabel,
                       })
                     }

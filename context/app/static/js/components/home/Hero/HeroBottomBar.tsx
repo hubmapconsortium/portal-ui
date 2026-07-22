@@ -33,7 +33,7 @@ function MobileBar() {
       const item = mobileItems.find((i) => i.anchorId === anchorId);
       if (item) {
         scrollToSection(anchorId);
-        trackEvent({ category: 'Homepage', action: `Hero Bottom Bar / ${item.label}` });
+        trackEvent({ category: 'Homepage', action: 'Navigation Pill', label: item.label });
       }
     },
     [mobileItems],
@@ -110,7 +110,7 @@ export default function HeroBottomBar() {
                 type="button"
                 onClick={() => {
                   scrollToSection(anchorId);
-                  trackEvent({ category: 'Homepage', action: `Hero Bottom Bar / ${label}` });
+                  trackEvent({ category: 'Homepage', action: 'Navigation Pill', label });
                 }}
               >
                 <Icon fontSize="small" color="primary" />

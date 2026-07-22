@@ -58,8 +58,8 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
       emblaApi?.scrollTo(index);
       trackEvent({
         category: 'Homepage',
-        action: 'Analysis and Visualizations / visualize-data',
-        label: `Visualize / Carousel / Browse / ${items[index].assay}`,
+        action: 'Analysis and Visualizations / Visualize',
+        label: `Vitessce / Carousel / Browse / ${items[index].assay}`,
       });
     },
     [emblaApi, items],
@@ -113,8 +113,8 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
           onClick={() =>
             trackEvent({
               category: 'Homepage',
-              action: 'Analysis and Visualizations / visualize-data',
-              label: `Visualize / Carousel / ${selected.assay}`,
+              action: 'Analysis and Visualizations / Visualize',
+              label: `Vitessce / Carousel / ${selected.assay} Link`,
             })
           }
         >

@@ -78,7 +78,13 @@ function TestimonialCard({ quote, role, image, buttonLabel, href }: Testimonial)
         color="primary"
         fullWidth
         href={href}
-        onClick={() => trackEvent({ category: 'Homepage', action: 'Testimonials / Explore', label: buttonLabel })}
+        onClick={() =>
+          trackEvent({
+            category: 'Homepage',
+            action: 'Why Researchers Use the HuBMAP Data Portal',
+            label: `${buttonLabel} Button`,
+          })
+        }
       >
         {buttonLabel}
       </Button>

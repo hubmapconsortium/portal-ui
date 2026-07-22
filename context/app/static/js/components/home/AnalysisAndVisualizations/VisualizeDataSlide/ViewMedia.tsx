@@ -27,7 +27,7 @@ function ViewMedia({ view, isReducedMotion }: ViewMediaProps) {
           onClick={() =>
             trackEvent({
               category: 'Homepage',
-              action: 'Analysis and Visualizations / visualize-data',
+              action: 'Analysis and Visualizations / Visualize',
               label: imageCta.trackingLabel,
             })
           }

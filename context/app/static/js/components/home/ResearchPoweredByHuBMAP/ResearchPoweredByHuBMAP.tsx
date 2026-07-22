@@ -18,7 +18,8 @@ function ResearchPoweredByHuBMAP() {
   const handleViewAll = useEventCallback(() => {
     trackEvent({
       category: 'Homepage',
-      action: 'Research Powered by HuBMAP / View All Publications Button',
+      action: 'Research Powered by HuBMAP',
+      label: 'View All Publications Button',
     });
   });
 

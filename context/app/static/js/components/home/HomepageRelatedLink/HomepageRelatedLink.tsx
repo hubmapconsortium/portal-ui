@@ -21,7 +21,7 @@ function HomepageRelatedLink({ img, title, linkText, linkHref, description, icon
     trackEvent({
       category: 'Homepage',
       action: title,
-      label: linkHref,
+      label: linkText,
     });
   });
 

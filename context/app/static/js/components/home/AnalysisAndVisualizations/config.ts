@@ -7,6 +7,7 @@ import { cdnUrl } from 'js/helpers/cdn';
 
 export const DATASETS_SEARCH_SLIDE: SlideConfig = {
   id: 'datasets-search',
+  trackingName: 'Dataset Search',
   theme: 'info',
   icon: DatasetIcon,
   title: 'Find Data Your Way',
@@ -19,13 +20,13 @@ export const DATASETS_SEARCH_SLIDE: SlideConfig = {
       label: 'Explore Datasets',
       href: '/search/datasets',
       variant: 'contained',
-      trackingLabel: 'Datasets Search / Explore Datasets',
+      trackingLabel: 'Explore Datasets Button',
     },
     {
       label: 'Chat with Say & See',
       href: '/search/datasets?mode=say-see',
       variant: 'outlined',
-      trackingLabel: 'Datasets Search / Chat with Say & See',
+      trackingLabel: 'Say & See Mode Link',
     },
   ],
   images: [
@@ -41,6 +42,7 @@ export const DATASETS_SEARCH_SLIDE: SlideConfig = {
 
 export const CLOUD_WORKSPACES_SLIDE: SlideConfig = {
   id: 'cloud-workspaces',
+  trackingName: 'Workspaces',
   theme: 'success',
   icon: WorkspacesIcon,
   title: 'Analyze Datasets in Cloud-based Workspaces',
@@ -57,14 +59,14 @@ export const CLOUD_WORKSPACES_SLIDE: SlideConfig = {
       label: 'Sign Up',
       href: 'https://hubmapconsortium.org/workspaces-sign-up/',
       variant: 'contained',
-      trackingLabel: 'Cloud Workspaces / Sign Up',
+      trackingLabel: 'Sign Up Button',
       outbound: true,
     },
     {
       label: 'Launch Workspaces',
       href: '/workspaces',
       variant: 'outlined',
-      trackingLabel: 'Cloud Workspaces / Launch Workspaces',
+      trackingLabel: 'Launch Workspaces Button',
     },
   ],
   images: [
@@ -87,6 +89,7 @@ export const CLOUD_WORKSPACES_SLIDE_WITH_ACCESS: SlideConfig = {
 
 export const BIOMARKERS_SLIDE: SlideConfig = {
   id: 'biomarkers',
+  trackingName: 'Biomarkers and Cell Types Search',
   theme: 'warning',
   icon: GeneIcon,
   title: 'Discover More About Biomarkers and Cell Types',
@@ -102,7 +105,7 @@ export const BIOMARKERS_SLIDE: SlideConfig = {
       label: 'Launch Advanced Search',
       href: '/cells',
       variant: 'contained',
-      trackingLabel: 'Biomarkers / Launch Advanced Search',
+      trackingLabel: 'Launch Advanced Search Button',
     },
   ],
   images: [
@@ -133,7 +136,7 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
         label: 'View Visualizations',
         href: '/search?mapped_data_types[0]=scRNA-seq%20%5BSalmon%5D&entity_type[0]=Dataset',
         variant: 'contained',
-        trackingLabel: 'Visualize / View Visualizations',
+        trackingLabel: 'View Visualizations Button',
       },
       // Rendered as an embla carousel (VitessceCarousel). `images` is unused for this view.
       images: [],
@@ -236,12 +239,12 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
         label: 'Visualize Cell Populations',
         href: '/organ',
         variant: 'contained',
-        trackingLabel: 'Visualize / Visualize Cell Populations',
+        trackingLabel: 'Visualize Cell Populations Button',
       },
       imageCta: {
         label: 'Visualize Kidney Cell Populations',
         href: '/organs/kidney#cell-population-plot',
-        trackingLabel: 'Visualize / Visualize Kidney Cell Populations',
+        trackingLabel: 'Visualize Kidney Cell Populations Button',
       },
       images: [
         {
@@ -261,7 +264,7 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
         label: 'Explore Data',
         href: '/lineup/datasets',
         variant: 'contained',
-        trackingLabel: 'Visualize / Explore Data',
+        trackingLabel: 'Explore Data Button',
       },
       images: [
         {
@@ -281,7 +284,7 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
         label: 'Download Integrated Maps',
         href: '/integrated-maps',
         variant: 'contained',
-        trackingLabel: 'Visualize / Download Integrated Maps',
+        trackingLabel: 'Download Integrated Maps Button',
       },
       images: [
         {

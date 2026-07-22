@@ -53,7 +53,8 @@ export default function HeroCard({
   const handleClick = useEventCallback(() => {
     trackEvent({
       category: 'Homepage',
-      action: `Hero Card / ${title}`,
+      action: 'Hero',
+      label: `Card / ${title}`,
     });
   });
 

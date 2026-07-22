@@ -41,7 +41,9 @@ function Home() {
     downloadPNG();
     trackEvent({
       category: 'Homepage',
-      action: 'HuBMAP Datasets / Download Datasets Graph',
+      // "HubMAP" (lowercase b) matches the graph's other events (see ChartDropdown's
+      // default action) and the analytics tracking sheet.
+      action: 'HubMAP Datasets Graph/Download Datasets Graph',
       label: selectionLabel,
     });
   }, [downloadPNG, selectionLabel]);
@@ -74,7 +76,9 @@ function Home() {
               language with our new{' '}
               <InternalLink
                 href="/search/datasets?mode=say-see"
-                onClick={() => trackEvent({ category: 'Homepage', action: 'HuBMAP Datasets / Say & See Mode Link' })}
+                onClick={() =>
+                  trackEvent({ category: 'Homepage', action: 'HuBMAP Datasets', label: 'Say & See Mode Link' })
+                }
               >
                 Say &amp; See Mode.
               </InternalLink>

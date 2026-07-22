@@ -69,7 +69,7 @@ function ParallaxSlide({ config, zIndex, isProminent = true, stickyRef }: Parall
                   onClick={() =>
                     trackEvent({
                       category: 'Homepage',
-                      action: `Analysis and Visualizations / ${config.id}`,
+                      action: `Analysis and Visualizations / ${config.trackingName}`,
                       label: button.trackingLabel,
                     })
                   }

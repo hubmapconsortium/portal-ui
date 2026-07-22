@@ -39,6 +39,8 @@ export interface CTAButton {
 
 export interface SlideConfig {
   id: string;
+  /** Human-readable name used in analytics actions, per the homepage tracking sheet. */
+  trackingName: string;
   theme: ThemeColorKey;
   icon: MUIIcon;
   title: string;
