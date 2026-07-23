@@ -1,0 +1,4 @@
+- Lazy-load iframes embedded in publication vignette descriptions so they no longer grab focus and scroll the page on load.
+- Reserve the Integrated Data / publication Data table's height while it loads so content below it (such as publication vignettes) no longer shifts up into view.
+- Speed up the Integrated Data / publication Data section by requesting only the fields needed up front and loading each tab's rows lazily.
+- Default the Integrated Data / publication Data table to the directly associated datasets, with a "Show All Ancestors" toggle to also include the ancestor datasets they were derived from.

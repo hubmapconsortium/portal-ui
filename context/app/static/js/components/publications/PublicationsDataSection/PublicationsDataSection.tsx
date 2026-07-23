@@ -100,11 +100,22 @@ function PublicationsDataSection({ ancestorIds, associatedCollectionUUID }: Publ
     isLoadingEffectiveDatasetUUIDs || effectiveDatasetUUIDs.length === 0,
   );
 
-  // Fetch ancestor entities (samples and donors)
-  const [allEntities, isLoadingEntities] = useEntitiesData(allAncestorIds, undefined, {
-    shouldFetch: !isLoadingAncestorIds,
-    useDefaultQuery: false,
-  });
+  // Fetch ancestor entities (datasets, samples, donors). Only the fields needed to build the
+  // per-type table queries, retracted-sort map, and download defaults are requested -- the tables
+  // themselves lazily fetch full display data for the open tab, so full `_source` here would be a
+  // redundant, expensive up-front load of every tab's entities.
+  const [allEntities, isLoadingEntities] = useEntitiesData(
+    allAncestorIds,
+    ['uuid', 'entity_type', 'mapped_status', 'status'],
+    {
+      shouldFetch: !isLoadingAncestorIds,
+      useDefaultQuery: false,
+    },
+  );
+
+  // The datasets the publication directly references are always shown; their ancestor datasets are
+  // hidden behind a toggle in IntegratedDataTables.
+  const directDatasetIds = useMemo(() => new Set(effectiveDatasetUUIDs.filter(Boolean)), [effectiveDatasetUUIDs]);
 
   const loadingTableEntities = isLoadingEntities || allEntities.length === 0;
 
@@ -139,6 +150,7 @@ function PublicationsDataSection({ ancestorIds, associatedCollectionUUID }: Publ
         isLoading={loadingTableEntities}
         useDefaultQuery={false}
         datasetRetractedSortMap={datasetRetractedSortMap}
+        directDatasetIds={directDatasetIds}
       />
       {associatedCollectionUUID && <PublicationCollections collectionsData={collections} isCollectionPublication />}
     </CollapsibleDetailPageSection>
