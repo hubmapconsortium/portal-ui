@@ -33,10 +33,14 @@ export interface CTAButton {
   href: string;
   variant: 'contained' | 'outlined';
   trackingLabel: string;
+  /** Opens the link in a new tab and appends an outbound icon. */
+  outbound?: boolean;
 }
 
 export interface SlideConfig {
   id: string;
+  /** Human-readable name used in analytics actions, per the homepage tracking sheet. */
+  trackingName: string;
   theme: ThemeColorKey;
   icon: MUIIcon;
   title: string;

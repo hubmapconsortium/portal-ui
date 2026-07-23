@@ -11,7 +11,9 @@ function HomepageOutboundLink({ href, children }: HomepageOutboundLinkProps) {
     trackEvent({
       category: 'Homepage',
       action: 'Data Use Guidelines',
-      label: href,
+      // The tracking sheet expects the link's text as the label; fall back to the href
+      // for the rare non-string children.
+      label: typeof children === 'string' ? children : href,
     });
   });
 

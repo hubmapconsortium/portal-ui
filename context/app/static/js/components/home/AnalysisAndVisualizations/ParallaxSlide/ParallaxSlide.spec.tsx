@@ -1,7 +1,12 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import ParallaxSlide from './ParallaxSlide';
-import { CLOUD_WORKSPACES_SLIDE, BIOMARKERS_SLIDE, DATASETS_SEARCH_SLIDE } from '../config';
+import {
+  CLOUD_WORKSPACES_SLIDE,
+  CLOUD_WORKSPACES_SLIDE_WITH_ACCESS,
+  BIOMARKERS_SLIDE,
+  DATASETS_SEARCH_SLIDE,
+} from '../config';
 
 // Mock SVG-based icons that fail in test environment due to SVG file mocking.
 // SvgIcon is imported inside the factory because vi.mock is hoisted above imports.
@@ -52,6 +57,21 @@ describe('ParallaxSlide', () => {
     const launchButton = screen.getByRole('link', { name: 'Launch Workspaces' });
     expect(signUpButton).toHaveClass('MuiButton-contained');
     expect(launchButton).toHaveClass('MuiButton-outlined');
+  });
+
+  test('outbound CTA button opens in a new tab', () => {
+    render(<ParallaxSlide config={CLOUD_WORKSPACES_SLIDE} zIndex={3} />);
+    const signUpButton = screen.getByRole('link', { name: /Sign Up/ });
+    expect(signUpButton).toHaveAttribute('target', '_blank');
+    expect(signUpButton).toHaveAttribute('rel', 'noopener noreferrer');
+    const launchButton = screen.getByRole('link', { name: 'Launch Workspaces' });
+    expect(launchButton).not.toHaveAttribute('target');
+  });
+
+  test('workspace-access variant hides Sign Up and promotes Launch Workspaces', () => {
+    render(<ParallaxSlide config={CLOUD_WORKSPACES_SLIDE_WITH_ACCESS} zIndex={3} />);
+    expect(screen.queryByRole('link', { name: /Sign Up/ })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Launch Workspaces' })).toHaveClass('MuiButton-contained');
   });
 
   test('renders slide media as looping muted videos', () => {

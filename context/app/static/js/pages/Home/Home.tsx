@@ -41,7 +41,9 @@ function Home() {
     downloadPNG();
     trackEvent({
       category: 'Homepage',
-      action: 'HuBMAP Datasets / Download Datasets Graph',
+      // "HubMAP" (lowercase b) matches the graph's other events (see ChartDropdown's
+      // default action) and the analytics tracking sheet.
+      action: 'HubMAP Datasets Graph/Download Datasets Graph',
       label: selectionLabel,
     });
   }, [downloadPNG, selectionLabel]);
@@ -64,15 +66,22 @@ function Home() {
             actionButtons={
               <DownloadButton
                 onClick={handleDownload}
-                tooltip="Download chart as PNG"
-                aria-label="Download Chart as PNG"
+                tooltip="Download chart as PNG."
+                aria-label="Download Chart as PNG."
               />
             }
           >
             <Typography variant="body1" color="text.secondary" mb={2}>
               Explore HuBMAP datasets through the Filter &amp; Browse Mode or ask questions about our data with natural
               language with our new{' '}
-              <InternalLink href="/search/datasets?mode=say-see">Say &amp; See Mode.</InternalLink>
+              <InternalLink
+                href="/search/datasets?mode=say-see"
+                onClick={() =>
+                  trackEvent({ category: 'Homepage', action: 'HuBMAP Datasets', label: 'Say & See Mode Link' })
+                }
+              >
+                Say &amp; See Mode.
+              </InternalLink>
             </Typography>
             <HuBMAPDatasetsChart chartRef={chartRef} onSelectionChange={setSelectionLabel} />
           </HomepageSection>

@@ -75,7 +75,8 @@ describe('HeroV3', () => {
     fireEvent.click(screen.getByRole('link', { name: 'Explore All Datasets' }));
     expect(mockTrackEvent).toHaveBeenCalledWith({
       category: 'Homepage',
-      action: 'Hero / Explore All Datasets Button',
+      action: 'Hero',
+      label: 'Explore All Datasets Button',
     });
   });
 
@@ -84,7 +85,8 @@ describe('HeroV3', () => {
     fireEvent.click(screen.getByRole('link', { name: 'Launch Workspaces' }));
     expect(mockTrackEvent).toHaveBeenCalledWith({
       category: 'Homepage',
-      action: 'Hero / Launch Workspaces Button',
+      action: 'Hero',
+      label: 'Launch Workspaces Button',
     });
   });
 });

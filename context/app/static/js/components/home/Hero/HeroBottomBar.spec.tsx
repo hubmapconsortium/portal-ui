@@ -49,7 +49,8 @@ describe('HeroBottomBar — desktop', () => {
     fireEvent.click(screen.getByText('Datasets'));
     expect(mockTrackEvent).toHaveBeenCalledWith({
       category: 'Homepage',
-      action: 'Hero Bottom Bar / Datasets',
+      action: 'Navigation Pill',
+      label: 'Datasets',
     });
   });
 
@@ -88,7 +89,8 @@ describe('HeroBottomBar — mobile', () => {
     fireEvent.click(screen.getByRole('option', { name: 'Publications' }));
     expect(mockTrackEvent).toHaveBeenCalledWith({
       category: 'Homepage',
-      action: 'Hero Bottom Bar / Publications',
+      action: 'Navigation Pill',
+      label: 'Publications',
     });
   });
 

@@ -49,7 +49,8 @@ describe('HeroCard', () => {
     fireEvent.click(screen.getByRole('link'));
     expect(mockTrackEvent).toHaveBeenCalledWith({
       category: 'Homepage',
-      action: 'Hero Card / Organs',
+      action: 'Hero',
+      label: 'Card / Organs',
     });
   });
 

@@ -1,0 +1,5 @@
+- Align homepage analytics event names with the homepage tracking sheet (action = section, label = element).
+- Close homepage analytics gaps: fix dataset chart bar-click events never firing, track the Say & See Mode link, Vitessce carousel browsing, Explore-slide view switching, and the Data Use Guidelines contact link.
+- Remove the unused RecentEntities homepage components.
+- Restore the hover state on the hero "Launch Workspaces" button.
+- Open the workspaces slide's Sign Up link in a new tab with an outbound icon, and hide it for users who already have workspace access (promoting Launch Workspaces to the primary action).

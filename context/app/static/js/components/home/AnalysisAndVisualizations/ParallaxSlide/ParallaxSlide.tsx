@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import OpenInNewRounded from '@mui/icons-material/OpenInNewRounded';
 
 import { trackEvent } from 'js/helpers/trackers';
 import { usePrefersReducedMotion } from '../hooks';
@@ -62,10 +63,13 @@ function ParallaxSlide({ config, zIndex, isProminent = true, stickyRef }: Parall
                   variant={button.variant}
                   color={theme}
                   href={button.href}
+                  {...(button.outbound
+                    ? { target: '_blank', rel: 'noopener noreferrer', endIcon: <OpenInNewRounded /> }
+                    : {})}
                   onClick={() =>
                     trackEvent({
                       category: 'Homepage',
-                      action: `Analysis and Visualizations / ${config.id}`,
+                      action: `Analysis and Visualizations / ${config.trackingName}`,
                       label: button.trackingLabel,
                     })
                   }
