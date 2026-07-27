@@ -38,6 +38,7 @@ function WorkspaceRelaunchAlert({ workspaceId }: { workspaceId: number }) {
   return (
     <Alert
       severity="error"
+      $marginTop={24}
       action={
         <Stack direction="row" spacing={1} justifyContent="center">
           <Button onClick={openLaunch}>Relaunch</Button>

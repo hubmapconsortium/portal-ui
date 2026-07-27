@@ -33,6 +33,7 @@ function SaySeeAlert() {
   return (
     <Alert
       severity="info"
+      $marginTop={24}
       action={
         <Stack direction="row" spacing={1} alignItems="center">
           <Button color="primary" size="small" onClick={exploreAndDismiss}>
