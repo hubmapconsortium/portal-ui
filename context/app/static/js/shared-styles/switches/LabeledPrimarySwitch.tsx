@@ -3,6 +3,7 @@ import Typography, { TypographyProps } from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import PrimarySwitch from 'js/shared-styles/switches/PrimarySwitch';
 import { SwitchProps } from '@mui/material/Switch';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import InfoTextTooltip from '../tooltips/InfoTextTooltip';
 
 interface LabeledPrimarySwitchProps extends Omit<SwitchProps, 'label'> {
@@ -14,6 +15,11 @@ interface LabeledPrimarySwitchProps extends Omit<SwitchProps, 'label'> {
   enabledLabel?: string;
   tooltip?: string;
   labelVariant?: TypographyProps['variant'];
+  /** Optional hover tooltips explaining each side of the toggle. */
+  disabledTooltip?: string;
+  enabledTooltip?: string;
+  /** Prevent the on/off option labels from wrapping onto multiple lines. */
+  noWrapOptionLabels?: boolean;
 }
 export default function LabeledPrimarySwitch({
   label,
@@ -22,6 +28,10 @@ export default function LabeledPrimarySwitch({
   ariaLabel,
   disabledLabel = 'Disabled',
   enabledLabel = 'Enabled',
+  tooltip,
+  disabledTooltip,
+  enabledTooltip,
+  noWrapOptionLabels = false,
   sx,
   labelVariant = 'subtitle2',
   ...rest
@@ -31,17 +41,25 @@ export default function LabeledPrimarySwitch({
       {label}
     </Typography>
   ) : null;
-  const tooltipNode = rest.tooltip ? (
-    <InfoTextTooltip tooltipTitle={rest.tooltip} infoIconSize="medium">
-      {labelNode}
-    </InfoTextTooltip>
-  ) : null;
+  const tooltipNode =
+    tooltip && labelNode ? (
+      <InfoTextTooltip tooltipTitle={tooltip} infoIconSize="medium">
+        {labelNode}
+      </InfoTextTooltip>
+    ) : null;
   const actualLabel = tooltipNode ?? labelNode;
+
+  const optionLabelSx = noWrapOptionLabels ? { whiteSpace: 'nowrap' as const } : undefined;
+  const renderOptionLabel = (text: React.ReactNode, optionTooltip?: string) => {
+    const node = <Typography sx={optionLabelSx}>{text}</Typography>;
+    return optionTooltip ? <SecondaryBackgroundTooltip title={optionTooltip}>{node}</SecondaryBackgroundTooltip> : node;
+  };
+
   return (
     <Stack useFlexGap alignItems="start" sx={sx}>
       {actualLabel}
       <Stack direction="row" component="label" alignItems="center" mt={0}>
-        <Typography>{disabledLabel}</Typography>
+        {renderOptionLabel(disabledLabel, disabledTooltip)}
         <PrimarySwitch
           checked={checked}
           onChange={onChange}
@@ -50,7 +68,7 @@ export default function LabeledPrimarySwitch({
           }}
           {...rest}
         />
-        <Typography>{enabledLabel}</Typography>
+        {renderOptionLabel(enabledLabel, enabledTooltip)}
       </Stack>
     </Stack>
   );

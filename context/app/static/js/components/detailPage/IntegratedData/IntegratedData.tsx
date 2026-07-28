@@ -16,9 +16,11 @@ import Description from 'js/shared-styles/sections/Description';
 interface IntegratedDataSectionProps {
   entities: (Donor | Dataset | Sample)[];
   includeCurrentEntity?: boolean;
+  /** Datasets shown by default; others are hidden behind the ancestor-datasets toggle. */
+  directDatasetIds?: Set<string>;
 }
 
-function IntegratedDataSection({ entities, includeCurrentEntity }: IntegratedDataSectionProps) {
+function IntegratedDataSection({ entities, includeCurrentEntity, directDatasetIds }: IntegratedDataSectionProps) {
   const { entity } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
@@ -67,6 +69,7 @@ function IntegratedDataSection({ entities, includeCurrentEntity }: IntegratedDat
       </Description>
       <IntegratedDataTables
         entities={fullEntities}
+        directDatasetIds={directDatasetIds}
         tableTooltips={{
           Dataset: 'Dataset count includes current dataset.',
         }}

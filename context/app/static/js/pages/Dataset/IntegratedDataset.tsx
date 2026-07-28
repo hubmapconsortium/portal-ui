@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -77,11 +77,34 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   const protocolUrl = useProtocolURL(assayMetadata, isExternal);
 
-  const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
+  // Only the fields needed to build the per-type table queries, retracted-sort map, and download
+  // defaults are requested. The tables lazily fetch full display data for the open tab, so full
+  // `_source` here would be a redundant up-front load of every tab's entities.
+  const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>(
+    [uuid, ...ancestor_ids],
+    ['uuid', 'entity_type', 'mapped_status', 'status'],
+  );
 
-  // Is this filtering necessary? I'm not sure if there will ever be datasets that are not immediate ancestors.
-  const entitiesForImmediateAncestors = entities.filter(
-    (entity) => entity.entity_type !== 'Dataset' || immediate_ancestor_ids.includes(entity.uuid),
+  // Ancestors of the current dataset (the section re-adds the current dataset via includeCurrentEntity).
+  // The full ancestor set is passed so ancestor datasets can be revealed via the section's toggle.
+  const ancestorEntities = useMemo(() => entities.filter((entity) => entity.uuid !== uuid), [entities, uuid]);
+
+  // Datasets shown by default: the current dataset plus its immediate ancestor (component) datasets.
+  const directDatasetIds = useMemo(
+    () =>
+      new Set<string>([
+        uuid,
+        ...entities
+          .filter((entity) => entity.entity_type === 'Dataset' && immediate_ancestor_ids.includes(entity.uuid))
+          .map((entity) => entity.uuid),
+      ]),
+    [entities, uuid, immediate_ancestor_ids],
+  );
+
+  // Non-dataset ancestors plus immediate ancestor datasets -- what the table shows before the toggle.
+  const defaultVisibleAncestors = useMemo(
+    () => ancestorEntities.filter((entity) => entity.entity_type !== 'Dataset' || directDatasetIds.has(entity.uuid)),
+    [ancestorEntities, directDatasetIds],
   );
 
   const { contributors, contacts } = useContributorsAndContacts(assayMetadata);
@@ -103,7 +126,7 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     visualization: Boolean(visualization || vitessceConfig.data || vitessceConfig.isLoading),
     files: Boolean(files),
     'bulk-data-transfer': true,
-    'integrated-data': Boolean(entitiesForImmediateAncestors.length),
+    'integrated-data': Boolean(defaultVisibleAncestors.length),
     provenance: true,
     // External datasets have protocol URLs, internal datasets should have workflow details
     'protocols-and-workflow-details': Boolean(protocolUrl || (!isExternal && dag_provenance_list)),
@@ -112,10 +135,8 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
     attribution: true,
   };
 
-  const uuidsForBulkDataTransfer = new Set<string>([
-    ...entitiesForImmediateAncestors.filter((e) => e.entity_type === 'Dataset').map((ds) => ds.uuid),
-    uuid,
-  ]);
+  // The current dataset plus its immediate ancestor datasets == directDatasetIds.
+  const uuidsForBulkDataTransfer = directDatasetIds;
 
   const trackFilesSectionEvents = useEventCallback((info: { action: string; label: string }) => {
     trackEvent({
@@ -156,7 +177,8 @@ function IntegratedDatasetPage({ assayMetadata }: EntityDetailProps<Dataset>) {
             customUUIDs={uuidsForBulkDataTransfer}
           />
           <IntegratedDataSection
-            entities={entitiesForImmediateAncestors}
+            entities={ancestorEntities}
+            directDatasetIds={directDatasetIds}
             shouldDisplay={shouldDisplaySection['integrated-data']}
             includeCurrentEntity
           />

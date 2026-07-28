@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
+import LabeledPrimarySwitch from 'js/shared-styles/switches/LabeledPrimarySwitch';
 import { Dataset, Donor, Entity, Sample } from 'js/components/types';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { EntitiesTabTypes } from 'js/shared-styles/tables/EntitiesTable/types';
@@ -46,9 +47,29 @@ const isIntegratedEntity = (e: Entity): e is IntegratedEntity => {
   return ['Donor', 'Sample', 'Dataset'].includes(e.entity_type);
 };
 
-function getHeaderActions(entityType: IntegratedEntityTypes, entityIdsByType: Record<IntegratedEntityTypes, string[]>) {
+/**
+ * Datasets to show in the Dataset tab: all of them when no direct set is provided or the
+ * ancestor-datasets toggle is enabled, otherwise only the directly-integrated datasets.
+ */
+export function getDisplayedDatasetIds(
+  allDatasetIds: string[],
+  directDatasetIds: Set<string> | undefined,
+  showAncestorDatasets: boolean,
+): string[] {
+  if (!directDatasetIds || showAncestorDatasets) {
+    return allDatasetIds;
+  }
+  return allDatasetIds.filter((id) => directDatasetIds.has(id));
+}
+
+function getHeaderActions(
+  entityType: IntegratedEntityTypes,
+  entityIdsByType: Record<IntegratedEntityTypes, string[]>,
+  extraActions?: React.ReactNode,
+) {
   return (
     <>
+      {extraActions}
       <SaveEntitiesButtonFromSearch entity_type={entityType} />
       <Copy />
       <WorkspacesDropdownMenu type={entityType} />
@@ -74,6 +95,12 @@ interface IntegratedDataTablesProps {
    * retracted datasets to the top by default (overridable by clicking another column header).
    */
   datasetRetractedSortMap?: Record<string, number>;
+  /**
+   * UUIDs of the datasets directly integrated into the entity being viewed. These are always shown
+   * in the Dataset tab; any other datasets in `entities` are treated as ancestor datasets and are
+   * hidden behind a "Show ancestor datasets" toggle. When omitted, every dataset is shown.
+   */
+  directDatasetIds?: Set<string>;
 }
 
 function IntegratedDataTables({
@@ -82,13 +109,32 @@ function IntegratedDataTables({
   isLoading,
   useDefaultQuery = true,
   datasetRetractedSortMap,
+  directDatasetIds,
 }: IntegratedDataTablesProps) {
+  const [showAncestorDatasets, setShowAncestorDatasets] = useState(false);
+
   const entitiesTableConfig: EntitiesTabTypes<Entity>[] = useMemo(() => {
     const integratedEntityList = entityList.filter(isIntegratedEntity);
-    // When the publication contains retracted datasets, surface a status column whose client-side
-    // custom sort values place retracted datasets first by default.
+    const allDatasetIds = integratedEntityList.filter((e) => e.entity_type === 'Dataset').map((e) => e.uuid);
+    const ancestorDatasetsPresent = Boolean(directDatasetIds) && allDatasetIds.some((id) => !directDatasetIds!.has(id));
+    const displayedDatasetIds = getDisplayedDatasetIds(allDatasetIds, directDatasetIds, showAncestorDatasets);
+    // Toggle (rendered in the Dataset tab's header actions) to reveal the ancestor datasets of the
+    // directly-integrated datasets. Only shown when there are ancestor datasets to reveal.
+    const ancestorDatasetsToggle = ancestorDatasetsPresent ? (
+      <LabeledPrimarySwitch
+        checked={showAncestorDatasets}
+        onChange={(_, checked) => setShowAncestorDatasets(checked)}
+        disabledLabel="Show Associated"
+        enabledLabel="Show All Ancestors"
+        ariaLabel="Show ancestor datasets"
+        noWrapOptionLabels
+        disabledTooltip="Show only the datasets directly associated with this entity."
+        enabledTooltip="Also show the ancestor datasets these were derived from, such as the raw datasets they were processed from."
+      />
+    ) : null;
+    // Only surface the retracted-first status column when a retracted dataset is actually visible.
     const hasRetracted = Boolean(
-      datasetRetractedSortMap && Object.values(datasetRetractedSortMap).some((v) => v === 0),
+      datasetRetractedSortMap && displayedDatasetIds.some((id) => datasetRetractedSortMap[id] === 0),
     );
     const datasetTabColumns = hasRetracted
       ? [
@@ -117,6 +163,9 @@ function IntegratedDataTables({
         Dataset: [],
       },
     );
+    // Restrict the Dataset tab (query, counts, and download/save defaults) to the datasets currently
+    // displayed. Sample/Donor tabs already only contain sample/donor ancestors.
+    entityIdsByType.Dataset = displayedDatasetIds;
     const entities: EntitiesTabTypes<Entity>[] = [
       {
         entityType: 'Dataset',
@@ -135,7 +184,7 @@ function IntegratedDataTables({
           ...(hasRetracted && { size: 10000 }),
         },
         columns: datasetTabColumns,
-        headerActions: getHeaderActions('Dataset', entityIdsByType),
+        headerActions: getHeaderActions('Dataset', entityIdsByType, ancestorDatasetsToggle),
         initialSortState: datasetInitialSortState,
         tabTooltipText: tableTooltips?.Dataset,
       },
@@ -177,7 +226,7 @@ function IntegratedDataTables({
       },
     ];
     return entities;
-  }, [entityList, tableTooltips, datasetRetractedSortMap]);
+  }, [entityList, tableTooltips, datasetRetractedSortMap, directDatasetIds, showAncestorDatasets]);
 
   const numSelected = useSelectableTableStore((s) => s.selectedRows.size);
 
