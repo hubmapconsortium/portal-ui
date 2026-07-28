@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { Alert } from 'js/shared-styles/alerts';
 
 const StyledAlert = styled(Alert)(({ theme }) => ({
+  marginTop: theme.spacing(3),
   marginBottom: theme.spacing(3),
 }));
 
