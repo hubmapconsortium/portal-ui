@@ -33,7 +33,9 @@ function SaySeeAlert() {
   return (
     <Alert
       severity="info"
-      $marginTop={24}
+      // `&&` doubles specificity to beat the parent Stack's `& > * { margin: 0 }` reset. Matches
+      // the global alert banner's 24px top margin (see components/style.ts).
+      sx={{ '&&': { mt: 3 } }}
       action={
         <Stack direction="row" spacing={1} alignItems="center">
           <Button color="primary" size="small" onClick={exploreAndDismiss}>
