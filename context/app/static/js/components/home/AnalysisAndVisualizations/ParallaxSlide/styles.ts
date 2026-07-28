@@ -93,7 +93,7 @@ export const SlideGrid = styled(Box)<SlideGridProps>(({ theme, $layout }) => ({
 
   [theme.breakpoints.up('md')]: {
     display: 'grid',
-    gridTemplateColumns: $layout === 'text-left' ? '5fr 4fr' : '4fr 5fr',
+    gridTemplateColumns: $layout === 'text-left' ? '1fr 2fr' : '2fr 1fr',
     gap: theme.spacing(6),
     alignItems: 'start',
   },

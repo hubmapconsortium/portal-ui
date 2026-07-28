@@ -38,6 +38,9 @@ function WorkspaceRelaunchAlert({ workspaceId }: { workspaceId: number }) {
   return (
     <Alert
       severity="error"
+      // `&&` doubles specificity to beat the parent Stack's `& > * { margin: 0 }` reset. Matches
+      // the global alert banner's 24px top margin (see components/style.ts).
+      sx={{ '&&': { mt: 3 } }}
       action={
         <Stack direction="row" spacing={1} justifyContent="center">
           <Button onClick={openLaunch}>Relaunch</Button>
