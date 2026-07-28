@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.49.2 - 2026-07-28
+
+- Widen the parallax slides' video relative to their text (1/3 text, 2/3 video) to match the visualizations slide.
+- Add a consistent top margin above top-of-page alerts (Say & See, workspace relaunch, and workspace launching), matching the global alert banner.
+- Adjust "View Visualizations" homepage link to go to dataset search page with visualization filter enabled.
+- Reserve the Integrated Data / publication Data table's height while it loads so content below it (such as publication vignettes) no longer shifts up into view.
+- Speed up the Integrated Data / publication Data section by requesting only the fields needed up front and loading each tab's rows lazily.
+- Default the Integrated Data / publication Data table to the directly associated datasets, with a "Show All Ancestors" toggle to also include the ancestor datasets they were derived from.
+
+
+
 ## v1.49.1 - 2026-07-23
 
 - Align homepage analytics event names with the homepage tracking sheet (action = section, label = element).

@@ -1,2 +1,0 @@
-- Widen the parallax slides' video relative to their text (1/3 text, 2/3 video) to match the visualizations slide.
-- Add a consistent top margin above top-of-page alerts (Say & See, workspace relaunch, and workspace launching), matching the global alert banner.
