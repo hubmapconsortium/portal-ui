@@ -1,0 +1,1 @@
+- Adjust "View Visualizations" homepage link to go to dataset search page with visualization filter enabled.
