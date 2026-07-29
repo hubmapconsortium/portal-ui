@@ -1,0 +1,1 @@
+- Bump portal visualization to 0.5.11 to fix issues with zipped visium outputs and meaningless "var/hugo_symbol" errors for datasets whose hugo symbols are in the index folder.
