@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.49.3 - 2026-07-29
+
+- Bump portal visualization to 0.5.11 to fix issues with zipped visium outputs and meaningless "var/hugo_symbol" errors for datasets whose hugo symbols are in the index folder.
+
+
+
 ## v1.49.2 - 2026-07-28
 
 - Widen the parallax slides' video relative to their text (1/3 text, 2/3 video) to match the visualizations slide.
