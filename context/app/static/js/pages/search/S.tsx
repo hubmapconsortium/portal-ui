@@ -2,7 +2,7 @@ import React from 'react';
 import esb from 'elastic-builder';
 
 import Search from 'js/components/search';
-import { FACETS } from 'js/components/search/store';
+import { FACETS, type SortField } from 'js/components/search/store';
 import { EntityWithType, isDonor } from 'js/components/types';
 import { useAppContext } from 'js/components/Contexts';
 
@@ -234,13 +234,15 @@ function buildDatasetConfig(isHubmapUser: boolean) {
       _extra: ['visualization'],
       tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
     },
+    // `satisfies` rather than a bare literal: `secondarySort` is optional on SortField, so a
+    // misspelled key would otherwise be silently accepted and the tiebreaker quietly dropped.
     sortField: isHubmapUser
-      ? { field: 'last_modified_timestamp', direction: 'desc' as const }
-      : {
+      ? ({ field: 'last_modified_timestamp', direction: 'desc' } satisfies SortField)
+      : ({
           field: 'published_timestamp',
-          direction: 'desc' as const,
-          secondaryField: { field: 'mapped_status', direction: 'desc' as const },
-        },
+          direction: 'desc',
+          secondarySort: { field: 'mapped_status', direction: 'desc' },
+        } satisfies SortField),
     facets: buildDatasetFacetGroups(isHubmapUser),
     ...buildDefaultQuery('Dataset'),
     // TODO: figure out how to make assertion unnecessary.

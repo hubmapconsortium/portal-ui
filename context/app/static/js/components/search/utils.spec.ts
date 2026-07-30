@@ -1,6 +1,7 @@
 import esb from 'elastic-builder';
 import { buildQuery } from './utils';
 import { Mappings } from './useEsMapping';
+import type { SortField } from './store';
 
 const mappings: Mappings = {
   mappings: {
@@ -9,6 +10,7 @@ const mappings: Mappings = {
       hubmap_id: { fields: { keyword: { type: 'keyword' } } },
       entity_type: { fields: { keyword: { type: 'keyword' } } },
       all_text: { type: 'text' },
+      mapped_status: { fields: { keyword: { type: 'keyword' } } },
       last_modified_timestamp: { type: 'date' },
     },
   },
@@ -217,5 +219,45 @@ describe('buildQuery range filter overlap', () => {
     expect(serialized).toContain('"donor_demographics.age_value":{"lte":60}');
     // ...not a single combined range, which would require one element inside [20, 60].
     expect(serialized).not.toContain('"gte":20,"lte":60');
+  });
+});
+
+describe('buildQuery sorting', () => {
+  function sortOf(sortField: SortField) {
+    const result = buildQuery({
+      filters: {},
+      facets: {},
+      search: '',
+      size: 18,
+      searchFields: ['all_text'],
+      sourceFields: { table: ['hubmap_id'] },
+      sortField,
+      defaultQuery,
+      latestRevisionFilter,
+      includeSupersededEntities: false,
+      mappings,
+      buildAggregations: false,
+    }) as { sort: unknown[] } | null;
+    if (!result) throw new Error('buildQuery returned null');
+    return result.sort;
+  }
+
+  test('emits the secondarySort tiebreaker between the primary sort and the unique sort', () => {
+    // Regression: the dataset search config spelled this key `secondaryField`, which buildSortField
+    // never reads, so anonymous users' published-timestamp sort silently lost its tiebreaker.
+    expect(
+      sortOf({
+        field: 'last_modified_timestamp',
+        direction: 'desc',
+        secondarySort: { field: 'mapped_status', direction: 'desc' },
+      }),
+    ).toEqual([{ last_modified_timestamp: 'desc' }, { 'mapped_status.keyword': 'desc' }, { 'uuid.keyword': 'desc' }]);
+  });
+
+  test('omits the tiebreaker when no secondarySort is configured', () => {
+    expect(sortOf({ field: 'last_modified_timestamp', direction: 'desc' })).toEqual([
+      { last_modified_timestamp: 'desc' },
+      { 'uuid.keyword': 'desc' },
+    ]);
   });
 });

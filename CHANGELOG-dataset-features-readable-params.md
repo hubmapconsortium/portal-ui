@@ -1,0 +1,3 @@
+- Fix the "View Visualizations" homepage link dropping its filter, and share each Dataset Features filter as a readable URL parameter (e.g. `/search/datasets?visualization=true`) instead of inside the compressed `q` blob.
+- Preserve unrelated search URL parameters, such as `mode=say-see`, when a filter changes.
+- Restore the `mapped_status` tiebreaker on the dataset search's published-timestamp sort.
