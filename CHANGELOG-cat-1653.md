@@ -1,0 +1,1 @@
+- Update the Integrated Data / publication Data table's "Show Associated" toggle tooltip to name the current page's entity type instead of the generic "entity".

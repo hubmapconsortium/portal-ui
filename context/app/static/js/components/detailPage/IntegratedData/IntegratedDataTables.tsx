@@ -24,6 +24,7 @@ import { Copy } from 'js/shared-styles/tables/actions';
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
 import DownloadsDropdownMenu from 'js/components/data-transfer/DownloadsDropdownMenu';
+import { useFlaskDataContext } from 'js/components/Contexts';
 
 const datasetColumns = [
   hubmapID,
@@ -112,6 +113,8 @@ function IntegratedDataTables({
   directDatasetIds,
 }: IntegratedDataTablesProps) {
   const [showAncestorDatasets, setShowAncestorDatasets] = useState(false);
+  // The toggle's tooltip refers to the entity whose page the tables are embedded in ("dataset", "publication").
+  const currentEntityLabel = useFlaskDataContext().entity.entity_type.toLowerCase();
 
   const entitiesTableConfig: EntitiesTabTypes<Entity>[] = useMemo(() => {
     const integratedEntityList = entityList.filter(isIntegratedEntity);
@@ -128,8 +131,8 @@ function IntegratedDataTables({
         enabledLabel="Show All Ancestors"
         ariaLabel="Show ancestor datasets"
         noWrapOptionLabels
-        disabledTooltip="Show only the datasets directly associated with this entity."
-        enabledTooltip="Also show the ancestor datasets these were derived from, such as the raw datasets they were processed from."
+        disabledTooltip={`Show only the datasets directly associated with this ${currentEntityLabel}.`}
+        enabledTooltip="Show directly associated datasets and the ancestor datasets these were derived from, such as the raw datasets they were processed from."
       />
     ) : null;
     // Only surface the retracted-first status column when a retracted dataset is actually visible.
@@ -226,7 +229,7 @@ function IntegratedDataTables({
       },
     ];
     return entities;
-  }, [entityList, tableTooltips, datasetRetractedSortMap, directDatasetIds, showAncestorDatasets]);
+  }, [entityList, tableTooltips, datasetRetractedSortMap, directDatasetIds, showAncestorDatasets, currentEntityLabel]);
 
   const numSelected = useSelectableTableStore((s) => s.selectedRows.size);
 
