@@ -1,0 +1,1 @@
+- Add CC BY 4.0 licensing information to the data use agreement dialog and the bulk data transfer section on dataset pages.

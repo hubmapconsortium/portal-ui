@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { getDUAText } from './utils';
+import LicensingText from './LicensingText';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
 
 interface FileBrowserDUAProps {
@@ -61,6 +62,11 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
               https://hubmapconsortium.org/policies/
             </OutboundLink>
             .
+          </Typography>
+
+          <StyledHeader variant="h4">Licensing</StyledHeader>
+          <Typography variant="body1">
+            <LicensingText />
           </Typography>
         </StyledDiv>
         <FormControlLabel
