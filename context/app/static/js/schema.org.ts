@@ -46,6 +46,7 @@ function getDatasetLD(entity: DatasetForLD) {
       entity.description && entity.description.length >= 50
         ? entity.description
         : `${fallbackDescription}. ${entity.description}`,
+    license: 'https://creativecommons.org/licenses/by/4.0/' as const,
     creator: [
       {
         '@type': 'Person' as const,
