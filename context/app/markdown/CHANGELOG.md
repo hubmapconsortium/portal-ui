@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.50.0 - 2026-08-04
+
+- Update the Integrated Data / publication Data table's "Show Associated" toggle tooltip to name the current page's entity type instead of the generic "entity".
+- Add CC BY 4.0 licensing information to the data use agreement dialog, the bulk data transfer section, and the schema.org metadata on dataset pages.
+- Fix the "View Visualizations" homepage link dropping its filter, and share each Dataset Features filter as a readable URL parameter (e.g. `/search/datasets?visualization=true`) instead of inside the compressed `q` blob.
+- Preserve unrelated search URL parameters, such as `mode=say-see`, when a filter changes.
+- Restore the `mapped_status` tiebreaker on the dataset search's published-timestamp sort.
+
+
+
 ## v1.49.3 - 2026-07-29
 
 - Bump portal visualization to 0.5.11 to fix issues with zipped visium outputs and meaningless "var/hugo_symbol" errors for datasets whose hugo symbols are in the index folder.
