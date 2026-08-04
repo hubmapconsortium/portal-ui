@@ -1,0 +1,1 @@
+- Add CC BY 4.0 licensing information to the data use agreement dialog, the bulk data transfer section, and the schema.org metadata on dataset pages.

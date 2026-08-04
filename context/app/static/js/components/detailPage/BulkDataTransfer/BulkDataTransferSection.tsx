@@ -5,16 +5,19 @@ import { useEventCallback } from '@mui/material/utils';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
+import HubmapDataFooter from 'js/components/detailPage/files/HubmapDataFooter';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { OutboundLink } from 'js/shared-styles/Links';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import BulkDownloadTextButton from 'js/components/bulkDownload/buttons/BulkDownloadTextButton';
 import { LINKS } from 'js/components/bulkDownload/constants';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
+import LicensingText from './LicensingText';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 import SnareSeq2Alert from '../multi-assay/SnareSeq2Alert';
 import { useDetailContext } from '../DetailContext';
@@ -51,6 +54,9 @@ function BulkDataTransferDescription({
     <SectionDescription>
       <Stack spacing={1}>
         {isIntegratedEntity ? integratedEntityDescription : description}
+        <LabelledSectionText label="Licensing">
+          <LicensingText />
+        </LabelledSectionText>
         <BulkDownloadTextButton uuids={uuids} />
       </Stack>
     </SectionDescription>
@@ -136,6 +142,7 @@ function BulkDataTransfer({ integratedEntityUUID, customUUIDs }: BulkDataTransfe
         ) : (
           <RegularBulkDataTransfer />
         )}
+        <HubmapDataFooter />
       </FilesContextProvider>
     </CollapsibleDetailPageSection>
   );

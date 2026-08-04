@@ -24,6 +24,7 @@ test('full', () => {
   expect(getDatasetLD(entity)).toEqual({
     '@context': 'https://schema.org/',
     '@type': 'Dataset',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
     creator: [
       {
         '@type': 'Person',
@@ -54,6 +55,7 @@ test('minimal, with donor', () => {
   expect(getDatasetLD(entity)).toEqual({
     '@context': 'https://schema.org/',
     '@type': 'Dataset',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
     creator: [
       {
         '@type': 'Person',
@@ -81,6 +83,7 @@ test('no donor', () => {
   expect(getDatasetLD(entity)).toEqual({
     '@context': 'https://schema.org/',
     '@type': 'Dataset',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
     creator: [
       {
         '@type': 'Person',
@@ -107,6 +110,7 @@ test('multiple organs', () => {
   expect(getDatasetLD(entity)).toEqual({
     '@context': 'https://schema.org/',
     '@type': 'Dataset',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
     creator: [
       {
         '@type': 'Person',

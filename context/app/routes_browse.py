@@ -200,6 +200,7 @@ def sitemap_txt():
                 f'{url_base}/tutorials',
                 f'{url_base}/templates',
                 f'{url_base}/organs',
+                f'{url_base}/integrated-maps',
                 # Detail pages
                 *[f'{url_base}/templates/{key}' for key in template_keys],
                 *[f'{url_base}/organs/{key}' for key in organ_keys],
