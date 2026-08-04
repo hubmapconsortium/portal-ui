@@ -4,6 +4,8 @@ import {
   decodeHierarchical,
   isLegacyCompressedURL,
   parseReadableParams,
+  preserveUnownedParams,
+  DATASET_FEATURE_PARAMS,
   READABLE_PARAM_FIELDS,
 } from './searchParams';
 import { parseURLState } from './store';
@@ -189,6 +191,78 @@ describe('parseReadableParams', () => {
   test('readable scFind params take precedence over a legacy q blob', () => {
     const q = LZString.compressToEncodedURIComponent(JSON.stringify({ scFindParams: { genes: ['LEGACY'] } }));
     expect(parseReadableParams(`?genes=CD4&q=${q}`).scFindParams).toEqual({ genes: ['CD4'] });
+  });
+});
+
+describe('parseReadableParams dataset features', () => {
+  test('parses the visualization feature into a BOOLEAN_GROUP filter', () => {
+    expect(parseReadableParams('?visualization=true').filters?.['_dataset_features']).toEqual({
+      type: 'BOOLEAN_GROUP',
+      values: ['visualization::true'],
+    });
+  });
+
+  test('parses multiple features together', () => {
+    const filter = parseReadableParams('?visualization=true&spatial=true&publications=true').filters?.[
+      '_dataset_features'
+    ];
+    expect(filter?.type).toBe('BOOLEAN_GROUP');
+    expect(filter?.values).toEqual(
+      expect.arrayContaining(['visualization::true', 'spatial', 'descendant_counts.entity_type.Publication']),
+    );
+  });
+
+  test('combines dataset features with other readable params', () => {
+    const result = parseReadableParams('?visualization=true&organ=Kidney');
+    expect(result.filters?.['_dataset_features']).toEqual({
+      type: 'BOOLEAN_GROUP',
+      values: ['visualization::true'],
+    });
+    expect(result.filters?.['origin_samples_unique_mapped_organs']).toEqual({ type: 'TERM', values: ['Kidney'] });
+  });
+
+  test('ignores a feature param that is not set to true', () => {
+    expect(parseReadableParams('?visualization=false').filters?.['_dataset_features']).toBeUndefined();
+  });
+
+  test('still reads dataset features from an existing q blob for backward compatibility', () => {
+    const q = LZString.compressToEncodedURIComponent(
+      JSON.stringify({ filters: { _dataset_features: { type: 'BOOLEAN_GROUP', values: ['visualization::true'] } } }),
+    );
+    expect(parseReadableParams(`?q=${q}`).filters?.['_dataset_features']).toEqual({
+      type: 'BOOLEAN_GROUP',
+      values: ['visualization::true'],
+    });
+  });
+
+  test('unions readable features with item keys carried in q rather than replacing them', () => {
+    // Item keys with no readable param stay in `q`; both halves must survive the round-trip.
+    const q = LZString.compressToEncodedURIComponent(
+      JSON.stringify({ filters: { _dataset_features: { type: 'BOOLEAN_GROUP', values: ['some_future_item'] } } }),
+    );
+    const values = parseReadableParams(`?visualization=true&q=${q}`).filters?.['_dataset_features']?.values;
+    expect(values).toEqual(expect.arrayContaining(['some_future_item', 'visualization::true']));
+    expect(values).toHaveLength(2);
+  });
+
+  test('preserveUnownedParams keeps params the search state does not own', () => {
+    const preserved = preserveUnownedParams('?mode=say-see&organ=Kidney&visualization=true&q=abc&genes=CD4');
+    expect(preserved.get('mode')).toBe('say-see');
+    expect([...preserved.keys()]).toEqual(['mode']);
+  });
+
+  test('preserveUnownedParams returns an empty set when only search params are present', () => {
+    expect([...preserveUnownedParams('?organ=Kidney&status=Published.Public&data_product=dp-1').keys()]).toEqual([]);
+  });
+
+  test('DATASET_FEATURE_PARAMS maps each Dataset Features checkbox to a readable param', () => {
+    // Keys must match getBooleanGroupItemKey output for the _dataset_features items in S.tsx.
+    expect(DATASET_FEATURE_PARAMS).toEqual({
+      visualization: 'visualization::true',
+      publications: 'descendant_counts.entity_type.Publication',
+      cell_annotations: 'calculated_metadata.object_types::CL:0000000',
+      spatial: 'spatial',
+    });
   });
 });
 

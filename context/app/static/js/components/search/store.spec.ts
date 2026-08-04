@@ -1,5 +1,7 @@
-import { buildSearchLink } from './store';
-import { parseReadableParams } from './searchParams';
+import history from 'history/browser';
+import { buildSearchLink, createStore } from './store';
+import type { SearchStoreState } from './store';
+import { DATASET_FEATURES_FIELD, parseReadableParams } from './searchParams';
 import { getSearchURL } from '../organ/utils';
 
 describe('buildSearchLink dataProductID', () => {
@@ -66,6 +68,109 @@ describe('buildSearchLink scFindParams', () => {
     const parsed = parseReadableParams(link.slice(link.indexOf('?')));
     expect(parsed.scFindParams).toEqual({ genes: ['CD4'] });
     expect(parsed.filters?.['origin_samples_unique_mapped_organs']).toEqual({ type: 'TERM', values: ['Kidney'] });
+  });
+});
+
+describe('buildSearchLink dataset features', () => {
+  const visualizationFeature = { type: 'BOOLEAN_GROUP' as const, values: ['visualization::true'] };
+  const visualizationFilter = { [DATASET_FEATURES_FIELD]: visualizationFeature };
+
+  test('encodes the visualization feature as a readable param (not the opaque q blob)', () => {
+    // Regression: the home page "View Visualizations" CTA previously hardcoded a hand-authored q
+    // blob whose `values` was a `Set("…")` string, which failed zod validation and silently
+    // discarded the entire URL state, landing on an unfiltered search page.
+    const link = buildSearchLink({ entity_type: 'Dataset', filters: visualizationFilter });
+    expect(link).toBe('/search/datasets?visualization=true');
+  });
+
+  test('round-trips the visualization feature through build → parse', () => {
+    const link = buildSearchLink({ entity_type: 'Dataset', filters: visualizationFilter });
+    expect(parseReadableParams(link.slice(link.indexOf('?'))).filters?.[DATASET_FEATURES_FIELD]).toEqual(
+      visualizationFeature,
+    );
+  });
+
+  test('round-trips multiple features alongside a readable organ filter', () => {
+    const filters = {
+      [DATASET_FEATURES_FIELD]: { type: 'BOOLEAN_GROUP' as const, values: ['visualization::true', 'spatial'] },
+      origin_samples_unique_mapped_organs: { type: 'TERM' as const, values: ['Kidney'] },
+    };
+    const link = buildSearchLink({ entity_type: 'Dataset', filters });
+    expect(link).not.toContain('q=');
+    const parsed = parseReadableParams(link.slice(link.indexOf('?')));
+    expect(parsed.filters?.['_dataset_features']?.values).toEqual(
+      expect.arrayContaining(['visualization::true', 'spatial']),
+    );
+    expect(parsed.filters?.['origin_samples_unique_mapped_organs']).toEqual({ type: 'TERM', values: ['Kidney'] });
+  });
+
+  test('falls back to the q blob for an item key with no readable param', () => {
+    const link = buildSearchLink({
+      entity_type: 'Dataset',
+      filters: {
+        [DATASET_FEATURES_FIELD]: { type: 'BOOLEAN_GROUP', values: ['visualization::true', 'some_future_item'] },
+      },
+    });
+    expect(link).toContain('visualization=true');
+    expect(link).toContain('q=');
+    expect(parseReadableParams(link.slice(link.indexOf('?'))).filters?.['_dataset_features']?.values).toEqual(
+      expect.arrayContaining(['visualization::true', 'some_future_item']),
+    );
+  });
+});
+
+describe('replaceURLSearchParams', () => {
+  const initialState: SearchStoreState = {
+    search: '',
+    filters: {
+      [DATASET_FEATURES_FIELD]: { type: 'BOOLEAN_GROUP', values: new Set<string>() },
+      origin_samples_unique_mapped_organs: { type: 'TERM', values: new Set<string>() },
+    },
+    initialFilters: {},
+    facets: {},
+    searchFields: ['all_text'],
+    sortField: { field: 'last_modified_timestamp', direction: 'desc' },
+    sourceFields: { table: ['hubmap_id'] },
+    view: 'table',
+    size: 18,
+    endpoint: 'http://example.com/search',
+    type: 'Dataset',
+    analyticsCategory: 'Datasets Search Page Interactions',
+    includeSupersededEntities: false,
+  };
+
+  function toggleVisualization() {
+    const store = createStore({ initialState });
+    store.getState().filterBooleanGroupItem({ field: DATASET_FEATURES_FIELD, itemKey: 'visualization::true' });
+    return store;
+  }
+
+  test('writes a checked dataset feature as a readable param, with no q blob', () => {
+    history.replace('/search/datasets');
+    toggleVisualization();
+
+    const params = new URLSearchParams(history.location.search);
+    expect(params.get('visualization')).toBe('true');
+    expect(params.get('q')).toBeNull();
+  });
+
+  test('preserves params the search state does not own', () => {
+    // Regression: the query string is rebuilt from scratch on every filter change, which used to
+    // destroy unrelated params — `mode=say-see` vanished on the first facet interaction.
+    history.replace('/search/datasets?mode=say-see');
+    toggleVisualization();
+
+    expect(new URLSearchParams(history.location.search).get('mode')).toBe('say-see');
+  });
+
+  test('clears its own params when a filter is unchecked, without touching unowned params', () => {
+    history.replace('/search/datasets?mode=say-see');
+    const store = toggleVisualization();
+    store.getState().filterBooleanGroupItem({ field: DATASET_FEATURES_FIELD, itemKey: 'visualization::true' });
+
+    const params = new URLSearchParams(history.location.search);
+    expect(params.get('visualization')).toBeNull();
+    expect(params.get('mode')).toBe('say-see');
   });
 });
 

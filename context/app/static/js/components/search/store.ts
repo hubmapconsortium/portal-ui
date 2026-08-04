@@ -7,8 +7,11 @@ import { z } from 'zod';
 import { SCFindParams } from '../organ/utils';
 import { SearchTypeProps } from './utils';
 import {
+  DATASET_FEATURES_FIELD,
   READABLE_PARAM_FIELDS,
+  appendDatasetFeatureParams,
   encodeHierarchical,
+  preserveUnownedParams,
   serializeReadableParams,
   buildScFindAndDataProductParams,
 } from './searchParams';
@@ -371,11 +374,19 @@ export function buildSearchLink({
     return `/search/${entity_type.toLowerCase()}s`;
   }
 
+  const urlSearchParams = buildScFindAndDataProductParams({ scFindParams, dataProductID });
   const readableParamValues: Record<string, string[]> = {};
   const remainingFilters: FiltersType<string[]> = {};
 
   if (filters) {
     for (const [field, filter] of Object.entries(filters)) {
+      if (field === DATASET_FEATURES_FIELD && isBooleanGroupFilter<string[]>(filter)) {
+        const unmapped = appendDatasetFeatureParams(urlSearchParams, filter.values);
+        if (unmapped.length > 0) {
+          remainingFilters[field] = { ...filter, values: unmapped };
+        }
+        continue;
+      }
       const paramName = READABLE_PARAM_FIELDS[field as keyof typeof READABLE_PARAM_FIELDS];
       if (paramName) {
         if (filter.type === 'TERM') {
@@ -399,7 +410,7 @@ export function buildSearchLink({
       ? LZString.compressToEncodedURIComponent(JSON.stringify({ filters: remainingFilters }))
       : null;
 
-  const urlParams = serializeReadableParams(buildScFindAndDataProductParams({ scFindParams, dataProductID }), {
+  const urlParams = serializeReadableParams(urlSearchParams, {
     organ: readableParamValues['organ'] ?? [],
     analyte: readableParamValues['analyte'] ?? [],
     dataset_type: readableParamValues['dataset_type'] ?? [],
@@ -429,12 +440,24 @@ function replaceURLSearchParams(state: SearchStoreState) {
   // params as the source of truth (re-resolved on load) rather than serializing every UUID into `q`.
   const uuidIsDerived = Boolean(scFindParams && Object.keys(scFindParams).length > 0) || Boolean(dataProductID);
 
+  const urlSearchParams = buildScFindAndDataProductParams({
+    scFindParams,
+    dataProductID,
+    params: preserveUnownedParams(history.location.search),
+  });
   const readableParamValues: Record<string, string[]> = {};
   const remainingFilters: FiltersType = {};
 
   for (const [field, filter] of Object.entries(filters)) {
     if (!filterHasValues({ filter })) continue;
     if (uuidIsDerived && field === 'uuid') continue;
+    if (field === DATASET_FEATURES_FIELD && isBooleanGroupFilter(filter)) {
+      const unmapped = appendDatasetFeatureParams(urlSearchParams, filter.values);
+      if (unmapped.length > 0) {
+        remainingFilters[field] = { ...filter, values: new Set(unmapped) };
+      }
+      continue;
+    }
     const paramName = READABLE_PARAM_FIELDS[field as keyof typeof READABLE_PARAM_FIELDS];
     if (paramName) {
       if (isTermFilter(filter)) {
@@ -457,7 +480,7 @@ function replaceURLSearchParams(state: SearchStoreState) {
       )
     : null;
 
-  const urlParams = serializeReadableParams(buildScFindAndDataProductParams({ scFindParams, dataProductID }), {
+  const urlParams = serializeReadableParams(urlSearchParams, {
     organ: readableParamValues['organ'] ?? [],
     analyte: readableParamValues['analyte'] ?? [],
     dataset_type: readableParamValues['dataset_type'] ?? [],

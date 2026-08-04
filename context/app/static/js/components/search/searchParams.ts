@@ -1,7 +1,7 @@
 import LZString from 'lz-string';
 import { createSerializer, parseAsArrayOf, parseAsString } from 'nuqs';
 import type { SCFindParams } from '../organ/utils';
-import { parseURLState } from './store';
+import { isBooleanGroupFilter, parseURLState } from './store';
 import type { SearchURLState } from './store';
 
 /**
@@ -66,11 +66,13 @@ const DATA_PRODUCT_PARAM = 'data_product';
 export function buildScFindAndDataProductParams({
   scFindParams,
   dataProductID,
+  params = new URLSearchParams(),
 }: {
   scFindParams?: SCFindParams;
   dataProductID?: string;
+  /** Existing params to append into. Defaults to a fresh set. */
+  params?: URLSearchParams;
 }): URLSearchParams {
-  const params = new URLSearchParams();
   if (scFindParams?.scFindOnly) {
     params.set(SCFIND_ONLY_PARAM, 'true');
   }
@@ -114,6 +116,79 @@ export function parseScFindAndDataProductParams(params: URLSearchParams): {
     ...(Object.keys(scFindParams).length > 0 && { scFindParams }),
     ...(dataProduct && { dataProductID: dataProduct }),
   };
+}
+
+/** ES field name of the synthetic "Dataset Features" boolean-group facet. */
+export const DATASET_FEATURES_FIELD = '_dataset_features';
+
+/**
+ * Mapping from URL param name to `_dataset_features` boolean-group item key, so each Dataset
+ * Features checkbox shares as a readable `?visualization=true` param instead of being buried in the
+ * opaque compressed `q` blob.
+ *
+ * Item keys must match `getBooleanGroupItemKey` output for the `_dataset_features` facet items in
+ * js/pages/search/S.tsx: `exists` items key on `field`, `term` items on `field::value`. Add an entry
+ * here when adding an item there; unmapped keys still round-trip, but only via `q`.
+ */
+export const DATASET_FEATURE_PARAMS = {
+  visualization: 'visualization::true',
+  publications: 'descendant_counts.entity_type.Publication',
+  cell_annotations: 'calculated_metadata.object_types::CL:0000000',
+  spatial: 'spatial',
+} as const;
+
+/** Reverse mapping: boolean-group item key → URL param name */
+const ITEM_KEY_TO_FEATURE_PARAM: Record<string, string> = Object.fromEntries(
+  Object.entries(DATASET_FEATURE_PARAMS).map(([param, itemKey]) => [itemKey, param]),
+);
+
+/**
+ * Sets a `<feature>=true` param for each mapped boolean-group item key, and returns the keys with no
+ * param mapping so callers can keep those in the `q` blob rather than dropping them from the URL.
+ */
+export function appendDatasetFeatureParams(params: URLSearchParams, itemKeys: Iterable<string>): string[] {
+  const unmapped: string[] = [];
+  for (const itemKey of itemKeys) {
+    const param = ITEM_KEY_TO_FEATURE_PARAM[itemKey];
+    if (param) {
+      params.set(param, 'true');
+    } else {
+      unmapped.push(itemKey);
+    }
+  }
+  return unmapped;
+}
+
+/** Reads the params produced by {@link appendDatasetFeatureParams} back into boolean-group item keys. */
+export function parseDatasetFeatureParams(params: URLSearchParams): string[] {
+  return Object.entries(DATASET_FEATURE_PARAMS)
+    .filter(([param]) => params.get(param) === 'true')
+    .map(([, itemKey]) => itemKey);
+}
+
+/** Every URL param the search state owns and rewrites whenever the query changes. */
+const SEARCH_OWNED_PARAMS: string[] = [
+  ...Object.values(READABLE_PARAM_FIELDS),
+  'q',
+  SCFIND_ONLY_PARAM,
+  GENES_PARAM,
+  CELL_TYPES_PARAM,
+  MODALITY_PARAM,
+  ALL_MODALITIES_PARAM,
+  DATA_PRODUCT_PARAM,
+  ...Object.keys(DATASET_FEATURE_PARAMS),
+];
+
+/**
+ * Returns the params on the current URL that the search state does *not* own, to serialize the fresh
+ * search params into. The search state rewrites the whole query string whenever a filter changes, so
+ * without this any unrelated param — such as `mode=say-see` from useSearchMode — would be dropped on
+ * the first facet interaction.
+ */
+export function preserveUnownedParams(search: string): URLSearchParams {
+  const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
+  SEARCH_OWNED_PARAMS.forEach((param) => params.delete(param));
+  return params;
 }
 
 /**
@@ -207,6 +282,18 @@ export function parseReadableParams(search: string): Partial<SearchURLState> {
     ...(remainingState.filters ?? {}),
     ...filters,
   };
+
+  // Dataset-feature params union with any `_dataset_features` values already decoded from `q`,
+  // rather than replacing them, so item keys without a readable param survive alongside.
+  const featureItemKeys = parseDatasetFeatureParams(params);
+  if (featureItemKeys.length > 0) {
+    const fromQ = mergedFilters[DATASET_FEATURES_FIELD];
+    const qValues = fromQ && isBooleanGroupFilter<string[]>(fromQ) ? fromQ.values : [];
+    mergedFilters[DATASET_FEATURES_FIELD] = {
+      type: 'BOOLEAN_GROUP',
+      values: [...new Set([...qValues, ...featureItemKeys])],
+    };
+  }
 
   // scFind / data product readable params take precedence over any legacy values from the `q` blob.
   const { scFindParams, dataProductID } = parseScFindAndDataProductParams(params);

@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 import 'intersection-observer'; // polyfill intersection observer (jsdom doesn't ship one)
+import { enableMapSet } from 'immer';
+
+// App.tsx enables this at startup; stores holding Set values (e.g. search filters) need it in tests too.
+enableMapSet();
 
 // Polyfill TextEncoder and TextDecoder, which are no longer provided by jsdom
 import { TextEncoder, TextDecoder } from 'node:util';

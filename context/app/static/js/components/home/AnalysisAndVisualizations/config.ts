@@ -4,6 +4,8 @@ import DescriptionRounded from '@mui/icons-material/DescriptionRounded';
 import { SlideConfig, MultiViewSlideConfig } from './types';
 import { DatasetIcon, GeneIcon, WorkspacesIcon, FileIcon } from 'js/shared-styles/icons';
 import { cdnUrl } from 'js/helpers/cdn';
+import { buildSearchLink } from 'js/components/search/store';
+import { DATASET_FEATURES_FIELD } from 'js/components/search/searchParams';
 
 export const DATASETS_SEARCH_SLIDE: SlideConfig = {
   id: 'datasets-search',
@@ -134,7 +136,10 @@ export const VISUALIZE_DATA_SLIDE: MultiViewSlideConfig = {
       description: 'Visualize single-cell and spatial data with Vitessce',
       ctaButton: {
         label: 'View Visualizations',
-        href: '/search/datasets?q=N4IgzgpghgTgxgCxALhCANOA9jALgMQEsIAbAExVADNjyUQAHAVwCMTCwEIyB9XQgLYQwuKAIYYQZQjAhx%2BWAHb0ywuJMhwlZWAE8ipCsmq0jIAVAYNuPEVFxMwk6bPmElKtSAC%2B3zDRJcCBgnYxAeHVFIXB4qaAdZUNAANygSJmF6AGUIXAAKAB0QZI4mNMIAL3t3RWRkXBgMooBKSVxda3oAIQB5HoAZAFEAQQA5HgBxACUegFUABR8-EEJFOHTVLKZrEO5uQcV%2BfkzkKjTIbyA',
+        href: buildSearchLink({
+          entity_type: 'Dataset',
+          filters: { [DATASET_FEATURES_FIELD]: { type: 'BOOLEAN_GROUP', values: ['visualization::true'] } },
+        }),
         variant: 'contained',
         trackingLabel: 'View Visualizations Button',
       },
