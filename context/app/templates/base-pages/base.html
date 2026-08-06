@@ -11,6 +11,17 @@
 
   <title>{% block title_text %}{{ title }}{% endblock %}{{' | HuBMAP' if not skip_title_suffix}}</title>
   <meta name="description" content="{% block description_text %}{{ description }}{% endblock %}">
+
+  {# `request.base_url` is the request URL *without* the query string, so pages reached via a
+     redirect that appends tracking params (e.g. `?redirected=True&redirectedFromId=...` on
+     processed-dataset URLs) still declare the bare page as canonical. ProxyFix supplies the
+     public scheme/host. #}
+  <link rel="canonical" href="{{ request.base_url }}">
+
+  {# Server-rendered so schema.org discovery does not depend on the crawler executing our JS.
+     `tojson` is HTML-safe (htmlsafe_dumps), so it is safe to inline inside <script>. #}
+  {% if json_ld %}<script type="application/ld+json">{{ json_ld | tojson }}</script>{% endif %}
+
   <script>
     const isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
     const groupsToken = '{{ groups_token }}';

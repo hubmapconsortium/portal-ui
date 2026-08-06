@@ -1,0 +1,6 @@
+- Server-render the schema.org `Dataset` metadata on dataset pages instead of injecting it with JavaScript, and enrich it with the dataset's DOI, publication and modification dates, keywords, assay, contributor ORCIDs, data catalog, funder, and an NLM-format citation.
+- Add a canonical link to every page, so pages reached through a redirect that appends parameters are no longer indexed as duplicates.
+- Include the HuBMAP ID in dataset, sample, and donor page titles and descriptions, so entities sharing the same donor, organ, and assay are distinguishable in search results.
+- Permanently redirect HuBMAP ID URLs, mistyped entity types, and processed datasets to their canonical page.
+- Replace the plain-text sitemap with an XML sitemap index that reports each entity's last modified date, covers entities beyond the first 10,000, and refreshes hourly instead of only on deploy.
+- Fix dataset descriptions claiming every donor had no medical history, sample titles ending in a dangling "of", and meta descriptions containing long runs of whitespace.

@@ -6,7 +6,6 @@ import Iframe from './pages/Iframe';
 // Side-effect import: instantiates Matomo + GA4 at module load time so they
 // are ready before the first render.
 import './helpers/trackers';
-import { setJsonLD, DatasetForLD } from './schema.org';
 
 // TODO: Re-enable. https://github.com/hubmapconsortium/portal-ui/issues/1426
 
@@ -34,7 +33,3 @@ root.render(
     />
   ),
 );
-
-if (flaskData?.entity?.entity_type === 'Dataset') {
-  setJsonLD(flaskData.entity as unknown as DatasetForLD);
-}

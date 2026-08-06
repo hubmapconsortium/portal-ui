@@ -113,13 +113,21 @@ def test_200_valid_tutorial_page(client, path):
     assert_is_valid_html(response)
 
 
-@pytest.mark.parametrize(
-    'path', ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid', '/docs']
-)
+@pytest.mark.parametrize('path', ['/docs'])
 def test_302_redirect(client, path, mocker):
     mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '302 FOUND'
+
+
+@pytest.mark.parametrize('path', ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid'])
+def test_301_entity_type_normalization(client, path, mocker):
+    # The mocked entity is a Donor, so these URLs normalize to /browse/donor/fake-uuid.
+    # 301 rather than 302 so search engines consolidate on the normalized URL.
+    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    response = client.get(path)
+    assert response.status == '301 MOVED PERMANENTLY'
+    assert response.location == '/browse/donor/fake-uuid'
 
 
 @pytest.mark.parametrize('path', ['/browse/no-such-type/fake-uuid'])
