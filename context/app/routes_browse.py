@@ -1,8 +1,15 @@
+from datetime import datetime, timezone
 from functools import cache
 from importlib.metadata import version
 import json
 import time
 from urllib.parse import urlparse, quote
+from xml.sax.saxutils import escape as xml_escape
+
+# Private, but so is the `_request` this module already relies on; both come from the
+# portal-visualization client that portal-ui pins.
+from portal_visualization.client import _paginate_search_after
+
 from .utils import get_organs, get_valid_tutorial_routes
 
 from flask import (
@@ -38,8 +45,11 @@ def hbm_redirect(possible_hbm_id):
         abort(404)
     client = get_client()
     entity = client.get_entity(hbm_id=uppercase_possible_hmb_id)
+    # 301: the HuBMAP ID -> uuid mapping is permanent, so let crawlers and browsers
+    # consolidate on the uuid URL.
     return redirect(
-        url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid'])
+        url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']),
+        code=301,
     )
 
 
@@ -77,7 +87,12 @@ def details(type, uuid):
 
         marker = request.args.get('marker') or None
 
-        # Redirect to the primary dataset
+        # Redirect to the primary dataset.
+        # 301, so search engines fold these URLs into the primary dataset instead of
+        # indexing each one as a near-duplicate (a 302 leaves the source URL canonical).
+        # NOTE: browsers cache 301s indefinitely. If processed datasets are ever given their
+        # own pages, as integrated datasets were, drop this back to the default 302 and let
+        # the rel=canonical tag carry the de-duplication signal on its own.
         return redirect(
             url_for(
                 'routes_browse.details',
@@ -88,11 +103,13 @@ def details(type, uuid):
                 redirectedFromId=entity.get('hubmap_id'),
                 redirectedFromPipeline=entity.get('pipeline'),
                 marker=marker,
-            )
+            ),
+            code=301,
         )
 
     if type != actual_type:
-        return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
+        # 301: pure URL normalization, an entity's type never changes.
+        return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid), code=301)
 
     redirected = request.args.get('redirected') == 'True'
 
@@ -122,6 +139,7 @@ def details(type, uuid):
         uuid=uuid,
         title=_get_entity_title(entity),
         description=_get_entity_description(entity),
+        json_ld=_get_dataset_ld(entity),
         flask_data=flask_data,
     )
 
@@ -180,39 +198,92 @@ def details_rui_json(type, uuid):
     abort(404)
 
 
+# One sitemap file may hold at most 50k URLs; past that Google rejects the whole file.
+# Entity sitemaps are split per type so no single file is anywhere near the limit, and
+# _render_urlset logs if one ever gets there anyway.
+SITEMAP_MAX_URLS = 50000
+
+SITEMAP_ENTITY_TYPES = ['dataset', 'sample', 'donor', 'collection', 'publication']
+
+
+def _render_urlset(urls):
+    """
+    Renders a <urlset> sitemap from an iterable of (loc, lastmod) pairs, where lastmod is
+    an epoch-millisecond timestamp or None.
+    """
+    urls = list(urls)
+    if len(urls) > SITEMAP_MAX_URLS:
+        current_app.logger.warning(
+            f'Sitemap has {len(urls)} URLs, over the {SITEMAP_MAX_URLS} limit: '
+            'the file will be rejected and needs splitting.'
+        )
+    entries = []
+    for loc, lastmod in urls:
+        iso_lastmod = _timestamp_to_iso(lastmod)
+        lastmod_tag = f'<lastmod>{iso_lastmod}</lastmod>' if iso_lastmod else ''
+        entries.append(f'<url><loc>{xml_escape(loc)}</loc>{lastmod_tag}</url>')
+    body = '\n'.join(entries)
+    return Response(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f'{body}\n'
+        '</urlset>\n',
+        mimetype='application/xml',
+    )
+
+
+@blueprint.route('/sitemap.xml')
+def sitemap_index_xml():
+    url_base = get_url_base_from_request()
+    children = ['pages', *SITEMAP_ENTITY_TYPES]
+    body = '\n'.join(
+        f'<sitemap><loc>{url_base}/sitemap-{child}.xml</loc></sitemap>' for child in children
+    )
+    return Response(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f'{body}\n'
+        '</sitemapindex>\n',
+        mimetype='application/xml',
+    )
+
+
 @blueprint.route('/sitemap.txt')
 def sitemap_txt():
-    template_keys = _get_all_template_keys()
-    organ_keys = list(get_organs().keys())
-    tutorial_routes = list(get_valid_tutorial_routes())
-    dataset_uuids = _get_all_primary_dataset_uuids()
-    sample_uuids = _get_all_sample_uuids()
-    donor_uuids = _get_all_donor_uuids()
-    collection_uuids = _get_all_collection_uuids()
-    publication_uuids = _get_all_publication_uuids()
+    # Kept as a permanent redirect: Search Console and any external referrers still hold
+    # the old plain-text URL, which robots.txt advertised for years.
+    return redirect(url_for('routes_browse.sitemap_index_xml'), code=301)
 
+
+@blueprint.route('/sitemap-pages.xml')
+def sitemap_pages_xml():
     url_base = get_url_base_from_request()
-    return Response(
-        '\n'.join(
-            [
-                # Landing pages
-                f'{url_base}/workspaces',
-                f'{url_base}/tutorials',
-                f'{url_base}/templates',
-                f'{url_base}/organs',
-                f'{url_base}/integrated-maps',
-                # Detail pages
-                *[f'{url_base}/templates/{key}' for key in template_keys],
-                *[f'{url_base}/organs/{key}' for key in organ_keys],
-                *[f'{url_base}/tutorials/{route}' for route in tutorial_routes],
-                *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
-                *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
-                *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],
-                *[f'{url_base}/browse/collection/{uuid}' for uuid in collection_uuids],
-                *[f'{url_base}/browse/publication/{uuid}' for uuid in publication_uuids],
-            ]
-        ),
-        mimetype='text/plain',
+    paths = [
+        # Landing pages
+        '/workspaces',
+        '/tutorials',
+        '/templates',
+        '/organs',
+        '/integrated-maps',
+        '/collections',
+        '/publications',
+        # Detail pages
+        *[f'/templates/{key}' for key in _get_all_template_keys(_hour_bucket())],
+        *[f'/organs/{key}' for key in get_organs()],
+        *[f'/tutorials/{route}' for route in get_valid_tutorial_routes()],
+    ]
+    # No lastmod: these are code- and config-derived, so there is no meaningful per-page date.
+    return _render_urlset((f'{url_base}{path}', None) for path in paths)
+
+
+@blueprint.route('/sitemap-<entity_type>.xml')
+def sitemap_entity_xml(entity_type):
+    if entity_type not in SITEMAP_ENTITY_TYPES:
+        abort(404)
+    url_base = get_url_base_from_request()
+    entities = _get_sitemap_entities_cached(entity_type, _hour_bucket())
+    return _render_urlset(
+        (f'{url_base}/browse/{entity_type}/{uuid}', lastmod) for uuid, lastmod in entities
     )
 
 
@@ -227,7 +298,7 @@ def robots_txt():
 # Allowed host: {allowed_hostname}
 User-agent: *
 Disallow: {disallow}
-Sitemap: {get_url_base_from_request()}/sitemap.txt
+Sitemap: {get_url_base_from_request()}/sitemap.xml
 """,
         mimetype='text/plain',
     )
@@ -265,14 +336,53 @@ def _format_donor_title(metadata):
     return ' '.join(c for c in components if c)  # Filter out empty strings
 
 
+def _format_donor_page_title(entity):
+    """
+    Title for a donor's own detail page: the demographics, made unique with the HuBMAP ID.
+
+    Deliberately separate from _format_donor_title, which describes the donor *within* a
+    dataset or sample title and so must not carry the donor's own ID.
+
+    >>> _format_donor_page_title({'hubmap_id': 'HBM1', 'mapped_metadata': {'sex': ['Male']}})
+    'Male (HBM1)'
+    >>> _format_donor_page_title({'hubmap_id': 'HBM1'})
+    'HBM1'
+    """
+    return _with_hubmap_id(_format_donor_title(entity.get('mapped_metadata')), entity)
+
+
+def _with_hubmap_id(title, entity):
+    """
+    Appends the entity's HuBMAP ID, which is what makes its title unique.
+
+    Donors, samples and datasets all generate titles from demographics, organ and assay, so
+    sibling entities share a title byte for byte; Google was excluding the resulting pages
+    as duplicates. Publications and collections are curated and already distinct.
+
+    >>> _with_hubmap_id('Section from Kidney', {'hubmap_id': 'HBM1'})
+    'Section from Kidney (HBM1)'
+    >>> _with_hubmap_id('', {'hubmap_id': 'HBM1'})
+    'HBM1'
+    >>> _with_hubmap_id('Section from Kidney', {})
+    'Section from Kidney'
+    """
+    hubmap_id = entity.get('hubmap_id')
+    if not hubmap_id:
+        return title
+    return f'{title} ({hubmap_id})' if title else hubmap_id
+
+
 def _format_dataset_title(entity):
     """
-    Returns a dataset's title, or formats a dataset title based on the metadata.
-    <Assay> of <Organ> of <Donor>
+    Returns a dataset's title, or formats a dataset title based on the metadata,
+    suffixed with the HuBMAP ID.
+    <Assay> of <Organ> of <Donor> (<HuBMAP ID>)
+
     >>> _format_dataset_title(None)
     'unknown assay of unknown organ of unknown donor'
     >>> _format_dataset_title({
     ...     'raw_dataset_type': 'Histology',
+    ...     'hubmap_id': 'HBM123.ABCD.456',
     ...     'origin_samples_unique_mapped_organs': ['Kidney'],
     ...     'donor': {
     ...         'mapped_metadata': {
@@ -283,16 +393,18 @@ def _format_dataset_title(entity):
     ...         }
     ...     }
     ... })
-    'Histology of Kidney of 70 years old White Male'
+    'Histology of Kidney of 70 years old White Male (HBM123.ABCD.456)'
     >>> _format_dataset_title({
-    ...     'title': 'Sample Title'
+    ...     'title': 'Sample Title', 'hubmap_id': 'HBM123.ABCD.456'
     ... })
+    'Sample Title (HBM123.ABCD.456)'
+    >>> _format_dataset_title({'title': 'Sample Title'})
     'Sample Title'
     """
     if entity is None:
         return 'unknown assay of unknown organ of unknown donor'
     if entity.get('title') is not None:
-        return entity['title']
+        title = entity['title']
     else:
         assay = entity.get('raw_dataset_type', 'unknown assay')
         origin_organs = entity.get('origin_samples_unique_mapped_organs')
@@ -303,17 +415,20 @@ def _format_dataset_title(entity):
             donor.get('mapped_metadata') if donor is not None else None
         )
         components = [assay, organ, donor_description]
-        return ' of '.join(c for c in components if c)  # Filter out empty strings
+        title = ' of '.join(c for c in components if c)  # Filter out empty strings
+
+    return _with_hubmap_id(title, entity)
 
 
 def _format_sample_title(entity):
     """
-    Formats a sample title based on the metadata.
-    <category> from <organ> of <donor>
+    Formats a sample title based on the metadata, suffixed with the HuBMAP ID.
+    <category> from <organ> of <donor> (<HuBMAP ID>)
     >>> _format_sample_title(None)
     'unknown sample type from unknown organ of unknown donor'
     >>> _format_sample_title({
     ...     'mapped_sample_category': 'Section',
+    ...     'hubmap_id': 'HBM123.ABCD.456',
     ...     'origin_samples_unique_mapped_organs': ['Kidney'],
     ...     'donor': {
     ...         'mapped_metadata': {
@@ -324,21 +439,25 @@ def _format_sample_title(entity):
     ...         }
     ...     }
     ... })
-    'Section from Kidney of 70 years old White Male'
+    'Section from Kidney of 70 years old White Male (HBM123.ABCD.456)'
+    >>> _format_sample_title({'origin_samples_unique_mapped_organs': []})
+    'Unknown sample type from unknown organ'
     """
     if entity is None:
         return 'unknown sample type from unknown organ of unknown donor'
     sample_category = entity.get('mapped_sample_category', 'Unknown sample type')
     origin_organs = entity.get('origin_samples_unique_mapped_organs')
-    if len(origin_organs) > 0:
-        organ = origin_organs[0]
-    else:
-        organ = 'unknown organ'
+    organ = origin_organs[0] if origin_organs else 'unknown organ'
     donor = entity.get('donor')
     donor_description = _format_donor_title(
         donor.get('mapped_metadata') if donor is not None else None
     )
-    return f'{sample_category} from {organ} of {donor_description}'
+    title = f'{sample_category} from {organ}'
+    # Drop the trailing "of" rather than emitting "... of " with nothing after it, which
+    # left a dangling preposition and a double space in the served <title>.
+    if donor_description:
+        title = f'{title} of {donor_description}'
+    return _with_hubmap_id(title, entity)
 
 
 def _truncate_title(title):
@@ -369,8 +488,7 @@ def _get_entity_title(entity):
             title = _truncate_title(entity.get('title', entity.get('hubmap_id')))
             return f'{title} | Collection'
         case 'donor':
-            title = _format_donor_title(entity.get('mapped_metadata'))
-            return f'{title} | Donor'
+            return f'{_format_donor_page_title(entity)} | Donor'
         case _:
             return f'{entity["hubmap_id"]} | {entity_type.title()}'
 
@@ -426,114 +544,371 @@ def _get_publication_data_types_and_organs(uuid: str):
         return data_types, organs
 
 
-def get_uuids(query):
+def _sitemap_query(entity_type):
     """
-    Retrieves UUIDs from the search API based on the given query.
+    Only raw datasets are listed: processed and component datasets redirect to their primary
+    dataset, so listing them would fill the sitemap with redirects.
+    >>> _sitemap_query('sample')
+    {'bool': {'filter': [{'term': {'entity_type.keyword': 'Sample'}}]}}
+    >>> _sitemap_query('dataset')['bool']['filter'][1]
+    {'term': {'processing.keyword': 'raw'}}
+    """
+    filters = [{'term': {'entity_type.keyword': entity_type.capitalize()}}]
+    if entity_type == 'dataset':
+        filters.append({'term': {'processing.keyword': 'raw'}})
+    return {'bool': {'filter': filters}}
+
+
+def _hour_bucket():
+    """
+    Cache key that changes hourly, giving @cache a TTL without a new dependency. The
+    sitemap lookups were previously cached for the lifetime of the process, so entities
+    published since the last deploy never appeared in the sitemap at all.
+    """
+    return int(time.time() // 3600)
+
+
+@cache
+def _get_sitemap_entities_cached(entity_type, hour_bucket):
+    """
+    Returns [(uuid, last_modified_timestamp)] for every entity of the given type.
+
+    ``hour_bucket`` is not used: it is only part of the cache key. See _hour_bucket.
     """
     client = get_client()
-
     elasticsearch_url = (
         current_app.config['ELASTICSEARCH_ENDPOINT'] + current_app.config['PORTAL_INDEX_PATH']
     )
-
-    request = {'size': 10000, 'query': query, '_source': False}
-
-    uuids = []
-
+    query = {
+        'size': 10000,  # ES max result window
+        'query': _sitemap_query(entity_type),
+        '_source': ['last_modified_timestamp'],
+        # search_after needs a total order. uuid.keyword is unique, and is already the
+        # tiebreaker used for search result sorting in js/components/search/utils.ts.
+        'sort': [{'uuid.keyword': 'asc'}],
+    }
     try:
-        response_json = client._request(elasticsearch_url, request)
-        uuids = [hit['_id'] for hit in response_json.get('hits', {}).get('hits', [])]
-        if len(uuids) == 10000:
-            raise Exception('At least 10k entities: need to make multiple requests')
+        hits = _paginate_search_after(
+            lambda body: client._request(elasticsearch_url, body),
+            query,
+            description=f'{entity_type} sitemap',
+        )
     except Exception as e:
-        current_app.logger.error(f'Error retrieving uuids: {e}')
-    finally:
-        return uuids
+        # A sitemap missing entities is better than a 500, but it must be loud: this used to
+        # fail silently and truncate at the 10k result window.
+        current_app.logger.error(f'Error retrieving {entity_type} uuids for sitemap: {e}')
+        return []
+    return [
+        (hit['_id'], (hit.get('_source') or {}).get('last_modified_timestamp')) for hit in hits
+    ]
 
 
 @cache
-def _get_all_primary_dataset_uuids():
+def _get_all_template_keys(hour_bucket):
     """
-    Retrieves all primary dataset UUIDs.
-    This is used to generate the sitemap for dataset detail pages (processed datasets
-    are excluded here to avoid including redirects to the primary dataset).
+    Retrieves all keys for templates, for the sitemap.
+
+    ``hour_bucket`` is not used: it is only part of the cache key. See _hour_bucket.
     """
-
-    return get_uuids(
-        {
-            'bool': {
-                'filter': [
-                    {'term': {'entity_type.keyword': 'Dataset'}},
-                    {'term': {'processing.keyword': 'raw'}},
-                ]
-            }
-        }
-    )
-
-
-@cache
-def _get_all_sample_uuids():
-    return get_uuids({'term': {'entity_type.keyword': 'Sample'}})
-
-
-@cache
-def _get_all_donor_uuids():
-    return get_uuids({'term': {'entity_type.keyword': 'Donor'}})
-
-
-@cache
-def _get_all_publication_uuids():
-    return get_uuids({'term': {'entity_type.keyword': 'Publication'}})
-
-
-@cache
-def _get_all_collection_uuids():
-    return get_uuids({'term': {'entity_type.keyword': 'Collection'}})
-
-
-@cache
-def _get_all_template_keys():
-    """
-    Retrieves all keys for templates.
-    """
-
     client = get_client()
     templates_url = current_app.config['USER_TEMPLATES_ENDPOINT'] + '/templates/jupyter_lab'
-    response_json = {}
-
     try:
-        response_json = client._request(templates_url)
+        return list(client._request(templates_url)['data'].keys())
     except Exception as e:
-        current_app.logger.error(f'Error retrieving uuids: {e}')
-    finally:
-        return list(response_json['data'].keys())
+        # A `finally: return response_json['data'].keys()` here swallowed the request error
+        # and then raised KeyError, taking down the whole sitemap. Losing the template pages
+        # from one sitemap render is the better failure.
+        current_app.logger.error(f'Error retrieving template keys for sitemap: {e}')
+        return []
 
 
 def _get_entity_description(entity):
     """
     Formats the meta description for entity detail pages.
+
+    Note the implicit string concatenation: backslash line-continuation inside an f-string
+    bakes the source indentation into the value, which served meta descriptions containing
+    long runs of literal spaces.
+
+    >>> '  ' in _get_entity_description({'entity_type': 'Dataset', 'title': 'T'})
+    False
     """
     entity_type = entity.get('entity_type', '').lower()
     match entity_type:
         case 'dataset':
-            return f'Explore the {_format_dataset_title(entity)} dataset from HuBMAP. \
-                Access and download metadata, visualizations, and analysis tools for research.'
+            return (
+                f'Explore the {_format_dataset_title(entity)} dataset from HuBMAP. '
+                'Access and download metadata, visualizations, and analysis tools for research.'
+            )
         case 'sample':
-            return f'Explore a {_format_sample_title(entity)}. \
-                View metadata and associated datasets for research.'
+            return (
+                f'Explore a {_format_sample_title(entity)}. '
+                'View metadata and associated datasets for research.'
+            )
         case 'publication':
             title = entity.get('title', entity.get('hubmap_id'))
             data_types, organs = _get_publication_data_types_and_organs(entity.get('uuid'))
-            return f'Explore HuBMAP publication "{title}", \
-                featuring data from {", ".join(data_types)} from {", ".join(organs)}. \
-                Access referenced datasets and related visualizations.'
+            return (
+                f'Explore HuBMAP publication "{title}", '
+                f'featuring data from {", ".join(data_types)} from {", ".join(organs)}. '
+                'Access referenced datasets and related visualizations.'
+            )
         case 'collection':
             title = entity.get('title', entity.get('hubmap_id'))
             return f'Explore {title} dataset collection. Browse referenced HuBMAP datasets.'
         case 'donor':
-            donor_description = _format_donor_title(entity.get('mapped_metadata'))
-            return f'Explore {donor_description} HuBMAP donor. \
-                Browse metadata and associated datasets, \
-                    and tissue samples for research applications.'
+            # "a HuBMAP donor" rather than "{demographics} HuBMAP donor": with the ID
+            # appended, the old phrasing read "...White Male (HBM1) HuBMAP donor".
+            return (
+                f'Explore {_format_donor_page_title(entity)}, a HuBMAP donor. '
+                'Browse metadata and associated datasets, '
+                'and tissue samples for research applications.'
+            )
         case _:
             return f'{entity["hubmap_id"]} | {entity_type.title()}'
+
+
+HUBMAP_PORTAL_URL = 'https://portal.hubmapconsortium.org'
+CC_BY_4_0 = 'https://creativecommons.org/licenses/by/4.0/'
+
+
+def _timestamp_to_iso(timestamp):
+    """
+    Portal Elasticsearch timestamps are epoch milliseconds.
+    >>> _timestamp_to_iso(1572559603311)
+    '2019-10-31'
+    >>> _timestamp_to_iso(None)
+    """
+    if not timestamp:
+        return None
+    return datetime.fromtimestamp(int(timestamp) / 1000, tz=timezone.utc).strftime('%Y-%m-%d')
+
+
+def _first(metadata, key):
+    """
+    ``mapped_metadata`` values are indexed as lists, even when single-valued.
+    >>> _first({'sex': ['Male']}, 'sex')
+    'Male'
+    >>> _first({'sex': []}, 'sex')
+    >>> _first({}, 'sex')
+    """
+    values = metadata.get(key) or []
+    return values[0] if values else None
+
+
+def _format_donor_details(mapped_metadata):
+    """
+    Long-form donor description, used as descriptive fallback text.
+
+    Note the field is ``medical_history``: the previous client-side implementation read a
+    camelCase ``medicalHistory`` that Elasticsearch never populates, so every dataset
+    description claimed the donor had no medical history.
+
+    >>> _format_donor_details({
+    ...     'sex': ['Male'], 'race': ['White'], 'age_value': [70], 'age_unit': ['years'],
+    ...     'height_value': [180], 'height_unit': ['cm'],
+    ...     'weight_value': [80], 'weight_unit': ['kg'],
+    ...     'medical_history': ['Diabetes', 'Cancer']})
+    '180 cm, 80 kg, White Male, 70 years old, with a medical history of Diabetes, Cancer'
+    >>> _format_donor_details({'sex': ['Male']})
+    'Male'
+    >>> _format_donor_details(None)
+    ''
+    """
+    if not mapped_metadata:
+        return ''
+
+    parts = [
+        f'{_first(mapped_metadata, f"{field}_value")} {_first(mapped_metadata, f"{field}_unit")}'
+        for field in ['height', 'weight']
+        if _first(mapped_metadata, f'{field}_value') is not None
+        and _first(mapped_metadata, f'{field}_unit') is not None
+    ]
+
+    demographics = ' '.join(
+        value
+        for value in [_first(mapped_metadata, 'race'), _first(mapped_metadata, 'sex')]
+        if value
+    )
+    if demographics:
+        parts.append(demographics)
+
+    age_value = _first(mapped_metadata, 'age_value')
+    age_unit = _first(mapped_metadata, 'age_unit')
+    if age_value is not None and age_unit:
+        parts.append(f'{age_value} {age_unit} old')
+
+    medical_history = mapped_metadata.get('medical_history') or []
+    if medical_history:
+        parts.append(f'with a medical history of {", ".join(medical_history)}')
+
+    return ', '.join(parts)
+
+
+def _build_nlm_citation(contributors, title, timestamp):
+    """
+    NLM-format citation string, e.g. "Lovelace A. Title [Internet]. HuBMAP Consortium; 2019."
+
+    ponytail: a hand-maintained twin of ``buildNLMCitation`` in
+    js/components/detailPage/Citation/Citation.tsx. Sharing one implementation across the
+    Python/TS boundary costs more than keeping six lines in sync; if the format changes,
+    change both.
+
+    >>> _build_nlm_citation(
+    ...     [{'last_name': 'Lovelace', 'first_name': 'Ada'}], 'Kidney data', 1572559603311)
+    'Lovelace A. Kidney data [Internet]. HuBMAP Consortium; 2019.'
+    >>> _build_nlm_citation([], 'Kidney data', 1572559603311)
+    >>> _build_nlm_citation([{'last_name': 'Lovelace', 'first_name': 'Ada'}], 'Kidney data', None)
+    """
+    names = ', '.join(
+        f'{contributor["last_name"]} {contributor["first_name"][0]}'
+        for contributor in contributors
+        if contributor.get('last_name') and contributor.get('first_name')
+    )
+    if not (names and title and timestamp):
+        return None
+    year = datetime.fromtimestamp(int(timestamp) / 1000, tz=timezone.utc).year
+    return f'{names}. {title} [Internet]. HuBMAP Consortium; {year}.'
+
+
+def _contributor_ld(contributor):
+    """
+    Maps one contributor record to a schema.org Person.
+
+    Contributor schemas differ by version: CEDAR uses ``orcid``/``display_name``, earlier
+    versions use ``orcid_id``/``name``. Mirrors ``normalizeContributor`` in
+    js/components/detailPage/ContributorsTable/utils.ts.
+
+    >>> _contributor_ld({'display_name': 'Lovelace, Ada', 'orcid': '0000-0002-1825-0097'})
+    {'@type': 'Person', 'name': 'Lovelace, Ada', 'sameAs': 'https://orcid.org/0000-0002-1825-0097'}
+    >>> _contributor_ld({'first_name': 'Ada', 'last_name': 'Lovelace'})
+    {'@type': 'Person', 'name': 'Ada Lovelace'}
+    >>> _contributor_ld({})
+    """
+    name = (
+        contributor.get('name')
+        or contributor.get('display_name')
+        or ' '.join(
+            part for part in [contributor.get('first_name'), contributor.get('last_name')] if part
+        )
+    )
+    if not name:
+        return None
+
+    person = {'@type': 'Person', 'name': name}
+    orcid = contributor.get('orcid') or contributor.get('orcid_id')
+    if orcid:
+        person['sameAs'] = f'https://orcid.org/{orcid}'
+    affiliation = contributor.get('affiliation')
+    if affiliation:
+        person['affiliation'] = {'@type': 'Organization', 'name': affiliation}
+    return person
+
+
+def _get_dataset_ld_description(entity):
+    """
+    Prefers the curated description, and otherwise generates a donor/organ/assay sentence,
+    so every dataset page carries differentiated descriptive text.
+
+    >>> _get_dataset_ld_description({'description': 'x' * 50})
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    >>> _get_dataset_ld_description({
+    ...     'mapped_data_types': ['snRNAseq'],
+    ...     'origin_samples_unique_mapped_organs': ['Kidney'],
+    ...     'donor': {'mapped_metadata': {'sex': ['Male']}}})
+    'snRNAseq of Kidney from Male.'
+    >>> _get_dataset_ld_description({'description': 'Too short.'})
+    'unknown assay of unknown organ from an unknown donor. Too short.'
+    """
+    description = entity.get('description') or ''
+    if len(description) >= 50:
+        return description
+
+    assay = (
+        ', '.join(entity.get('mapped_data_types') or [])
+        or entity.get('dataset_type')
+        or 'unknown assay'
+    )
+    organs = ', '.join(entity.get('origin_samples_unique_mapped_organs') or []) or 'unknown organ'
+    donor = (
+        _format_donor_details((entity.get('donor') or {}).get('mapped_metadata'))
+        or 'an unknown donor'
+    )
+    # A curated description too short to stand alone is kept as a suffix rather than dropped.
+    return f'{assay} of {organs} from {donor}. {description}'.strip()
+
+
+def _get_dataset_ld(entity):
+    """
+    schema.org Dataset JSON-LD for dataset detail pages, per
+    https://developers.google.com/search/docs/appearance/structured-data/dataset
+
+    Returns None for every other entity type, so the template omits the <script> entirely.
+
+    ponytail: no ``distribution``. Bulk download goes through a per-user Globus URL fetched
+    at runtime, and the only static alternatives are one DataDownload per file (hundreds of
+    entries) or a contentUrl pointing back at this page, which is not a data location.
+    ``isAccessibleForFree`` carries the access signal instead.
+
+    >>> _get_dataset_ld({'entity_type': 'Donor'})
+    """
+    if entity.get('entity_type', '').lower() != 'dataset':
+        return None
+
+    hubmap_id = entity.get('hubmap_id')
+    doi_url = entity.get('doi_url')
+    contributors = entity.get('contributors') or []
+    assays = entity.get('assay_display_name') or []
+    title = _format_dataset_title(entity)
+    # Datasets use the publication date when they have one, falling back to last modified:
+    # the same precedence as getEntityCreationInfo in js/helpers/functions.tsx.
+    timestamp = entity.get('published_timestamp') or entity.get('last_modified_timestamp')
+
+    creators = [person for person in map(_contributor_ld, contributors) if person]
+    group_name = entity.get('group_name')
+    if group_name:
+        creators.append({'@type': 'Organization', 'name': group_name})
+
+    keywords = [
+        *(entity.get('origin_samples_unique_mapped_organs') or []),
+        *assays,
+        *([entity['dataset_type']] if entity.get('dataset_type') else []),
+        'HuBMAP',
+    ]
+
+    ld = {
+        '@context': 'https://schema.org/',
+        '@type': 'Dataset',
+        'name': title,
+        'description': _get_dataset_ld_description(entity),
+        'url': request.base_url,
+        'license': CC_BY_4_0,
+        'isAccessibleForFree': entity.get('mapped_data_access_level') == 'Public',
+        'keywords': list(dict.fromkeys(keywords)),
+        'includedInDataCatalog': {
+            '@type': 'DataCatalog',
+            'name': 'HuBMAP Data Portal',
+            'url': HUBMAP_PORTAL_URL,
+        },
+        # HuBMAP is an NIH Common Fund program. The Common Fund has its own ROR record,
+        # https://ror.org/001d55x84 (FundRef 100015326), distinct from NIH's 01cwqze88.
+        'funder': {
+            '@type': 'Organization',
+            'name': 'NIH Common Fund',
+            'sameAs': 'https://ror.org/001d55x84',
+        },
+    }
+
+    optional = {
+        # Google clusters dataset replicas by identifier, so the DOI is the single most
+        # valuable field for having this page recognized as a distinct dataset.
+        'identifier': [value for value in [hubmap_id, doi_url] if value],
+        'sameAs': doi_url,
+        'creator': creators,
+        'datePublished': _timestamp_to_iso(entity.get('published_timestamp')),
+        'dateModified': _timestamp_to_iso(entity.get('last_modified_timestamp')),
+        'measurementTechnique': assays,
+        'citation': _build_nlm_citation(contributors, title, timestamp),
+    }
+    ld.update({key: value for key, value in optional.items() if value})
+    return ld
