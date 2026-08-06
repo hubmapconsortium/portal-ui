@@ -300,6 +300,68 @@ def test_dataset_ld_is_in_the_served_html(client, mocker):
     assert '<title>Histology of Kidney (HBM123.ABCD.456) | Dataset | HuBMAP</title>' in html
 
 
+def mock_processed_dataset_post(path, **kwargs):
+    """
+    Answers both Elasticsearch calls made while redirecting a processed dataset: the
+    get_entity lookup (an `ids` query) and the raw-ancestor lookup (a `post_filter` query).
+    """
+    is_ancestor_lookup = 'post_filter' in (kwargs.get('json') or {})
+
+    class MockResponse:
+        def __init__(self):
+            self.status_code = 0
+            self.text = 'Logger call requires this'
+
+        def json(self):
+            if is_ancestor_lookup:
+                return {
+                    'hits': {
+                        'total': {'value': 1},
+                        'hits': [
+                            {
+                                '_id': 'raw-uuid',
+                                '_source': {'uuid': 'raw-uuid', 'processing': 'raw'},
+                                'sort': ['raw-uuid'],
+                            }
+                        ],
+                    }
+                }
+            return {
+                'hits': {
+                    'hits': [
+                        {
+                            '_source': {
+                                'entity_type': 'Dataset',
+                                'uuid': 'processed-uuid',
+                                'hubmap_id': 'HBM777.PROC.888',
+                                'processing': 'processed',
+                                'pipeline': 'salmon',
+                                'ancestor_ids': ['raw-uuid'],
+                            }
+                        }
+                    ]
+                }
+            }
+
+        def raise_for_status(self):
+            pass
+
+    return MockResponse()
+
+
+def test_processed_dataset_redirects_permanently(client, mocker):
+    """
+    Processed datasets are always part of the unified dataset view, so this redirect is
+    permanent. A 302 would leave each processed URL canonical in Google's eyes and eligible
+    for indexing as a near-duplicate of the primary dataset page.
+    """
+    mocker.patch('requests.post', side_effect=mock_processed_dataset_post)
+    response = client.get('/browse/dataset/processed-uuid')
+    assert response.status == '301 MOVED PERMANENTLY'
+    assert response.location.startswith('/browse/dataset/raw-uuid')
+    assert 'redirectedFromId=HBM777.PROC.888' in response.location
+
+
 def test_sitemap_index(client):
     response = client.get('/sitemap.xml')
     assert response.status == '200 OK'

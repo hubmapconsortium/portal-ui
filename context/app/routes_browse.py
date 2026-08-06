@@ -90,9 +90,8 @@ def details(type, uuid):
         # Redirect to the primary dataset.
         # 301, so search engines fold these URLs into the primary dataset instead of
         # indexing each one as a near-duplicate (a 302 leaves the source URL canonical).
-        # NOTE: browsers cache 301s indefinitely. If processed datasets are ever given their
-        # own pages, as integrated datasets were, drop this back to the default 302 and let
-        # the rel=canonical tag carry the de-duplication signal on its own.
+        # Permanent is correct: processed datasets are always part of the unified dataset
+        # view and will not get pages of their own.
         return redirect(
             url_for(
                 'routes_browse.details',
