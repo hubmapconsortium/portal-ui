@@ -23,9 +23,31 @@ def client():
         yield client
 
 
+def mock_publications_post(publications):
+    """Mocks the related-publications lookup with the given `_source` dicts."""
+
+    def post(path, **kwargs):
+        class MockResponse:
+            def __init__(self):
+                self.status_code = 0
+                self.text = 'Logger call requires this'
+
+            def json(self):
+                return {'hits': {'hits': [{'_source': p} for p in publications]}}
+
+            def raise_for_status(self):
+                pass
+
+        return MockResponse()
+
+    return post
+
+
 @pytest.fixture
-def app_context():
-    # _get_dataset_ld reads request.base_url for the `url` field.
+def app_context(mocker):
+    # _get_dataset_ld reads request.base_url for the `url` field, and queries Elasticsearch
+    # for related publications. Default to none, so citation-specific tests opt in.
+    mocker.patch('requests.post', side_effect=mock_publications_post([]))
     app = create_app(testing=True)
     with app.test_request_context('/browse/dataset/fake-uuid?redirected=True'):
         yield
@@ -96,12 +118,95 @@ def test_dataset_ld_name_and_description_are_differentiated(app_context):
     )
 
 
-def test_dataset_ld_citation_and_creators(app_context):
+def test_dataset_ld_does_not_self_cite(app_context):
+    """
+    `citation` identifies related academic articles, not the dataset itself. Google is
+    explicit: "Don't use this property to provide citation information for the dataset
+    itself." The dataset's own citation is carried by name, identifier, creator and
+    publisher instead.
+    https://developers.google.com/search/docs/appearance/structured-data/dataset
+    """
     ld = _get_dataset_ld(DATASET)
-    assert ld['citation'] == (
-        'Lovelace A, Hopper G. Histology of Kidney (HBM123.ABCD.456) '
-        '[Internet]. HuBMAP Consortium; 2019.'
+    # No related publications in this fixture, so `citation` must be absent entirely rather
+    # than falling back to a citation of the dataset itself.
+    assert 'citation' not in ld
+    assert ld['publisher'] == {
+        '@type': 'Organization',
+        'name': 'HuBMAP Consortium',
+        'url': 'https://portal.hubmapconsortium.org',
+    }
+    # The four properties Google names for the dataset's own citation.
+    for required in ['name', 'identifier', 'creator', 'publisher']:
+        assert ld[required]
+
+
+def test_citation_holds_related_publications(mocker):
+    """
+    `citation` identifies related academic articles. Google asks for the article identifier
+    "whenever possible", so each snippet ends in the publication's DOI.
+    """
+    mocker.patch(
+        'requests.post',
+        side_effect=mock_publications_post(
+            [
+                {
+                    'uuid': 'pub-2',
+                    'title': 'Zebra atlas of the kidney',
+                    'publication_venue': 'Nature',
+                    'publication_date': '2024-01-15',
+                    'publication_doi': '10.1111/222',
+                    'contributors': [{'name': 'Doe J'}, {'name': 'Roe R'}],
+                },
+                {
+                    'uuid': 'pub-1',
+                    'title': 'A preprint with no DOI',
+                    'contributors': [{'first_name': 'Ada', 'last_name': 'Lovelace'}],
+                },
+            ]
+        ),
     )
+    app = create_app(testing=True)
+    with app.test_request_context('/browse/dataset/fake-uuid'):
+        ld = _get_dataset_ld({**DATASET, 'descendant_ids': ['processed-uuid']})
+
+    assert ld['citation'] == [
+        'Ada Lovelace. A preprint with no DOI. '
+        'https://portal.hubmapconsortium.org/browse/publication/pub-1',
+        'Doe J, et al. Zebra atlas of the kidney. Nature; 2024. https://doi.org/10.1111/222',
+    ]
+
+
+def test_citation_query_covers_processed_descendants(mocker):
+    """
+    A publication may reference a processed descendant rather than the raw dataset, so the
+    lookup has to match on the dataset and every descendant.
+    """
+    post = mocker.patch('requests.post', side_effect=mock_publications_post([]))
+    app = create_app(testing=True)
+    with app.test_request_context('/browse/dataset/fake-uuid'):
+        _get_dataset_ld({**DATASET, 'descendant_ids': ['processed-uuid', 'support-uuid']})
+
+    body = post.call_args.kwargs['json']
+    assert body['query']['bool']['filter'][0]['terms']['ancestor_ids.keyword'] == [
+        'fake-uuid',
+        'processed-uuid',
+        'support-uuid',
+    ]
+    assert body['query']['bool']['filter'][1] == {'term': {'entity_type.keyword': 'Publication'}}
+
+
+def test_citation_survives_a_failed_publication_lookup(mocker):
+    """The rest of the LD is still worth serving if the publication query fails."""
+    mocker.patch('requests.post', side_effect=Exception('Elasticsearch is down'))
+    app = create_app(testing=True)
+    with app.test_request_context('/browse/dataset/fake-uuid'):
+        ld = _get_dataset_ld(DATASET)
+    assert 'citation' not in ld
+    assert ld['name'] == 'Histology of Kidney (HBM123.ABCD.456)'
+
+
+def test_dataset_ld_creators(app_context):
+    ld = _get_dataset_ld(DATASET)
     creators = ld['creator']
     assert creators[0] == {
         '@type': 'Person',
@@ -294,7 +399,7 @@ def test_dataset_ld_is_in_the_served_html(client, mocker):
         'HBM123.ABCD.456',
         'https://doi.org/10.35079/HBM123.ABCD.456',
     ]
-    assert ld['citation'].startswith('Lovelace A, Hopper G.')
+    assert ld['publisher']['name'] == 'HuBMAP Consortium'
     assert '<link rel="canonical" href="http://localhost/browse/dataset/fake-uuid">' in html
     # <title> and the LD name must agree, and both must carry the differentiating ID.
     assert '<title>Histology of Kidney (HBM123.ABCD.456) | Dataset | HuBMAP</title>' in html

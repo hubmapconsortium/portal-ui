@@ -1,4 +1,5 @@
-- Server-render the schema.org `Dataset` metadata on dataset pages instead of injecting it with JavaScript, and enrich it with the dataset's DOI, publication and modification dates, keywords, assay, contributor ORCIDs, data catalog, funder, and an NLM-format citation.
+- Server-render the schema.org `Dataset` metadata on dataset pages instead of injecting it with JavaScript, and enrich it with the dataset's DOI, publication and modification dates, keywords, assay, contributor ORCIDs, data catalog, publisher, and funder.
+- List the publications that reference a dataset, or any of its processed datasets, as citations in that dataset's structured data, so search engines can recommend the related articles alongside the dataset itself.
 - Add a canonical link to every page, so pages reached through a redirect that appends parameters are no longer indexed as duplicates.
 - Include the HuBMAP ID in dataset, sample, and donor page titles and descriptions, so entities sharing the same donor, organ, and assay are distinguishable in search results.
 - Permanently redirect HuBMAP ID URLs, mistyped entity types, and processed datasets to their canonical page.

@@ -744,30 +744,128 @@ def _format_donor_details(mapped_metadata):
     return ', '.join(parts)
 
 
-def _build_nlm_citation(contributors, title, timestamp):
+def _contributor_name(contributor):
     """
-    NLM-format citation string, e.g. "Lovelace A. Title [Internet]. HuBMAP Consortium; 2019."
+    Contributor schemas differ by version: CEDAR uses ``display_name``, earlier versions use
+    ``name``, and either may only carry the split first/last fields.
 
-    ponytail: a hand-maintained twin of ``buildNLMCitation`` in
-    js/components/detailPage/Citation/Citation.tsx. Sharing one implementation across the
-    Python/TS boundary costs more than keeping six lines in sync; if the format changes,
-    change both.
-
-    >>> _build_nlm_citation(
-    ...     [{'last_name': 'Lovelace', 'first_name': 'Ada'}], 'Kidney data', 1572559603311)
-    'Lovelace A. Kidney data [Internet]. HuBMAP Consortium; 2019.'
-    >>> _build_nlm_citation([], 'Kidney data', 1572559603311)
-    >>> _build_nlm_citation([{'last_name': 'Lovelace', 'first_name': 'Ada'}], 'Kidney data', None)
+    >>> _contributor_name({'display_name': 'Lovelace, Ada'})
+    'Lovelace, Ada'
+    >>> _contributor_name({'first_name': 'Ada', 'last_name': 'Lovelace'})
+    'Ada Lovelace'
+    >>> _contributor_name({})
+    ''
     """
-    names = ', '.join(
-        f'{contributor["last_name"]} {contributor["first_name"][0]}'
-        for contributor in contributors
-        if contributor.get('last_name') and contributor.get('first_name')
+    return (
+        contributor.get('name')
+        or contributor.get('display_name')
+        or ' '.join(
+            part for part in [contributor.get('first_name'), contributor.get('last_name')] if part
+        )
     )
-    if not (names and title and timestamp):
+
+
+def _publication_citation(publication):
+    """
+    Citation snippet for one publication that references this dataset, in the shape Google's
+    examples use: descriptive text ending in the article identifier. Their guideline is to
+    "provide the article identifier (such as a DOI) whenever possible", so a publication with
+    neither a DOI nor a portal page is skipped.
+
+    Mirrors buildNLMCitation in
+    js/components/publications/PublicationCitation/PublicationCitation.tsx.
+
+    >>> _publication_citation({
+    ...     'title': 'Influence of X', 'publication_venue': 'Nature',
+    ...     'publication_date': '2024-01-15', 'publication_doi': '10.1111/111',
+    ...     'contributors': [{'name': 'Doe J'}, {'name': 'Roe R'}]})
+    'Doe J, et al. Influence of X. Nature; 2024. https://doi.org/10.1111/111'
+    >>> _publication_citation({'title': 'Influence of X', 'uuid': 'pub-uuid'})
+    'Influence of X. https://portal.hubmapconsortium.org/browse/publication/pub-uuid'
+    >>> _publication_citation({'publication_doi': '10.1111/111'})
+    'https://doi.org/10.1111/111'
+    >>> _publication_citation({})
+    """
+    doi = publication.get('publication_doi')
+    uuid = publication.get('uuid')
+    if doi:
+        identifier = f'https://doi.org/{doi}'
+    elif uuid:
+        identifier = f'{HUBMAP_PORTAL_URL}/browse/publication/{uuid}'
+    else:
         return None
-    year = datetime.fromtimestamp(int(timestamp) / 1000, tz=timezone.utc).year
-    return f'{names}. {title} [Internet]. HuBMAP Consortium; {year}.'
+
+    names = [
+        name for name in map(_contributor_name, publication.get('contributors') or []) if name
+    ]
+    author = f'{names[0]}, et al' if len(names) > 1 else (names[0] if names else '')
+    year = (publication.get('publication_date') or '')[:4]
+
+    parts = [
+        f'{author}.' if author else '',
+        f'{publication["title"]}.' if publication.get('title') else '',
+        f'{publication["publication_venue"]};' if publication.get('publication_venue') else '',
+        f'{year}.' if year else '',
+    ]
+    return ' '.join([*(part for part in parts if part), identifier])
+
+
+def _get_related_publication_citations(entity):
+    """
+    Citations for the publications that reference this dataset or any of its processed
+    descendants. This is what schema.org `citation` is for: related academic articles, not
+    the dataset's own citation, which name/identifier/creator/publisher carry.
+
+    Mirrors buildPublicationsWithDatasetQuery in js/hooks/useDatasetsPublications.ts: a
+    publication may reference either the raw dataset or one of its processed descendants,
+    and records the reference in its own `ancestor_ids`.
+    """
+    uuids = [uuid for uuid in [entity.get('uuid'), *(entity.get('descendant_ids') or [])] if uuid]
+    if not uuids:
+        return []
+
+    # Unauthenticated on purpose: this markup is crawler-facing, so it should describe what
+    # an anonymous visitor sees rather than varying with the signed-in user's group access.
+    client = get_client(use_groups_token=False)
+    elasticsearch_url = (
+        current_app.config['ELASTICSEARCH_ENDPOINT'] + current_app.config['PORTAL_INDEX_PATH']
+    )
+    query = {
+        # A dataset cited by more than 100 publications would be unprecedented; the cap is
+        # only here so a mapping change cannot turn this into an unbounded response.
+        'size': 100,
+        'query': {
+            'bool': {
+                'filter': [
+                    {'terms': {'ancestor_ids.keyword': uuids}},
+                    {'term': {'entity_type.keyword': 'Publication'}},
+                ]
+            }
+        },
+        '_source': [
+            'uuid',
+            'title',
+            'publication_doi',
+            'publication_venue',
+            'publication_date',
+            'contributors',
+        ],
+    }
+    try:
+        response = client._request(elasticsearch_url, query)
+        hits = response.get('hits', {}).get('hits', [])
+    except Exception as e:
+        # The dataset page must still render, and the rest of the LD is still worth serving,
+        # if the publication lookup fails.
+        current_app.logger.error(
+            f'Error retrieving related publications for {entity.get("uuid")}: {e}'
+        )
+        return []
+
+    citations = [_publication_citation(hit.get('_source') or {}) for hit in hits]
+    # Sorted because a filter-only query has no meaningful score order, and unstable output
+    # would churn the served markup between requests.
+    return sorted(citation for citation in citations if citation)
 
 
 def _contributor_ld(contributor):
@@ -784,13 +882,7 @@ def _contributor_ld(contributor):
     {'@type': 'Person', 'name': 'Ada Lovelace'}
     >>> _contributor_ld({})
     """
-    name = (
-        contributor.get('name')
-        or contributor.get('display_name')
-        or ' '.join(
-            part for part in [contributor.get('first_name'), contributor.get('last_name')] if part
-        )
-    )
+    name = _contributor_name(contributor)
     if not name:
         return None
 
@@ -859,9 +951,6 @@ def _get_dataset_ld(entity):
     contributors = entity.get('contributors') or []
     assays = entity.get('assay_display_name') or []
     title = _format_dataset_title(entity)
-    # Datasets use the publication date when they have one, falling back to last modified:
-    # the same precedence as getEntityCreationInfo in js/helpers/functions.tsx.
-    timestamp = entity.get('published_timestamp') or entity.get('last_modified_timestamp')
 
     creators = [person for person in map(_contributor_ld, contributors) if person]
     group_name = entity.get('group_name')
@@ -889,6 +978,16 @@ def _get_dataset_ld(entity):
             'name': 'HuBMAP Data Portal',
             'url': HUBMAP_PORTAL_URL,
         },
+        # How a dataset's own citation is expressed: Google's guidance is to "provide the
+        # citation for the dataset itself with other properties, such as name, identifier,
+        # creator, and publisher". The `citation` property is explicitly NOT for this --
+        # it identifies related academic articles, and is populated as such below.
+        # HuBMAP has no ROR record, so no sameAs.
+        'publisher': {
+            '@type': 'Organization',
+            'name': 'HuBMAP Consortium',
+            'url': HUBMAP_PORTAL_URL,
+        },
         # HuBMAP is an NIH Common Fund program. The Common Fund has its own ROR record,
         # https://ror.org/001d55x84 (FundRef 100015326), distinct from NIH's 01cwqze88.
         'funder': {
@@ -907,7 +1006,8 @@ def _get_dataset_ld(entity):
         'datePublished': _timestamp_to_iso(entity.get('published_timestamp')),
         'dateModified': _timestamp_to_iso(entity.get('last_modified_timestamp')),
         'measurementTechnique': assays,
-        'citation': _build_nlm_citation(contributors, title, timestamp),
+        # Related academic articles, per the property's documented purpose.
+        'citation': _get_related_publication_citations(entity),
     }
     ld.update({key: value for key, value in optional.items() if value})
     return ld
