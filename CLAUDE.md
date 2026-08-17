@@ -11,34 +11,34 @@ HuBMAP Data Portal — a Flask + React full-stack application backed by Elastics
 - `context/` — the main source tree (the `app` symlink points here)
   - `app/` — Flask backend (Python routes, templates, config)
   - `app/static/js/` — React frontend source
+  - `app/figure/` — figure asset generation (`build_figure.py`, `figure.ipynb`); excluded from pytest collection by `pytest.ini`
   - `vite.config.mts` / `vite.config.maintenance.mts` — Vite build configs
   - `package.json` — Node dependencies and scripts (workspace package)
 - `end-to-end/` — Cypress E2E tests (workspace package)
 - `etc/` — development and CI helper scripts
-- `figure-generation/` — static figure asset generation
 - `package.json` + `pnpm-workspace.yaml` — pnpm workspace root (`context` + `end-to-end`)
 - `pyproject.toml` — Python project config (uses `uv` for dependency management)
 
 ## Common Commands
 
-Package manager is **pnpm** (workspace root at the repo root). `pnpm` commands run from the `context/` directory unless noted; `pnpm install` runs from the repo root.
+Package manager is **pnpm**, with the workspace root at the repo root (`context` + `end-to-end`). The repo-root `package.json` proxies the common scripts to `context` via `pnpm --filter ./context`, so everything in the table below runs from the **repo root**. Only scripts that aren't proxied — `test:coverage`, `test:ui`, `build:dev`, `build:analyze`, `build:maintain`, `clean`, and any bare `pnpm exec` invocation — need `cd context` first.
 
-| Task                             | Command                                                       |
-| -------------------------------- | ------------------------------------------------------------- |
-| Install JS deps                  | `pnpm install` (from repo root)                               |
-| Start dev servers (Vite + Flask) | `./etc/dev/dev-start.sh`                                      |
-| Vite dev server only (port 5001) | `cd context && pnpm dev-server`                               |
-| Run Vitest tests                 | `cd context && pnpm test`                                     |
-| Run a single Vitest test         | `cd context && pnpm exec vitest run path/to/file.spec.ts`     |
-| Vitest watch mode                | `cd context && pnpm test:watch`                               |
-| ESLint                           | `cd context && pnpm lint`                                     |
-| ESLint autofix                   | `cd context && pnpm lint:fix`                                 |
-| TypeScript type check            | `cd context && pnpm tsc`                                      |
-| Production build                 | `cd context && pnpm build`                                    |
-| Storybook (port 6006)            | `cd context && pnpm storybook`                                |
-| Python tests                     | `uv run pytest context/app` (scope to `context/app`)          |
-| Python lint/format               | `uv run ruff check context` / `uv run ruff format context`    |
-| Cypress E2E                      | `./etc/test/test-cypress.sh`                                  |
+| Task                             | Command                                                     |
+| -------------------------------- | ----------------------------------------------------------- |
+| Install JS deps                  | `pnpm install`                                              |
+| Start dev servers (Vite + Flask) | `./etc/dev/dev-start.sh`                                    |
+| Vite dev server only (port 5001) | `pnpm dev-server`                                           |
+| Run Vitest tests                 | `pnpm test`                                                 |
+| Run a single Vitest test         | `cd context && pnpm exec vitest run path/to/file.spec.ts`   |
+| Vitest watch mode                | `pnpm test:watch`                                           |
+| ESLint                           | `pnpm lint`                                                 |
+| ESLint autofix                   | `pnpm lint:fix`                                             |
+| TypeScript type check            | `pnpm tsc`                                                  |
+| Production build                 | `pnpm build`                                                |
+| Storybook (port 6006)            | `pnpm storybook`                                            |
+| Python tests                     | `uv run pytest context/app` (scope to `context/app`)        |
+| Python lint/format               | `uv run ruff check context` / `uv run ruff format context`  |
+| Cypress E2E                      | `./etc/test/test-cypress.sh`                                |
 
 > **Run pytest scoped to `context/app`**, as CI does ([etc/test/test-python.sh](etc/test/test-python.sh)). A bare `uv run pytest` from the repo root collects the whole tree under `--doctest-modules` (per the root `pytest.ini`), which imports `main.py`'s module-level `create_app()` outside testing mode and resolves the instance config to `portal-ui/instance/app.conf` instead of `context/instance/app.conf` — causing spurious collection errors. The config lives at `context/instance/app.conf` (created by `etc/dev/copy-app-conf.sh`).
 
@@ -92,5 +92,5 @@ The Python package `portal-visualization` (in the sibling `portal-visualization`
 ## Environment
 
 - Node: 24.x (see `.nvmrc`)
-- Python: 3.12 (see `.python-version`)
+- Python: 3.13 (`.python-version` pins 3.13.9; `pyproject.toml` requires `>=3.13`). Note the README's prerequisites section still says 3.12 — it's out of date.
 - Python deps managed with `uv`; Node version managed with `nvm` or `n`; JS deps managed with `pnpm` (version pinned via `packageManager` field in repo-root `package.json`)
