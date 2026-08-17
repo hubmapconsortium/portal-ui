@@ -20,8 +20,11 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@danmarshall/deckgl-typings",
       "@swc/core",
       "canvas",
+      "core-js",
+      "core-js-pure",
       "cypress",
       "esbuild",
       "msw",
