@@ -3,5 +3,6 @@
 - Add a canonical link to every page, so pages reached through a redirect that appends parameters are no longer indexed as duplicates.
 - Include the HuBMAP ID in dataset, sample, and donor page titles and descriptions, so entities sharing the same donor, organ, and assay are distinguishable in search results.
 - Permanently redirect HuBMAP ID URLs, mistyped entity types, and processed datasets to their canonical page.
-- Replace the plain-text sitemap with an XML sitemap index that reports each entity's last modified date, covers entities beyond the first 10,000, and refreshes hourly instead of only on deploy.
+- Replace the plain-text sitemap with an XML sitemap index that reports each entity's last modified date, covers entities beyond the first 10,000, splits any entity type that outgrows the 50,000 URL per-file limit into numbered pages, and refreshes hourly instead of only on deploy.
+- List only the datasets that have a page of their own in the sitemap: processed and component datasets redirect to their primary dataset, while integrated datasets are rendered in place and were previously left out.
 - Fix dataset descriptions claiming every donor had no medical history, sample titles ending in a dangling "of", and meta descriptions containing long runs of whitespace.

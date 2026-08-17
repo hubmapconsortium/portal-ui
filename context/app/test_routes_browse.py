@@ -97,7 +97,9 @@ def test_dataset_ld_core_fields(app_context):
     # The DOI is what lets Google treat this page as a distinct dataset.
     assert 'https://doi.org/10.35079/HBM123.ABCD.456' in ld['identifier']
     assert 'HBM123.ABCD.456' in ld['identifier']
-    assert ld['sameAs'] == 'https://doi.org/10.35079/HBM123.ABCD.456'
+    # No sameAs: a HuBMAP DOI resolves to this same page, so there is no other copy of the
+    # dataset for it to point at.
+    assert 'sameAs' not in ld
     assert ld['datePublished'] == '2019-10-31'
     assert ld['dateModified'] == '2024-07-19'
     assert ld['isAccessibleForFree'] is True
@@ -229,15 +231,25 @@ def test_dataset_ld_omits_missing_fields(app_context):
     minimal = {'entity_type': 'Dataset', 'hubmap_id': 'HBM123.ABCD.456'}
     ld = _get_dataset_ld(minimal)
     assert ld['identifier'] == ['HBM123.ABCD.456']
-    for absent in ['sameAs', 'creator', 'datePublished', 'dateModified', 'citation']:
+    for absent in [
+        'sameAs',
+        'creator',
+        'datePublished',
+        'dateModified',
+        'citation',
+        'isAccessibleForFree',
+    ]:
         assert absent not in ld
-    assert ld['isAccessibleForFree'] is False
 
 
 @pytest.mark.parametrize('access_level', ['Protected', 'Consortium', None])
-def test_dataset_ld_non_public_is_not_free(app_context, access_level):
+def test_dataset_ld_omits_free_access_when_not_public(app_context, access_level):
+    """
+    `isAccessibleForFree: false` reads as a paywall; what actually gates these datasets is
+    consortium membership. The property is optional, so it is left out instead.
+    """
     ld = _get_dataset_ld({**DATASET, 'mapped_data_access_level': access_level})
-    assert ld['isAccessibleForFree'] is False
+    assert 'isAccessibleForFree' not in ld
 
 
 @pytest.mark.parametrize('entity_type', ['Donor', 'Sample', 'Collection', 'Publication'])
@@ -467,8 +479,14 @@ def test_processed_dataset_redirects_permanently(client, mocker):
     assert 'redirectedFromId=HBM777.PROC.888' in response.location
 
 
-def test_sitemap_index(client):
+def test_sitemap_index(client, mocker):
+    from .routes_browse import _get_sitemap_entities_cached
+
+    _get_sitemap_entities_cached.cache_clear()
+    mocker.patch('requests.post', side_effect=mock_sitemap_search_post)
     response = client.get('/sitemap.xml')
+    _get_sitemap_entities_cached.cache_clear()
+
     assert response.status == '200 OK'
     root = ET.fromstring(response.data)
     locs = [loc.text for loc in root.iter(f'{SITEMAP_NS}loc')]
@@ -534,3 +552,113 @@ def test_sitemap_entity_includes_lastmod(client, mocker):
     assert len(urls) == 1
     assert urls[0].find(f'{SITEMAP_NS}loc').text == 'http://localhost/browse/dataset/dataset-uuid'
     assert urls[0].find(f'{SITEMAP_NS}lastmod').text == '2024-07-19'
+
+
+def test_sitemap_lists_only_datasets_with_their_own_page(client, mocker):
+    """
+    details() redirects a processed or component dataset to its primary dataset, so neither
+    belongs in the sitemap. Integrated datasets are the exception: they are processed, but the
+    front end renders them in place, so they do have a page to crawl.
+    """
+    from .routes_browse import _get_sitemap_entities_cached
+
+    _get_sitemap_entities_cached.cache_clear()
+    post = mocker.patch('requests.post', side_effect=mock_sitemap_search_post)
+    client.get('/sitemap-dataset.xml')
+    _get_sitemap_entities_cached.cache_clear()
+
+    dataset_filter = post.call_args.kwargs['json']['query']['bool']['filter'][1]['bool']
+    assert dataset_filter['minimum_should_match'] == 1
+    integrated, own_raw_page = dataset_filter['should']
+    assert integrated == {'term': {'is_integrated': True}}
+    assert own_raw_page['bool']['filter'] == [{'term': {'processing.keyword': 'raw'}}]
+    # Components are indexed as `processing: raw`, so the raw filter alone would let them in.
+    assert own_raw_page['bool']['must_not'] == [{'term': {'is_component': True}}]
+
+
+def mock_many_entities_post(count):
+    """Mocks the sitemap lookup with `count` entities, all returned in one ES page."""
+
+    def post(path, **kwargs):
+        class MockResponse:
+            def __init__(self):
+                self.status_code = 0
+                self.text = 'Logger call requires this'
+
+            def json(self):
+                return {
+                    'hits': {
+                        'total': {'value': count},
+                        'hits': [
+                            {
+                                '_id': f'uuid-{i}',
+                                '_source': {'last_modified_timestamp': 1721426610012},
+                                'sort': [f'uuid-{i}'],
+                            }
+                            for i in range(count)
+                        ],
+                    }
+                }
+
+            def raise_for_status(self):
+                pass
+
+        return MockResponse()
+
+    return post
+
+
+@pytest.fixture
+def five_entities_per_sitemap(mocker):
+    """
+    Shrinks the per-file cap so pagination can be exercised without mocking 50k entities,
+    and mocks 12 entities per type: three pages, the last one partial.
+    """
+    from . import routes_browse
+
+    mocker.patch.object(routes_browse, 'SITEMAP_MAX_URLS', 5)
+    mocker.patch('requests.post', side_effect=mock_many_entities_post(12))
+    routes_browse._get_sitemap_entities_cached.cache_clear()
+    yield
+    routes_browse._get_sitemap_entities_cached.cache_clear()
+
+
+def test_sitemap_index_lists_every_page_of_a_split_type(client, five_entities_per_sitemap):
+    """
+    Over-large types are split into numbered files, and the index has to name each one: a
+    sitemap index may not point at another sitemap index, so this is the only place the
+    extra pages can be advertised.
+    """
+    locs = [
+        loc.text for loc in ET.fromstring(client.get('/sitemap.xml').data).iter(f'{SITEMAP_NS}loc')
+    ]
+    assert 'http://localhost/sitemap-dataset-1.xml' in locs
+    assert 'http://localhost/sitemap-dataset-3.xml' in locs
+    # The unnumbered name is not used for a split type, so nothing is listed twice.
+    assert 'http://localhost/sitemap-dataset.xml' not in locs
+    assert 'http://localhost/sitemap-dataset-4.xml' not in locs
+
+
+@pytest.mark.parametrize(
+    'page,expected_uuids',
+    [
+        # The unnumbered URL stays valid and serves the first page.
+        ('', ['uuid-0', 'uuid-1', 'uuid-2', 'uuid-3', 'uuid-4']),
+        ('-1', ['uuid-0', 'uuid-1', 'uuid-2', 'uuid-3', 'uuid-4']),
+        ('-2', ['uuid-5', 'uuid-6', 'uuid-7', 'uuid-8', 'uuid-9']),
+        ('-3', ['uuid-10', 'uuid-11']),
+    ],
+)
+def test_sitemap_pagination_covers_every_entity(
+    client, five_entities_per_sitemap, page, expected_uuids
+):
+    response = client.get(f'/sitemap-dataset{page}.xml')
+    assert response.status == '200 OK'
+    locs = [loc.text for loc in ET.fromstring(response.data).iter(f'{SITEMAP_NS}loc')]
+    assert locs == [f'http://localhost/browse/dataset/{uuid}' for uuid in expected_uuids]
+
+
+@pytest.mark.parametrize('slug', ['dataset-4', 'dataset-0', 'gene-2', 'gene-expression'])
+def test_sitemap_bad_page_404s(client, five_entities_per_sitemap, slug):
+    """A page past the end, or of an unknown type, is a stale URL rather than an empty file."""
+    assert client.get(f'/sitemap-{slug}.xml').status == '404 NOT FOUND'

@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from functools import cache
 from importlib.metadata import version
 import json
+from math import ceil
 import time
 from urllib.parse import urlparse, quote
 from xml.sax.saxutils import escape as xml_escape
@@ -198,11 +199,66 @@ def details_rui_json(type, uuid):
 
 
 # One sitemap file may hold at most 50k URLs; past that Google rejects the whole file.
-# Entity sitemaps are split per type so no single file is anywhere near the limit, and
-# _render_urlset logs if one ever gets there anyway.
+# Entity sitemaps are split per type and then paginated within a type, so no served file can
+# reach the limit. _render_urlset still logs if one somehow does.
 SITEMAP_MAX_URLS = 50000
 
 SITEMAP_ENTITY_TYPES = ['dataset', 'sample', 'donor', 'collection', 'publication']
+
+
+def _sitemap_page_count(url_count):
+    """
+    How many files a sitemap of ``url_count`` URLs has to be split into. Always at least one,
+    so an entity type with nothing indexed still has a page to serve.
+
+    >>> _sitemap_page_count(0)
+    1
+    >>> _sitemap_page_count(SITEMAP_MAX_URLS)
+    1
+    >>> _sitemap_page_count(SITEMAP_MAX_URLS + 1)
+    2
+    """
+    return max(1, ceil(url_count / SITEMAP_MAX_URLS))
+
+
+def _parse_sitemap_slug(slug):
+    """
+    Splits the variable part of a `sitemap-<slug>.xml` filename into (entity_type, page).
+
+    Pages are 1-based and only appear in the filename for types that need more than one file,
+    so `sitemap-dataset.xml` and `sitemap-dataset-1.xml` are the same first page. Handled here
+    rather than with a second `/sitemap-<entity_type>-<int:page>.xml` route, because
+    `sitemap-dataset-2.xml` also matches the unnumbered rule and which one Werkzeug prefers
+    is not obvious.
+
+    >>> _parse_sitemap_slug('dataset')
+    ('dataset', 1)
+    >>> _parse_sitemap_slug('dataset-2')
+    ('dataset', 2)
+    >>> _parse_sitemap_slug('gene-expression')
+    ('gene-expression', 1)
+    """
+    entity_type, _, page = slug.rpartition('-')
+    if entity_type and page.isdigit():
+        return entity_type, int(page)
+    return slug, 1
+
+
+def _entity_sitemap_names():
+    """
+    Filenames for every entity sitemap, numbered for any type that has outgrown
+    SITEMAP_MAX_URLS. The counts come from the same hour-cached lookup the individual
+    sitemaps use, so a warm cache costs the index nothing; a cold one pays for the sweeps
+    the sub-sitemaps would have run anyway.
+    """
+    names = []
+    for entity_type in SITEMAP_ENTITY_TYPES:
+        pages = _sitemap_page_count(len(_get_sitemap_entities_cached(entity_type, _hour_bucket())))
+        if pages == 1:
+            names.append(f'sitemap-{entity_type}.xml')
+        else:
+            names.extend(f'sitemap-{entity_type}-{page}.xml' for page in range(1, pages + 1))
+    return names
 
 
 def _render_urlset(urls):
@@ -212,6 +268,8 @@ def _render_urlset(urls):
     """
     urls = list(urls)
     if len(urls) > SITEMAP_MAX_URLS:
+        # Unreachable for entity sitemaps, which are paginated before they get here. This
+        # guards the hand-maintained page list, which has no pagination of its own.
         current_app.logger.warning(
             f'Sitemap has {len(urls)} URLs, over the {SITEMAP_MAX_URLS} limit: '
             'the file will be rejected and needs splitting.'
@@ -234,10 +292,8 @@ def _render_urlset(urls):
 @blueprint.route('/sitemap.xml')
 def sitemap_index_xml():
     url_base = get_url_base_from_request()
-    children = ['pages', *SITEMAP_ENTITY_TYPES]
-    body = '\n'.join(
-        f'<sitemap><loc>{url_base}/sitemap-{child}.xml</loc></sitemap>' for child in children
-    )
+    children = ['sitemap-pages.xml', *_entity_sitemap_names()]
+    body = '\n'.join(f'<sitemap><loc>{url_base}/{child}</loc></sitemap>' for child in children)
     return Response(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -275,14 +331,21 @@ def sitemap_pages_xml():
     return _render_urlset((f'{url_base}{path}', None) for path in paths)
 
 
-@blueprint.route('/sitemap-<entity_type>.xml')
-def sitemap_entity_xml(entity_type):
+@blueprint.route('/sitemap-<slug>.xml')
+def sitemap_entity_xml(slug):
+    entity_type, page = _parse_sitemap_slug(slug)
     if entity_type not in SITEMAP_ENTITY_TYPES:
         abort(404)
     url_base = get_url_base_from_request()
     entities = _get_sitemap_entities_cached(entity_type, _hour_bucket())
+    if not 1 <= page <= _sitemap_page_count(len(entities)):
+        # 404 rather than an empty urlset: a page past the end is a stale URL, and Search
+        # Console reports an empty sitemap it was told about as an error.
+        abort(404)
+    start = (page - 1) * SITEMAP_MAX_URLS
     return _render_urlset(
-        (f'{url_base}/browse/{entity_type}/{uuid}', lastmod) for uuid, lastmod in entities
+        (f'{url_base}/browse/{entity_type}/{uuid}', lastmod)
+        for uuid, lastmod in entities[start : start + SITEMAP_MAX_URLS]
     )
 
 
@@ -543,18 +606,46 @@ def _get_publication_data_types_and_organs(uuid: str):
         return data_types, organs
 
 
+# Matches the datasets that have a page of their own, mirroring should_redirect_entity in
+# utils.py. Integrated datasets are the first clause and are kept whatever their processing
+# state: they are processed, but the front end gives them the IntegratedDataset page variant
+# instead of folding them into a primary dataset, so details() does not redirect them.
+_DATASET_HAS_OWN_PAGE = {
+    'bool': {
+        # Explicit, because a bare `should` inside a filter context is easy to misread as
+        # optional.
+        'minimum_should_match': 1,
+        'should': [
+            {'term': {'is_integrated': True}},
+            {
+                'bool': {
+                    'filter': [{'term': {'processing.keyword': 'raw'}}],
+                    # Components are Multi-Assay Split datasets, which search-api leaves as
+                    # `processing: raw`, so the raw filter alone lets them through. must_not
+                    # rather than `term: false`: `is_component` is only set on multi-assay
+                    # datasets, and a false-match would drop every single-assay dataset.
+                    'must_not': [{'term': {'is_component': True}}],
+                }
+            },
+        ],
+    }
+}
+
+
 def _sitemap_query(entity_type):
     """
-    Only raw datasets are listed: processed and component datasets redirect to their primary
-    dataset, so listing them would fill the sitemap with redirects.
+    Datasets are narrowed to the ones a crawler can actually land on. A non-integrated
+    processed dataset, and a component dataset, both redirect to their primary dataset, so
+    listing them would fill the sitemap with redirects.
+
     >>> _sitemap_query('sample')
     {'bool': {'filter': [{'term': {'entity_type.keyword': 'Sample'}}]}}
-    >>> _sitemap_query('dataset')['bool']['filter'][1]
-    {'term': {'processing.keyword': 'raw'}}
+    >>> _sitemap_query('dataset')['bool']['filter'][1] is _DATASET_HAS_OWN_PAGE
+    True
     """
     filters = [{'term': {'entity_type.keyword': entity_type.capitalize()}}]
     if entity_type == 'dataset':
-        filters.append({'term': {'processing.keyword': 'raw'}})
+        filters.append(_DATASET_HAS_OWN_PAGE)
     return {'bool': {'filter': filters}}
 
 
@@ -773,7 +864,14 @@ def _publication_citation(publication):
     neither a DOI nor a portal page is skipped.
 
     Mirrors buildNLMCitation in
-    js/components/publications/PublicationCitation/PublicationCitation.tsx.
+    js/components/publications/PublicationCitation/PublicationCitation.tsx, including its
+    author handling: NLM style wants the byline, which is ``contributors`` in submission
+    order. ``contacts`` is the corresponding authors (a flag on contributors in some schema
+    versions, a separate array in others) -- correspondence, not byline position, so it is
+    not the right list to take a first author from. Nothing in the contributor schemas
+    guarantees that order, but it is the order the page's own visible citation uses, and
+    markup that named a different first author than the page would be worse than markup that
+    inherits the same assumption.
 
     >>> _publication_citation({
     ...     'title': 'Influence of X', 'publication_venue': 'Nature',
@@ -939,7 +1037,7 @@ def _get_dataset_ld(entity):
     ponytail: no ``distribution``. Bulk download goes through a per-user Globus URL fetched
     at runtime, and the only static alternatives are one DataDownload per file (hundreds of
     entries) or a contentUrl pointing back at this page, which is not a data location.
-    ``isAccessibleForFree`` carries the access signal instead.
+    ``isAccessibleForFree`` carries the access signal for public datasets instead.
 
     >>> _get_dataset_ld({'entity_type': 'Donor'})
     """
@@ -971,7 +1069,6 @@ def _get_dataset_ld(entity):
         'description': _get_dataset_ld_description(entity),
         'url': request.base_url,
         'license': CC_BY_4_0,
-        'isAccessibleForFree': entity.get('mapped_data_access_level') == 'Public',
         'keywords': list(dict.fromkeys(keywords)),
         'includedInDataCatalog': {
             '@type': 'DataCatalog',
@@ -999,9 +1096,16 @@ def _get_dataset_ld(entity):
 
     optional = {
         # Google clusters dataset replicas by identifier, so the DOI is the single most
-        # valuable field for having this page recognized as a distinct dataset.
+        # valuable field for having this page recognized as a distinct dataset. No `sameAs`:
+        # that property points at the canonical page when the same dataset is described in
+        # more than one place, and a HuBMAP DOI resolves to this very page (see the
+        # "leads to the page you are currently viewing" tooltip in
+        # js/components/detailPage/Citation/Citation.tsx), so it has no other copy to name.
         'identifier': [value for value in [hubmap_id, doi_url] if value],
-        'sameAs': doi_url,
+        # Omitted rather than set to false for non-public datasets: the restriction is
+        # consortium membership, not payment, and `false` reads as a paywall. Only ever true
+        # here, since falsy values are dropped below.
+        'isAccessibleForFree': entity.get('mapped_data_access_level') == 'Public',
         'creator': creators,
         'datePublished': _timestamp_to_iso(entity.get('published_timestamp')),
         'dateModified': _timestamp_to_iso(entity.get('last_modified_timestamp')),
