@@ -21,6 +21,7 @@ class DefaultConfig(object):
     # These app-wide configurations do not vary between environments:
     VERSION = version
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
+    FILES_INDEX_PATH = f'/{version}/files/search'
     CCF_INDEX_PATH = f'{version}/entities/search'
     GLOBUS_GROUPS_URL = (
         'https://raw.githubusercontent.com'
@@ -55,6 +56,17 @@ class DefaultConfig(object):
     # SCFIND_CACHE_TOKEN set in gunicorn.conf.py). None/0 disables expiry.
     SCFIND_CACHE_TTL = 86400
     DATA_PRODUCTS_ENDPOINT = 'should-be-overridden'
+
+    # Max age (seconds) of a cached files-index facet aggregation. Shorter than the
+    # scfind default because facet *counts* drift whenever the files index is rebuilt,
+    # not just the value lists. None/0 disables expiry.
+    FILES_FACET_CACHE_TTL = 3600
+    # Directory backing the cross-process files-facet cache. None -> a subdir of the
+    # system temp dir (writable by the non-root container user, ephemeral).
+    FILES_FACET_CACHE_DIR = None
+    # Upper bound on cached facet responses per deploy. The filter space is unbounded,
+    # so old entries are pruned to keep disk use predictable.
+    FILES_FACET_CACHE_MAX_ENTRIES = 256
 
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'

@@ -150,6 +150,41 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
       label: 'Visualization Available',
       valueTransformations: [capitalizeString],
     },
+    // Files index fields. Note these describe the *dataset* a file belongs to, hence the
+    // "Dataset" prefixes; `dataset_status` / `data_access_level` are single-valued in the
+    // public index and only vary for authenticated users reading the consortium index.
+    dataset_hubmap_id: {
+      label: 'Dataset',
+    },
+    rel_path: {
+      label: 'Files',
+    },
+    file_extension: {
+      label: 'File Type',
+    },
+    data_class: {
+      label: 'Data Class',
+    },
+    dataset_status: {
+      label: 'Dataset Status',
+    },
+    data_access_level: {
+      label: 'Data Access Level',
+    },
+    is_qa_qc: {
+      label: 'Quality Assurance/Control',
+      valueTransformations: [capitalizeString],
+    },
+    is_data_product: {
+      label: 'Data Product',
+      valueTransformations: [capitalizeString],
+    },
+    'organs.label': {
+      label: 'Organ',
+    },
+    last_modified_at: {
+      label: 'Last Modified',
+    },
     // Dev Search Fields
     'mapper_metadata.size': {
       label: 'Doc Size',

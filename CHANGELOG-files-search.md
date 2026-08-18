@@ -1,0 +1,1 @@
+- Add a Files search page at `/search/files`, backed by the new `files` Elasticsearch index. Results are grouped one row per dataset and expand to the matching files, with per-file downloads, Globus transfer links, a per-dataset file-selection modal, and CLT manifest download.

@@ -5,7 +5,7 @@ import history from 'history/browser';
 import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
 import { SCFindParams } from '../organ/utils';
-import { SearchTypeProps } from './utils';
+import { CollapseConfig, FilterMode, SearchTypeProps } from './utils';
 import {
   DATASET_FEATURES_FIELD,
   READABLE_PARAM_FIELDS,
@@ -155,6 +155,27 @@ export interface SearchState<V> {
   view: string;
   size: number;
   endpoint: string;
+  /**
+   * Field providing the unique `search_after` sort tiebreaker. Defaults to `uuid.keyword`;
+   * indices without a `uuid` field must override it (sorting on an unmapped field errors).
+   */
+  uniqueSortField?: string;
+  /** Where active filters go. See `FilterMode`. */
+  filterMode?: FilterMode;
+  /** Groups hits by a field, e.g. one row per dataset on the files search. */
+  collapse?: CollapseConfig;
+  /** Index whose mapping resolves `.keyword` subfields. Defaults to `portal`. */
+  mappingIndex?: string;
+  /** Field an ID-shaped search term matches. Defaults to `hubmap_id`. */
+  hubmapIdField?: string;
+  /** Field a UUID-shaped search term matches. Defaults to `uuid`. */
+  uuidField?: string;
+  /**
+   * When set, facet aggregations are fetched from this endpoint instead of riding along with
+   * the hits request. Required with `collapse`, whose `filterMode: 'query'` cannot also serve
+   * unfiltered aggregations.
+   */
+  facetsEndpoint?: string;
   swrConfig?: SWRConfiguration;
   type: SearchTypeProps['type'];
   analyticsCategory: string;

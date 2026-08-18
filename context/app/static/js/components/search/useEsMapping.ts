@@ -50,12 +50,20 @@ export function isESMapping(mappings: UseESMappingType): mappings is Mappings {
   return mappings && Object.keys(mappings).length > 0;
 }
 
-export default function useESmapping(): Mappings | Record<string, never> {
+export const DEFAULT_MAPPING_INDEX = 'portal';
+
+/**
+ * Fetches an index's field mapping, used to resolve `.keyword` subfields.
+ *
+ * @param index Index to read the mapping of. Defaults to `portal`; the files search passes
+ *   `files`, whose fields are absent from the portal mapping.
+ */
+export default function useESmapping(index: string = DEFAULT_MAPPING_INDEX): Mappings | Record<string, never> {
   const { baseElasticsearchEndpoint } = useAppContext();
   const authHeader = useAuthHeader();
 
   const { data } = useSWR<Record<string, Mappings>>(
-    { requestInit: { headers: authHeader }, url: `${baseElasticsearchEndpoint}/portal/mapping` },
+    { requestInit: { headers: authHeader }, url: `${baseElasticsearchEndpoint}/${index}/mapping` },
     fetcher,
     {
       fallbackData: {},

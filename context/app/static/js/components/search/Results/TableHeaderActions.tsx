@@ -15,7 +15,7 @@ import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 import { useLineUpModalStore } from 'js/stores/useLineUpModalStore';
 import { useSearchStore, filterHasValues } from '../store';
-import { buildQuery, isDevSearch } from '../utils';
+import { buildQuery, isDevSearch, isFileSearch } from '../utils';
 import useEsMapping, { isESMapping } from '../useEsMapping';
 import { DefaultSearchViewSwitch } from '../SearchViewSwitch';
 import { DownloadTSVItem } from '../MetadataMenu/DownloadTSVItem';
@@ -137,12 +137,15 @@ const DownloadMenu = withDropdownMenuProvider(DownloadMenuInner, false);
 function TableHeaderActions() {
   const type = useSearchStore((state) => state.type);
   const devSearch = isDevSearch(type);
+  // Files aren't entities: no detail page, saved lists, workspaces or LineUp metadata.
+  // (The files search renders its own actions bar, so this is a safety net.)
+  const entityActions = !devSearch && !isFileSearch(type);
   const lcPluralType = devSearch ? 'entities' : `${type.toLowerCase()}s`;
 
   return (
     <Stack direction="row" spacing={1} flexWrap="nowrap" alignItems="center">
       <Copy />
-      {!devSearch && (
+      {entityActions && (
         <>
           <SaveEntitiesButtonFromSearch entity_type={type} />
           <LineupButton lcPluralType={lcPluralType} />

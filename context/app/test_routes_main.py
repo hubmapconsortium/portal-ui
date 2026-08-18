@@ -189,3 +189,26 @@ def test_truncate_and_redirect(client, path_status):
     assert response.status == status
     if response.status == '302 FOUND':
         assert [response.location] == location
+
+
+@pytest.mark.parametrize(
+    'type_status',
+    [
+        ('donors', '200 OK'),
+        ('samples', '200 OK'),
+        ('datasets', '200 OK'),
+        ('files', '200 OK'),
+        ('uploads', '404 NOT FOUND'),
+        ('nonsense', '404 NOT FOUND'),
+    ],
+    ids=lambda type_status: f'/search/{type_status[0]} -> {type_status[1]}',
+)
+def test_search_types(client, type_status):
+    (search_type, status) = type_status
+    response = client.get(f'/search/{search_type}')
+    assert response.status == status
+
+
+def test_files_search_title(client):
+    response = client.get('/search/files')
+    assert 'Files Search' in response.data.decode('utf8')

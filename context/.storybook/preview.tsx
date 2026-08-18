@@ -50,6 +50,8 @@ export const mockEndpoints = {
   assetsEndpoint: 'https://assets.hubmapconsortium.org',
   softAssayEndpoint: '/soft-assay-endpoint',
   elasticsearchEndpoint: '/search',
+  filesElasticsearchEndpoint: '/files/search',
+  filesFacetsEndpoint: '/api/files/facets',
   scFindEndpoint: SCFIND_BASE_STORYBOOK,
 };
 export const mockGroupsToken = '';

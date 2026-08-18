@@ -50,7 +50,7 @@ def ccf_eui():
 
 @blueprint.route('/search/<type>')
 def search(type):
-    if type not in ['donors', 'samples', 'datasets']:
+    if type not in ['donors', 'samples', 'datasets', 'files']:
         abort(404)
     title = f'{type.capitalize()} Search'
     flask_data = {

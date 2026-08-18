@@ -57,6 +57,12 @@ def get_default_flask_data():
             + current_app.config['VERSION'],
             'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
+            # Result hits for the files search go straight to search-api, like every
+            # other search; only the slow facet aggregations are proxied (and cached)
+            # through 'filesFacetsEndpoint'.
+            'filesElasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['FILES_INDEX_PATH'],
+            'filesFacetsEndpoint': '/api/files/facets',
             'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
             'entityEndpoint': current_app.config['ENTITY_API_BASE'],
             'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],

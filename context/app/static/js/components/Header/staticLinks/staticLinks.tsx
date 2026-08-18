@@ -124,6 +124,12 @@ export const dataLinks: DrawerSection[] = [
         href: '/search/biomarkers-cell-types',
         icon: <SearchIcon color="primary" />,
       },
+      {
+        label: 'Files',
+        description: 'Find files across datasets by file type, organ, and other metadata.',
+        href: '/search/files',
+        icon: <entityIconMap.File color="primary" />,
+      },
     ],
   },
   {

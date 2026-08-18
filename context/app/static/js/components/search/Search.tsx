@@ -42,12 +42,13 @@ import {
 } from './store';
 import Results from './Results';
 import Facets from './Facets/Facets';
-import { useScrollSearchHits } from './useScrollSearchHits';
+import { MAX_RESULT_WINDOW, useScrollSearchHits } from './useScrollSearchHits';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
-import { isDevSearch, SearchTypeProps } from './utils';
+import { GROUP_COUNT_AGG, isDevSearch, SearchTypeProps } from './utils';
+import useFacetAggregations from './useFacetAggregations';
 import SaySeeAlert from './SaySeeAlert';
 import SearchModeTabs from './SearchModeTabs';
 import SaySeePanel from './SaySeePanel';
@@ -71,6 +72,13 @@ type Aggregations = Record<
     Record<string, AggregationsTermsAggregateBase<HierarchicalBucket> | AggregationsSingleMetricAggregateBase>
 >;
 
+/** Reads the distinct-group count emitted by `buildQuery`'s `GROUP_COUNT_AGG`. */
+function getGroupCount(aggregations?: Aggregations): number | undefined {
+  const outer = aggregations?.[GROUP_COUNT_AGG];
+  const inner = outer?.[GROUP_COUNT_AGG] as AggregationsSingleMetricAggregateBase | undefined;
+  return typeof inner?.value === 'number' ? inner.value : undefined;
+}
+
 export function useSearch() {
   const {
     endpoint,
@@ -86,9 +94,16 @@ export function useSearch() {
     defaultQueryWithAncestorFilter,
     latestRevisionFilter,
     includeSupersededEntities,
+    uniqueSortField,
+    filterMode,
+    collapse,
+    mappingIndex,
+    facetsEndpoint,
+    hubmapIdField,
+    uuidField,
   }: SearchStoreState = useSearchStore();
 
-  return useScrollSearchHits<Partial<Entity>, Aggregations>({
+  const hits = useScrollSearchHits<Partial<Entity>, Aggregations>({
     endpoint,
     swrConfig,
     filters,
@@ -102,7 +117,41 @@ export function useSearch() {
     defaultQueryWithAncestorFilter,
     latestRevisionFilter,
     includeSupersededEntities,
+    uniqueSortField,
+    filterMode,
+    collapse,
+    mappingIndex,
+    facetsEndpoint,
+    hubmapIdField,
+    uuidField,
   });
+
+  // Only fetches when `facetsEndpoint` is set; otherwise aggregations ride along with the hits.
+  const separateFacets = useFacetAggregations<Aggregations>();
+
+  if (!facetsEndpoint) {
+    return hits;
+  }
+
+  // Under `collapse`, `hits.total` counts matching *documents* (files), not the groups
+  // (datasets) that become rows -- so paging would never recognise the end of the results.
+  // The group count comes from a cardinality aggregation the search config asks for.
+  const groupCount = collapse ? getGroupCount(separateFacets.aggregations) : undefined;
+  const totalHitsCount = groupCount ?? hits.totalHitsCount;
+
+  return {
+    ...hits,
+    aggregations: separateFacets.aggregations,
+    totalHitsCount,
+    // `searchHits.length` counts collapsed groups, so compare against the group count. While
+    // the count is still loading, don't claim the end has been reached.
+    isReachingEnd:
+      hits.searchHits.length === 0 ||
+      (totalHitsCount !== undefined && hits.searchHits.length >= totalHitsCount) ||
+      // Collapsed searches page with `from`, which cannot reach past the result window.
+      hits.searchHits.length >= MAX_RESULT_WINDOW,
+    isLoading: hits.isLoading || separateFacets.isLoading,
+  };
 }
 
 export type FacetGroups = Record<string, Facet[]>;
@@ -158,6 +207,13 @@ type SearchConfig = Pick<
   | 'defaultQueryWithAncestorFilter'
   | 'latestRevisionFilter'
   | 'analyticsCategory'
+  | 'uniqueSortField'
+  | 'filterMode'
+  | 'collapse'
+  | 'mappingIndex'
+  | 'facetsEndpoint'
+  | 'hubmapIdField'
+  | 'uuidField'
 > & {
   facets: FacetGroups;
 };
@@ -558,13 +614,18 @@ function useInitialURLState() {
   return { initialUrlState, hasLoadedURLState };
 }
 
-function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'analyticsCategory'> }) {
+function SearchWrapper({
+  config,
+}: {
+  config: Omit<SearchConfig, 'endpoint' | 'analyticsCategory'> & Partial<Pick<SearchConfig, 'endpoint'>>;
+}) {
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
   const { search, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
     ...config,
-    endpoint: elasticsearchEndpoint,
+    // Configs targeting another index (e.g. files) supply their own endpoint.
+    endpoint: config.endpoint ?? elasticsearchEndpoint,
     analyticsCategory: `${type}s Search Page Interactions`,
   });
 

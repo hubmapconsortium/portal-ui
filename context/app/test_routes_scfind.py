@@ -6,6 +6,7 @@ import requests
 
 from .main import create_app
 from . import routes_scfind
+from . import cache_utils
 from . import utils as app_utils
 
 
@@ -21,7 +22,7 @@ def client(tmp_path):
     # in-process memo so maps don't leak between tests (the builders are no
     # longer @cache-decorated; they use the disk-backed cache instead).
     app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
-    routes_scfind._memory_cache.clear()
+    cache_utils.clear_memory_cache()
     with app.test_client() as client:
         # Clear any cached data before each test
         if hasattr(routes_scfind._get_all_cell_type_names, 'cache_clear'):
@@ -1112,7 +1113,7 @@ class TestSharedMapCache:
     def test_get_or_build_map_builds_once(self, tmp_path):
         app = create_app(testing=True)
         app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
-        routes_scfind._memory_cache.clear()
+        cache_utils.clear_memory_cache()
 
         calls = {'n': 0}
 
@@ -1126,7 +1127,7 @@ class TestSharedMapCache:
             assert routes_scfind._get_or_build_map('m', builder) == {'cell': ['CL:0001']}
             # Clearing the memo simulates a fresh worker process: it must read
             # the shared file written by the first build, not rebuild.
-            routes_scfind._memory_cache.clear()
+            cache_utils.clear_memory_cache()
             assert routes_scfind._get_or_build_map('m', builder) == {'cell': ['CL:0001']}
 
         assert calls['n'] == 1
@@ -1135,7 +1136,7 @@ class TestSharedMapCache:
         app = create_app(testing=True)
         app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
         app.config['SCFIND_CACHE_TTL'] = 60  # 1 minute
-        routes_scfind._memory_cache.clear()
+        cache_utils.clear_memory_cache()
 
         calls = {'n': 0}
 
@@ -1145,12 +1146,12 @@ class TestSharedMapCache:
 
         with app.app_context():
             routes_scfind._get_or_build_map('m', builder)
-            path = routes_scfind._scfind_cache_path('m')
+            path = cache_utils.cache_path(routes_scfind.SCFIND_CACHE, 'm')
 
         # Age the cached file well past the TTL, then a fresh worker must rebuild.
         old = time.time() - 3600
         os.utime(path, (old, old))
-        routes_scfind._memory_cache.clear()
+        cache_utils.clear_memory_cache()
         with app.app_context():
             routes_scfind._get_or_build_map('m', builder)
 
@@ -1161,11 +1162,11 @@ class TestSharedMapCache:
         app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
         with app.app_context():
             monkeypatch.delenv('SCFIND_CACHE_TOKEN', raising=False)
-            no_token = routes_scfind._scfind_cache_path('m')
+            no_token = cache_utils.cache_path(routes_scfind.SCFIND_CACHE, 'm')
             monkeypatch.setenv('SCFIND_CACHE_TOKEN', '111')
-            start_a = routes_scfind._scfind_cache_path('m')
+            start_a = cache_utils.cache_path(routes_scfind.SCFIND_CACHE, 'm')
             monkeypatch.setenv('SCFIND_CACHE_TOKEN', '222')
-            start_b = routes_scfind._scfind_cache_path('m')
+            start_b = cache_utils.cache_path(routes_scfind.SCFIND_CACHE, 'm')
 
         # A new per-start token yields a distinct path, so each server start
         # builds fresh; the tokenless (dev) path is distinct from both.

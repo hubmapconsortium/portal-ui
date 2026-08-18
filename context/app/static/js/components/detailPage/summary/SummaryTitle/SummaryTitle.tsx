@@ -31,6 +31,7 @@ const titleLinks: Record<AllEntityTypes, string | undefined> = {
   Gene: '/biomarkers',
   VerifiedUser: undefined,
   Tutorial: '/tutorials',
+  File: '/search/files',
 };
 
 const titleLinkNames: Record<AllEntityTypes, string | undefined> = {
@@ -46,6 +47,7 @@ const titleLinkNames: Record<AllEntityTypes, string | undefined> = {
   Gene: 'Biomarkers',
   VerifiedUser: undefined,
   Tutorial: 'Tutorials',
+  File: 'Files Search',
 };
 
 const getTitleLinkTooltipText = (entityType?: AllEntityTypes, organIcon?: string) => {

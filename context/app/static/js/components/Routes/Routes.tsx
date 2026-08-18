@@ -19,6 +19,7 @@ const Collection = lazy(() => import('js/pages/Collection'));
 const Home = lazy(() => import('js/pages/Home/Home'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Search = lazy(() => import('js/pages/search/S'));
+const FilesSearch = lazy(() => import('js/pages/search/Files'));
 const Diversity = lazy(() => import('js/pages/Diversity'));
 const Preview = lazy(() => import('js/pages/Preview'));
 const Publications = lazy(() => import('js/pages/Publications'));
@@ -137,6 +138,14 @@ function Routes({ flaskData }: RoutesProps) {
     return (
       <Route>
         <BiomarkerAndCellTypeSearch />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/search/files')) {
+    return (
+      <Route>
+        <FilesSearch />
       </Route>
     );
   }

@@ -9,7 +9,7 @@ import { useSearchStore } from '../store';
 import { decimal } from 'js/helpers/number-format';
 
 function ViewMoreResults() {
-  const { searchHits: hits, loadMore, totalHitsCount } = useSearch();
+  const { searchHits: hits, loadMore, totalHitsCount, isReachingEnd } = useSearch();
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
   const resultsShown = `${decimal.format(hits.length)} Results Shown | ${decimal.format(totalHitsCount ?? 0)} Total Results`;
@@ -29,7 +29,10 @@ function ViewMoreResults() {
 
   return (
     <>
-      {hits.length !== totalHitsCount && (
+      {/* `isReachingEnd` rather than a count comparison: collapsed searches page with `from`,
+          which cannot go past Elasticsearch's result window, and their total counts groups
+          rather than documents. */}
+      {!isReachingEnd && (
         <Button variant="contained" color="primary" onClick={handleClick} fullWidth>
           See More Search Results
         </Button>

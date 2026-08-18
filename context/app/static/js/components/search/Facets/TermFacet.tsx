@@ -151,6 +151,14 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
     return null;
   }
 
+  // An empty accordion is never useful, so hide a facet with nothing to offer -- but never hide
+  // one the user is actively filtering on, which would strand a filter they cannot see to undo.
+  // (A facet's own filter is excluded from its aggregation, so a filtered facet normally still
+  // has buckets; this only guards the edge case.)
+  if (aggBuckets.length === 0 && filter.values.size === 0) {
+    return null;
+  }
+
   const title = getFieldLabel(field);
   return (
     <FacetAccordion title={title} position="inner">
