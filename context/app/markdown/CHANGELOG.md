@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.51.0 - 2026-08-18
+
+- Update citation link to point at Acknowledgement in Publications page.
+
+
+
 ## v1.50.1 - 2026-08-17
 
 - Server-render the schema.org `Dataset` metadata on dataset pages instead of injecting it with JavaScript, and enrich it with the dataset's DOI, publication and modification dates, keywords, assay, contributor ORCIDs, data catalog, publisher, and funder.
