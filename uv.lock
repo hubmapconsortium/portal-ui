@@ -921,7 +921,7 @@ requires-dist = [
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "hubmap-api-py-client", specifier = ">=0.0.11" },
     { name = "hubmap-commons", specifier = ">=2.1.20" },
-    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.11" },
+    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.12" },
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
@@ -1942,11 +1942,11 @@ wheels = [
 
 [[package]]
 name = "portal-visualization"
-version = "0.5.11"
+version = "0.5.12"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/80/a5/b387072db1c7501c06d80f093bfe4cfebda5edf1eba7fa9af7c1ad237fbe/portal_visualization-0.5.11.tar.gz", hash = "sha256:e95f9241272442d631535ebdfdc7a7fe6b958a5db2b5832ade1fa3acf0b6a085", size = 78790, upload-time = "2026-07-29T16:32:55.842Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/67/758c2fc0fb760569ae11a4f3f67feca24210782685ff2f9a3e2e71fc6c86/portal_visualization-0.5.12.tar.gz", hash = "sha256:86e0c47a449b1ac82bc6f320d6d20c7f616b0fd1dafdaf54f9e7e5fb10fd9586", size = 78808, upload-time = "2026-08-18T18:58:30.941Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5d/17/20d917902ac1617d7f33b906aa21bc7b69a905faa19b01d1a8e4a5b60027/portal_visualization-0.5.11-py3-none-any.whl", hash = "sha256:a4fc2fd194e041a5347fd068b3a6d15a7cdee3bf9341f360dc68b136d5693276", size = 81824, upload-time = "2026-07-29T16:32:54.751Z" },
+    { url = "https://files.pythonhosted.org/packages/3e/ba/9b19475892a63eb48f2d1d115ade6224ee3fc7066cdc3fce68276e5c9a65/portal_visualization-0.5.12-py3-none-any.whl", hash = "sha256:f1161bb825614b4d8cec2e22df94d139579a262453dd55b3c56ed9b36b3ac126", size = 81808, upload-time = "2026-08-18T18:58:29.77Z" },
 ]
 
 [package.optional-dependencies]
