@@ -1,0 +1,1 @@
+- Add a permanent redirect from `/publications/hubmap-data-portal` to the HuBMAP Data Portal publication page.
