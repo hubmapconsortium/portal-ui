@@ -11,6 +11,9 @@ import { useAppContext } from 'js/components/Contexts';
  * worth stating up front:
  *
  * - It has no `all_text` field, so free text is matched against named fields.
+ * - Its path field is analyzed into whole path segments, so free text cannot find a filename
+ *   *fragment* ("secondary" does not match `secondary_analysis.h5ad`). That is what the separate
+ *   `filenameFilter` is for; see `FilenameFilterBar`.
  * - It has no `uuid` field, so the `search_after` tiebreaker is overridden. Sorting on an
  *   unmapped field is a hard Elasticsearch error.
  * - Its HuBMAP ID and UUID fields describe the *dataset* a file belongs to, so ID lookups are
@@ -22,12 +25,25 @@ import { useAppContext } from 'js/components/Contexts';
  */
 const filesFacetGroups = {
   File: [
-    { field: 'file_extension', type: FACETS.term, order: { type: '_count', dir: 'desc' } as const },
+    // `isFilterable` adds a text box over the facet's own values. The index has 74 distinct
+    // extensions, well past what a "View More" list makes browsable, and file type is one of the
+    // two things people search by.
+    {
+      field: 'file_extension',
+      type: FACETS.term,
+      order: { type: '_count', dir: 'desc' } as const,
+      isFilterable: true,
+    },
     { field: 'is_qa_qc', type: FACETS.term },
     { field: 'is_data_product', type: FACETS.term },
   ],
   Dataset: [
-    { field: 'dataset_type', type: FACETS.term, order: { type: '_term', dir: 'asc' } as const },
+    {
+      field: 'dataset_type',
+      type: FACETS.term,
+      order: { type: '_term', dir: 'asc' } as const,
+      isFilterable: true,
+    },
     { field: 'data_class', type: FACETS.term },
     { field: 'analyte_class', type: FACETS.term },
     { field: 'dataset_status', type: FACETS.term },
@@ -38,12 +54,10 @@ const filesFacetGroups = {
   // hierarchy against every organ's label. Multi-organ datasets then list unrelated children
   // (the "Small Intestine" bucket shows "Lung (Left)"), which is why SenNet's organ
   // megahierarchy is not portable here.
-  Organ: [{ field: 'organs.label', type: FACETS.term, order: { type: '_term', dir: 'asc' } as const }],
+  Organ: [
+    { field: 'organs.label', type: FACETS.term, order: { type: '_term', dir: 'asc' } as const, isFilterable: true },
+  ],
 };
-
-/** Files shown per dataset row before the row has to be expanded. */
-export const INNER_HITS_SIZE = 20;
-export const INNER_HITS_NAME = 'files';
 
 /**
  * The files search configuration, independent of app context so it can be exercised directly
@@ -68,17 +82,14 @@ export function buildFilesSearchConfig({ endpoint, facetsEndpoint }: { endpoint:
     sortField: { field: 'dataset_hubmap_id', direction: 'asc' as const },
     // No `uuid` on this index; also the field whose distinct values are the row count.
     uniqueSortField: 'dataset_uuid.keyword',
-    // Required with `collapse`: `inner_hits` honour the main query but ignore `post_filter`, so
-    // with the default mode a row's file list would ignore the active file filters.
+    // Required with `collapse`, so each dataset's representative row is chosen from the files that
+    // actually match rather than from all of them.
     filterMode: 'query' as const,
-    collapse: {
-      field: 'dataset_uuid',
-      innerHits: {
-        name: INNER_HITS_NAME,
-        size: INNER_HITS_SIZE,
-        sort: { field: 'rel_path', direction: 'asc' as const },
-      },
-    },
+    // Deliberately no `innerHits`. Requesting the grouped documents is what makes a collapsed query
+    // expensive: with a filename filter active the same query costs ~12.7s with `inner_hits` and
+    // ~215ms without. Per-row counts and sizes come from `useDatasetPageStats` instead, which is
+    // both far cheaper and exact, and the file list itself is loaded when the picker opens.
+    collapse: { field: 'dataset_uuid' },
     facets: filesFacetGroups,
     type: 'File' as const,
   };

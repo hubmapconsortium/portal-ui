@@ -16,17 +16,17 @@ interface FacetAggregationsResponse<Aggs> {
  *
  * Two reasons this is its own request rather than riding along with the hits:
  *
- * 1. Cost. Against the ~10M-document files index, per-facet `filter` aggregations take
- *    2.7-4.4s, while `collapse` + `inner_hits` takes ~110ms. Combined in one request they
- *    take 7.5-16s -- markedly worse than the sum of the parts. Split, only the aggregations
- *    are slow, and they are identical for every user in a scope, so the Flask endpoint this
- *    posts to caches them.
- * 2. Correctness. `inner_hits` ignore `post_filter`, so the hits request has to put filters
- *    in the main query (`filterMode: 'query'`). One request cannot then also produce the
- *    unfiltered aggregations the facet counts need.
+ * 1. Cost. Against the ~10M-document files index, per-facet `filter` aggregations take 7-13s
+ *    cold, while the collapsed hits query takes ~110-215ms. Combined in one request the total
+ *    is markedly worse than the sum of the parts. Split, only the aggregations are slow, and
+ *    they are identical for every user in a scope, so the Flask endpoint this posts to caches
+ *    them.
+ * 2. Correctness. A collapsed hits query has to put its filters in the main query
+ *    (`filterMode: 'query'`) so each group's representative comes from the matching documents.
+ *    One request cannot then also produce the unfiltered aggregations the facet counts need.
  *
- * Returns `undefined` aggregations until loaded, matching what the hits request returns
- * while in flight, so facet components need no special handling.
+ * Returns the previous aggregations while a new request is in flight (`keepPreviousData`), so
+ * the facet sidebar stays on screen rather than unmounting on every filter change.
  */
 export default function useFacetAggregations<Aggs>() {
   const facetsEndpoint = useSearchStore((state) => state.facetsEndpoint);
@@ -40,6 +40,8 @@ export default function useFacetAggregations<Aggs>() {
   const collapse = useSearchStore((state) => state.collapse);
   const hubmapIdField = useSearchStore((state) => state.hubmapIdField);
   const uuidField = useSearchStore((state) => state.uuidField);
+  const filenameFilter = useSearchStore((state) => state.filenameFilter);
+  const filenameField = useSearchStore((state) => state.filenameField);
 
   const mappings = useESmapping(mappingIndex);
 
@@ -64,6 +66,8 @@ export default function useFacetAggregations<Aggs>() {
       groupCountField: collapse?.field,
       hubmapIdField,
       uuidField,
+      filenameFilter,
+      filenameField,
     }) as Record<string, unknown> | null;
 
     if (!query) {
@@ -85,6 +89,8 @@ export default function useFacetAggregations<Aggs>() {
     collapse,
     hubmapIdField,
     uuidField,
+    filenameFilter,
+    filenameField,
   ]);
 
   const { data, error, isLoading } = useSWR<FacetAggregationsResponse<Aggs>, SWRError>(
@@ -100,6 +106,12 @@ export default function useFacetAggregations<Aggs>() {
         }
       : null,
     fetcher,
+    {
+      // Every filter change changes the SWR key. Without this, `data` resets to undefined while
+      // the new aggregations are in flight, which unmounts the entire facet sidebar (each facet
+      // renders nothing without buckets) and makes the filters visibly flicker away mid-click.
+      keepPreviousData: true,
+    },
   );
 
   return {

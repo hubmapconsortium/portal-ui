@@ -1,1 +1,7 @@
-- Add a Files search page at `/search/files`, backed by the new `files` Elasticsearch index. Results are grouped one row per dataset and expand to the matching files, with per-file downloads, Globus transfer links, a per-dataset file-selection modal, and CLT manifest download.
+- Add a Files search page at `/search/files`, backed by the new `files` Elasticsearch index. Results are grouped one row per dataset with exact file counts and sizes, and expand into a file picker offering per-file downloads and Globus transfer.
+- Add a "filter by file or folder name" control to the Files search, matching anywhere in a file's path. Free-text search cannot do this, because the path field is indexed as whole path segments.
+- Add an "Add All Matching Files" action to the Files search, which adds every file matching the current filters to the selection.
+- Add value-search boxes to high-cardinality search facets (file type, dataset type, organ), so a value can be found without scrolling.
+- Downloads from the Files search now go through the shared bulk download dialog, which checks dataset access permissions, offers the metadata TSV, and can add each dataset's `metadata.json` to the manifest.
+- Fix search facets briefly disappearing while a newly selected filter reloaded them.
+- Fix the free-text search input being unlabelled for assistive technology.

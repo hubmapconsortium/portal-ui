@@ -17,13 +17,17 @@ import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
 import { decimal } from 'js/helpers/number-format';
 import { useFilesSelectionStore } from './useFilesSelectionStore';
-import useDatasetFiles, { MAX_DATASET_FILES } from './useDatasetFiles';
+import useDatasetFiles from './useDatasetFiles';
 import FileDownloadLink from './FileDownloadLink';
+import DatasetGlobusLink from './DatasetGlobusLink';
+import FilenameFilterBar from './FilenameFilterBar';
 
 export interface FileSelectionTarget {
   datasetUuid: string;
   datasetHubmapId: string;
+  /** Files matching the current filters, from the exact per-page aggregation. */
   fileCount: number;
+  dataAccessLevel?: string;
 }
 
 interface FileSelectionModalProps {
@@ -31,8 +35,15 @@ interface FileSelectionModalProps {
   handleClose: () => void;
 }
 
-function FileRows({ datasetUuid, fileCount }: Omit<FileSelectionTarget, 'datasetHubmapId'>) {
-  const { files, error, isLoading } = useDatasetFiles(datasetUuid, fileCount);
+/**
+ * A dataset large enough that scrolling to a specific file is impractical, so the filename filter
+ * is surfaced rather than merely available. The largest dataset in the index holds 480,337 files.
+ */
+const LARGE_DATASET_FILE_COUNT = 1_000;
+
+function FileRows({ target }: { target: FileSelectionTarget }) {
+  const { datasetUuid, datasetHubmapId, dataAccessLevel } = target;
+  const { files, error, isLoading, isReachingEnd, loadMore } = useDatasetFiles(datasetUuid);
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
   const toggleFile = useFilesSelectionStore((state) => state.toggleFile);
@@ -44,7 +55,7 @@ function FileRows({ datasetUuid, fileCount }: Omit<FileSelectionTarget, 'dataset
     return <Alert severity="error">Unable to load the files for this dataset.</Alert>;
   }
 
-  if (isLoading) {
+  if (isLoading && files.length === 0) {
     return (
       <Stack spacing={1}>
         {Array.from({ length: 5 }).map((_, i) => (
@@ -54,38 +65,49 @@ function FileRows({ datasetUuid, fileCount }: Omit<FileSelectionTarget, 'dataset
     );
   }
 
+  if (files.length === 0) {
+    return <Alert severity="warning">No files in this dataset match the current filters.</Alert>;
+  }
+
   return (
-    <Table size="small">
-      <TableHead>
-        <TableRow>
-          <TableCell padding="checkbox" />
-          <TableCell>File</TableCell>
-          <TableCell>Description</TableCell>
-          <TableCell align="right">Size</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {files.map((file) => (
-          <TableRow key={file.rel_path} hover>
-            <TableCell padding="checkbox">
-              <Checkbox
-                color="secondary"
-                // A whole-dataset selection includes every file, so each row reads as checked
-                // without the individual paths having to be enumerated in the store.
-                checked={isWholeSelected || Boolean(selected?.has(file.rel_path))}
-                onChange={() => toggleFile(datasetUuid, file.rel_path)}
-                inputProps={{ 'aria-label': `Select ${file.rel_path}` }}
-              />
-            </TableCell>
-            <TableCell sx={{ wordBreak: 'break-all' }}>
-              <FileDownloadLink datasetUuid={datasetUuid} relPath={file.rel_path} />
-            </TableCell>
-            <TableCell>{file.description ?? '—'}</TableCell>
-            <TableCell align="right">{file.size === undefined ? '—' : prettyBytes(file.size)}</TableCell>
+    <Stack spacing={1}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell padding="checkbox" />
+            <TableCell>File</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell align="right">Size</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHead>
+        <TableBody>
+          {files.map((file) => (
+            <TableRow key={file.rel_path} hover>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  color="secondary"
+                  // A whole-dataset selection includes every file, so each row reads as checked
+                  // without the individual paths having to be enumerated in the store.
+                  checked={isWholeSelected || Boolean(selected?.has(file.rel_path))}
+                  onChange={() => toggleFile(datasetUuid, datasetHubmapId, file.rel_path)}
+                  inputProps={{ 'aria-label': `Select ${file.rel_path}` }}
+                />
+              </TableCell>
+              <TableCell sx={{ wordBreak: 'break-all' }}>
+                <FileDownloadLink datasetUuid={datasetUuid} relPath={file.rel_path} dataAccessLevel={dataAccessLevel} />
+              </TableCell>
+              <TableCell>{file.description ?? '—'}</TableCell>
+              <TableCell align="right">{file.size === undefined ? '—' : prettyBytes(file.size)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {!isReachingEnd && (
+        <Button variant="text" onClick={loadMore} disabled={isLoading} fullWidth>
+          {isLoading ? 'Loading…' : `Load more files (${decimal.format(files.length)} shown)`}
+        </Button>
+      )}
+    </Stack>
   );
 }
 
@@ -104,19 +126,19 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
   }, [datasetUuid, wholeDatasets, selectedFiles, target?.fileCount]);
 
   const handleSelectAll = useCallback(() => {
-    if (!datasetUuid) return;
-    if (wholeDatasets.has(datasetUuid) || selectedFiles.has(datasetUuid)) {
-      clearDataset(datasetUuid);
+    if (!target) return;
+    if (wholeDatasets.has(target.datasetUuid) || selectedFiles.has(target.datasetUuid)) {
+      clearDataset(target.datasetUuid);
     } else {
-      toggleWholeDataset(datasetUuid);
+      toggleWholeDataset(target.datasetUuid, target.datasetHubmapId);
     }
-  }, [datasetUuid, wholeDatasets, selectedFiles, clearDataset, toggleWholeDataset]);
+  }, [target, wholeDatasets, selectedFiles, clearDataset, toggleWholeDataset]);
 
   if (!target) {
     return null;
   }
 
-  const truncated = target.fileCount > MAX_DATASET_FILES;
+  const isLarge = target.fileCount > LARGE_DATASET_FILE_COUNT;
 
   return (
     <DialogModal
@@ -128,11 +150,15 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
       handleClose={handleClose}
       content={
         <Stack spacing={2}>
-          {truncated && (
+          {isLarge && (
             <Alert severity="info">
-              {`Showing the first ${decimal.format(MAX_DATASET_FILES)} files. Select the whole dataset to include all of them, or narrow the filters.`}
+              {/* Some datasets hold hundreds of thousands of unstitched image tiles, where picking
+                  files one at a time is not realistic. */}
+              This dataset has a large number of files. Select it in full to include all of them, or narrow the list by
+              name below.
             </Alert>
           )}
+          <FilenameFilterBar />
           <Box>
             <FormControlLabel
               control={
@@ -143,10 +169,19 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
                   onChange={handleSelectAll}
                 />
               }
-              label={<Typography variant="body2">Select all files in this dataset</Typography>}
+              label={
+                <Typography variant="body2">
+                  {`Select all files in this dataset (${decimal.format(target.fileCount)})`}
+                </Typography>
+              }
             />
           </Box>
-          <FileRows datasetUuid={target.datasetUuid} fileCount={target.fileCount} />
+          <DatasetGlobusLink
+            datasetUuid={target.datasetUuid}
+            datasetHubmapId={target.datasetHubmapId}
+            dataAccessLevel={target.dataAccessLevel}
+          />
+          <FileRows target={target} />
         </Stack>
       }
       actions={

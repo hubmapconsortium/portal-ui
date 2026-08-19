@@ -101,6 +101,8 @@ export function useSearch() {
     facetsEndpoint,
     hubmapIdField,
     uuidField,
+    filenameFilter,
+    filenameField,
   }: SearchStoreState = useSearchStore();
 
   const hits = useScrollSearchHits<Partial<Entity>, Aggregations>({
@@ -124,6 +126,8 @@ export function useSearch() {
     facetsEndpoint,
     hubmapIdField,
     uuidField,
+    filenameFilter,
+    filenameField,
   });
 
   // Only fetches when `facetsEndpoint` is set; otherwise aggregations ride along with the hits.
@@ -214,6 +218,7 @@ type SearchConfig = Pick<
   | 'facetsEndpoint'
   | 'hubmapIdField'
   | 'uuidField'
+  | 'filenameField'
 > & {
   facets: FacetGroups;
 };
@@ -221,6 +226,7 @@ type SearchConfig = Pick<
 function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
+    filenameFilter: '',
     includeSupersededEntities: false,
     ...buildFacets({ facetGroups: facets }),
     swrConfig,
@@ -622,7 +628,7 @@ function SearchWrapper({
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
-  const { search, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
+  const { search, filenameFilter, sortField, filters, includeSupersededEntities, ...rest } = buildInitialSearchState({
     ...config,
     // Configs targeting another index (e.g. files) supply their own endpoint.
     endpoint: config.endpoint ?? elasticsearchEndpoint,
@@ -636,7 +642,7 @@ function SearchWrapper({
   }
 
   const initialState = {
-    ...merge({ search, sortField, filters, includeSupersededEntities }, initialUrlState, options),
+    ...merge({ search, filenameFilter, sortField, filters, includeSupersededEntities }, initialUrlState, options),
     ...rest,
     initialFilters: filters,
   };

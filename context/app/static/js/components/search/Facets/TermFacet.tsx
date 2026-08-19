@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Typography from '@mui/material/Typography';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import Accordion from '@mui/material/Accordion';
@@ -131,14 +134,28 @@ function FacetSizeButton({ handleExpand, hasMoreBuckets }: { handleExpand: () =>
   );
 }
 
-function TermFacetContent({ filter, field }: { filter: TermValues; field: string }) {
+function TermFacetContent({
+  filter,
+  field,
+  isFilterable,
+}: {
+  filter: TermValues;
+  field: string;
+  isFilterable?: boolean;
+}) {
   const { aggregations } = useSearch();
   const [showLessTerms, setShowLessTerms] = useState(true);
+  const [valueFilter, setValueFilter] = useState('');
   const getFieldLabel = useGetFieldLabel();
+  const getTransformedFieldValue = useGetTransformedFieldValue();
 
   const toggleTermsCount = useCallback(() => {
     setShowLessTerms((prev) => !prev);
   }, [setShowLessTerms]);
+
+  const handleValueFilterChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueFilter(event.target.value);
+  }, []);
 
   const innerAggregations = aggregations?.[field]?.[field];
 
@@ -160,9 +177,52 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
   }
 
   const title = getFieldLabel(field);
+
+  // Matches the displayed value, which is what the user is reading -- the same choice
+  // `FacetSearchCombobox` makes. Selected values always stay visible so a filter can be undone
+  // without first clearing the text box.
+  const matchingBuckets = valueFilter
+    ? aggBuckets.filter((bucket) => {
+        const key = getBucketKey(bucket);
+        if (filter.values.has(key)) return true;
+        return getTransformedFieldValue({ value: key, field }).toLowerCase().includes(valueFilter.toLowerCase());
+      })
+    : aggBuckets;
+
+  // With a text filter the list is already narrowed, so paging it again just hides matches.
+  const visibleBuckets = showLessTerms && !valueFilter ? matchingBuckets.slice(0, smallAggSize) : matchingBuckets;
+
   return (
     <FacetAccordion title={title} position="inner">
-      {aggBuckets.slice(...(showLessTerms ? [0, smallAggSize] : [undefined, undefined])).map((bucket) => {
+      {isFilterable && aggBuckets.length > smallAggSize && (
+        <Box sx={{ px: 1, pb: 1 }}>
+          <TextField
+            size="small"
+            fullWidth
+            value={valueFilter}
+            onChange={handleValueFilterChange}
+            placeholder={`Find ${title.toLowerCase()}`}
+            aria-label={`Find a value in ${title}`}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchRoundedIcon fontSize="small" color="primary" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        </Box>
+      )}
+      {valueFilter && matchingBuckets.length === 0 && (
+        <Box sx={{ px: 1, pb: 1 }}>
+          <Typography variant="caption" color="secondary">
+            No matching values.
+          </Typography>
+        </Box>
+      )}
+      {visibleBuckets.map((bucket) => {
         const key = getBucketKey(bucket);
         return (
           <TermFacetItem
@@ -175,21 +235,21 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
           />
         );
       })}
-      {aggBuckets.length > smallAggSize && (
+      {!valueFilter && matchingBuckets.length > smallAggSize && (
         <FacetSizeButton hasMoreBuckets={showLessTerms} handleExpand={toggleTermsCount} />
       )}
     </FacetAccordion>
   );
 }
 
-export function TermFacet({ field }: { field: string }) {
+export function TermFacet({ field, isFilterable }: { field: string; isFilterable?: boolean }) {
   const filter = useSearchStore((state) => state.filters[field]);
 
   if (!isTermFilter(filter)) {
     return null;
   }
 
-  return <TermFacetContent field={field} filter={filter} />;
+  return <TermFacetContent field={field} filter={filter} isFilterable={isFilterable} />;
 }
 
 function buildExpandTooltip({ expanded, disabled }: { expanded: boolean; disabled: boolean }) {

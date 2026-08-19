@@ -88,10 +88,18 @@ function buildSortField({
   return [primarySort, ...secondarySort, uniqueSort];
 }
 
-/** Groups hits by `field`, returning the grouped documents under `innerHits.name`. */
+/**
+ * Groups hits by `field`, returning one hit per distinct value.
+ *
+ * `innerHits` additionally returns the grouped documents, but it is **very** expensive: against
+ * the ~10M-document files index, collapsing alone costs ~200ms while collapsing with `inner_hits`
+ * costs 12-18s for the same query. Prefer leaving it unset and fetching per-group detail
+ * separately (see `useDatasetPageStats`), which is both far faster and gives exact aggregate
+ * numbers rather than sums over a truncated inner-hit list.
+ */
 export interface CollapseConfig {
   field: string;
-  innerHits: {
+  innerHits?: {
     name: string;
     size: number;
     /** Order within each group. Independent of the outer result sort. */
@@ -104,10 +112,10 @@ export interface CollapseConfig {
  *
  * `post_filter` (the default) keeps them out of the main query so aggregations see the
  * unfiltered document set. `query` puts them in the main query instead, which is required
- * when `collapse` is used: `inner_hits` honour the main query but ignore `post_filter`, so
- * with `post_filter` the per-group documents would ignore the active filters. Callers using
- * `query` mode should request aggregations separately (see `useFacetAggregations`), since a
- * single request cannot both filter the hits and leave the aggregations unfiltered.
+ * when `collapse` is used, since a collapsed group's representative must be chosen from the
+ * documents that actually match. Callers using `query` mode should request aggregations
+ * separately (see `useFacetAggregations`), since a single request cannot both filter the hits
+ * and leave the aggregations unfiltered.
  */
 export type FilterMode = 'post_filter' | 'query';
 
@@ -145,6 +153,8 @@ export function buildQuery({
   groupCountField,
   hubmapIdField = 'hubmap_id',
   uuidField = 'uuid',
+  filenameFilter,
+  filenameField = 'rel_path',
 }: {
   buildAggregations?: boolean;
   mappings: UseESMappingType;
@@ -153,6 +163,14 @@ export function buildQuery({
   collapse?: CollapseConfig;
   /** Emit a `GROUP_COUNT_AGG` counting distinct values of this field. */
   groupCountField?: string;
+  /**
+   * Substring to match against `filenameField`, with "contains" semantics.
+   *
+   * A separate slot from `search` because the two are different questions ("anywhere in the
+   * document" vs "in the path"), and because `search`'s `*...*` form is routed to the ID field.
+   */
+  filenameFilter?: string;
+  filenameField?: string;
   /**
    * Fields an ID-shaped search term is matched against. Indices that name them differently
    * must override: an unmapped field in a query matches nothing *silently*, so a pasted ID
@@ -208,6 +226,13 @@ export function buildQuery({
           ? [esb.termQuery(getESField({ field: uuidField, mappings }), search.toLowerCase())]
           : [esb.simpleQueryStringQuery(search).fields(searchFields)]
     : [];
+  // "Contains" matching on the path. A wildcard is needed rather than a text match because the
+  // analyzed field tokenizes into whole path segments, so `secondary` does not match
+  // `secondary_analysis.h5ad`; only the complete segment does.
+  const filenameQueries = filenameFilter
+    ? [esb.wildcardQuery(getESField({ field: filenameField, mappings }), `*${filenameFilter}*`).caseInsensitive(true)]
+    : [];
+
   const ancestorIdsFilter = filters?.ancestor_ids;
   const hasAncestorIdsFilter = Boolean(ancestorIdsFilter && filterHasValues({ filter: ancestorIdsFilter }));
   const effectiveDefaultQuery =
@@ -216,7 +241,9 @@ export function buildQuery({
   const revisionFilterQueries =
     latestRevisionFilter && !isIdLookupSearch && !includeSupersededEntities ? [latestRevisionFilter] : [];
 
-  query.query(esb.boolQuery().must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries]));
+  query.query(
+    esb.boolQuery().must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries, ...filenameQueries]),
+  );
 
   // Highlight only for free-text queries; exact-match ID lookups don't need highlighting.
   if (hasTextQuery && !isWildcardIdSearch && !isHbmIdFormatSearch && !isUuidFormatSearch) {
@@ -306,26 +333,37 @@ export function buildQuery({
   }, {});
 
   if (filterMode === 'query') {
-    // Filters belong to the main query so that `inner_hits` (which ignore `post_filter`)
-    // reflect them. Aggregations for this mode are fetched by a separate request.
+    // Filters belong to the main query so a collapsed group's representative is chosen from the
+    // documents that actually match. Aggregations for this mode come from a separate request.
     // This replaces the bool query set above, re-listing its clauses plus the filters.
     query.query(
       esb
         .boolQuery()
-        .must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries, ...Object.values(allFilters)]),
+        .must([
+          ...defaultQueries,
+          ...revisionFilterQueries,
+          ...freeTextQueries,
+          ...filenameQueries,
+          ...Object.values(allFilters),
+        ]),
     );
   } else {
     query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
   }
 
   if (collapse) {
-    const innerHits = esb.innerHits(collapse.innerHits.name).size(collapse.innerHits.size);
-    const innerSort = collapse.innerHits.sort;
-    if (innerSort) {
-      innerHits.sort(esb.sort(getESField({ field: innerSort.field, mappings }), innerSort.direction));
+    const collapseField = getESField({ field: collapse.field, mappings });
+    if (collapse.innerHits) {
+      const innerHits = esb.innerHits(collapse.innerHits.name).size(collapse.innerHits.size);
+      const innerSort = collapse.innerHits.sort;
+      if (innerSort) {
+        innerHits.sort(esb.sort(getESField({ field: innerSort.field, mappings }), innerSort.direction));
+      }
+      // Bounds how many group-expansion queries ES runs at once.
+      query.collapse(collapseField, innerHits, 4);
+    } else {
+      query.collapse(collapseField);
     }
-    // Bounds how many group-expansion queries ES runs at once.
-    query.collapse(getESField({ field: collapse.field, mappings }), innerHits, 4);
   }
 
   if (buildAggregations && groupCountField) {

@@ -4,6 +4,7 @@ import type { DownloadAction, DownloadActionContext } from 'udi-yac';
 import { useAppContext } from 'js/components/Contexts';
 import { trackEvent } from 'js/helpers/trackers';
 import { createDownloadUrl } from 'js/helpers/functions';
+import { buildWholeDatasetManifest } from 'js/helpers/manifest';
 import { checkAndDownloadFile } from 'js/helpers/download';
 
 import useOpenInWorkspacesTrigger from './openInWorkspacesStore';
@@ -29,7 +30,7 @@ function extractHubmapIds(rows: Record<string, unknown>[]): string[] {
 
 function downloadHubmapIds(ids: string[], entityLabel: string) {
   const isDatasetManifest = entityLabel === 'Dataset';
-  const content = isDatasetManifest ? `${ids.join(' /\n')} /` : ids.join('\n');
+  const content = isDatasetManifest ? buildWholeDatasetManifest(ids) : ids.join('\n');
   const url = createDownloadUrl(content, 'text/plain');
   const fileName = isDatasetManifest ? 'manifest.txt' : `hubmap-${entityLabel.toLowerCase()}-ids.txt`;
   void checkAndDownloadFile({ url, fileName });
