@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.51.1 - 2026-08-19
+
+- Add a permanent redirect from `/publications/hubmap-data-portal` to the HuBMAP Data Portal publication page.
+
+
+
 ## v1.51.0 - 2026-08-18
 
 - Update citation link to point at Acknowledgement in Publications page.
