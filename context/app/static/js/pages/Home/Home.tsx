@@ -72,8 +72,16 @@ function Home() {
             }
           >
             <Typography variant="body1" color="text.secondary" mb={2}>
-              Explore HuBMAP datasets through the Filter &amp; Browse Mode or ask questions about our data with natural
-              language with our new{' '}
+              Explore HuBMAP datasets through the{' '}
+              <InternalLink
+                href="/search/datasets"
+                onClick={() =>
+                  trackEvent({ category: 'Homepage', action: 'HuBMAP Datasets', label: 'Filter & Browse Mode Link' })
+                }
+              >
+                Filter &amp; Browse Mode
+              </InternalLink>{' '}
+              data with natural language with our new{' '}
               <InternalLink
                 href="/search/datasets?mode=say-see"
                 onClick={() =>
