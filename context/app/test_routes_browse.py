@@ -389,6 +389,36 @@ def mock_search_dataset_post(path, **kwargs):
     return MockResponse()
 
 
+def test_details_excludes_heavy_relative_lists(client, mocker):
+    """The dataset page inlines the entity into a blocking <script>, so the nested relative lists
+    are excluded from that query -- but the `.json` route exists to serve the whole document and
+    must not be trimmed.
+    """
+    from portal_visualization.client import HEAVY_RELATIVE_FIELDS
+
+    from .test_routes_main import mock_prov_get
+
+    bodies = []
+
+    def capture(path, **kwargs):
+        bodies.append(kwargs.get('json'))
+        return mock_search_dataset_post(path, **kwargs)
+
+    mocker.patch('requests.get', side_effect=mock_prov_get)
+    mocker.patch('requests.post', side_effect=capture)
+
+    client.get('/browse/dataset/fake-uuid')
+    entity_queries = [b for b in bodies if b and 'ids' in str(b.get('query', ''))]
+    assert entity_queries, 'expected an ids lookup for the entity'
+    assert entity_queries[0]['_source'] == {'exclude': HEAVY_RELATIVE_FIELDS}
+
+    bodies.clear()
+    client.get('/browse/dataset/fake-uuid.json')
+    entity_queries = [b for b in bodies if b and 'ids' in str(b.get('query', ''))]
+    assert entity_queries, 'expected an ids lookup for the entity'
+    assert '_source' not in entity_queries[0], 'the raw .json route must serve the whole document'
+
+
 def test_dataset_ld_is_in_the_served_html(client, mocker):
     """
     The whole point of moving generation server-side: the markup must be in the raw HTML,
