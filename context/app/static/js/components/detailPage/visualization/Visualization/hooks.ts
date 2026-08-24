@@ -5,6 +5,7 @@ import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
 import { cdnUrl } from 'js/helpers/cdn';
+import { useAppContext } from 'js/components/Contexts';
 import { useSnackbarActions, useSnackbarStore } from 'js/shared-styles/snackbars';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { debounce } from 'js/helpers/nodash';
@@ -12,6 +13,7 @@ import { useTotalHeaderOffset } from 'js/components/detailPage/entityHeader/Enti
 
 import { isFirefox } from 'react-device-detect';
 import { datasetSectionId } from 'js/pages/Dataset/utils';
+import { restoreTokenFromPlaceholder } from '../vitessceTokens';
 
 interface UseVitessceConfigProps {
   vitData?: object | object[];
@@ -66,6 +68,8 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
   }, [headerOffset]);
 
   const toastError = useSnackbarStore((store) => store.toastError);
+  const toastInfo = useSnackbarStore((store) => store.toastInfo);
+  const { groupsToken } = useAppContext();
 
   const isMultiDataset = Array.isArray(vitData);
 
@@ -130,6 +134,19 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
         }
       }
 
+      // Shared links carry a placeholder where the sharer's expiring groups token was. Swap in the
+      // current viewer's token so one link works for any authorized user; for a viewer with no
+      // token, drop the auth material so public assets still load unauthenticated. Configs without
+      // a placeholder (a normal server-built conf, a static CDN conf, or a link shared before this
+      // existed) come back untouched, which is why one call covers both branches above.
+      const restored = restoreTokenFromPlaceholder(vitessceURLConf, groupsToken);
+      vitessceURLConf = restored.conf;
+      if (restored.strippedCredentials) {
+        // Otherwise the views render empty with no explanation: handleWarning in Visualization.tsx
+        // suppresses the 401s this produces.
+        toastInfo('Log in to view the data in this shared visualization.');
+      }
+
       let initializedVitDataFromUrl: object | object[];
       let initialSelectionFromUrl;
       // If there is a url conf and we have a multidataset, use the url conf to find the initial selection of the multi-dataset.
@@ -174,7 +191,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
     };
     // markerGene is included to re-initialize when it changes (e.g., gene search)
-  }, [vitData, toastError, markerGene, isTargetViz, vizParam, hubmapId, confSlug, staticConf]);
+  }, [vitData, toastError, toastInfo, markerGene, isTargetViz, vizParam, hubmapId, confSlug, staticConf, groupsToken]);
 
   const currentConfig = useMemo(() => {
     if (isMultiDataset && Array.isArray(vitessceConfig) && Number.isInteger(vitessceSelection)) {

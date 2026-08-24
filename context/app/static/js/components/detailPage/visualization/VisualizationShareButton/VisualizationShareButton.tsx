@@ -18,8 +18,10 @@ import { postAndDownloadFile } from 'js/helpers/download';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { useAppContext } from 'js/components/Contexts';
+import { containsCredentials, replaceTokenWithPlaceholder } from '../vitessceTokens';
 import { createEmailWithUrl, getUrl } from './utils';
-import { DEFAULT_LONG_URL_WARNING } from './constants';
+import { DEFAULT_LONG_URL_WARNING, EXPIRING_TOKEN_WARNING } from './constants';
 import { FileIcon } from 'js/shared-styles/icons';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -60,7 +62,8 @@ function VisualizationShareButton({
   const isFullscreen = isFullscreenProp ?? Boolean(fullscreenVizId);
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const handleCopyClick = useHandleCopyClick();
-  const { toastError } = useSnackbarActions();
+  const { toastError, toastWarning } = useSnackbarActions();
+  const { groupsToken } = useAppContext();
 
   const hasConfig = vitessceState != null;
   const urlOptions = { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen };
@@ -74,7 +77,10 @@ function VisualizationShareButton({
 
     let urlIsLong = false;
     const url = getUrl(
-      vitessceState,
+      // Swap the sharer's expiring token for a placeholder; the recipient's page swaps in their own
+      // token on load, so one link works for every authorized viewer. Redacting before encoding
+      // also means the long-URL check measures the payload that actually ships.
+      replaceTokenWithPlaceholder(vitessceState, groupsToken),
       () => {
         urlIsLong = true;
       },
@@ -91,8 +97,9 @@ function VisualizationShareButton({
       ...trackingInfo,
       action: `${trackingInfo.action} / Copy Visualization Configuration to Clipboard`,
     });
+    // A raw config is not a shareable link, so the token stays intact — but warn that it expires.
     const configString = JSON.stringify(vitessceState, null, 2);
-    handleCopyClick(configString);
+    handleCopyClick(configString, containsCredentials(vitessceState) ? EXPIRING_TOKEN_WARNING : undefined);
   });
 
   const downloadConf = useEventCallback(() => {
@@ -111,12 +118,16 @@ function VisualizationShareButton({
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    // No copy toast to piggyback the caveat on, so warn separately.
+    if (containsCredentials(vitessceState)) {
+      toastWarning(EXPIRING_TOKEN_WARNING);
+    }
   });
 
   const emailConf = useEventCallback(() => {
     if (!hasConfig) return;
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
-    createEmailWithUrl(vitessceState, urlOptions);
+    createEmailWithUrl(replaceTokenWithPlaceholder(vitessceState, groupsToken), urlOptions);
   });
 
   const downloadNotebook = useEventCallback(() => {
