@@ -1,3 +1,4 @@
-- Shared visualization links no longer embed the sharer's access token. The token is replaced with a placeholder on export and swapped for the viewer's own token when the link is opened, so one link works for any authorized user instead of breaking once the sharer's session expires. Viewers who aren't logged in get the credentials stripped, along with a prompt to log in.
+- Shared visualization links no longer embed the sharer's access token. The token is replaced with a placeholder on export and swapped for the viewer's own token when the link is opened, so one link works for any authorized user instead of breaking once the sharer's session expires.
+- Opening a shared visualization that references non-public data while logged out now displays a prompt to log in, instead of rendering an empty visualization.
 - Visualization configurations exported to a file or the clipboard still contain a real access token, and now warn that it will expire.
 - Publication vignettes no longer embed an access token in their visualization configurations when the publication's data is public.

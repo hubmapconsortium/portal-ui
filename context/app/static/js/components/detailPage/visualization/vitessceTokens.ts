@@ -1,3 +1,5 @@
+import LZString from 'lz-string';
+
 import { isObject } from 'js/helpers/type-guards';
 
 /**
@@ -59,33 +61,52 @@ export function replaceTokenWithPlaceholder<T>(conf: T, groupsToken: string): T 
   return JSON.parse(serialized.replaceAll(needle, SHARED_TOKEN_PLACEHOLDER)) as T;
 }
 
-export interface RestoredConf<T> {
-  conf: T;
-  /** True when credentials were removed because there was no viewer token to substitute. */
-  strippedCredentials: boolean;
-}
-
 /**
  * Undo {@link replaceTokenWithPlaceholder} for the *current* viewer: splice in their token, or, for
  * a viewer with no token, remove the auth material so public assets are still fetched
  * unauthenticated. A config with no placeholder — a server-built conf, a static CDN conf, or a link
  * shared before this existed — is returned untouched, by reference.
  */
-export function restoreTokenFromPlaceholder<T>(conf: T, groupsToken: string): RestoredConf<T> {
+export function restoreTokenFromPlaceholder<T>(conf: T, groupsToken: string): T {
   if (conf == null) {
-    return { conf, strippedCredentials: false };
+    return conf;
   }
   const serialized = JSON.stringify(conf);
   if (!serialized.includes(SHARED_TOKEN_PLACEHOLDER)) {
-    return { conf, strippedCredentials: false };
+    return conf;
   }
   if (groupsToken) {
-    return {
-      conf: JSON.parse(serialized.replaceAll(SHARED_TOKEN_PLACEHOLDER, jsonEscape(groupsToken))) as T,
-      strippedCredentials: false,
-    };
+    return JSON.parse(serialized.replaceAll(SHARED_TOKEN_PLACEHOLDER, jsonEscape(groupsToken))) as T;
   }
-  return { conf: stripPlaceholder(conf) as T, strippedCredentials: true };
+  return stripPlaceholder(conf) as T;
+}
+
+/**
+ * Whether a URL fragment carries a shared config that references non-public data — i.e. one this
+ * viewer needs credentials for. Callers pair it with an empty `groupsToken` to decide whether to
+ * prompt for login.
+ *
+ * Deliberately decodes with lz-string rather than vitessce's `decodeURLParamsToConf`, and only
+ * substring-matches instead of parsing: this runs on the detail page's alert band, which must not
+ * pull the (lazy-loaded, very large) vitessce bundle into the initial page chunk. The fragment
+ * shape comes from `encodeConfInUrl`:
+ * `vitessce_conf_length=<n>&vitessce_conf_version=<v>&vitessce_conf=<lz-string>`.
+ */
+export function sharedConfNeedsCredentials(hash: string): boolean {
+  const fragment = hash.startsWith('#') ? hash.slice(1) : hash;
+  if (!fragment.startsWith('vitessce_conf_')) {
+    return false;
+  }
+  const compressed = new URLSearchParams(fragment).get('vitessce_conf');
+  if (!compressed) {
+    return false;
+  }
+  // Malformed input decompresses to null or throws, depending on how it's malformed.
+  try {
+    return Boolean(LZString.decompressFromEncodedURIComponent(compressed)?.includes(SHARED_TOKEN_PLACEHOLDER));
+  } catch {
+    return false;
+  }
 }
 
 function stripPlaceholderFromString(value: string) {

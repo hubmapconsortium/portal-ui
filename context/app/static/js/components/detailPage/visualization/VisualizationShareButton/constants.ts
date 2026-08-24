@@ -7,4 +7,6 @@ const DEFAULT_EMAIL_MESSAGE = 'Here is an interesting dataset I found in the HuB
 const EXPIRING_TOKEN_WARNING =
   'This configuration contains an access token for non-public data, which will stop working when your session expires. Use "Copy Visualization Link" to share a link that authorizes each viewer with their own credentials.';
 
-export { DEFAULT_LONG_URL_WARNING, DEFAULT_EMAIL_MESSAGE, EXPIRING_TOKEN_WARNING };
+const CONFIG_FILENAME = 'vitessce_config.json';
+
+export { DEFAULT_LONG_URL_WARNING, DEFAULT_EMAIL_MESSAGE, EXPIRING_TOKEN_WARNING, CONFIG_FILENAME };
