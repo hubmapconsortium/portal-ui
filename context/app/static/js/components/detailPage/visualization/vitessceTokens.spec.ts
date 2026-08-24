@@ -5,6 +5,7 @@ import {
   containsCredentials,
   replaceTokenWithPlaceholder,
   restoreTokenFromPlaceholder,
+  sharedConfDatasetUuids,
   sharedConfNeedsCredentials,
 } from './vitessceTokens';
 
@@ -180,5 +181,39 @@ describe('sharedConfNeedsCredentials', () => {
   test('is false rather than throwing on a malformed fragment', () => {
     expect(sharedConfNeedsCredentials('#vitessce_conf_length=3&vitessce_conf=%%%not-lz%%%')).toBe(false);
     expect(sharedConfNeedsCredentials('#vitessce_conf_length=0')).toBe(false);
+  });
+});
+
+describe('sharedConfDatasetUuids', () => {
+  const encodeFragment = (conf: object) => {
+    const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(conf));
+    return `#vitessce_conf_length=${compressed.length}&vitessce_conf_version=0.0.1&vitessce_conf=${compressed}`;
+  };
+  const uuidA = '0123456789abcdef0123456789abcdef';
+  const uuidB = 'fedcba9876543210fedcba9876543210';
+
+  test('collects each referenced uuid once', () => {
+    const hash = encodeFragment({
+      datasets: [
+        { files: [{ url: `https://assets.example.com/${uuidA}/x.ome.tif` }] },
+        { files: [{ url: `https://assets.example.com/${uuidA}/x.offsets.json` }] },
+        { files: [{ url: `https://assets.example.com/${uuidB}/y.zarr` }] },
+      ],
+    });
+
+    expect(sharedConfDatasetUuids(hash)).toEqual([uuidA, uuidB]);
+  });
+
+  // Configs shared from another deployment carry that deployment's assets endpoint, so matching is
+  // by uuid shape rather than by the viewer's own endpoint.
+  test('finds uuids regardless of which assets endpoint the config was built against', () => {
+    const hash = encodeFragment({ url: `https://assets.other-deployment.org/${uuidA}/x.ome.tif` });
+
+    expect(sharedConfDatasetUuids(hash)).toEqual([uuidA]);
+  });
+
+  test('is empty when there is no shared config', () => {
+    expect(sharedConfDatasetUuids('#attribution')).toEqual([]);
+    expect(sharedConfDatasetUuids('')).toEqual([]);
   });
 });

@@ -83,29 +83,49 @@ export function restoreTokenFromPlaceholder<T>(conf: T, groupsToken: string): T 
 
 /**
  * Whether a URL fragment carries a shared config that references non-public data — i.e. one this
- * viewer needs credentials for. Callers pair it with an empty `groupsToken` to decide whether to
- * prompt for login.
+ * viewer needs credentials for.
  *
- * Deliberately decodes with lz-string rather than vitessce's `decodeURLParamsToConf`, and only
- * substring-matches instead of parsing: this runs on the detail page's alert band, which must not
- * pull the (lazy-loaded, very large) vitessce bundle into the initial page chunk. The fragment
- * shape comes from `encodeConfInUrl`:
+ * The helpers below deliberately decode with lz-string rather than vitessce's
+ * `decodeURLParamsToConf`, and substring-match instead of parsing: they run on the detail page's
+ * alert band, which must not pull the (lazy-loaded, very large) vitessce bundle into the initial
+ * page chunk. The fragment shape comes from `encodeConfInUrl`:
  * `vitessce_conf_length=<n>&vitessce_conf_version=<v>&vitessce_conf=<lz-string>`.
  */
 export function sharedConfNeedsCredentials(hash: string): boolean {
+  return Boolean(decodeSharedConf(hash)?.includes(SHARED_TOKEN_PLACEHOLDER));
+}
+
+/** HuBMAP uuids are 32 lowercase hex characters, and appear as a path segment in every asset URL. */
+const UUID_PATTERN = /\b[0-9a-f]{32}\b/g;
+
+/**
+ * The uuids of the entities a shared config pulls data from, for checking whether this viewer can
+ * actually read them.
+ *
+ * Matches uuid-shaped substrings anywhere in the config rather than parsing asset URLs against the
+ * viewer's `assetsEndpoint`, because a config shared from another deployment carries that
+ * deployment's endpoint. A false positive here is harmless: an id that isn't a real dataset comes
+ * back from the permissions API as `valid_id: false` with no `access_allowed`, which callers ignore.
+ */
+export function sharedConfDatasetUuids(hash: string): string[] {
+  return Array.from(new Set(decodeSharedConf(hash)?.match(UUID_PATTERN) ?? []));
+}
+
+/** The decompressed config JSON carried by a `#vitessce_conf_…` fragment, or null if there is none. */
+function decodeSharedConf(hash: string): string | null {
   const fragment = hash.startsWith('#') ? hash.slice(1) : hash;
   if (!fragment.startsWith('vitessce_conf_')) {
-    return false;
+    return null;
   }
   const compressed = new URLSearchParams(fragment).get('vitessce_conf');
   if (!compressed) {
-    return false;
+    return null;
   }
   // Malformed input decompresses to null or throws, depending on how it's malformed.
   try {
-    return Boolean(LZString.decompressFromEncodedURIComponent(compressed)?.includes(SHARED_TOKEN_PLACEHOLDER));
+    return LZString.decompressFromEncodedURIComponent(compressed);
   } catch {
-    return false;
+    return null;
   }
 }
 

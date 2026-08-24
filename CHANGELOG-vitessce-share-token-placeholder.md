@@ -1,5 +1,5 @@
 - Shared visualization links no longer embed the sharer's access token. The token is replaced with a placeholder on export and swapped for the viewer's own token when the link is opened, so one link works for any authorized user instead of breaking once the sharer's session expires.
-- Opening a shared visualization that references non-public data while logged out now displays a prompt to log in, instead of rendering an empty visualization.
+- Opening a shared visualization that references data you cannot read now explains why, instead of rendering an empty visualization: visitors who are logged out are prompted to log in, and logged-in users without access to the dataset are told so.
 - Visualization configurations exported to a file or the clipboard still contain a real access token, and now warn that it will expire.
 - Publication vignettes no longer embed an access token in their visualization configurations when the publication's data is public.
 - Update to Vitessce 4.0.4 to resolve issues with 3D data scaling incorrectly in spatialBeta view, improve spatial controller layout in narrow containers, and sort image channels.
