@@ -1,0 +1,2 @@
+- Stop shipping the nested `ancestors`, `descendants`, `immediate_ancestors`, `immediate_descendants`, and `donors` lists to the browser on entity detail pages. Each element is a whole entity document, so on datasets with many ancestors these dominated the page's blocking inline data and delayed the first render; nothing on the client read them. The raw `.json` view of an entity still returns the complete document.
+- Request only the fields it needs when looking up an entity's immediate descendants for the provenance graph, instead of downloading the whole document.

@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape as xml_escape
 
 # Private, but so is the `_request` this module already relies on; both come from the
 # portal-visualization client that portal-ui pins.
-from portal_visualization.client import _paginate_search_after
+from portal_visualization.client import HEAVY_RELATIVE_FIELDS, _paginate_search_after
 
 from .utils import get_organs, get_valid_tutorial_routes
 
@@ -74,7 +74,11 @@ def details(type, uuid):
     if type not in entity_types:
         abort(404)
     client = get_client()
-    entity = client.get_entity(uuid)
+    # This document is serialized into flask_data and inlined into a blocking <script> that the
+    # browser must parse before React boots, so the nested relative lists -- which nothing on the
+    # client reads; it uses ancestor_ids/descendant_ids plus useEntitiesData -- are dropped here.
+    # The `.json` route below deliberately keeps serving the whole document.
+    entity = client.get_entity(uuid, source_exclude=HEAVY_RELATIVE_FIELDS)
     actual_type = entity['entity_type'].lower()
     integrated = entity.get('is_integrated')
 
@@ -158,11 +162,19 @@ def details_vitessce(type, uuid):
     if type not in entity_types:
         abort(404)
     client = get_client()
-    entity = client.get_entity(uuid)
+    # Builders read uuid/status/files/metadata/hints off the entity, never its nested relative
+    # lists, and this route fetches a document once per request (twice with ?parent=).
+    fetch_start = time.perf_counter()
+    entity = client.get_entity(uuid, source_exclude=HEAVY_RELATIVE_FIELDS)
     parent_uuid = request.args.get('parent') or None
     marker = request.args.get('marker') or None
     minimal = request.args.get('minimal') == 'True'
-    parent = client.get_entity(parent_uuid) if parent_uuid else None
+    parent = (
+        client.get_entity(parent_uuid, source_exclude=HEAVY_RELATIVE_FIELDS)
+        if parent_uuid
+        else None
+    )
+    fetch_seconds = time.perf_counter() - fetch_start
 
     # ponytail: temporary timer to verify the multi-region SPRM build speedup. Logs which
     # portal-visualization is actually loaded, so a slow time on the pre-fix wheel is obvious.
@@ -170,10 +182,16 @@ def details_vitessce(type, uuid):
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
         entity, marker=marker, parent=parent, minimal=minimal
     ).vitessce_conf
+    # The entity size is already stamped on the document by the search-api transform, so read it
+    # rather than re-serializing a document this route is trying to keep small.
     current_app.logger.info(
-        'vitessce conf build for %s took %.2fs (portal-visualization %s)',
+        'vitessce conf for %s: %.2fs entity fetch (%s bytes indexed), %.2fs build, '
+        '%s bytes conf (portal-visualization %s)',
         uuid,
+        fetch_seconds,
+        (entity.get('mapper_metadata') or {}).get('size', 'unknown'),
         time.perf_counter() - build_start,
+        len(json.dumps(vitessce_conf.conf)) if vitessce_conf.conf else 0,
         version('portal-visualization'),
     )
     # Returns a JSON null if there is no visualization.
