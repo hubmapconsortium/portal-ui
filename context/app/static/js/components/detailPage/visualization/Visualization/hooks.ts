@@ -68,7 +68,6 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
   }, [headerOffset]);
 
   const toastError = useSnackbarStore((store) => store.toastError);
-  const toastInfo = useSnackbarStore((store) => store.toastInfo);
   const { groupsToken } = useAppContext();
 
   const isMultiDataset = Array.isArray(vitData);
@@ -139,13 +138,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       // token, drop the auth material so public assets still load unauthenticated. Configs without
       // a placeholder (a normal server-built conf, a static CDN conf, or a link shared before this
       // existed) come back untouched, which is why one call covers both branches above.
-      const restored = restoreTokenFromPlaceholder(vitessceURLConf, groupsToken);
-      vitessceURLConf = restored.conf;
-      if (restored.strippedCredentials) {
-        // Otherwise the views render empty with no explanation: handleWarning in Visualization.tsx
-        // suppresses the 401s this produces.
-        toastInfo('Log in to view the data in this shared visualization.');
-      }
+      vitessceURLConf = restoreTokenFromPlaceholder(vitessceURLConf, groupsToken);
 
       let initializedVitDataFromUrl: object | object[];
       let initialSelectionFromUrl;
@@ -191,7 +184,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
     };
     // markerGene is included to re-initialize when it changes (e.g., gene search)
-  }, [vitData, toastError, toastInfo, markerGene, isTargetViz, vizParam, hubmapId, confSlug, staticConf, groupsToken]);
+  }, [vitData, toastError, markerGene, isTargetViz, vizParam, hubmapId, confSlug, staticConf, groupsToken]);
 
   const currentConfig = useMemo(() => {
     if (isMultiDataset && Array.isArray(vitessceConfig) && Number.isInteger(vitessceSelection)) {

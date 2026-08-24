@@ -21,7 +21,7 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { useAppContext } from 'js/components/Contexts';
 import { containsCredentials, replaceTokenWithPlaceholder } from '../vitessceTokens';
 import { createEmailWithUrl, getUrl } from './utils';
-import { DEFAULT_LONG_URL_WARNING, EXPIRING_TOKEN_WARNING } from './constants';
+import { CONFIG_FILENAME, DEFAULT_LONG_URL_WARNING, EXPIRING_TOKEN_WARNING } from './constants';
 import { FileIcon } from 'js/shared-styles/icons';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -62,11 +62,14 @@ function VisualizationShareButton({
   const isFullscreen = isFullscreenProp ?? Boolean(fullscreenVizId);
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const handleCopyClick = useHandleCopyClick();
-  const { toastError, toastWarning } = useSnackbarActions();
+  const { toastError, toastSuccess } = useSnackbarActions();
   const { groupsToken } = useAppContext();
 
   const hasConfig = vitessceState != null;
   const urlOptions = { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen };
+
+  // Raw-config exports hand over a real, expiring token. Both of them say so the same way.
+  const credentialWarningSuffix = () => (containsCredentials(vitessceState) ? ` ${EXPIRING_TOKEN_WARNING}` : '');
 
   const copyLink = useEventCallback(() => {
     if (!hasConfig) return;
@@ -99,7 +102,7 @@ function VisualizationShareButton({
     });
     // A raw config is not a shareable link, so the token stays intact — but warn that it expires.
     const configString = JSON.stringify(vitessceState, null, 2);
-    handleCopyClick(configString, containsCredentials(vitessceState) ? EXPIRING_TOKEN_WARNING : undefined);
+    handleCopyClick(configString, credentialWarningSuffix().trim() || undefined);
   });
 
   const downloadConf = useEventCallback(() => {
@@ -113,15 +116,14 @@ function VisualizationShareButton({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'vitessce_config.json';
+    link.download = CONFIG_FILENAME;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    // No copy toast to piggyback the caveat on, so warn separately.
-    if (containsCredentials(vitessceState)) {
-      toastWarning(EXPIRING_TOKEN_WARNING);
-    }
+    // Mirrors the shape and severity of the copy toast that `useHandleCopyClick` emits: a
+    // confirmation, plus the expiry caveat when the config actually carries a credential.
+    toastSuccess(`Downloaded ${CONFIG_FILENAME}.${credentialWarningSuffix()}`);
   });
 
   const emailConf = useEventCallback(() => {

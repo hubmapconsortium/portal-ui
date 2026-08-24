@@ -21,6 +21,7 @@ import { Dataset, Donor, Entity, Sample, isDataset } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
+import SharedVisualizationAlert from 'js/components/detailPage/SharedVisualizationAlert';
 import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
@@ -119,6 +120,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
       <RetractedDatasetProvider isRetracted={isRetracted}>
         <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
           <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
+          <SharedVisualizationAlert />
           {Boolean(is_component) && <ComponentAlert />}
           <SnareSeq2Alert isHeader />
           {isRetracted && (
