@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.51.2 - 2026-08-25
+
+- Add filter & browse mode link to the homepage's datasets section.
+
+
+
 ## v1.51.1 - 2026-08-19
 
 - Add a permanent redirect from `/publications/hubmap-data-portal` to the HuBMAP Data Portal publication page.
