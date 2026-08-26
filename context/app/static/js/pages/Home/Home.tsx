@@ -81,7 +81,7 @@ function Home() {
               >
                 Filter &amp; Browse Mode
               </InternalLink>{' '}
-              data with natural language with our new{' '}
+              or ask questions about our data with natural language with our new{' '}
               <InternalLink
                 href="/search/datasets?mode=say-see"
                 onClick={() =>
