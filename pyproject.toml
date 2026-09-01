@@ -26,8 +26,8 @@ dependencies = [
     "python-frontmatter>=1.1.0",
     "hubmap-commons>=2.1.20",
     "portal-visualization[full]>=0.5.13",
-    "udiagent>=0.2.6",
-    "udiagent[langfuse]>=0.2.6",
+    "udiagent>=0.3.0",
+    "udiagent[langfuse]>=0.3.0",
     "gunicorn>=23.0.0",
     "whitenoise[brotli]>=6.9.0",
 ]
