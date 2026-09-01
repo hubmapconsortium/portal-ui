@@ -1,0 +1,3 @@
+- Upgrade `udi-yac` (Say & See chat) from 0.2.4 to 0.3.0, which scopes the chat's CSS custom properties to its own root element instead of leaking them onto `:root` portal-wide.
+- Upgrade `udiagent` from 0.2.6 to 0.3.0, so CI and local development test against the version production already resolves.
+- Fix Say & See chat lists rendering without bullets or numbers: the chat sets the marker on the list and lets each item inherit it, but the portal's global `li { list-style: none }` reset matched the items directly and won.

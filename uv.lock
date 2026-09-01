@@ -925,8 +925,8 @@ requires-dist = [
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "udiagent", specifier = ">=0.2.6" },
-    { name = "udiagent", extras = ["langfuse"], specifier = ">=0.2.6" },
+    { name = "udiagent", specifier = ">=0.3.0" },
+    { name = "udiagent", extras = ["langfuse"], specifier = ">=0.3.0" },
     { name = "whitenoise", extras = ["brotli"], specifier = ">=6.9.0" },
 ]
 
@@ -2758,7 +2758,7 @@ wheels = [
 
 [[package]]
 name = "udiagent"
-version = "0.2.6"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
@@ -2766,9 +2766,9 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/20/8c/1a1ecf33626cb3687af13dea1a2c452af5be5c38474029e210f38bfdb78a/udiagent-0.2.6.tar.gz", hash = "sha256:0d868f837db41638f0d7450fe48386d2b7d3aca0fb7ade19930944180dcdb36a", size = 28250812, upload-time = "2026-06-23T17:16:09.966Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1d/5c/75d63d1c19879444e2165bd89fcefcb6428bf7629c6877fdcbf64df9af49/udiagent-0.3.0.tar.gz", hash = "sha256:22e3b1fd61ba549c4e616b0b3e3ef9ebc265468bfbf53fd8ad5c357534008dba", size = 28180226, upload-time = "2026-08-25T21:12:21.875Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c6/81/ccb7b3d6a23b3ad0fba44d9ec86585647ae9679005015a4c59b061f33a48/udiagent-0.2.6-py3-none-any.whl", hash = "sha256:7ae96428231e7123dcaf94148a0b762eba398c777e20e099b3ab6de1335781b7", size = 83141, upload-time = "2026-06-23T17:16:07.924Z" },
+    { url = "https://files.pythonhosted.org/packages/47/1d/9b5e68ffd694212963f7b0febe8be321e7d1982343c7618a9213421a2743/udiagent-0.3.0-py3-none-any.whl", hash = "sha256:ff4292860fec599255a9ff31ec463a9db7cf523aa94f9b0681169314d7eed9dd", size = 128182, upload-time = "2026-08-25T21:12:20.088Z" },
 ]
 
 [package.optional-dependencies]
