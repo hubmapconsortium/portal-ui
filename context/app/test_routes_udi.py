@@ -153,8 +153,14 @@ def test_datapackage(client, mocker):
     assert uuid_field['type'] == 'string'
     assert uuid_field['description'] == ''
 
-    # With only 1 row, all non-empty fields overlap with all
-    assert age_value_field['udi:overlapping_fields'] == 'all'
+    # `udi:overlapping_fields` was computed for every field and read by nobody:
+    # both clients deleted it before use. Dropping it took ~26% off the cost of
+    # building a resource and 71% off the payload.
+    assert all(
+        'udi:overlapping_fields' not in field
+        for resource in data['resources']
+        for field in resource['schema']['fields']
+    )
 
     # Samples should have foreign keys
     samples = data['resources'][1]
@@ -624,10 +630,18 @@ mock_es_with_assaytype = {
                 '_source': {
                     'uuid': 'ABC123',
                     'hubmap_id': 'HMB123.XYZ',
+                    'created_by_user_displayname': 'A Name',
+                    'created_by_user_email': 'someone@example.edu',
+                    'raw_dataset_type': 'Xenium',
+                    'is_integrated': False,
+                    'origin_samples_unique_mapped_organs': ['Kidney (Left)', 'Kidney (Right)'],
+                    'donors': [{'hubmap_id': 'HBM1.AAAA.1'}, {'hubmap_id': 'HBM2.BBBB.2'}],
+                    'donor': {'hubmap_id': 'HBM1.AAAA.1'},
                     'mapped_metadata': {
                         'age_unit': ['eons'],
                         'age_value': [42],
                         'assaytype': ['10x Multiome'],
+                        'assay_type': ['snRNAseq-10xGenomics-v3'],
                     },
                 }
             }
@@ -663,9 +677,10 @@ def test_datapackage_strips_assaytype_field(client, mocker):
     data = response.get_json()
     for resource in data['resources']:
         field_names = [f['name'] for f in resource['schema']['fields']]
-        assert 'assaytype' not in field_names, (
-            f'assaytype should not appear in {resource["name"]} schema, got {field_names}'
-        )
+        for stripped in ('assaytype', 'assay_type'):
+            assert stripped not in field_names, (
+                f'{stripped} should not appear in {resource["name"]} schema, got {field_names}'
+            )
 
 
 def test_tsv_strips_assaytype_field(client, mocker):
@@ -674,7 +689,9 @@ def test_tsv_strips_assaytype_field(client, mocker):
     assert response.status_code == 200
     body = response.get_data(as_text=True)
     header_line = body.splitlines()[0]
-    assert 'assaytype' not in header_line.split('\t')
+    header_fields = header_line.split('\t')
+    assert 'assaytype' not in header_fields
+    assert 'assay_type' not in header_fields
 
 
 def _capture_es_post_bodies(mocker):
@@ -741,3 +758,81 @@ def test_regular_metadata_tsv_does_not_apply_udi_filters(client, mocker):
     response = client.get('/metadata/v0/datasets.tsv')
     assert response.status_code == 200
     assert all(not _query_excludes_revisions(b.get('query', {})) for b in bodies)
+
+
+# ---- Fields the chat needs, and fields it must not be given ----
+
+
+def test_datapackage_exposes_requested_top_level_fields(client, mocker):
+    """The assay question the agent kept getting wrong depends on
+    `raw_dataset_type`, which was never requested from Elasticsearch."""
+    _patch_es_with_assaytype(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    assert response.status_code == 200
+    datasets = next(r for r in response.get_json()['resources'] if r['name'] == 'datasets')
+    field_names = [f['name'] for f in datasets['schema']['fields']]
+    for expected in ('raw_dataset_type', 'processing', 'donors.hubmap_id'):
+        assert expected in field_names, f'{expected} missing from {field_names}'
+
+
+def test_datapackage_omits_noise_fields(client, mocker):
+    """Measured against the live index under this route's own filter:
+    `entity_type` is constant and `sub_status` is empty for every row, because
+    `exclude_revisions` drops any document that has one."""
+    _patch_es_with_assaytype(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    datasets = next(r for r in response.get_json()['resources'] if r['name'] == 'datasets')
+    field_names = [f['name'] for f in datasets['schema']['fields']]
+    for unwanted in ('entity_type', 'sub_status'):
+        assert unwanted not in field_names
+
+
+def test_donors_list_is_described_but_not_joinable(client, mocker):
+    """A frictionless foreign key compares one cell to one cell, and the chat's
+    cross-filter compiles to string equality -- so a comma-joined donor list
+    must stay out of `foreignKeys` or every cross-filter silently matches
+    nothing. `donor.hubmap_id` remains the joinable key."""
+    _patch_es_with_assaytype(mocker)
+    response = client.get('/metadata/v0/udi/datapackage.json')
+    datasets = next(r for r in response.get_json()['resources'] if r['name'] == 'datasets')
+    fk_fields = [f for fk in datasets['schema']['foreignKeys'] for f in fk['fields']]
+    assert 'donors.hubmap_id' not in fk_fields
+    assert 'donor.hubmap_id' in fk_fields
+
+
+def test_datapackage_and_tsv_omit_user_email(client, mocker):
+    """High-cardinality PII, in a public 12-hour-cached CORS-shared export and
+    in the agent's prompt, saying nothing `created_by_user_displayname` does
+    not. The plain metadata export still carries it."""
+    _patch_es_with_assaytype(mocker)
+    datapackage = client.get('/metadata/v0/udi/datapackage.json').get_json()
+    for resource in datapackage['resources']:
+        assert 'created_by_user_email' not in [f['name'] for f in resource['schema']['fields']]
+    tsv = client.get('/metadata/v0/udi/datasets.tsv').get_data(as_text=True)
+    assert 'created_by_user_email' not in tsv.splitlines()[0].split('\t')
+    assert 'someone@example.edu' not in tsv
+
+
+def test_tsv_renders_lists_without_python_repr(client, mocker):
+    """List-valued fields kept their native type through the flattener, so
+    csv.DictWriter emitted the repr -- organ columns shipped as
+    "['Kidney (Left)', 'Kidney (Right)']", brackets and quotes included."""
+    _patch_es_with_assaytype(mocker)
+    tsv = client.get('/metadata/v0/udi/datasets.tsv').get_data(as_text=True)
+    assert 'Kidney (Left), Kidney (Right)' in tsv
+    assert "['Kidney (Left)'" not in tsv
+    # Every donor is listed, while the joinable column keeps a single id.
+    assert 'HBM1.AAAA.1, HBM2.BBBB.2' in tsv
+
+
+def test_build_resource_survives_a_nested_field(client, mocker):
+    """`_make_hashable` only flattens one level, so a dict-of-lists reaches
+    `set()` as an unhashable tuple and 500s the whole datapackage. Any field
+    added to the request must be a scalar or a scalar dot-path leaf."""
+    import pytest
+
+    from .utils_datapackage import build_resource
+
+    entities = [{'hubmap_id': 'HBM1', 'nested': {'entity_type': ['Dataset']}}]
+    with pytest.raises(TypeError):
+        build_resource('datasets', entities, {}, {}, ['hubmap_id'])

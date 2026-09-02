@@ -61,9 +61,79 @@ def _set_cached(key, data):
     _udi_cache[key] = (time.time(), data)
 
 
-# Fields to strip from UDI responses. `assaytype` overlaps semantically with the
-# dataset_type field and creates confusion in the chat UI's schema.
-_UDI_EXCLUDED_FIELDS = ['assaytype']
+# Fields to strip from UDI responses. Both overlap semantically with
+# `dataset_type` and create confusion in the chat UI's schema: the agent picks
+# them for "assay type" questions, but they are sparse legacy ingest metadata.
+# `assay_type` is empty for ~79% of datasets and its value set differs from
+# `dataset_type`'s -- notably "Xenium" appears only in `dataset_type`, so
+# filtering `assay_type` for it matched nothing and rendered an empty card.
+_UDI_EXCLUDED_FIELDS = ['assaytype', 'assay_type']
+
+# `created_by_user_email` is high-cardinality PII that reaches a public,
+# 12-hour-cached, CORS-shared TSV and the chat agent's prompt, and says nothing
+# that `created_by_user_displayname` (already requested) does not. Excluded
+# here rather than in `routes_api` so the regular metadata exports keep it.
+_UDI_EXCLUDED_FIELDS += ['created_by_user_email']
+
+# Top-level document fields the chat needs that the default entity request does
+# not pull. Only scalar values and scalar dot-path leaves belong here: a nested
+# object reaches `_make_hashable` in utils_datapackage as an unhashable tuple
+# and 500s the whole datapackage.
+#
+# Two candidates were measured and deliberately left out, because both would
+# add a column carrying no information: `entity_type` is constant ('Dataset')
+# once the client's own entity filter has run, and `sub_status` is empty for
+# every row because these routes pass `exclude_revisions=True`, whose query
+# excludes any document that has one.
+_UDI_COMMON_ADDITIONAL_FIELDS = [
+    # Human-readable twin of the already-requested `data_access_level`.
+    'mapped_data_access_level',
+    # Pre-humanised entity label, as shown in the portal UI.
+    'display_subtype',
+]
+
+_UDI_ADDITIONAL_FIELDS = {
+    'donors': _UDI_COMMON_ADDITIONAL_FIELDS
+    + [
+        'descendant_counts.entity_type.Dataset',
+        'descendant_counts.entity_type.Sample',
+    ],
+    'samples': _UDI_COMMON_ADDITIONAL_FIELDS
+    + [
+        # Every donor, not just `donor.hubmap_id`, which is only `donors[0]`.
+        # Descriptive, not joinable -- see the description override.
+        'donors.hubmap_id',
+        'mapped_organ',
+        'mapped_sample_category',
+        'is_spatial',
+        'ancestor_counts.entity_type.Donor',
+        'descendant_counts.entity_type.Dataset',
+    ],
+    'datasets': _UDI_COMMON_ADDITIONAL_FIELDS
+    + [
+        # Every donor, not just `donor.hubmap_id`, which is only `donors[0]`.
+        # Descriptive, not joinable -- see the description override.
+        'donors.hubmap_id',
+        # Assay identity. `raw_dataset_type` is the one to lead with: 100%
+        # coverage, 26 clean values, and no CEDAR metadata key of the same
+        # name, so `_flatten_sources`'s metadata merge cannot shadow it.
+        'raw_dataset_type',
+        'dataset_type',
+        'soft_assaytype',
+        'analyte_class',
+        # Processing state -- needed to avoid double-counting raw vs derived.
+        'processing',
+        'processing_type',
+        'pipeline',
+        'assay_modality',
+        'creation_action',
+        'is_spatial',
+        'is_integrated',
+        'is_component',
+        'ancestor_counts.entity_type.Donor',
+        'descendant_counts.entity_type.Publication',
+    ],
+}
 
 
 def _apply_cache_headers(response, *, public, etag_payload=None):
@@ -260,6 +330,8 @@ def _serve_tsv(entity_type, *, consortium):
         use_groups_token=consortium,
         excluded_fields=_UDI_EXCLUDED_FIELDS,
         exclude_revisions=True,
+        additional_fields=_UDI_ADDITIONAL_FIELDS.get(entity_type),
+        normalize_values=True,
     )
 
     if not consortium:
@@ -311,6 +383,8 @@ def _serve_datapackage(*, consortium):
             use_groups_token=consortium,
             excluded_fields=_UDI_EXCLUDED_FIELDS,
             exclude_revisions=True,
+            additional_fields=_UDI_ADDITIONAL_FIELDS.get(entity_type),
+            normalize_values=True,
         )
         resource = build_resource(
             entity_type, entities, descriptions_dict, types_dict, _first_fields
