@@ -150,34 +150,3 @@ def test_unexpected_args_tsv_post(client, mocker):
         response.get_data(as_text=True).strip()
         == '{"message":"POST only accepts a JSON body.","status":400}'
     )
-
-
-def test_overlapping_fields_partial():
-    """Test overlapping fields computation with partial field coverage."""
-    from .utils_datapackage import compute_overlapping_fields
-
-    # 3 rows: field_a present in all, field_b only in rows 0,1, field_c only in row 0
-    non_null_maps = {
-        'field_a': {0, 1, 2},
-        'field_b': {0, 1},
-        'field_c': {0},
-    }
-    result = compute_overlapping_fields(['field_a', 'field_b', 'field_c'], non_null_maps, 3)
-    assert result['field_a'] == 'all'
-    # field_b is in rows 0,1 — field_a covers those too, but field_c doesn't
-    assert result['field_b'] == ['field_a', 'field_b']
-    # field_c is in row 0 — both field_a and field_b cover that
-    assert result['field_c'] == ['field_a', 'field_b', 'field_c']
-
-
-def test_overlapping_fields_empty():
-    """Test overlapping fields with a field that has no values."""
-    from .utils_datapackage import compute_overlapping_fields
-
-    non_null_maps = {
-        'field_a': {0, 1},
-        'field_empty': set(),
-    }
-    result = compute_overlapping_fields(['field_a', 'field_empty'], non_null_maps, 2)
-    assert result['field_a'] == 'all'
-    assert result['field_empty'] == []

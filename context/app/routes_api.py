@@ -68,6 +68,8 @@ def _generate_tsv_response(
     use_groups_token: bool = True,
     excluded_fields: Optional[list] = None,
     exclude_revisions: bool = False,
+    additional_fields: Optional[list] = None,
+    normalize_values: bool = False,
 ):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
@@ -88,6 +90,8 @@ def _generate_tsv_response(
         use_groups_token=use_groups_token,
         excluded_fields=excluded_fields,
         exclude_revisions=exclude_revisions,
+        additional_fields=additional_fields,
+        normalize_values=normalize_values,
     )
 
     if with_descriptions:
@@ -127,6 +131,35 @@ def lineup(entity_type):
 _first_fields = ['uuid', 'hubmap_id']
 
 
+# Fields where a missing value means False, not "unknown". Two separate causes:
+# `_get_nested` in portal-visualization ends `return nested or None`, so a
+# stored False arrives as None; and `add_assay_details` only writes some of
+# these when they are true. Either way the column should read False, not blank.
+_BOOLEAN_FIELDS = frozenset({'is_spatial', 'is_integrated', 'is_component'})
+
+
+def _normalize_values(entities, boolean_fields=_BOOLEAN_FIELDS):
+    """Make list- and boolean-valued fields legible to a TSV consumer.
+
+    Values pulled from `non_metadata_fields` keep their native Python type
+    (only `mapped_metadata` is stringified upstream), so `csv.DictWriter`
+    renders a list as its repr -- `origin_samples_unique_mapped_organs` ships
+    today as the literal `"['Kidney (Left)', 'Kidney (Right)']"`. Anything
+    comparing against that string, the chat agent included, sees the brackets.
+
+    Mutates in place and returns the list, matching `_get_entities`'s existing
+    handling of `excluded_fields`.
+    """
+    for entity in entities:
+        for field in boolean_fields:
+            if field in entity and entity[field] is None:
+                entity[field] = False
+        for key, value in entity.items():
+            if isinstance(value, list):
+                entity[key] = ', '.join(str(v) for v in value)
+    return entities
+
+
 def _get_entities(
     entity_type,
     constraints={},
@@ -134,6 +167,8 @@ def _get_entities(
     use_groups_token=True,
     excluded_fields=None,
     exclude_revisions=False,
+    additional_fields=None,
+    normalize_values=False,
 ):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
@@ -165,6 +200,8 @@ def _get_entities(
         extra_fields += ['donor.hubmap_id', 'origin_samples_unique_mapped_organs']
     if entity_type in ['samples']:
         extra_fields += ['sample_category']
+    if additional_fields:
+        extra_fields += additional_fields
     post_filter_extra = None
     if entity_type == 'samples':
         post_filter_extra = {'exists': {'field': 'descendant_counts.entity_type.Dataset'}}
@@ -196,6 +233,8 @@ def _get_entities(
         for entity in entities:
             for field in excluded_fields:
                 entity.pop(field, None)
+    if normalize_values:
+        _normalize_values(entities)
     return entities
 
 
