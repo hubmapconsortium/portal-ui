@@ -55,6 +55,92 @@ def _udi_data_type(datapackage_type):
     return 'nominal'
 
 
+# UBKG descriptions are written per-field and context-free, so near-synonyms
+# read as equally good choices to the chat agent. These overrides say which
+# field to reach for. They apply to the UDI datapackage only -- the regular
+# metadata exports still carry the UBKG text.
+#
+# The description is the one channel that reaches the agent's routing prompt
+# intact: udiagent renders each field's domain with a value cap, but prints
+# `description` in full. So anything the agent needs to know about how these
+# fields relate to each other has to be said here.
+_FIELD_DESCRIPTION_OVERRIDES = {
+    'raw_dataset_type': (
+        'The assay that produced this dataset, and the field to use for any '
+        'question about assay type, dataset type, modality, or "what kind of '
+        'data is this". In HuBMAP "assay type" and "dataset type" are the same '
+        'thing and are used interchangeably; this field answers both. Populated '
+        'for every dataset.'
+    ),
+    'dataset_type': (
+        'The same assay as raw_dataset_type, but suffixed with the processing '
+        'pipeline that produced it (e.g. "RNAseq [Salmon]"). Higher cardinality '
+        'and not always populated; prefer raw_dataset_type for filtering and '
+        'grouping, and use this only when the pipeline suffix itself matters.'
+    ),
+    'soft_assaytype': (
+        'Internal machine-readable assay key (e.g. "salmon_rnaseq_10x"). Not a '
+        'display label and not what a user means by assay type -- use '
+        'raw_dataset_type for that.'
+    ),
+    'display_subtype': (
+        'Pre-humanised label shown in the portal UI. Descriptive only; filter '
+        'on raw_dataset_type instead.'
+    ),
+    'processing': (
+        'Whether this is a raw dataset or one derived from it by a processing '
+        'pipeline. Datasets and their derivatives both appear as rows, so '
+        'filter on this to avoid counting the same experiment twice.'
+    ),
+    'processing_type': (
+        'Who ran the processing pipeline: hubmap, lab, or external. Only '
+        'populated for processed datasets.'
+    ),
+    'donors.hubmap_id': (
+        'Every donor this entity derives from, comma-separated. Most entities '
+        'have exactly one, but some have several. This column is descriptive '
+        'and cannot be joined against the donors table -- join on '
+        'donor.hubmap_id, which holds a single donor id.'
+    ),
+    'donor.hubmap_id': (
+        'A single donor id, and the joinable key to the donors table. Where an '
+        'entity has several donors this holds only the first; donors.hubmap_id '
+        'lists them all.'
+    ),
+}
+
+
+def _field_description(field_name, descriptions_dict):
+    """
+    Portal-specific description for a UDI datapackage field, falling back to
+    the UBKG-provided text.
+
+    >>> _field_description('age_value', {'age_value': 'Age of the donor.'})
+    'Age of the donor.'
+    >>> _field_description('nonesuch', {})
+    ''
+
+    An override wins over the UBKG text:
+
+    >>> overridden = _field_description('raw_dataset_type', {'raw_dataset_type': 'UBKG text'})
+    >>> overridden.startswith('The assay that produced this dataset')
+    True
+    >>> 'UBKG text' in overridden
+    False
+
+    The override is where the agent learns the portal's own vocabulary, since
+    it is the only part of a field's schema entry that reaches the routing
+    prompt untruncated:
+
+    >>> 'interchangeably' in overridden
+    True
+    """
+    override = _FIELD_DESCRIPTION_OVERRIDES.get(field_name)
+    if override is not None:
+        return override
+    return descriptions_dict.get(field_name, '')
+
+
 def _make_hashable(val):
     if isinstance(val, list):
         return tuple(val)
@@ -65,28 +151,12 @@ def _make_hashable(val):
 
 def _compute_field_stats(entities, field_name):
     values = []
-    non_null_indices = set()
-    for i, entity in enumerate(entities):
+    for entity in entities:
         val = entity.get(field_name)
         if val is not None and val != '':
             values.append(_make_hashable(val))
-            non_null_indices.add(i)
     distinct = len(set(values))
-    return distinct, distinct == len(entities), non_null_indices
-
-
-def compute_overlapping_fields(field_names, non_null_maps, row_count):
-    all_rows = set(range(row_count))
-    result = {}
-    for field in field_names:
-        field_rows = non_null_maps[field]
-        if not field_rows:
-            result[field] = []
-        elif field_rows == all_rows:
-            result[field] = 'all'
-        else:
-            result[field] = [other for other in field_names if field_rows <= non_null_maps[other]]
-    return result
+    return distinct, distinct == len(entities)
 
 
 _FOREIGN_KEYS = {
@@ -138,14 +208,9 @@ def build_resource(entity_type, entities, descriptions_dict, types_dict, first_f
     rest = sorted(set(all_field_names) - set(first_fields))
     ordered_fields = first + rest
 
-    non_null_maps = {}
-    field_stats = {}
-    for field_name in ordered_fields:
-        cardinality, is_unique, non_null_indices = _compute_field_stats(entities, field_name)
-        field_stats[field_name] = (cardinality, is_unique)
-        non_null_maps[field_name] = non_null_indices
-
-    overlapping = compute_overlapping_fields(ordered_fields, non_null_maps, row_count)
+    field_stats = {
+        field_name: _compute_field_stats(entities, field_name) for field_name in ordered_fields
+    }
 
     fields = []
     for field_name in ordered_fields:
@@ -155,11 +220,10 @@ def build_resource(entity_type, entities, descriptions_dict, types_dict, first_f
             {
                 'name': field_name,
                 'type': dp_type,
-                'description': descriptions_dict.get(field_name, ''),
+                'description': _field_description(field_name, descriptions_dict),
                 'udi:cardinality': cardinality,
                 'udi:unique': is_unique,
                 'udi:data_type': _udi_data_type(dp_type),
-                'udi:overlapping_fields': overlapping[field_name],
             }
         )
 
