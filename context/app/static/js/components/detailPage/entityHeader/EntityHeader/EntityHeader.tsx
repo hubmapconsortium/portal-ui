@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { animated } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import Box from '@mui/material/Box';
 
 import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
@@ -20,7 +20,14 @@ const visualizationSelector = (state: VisualizationStore) => ({
 });
 
 function Header() {
-  const { springs, view, setView, summaryHeight, setSummaryHeight } = useEntityStore();
+  const {
+    springs,
+    view,
+    setView,
+    summaryHeight,
+    setSummaryHeight,
+    summaryComponentObserver: { summaryInView },
+  } = useEntityStore();
   const startViewChangeSpring = useStartViewChangeSpring();
   const isLargeDesktop = useIsLargeDesktop();
   const { vizIsFullscreen } = useVisualizationStore(useShallow(visualizationSelector));
@@ -72,6 +79,13 @@ function Header() {
     wasLargeDesktop.current = isLargeDesktop;
   }, [isLargeDesktop, handleViewChange, view]);
 
+  // The header keeps its sticky slot at all times so that section offsets and visualization
+  // sizing stay stable, but the container itself should not be visible until the summary
+  // title scrolls out of view. It is also revealed when expanded or when a viz is fullscreen,
+  // since it hosts the controls for both.
+  const isRevealed = !summaryInView || view !== 'narrow' || vizIsFullscreen;
+  const { opacity } = useSpring({ opacity: isRevealed ? 1 : 0 });
+
   const [springValues] = springs;
 
   if (springValues[0] === undefined) {
@@ -79,7 +93,17 @@ function Header() {
   }
 
   return (
-    <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={springValues[0]}>
+    <AnimatedPaper
+      elevation={4}
+      data-testid="entity-header"
+      sx={{ overflow: 'hidden' }}
+      style={{
+        ...springValues[0],
+        opacity,
+        // Hidden rather than merely transparent so the collapsed header cannot be clicked or tabbed into.
+        visibility: opacity.to((o) => (o === 0 ? 'hidden' : 'visible')),
+      }}
+    >
       <Box>
         <EntityHeaderContent setView={handleViewChange} view={view} />
         {isLargeDesktop && (

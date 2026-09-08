@@ -1,0 +1,1 @@
+- The entity header bar on detail pages is now hidden while the page is scrolled to the top, instead of showing an empty bar with its action buttons. It fades in once the page title scrolls out of view, and stays visible whenever the header is expanded or a visualization is fullscreen.
