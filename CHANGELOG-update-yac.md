@@ -1,0 +1,9 @@
+- Upgrade `udi-yac` (Say & See chat) from 0.2.4 to 0.3.0, which scopes the chat's CSS custom properties to its own root element instead of leaking them onto `:root` portal-wide.
+- Upgrade `udiagent` from 0.2.6 to 0.3.0, so CI and local development test against the version production already resolves.
+- Fix Say & See chat lists rendering without bullets or numbers: the chat sets the marker on the list and lets each item inherit it, but the portal's global `li { list-style: none }` reset matched the items directly and won.
+- Fix Say & See returning an empty card for questions like "filter to datasets with assay type = Xenium": the agent was choosing `assay_type`, a sparse legacy ingest field that is empty for ~79% of datasets and never contains values such as Xenium, instead of `dataset_type`. `assay_type` is now excluded from the chat's schema, and `dataset_type` is described as the primary field for assay questions.
+- Request the top-level assay, processing, organ and count fields from Elasticsearch for the Say & See datapackage. `raw_dataset_type` in particular is populated for every dataset, where the previously-used `dataset_type` reached the export only via optional CEDAR metadata and was blank for 14% of rows.
+- List every donor a dataset or sample derives from in a new `donors.hubmap_id` column. The joinable `donor.hubmap_id` holds only the first, so multi-donor entities previously appeared to have one donor.
+- Render list-valued columns in the Say & See exports as comma-separated text instead of a Python list literal, so organ values read `Kidney (Left)` rather than `['Kidney (Left)']`.
+- Stop publishing `created_by_user_email` in the Say & See datapackage and metadata exports.
+- Drop the `udi:overlapping_fields` entry from the datapackage. Nothing read it, and computing it accounted for roughly a quarter of the time spent building each resource and 71% of the response size.
