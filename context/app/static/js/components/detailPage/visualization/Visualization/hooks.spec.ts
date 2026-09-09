@@ -1,6 +1,10 @@
-import { renderHook, act } from 'test-utils/functions';
+import React, { PropsWithChildren } from 'react';
+import { renderHook, act, AllTheProviders, appProviderToken } from 'test-utils/functions';
 import useSWR from 'swr';
+import LZString from 'lz-string';
 
+import { AppContext, AppContextType } from 'js/components/Contexts';
+import { SHARED_TOKEN_PLACEHOLDER } from '../vitessceTokens';
 import { useVitessceConfig } from './hooks';
 
 // The hook fetches a static config via SWR when ?vitessce-conf= is present; mock only the
@@ -144,5 +148,105 @@ describe('useVitessceConfig', () => {
     const { result } = renderHook(() => useVitessceConfig({ vitData }));
 
     expect(typeof result.current.setLocalVitessceStateDebounced).toBe('function');
+  });
+
+  describe('shared-token placeholders', () => {
+    // The cases above pass a deliberately malformed fragment so that `decodeURLParamsToConf` throws
+    // into the catch branch. These are the first to exercise a successful decode, so build the
+    // fragment the way `encodeConfInUrl` does — directly, to avoid its `bowser` UA sniffing.
+    function encodeFragment(conf: object) {
+      const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(conf));
+      return `#vitessce_conf_length=${compressed.length}&vitessce_conf_version=0.0.1&vitessce_conf=${compressed}`;
+    }
+
+    const sharedConf = (name = 'conf1') => ({
+      name,
+      datasets: [
+        {
+          files: [
+            { url: `https://a/x.ome.tif?token=${SHARED_TOKEN_PLACEHOLDER}` },
+            {
+              url: 'https://a/y.zarr',
+              requestInit: { headers: { Authorization: `Bearer ${SHARED_TOKEN_PLACEHOLDER}` } },
+            },
+          ],
+        },
+      ],
+    });
+
+    // `vitData` is an effect dependency, so every case must pass a stable reference — an inline
+    // object literal would re-run the effect on each render and loop forever.
+    const serverDefault = { name: 'server-default' };
+
+    test("substitutes the viewer's own token", () => {
+      mockWindowLocation(encodeFragment(sharedConf()));
+      const { result } = renderHook(() => useVitessceConfig({ vitData: serverDefault }));
+
+      expect(result.current.localVitessceState).toEqual({
+        name: 'conf1',
+        datasets: [
+          {
+            files: [
+              { url: `https://a/x.ome.tif?token=${appProviderToken}` },
+              {
+                url: 'https://a/y.zarr',
+                requestInit: { headers: { Authorization: `Bearer ${appProviderToken}` } },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    test('strips credentials for a viewer with no token', () => {
+      mockWindowLocation(encodeFragment(sharedConf()));
+      // A stable value object: a fresh literal per render would re-render every context consumer.
+      const anonymousAppContext = { groupsToken: '' } as AppContextType;
+      const { result } = renderHook(() => useVitessceConfig({ vitData: serverDefault }), {
+        // Nest inside AllTheProviders rather than replacing it: customRenderHook spreads options
+        // *after* its own `wrapper`, so a bare `wrapper` option would drop Providers entirely and
+        // break useQueryState/SWRConfig. The inner AppContext provider wins for this subtree.
+        wrapper: ({ children }: PropsWithChildren) =>
+          React.createElement(
+            AllTheProviders,
+            null,
+            React.createElement(AppContext.Provider, { value: anonymousAppContext }, children),
+          ),
+      });
+
+      expect(result.current.localVitessceState).toEqual({
+        name: 'conf1',
+        datasets: [{ files: [{ url: 'https://a/x.ome.tif' }, { url: 'https://a/y.zarr' }] }],
+      });
+    });
+
+    test('restores into the matching entry of a multi-dataset config', () => {
+      mockWindowLocation(encodeFragment(sharedConf('conf2')));
+      const vitData = [{ name: 'conf1' }, { name: 'conf2' }];
+      const { result } = renderHook(() => useVitessceConfig({ vitData }));
+
+      expect(result.current.vitessceSelection).toEqual(1);
+      const configs = result.current.vitessceConfig as { name: string }[];
+      expect(configs[0]).toEqual({ name: 'conf1' });
+      expect(JSON.stringify(configs[1])).toContain(`token=${appProviderToken}`);
+    });
+
+    test('passes a placeholder-free config through untouched', () => {
+      // Regression guard: links shared before placeholders existed must behave exactly as before.
+      const legacyConf = { name: 'conf1', datasets: [{ files: [{ url: 'https://a/x.ome.tif?token=stale' }] }] };
+      mockWindowLocation(encodeFragment(legacyConf));
+      const { result } = renderHook(() => useVitessceConfig({ vitData: serverDefault }));
+
+      expect(result.current.localVitessceState).toEqual(legacyConf);
+    });
+
+    test('restores the static config from ?vitessce-conf= too', () => {
+      mockWindowLocation('', '?vitessce-conf=codex');
+      staticConfData = sharedConf('static-codex');
+      const { result } = renderHook(() => useVitessceConfig({ vitData: serverDefault }));
+
+      expect(JSON.stringify(result.current.currentConfig)).toContain(`token=${appProviderToken}`);
+      expect(JSON.stringify(result.current.currentConfig)).not.toContain(SHARED_TOKEN_PLACEHOLDER);
+    });
   });
 });

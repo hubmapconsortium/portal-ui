@@ -16,7 +16,7 @@
     "@mui/system": "^7.3.11",
     "@mui/x-date-pickers": "^8.28.7",
     "@react-spring/web": "^10.0.3",
-    "@react-three/xr": "^6.0.0",
+    "@react-three/xr": "^6.6.30",
     "@tanstack/react-virtual": "^3.2.0",
     "@visx/axis": "^3.10.1",
     "@visx/event": "^3.3.0",
@@ -65,7 +65,7 @@
     "uuid": "^14.0.0",
     "vega": "^6.2.0",
     "vega-embed": "^7.1.0",
-    "vitessce": "4.0.0",
+    "vitessce": "4.0.6",
     "zod": "^3.25.76",
     "zustand": "^5.0.13"
   },
