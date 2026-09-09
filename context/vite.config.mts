@@ -60,6 +60,10 @@ function webpackStyleManifest(): Plugin {
   };
 }
 
+// Chunks Vitessce only reaches through `import()` from SpatialWrapper /
+// SpatialThree. Hashes change between releases, so match on the stable prefix.
+const VITESSCE_XR_CHUNK = /\/(?:vitessce|@vitessce\/[^/]+)\/dist\/(?:XR|xrStore|GeometryAndMeshXR)[^/]*\.js$/;
+
 export default defineConfig(({ command }) => ({
   // Dev: serve at the root of localhost:5001 so the terminal shows a clean
   // URL and the browser can navigate there directly. Production: bundles
@@ -79,6 +83,13 @@ export default defineConfig(({ command }) => ({
         chunkFileNames: 'assets/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash][extname]',
         manualChunks(id) {
+          // Vitessce's XR entry points are meant to stay lazy: they call
+          // getXRModule() at module scope and throw
+          // "@react-three/xr is not loaded" unless SpatialWrapper has already
+          // awaited loadXRModule(). Folding them into the eagerly-loaded
+          // `vendors` chunk evaluates them on every page. Leave them
+          // unassigned so Rollup keeps them behind their dynamic imports.
+          if (VITESSCE_XR_CHUNK.test(id)) return undefined;
           if (id.includes('/node_modules/')) return 'vendors';
         },
       },
