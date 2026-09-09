@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.52.0 - 2026-09-09
+
+- Restore missing text to homepage datasets section description.
+- Stop shipping the nested `ancestors`, `descendants`, `immediate_ancestors`, `immediate_descendants`, and `donors` lists to the browser on entity detail pages. Each element is a whole entity document, so on datasets with many ancestors these dominated the page's blocking inline data and delayed the first render; nothing on the client read them. The raw `.json` view of an entity still returns the complete document.
+- Request only the fields it needs when looking up an entity's immediate descendants for the provenance graph, instead of downloading the whole document.
+- Shared visualization links no longer embed the sharer's access token. The token is replaced with a placeholder on export and swapped for the viewer's own token when the link is opened, so one link works for any authorized user instead of breaking once the sharer's session expires.
+- Opening a shared visualization that references data you cannot read now explains why, instead of rendering an empty visualization: visitors who are logged out are prompted to log in, and logged-in users without access to the dataset are told so.
+- Visualization configurations exported to a file or the clipboard still contain a real access token, and now warn that it will expire.
+- Publication vignettes no longer embed an access token in their visualization configurations when the publication's data is public.
+- Update to Vitessce 4.0.6, which resolves 3D data scaling incorrectly in the spatialBeta view, improves spatial controller layout in narrow containers, sorts image channels, and makes datasets with millions of cells usable: selecting a gene no longer downloads the entire expression matrix, cell set coloring and tooltips no longer stall the tab, chunks are no longer fetched twice, and observations with no annotation are grouped under a labeled set instead of one named `undefined`.
+
+
+
 ## v1.51.2 - 2026-08-25
 
 - Add filter & browse mode link to the homepage's datasets section.
