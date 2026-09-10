@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.52.1 - 2026-09-09
+
+- Increase visualization zIndex to ensure fullscreen visualization covers metadata tables.
+
+
+
 ## v1.52.0 - 2026-09-09
 
 - Restore missing text to homepage datasets section description.

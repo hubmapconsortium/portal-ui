@@ -1,1 +1,0 @@
-- Increase visualization zIndex to ensure fullscreen visualization covers metadata tables.
