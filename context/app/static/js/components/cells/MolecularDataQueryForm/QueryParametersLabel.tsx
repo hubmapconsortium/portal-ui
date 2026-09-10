@@ -3,7 +3,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { isScFindMethod, useCellVariableNames, useMolecularDataQueryFormState } from './hooks';
+import { useCellVariableNames, useMolecularDataQueryFormState } from './hooks';
 import QuerySubtitle from './QuerySubtitle';
 
 function VariableText() {
@@ -11,34 +11,17 @@ function VariableText() {
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
   const cellVariableNames = useCellVariableNames();
-  const expressionLevel = watch('minimumExpressionLevel');
-  const threshold = watch('minimumCellPercentage');
   const pathway = watch('pathway');
 
   const variables = cellVariableNames.join(', ');
   switch (queryType) {
     case 'gene':
-      if (isScFindMethod(queryMethod)) {
-        if (pathway) {
-          return <QuerySubtitle additionalText={variables}>{`${queryMethod} | ${pathway.full}`}</QuerySubtitle>;
-        }
-        return <QuerySubtitle additionalText={variables}>{queryMethod}</QuerySubtitle>;
+      if (pathway) {
+        return <QuerySubtitle additionalText={variables}>{`${queryMethod} | ${pathway.full}`}</QuerySubtitle>;
       }
-
-      return (
-        <QuerySubtitle additionalText={variables}>
-          Expression Level 10<sup>{expressionLevel}</sup> | {threshold}% Cell
-        </QuerySubtitle>
-      );
-
+      return <QuerySubtitle additionalText={variables}>{queryMethod}</QuerySubtitle>;
     case 'cell-type':
       return <QuerySubtitle additionalText={variables}>{queryMethod}</QuerySubtitle>;
-    case 'protein':
-      return (
-        <QuerySubtitle additionalText={variables}>
-          Abundance Level 10<sup>{expressionLevel}</sup> | {threshold}% Cell
-        </QuerySubtitle>
-      );
     default:
       return '';
   }

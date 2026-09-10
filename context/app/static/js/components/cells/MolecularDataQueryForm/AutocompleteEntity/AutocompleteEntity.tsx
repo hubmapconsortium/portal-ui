@@ -18,7 +18,7 @@ import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
 import { QueryType, queryTypes } from '../../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
-import { isScFindMethod, useQueryType, useMolecularDataQueryFormState, getScFindModalityLabel } from '../hooks';
+import { useQueryType, useMolecularDataQueryFormState, getScFindModalityLabel } from '../hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
 import { CustomChip } from './EntityChips';
 
@@ -28,7 +28,6 @@ function buildHelperText(entity: string): string {
 
 const labelAndHelperTextProps: Record<QueryType, Pick<TextFieldProps, 'label' | 'helperText'>> = {
   gene: { label: 'Gene Symbol', helperText: buildHelperText('gene symbols') },
-  protein: { label: 'Protein', helperText: buildHelperText('proteins') },
   'cell-type': { label: 'Cell Type', helperText: buildHelperText('cell types') },
 };
 interface AutocompleteEntityProps<T extends QueryType> {
@@ -80,7 +79,6 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
   });
 
   const queryMethod = useWatch({ control, name: 'queryMethod' });
-  const isCellsAPI = !isScFindMethod(queryMethod);
 
   const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring, queryMethod });
 
@@ -242,16 +240,14 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       />
       {targetEntity === 'gene' && invalidGenes.length > 0 && (
         <Alert severity="info" sx={{ mt: 1 }}>
-          The following genes from the selected pathway are not available in the{' '}
-          {isCellsAPI ? 'selected modality in the Cells API' : 'scFind'} Query Method and were excluded:{' '}
+          The following genes from the selected pathway are not available in the scFind Query Method and were excluded:{' '}
           <strong>{invalidGenes.join(', ')}</strong>
         </Alert>
       )}
       {allGenesExcludedPathway && (
         <Alert severity="warning" sx={{ mt: 1 }}>
-          All genes in <strong>{allGenesExcludedPathway}</strong> are not present in the{' '}
-          {isCellsAPI ? 'selected modality in the Cells API' : `scFind ${getScFindModalityLabel(queryMethod)}`} index.
-          The pathway has been deselected.
+          All genes in <strong>{allGenesExcludedPathway}</strong> are not present in the scFind{' '}
+          {getScFindModalityLabel(queryMethod)} index. The pathway has been deselected.
         </Alert>
       )}
     </Box>

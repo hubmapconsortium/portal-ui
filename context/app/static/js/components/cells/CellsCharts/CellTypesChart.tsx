@@ -11,8 +11,7 @@ import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { decimal, percent } from 'js/helpers/number-format';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
-import { useCellTypesChartsData } from './hooks';
-import { extractLabel } from '../CrossModalityResults/utils';
+import { extractLabel } from '../utils';
 import { useCellVariableNames, useIsQueryType } from '../MolecularDataQueryForm/hooks';
 import Stack from '@mui/material/Stack';
 import { scaleOrdinal } from '@visx/scale';
@@ -207,52 +206,6 @@ function CellTypesChart({
         </ChartLoader>
       </TotalCellsContext.Provider>
     </ChartWrapper>
-  );
-}
-
-export function CrossModalityCellTypesChart({ uuid }: Dataset) {
-  const cellVariableNames = useCellVariableNames();
-  const { expressionData, isLoading } = useCellTypesChartsData({
-    uuid,
-    cellVariableNames,
-  });
-
-  const cellNames = useMemo(() => {
-    return cellVariableNames.map((cellTypeName) => extractLabel(cellTypeName)).filter(Boolean);
-  }, [cellVariableNames]);
-
-  const [cellTypeCounts, totalCells] = useMemo(() => {
-    if (!expressionData) {
-      return [{}, 0] as const;
-    }
-    const counts = expressionData.results.reduce((acc: CellTypeCounts, result) => {
-      const clid = result.cell_type;
-      if (!clid) {
-        return acc;
-      }
-      if (acc[clid]) {
-        acc[clid] = {
-          value: acc[clid].value + 1,
-        };
-      } else {
-        acc[clid] = {
-          value: 1,
-        };
-      }
-      return acc;
-    }, {});
-
-    const total = Object.values(counts).reduce((acc, count) => acc + count.value, 0);
-    return [counts, total] as const;
-  }, [expressionData]);
-
-  return (
-    <CellTypesChart
-      totalCells={totalCells}
-      cellTypeCounts={cellTypeCounts}
-      isLoading={isLoading}
-      cellNames={cellNames}
-    />
   );
 }
 

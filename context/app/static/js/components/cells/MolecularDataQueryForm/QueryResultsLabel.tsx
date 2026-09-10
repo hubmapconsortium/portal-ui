@@ -1,12 +1,10 @@
 import React from 'react';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
-import useSWR from 'swr';
 import Typography from '@mui/material/Typography';
 import StepLabel from '@mui/material/StepLabel';
 import Stack from '@mui/material/Stack';
-import { getScFindModality, isScFindMethod, useMolecularDataQueryFormState } from './hooks';
+import { getScFindModality, useMolecularDataQueryFormState } from './hooks';
 import { useResultsProvider } from './ResultsProvider';
-import CellsService from '../CellsService';
 import QuerySubtitle from './QuerySubtitle';
 
 function SCFindQueryResultsDisplay({ modality }: { modality?: string }) {
@@ -19,33 +17,6 @@ function SCFindQueryResultsDisplay({ modality }: { modality?: string }) {
     <QuerySubtitle>
       {resultCount} Datasets Matching Query Parameters / {totalDatasets} Indexed Datasets ({percentage}%)
     </QuerySubtitle>
-  );
-}
-
-const fetchTotalCellsApiDatasets = async () => {
-  const cellService = new CellsService();
-  const resultCount = await cellService.getIndexedDatasetCount();
-  return resultCount;
-};
-
-function CrossModalityQueryResultsDisplay() {
-  const results = useSWR<number, Error, string>('crossModalityIndexedDatasets', fetchTotalCellsApiDatasets);
-  const { data: totalDatasets, isLoading, error } = results;
-  const resultCount = useResultsProvider((state) => state.resultCount);
-  if (isLoading) {
-    return <>Loading...</>;
-  }
-
-  if (error || !totalDatasets) {
-    return <>Error: {error?.message ?? 'No datasets found.'}</>;
-  }
-
-  const percentage = ((resultCount / totalDatasets) * 100).toFixed(1);
-
-  return (
-    <>
-      {resultCount} Datasets Matching Query Parameters / {totalDatasets} Indexed Datasets ({percentage}%)
-    </>
   );
 }
 
@@ -69,14 +40,7 @@ function QueryResultsVariables() {
     return <>Error: {(error as Error)?.message ?? error ?? 'No datasets found'}</>;
   }
 
-  if (isScFindMethod(queryMethod)) {
-    return <SCFindQueryResultsDisplay modality={getScFindModality(queryMethod)} />;
-  }
-  if (['crossModality', 'crossModalityRNA', 'crossModalityATAC'].includes(queryMethod)) {
-    return <CrossModalityQueryResultsDisplay />;
-  }
-
-  return <>Unknown query method. Please contact support.</>;
+  return <SCFindQueryResultsDisplay modality={getScFindModality(queryMethod)} />;
 }
 
 interface QueryResultsLabelProps {
