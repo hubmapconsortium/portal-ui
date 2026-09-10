@@ -9,12 +9,12 @@ import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrack
 
 const queryMethods = {
   gene: [
-    { value: 'scFind', label: 'scFind - RNAseq experiments (gene expression)', disabled: false },
-    { value: 'scFindATAC', label: 'scFind - ATACseq experiments (DNA accessibility)', disabled: false },
+    { value: 'scFind', label: 'RNAseq (gene expression)', disabled: false },
+    { value: 'scFindATAC', label: 'ATACseq (DNA accessibility)', disabled: false },
   ],
   'cell-type': [
-    { value: 'scFind', label: 'scFind (RNAseq)', disabled: false },
-    { value: 'scFindATAC', label: 'scFind (ATACseq)', disabled: false },
+    { value: 'scFind', label: 'RNAseq (gene expression)', disabled: false },
+    { value: 'scFindATAC', label: 'ATACseq (DNA accessibility)', disabled: false },
   ],
 };
 
