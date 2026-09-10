@@ -847,17 +847,6 @@ wheels = [
 ]
 
 [[package]]
-name = "hubmap-api-py-client"
-version = "0.0.11"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "requests" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/64/d3/92e8ff84f95b3a800a54f985139ce8e40ca5b19dccb2dbad79d8c5540504/hubmap_api_py_client-0.0.11-py3-none-any.whl", hash = "sha256:65576f80fb449688027cabd43cd7f130e52fa8f43c4e823a579b6111085203e1", size = 8274, upload-time = "2024-05-01T19:15:50.447Z" },
-]
-
-[[package]]
 name = "hubmap-commons"
 version = "2.1.21"
 source = { registry = "https://pypi.org/simple" }
@@ -887,7 +876,6 @@ dependencies = [
     { name = "flask", extra = ["async"] },
     { name = "globus-sdk" },
     { name = "gunicorn" },
-    { name = "hubmap-api-py-client" },
     { name = "hubmap-commons" },
     { name = "portal-visualization", extra = ["full"] },
     { name = "python-frontmatter" },
@@ -919,7 +907,6 @@ requires-dist = [
     { name = "flask", extras = ["async"], specifier = ">=3.1.1" },
     { name = "globus-sdk", specifier = ">=3.59.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
-    { name = "hubmap-api-py-client", specifier = ">=0.0.11" },
     { name = "hubmap-commons", specifier = ">=2.1.20" },
     { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.13" },
     { name = "python-frontmatter", specifier = ">=1.1.0" },

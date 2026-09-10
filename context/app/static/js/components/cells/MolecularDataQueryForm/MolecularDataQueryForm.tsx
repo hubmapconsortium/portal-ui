@@ -25,9 +25,7 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
 
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
-  const threshold = watch('minimumCellPercentage');
   const genes = watch('genes');
-  const proteins = watch('proteins');
   const cellTypes = watch('cellTypes');
 
   const [activeStep, setActiveStep] = useState(0);
@@ -44,7 +42,7 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
   }, [methods.formState.isSubmitSuccessful]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
-    const cellVariableNames = getCellVariableNames(queryType, genes, proteins, cellTypes);
+    const cellVariableNames = getCellVariableNames(queryType, genes, cellTypes);
 
     // TODO: Once we add pathways, the pathway name should be present here too for gene queries
     track('Parameters / Run Query', `${data.queryType} ${queryMethod} ${cellVariableNames.join(', ')}`);
@@ -92,7 +90,7 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
     // can't be replaced by derived state.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveStep(0);
-  }, [threshold, genes, proteins, cellTypes, reset]);
+  }, [genes, cellTypes, reset]);
 
   const handleBackToParameters = useEventCallback(() => {
     setActiveStep(0);

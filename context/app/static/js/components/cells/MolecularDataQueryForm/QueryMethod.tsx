@@ -11,50 +11,19 @@ const queryMethods = {
   gene: [
     { value: 'scFind', label: 'scFind - RNAseq experiments (gene expression)', disabled: false },
     { value: 'scFindATAC', label: 'scFind - ATACseq experiments (DNA accessibility)', disabled: false },
-    {
-      value: 'crossModalityRNA',
-      label: 'Cells Cross-Modality - RNAseq experiments (gene expression)',
-      disabled: false,
-    },
-    {
-      value: 'crossModalityATAC',
-      label: 'Cells Cross-Modality - ATACseq experiments (DNA accessibility)',
-      disabled: false,
-    },
   ],
   'cell-type': [
-    { value: 'scFind', label: 'scFind (RNASeq)', disabled: false },
-    { value: 'scFindATAC', label: 'scFind (ATACSeq)', disabled: false },
-    { value: 'crossModality', label: 'Cells Cross-Modality', disabled: false },
+    { value: 'scFind', label: 'scFind (RNAseq)', disabled: false },
+    { value: 'scFindATAC', label: 'scFind (ATACseq)', disabled: false },
   ],
-  protein: undefined,
 };
 
 const scFindLink = <OutboundIconLink href="https://doi.org/10.1038/s41592-021-01076-9">scFind</OutboundIconLink>;
 
 const description = {
-  gene: (
-    <>
-      Choose the query method to retrieve data. {scFindLink} and Cells Cross-Modality support RNAseq and ATACseq
-      analyses.
-    </>
-  ),
-  'cell-type': (
-    <>
-      Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq data. Cross-Modality supports
-      RNAseq, ATACseq and proteomic datasets.
-    </>
-  ),
-  protein: undefined,
+  gene: <>Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq analyses.</>,
+  'cell-type': <>Choose the query method to retrieve data. {scFindLink} supports RNAseq and ATACseq data.</>,
 };
-
-function ProteinQueryMethod() {
-  return (
-    <FormFieldContainer title="Query Method">
-      <FormFieldSubtitle>Protein queries currently only support the Cells Cross-Modality method.</FormFieldSubtitle>
-    </FormFieldContainer>
-  );
-}
 
 export default function QueryMethod() {
   const { watch, register } = useMolecularDataQueryFormState();
@@ -62,10 +31,6 @@ export default function QueryMethod() {
   const queryType = watch('queryType');
 
   const { track } = useMolecularDataQueryFormTracking();
-
-  if (queryType === 'protein') {
-    return <ProteinQueryMethod />;
-  }
 
   const currentQueryMethods = queryMethods[queryType];
   const currentDescription = description[queryType];

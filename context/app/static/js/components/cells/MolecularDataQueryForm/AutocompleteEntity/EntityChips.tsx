@@ -45,7 +45,7 @@ export function CustomChip({ targetEntity, ...props }: CustomChipProps) {
   switch (targetEntity) {
     case 'gene':
       return <GeneChip {...props} />;
-    // Add other cases for different entities when needed, e.g. protein, cell-type, etc.
+    // Add other cases for different entities when needed, e.g. cell-type, etc.
     default:
       return <BaseChip {...props} />;
   }

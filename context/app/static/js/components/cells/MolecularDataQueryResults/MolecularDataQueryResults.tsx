@@ -1,8 +1,7 @@
 import React from 'react';
 
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
-import { CrossModalityCellTypeResults, CrossModalityGeneOrProteinResults } from '../CrossModalityResults';
-import { getScFindModality, isScFindMethod, useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
+import { getScFindModality, useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
 import LoadingResults from './LoadingResults';
 import { SCFindCellTypeQueryResults } from '../SCFindResults';
 import SCFindGeneQueryResultsLoader from '../SCFindResults/SCFindGeneQueryResults';
@@ -14,33 +13,23 @@ function Results() {
   const { sessionId } = useMolecularDataQueryFormTracking();
 
   const queryType = watch('queryType');
-  const queryMethod = watch('queryMethod');
+  const modality = getScFindModality(watch('queryMethod'));
 
-  if (isScFindMethod(queryMethod)) {
-    const modality = getScFindModality(queryMethod);
-    const trackingInfo = {
-      action: 'Results',
-      label: sessionId,
-      category: 'Molecular and Cellular Query' as const,
-    };
+  const trackingInfo = {
+    action: 'Results',
+    label: sessionId,
+    category: 'Molecular and Cellular Query' as const,
+  };
 
-    return (
-      <SCFindModalityProvider value={modality}>
-        {queryType === 'cell-type' ? (
-          <SCFindCellTypeQueryResults trackingInfo={trackingInfo} />
-        ) : queryType === 'gene' ? (
-          <SCFindGeneQueryResultsLoader trackingInfo={trackingInfo} />
-        ) : null}
-      </SCFindModalityProvider>
-    );
-  }
-
-  switch (queryType) {
-    case 'cell-type':
-      return <CrossModalityCellTypeResults />;
-    default:
-      return <CrossModalityGeneOrProteinResults />;
-  }
+  return (
+    <SCFindModalityProvider value={modality}>
+      {queryType === 'cell-type' ? (
+        <SCFindCellTypeQueryResults trackingInfo={trackingInfo} />
+      ) : (
+        <SCFindGeneQueryResultsLoader trackingInfo={trackingInfo} />
+      )}
+    </SCFindModalityProvider>
+  );
 }
 
 function ResultsWithLoader() {
