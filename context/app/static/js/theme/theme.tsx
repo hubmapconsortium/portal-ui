@@ -334,7 +334,7 @@ const theme = createTheme({
     dropdownOffset: 1001,
     header: 1000,
     dropdown: 50,
-    visualization: 3,
+    visualization: 11, // above sticky table HeaderCell (zIndex 10) so fullscreen viz covers metadata tables
     fileBrowserHeader: 1,
   },
   breakpoints: {
