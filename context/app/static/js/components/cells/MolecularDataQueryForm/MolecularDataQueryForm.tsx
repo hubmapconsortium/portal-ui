@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useEventCallback } from '@mui/material/utils';
 import Stack from '@mui/material/Stack';
@@ -15,8 +15,48 @@ import { getCellVariableNames, useMolecularDataQueryFormState } from './hooks';
 import MolecularDataQueryFormProvider from './MolecularDataQueryFormProvider';
 import QueryParametersLabel from './QueryParametersLabel';
 import QueryResultsLabel from './QueryResultsLabel';
+import { formValuesToParams, useMolecularDataQueryUrlState } from './urlState';
+import { usePathwayAutocompleteQuery } from './AutocompleteEntity/hooks';
 
-export function MolecularDataQueryForm({ children }: PropsWithChildren) {
+type UrlState = ReturnType<typeof useMolecularDataQueryUrlState>;
+
+/**
+ * Restores the pathway chip from a shared link.
+ *
+ * Gated on the form already being submitted: useSelectedPathwayParticipants watches `pathway`
+ * and, while the form is unsubmitted, replaces `genes` wholesale with the pathway's participants.
+ * Hydrating earlier would therefore discard the gene list the link carried and bounce the user
+ * back to the parameters step.
+ *
+ * ponytail: relies on the auto-submit landing first. A URL carrying a pathway but no genes is not
+ * auto-submitted, so it hydrates immediately and the participants effect populates the genes --
+ * which is what we want there.
+ */
+function useHydratePathwayFromUrl({ pathwayCode, hasQuery }: UrlState) {
+  const { setValue, formState } = useMolecularDataQueryFormState();
+  const { options } = usePathwayAutocompleteQuery('');
+  const hydratedRef = useRef(false);
+
+  const canHydrate = formState.isSubmitted || !hasQuery;
+
+  useEffect(() => {
+    if (hydratedRef.current || !pathwayCode || !canHydrate) {
+      return;
+    }
+    const match = options.find((option) => option.values?.[0] === pathwayCode);
+    if (!match) {
+      return;
+    }
+    hydratedRef.current = true;
+    setValue('pathway', match);
+  }, [pathwayCode, canHydrate, options, setValue]);
+}
+
+interface MolecularDataQueryFormInnerProps extends PropsWithChildren {
+  urlState: UrlState;
+}
+
+export function MolecularDataQueryForm({ children, urlState }: MolecularDataQueryFormInnerProps) {
   const methods = useMolecularDataQueryFormState();
   const { watch, reset } = methods;
   const { track } = useMolecularDataQueryFormTracking();
@@ -41,12 +81,19 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
     }
   }, [methods.formState.isSubmitSuccessful]);
 
-  const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
+  const runQuery = useEventCallback((data: MolecularDataQueryFormState) => {
     const cellVariableNames = getCellVariableNames(queryType, genes, cellTypes);
 
     // TODO: Once we add pathways, the pathway name should be present here too for gene queries
     track('Parameters / Run Query', `${data.queryType} ${queryMethod} ${cellVariableNames.join(', ')}`);
     methods.reset(data, { keepValues: true, keepDirty: false });
+  });
+
+  const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
+    // Share the query as a link. A query restored from the URL runs through runQuery instead, so
+    // that it isn't pushed back onto the history stack it came from.
+    void urlState.setQueryParams(formValuesToParams(data), { history: 'push' });
+    runQuery(data);
   });
 
   const onError = useEventCallback((errors: FieldErrors<MolecularDataQueryFormState>) => {
@@ -92,6 +139,26 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
     setActiveStep(0);
   }, [genes, cellTypes, reset]);
 
+  const autoSubmittedRef = useRef(false);
+
+  // Run a query restored from a shared link so the recipient lands on results. Declared after the
+  // reset effect above, which also fires on mount and would otherwise undo this; handleSubmit
+  // resolves asynchronously, so isSubmitSuccessful lands after both mount effects.
+  useEffect(() => {
+    if (autoSubmittedRef.current || !urlState.hasQuery) {
+      return;
+    }
+    autoSubmittedRef.current = true;
+    methods
+      .handleSubmit(runQuery, onError)()
+      .catch((error) => {
+        console.error('Error running the query from the URL:', error);
+        toastError('An error occurred while running the shared query. Please try again.');
+      });
+  }, [urlState.hasQuery, methods, runQuery, onError, toastError]);
+
+  useHydratePathwayFromUrl(urlState);
+
   const handleBackToParameters = useEventCallback(() => {
     setActiveStep(0);
   });
@@ -119,9 +186,13 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
   );
 }
 export default function MolecularDataQueryFormWithProvider({ initialValues, children }: MolecularDataQueryFormProps) {
+  const urlState = useMolecularDataQueryUrlState();
+
   return (
-    <MolecularDataQueryFormProvider initialValues={initialValues}>
-      <MolecularDataQueryForm>{children}</MolecularDataQueryForm>
+    // Remount on back/forward so a restored URL rebuilds the form through the same path as a cold
+    // load, instead of patching the live form around the provider's own reset effects.
+    <MolecularDataQueryFormProvider key={urlState.formKey} initialValues={initialValues ?? urlState.initialValues}>
+      <MolecularDataQueryForm urlState={urlState}>{children}</MolecularDataQueryForm>
     </MolecularDataQueryFormProvider>
   );
 }
