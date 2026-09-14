@@ -18,8 +18,10 @@ import { postAndDownloadFile } from 'js/helpers/download';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { useAppContext } from 'js/components/Contexts';
+import { containsCredentials, replaceTokenWithPlaceholder } from '../vitessceTokens';
 import { createEmailWithUrl, getUrl } from './utils';
-import { DEFAULT_LONG_URL_WARNING } from './constants';
+import { CONFIG_FILENAME, DEFAULT_LONG_URL_WARNING, EXPIRING_TOKEN_WARNING } from './constants';
 import { FileIcon } from 'js/shared-styles/icons';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -60,10 +62,14 @@ function VisualizationShareButton({
   const isFullscreen = isFullscreenProp ?? Boolean(fullscreenVizId);
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const handleCopyClick = useHandleCopyClick();
-  const { toastError } = useSnackbarActions();
+  const { toastError, toastSuccess } = useSnackbarActions();
+  const { groupsToken } = useAppContext();
 
   const hasConfig = vitessceState != null;
   const urlOptions = { vizHubmapId: effectiveHubmapId, fullscreen: isFullscreen };
+
+  // Raw-config exports hand over a real, expiring token. Both of them say so the same way.
+  const credentialWarningSuffix = () => (containsCredentials(vitessceState) ? ` ${EXPIRING_TOKEN_WARNING}` : '');
 
   const copyLink = useEventCallback(() => {
     if (!hasConfig) return;
@@ -74,7 +80,10 @@ function VisualizationShareButton({
 
     let urlIsLong = false;
     const url = getUrl(
-      vitessceState,
+      // Swap the sharer's expiring token for a placeholder; the recipient's page swaps in their own
+      // token on load, so one link works for every authorized viewer. Redacting before encoding
+      // also means the long-URL check measures the payload that actually ships.
+      replaceTokenWithPlaceholder(vitessceState, groupsToken),
       () => {
         urlIsLong = true;
       },
@@ -91,8 +100,9 @@ function VisualizationShareButton({
       ...trackingInfo,
       action: `${trackingInfo.action} / Copy Visualization Configuration to Clipboard`,
     });
+    // A raw config is not a shareable link, so the token stays intact — but warn that it expires.
     const configString = JSON.stringify(vitessceState, null, 2);
-    handleCopyClick(configString);
+    handleCopyClick(configString, credentialWarningSuffix().trim() || undefined);
   });
 
   const downloadConf = useEventCallback(() => {
@@ -106,17 +116,20 @@ function VisualizationShareButton({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'vitessce_config.json';
+    link.download = CONFIG_FILENAME;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    // Mirrors the shape and severity of the copy toast that `useHandleCopyClick` emits: a
+    // confirmation, plus the expiry caveat when the config actually carries a credential.
+    toastSuccess(`Downloaded ${CONFIG_FILENAME}.${credentialWarningSuffix()}`);
   });
 
   const emailConf = useEventCallback(() => {
     if (!hasConfig) return;
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
-    createEmailWithUrl(vitessceState, urlOptions);
+    createEmailWithUrl(replaceTokenWithPlaceholder(vitessceState, groupsToken), urlOptions);
   });
 
   const downloadNotebook = useEventCallback(() => {

@@ -7,7 +7,12 @@ import { fetchSearchData } from './useSearchData';
 import { useAppContext } from 'js/components/Contexts';
 
 async function getEntityData(hubmapID: string, elasticsearchEndpoint: string, groupsToken: string) {
-  const query = { query: { match: { 'hubmap_id.keyword': hubmapID } } };
+  const query = {
+    query: { match: { 'hubmap_id.keyword': hubmapID } },
+    // Only the uuids are read below; without this the whole document comes back, including the
+    // nested ancestor/donor lists that dominate it.
+    _source: ['immediate_descendants.uuid'],
+  };
   const results = await fetchSearchData<Entity, unknown>(query, elasticsearchEndpoint, groupsToken);
   return results.hits.hits[0]._source;
 }

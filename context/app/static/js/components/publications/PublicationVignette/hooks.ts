@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { useAppContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { multiFetcher } from 'js/helpers/swr';
 import { VitessceConfig } from 'vitessce';
 import { fillUrls } from './utils';
@@ -13,7 +13,16 @@ interface PublicationVignetteConfsInput {
 
 export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }: PublicationVignetteConfsInput) {
   const { assetsEndpoint, groupsToken } = useAppContext();
-  // Extract file paths from the vignette object to form the urls to fetch for this vignette
+  const { entity } = useFlaskDataContext();
+  // Vignette assets live under the publication's own uuid, so the publication's access level decides
+  // whether the assets API needs a token at all. Embedding one for public data would put an expiring
+  // credential into every exported config for no benefit. Anything short of a positive `Public` —
+  // including the field being absent — keeps the previous behavior.
+  const assetsArePublic = entity?.mapped_data_access_level === 'Public';
+  const confToken = assetsArePublic ? '' : groupsToken;
+
+  // Extract file paths from the vignette object to form the urls to fetch for this vignette.
+  // This is a request-time credential that never enters a config, so it always uses the real token.
   const urls = vignette.figures?.map(
     ({ file }) => `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${file}?token=${groupsToken}`,
   );
@@ -22,15 +31,15 @@ export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }:
   if (data) {
     const urlHandler = (url: string, isZarr: boolean) => {
       return `${url.replace('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)}${
-        isZarr || !groupsToken ? '' : `?token=${groupsToken}`
+        isZarr || !confToken ? '' : `?token=${confToken}`
       }`;
     };
 
     const requestInitHandler = () => {
-      // Only include the Authorization header if the user is logged in/has a groups token
-      if (groupsToken) {
+      // Only include the Authorization header if the assets actually need authenticating
+      if (confToken) {
         return {
-          headers: { Authorization: `Bearer ${groupsToken}` },
+          headers: { Authorization: `Bearer ${confToken}` },
         };
       }
       return {};

@@ -72,8 +72,8 @@ function Footer({ isMaintenancePage }: FooterProps) {
                 Data Sharing Policy
               </OutboundLink>
               {!isMaintenancePage && (
-                <OutboundLink href="https://docs.hubmapconsortium.org/about#citation" variant="body2">
-                  Citing HuBMAP
+                <OutboundLink href="https://hubmapconsortium.org/acknowledgement-in-publications/" variant="body2">
+                  Acknowledgement in Publications
                 </OutboundLink>
               )}
             </FlexColumn>

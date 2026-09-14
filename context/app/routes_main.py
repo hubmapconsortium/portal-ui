@@ -115,6 +115,19 @@ def publications():
     )
 
 
+@blueprint.route('/publications/hubmap-data-portal')
+def hubmap_data_portal_publication():
+    # Vanity URL for the HuBMAP Data Portal paper, cited in print and elsewhere.
+    return redirect(
+        url_for(
+            'routes_browse.details',
+            type='publication',
+            uuid='6c9a473b6c49b85d58f1cdfd159a934b',
+        ),
+        code=301,
+    )
+
+
 @blueprint.route('/integrated-maps')
 def integrated_maps():
     organs = get_organs()

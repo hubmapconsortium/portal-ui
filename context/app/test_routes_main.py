@@ -120,6 +120,12 @@ def test_302_redirect(client, path, mocker):
     assert response.status == '302 FOUND'
 
 
+def test_301_hubmap_data_portal_publication(client):
+    response = client.get('/publications/hubmap-data-portal')
+    assert response.status == '301 MOVED PERMANENTLY'
+    assert response.location == '/browse/publication/6c9a473b6c49b85d58f1cdfd159a934b'
+
+
 @pytest.mark.parametrize('path', ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid'])
 def test_301_entity_type_normalization(client, path, mocker):
     # The mocked entity is a Donor, so these URLs normalize to /browse/donor/fake-uuid.

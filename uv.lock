@@ -881,7 +881,7 @@ wheels = [
 
 [[package]]
 name = "hubmap-portal-ui"
-version = "1.50.1"
+version = "1.52.1"
 source = { editable = "." }
 dependencies = [
     { name = "flask", extra = ["async"] },
@@ -921,7 +921,7 @@ requires-dist = [
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "hubmap-api-py-client", specifier = ">=0.0.11" },
     { name = "hubmap-commons", specifier = ">=2.1.20" },
-    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.11" },
+    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.13" },
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
@@ -1942,11 +1942,11 @@ wheels = [
 
 [[package]]
 name = "portal-visualization"
-version = "0.5.11"
+version = "0.5.13"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/80/a5/b387072db1c7501c06d80f093bfe4cfebda5edf1eba7fa9af7c1ad237fbe/portal_visualization-0.5.11.tar.gz", hash = "sha256:e95f9241272442d631535ebdfdc7a7fe6b958a5db2b5832ade1fa3acf0b6a085", size = 78790, upload-time = "2026-07-29T16:32:55.842Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/99/1c/188242f7b1d00808ba65043cb76b467091b591e38b9e169acebc0b77e558/portal_visualization-0.5.13.tar.gz", hash = "sha256:67ed60dee0d71e01924ab9e23a25f2843c9a2cf565a68e4d305bfd840edc2260", size = 83878, upload-time = "2026-09-09T19:06:14.817Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5d/17/20d917902ac1617d7f33b906aa21bc7b69a905faa19b01d1a8e4a5b60027/portal_visualization-0.5.11-py3-none-any.whl", hash = "sha256:a4fc2fd194e041a5347fd068b3a6d15a7cdee3bf9341f360dc68b136d5693276", size = 81824, upload-time = "2026-07-29T16:32:54.751Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/f6/73a0d6c1452a07c1292bf02ee98422921037a4ad2bac73376e5cdfb8f723/portal_visualization-0.5.13-py3-none-any.whl", hash = "sha256:99df76a1bb3deb5723229f63e8ac836a789554862820dd514e125e9309f5e232", size = 86794, upload-time = "2026-09-09T19:06:13.537Z" },
 ]
 
 [package.optional-dependencies]
@@ -2787,7 +2787,7 @@ wheels = [
 
 [[package]]
 name = "vitessce"
-version = "3.9.2"
+version = "3.9.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "black" },
@@ -2796,9 +2796,9 @@ dependencies = [
     { name = "scipy" },
     { name = "zarr" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1a/c3/3b77cc99a691d415d633c63178b2a6afe6cb4b48230b32e2a79612b2598e/vitessce-3.9.2.tar.gz", hash = "sha256:191e45681b8e39f8a5cbe48734bb11ade61267bd1fefed4fe28b36ace5f97dac", size = 261392, upload-time = "2026-06-04T01:25:56.729Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4a/ba/60bd170b5916d8c1a366c972072a3aba13fe07c5369294d199c3e84d6536/vitessce-3.9.6.tar.gz", hash = "sha256:d18ede356a862378f07d08db85ec1ca547e8af1f40d69f476fd6333deb00c2e7", size = 262710, upload-time = "2026-09-04T10:57:22.992Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/df/e8f3ddd021976edaa9caf8459fffe181abc936e5ccc1958ce21308fe129b/vitessce-3.9.2-py3-none-any.whl", hash = "sha256:edac5f899bdf0634f525a071146c832926b2c37bb9167d51cc86623664ebae3e", size = 85703, upload-time = "2026-06-04T01:25:55.076Z" },
+    { url = "https://files.pythonhosted.org/packages/14/c7/aa6b4cbe667fffef01e6666bc175ae95756221d532bca665a612f997c2c7/vitessce-3.9.6-py3-none-any.whl", hash = "sha256:e2fca974896339583c4a1b38da5810fa97206b1494e41b98e02f9a1b2da90d77", size = 86936, upload-time = "2026-09-04T10:57:21.895Z" },
 ]
 
 [[package]]
