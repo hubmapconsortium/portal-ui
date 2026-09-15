@@ -117,7 +117,8 @@ export const DatasetDefault: StoryObj<typeof DatasetTemplate> = {
   parameters: {
     msw: {
       handlers: [
-        http.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', () => {
+        // Path prefix matches `mockEndpoints.entityEndpoint` in .storybook/preview.tsx.
+        http.get('/entity-endpoint/datasets/fakeuuid/revisions', () => {
           return HttpResponse.json([{ revision_number: 1, uuid: 'fakeuuid' }]);
         }),
       ],

@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen } from 'test-utils/functions';
-import { composeStories } from '@storybook/react-vite';
+// Plain RTL render: a composed story already carries the preview's `Providers` decorator,
+// so wrapping it again in the one from test-utils would nest two of them.
+import { render, screen } from '@testing-library/react';
+import { composeStories } from 'test-utils/storybook';
 
 import { buildNLMCitation } from './Citation';
 import * as stories from './Citation.stories';

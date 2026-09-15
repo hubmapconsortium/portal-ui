@@ -1,33 +1,18 @@
 import React from 'react';
-import { render, screen, fireEvent } from 'test-utils/functions';
-import MenuItem from '@mui/material/MenuItem';
+// Plain RTL render: a composed story already carries the preview's `Providers` decorator,
+// so wrapping it again in the one from test-utils would nest two of them.
+import { render, screen, fireEvent } from '@testing-library/react';
+import { composeStories } from 'test-utils/storybook';
 
-import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton';
-import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import DropdownMenuProviderComponent, { useDropdownMenuStore } from './DropdownMenuProvider';
+import * as stories from './DropdownMenuProvider.stories';
 
-const menuID = 'example-dropdown';
-const menuItemText = 'Menu Item';
-const menuButtonText = 'Click to open';
-
-function ExampleMenuItem() {
-  const { closeMenu } = useDropdownMenuStore();
-  return <MenuItem onClick={closeMenu}>{menuItemText}</MenuItem>;
-}
-
-function TestDropdownMenuProvider() {
-  return (
-    <DropdownMenuProviderComponent isOpenToStart={false}>
-      <DropdownMenuButton menuID={menuID}>{menuButtonText}</DropdownMenuButton>
-      <DropdownMenu id={menuID}>
-        <ExampleMenuItem />
-      </DropdownMenu>
-    </DropdownMenuProviderComponent>
-  );
-}
+// The story already wires a button, a menu and a menu item together; `menuID` and friends are
+// exported from it (and excluded from the story list) for exactly this reason.
+const { DropdownMenuProvider } = composeStories(stories);
+const { menuID, menuItemText } = stories;
 
 test('clicking menu button should open menu', () => {
-  render(<TestDropdownMenuProvider />);
+  render(<DropdownMenuProvider />);
 
   expect(screen.queryByText(menuItemText)).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button'));
@@ -35,7 +20,7 @@ test('clicking menu button should open menu', () => {
 });
 
 test('menu button has correct aria-controls attribute', () => {
-  render(<TestDropdownMenuProvider />);
+  render(<DropdownMenuProvider />);
 
   const menuButton = screen.getByRole('button');
 

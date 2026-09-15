@@ -56,6 +56,8 @@ export const parameters = {
 
 export const mockEndpoints = {
   assetsEndpoint: 'https://assets.hubmapconsortium.org',
+  // Stories that mock entity-api requests build their msw handler paths from this prefix.
+  entityEndpoint: '/entity-endpoint',
   softAssayEndpoint: '/soft-assay-endpoint',
   elasticsearchEndpoint: '/search',
   scFindEndpoint: SCFIND_BASE_STORYBOOK,
