@@ -59,7 +59,6 @@ def get_default_flask_data():
             + current_app.config['PORTAL_INDEX_PATH'],
             'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
             'entityEndpoint': current_app.config['ENTITY_API_BASE'],
-            'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
             'workspacesEndpoint': current_app.config['WORKSPACES_ENDPOINT'],
             'userTemplatesEndpoint': current_app.config['USER_TEMPLATES_ENDPOINT'],
             'workspacesWsEndpoint': current_app.config['WORKSPACES_WS_ENDPOINT'],

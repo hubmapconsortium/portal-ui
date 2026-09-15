@@ -1,12 +1,7 @@
 import { queryTypes } from 'js/components/cells/queryTypes';
 import { useFormContext } from 'react-hook-form';
-import { MolecularDataQueryFormState, QueryType, SCFindModality } from './types';
+import { MolecularDataQueryFormState, SCFindModality } from './types';
 import { AutocompleteResult } from './AutocompleteEntity/types';
-import { GetDatasetsProps } from '../CellsService';
-
-export function isScFindMethod(queryMethod: string): boolean {
-  return queryMethod === 'scFind' || queryMethod === 'scFindATAC';
-}
 
 export function getScFindModality(queryMethod: string): SCFindModality {
   return queryMethod === 'scFindATAC' ? 'ATAC' : undefined;
@@ -21,17 +16,10 @@ export function getScFindModalityLabel(queryMethod: string): string {
   return makeScFindModalityLabel(modality);
 }
 
-export function getCellVariableNames(
-  queryType: string,
-  genes: AutocompleteResult[],
-  proteins: AutocompleteResult[],
-  cellTypes: AutocompleteResult[],
-) {
+export function getCellVariableNames(queryType: string, genes: AutocompleteResult[], cellTypes: AutocompleteResult[]) {
   switch (queryType) {
     case 'gene':
       return genes.map((g) => g.full);
-    case 'protein':
-      return proteins.map((p) => p.full);
     case 'cell-type':
       return cellTypes.map((c) => c.full);
     default:
@@ -41,7 +29,7 @@ export function getCellVariableNames(
 
 export function useCellVariableNames() {
   const { watch } = useFormContext<MolecularDataQueryFormState>();
-  return getCellVariableNames(watch('queryType'), watch('genes'), watch('proteins'), watch('cellTypes'));
+  return getCellVariableNames(watch('queryType'), watch('genes'), watch('cellTypes'));
 }
 
 export function useQueryType() {
@@ -50,35 +38,11 @@ export function useQueryType() {
   return queryTypes[queryType];
 }
 
-export function useIsQueryType(type: 'gene' | 'protein' | 'cell-type') {
+export function useIsQueryType(type: 'gene' | 'cell-type') {
   const { watch } = useFormContext<MolecularDataQueryFormState>();
   return watch('queryType') === type;
 }
 
 export function useMolecularDataQueryFormState() {
   return useFormContext<MolecularDataQueryFormState>();
-}
-
-export function useCrossModalityQueryParameters<T extends QueryType>(): GetDatasetsProps<T> {
-  const { watch } = useFormContext<MolecularDataQueryFormState>();
-  const type = watch('queryType') as T;
-  const cellVariableNames = useCellVariableNames();
-  const minExpression = 10 ** watch('minimumExpressionLevel');
-  const minCellPercentage = watch('minimumCellPercentage');
-  const modality = watch('queryMethod') === 'crossModalityATAC' ? 'atac' : 'rna';
-  const parameters = {
-    type,
-    cellVariableNames,
-    minExpression,
-    minCellPercentage,
-  };
-  if (type === 'gene') {
-    return { ...parameters, modality };
-  }
-  return parameters;
-}
-
-export function useSCFindQueryParameters() {
-  const cellVariableNames = useCellVariableNames();
-  return cellVariableNames;
 }

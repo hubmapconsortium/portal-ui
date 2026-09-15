@@ -1,3 +1,5 @@
-import CellsCharts from './CellsCharts';
+import { SCFindCellTypesChart } from './CellTypesChart';
 
-export default CellsCharts;
+import SCFindGeneCharts from './SCFindGeneCharts';
+
+export { SCFindCellTypesChart, SCFindGeneCharts };

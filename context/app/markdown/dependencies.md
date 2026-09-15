@@ -13,7 +13,6 @@ Flask>=3.1.1
 Flask[async]>=3.1.1
 globus-sdk>=3.59.0
 gunicorn>=23.0.0
-hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
 portal-visualization[full]>=0.5.13
 python-frontmatter>=1.1.0

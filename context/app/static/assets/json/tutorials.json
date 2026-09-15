@@ -62,16 +62,5 @@
       "Pathway"
     ],
     "iframeLink": "https://app.tango.us/app/embed/95ab0181-46bf-4630-b6a7-736b0dc876e1?skipCover=false&defaultListView=true&skipBranding=false"
-  },
-  {
-    "title": "Search for Proteins",
-    "route": "search-for-proteins",
-    "description": "Learn how to find datasets for proteins, and visualize the protein abundance for the individual datasets.",
-    "category": "Biomarker and Cell Type Search",
-    "tags": [
-      "Protein",
-      "Biomarker"
-    ],
-    "iframeLink": ""
   }
 ]
