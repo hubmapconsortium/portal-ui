@@ -33,7 +33,6 @@ export default function MolecularDataQueryFormProvider({ children, initialValues
         ...initialValues,
         // @ts-expect-error - some annoying conflicts between queryType and queryMethod
         queryType,
-        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
         queryMethod: currentQueryMethod,
       },
       {
