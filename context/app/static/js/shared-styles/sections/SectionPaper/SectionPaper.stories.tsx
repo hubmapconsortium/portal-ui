@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import LabelledSectionText from '../LabelledSectionText/LabelledSectionText';
 import { Default as DefaultLabelledSectionText } from '../LabelledSectionText/LabelledSectionText.stories';

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import ExpandableRow from './ExpandableRow';
@@ -7,14 +7,18 @@ import ExpandableRow from './ExpandableRow';
 const meta = {
   title: 'Tables/ExpandableRow',
   component: ExpandableRow,
+  excludeStories: ['expandedContentTestId'],
 } satisfies Meta<typeof ExpandableRow>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+// The spec composes these stories and looks the expanded content up by this id.
+export const expandedContentTestId = 'expandable-row-content';
+
 function Content({ heightRef }: { heightRef: React.Ref<HTMLDivElement> }) {
   return (
-    <div ref={heightRef}>
+    <div ref={heightRef} data-testid={expandedContentTestId}>
       Mollit irure sit fugiat eiusmod ullamco laborum. Deserunt aliqua nulla occaecat reprehenderit est cupidatat ex
       laborum. Occaecat ipsum anim dolore anim ut velit irure exercitation sunt. Incididunt pariatur dolore ut duis. Eu
       nulla ut amet irure deserunt eiusmod aliqua fugiat labore.

@@ -1,9 +1,14 @@
 import React from 'react';
-import { render, screen, appProviderEndpoints } from 'test-utils/functions';
+// Plain RTL render: a composed story already carries the preview's `Providers` decorator,
+// so wrapping it again in the one from test-utils would nest two of them.
+import { render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import { composeStories, mockEndpoints } from 'test-utils/storybook';
 
-import SummaryData from './SummaryData';
+import * as stories from './SummaryData.stories';
+
+const { Default, Dataset, WithChildren } = composeStories(stories);
 
 const testUUID = 'fakeuuid';
 
@@ -14,8 +19,10 @@ const versionResponse = [
   },
 ];
 
+// The composed stories run under the preview's `Providers`, so `entityEndpoint` is the
+// Storybook mock rather than the one from test-utils.
 const server = setupServer(
-  http.get(`/${appProviderEndpoints.entityEndpoint}/datasets/${testUUID}/revisions`, () => {
+  http.get(`${mockEndpoints.entityEndpoint}/datasets/${testUUID}/revisions`, () => {
     return HttpResponse.json(versionResponse);
   }),
 );
@@ -31,33 +38,28 @@ afterAll(() => {
 });
 
 test('dataset displays properly', () => {
-  render(<SummaryData entity_type="Dataset" status="QA" mapped_data_access_level="Public" />);
+  render(<Dataset />);
   expect(screen.getByText('QA (Public)')).toBeInTheDocument();
   expect(screen.getByTestId('status-svg-icon')).toBeInTheDocument();
 });
 
 test('non-dataset displays properly', () => {
-  render(<SummaryData entity_type="Sample" status="QA" mapped_data_access_level="Public" />);
+  render(<Default />);
   expect(screen.queryByTestId('status-svg-icon')).not.toBeInTheDocument();
 });
 
 test('children display when provided', () => {
-  render(
-    <SummaryData entity_type="Dataset" status="QA" mapped_data_access_level="Public">
-      <div>child 1</div>
-      <div>child 2</div>
-    </SummaryData>,
-  );
+  render(<WithChildren />);
   expect(screen.getByTestId('summary-data-parent')).toBeInTheDocument();
   expect(screen.getByTestId('summary-data-parent')).not.toBeEmptyDOMElement();
 
-  const textToTest = ['child 1', 'child 2'];
-  textToTest.forEach((text) => {
+  // The story renders eight children, labelled from zero.
+  ['Child 0', 'Child 7'].forEach((text) => {
     expect(screen.getByText(text)).toBeInTheDocument();
   });
 });
 
 test('children do not display when undefined', () => {
-  render(<SummaryData entity_type="Dataset" status="QA" mapped_data_access_level="Public" />);
+  render(<Dataset />);
   expect(screen.queryByTestId('summary-data-parent')).not.toBeInTheDocument();
 });

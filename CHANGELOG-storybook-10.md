@@ -1,0 +1,4 @@
+- Upgraded Storybook from 9.1 to 10.6. Story files now import their types from `@storybook/react-vite` instead of the removed `@storybook/react` package, `.storybook/main.ts` is valid ESM, and `msw-storybook-addon` moved to 3.0, whose CSF 3.0 entry point replaces the old `initialize()` call.
+- Added a Storybook build to the Node CI script, so a story that no longer compiles fails a pull request instead of waiting for someone to open Storybook.
+- Specs can now reuse a story as their fixture through `test-utils/storybook`, and the `Citation`, `DropdownMenuProvider`, `SummaryData` and `ExpandableRow` specs do so rather than redeclaring props their stories already define.
+- Replaced the nineteen per-hook scFind stories, which could only run against the live dev API, with one `SCFind/Explorer` story and a `hooks.spec.tsx` covering every hook's request and response shape.

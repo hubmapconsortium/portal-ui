@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import IconPageTitle from 'js/shared-styles/pages/IconPageTitle';
 import PageTitle from 'js/shared-styles/pages/PageTitle';

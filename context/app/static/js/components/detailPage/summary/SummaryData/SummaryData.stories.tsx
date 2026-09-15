@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { http, HttpResponse } from 'msw';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import { getArrayRange } from 'js/helpers/functions';
@@ -28,7 +28,8 @@ const meta = {
   parameters: {
     msw: {
       handlers: [
-        http.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', () => {
+        // Path prefix matches `mockEndpoints.entityEndpoint` in .storybook/preview.tsx.
+        http.get('/entity-endpoint/datasets/fakeuuid/revisions', () => {
           return HttpResponse.json({ revision_number: 1, uuid: 'fakeuuid' });
         }),
       ],

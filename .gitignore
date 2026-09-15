@@ -140,3 +140,5 @@ compose/.env
 # Ignore ruff cache
 .ruff_cache
 
+# Storybook build output
+context/storybook-static
