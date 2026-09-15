@@ -1,3 +1,26 @@
 packages:
   - 'context'
   - 'end-to-end'
+
+# Moved here from the `pnpm` field in package.json: pnpm 10.27 no longer reads
+# `pnpm.onlyBuiltDependencies` / `pnpm.overrides` from package.json.
+onlyBuiltDependencies:
+  - '@danmarshall/deckgl-typings'
+  - '@swc/core'
+  - canvas
+  - core-js
+  - core-js-pure
+  - cypress
+  - esbuild
+  - msw
+  - protobufjs
+  - unrs-resolver
+
+overrides:
+  react: ^19.2.6
+  react-dom: ^19.2.6
+  '@types/react': ^19.2.15
+  '@types/react-dom': ^19.2.3
+  piscina: '>=4.9.3'
+  lodash: '>=4.18.1'
+  minimatch: '>=10.2.5'
