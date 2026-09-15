@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { http, passthrough } from 'msw';
 import useEvaluateMarkers, { EvaluateMarkersParams } from './useEvaluateMarkers';
 

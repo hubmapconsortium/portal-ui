@@ -1,5 +1,5 @@
 import React, { ComponentProps, useState } from 'react';
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 
 import { Slider } from 'js/shared-styles/inputs/Slider/Slider.stories';
 import MarkedSliderComponent from './MarkedSlider';

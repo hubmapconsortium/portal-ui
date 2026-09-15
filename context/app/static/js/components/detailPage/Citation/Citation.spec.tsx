@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
-import { composeStories } from '@storybook/react';
+import { composeStories } from '@storybook/react-vite';
 
 import { buildNLMCitation } from './Citation';
 import * as stories from './Citation.stories';

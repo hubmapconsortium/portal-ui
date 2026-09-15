@@ -1,0 +1,1 @@
+- Upgraded Storybook from 9.1 to 10.6. Story files now import their types from `@storybook/react-vite` instead of the removed `@storybook/react` package, `.storybook/main.ts` is valid ESM, and `msw-storybook-addon` moved to 3.0, whose CSF 3.0 entry point replaces the old `initialize()` call.

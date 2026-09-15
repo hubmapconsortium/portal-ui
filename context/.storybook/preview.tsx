@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Providers from '../app/static/js/components/Providers';
-import { initialize, mswLoader } from 'msw-storybook-addon';
+import { mswLoader } from 'msw-storybook-addon/csf3';
 import { http, HttpResponse } from 'msw';
 import { enableMapSet } from 'immer';
 import { SCFIND_BASE_STORYBOOK } from '../app/static/js/api/scfind/utils';
@@ -10,14 +10,22 @@ import '@fontsource-variable/inter/files/inter-latin-standard-normal.woff2';
 
 enableMapSet();
 
-initialize({
-  serviceWorker: {
-    options: {
-      updateViaCache: 'none',
-    },
-  },
-});
-export const loaders = [mswLoader];
+// msw-storybook-addon 3 dropped `initialize()` and starts the worker itself, so the
+// `updateViaCache` option this project has always set now has to come in through a
+// custom setup. `bypass` replaces the addon's default onUnhandledRequest warning,
+// which would otherwise fire for Storybook's own asset requests.
+const startWorker = async () => {
+  const { setupWorker } = await import('msw/browser');
+  const worker = setupWorker();
+  await worker.start({
+    quiet: true,
+    onUnhandledRequest: 'bypass',
+    serviceWorker: { options: { updateViaCache: 'none' } },
+  });
+  return worker;
+};
+
+export const loaders = [mswLoader(startWorker)];
 
 // The scFind hooks now fetch our Flask BFF routes at relative `/scfind/...` URLs rather than the
 // upstream scFind API. Storybook (port 6006) doesn't serve Flask, so proxy those requests to the

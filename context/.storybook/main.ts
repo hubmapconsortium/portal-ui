@@ -1,15 +1,19 @@
+import { fileURLToPath } from 'node:url';
 import type { StorybookConfig } from '@storybook/react-vite';
 import { mergeConfig } from 'vite';
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
 import svgr from 'vite-plugin-svgr';
 import { readFileSync } from 'node:fs';
+
+// Storybook 10 loads this config as ESM, where `__dirname` is not defined.
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf8')) as { version: string };
 
 const config: StorybookConfig = {
   framework: '@storybook/react-vite',
   stories: ['../app/static/js/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-docs'],
+  addons: ['@storybook/addon-links', '@storybook/addon-docs', 'msw-storybook-addon'],
   staticDirs: ['../app/static/assets', '../app/static/storybook-public'],
   viteFinal: async (viteConfig) =>
     mergeConfig(viteConfig, {

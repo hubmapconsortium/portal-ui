@@ -1,6 +1,6 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
-import { StoryObj } from '@storybook/react';
+import { StoryObj } from '@storybook/react-vite';
 import ClickableRow, { ClickableRowProps } from './ClickableRow';
 
 export default {

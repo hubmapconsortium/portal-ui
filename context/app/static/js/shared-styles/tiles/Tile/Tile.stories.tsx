@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { StyledIcon } from 'js/components/entity-tile/EntityTile/style';

@@ -1,5 +1,5 @@
 import React, { ComponentProps, useMemo } from 'react';
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 
 import { FlaskDataContext, FlaskDataContextType } from 'js/components/Contexts';
 

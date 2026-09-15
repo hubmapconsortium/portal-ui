@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import Panel from 'js/shared-styles/panels/Panel';
 import PanelListComponent from 'js/shared-styles/panels/PanelList';
