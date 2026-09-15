@@ -19,7 +19,13 @@ function RouteBoundary({
   return <Box id={id} padding={2} display={!showBoundary ? 'none' : 'block'} />;
 }
 
-function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{ disableWidthConstraint?: boolean }>) {
+interface RouteProps {
+  disableWidthConstraint?: boolean;
+  /** Drops the 8px gap below the header, for pages whose content is meant to sit flush against it. */
+  disableTopMargin?: boolean;
+}
+
+function Route({ children, disableWidthConstraint = false, disableTopMargin = false }: PropsWithChildren<RouteProps>) {
   const constrainWidthProps: Partial<ContainerProps> = disableWidthConstraint
     ? { maxWidth: false, disableGutters: true }
     : { maxWidth: 'lg' };
@@ -28,7 +34,7 @@ function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{
   const shouldShowBoundaries = !disableWidthConstraint && isDesktop;
 
   return (
-    <GridWrapper $shouldShowBoundaries={shouldShowBoundaries}>
+    <GridWrapper $shouldShowBoundaries={shouldShowBoundaries} $disableTopMargin={disableTopMargin}>
       <RouteBoundary id={leftRouteBoundaryID} showBoundary={shouldShowBoundaries} />
       <Suspense fallback={<RouteLoader />}>
         <StyledContainer {...constrainWidthProps} component="div">

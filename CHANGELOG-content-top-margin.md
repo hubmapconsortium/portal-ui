@@ -1,0 +1,1 @@
+- Added an 8px gap between the header (or the entity header, on pages that show one) and the page content throughout the site. The homepage keeps its hero flush against the header unless a sitewide alert is being displayed.
