@@ -3,24 +3,27 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import React, { useCallback, useMemo, useState } from 'react';
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import PublicationVignette from 'js/components/publications/PublicationVignette';
 import { PublicationVignette as PublicationVignetteType } from 'js/components/publications/types';
 import { StyledAccordionDetails } from './style';
 
-const StyledAccordion = styled(Accordion)<{ $isExpanded: boolean }>(({ theme, $isExpanded }) => ({
-  '& .MuiAccordionSummary-root': {
-    backgroundColor: $isExpanded ? theme.palette.primary.main : '#fff',
-    '& > .MuiAccordionSummary-content': {
-      ...theme.typography.subtitle1,
-      color: $isExpanded ? theme.palette.primary.contrastText : theme.palette.text.primary,
+const StyledAccordion = styled(Accordion, { shouldForwardProp })<{ $isExpanded: boolean }>(
+  ({ theme, $isExpanded }) => ({
+    '& .MuiAccordionSummary-root': {
+      backgroundColor: $isExpanded ? theme.palette.primary.main : '#fff',
+      '& > .MuiAccordionSummary-content': {
+        ...theme.typography.subtitle1,
+        color: $isExpanded ? theme.palette.primary.contrastText : theme.palette.text.primary,
+      },
+      '& .MuiSvgIcon-root': {
+        color: $isExpanded ? theme.palette.primary.contrastText : theme.palette.text.primary,
+      },
     },
-    '& .MuiSvgIcon-root': {
-      color: $isExpanded ? theme.palette.primary.contrastText : theme.palette.text.primary,
-    },
-  },
-}));
+  }),
+);
 
 interface PublicationsVisualizationSectionProps {
   vignette_json: {
