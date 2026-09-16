@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -28,16 +29,18 @@ function invertSectionColors(backgroundColor: string, color: string, $invertColo
   };
 }
 
-const StyledPaper = styled(Paper)<TileProps>(({ theme, $tileWidth = 225, $invertColors = false }) => ({
-  marginBottom: theme.spacing(1),
-  boxShadow: theme.shadows[1],
-  width: $tileWidth,
-  ...invertSectionColors(theme.palette.white.main, theme.palette.primary.main, $invertColors),
-  '&:hover': {
-    boxShadow: theme.shadows[8],
-    filter: $invertColors ? 'brightness:108%' : 'brightness(96%)',
-  },
-}));
+const StyledPaper = styled(Paper, { shouldForwardProp })<TileProps>(
+  ({ theme, $tileWidth = 225, $invertColors = false }) => ({
+    marginBottom: theme.spacing(1),
+    boxShadow: theme.shadows[1],
+    width: $tileWidth,
+    ...invertSectionColors(theme.palette.white.main, theme.palette.primary.main, $invertColors),
+    '&:hover': {
+      boxShadow: theme.shadows[8],
+      filter: $invertColors ? 'brightness:108%' : 'brightness(96%)',
+    },
+  }),
+);
 
 const FlexGrow = styled('div')({
   flexGrow: 1,
@@ -57,7 +60,7 @@ const TileFooter = styled('div')<TileProps>(({ theme, $invertColors }) => ({
   ...invertSectionColors(theme.palette.primary.main, theme.palette.white.main, $invertColors),
 }));
 
-const StyledDivider = styled(Divider)<TileProps>(({ theme, $invertColors = false }) => ({
+const StyledDivider = styled(Divider, { shouldForwardProp })<TileProps>(({ theme, $invertColors = false }) => ({
   backgroundColor: $invertColors ? theme.palette.primary.main : theme.palette.white.main,
   margin: theme.spacing(0, 0.5),
 }));

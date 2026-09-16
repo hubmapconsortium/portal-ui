@@ -23,9 +23,8 @@ const config: StorybookConfig = {
           assets: resolve(__dirname, '../app/static/assets'),
           'shared-styles': resolve(__dirname, '../app/static/js/shared-styles'),
           package: resolve(__dirname, '../package.json'),
-          '@mui/styled-engine': '@mui/styled-engine-sc',
         },
-        dedupe: ['react', 'react-dom', '@mui/material', 'styled-components'],
+        dedupe: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled'],
       },
       define: {
         CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),

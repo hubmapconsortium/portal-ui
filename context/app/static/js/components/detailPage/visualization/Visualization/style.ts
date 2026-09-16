@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Button, { ButtonProps } from '@mui/material/Button';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
@@ -59,7 +60,7 @@ interface StyledDetailPageSectionProps {
   $vizIsFullscreen: boolean;
 }
 
-const StyledDetailPageSection = styled(DetailPageSection)<StyledDetailPageSectionProps>(
+const StyledDetailPageSection = styled(DetailPageSection, { shouldForwardProp })<StyledDetailPageSectionProps>(
   ({ theme, $vizIsFullscreen }) => ({
     width: '100%',
     zIndex: $vizIsFullscreen ? theme.zIndex.visualization : 'auto',

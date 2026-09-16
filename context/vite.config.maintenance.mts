@@ -31,14 +31,11 @@ export default defineConfig({
       assets: resolve(__dirname, 'app/static/assets'),
       'shared-styles': resolve(__dirname, 'app/static/js/shared-styles'),
       package: resolve(__dirname, 'package.json'),
-      '@mui/styled-engine': '@mui/styled-engine-sc',
     },
-    dedupe: ['react', 'react-dom', '@mui/material', 'styled-components'],
+    dedupe: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled'],
   },
   plugins: [
-    react({
-      plugins: [['@swc/plugin-styled-components', { displayName: true, ssr: false }]],
-    }),
+    react(),
     svgr({
       svgrOptions: { exportType: 'default' },
       include: '**/*.svg',
