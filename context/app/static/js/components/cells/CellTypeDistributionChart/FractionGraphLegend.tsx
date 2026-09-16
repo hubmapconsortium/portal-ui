@@ -22,15 +22,23 @@ export default function FractionGraphLegend({
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      alignItems="flex-start"
-      flexWrap="wrap"
-      gap={2}
       useFlexGap
-      mt={1}
+      sx={{
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        flexWrap: 'wrap',
+        gap: 2,
+        mt: 1,
+      }}
     >
       <Stack sx={{ minWidth: 0 }}>
-        <Typography variant="body2" color="textSecondary" my={1}>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{
+            my: 1,
+          }}
+        >
           Targeted Cell Types
         </Typography>
         <LegendOrdinal scale={targetColorScale} labelFormat={(label) => label.split('.').slice(1).join('.')}>
@@ -55,10 +63,21 @@ export default function FractionGraphLegend({
         </LegendOrdinal>
       </Stack>
       <Stack sx={{ minWidth: 0 }}>
-        <Typography variant="body2" color="textSecondary" my={1}>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{
+            my: 1,
+          }}
+        >
           Other Cell Types
         </Typography>
-        <Box maxHeight={300} overflow="auto">
+        <Box
+          sx={{
+            maxHeight: 300,
+            overflow: 'auto',
+          }}
+        >
           <LegendOrdinal
             scale={otherColorScale}
             labelFormat={(label) => label.split('.').slice(1).join('.')}

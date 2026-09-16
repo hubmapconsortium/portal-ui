@@ -187,7 +187,12 @@ function InvitationPageContent({ invitationId }: InvitationPageProps) {
         <StyledAlert
           severity="info"
           action={
-            <Stack direction="row" gap={1}>
+            <Stack
+              direction="row"
+              sx={{
+                gap: 1,
+              }}
+            >
               <Button onClick={handleDecline}>Decline</Button>
               <Button onClick={handleAccept} color="success">
                 Accept
@@ -197,7 +202,12 @@ function InvitationPageContent({ invitationId }: InvitationPageProps) {
         >
           {descriptions.acceptInvite}
         </StyledAlert>
-        <Stack gap={1} sx={{ marginBottom: 5 }}>
+        <Stack
+          sx={{
+            gap: 1,
+            marginBottom: 5,
+          }}
+        >
           <Summary invitation={invitation} />
           <Datasets invitationDatasets={invitationDatasets} />
           <Templates invitationTemplates={invitationTemplates} />

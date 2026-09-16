@@ -209,10 +209,7 @@
     },
     {
       "label": "dev-start (no storybook)",
-      "dependsOn": [
-        "Install dependencies",
-        "dev-start (no storybook, no install)"
-      ],
+      "dependsOn": ["Install dependencies", "dev-start (no storybook, no install)"],
       "dependsOrder": "sequence",
       "problemMatcher": ["$eslint-stylish"]
     },
@@ -228,7 +225,8 @@
       "options": {
         "cwd": "${workspaceFolder}/context"
       },
-      "command": "npx --yes kill-port 5000 5001 6006"
+      "command": "npx --yes kill-port 5000 5001 6006",
+      "problemMatcher": []
     },
     {
       "label": "Clear scFind cache",

@@ -117,7 +117,12 @@ function SaySeePanel() {
       <SaySeeWelcomeDialog />
       {isWorkspacesUser && <OpenInWorkspacesFromYAC />}
       <SaySeePanelDescription />
-      <Stack direction="row" justifyContent="flex-end">
+      <Stack
+        direction="row"
+        sx={{
+          justifyContent: 'flex-end',
+        }}
+      >
         <SecondaryBackgroundTooltip title={isFullscreen ? 'Exit Fullscreen' : 'Switch to Fullscreen'}>
           <ExpandButton
             size="small"

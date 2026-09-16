@@ -8,7 +8,12 @@ interface FormFieldContainerProps extends PropsWithChildren {
 
 export function FormFieldContainer({ title, children }: FormFieldContainerProps) {
   return (
-    <Stack gap={2} py={2}>
+    <Stack
+      sx={{
+        gap: 2,
+        py: 2,
+      }}
+    >
       <Typography variant="subtitle2">{title}</Typography>
       {children}
     </Stack>

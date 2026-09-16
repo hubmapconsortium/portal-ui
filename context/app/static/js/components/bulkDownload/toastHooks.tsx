@@ -16,7 +16,13 @@ const useBulkDownloadToasts = () => {
   const toastErrorDownloadFile = useCallback(
     (type: fileType, retry: () => void) => {
       toastError(
-        <Stack spacing={3} direction="row" alignItems="center">
+        <Stack
+          spacing={3}
+          direction="row"
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           <Typography>{type} file failed to download.</Typography>
           <Button onClick={retry} variant="text" color="inherit" sx={{ alignSelf: 'flex-end' }}>
             Try Again

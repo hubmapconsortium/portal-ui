@@ -275,19 +275,25 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      height="3rem"
-      px={2}
-      py={0.5}
-      sx={(theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) })}
+      sx={[
+        {
+          alignItems: 'center',
+          height: '3rem',
+          px: 2,
+          py: 0.5,
+        },
+        (theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) }),
+      ]}
     >
       <AnimatedStack
         style={styles}
         direction="row"
-        alignItems="center"
         spacing={2}
         useFlexGap
         divider={<Divider orientation="vertical" flexItem />}
+        sx={{
+          alignItems: 'center',
+        }}
       >
         {isOrganPage && organ ? (
           <OrganItem organ={organ} />

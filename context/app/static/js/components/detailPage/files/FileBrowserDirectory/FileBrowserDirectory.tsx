@@ -58,7 +58,11 @@ function FileBrowserDirectory({ dirName, children, depth }: FileBrowserDirectory
       >
         {/* colSpan should match the number of cells in a FileBrowserFile row. */}
         <td colSpan={4}>
-          <Directory ml={(theme) => theme.spacing(4 * depth)}>
+          <Directory
+            sx={{
+              ml: (theme) => theme.spacing(4 * depth),
+            }}
+          >
             {isExpanded ? <ExpandedIcons /> : <CollapsedIcons />}
             {dirName}
           </Directory>

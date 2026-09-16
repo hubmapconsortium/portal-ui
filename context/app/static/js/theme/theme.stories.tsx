@@ -59,12 +59,14 @@ function PaletteHoverColor({ color, name }: PaletteHoverColorProps) {
     <TableRow>
       <TableCell>
         <Box
-          width={theme.spacing(4)}
-          height={theme.spacing(4)}
-          bgcolor="#fff"
-          display="inline-block"
-          border="1px solid black"
-          flexShrink="none"
+          sx={{
+            width: theme.spacing(4),
+            height: theme.spacing(4),
+            bgcolor: '#fff',
+            display: 'inline-block',
+            border: '1px solid black',
+            flexShrink: 'none',
+          }}
         />
       </TableCell>
       <TableCell>{name}</TableCell>
@@ -91,12 +93,14 @@ function PaletteColor({ color, name }: PaletteColorProps) {
       <TableRow>
         <TableCell>
           <Box
-            width={theme.spacing(4)}
-            height={theme.spacing(4)}
-            bgcolor={color}
-            display="inline-block"
-            border="1px solid black"
-            flexShrink="none"
+            sx={{
+              width: theme.spacing(4),
+              height: theme.spacing(4),
+              bgcolor: color,
+              display: 'inline-block',
+              border: '1px solid black',
+              flexShrink: 'none',
+            }}
           />
         </TableCell>
         <TableCell>{name}</TableCell>

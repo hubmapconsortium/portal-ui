@@ -65,7 +65,14 @@ function BooleanGroupItem({
         />
       }
       label={
-        <StyledStack direction="row" justifyContent="space-between" $active={active} pr={RIGHT_CHEVRON_SIZE}>
+        <StyledStack
+          direction="row"
+          $active={active}
+          sx={{
+            justifyContent: 'space-between',
+            pr: RIGHT_CHEVRON_SIZE,
+          }}
+        >
           <FormLabelText>{label}</FormLabelText>
           <Typography>{decimal.format(count)}</Typography>
         </StyledStack>

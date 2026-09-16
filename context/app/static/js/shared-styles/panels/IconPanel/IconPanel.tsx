@@ -12,7 +12,15 @@ interface IconPanelProps extends PropsWithChildren {
 
 function IconPanel({ status, children }: IconPanelProps) {
   return (
-    <Stack component={Paper} direction="row" p={2} spacing={1} marginBottom={1}>
+    <Stack
+      component={Paper}
+      direction="row"
+      spacing={1}
+      sx={{
+        p: 2,
+        marginBottom: 1,
+      }}
+    >
       <SeverityIcon status={status} color="primary" sx={{ fontSize: '1.5rem' }} />
       <Typography>{children}</Typography>
     </Stack>

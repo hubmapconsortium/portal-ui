@@ -23,8 +23,16 @@ export function DataProduct({ file }: DataProductProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   return (
     <Box key={file.rel_path} data-testid="data-product" sx={{ py: 1.5 }}>
-      <Box display="flex">
-        <Box px={2.5}>
+      <Box
+        sx={{
+          display: 'flex',
+        }}
+      >
+        <Box
+          sx={{
+            px: 2.5,
+          }}
+        >
           <FileIcon
             sx={(theme) => ({
               color: theme.palette.primary.main,
@@ -33,8 +41,19 @@ export function DataProduct({ file }: DataProductProps) {
             })}
           />
         </Box>
-        <Box width="100%">
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
+        <Box
+          sx={{
+            width: '100%',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 0.5,
+            }}
+          >
             <div>
               <FilesConditionalLink
                 openDUA={() => {
@@ -68,7 +87,7 @@ export function DataProduct({ file }: DataProductProps) {
           </Typography>
           {/* Hide data generation section until accurate values are available */}
           {/* <DetailAccordion summary="Additional Details">
-              <Box component="dl" my={0}>
+              <Box component="dl" sx={{ my: 0 }}>
                 <Typography variant="subtitle2" component="dt">
                   Data Generation
                 </Typography>

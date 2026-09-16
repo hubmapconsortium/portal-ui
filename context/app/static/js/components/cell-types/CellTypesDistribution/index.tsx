@@ -40,8 +40,18 @@ function Chart() {
             index={idx + 1}
             iconPosition="start"
             label={
-              <Stack direction="row" alignItems="center" gap={1}>
-                <Box flexShrink={0}>
+              <Stack
+                direction="row"
+                sx={{
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
+                <Box
+                  sx={{
+                    flexShrink: 0,
+                  }}
+                >
                   <OrganIcon organName={organ} />
                 </Box>
                 <Box component="span" sx={{ textTransform: 'capitalize' }}>

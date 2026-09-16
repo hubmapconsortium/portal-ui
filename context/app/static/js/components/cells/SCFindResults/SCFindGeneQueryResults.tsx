@@ -120,7 +120,12 @@ export function SCFindGeneQueryDatasetList({
 
 function NoMatchesText({ emptyResults }: { emptyResults: string[] }) {
   return (
-    <Stack spacing={1} pt={2}>
+    <Stack
+      spacing={1}
+      sx={{
+        pt: 2,
+      }}
+    >
       <Description>
         No datasets were found for the selected genes:{' '}
         <Typography component="span" color="warning">
@@ -170,7 +175,12 @@ function DatasetListSection() {
     // switching between gene result tabs (selection is scoped to one tab's results).
     <SelectableTableProvider key={openTabIndex} tableLabel="Gene Query - scFind Results">
       <MatchingGeneContextProvider value={datasetToGeneMap}>
-        <Stack spacing={1} pt={2}>
+        <Stack
+          spacing={1}
+          sx={{
+            pt: 2,
+          }}
+        >
           <DatasetListHeader />
           <Description>
             Datasets expressing each selected gene are listed below. The number of datasets for each gene is shown in

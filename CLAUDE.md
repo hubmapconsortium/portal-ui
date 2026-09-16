@@ -58,7 +58,7 @@ Flask handles server-side routing and renders a template (`react-content.html`) 
 
 ### Styling
 
-MUI v7 with **Emotion** (MUI's default styled engine). Custom theme in `theme/theme.tsx` extends MUI's palette with project-specific colors. Reusable styled components live in `shared-styles/`.
+MUI v9 with **Emotion** (MUI's default styled engine). Custom theme in `theme/theme.tsx` extends MUI's palette with project-specific colors. Reusable styled components live in `shared-styles/`.
 
 ### Vite Path Aliases
 

@@ -10,7 +10,14 @@ function NonLinkingCreatorInfo({ creatorInfo }: { creatorInfo: string }) {
   }
 
   return (
-    <Stack component="span" direction="row" alignItems="center" sx={{ display: 'inline-flex' }}>
+    <Stack
+      component="span"
+      direction="row"
+      sx={{
+        alignItems: 'center',
+        display: 'inline-flex',
+      }}
+    >
       <Typography component="span">Unknown</Typography>
       <InfoTooltipIcon iconTooltipText="Original creator has deleted workspace" />
     </Stack>

@@ -30,12 +30,14 @@ function SelectableRowCell({
       <Checkbox
         color="secondary"
         checked={selectedRows.has(rowKey)}
-        inputProps={{ 'aria-label': `${tableLabel}-row-${rowKey}-checkbox` }}
         onChange={(e) => {
           onSelectChange?.(e, rowName ?? rowKey);
           toggleRow(rowKey);
         }}
         disabled={disabled}
+        slotProps={{
+          input: { 'aria-label': `${tableLabel}-row-${rowKey}-checkbox` },
+        }}
       />
     </CellComponent>
   );

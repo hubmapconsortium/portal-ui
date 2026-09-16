@@ -17,8 +17,12 @@ function NumSelectedHeader({ numSelected, ...props }: NumSelectedHeaderProps) {
   return (
     <HeaderWrapper {...props}>
       <Typography
-        fontWeight="500"
-        sx={(theme) => ({ color: numSelected === 0 ? theme.palette.grey[500] : theme.palette.primary.main })}
+        sx={[
+          {
+            fontWeight: '500',
+          },
+          (theme) => ({ color: numSelected === 0 ? theme.palette.grey[500] : theme.palette.primary.main }),
+        ]}
       >
         {formatNumSelected(numSelected)}
       </Typography>

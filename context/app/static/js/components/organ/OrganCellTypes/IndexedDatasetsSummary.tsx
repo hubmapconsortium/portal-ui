@@ -17,7 +17,13 @@ interface IndexedDatasetsSummaryProps {
 }
 
 const loadingSkeleton = (
-  <Stack direction="row" spacing={1} alignItems="center">
+  <Stack
+    direction="row"
+    spacing={1}
+    sx={{
+      alignItems: 'center',
+    }}
+  >
     <Skeleton variant="rectangular" width={120} height={20} />
     <Skeleton variant="rectangular" width={100} height={20} />
   </Stack>
@@ -63,7 +69,13 @@ function IndexedDatasetsSummary({
       </Typography>
       <StyledDetailsAccordion
         summary={
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: 'center',
+            }}
+          >
             <OrganIcon />
             <Typography variant="subtitle2" component="span">
               Organs
@@ -77,7 +89,13 @@ function IndexedDatasetsSummary({
         }}
         defaultExpanded
       >
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           {isLoadingDatasets
             ? loadingSkeleton
             : organs.map(({ key, doc_count }, idx) => (
@@ -89,7 +107,13 @@ function IndexedDatasetsSummary({
       </StyledDetailsAccordion>
       <StyledDetailsAccordion
         summary={
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: 'center',
+            }}
+          >
             <DatasetIcon />
             <Typography variant="subtitle2" component="span">
               Data Types
@@ -103,7 +127,13 @@ function IndexedDatasetsSummary({
         }}
         defaultExpanded
       >
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           {isLoadingDatasets
             ? loadingSkeleton
             : datasetTypes.map(({ key, doc_count }, idx) => (

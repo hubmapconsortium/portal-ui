@@ -50,7 +50,12 @@ function TooltipTable({ organ, cellTypes, cellTypeCounts }: TooltipTableProps) {
 
   return (
     <Stack direction="column" spacing={1}>
-      <Typography variant="body2" fontWeight="bold">
+      <Typography
+        variant="body2"
+        sx={{
+          fontWeight: 'bold',
+        }}
+      >
         {organ}
       </Typography>
       <Table size="small">
@@ -66,7 +71,12 @@ function TooltipTable({ organ, cellTypes, cellTypeCounts }: TooltipTableProps) {
           {targetCellTypes.map(({ name, count }) => (
             <TableRow key={name}>
               <TableCell aria-hidden padding="checkbox">
-                <Stack direction="row" alignItems="center">
+                <Stack
+                  direction="row"
+                  sx={{
+                    alignItems: 'center',
+                  }}
+                >
                   <svg width="1em" height="1em" style={{ borderRadius: '0.25rem', marginRight: '-0.5rem' }}>
                     <rect fill={colorScale(name)} width="1em" height="1em" />
                   </svg>

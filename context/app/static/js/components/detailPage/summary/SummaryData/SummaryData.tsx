@@ -48,9 +48,22 @@ function SummaryData({
       <SpacedSectionButtonRow
         leftText={
           <LeftTextContainer>
-            <Stack direction="row" alignItems="center" gap={1}>
+            <Stack
+              direction="row"
+              sx={{
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
               {titlePrefixIcon}
-              <Typography component="h1" variant="h2" marginBottom={0.5} data-testid="entity-title">
+              <Typography
+                component="h1"
+                variant="h2"
+                data-testid="entity-title"
+                sx={{
+                  marginBottom: 0.5,
+                }}
+              >
                 {title}
               </Typography>
             </Stack>

@@ -30,8 +30,18 @@ function HomepageRelatedLink({ img, title, linkText, linkHref, description, icon
   const LinkComponent = isExternal ? OutboundIconLink : InternalLink;
 
   return (
-    <ExternalLinkContainer alignItems="center" direction="row">
-      <ImageWrapper justifyContent="center" flexShrink={0}>
+    <ExternalLinkContainer
+      direction="row"
+      sx={{
+        alignItems: 'center',
+      }}
+    >
+      <ImageWrapper
+        sx={{
+          justifyContent: 'center',
+          flexShrink: 0,
+        }}
+      >
         {icon ?? img}
       </ImageWrapper>
       <div>

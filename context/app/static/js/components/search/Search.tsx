@@ -187,7 +187,13 @@ function Header({ type }: SearchTypeProps) {
   }, [type]);
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        alignItems: 'center',
+      }}
+    >
       <EntityIcon component={icon} color="primary" />
       <Typography component="h1" variant="h2" data-testid="search-header">
         {text}
@@ -200,7 +206,12 @@ function TileViewBar() {
   const view = useSearchStore((state) => state.view);
   if (view !== 'tile') return null;
   return (
-    <Stack direction="row" justifyContent="flex-end">
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: 'flex-end',
+      }}
+    >
       <DefaultSearchViewSwitch />
     </Stack>
   );
@@ -208,16 +219,24 @@ function TileViewBar() {
 
 function Body({ facetGroups, withPaper }: { facetGroups: FacetGroups; withPaper?: boolean }) {
   return withPaper ? (
-    <Paper component={Stack} direction="row" spacing={2} p={2}>
+    <Paper component={Stack} direction="row" spacing={2} sx={{ p: 2 }}>
       <Facets facetGroups={facetGroups} />
-      <Box flexGrow={1}>
+      <Box
+        sx={{
+          flexGrow: 1,
+        }}
+      >
         <Results />
       </Box>
     </Paper>
   ) : (
     <Stack direction="row" spacing={2}>
       <Facets facetGroups={facetGroups} />
-      <Box flexGrow={1}>
+      <Box
+        sx={{
+          flexGrow: 1,
+        }}
+      >
         <Results />
       </Box>
     </Stack>
@@ -281,14 +300,25 @@ const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps
   const { enableSaySeeMode } = useAppContext();
   const effectiveMode = enableSaySeeMode ? mode : 'filter';
   return (
-    <Stack spacing={2} mb={4}>
+    <Stack
+      spacing={2}
+      sx={{
+        mb: 4,
+      }}
+    >
       {enableSaySeeMode && <SaySeeAlert />}
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
       <DataProductAlert />
       <Header type={type} />
-      <Stack direction="column" spacing={1} mb={2}>
+      <Stack
+        direction="column"
+        spacing={1}
+        sx={{
+          mb: 2,
+        }}
+      >
         <SearchNote />
         <div>
           {enableSaySeeMode && <SearchModeTabs />}

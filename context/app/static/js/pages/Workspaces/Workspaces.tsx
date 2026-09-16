@@ -25,7 +25,13 @@ function WorkspacesTutorialPrompt() {
 
 function Workspaces() {
   return (
-    <Stack spacing={2} direction="column" mb={2}>
+    <Stack
+      spacing={2}
+      direction="column"
+      sx={{
+        mb: 2,
+      }}
+    >
       <WorkspaceRelaunchAlert />
       <WorkspaceSessionWarning link />
       <WorkspacesTitle />

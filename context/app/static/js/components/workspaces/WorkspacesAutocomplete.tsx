@@ -24,8 +24,7 @@ function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: Wor
   );
 }
 
-function WorkspaceSearchField(params: AutocompleteRenderInputParams) {
-  const { InputProps } = params;
+function WorkspaceSearchField({ slotProps, ...params }: AutocompleteRenderInputParams) {
   return (
     <StyledTextField
       {...params}
@@ -33,8 +32,9 @@ function WorkspaceSearchField(params: AutocompleteRenderInputParams) {
       size="small"
       placeholder="Search workspace by name or ID"
       slotProps={{
+        ...slotProps,
         input: {
-          ...InputProps,
+          ...slotProps.input,
           startAdornment: (
             <InputAdornment position="start">
               <StyledSearchIcon />
@@ -69,7 +69,12 @@ function WorkspacesAutocomplete({
   );
 
   return (
-    <Box flex={1} maxWidth="50%">
+    <Box
+      sx={{
+        flex: 1,
+        maxWidth: '50%',
+      }}
+    >
       <Autocomplete
         value=""
         inputValue={inputValue}

@@ -14,7 +14,13 @@ interface DescriptionProps extends PaperProps {
 function Description({ children, noIcon = false, belowTheFold, ...props }: DescriptionProps) {
   return (
     <StyledPaper {...props}>
-      <Stack direction="row" alignItems="start" spacing={2}>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          alignItems: 'start',
+        }}
+      >
         {!noIcon && <InfoIcon fontSize="1.25rem" color="primary" />}
         <Typography variant="body1" component="div">
           {children}

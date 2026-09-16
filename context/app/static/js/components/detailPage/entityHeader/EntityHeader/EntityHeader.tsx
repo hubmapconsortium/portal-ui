@@ -83,7 +83,14 @@ function Header() {
       <Box>
         <EntityHeaderContent setView={handleViewChange} view={view} />
         {isLargeDesktop && (
-          <Box ref={summaryBodyRef} height={expandedHeights[view]} width="100%" p={2}>
+          <Box
+            ref={summaryBodyRef}
+            sx={{
+              height: expandedHeights[view],
+              width: '100%',
+              p: 2,
+            }}
+          >
             {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
             {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} isEntityHeader />}
           </Box>

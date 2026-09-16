@@ -59,7 +59,7 @@ export default function GenePathwaysAutocomplete() {
           </PreserveWhiteSpaceListItem>
         );
       }}
-      renderInput={({ InputLabelProps, ...params }) => (
+      renderInput={({ slotProps: inputSlotProps, ...params }) => (
         <TextField
           placeholder="Find a pathway by name (e.g. DNA Damage)."
           value={substring}
@@ -75,7 +75,8 @@ export default function GenePathwaysAutocomplete() {
           onChange={handleSubstringChange}
           {...params}
           slotProps={{
-            inputLabel: { shrink: true, ...InputLabelProps },
+            ...inputSlotProps,
+            inputLabel: { shrink: true, ...inputSlotProps.inputLabel },
           }}
         />
       )}

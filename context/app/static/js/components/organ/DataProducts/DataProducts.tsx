@@ -104,10 +104,20 @@ function DownloadCell({
         >
           {fileName}
         </InternalLink>
-        <Typography variant="caption" color="text.secondary">
+        <Typography
+          variant="caption"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
           {fileSizeBytes > 0 ? prettyBytes(fileSizeBytes) : '—'}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
+        <Typography
+          variant="caption"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
           {totalCells > 0 ? `${totalCells.toLocaleString()} cells, ${cellTypes.toLocaleString()} cell types` : ''}
         </Typography>
       </Stack>
@@ -204,7 +214,13 @@ export function DataProductsTable({
         <TableRow key={data_product_id}>
           <TableCell>
             {standalone ? (
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
                 {organIcon && <URLSvgIcon iconURL={organIcon} ariaLabel={`Icon for ${tissueType}`} />}
                 <InternalLink href={organHref} variant="body2">
                   {tissue.tissuetype}

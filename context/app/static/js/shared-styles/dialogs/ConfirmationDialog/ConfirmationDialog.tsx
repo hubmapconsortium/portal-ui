@@ -28,11 +28,22 @@ export default function ConfirmationDialog({
 }: ConfirmationDialogProps) {
   return (
     <Dialog open onClose={handleClose} scroll="paper" aria-labelledby={`${title}-dialog`} maxWidth="lg">
-      <Stack display="flex" flexDirection="row" justifyContent="space-between" marginRight={1}>
+      <Stack
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginRight: 1,
+        }}
+      >
         <DialogTitle id={`${title}-title`} variant="h3">
           {title}
         </DialogTitle>
-        <Box alignContent="center">
+        <Box
+          sx={{
+            alignContent: 'center',
+          }}
+        >
           <IconButton aria-label="Close" onClick={handleClose} size="large">
             <CloseRounded />
           </IconButton>
