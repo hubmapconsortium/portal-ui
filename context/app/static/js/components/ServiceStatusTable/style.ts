@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import LensIcon from '@mui/icons-material/LensRounded';
 
 import { ExternalLinkIcon } from 'js/shared-styles/icons';
@@ -11,7 +12,7 @@ interface ColoredStatusIconProps {
 // of text in this cell. 0.8rem works, but somewhat arbitrary.
 // "vertical-align: sub" looks better than "baseline",
 // but depends on size of circle.
-const ColoredStatusIcon = styled(LensIcon)<ColoredStatusIconProps>(({ theme, $iconColor }) => ({
+const ColoredStatusIcon = styled(LensIcon, { shouldForwardProp })<ColoredStatusIconProps>(({ theme, $iconColor }) => ({
   color: theme.palette[$iconColor].main,
   fontSize: '0.8rem',
   marginRight: '3px',

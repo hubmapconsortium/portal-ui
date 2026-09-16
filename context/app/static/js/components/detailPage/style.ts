@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import { Alert } from 'js/shared-styles/alerts';
 import MUIAlert from '@mui/material/Alert';
 import Section from 'js/shared-styles/sections/Section';
@@ -9,7 +10,7 @@ const DetailPageAlert = styled(Alert as typeof MUIAlert)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 })) as typeof MUIAlert;
 
-const OffsetSection = styled(Section)<{ $offset: number }>(({ $offset }) => ({
+const OffsetSection = styled(Section, { shouldForwardProp })<{ $offset: number }>(({ $offset }) => ({
   scrollMarginTop: `${$offset}px`,
 }));
 

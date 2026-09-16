@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Typography from '@mui/material/Typography';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
@@ -9,7 +10,7 @@ interface AccordionProps {
   $isExpanded: boolean;
 }
 
-const AccordionText = styled(Typography)<AccordionProps>(({ theme, $isExpanded }) => ({
+const AccordionText = styled(Typography, { shouldForwardProp })<AccordionProps>(({ theme, $isExpanded }) => ({
   color: $isExpanded ? '#fff' : theme.palette.text.primary,
 }));
 
@@ -18,16 +19,18 @@ const AccordionSummaryHeading = styled(AccordionText)({
   flexShrink: 0,
 });
 
-const StyledAccordionSummary = styled(AccordionSummary)<AccordionProps>(({ theme, $isExpanded }) => ({
-  backgroundColor: $isExpanded ? theme.palette.secondary.main : '#E0E0E0',
-  '> div': {
-    minHeight: iconHeight,
-  },
-  // only color the expand icon
-  'span > svg': {
-    color: $isExpanded ? '#fff' : theme.palette.text.primary,
-  },
-}));
+const StyledAccordionSummary = styled(AccordionSummary, { shouldForwardProp })<AccordionProps>(
+  ({ theme, $isExpanded }) => ({
+    backgroundColor: $isExpanded ? theme.palette.secondary.main : '#E0E0E0',
+    '> div': {
+      minHeight: iconHeight,
+    },
+    // only color the expand icon
+    'span > svg': {
+      color: $isExpanded ? '#fff' : theme.palette.text.primary,
+    },
+  }),
+);
 
 const SuccessIcon = styled(CheckCircleRoundedIcon)(({ theme }) => ({
   color: theme.palette.success.light,

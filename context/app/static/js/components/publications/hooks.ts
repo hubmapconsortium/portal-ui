@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { SyntheticEvent, useMemo, useState } from 'react';
 import { ContributorAPIResponse } from 'js/components/detailPage/ContributorsTable/utils';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useDownloadTable } from 'js/helpers/download';
@@ -72,7 +72,7 @@ function usePublications() {
 
   const [openTabIndex, setOpenTabIndex] = useState(0);
 
-  const handleTabChange = useEventCallback((_: Event, newIndex: number) => {
+  const handleTabChange = useEventCallback((_: SyntheticEvent, newIndex: number) => {
     setOpenTabIndex(newIndex);
   });
 

@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 
 type Props = LinkProps;
 
-const StyledLink = styled(Link)<{ component: 'a' }>(({ theme }) => ({
+const StyledLink = styled(Link)(({ theme }) => ({
   color: theme.palette.common.link,
 })) as typeof Link;
 

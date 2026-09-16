@@ -8,7 +8,7 @@ interface SectionButtonRowProps extends ComponentProps<typeof Flex> {
   /**
    Text to be displayed in the left most available space. Usually a BottomAlignedTypography component.
   */
-  leftText: React.ReactNode;
+  leftText?: React.ReactNode;
   /**
    Button(s) to be displayed in the right most available space.
   */

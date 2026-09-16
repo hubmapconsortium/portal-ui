@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
@@ -20,7 +21,7 @@ const StyledTableBody = styled(TableBody)({
 const interPadding = '.6rem';
 const sidePadding = '4rem';
 
-const StyledTableRow = styled(TableRow)<{ $beforeHighlight?: boolean; $highlight?: boolean }>(
+const StyledTableRow = styled(TableRow, { shouldForwardProp })<{ $beforeHighlight?: boolean; $highlight?: boolean }>(
   ({ theme, $beforeHighlight, $highlight }) => ({
     border: `1px solid ${theme.palette.divider}`,
 
