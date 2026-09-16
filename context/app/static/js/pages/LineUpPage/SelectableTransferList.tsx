@@ -18,6 +18,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeftRounded'
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => !b.includes(value));
@@ -235,7 +236,7 @@ export default function SelectableTransferList({
         />
       </Grid2>
       <Grid2 size={1}>
-        <Grid2 container direction="column" sx={{ alignItems: 'center', gap: 1 }}>
+        <Stack direction="column" sx={{ alignItems: 'center', gap: 1 }}>
           <SecondaryBackgroundTooltip title={moveToRightTooltip}>
             <Box>
               <Button
@@ -262,7 +263,7 @@ export default function SelectableTransferList({
               </Button>
             </Box>
           </SecondaryBackgroundTooltip>
-        </Grid2>
+        </Stack>
       </Grid2>
       <Grid2 size="grow">
         <SearchableTransferList

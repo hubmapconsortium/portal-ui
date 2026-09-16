@@ -169,7 +169,13 @@ function CellTypesHeaderPanel() {
             );
           })}
         </Menu>
-        <Box visibility="hidden" width={0} height={0}>
+        <Box
+          sx={{
+            visibility: 'hidden',
+            width: 0,
+            height: 0,
+          }}
+        >
           {/* Prefetch organ icons so they don't have to load on first menu open */}
           {organs.map((organ) => (
             <OrganIcon key={organ} organName={organ} />
@@ -322,7 +328,12 @@ function CellTypesPanelItem({
       <BodyCell {...desktopConfig.name} aria-label="Cell Type">
         <Box>
           {href ? (
-            <InternalLink href={href} display="inline">
+            <InternalLink
+              href={href}
+              sx={{
+                display: 'inline',
+              }}
+            >
               {name}
             </InternalLink>
           ) : (

@@ -169,7 +169,13 @@ export function MolecularDataQueryForm({ children, urlState }: MolecularDataQuer
         <Step index={0}>
           <QueryParametersLabel activeStep={activeStep} handleBackToParameters={handleBackToParameters} />
           <StepContent>
-            <Stack component="form" onSubmit={submit} gap={2}>
+            <Stack
+              component="form"
+              onSubmit={submit}
+              sx={{
+                gap: 2,
+              }}
+            >
               {children}
               <SubmitButton />
             </Stack>

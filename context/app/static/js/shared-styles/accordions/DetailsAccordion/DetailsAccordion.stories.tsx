@@ -10,7 +10,11 @@ type DetailsStoryProps = React.ComponentProps<typeof DetailsAccordion>;
 
 function DetailsStory({ summary, children }: DetailsStoryProps) {
   return (
-    <Box height="10em">
+    <Box
+      sx={{
+        height: '10em',
+      }}
+    >
       <DetailsAccordion summary={summary}>{children}</DetailsAccordion>
     </Box>
   );

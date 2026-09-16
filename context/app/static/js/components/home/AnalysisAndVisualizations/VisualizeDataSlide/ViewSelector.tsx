@@ -65,13 +65,32 @@ function DesktopViewSelector({
               onViewChange(nextIndex);
             }}
           >
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                alignItems: 'center',
+                mb: 0.5,
+              }}
+            >
               <Icon color={view.theme} sx={{ fontSize: '1.5rem' }} />
-              <Typography variant="subtitle1" component="h4" fontWeight={500}>
+              <Typography
+                variant="subtitle1"
+                component="h4"
+                sx={{
+                  fontWeight: 500,
+                }}
+              >
                 {view.title}
               </Typography>
             </Stack>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'text.secondary',
+                mb: 1,
+              }}
+            >
               {view.description}
             </Typography>
             <Button
@@ -143,13 +162,30 @@ function MobileViewSelector({
             return (
               <SwipePanel key={view.id}>
                 <Stack spacing={1.5}>
-                  <Stack direction="row" spacing={1} alignItems="center">
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{
+                      alignItems: 'center',
+                    }}
+                  >
                     <Icon color={view.theme} sx={{ fontSize: '1.5rem' }} />
-                    <Typography variant="subtitle1" component="h4" fontWeight={500}>
+                    <Typography
+                      variant="subtitle1"
+                      component="h4"
+                      sx={{
+                        fontWeight: 500,
+                      }}
+                    >
                       {view.title}
                     </Typography>
                   </Stack>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: 'text.secondary',
+                    }}
+                  >
                     {view.description}
                   </Typography>
                   <Button
@@ -178,7 +214,14 @@ function MobileViewSelector({
           })}
         </SwipeTrack>
       </SwipeContainer>
-      <Stack direction="row" spacing={1} justifyContent="center" sx={{ mt: 2 }}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          justifyContent: 'center',
+          mt: 2,
+        }}
+      >
         {views.map((view, index) => (
           <PaginationDot
             key={view.id}

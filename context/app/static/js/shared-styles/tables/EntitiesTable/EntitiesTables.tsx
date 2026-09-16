@@ -105,7 +105,13 @@ function EntitiesTableTabInternal<Doc extends Entity>(
       label={
         tabTooltipText ? (
           <SecondaryBackgroundTooltip title={tabTooltipText}>
-            <Box display="contents">{label}</Box>
+            <Box
+              sx={{
+                display: 'contents',
+              }}
+            >
+              {label}
+            </Box>
           </SecondaryBackgroundTooltip>
         ) : (
           label
@@ -191,7 +197,13 @@ function EntitiesTablesBodies<Doc extends Entity>({
 
           return (
             <TabPanel key={entityType} value={openTabIndex} index={i}>
-              <Stack width="100%" minHeight={reservedHeight} spacing={0.5}>
+              <Stack
+                spacing={0.5}
+                sx={{
+                  width: '100%',
+                  minHeight: reservedHeight,
+                }}
+              >
                 {Array.from({ length: skeletonRows }).map((_, idx) => (
                   <Skeleton height={ESTIMATED_ROW_HEIGHT} key={idx} width="100%" />
                 ))}

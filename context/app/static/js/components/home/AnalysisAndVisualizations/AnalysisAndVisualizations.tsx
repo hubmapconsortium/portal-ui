@@ -52,7 +52,12 @@ function AnalysisAndVisualizations() {
         <SectionHeader variant="h2" component="h3" icon={QueryStatsRounded}>
           Analysis and Visualizations
         </SectionHeader>
-        <Typography variant="body1" color="text.secondary">
+        <Typography
+          variant="body1"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
           See how researchers use HuBMAP&apos;s data and tools to map human organs, cell types, and biomarkers.
         </Typography>
       </Container>

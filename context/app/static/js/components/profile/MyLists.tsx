@@ -15,7 +15,12 @@ export function MyLists() {
   return (
     <CollapsibleDetailPageSection id="my-lists" title="My Lists" component="h2" variant="h2">
       <SectionPaper>
-        <Stack spacing={1} alignItems="start">
+        <Stack
+          spacing={1}
+          sx={{
+            alignItems: 'start',
+          }}
+        >
           <Typography variant="body1">
             Lists saved here are stored to your profile and accessible across devices.
           </Typography>

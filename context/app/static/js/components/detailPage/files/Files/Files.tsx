@@ -15,7 +15,11 @@ interface FilesProps {
 
 function Files({ files, includeAccordion }: FilesProps) {
   const fileContent = files.length > 0 && (
-    <Box mb={2}>
+    <Box
+      sx={{
+        mb: 2,
+      }}
+    >
       <FileBrowser files={files} />
     </Box>
   );

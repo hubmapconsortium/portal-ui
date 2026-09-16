@@ -23,7 +23,11 @@ function SnackbarStory({ message, severity }: SnackbarMessage) {
 
 function SnackbarStoryWrapper(message: SnackbarMessage) {
   return (
-    <Box height="50vh">
+    <Box
+      sx={{
+        height: '50vh',
+      }}
+    >
       <SnackbarStory {...message} />
       <StyledSnackbar />
     </Box>

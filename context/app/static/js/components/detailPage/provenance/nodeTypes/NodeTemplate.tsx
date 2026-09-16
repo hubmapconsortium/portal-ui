@@ -45,25 +45,45 @@ export function NodeTemplate({
   isSelected,
 }: NodeTemplateProps) {
   const contents = (
-    <Box height={height} display="flex" alignItems="center">
+    <Box
+      sx={{
+        height: height,
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
       <Stack
         direction="column"
-        px={2}
-        py={1}
-        borderRadius={rounded ? '1rem' : 0}
-        minWidth="15rem"
-        maxWidth="20rem"
-        bgcolor={bgColor}
-        boxShadow="0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)"
         sx={{
+          px: 2,
+          py: 1,
+          borderRadius: rounded ? '1rem' : 0,
+          minWidth: '15rem',
+          maxWidth: '20rem',
+          bgcolor: bgColor,
+          boxShadow:
+            '0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)',
           outline: isSelected ? '3px solid' : 'none',
           outlineColor: isSelected ? 'primary.main' : 'transparent',
           outlineOffset: '2px',
         }}
       >
-        <Stack direction="row" gap={1} my="auto" alignItems="center">
+        <Stack
+          direction="row"
+          sx={{
+            gap: 1,
+            my: 'auto',
+            alignItems: 'center',
+          }}
+        >
           {Icon && <Icon color="primary" fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
-          <Typography variant="subtitle2" noWrap mx={Icon ? '0' : 'auto'}>
+          <Typography
+            variant="subtitle2"
+            noWrap
+            sx={{
+              mx: Icon ? '0' : 'auto',
+            }}
+          >
             {displayName}
           </Typography>
           {showAsterisk && <AsteriskWrapper aria-label="Current entity">✻</AsteriskWrapper>}

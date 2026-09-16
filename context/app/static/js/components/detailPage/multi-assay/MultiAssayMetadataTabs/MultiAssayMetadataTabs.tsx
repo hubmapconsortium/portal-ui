@@ -91,7 +91,13 @@ function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] 
         tableRows,
         label:
           count > 1 ? (
-            <Stack key={hubmap_id} spacing={0} alignItems="center">
+            <Stack
+              key={hubmap_id}
+              spacing={0}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
               <div>{label}</div>
               <div>({hubmap_id})</div>
             </Stack>

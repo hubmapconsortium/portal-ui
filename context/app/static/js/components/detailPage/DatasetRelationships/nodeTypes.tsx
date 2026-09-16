@@ -87,17 +87,34 @@ function NodeTemplate({
   const contentColor = isRetracted ? theme.palette.common.white : undefined;
   // Outer wrapper Box makes sure that nodes are always the same height
   const contents = (
-    <Box height="4.125rem" display="flex" alignItems="center" sx={{ cursor: href ? 'pointer' : 'default' }}>
+    <Box
+      sx={{
+        height: '4.125rem',
+        display: 'flex',
+        alignItems: 'center',
+        cursor: href ? 'pointer' : 'default',
+      }}
+    >
       <Stack
         direction="column"
-        px={2}
-        py={1}
-        borderRadius={rounded ? '1rem' : 0}
-        maxWidth="18rem"
-        bgcolor={effectiveBgColor}
-        boxShadow="0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)"
+        sx={{
+          px: 2,
+          py: 1,
+          borderRadius: rounded ? '1rem' : 0,
+          maxWidth: '18rem',
+          bgcolor: effectiveBgColor,
+          boxShadow:
+            '0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)',
+        }}
       >
-        <Stack direction="row" gap={1} my="auto" alignItems="center">
+        <Stack
+          direction="row"
+          sx={{
+            gap: 1,
+            my: 'auto',
+            alignItems: 'center',
+          }}
+        >
           {Icon && <Icon color={isRetracted ? 'white' : 'primary'} fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
           <Typography variant="subtitle2" sx={{ color: contentColor }}>
             {isLoading ? <Skeleton variant="text" width="10rem" /> : name}

@@ -132,7 +132,13 @@ function SummaryTitle({
       title={name}
       entity_type="Workspace"
       otherButtons={
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           <WorkspacesDeleteButton workspaceIds={new Set([workspace.id.toString()])} tooltip={tooltips.delete} />
           <WorkspacesUpdateButton
             workspace={workspace}
@@ -167,7 +173,13 @@ function SummaryTitle({
         </Stack>
       }
     >
-      <Typography variant="subtitle1" component="p" marginTop={2}>
+      <Typography
+        variant="subtitle1"
+        component="p"
+        sx={{
+          marginTop: 2,
+        }}
+      >
         <JobStatus job={job} />
       </Typography>
     </SummaryData>
@@ -377,7 +389,12 @@ function WorkspacePageContent({ workspaceId }: WorkspacePageProps) {
         sections={shouldDisplaySection}
         trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage, label: workspace.name }}
       >
-        <Stack gap={1} sx={{ marginBottom: 5 }}>
+        <Stack
+          sx={{
+            gap: 1,
+            marginBottom: 5,
+          }}
+        >
           <WorkspaceSessionWarning workspace={workspace} />
           <Summary
             workspace={workspace}

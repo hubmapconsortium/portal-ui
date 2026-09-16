@@ -5,6 +5,7 @@ import PrimarySwitch from 'js/shared-styles/switches/PrimarySwitch';
 import { SwitchProps } from '@mui/material/Switch';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import InfoTextTooltip from '../tooltips/InfoTextTooltip';
+import { mergeSx } from 'js/helpers/styled';
 
 interface LabeledPrimarySwitchProps extends Omit<SwitchProps, 'label'> {
   label?: React.ReactNode;
@@ -56,9 +57,24 @@ export default function LabeledPrimarySwitch({
   };
 
   return (
-    <Stack useFlexGap alignItems="start" sx={sx}>
+    <Stack
+      useFlexGap
+      sx={mergeSx(
+        {
+          alignItems: 'start',
+        },
+        sx,
+      )}
+    >
       {actualLabel}
-      <Stack direction="row" component="label" alignItems="center" mt={0}>
+      <Stack
+        direction="row"
+        component="label"
+        sx={{
+          alignItems: 'center',
+          mt: 0,
+        }}
+      >
         {renderOptionLabel(disabledLabel, disabledTooltip)}
         <PrimarySwitch
           checked={checked}

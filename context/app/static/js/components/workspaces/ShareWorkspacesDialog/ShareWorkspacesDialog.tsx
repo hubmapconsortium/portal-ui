@@ -71,7 +71,12 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
       handleClose={handleClose}
       handleConfirmAndClose={handleShareAndClose}
     >
-      <Stack spacing={3} marginBottom={10}>
+      <Stack
+        spacing={3}
+        sx={{
+          marginBottom: 10,
+        }}
+      >
         <StepDescription blocks={description} />
         <UsersAutocomplete selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
       </Stack>

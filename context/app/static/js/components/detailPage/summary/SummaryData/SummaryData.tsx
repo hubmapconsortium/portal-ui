@@ -51,7 +51,13 @@ function SummaryData({
       <SpacedSectionButtonRow
         leftText={
           <LeftTextContainer>
-            <Stack direction="row" alignItems="center" gap={1}>
+            <Stack
+              direction="row"
+              sx={{
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
               {titlePrefixIcon}
               <Typography
                 component={titleIsHubmapId ? 'h2' : 'h1'}

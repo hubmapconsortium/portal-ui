@@ -24,7 +24,14 @@ function SeeMoreRows({
 
   return (
     <StyledButton variant="text" onClick={trackSeeMoreClick} fullWidth>
-      <Stack direction="row" spacing={1} marginY={0.5} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          marginY: 0.5,
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="button">See More</Typography>
         <DownIcon />
       </Stack>

@@ -182,7 +182,13 @@ function EntityHeaderActionButtons({
   const isDataset = entity_type === 'Dataset';
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        alignItems: 'center',
+      }}
+    >
       {isLargeDesktop && (
         <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} uuid={uuid} />
       )}

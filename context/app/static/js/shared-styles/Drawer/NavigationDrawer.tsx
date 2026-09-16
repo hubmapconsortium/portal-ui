@@ -15,7 +15,12 @@ export default function NavigationDrawer({ title, direction, sections, onClose, 
   }, []);
   return (
     <StyledDrawer open={open} anchor={direction} onClose={onClose}>
-      <Stack gap={1} useFlexGap>
+      <Stack
+        useFlexGap
+        sx={{
+          gap: 1,
+        }}
+      >
         <DrawerTitle>
           {title}
           <IconButton aria-label="Close" onClick={onClose}>

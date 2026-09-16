@@ -32,11 +32,25 @@ function ParallaxSlide({ config, zIndex, isProminent = true, stickyRef }: Parall
         <SlideGrid $layout={layout}>
           <TextContent>
             <Icon color={theme} sx={{ fontSize: '2.5rem', mb: 1 }} />
-            <Typography variant="h4" component="h3" gutterBottom fontWeight={400}>
+            <Typography
+              variant="h4"
+              component="h3"
+              gutterBottom
+              sx={{
+                fontWeight: 400,
+              }}
+            >
               {title}
             </Typography>
             {(Array.isArray(description) ? description : [description]).map((paragraph) => (
-              <Typography key={paragraph} variant="body1" color="text.secondary" paragraph>
+              <Typography
+                key={paragraph}
+                variant="body1"
+                sx={{
+                  color: 'text.secondary',
+                  marginBottom: '16px',
+                }}
+              >
                 {paragraph}
               </Typography>
             ))}

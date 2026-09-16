@@ -47,7 +47,13 @@ function IndexedDatasetPreview(dataset: Dataset) {
   const { data: vitessceConf, isLoading } = useVitessceConf(dataset.uuid);
 
   return (
-    <Box p={2} width="100%" height="700px">
+    <Box
+      sx={{
+        p: 2,
+        width: '100%',
+        height: '700px',
+      }}
+    >
       <ChartLoader isLoading={isLoading || !vitessceConf}>
         <VisualizationWrapper
           vitData={vitessceConf}

@@ -36,7 +36,9 @@ function AddToListItem({
           checked={isSelected}
           tabIndex={-1}
           disableRipple
-          inputProps={{ 'aria-labelledby': labelId }}
+          slotProps={{
+            input: { 'aria-labelledby': labelId },
+          }}
         />
       </ListItemIcon>
       <ListItemText id={labelId} primary={title} />

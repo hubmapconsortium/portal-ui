@@ -20,7 +20,7 @@ function TitleTextField({
       fullWidth
       variant="outlined"
       placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-      inputProps={{ maxLength: maxTitleLength }}
+      slotProps={{ htmlInput: { maxLength: maxTitleLength } }}
       onChange={handleChange}
       required
       helperText={`${title.length}/${maxTitleLength} Characters`}
@@ -45,7 +45,7 @@ function DescriptionTextField({
       placeholder="Input description of list"
       multiline
       rows={5}
-      inputProps={{ maxLength: 1000 }}
+      slotProps={{ htmlInput: { maxLength: 1000 } }}
       onChange={handleChange}
       value={description}
     />

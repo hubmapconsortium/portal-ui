@@ -40,7 +40,11 @@ export default function Datasets() {
     <CollapsibleDetailPageSection id={datasets.id} title={`Datasets with ${geneSymbol}`} trackingInfo={trackingInfo}>
       <Description
         belowTheFold={
-          <Box mt={2}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Button
               href="/search/biomarkers-cell-types"
               variant="contained"
@@ -57,7 +61,11 @@ export default function Datasets() {
         modalities or the availability of cell annotations. To find datasets with additional parameters such as finding
         datasets with multiple genes, use the biomarker and cell type search tool.
       </Description>
-      <Box py={1} />
+      <Box
+        sx={{
+          py: 1,
+        }}
+      />
       <MolecularDataQueryFormTrackingProvider category="Gene Detail Page">
         <MolecularDataQueryFormProvider
           initialValues={{

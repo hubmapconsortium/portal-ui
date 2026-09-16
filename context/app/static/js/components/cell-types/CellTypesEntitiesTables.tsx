@@ -32,7 +32,11 @@ function CellTypesEntitiesTables() {
     <CollapsibleDetailPageSection title={formattedTitle} id="datasets" trackingInfo={trackingInfo}>
       <Description
         belowTheFold={
-          <Box mt={2}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Button
               href="/search/biomarkers-cell-types"
               variant="contained"
@@ -49,7 +53,11 @@ function CellTypesEntitiesTables() {
         plot displays an overview of the datasets metadata compared to either the indexed datasets or all the HuBMAP
         datasets available. The table is available for download in TSV format for further analysis.
       </Description>
-      <Box py={1} />
+      <Box
+        sx={{
+          py: 1,
+        }}
+      />
       <MolecularDataQueryFormTrackingProvider category="Cell Type Detail Page">
         <MolecularDataQueryFormProvider
           initialValues={{

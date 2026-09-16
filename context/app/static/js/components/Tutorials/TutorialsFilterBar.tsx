@@ -28,14 +28,34 @@ export default function TutorialsFilterBar() {
   const filterCategories = useTutorialLandingPageFilterCategories();
 
   return (
-    <Stack spacing={1} justifyContent="start" alignItems="start">
-      <Stack direction="row" gap={1} alignItems="center" useFlexGap>
+    <Stack
+      spacing={1}
+      sx={{
+        justifyContent: 'start',
+        alignItems: 'start',
+      }}
+    >
+      <Stack
+        direction="row"
+        useFlexGap
+        sx={{
+          gap: 1,
+          alignItems: 'center',
+        }}
+      >
         <FilterListRounded color="primary" />
         <Typography variant="subtitle1" component="label" htmlFor="tutorial-category-filters">
           Filter by Category
         </Typography>
       </Stack>
-      <Stack direction="row" gap={1} useFlexGap id="tutorial-category-filters">
+      <Stack
+        direction="row"
+        useFlexGap
+        id="tutorial-category-filters"
+        sx={{
+          gap: 1,
+        }}
+      >
         {TUTORIAL_CATEGORIES.map((category) => (
           <FilterChip key={category} category={category} isSelected={filterCategories.includes(category)} />
         ))}

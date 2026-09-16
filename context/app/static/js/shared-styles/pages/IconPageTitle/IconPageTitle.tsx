@@ -11,7 +11,7 @@ interface IconPageTitleProps {
 
 function IconPageTitle({ icon, children, iconProps, ...rest }: React.PropsWithChildren<IconPageTitleProps>) {
   return (
-    <Stack direction="row" alignItems="center" {...rest}>
+    <Stack direction="row" {...rest} sx={{ alignItems: 'center' }}>
       <StyledHeaderIcon component={icon} color="primary" {...iconProps} />
       <PageTitle>{children}</PageTitle>
     </Stack>

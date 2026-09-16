@@ -16,7 +16,15 @@ export default function PublicationsSearchBar() {
   const { downloadTable } = usePublications();
 
   return (
-    <Stack direction="row" justifyContent="space-between" mb={2} gap={2} useFlexGap>
+    <Stack
+      direction="row"
+      useFlexGap
+      sx={{
+        justifyContent: 'space-between',
+        mb: 2,
+        gap: 2,
+      }}
+    >
       <SearchBar
         sx={{ flexGrow: 1 }}
         placeholder={text.placeholder}

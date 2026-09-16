@@ -346,7 +346,11 @@ function ResetFiltersButton() {
     setSearch('');
   }, [resetFilters, setSearch]);
   return (
-    <Box flexShrink={0}>
+    <Box
+      sx={{
+        flexShrink: 0,
+      }}
+    >
       <Chip
         variant="outlined"
         onClick={handleClear}
@@ -554,14 +558,29 @@ function FilterChips() {
 
   if (!hasActiveFilters) {
     return (
-      <Typography fontWeight="500" sx={(theme) => ({ color: theme.palette.grey[500], px: 1, py: 0.75 })}>
+      <Typography
+        sx={[
+          {
+            fontWeight: '500',
+          },
+          (theme) => ({ color: theme.palette.grey[500], px: 1, py: 0.75 }),
+        ]}
+      >
         No active filters
       </Typography>
     );
   }
 
   return (
-    <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start" sx={{ width: '100%' }}>
+    <Stack
+      direction="row"
+      spacing={2}
+      sx={{
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        width: '100%',
+      }}
+    >
       <Box
         ref={containerRef}
         sx={{
@@ -578,7 +597,14 @@ function FilterChips() {
         <IncludeSupersededChip />
         {chipElements}
       </Box>
-      <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          flexShrink: 0,
+          alignItems: 'flex-start',
+        }}
+      >
         <Chip
           label={isExpanded ? 'See less' : 'See more'}
           onClick={() => setIsExpanded((prev) => !prev)}

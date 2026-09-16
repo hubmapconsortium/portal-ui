@@ -20,7 +20,13 @@ function LogInPanel({ children, trackingInfo }: LogInPanelProps) {
   }
 
   return (
-    <Stack component={Paper} p={2} spacing={2}>
+    <Stack
+      component={Paper}
+      spacing={2}
+      sx={{
+        p: 2,
+      }}
+    >
       <Stack direction="row" spacing={2}>
         <InfoIcon color="primary" fontSize="1.5rem" />
         <Typography>{children}</Typography>

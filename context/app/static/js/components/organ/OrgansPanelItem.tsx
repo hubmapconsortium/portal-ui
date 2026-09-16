@@ -75,7 +75,12 @@ function OrgansHeaderPanel() {
 
   return (
     <StackTemplate spacing={4}>
-      <HeaderCell {...desktopConfig.name} pl={4}>
+      <HeaderCell
+        {...desktopConfig.name}
+        sx={{
+          pl: 4,
+        }}
+      >
         <TableSortLabelTemplate columnId="name" label="Organ" />
       </HeaderCell>
       <HeaderCell {...desktopConfig.description}>
@@ -122,12 +127,37 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
             width: '100%',
           }}
         >
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: 'center',
+            }}
+          >
             {/* Using URLSvgIcon here directly instead of OrganIcon to prevent redundant request for icon URL */}
-            <URLSvgIcon iconURL={icon} ariaLabel={name} aria-hidden fontSize="small" />
+            <URLSvgIcon
+              iconURL={icon}
+              ariaLabel={name}
+              aria-hidden
+              sx={{
+                fontSize: 'small',
+              }}
+            />
 
-            <Stack direction="column" alignItems="start" spacing={0.25}>
-              <Stack direction="row" spacing={0.5} alignItems="center">
+            <Stack
+              direction="column"
+              spacing={0.25}
+              sx={{
+                alignItems: 'start',
+              }}
+            >
+              <Stack
+                direction="row"
+                spacing={0.5}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
                 <Typography variant="body2">{name}</Typography>
                 {cellTypes.length > 0 && (
                   <SecondaryBackgroundTooltip title="This organ contains datasets with annotated cell types.">
@@ -135,7 +165,13 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
                   </SecondaryBackgroundTooltip>
                 )}
               </Stack>
-              <Typography variant="body2" color="text.secondary" component="span">
+              <Typography
+                variant="body2"
+                component="span"
+                sx={{
+                  color: 'text.secondary',
+                }}
+              >
                 {uberon_short}
               </Typography>
             </Stack>

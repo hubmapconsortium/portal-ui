@@ -116,11 +116,27 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
         </PageTitle>
         <Description
           belowTheFold={
-            <Stack mt={2} gap={0.5}>
-              <Typography variant="subtitle2" color="text.secondary">
+            <Stack
+              sx={{
+                mt: 2,
+                gap: 0.5,
+              }}
+            >
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: 'text.secondary',
+                }}
+              >
                 Tags
               </Typography>
-              <Stack direction="row" gap={1} flexWrap="wrap">
+              <Stack
+                direction="row"
+                sx={{
+                  gap: 1,
+                  flexWrap: 'wrap',
+                }}
+              >
                 {tags.map((tag) => (
                   <Chip key={tag} label={tag} variant="outlined" sx={{ borderRadius: '4px' }} />
                 ))}
@@ -138,7 +154,14 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
             <Description>
               Explore other tutorials to continue learning about HuBMAP data and the features of the portal.
             </Description>
-            <Grid mt={2} spacing={2} container justifyContent="stretch">
+            <Grid
+              spacing={2}
+              container
+              sx={{
+                mt: 2,
+                justifyContent: 'stretch',
+              }}
+            >
               {relatedTutorials.map((tutorial) => (
                 <TutorialCard key={tutorial.route} tutorial={tutorial} />
               ))}

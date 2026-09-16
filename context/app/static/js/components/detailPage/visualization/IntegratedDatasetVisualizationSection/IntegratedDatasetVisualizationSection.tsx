@@ -28,7 +28,12 @@ function IntegratedDatasetVisualizationSection({
     <CollapsibleDetailPageSection title="Visualization" icon={VisualizationIcon}>
       <Description
         belowTheFold={
-          <Box mt={2} width="100%">
+          <Box
+            sx={{
+              mt: 2,
+              width: '100%',
+            }}
+          >
             <VisualizationWrapper
               uuid={uuid}
               vitData={vitessceConfig}

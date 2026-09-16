@@ -19,7 +19,13 @@ function indexToMode(index: number): SearchMode {
 
 function TabLabel({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        alignItems: 'center',
+      }}
+    >
       {icon}
       <span>{text}</span>
     </Stack>

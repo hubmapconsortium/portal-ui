@@ -32,11 +32,24 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
 
   return (
     <>
-      <Stack direction="row" alignItems="center" spacing={1}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <Icon component={entityIconMap.Dataset} color="primary" fontSize="inherit" sx={{ fontSize: '1.5rem' }} />
         <Typography variant="h5">{title}</Typography>
       </Stack>
-      <Stack direction="row" justifyContent="center" spacing={1} flexWrap="wrap">
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+        }}
+      >
         {datasets.map((dataset, index) => (
           <EntityTile
             key={dataset.uuid}
@@ -71,7 +84,12 @@ function MultiAssayProvenance() {
   const { datasets } = useRelatedMultiAssayDatasets();
   return (
     <Paper sx={{ p: 2 }}>
-      <Stack spacing={2} alignItems="center">
+      <Stack
+        spacing={2}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <StyledPaper>
           <Stack spacing={2}>
             <MultiTileStack datasets={datasets.component} title="Components" />
@@ -79,7 +97,13 @@ function MultiAssayProvenance() {
           </Stack>
         </StyledPaper>
         {datasets?.processed.length > 0 && (
-          <Stack spacing={2} sx={{ width: '100%' }} alignItems="center">
+          <Stack
+            spacing={2}
+            sx={{
+              alignItems: 'center',
+              width: '100%',
+            }}
+          >
             <KeyboardArrowDownIcon sx={{ fontSize: '2rem' }} />
             <StyledPaper>
               <MultiTileStack datasets={datasets.processed} title="Processed" />

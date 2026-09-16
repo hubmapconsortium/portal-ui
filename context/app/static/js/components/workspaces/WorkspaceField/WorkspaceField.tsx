@@ -31,7 +31,12 @@ function WorkspaceField<FormType extends FieldValues>({
   const [charCount, setCharCount] = useState((field?.value as string)?.length ?? 0);
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <TextField
         label={label || name}
         fullWidth
@@ -49,7 +54,15 @@ function WorkspaceField<FormType extends FieldValues>({
         }}
       />
       {!hideCharCount && (
-        <Typography variant="caption" color="textSecondary" align="right" marginTop={0.5} marginRight={2}>
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          align="right"
+          sx={{
+            marginTop: 0.5,
+            marginRight: 2,
+          }}
+        >
           {charCount}/{maxLength} Characters
         </Typography>
       )}

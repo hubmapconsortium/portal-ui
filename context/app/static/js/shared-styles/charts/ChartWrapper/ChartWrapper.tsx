@@ -96,7 +96,14 @@ function ChartWrapper(
         // aligns the title with the left edge of the chart area
         <Box sx={{ gridArea: 'title', paddingLeft: `${margin.left + 16}px` }}>
           {chartTitle && (
-            <Typography variant="subtitle2" display="flex" alignItems="center" justifyContent="start">
+            <Typography
+              variant="subtitle2"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'start',
+              }}
+            >
               {chartTitle}
             </Typography>
           )}
@@ -104,19 +111,38 @@ function ChartWrapper(
       )}
       {/* Keep the X/Y axis selects on a single row; minWidth:0 lets the fullWidth selects shrink to
           fit on narrow screens rather than wrapping onto separate rows. */}
-      <Stack direction="row" gap={1} sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0, minWidth: 0 }}>
+      <Stack
+        direction="row"
+        sx={{
+          gap: 1,
+          gridArea: 'axis-controls',
+          p: hasAxisDropdown ? 1 : 0,
+          minWidth: 0,
+        }}
+      >
         {xAxisDropdown}
         {yAxisDropdown}
       </Stack>
       <Box sx={{ gridArea: 'chart', minWidth: 0 }}>{children}</Box>
       <Box sx={{ gridArea: 'legend', display: fullWidthGraph ? 'none' : 'grid' }}>
-        <Stack direction="column" px={1}>
+        <Stack
+          direction="column"
+          sx={{
+            px: 1,
+          }}
+        >
           {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}
           <Box sx={{ flex: 1, overflowY: 'auto', gridArea: 'legend', mt: dropdown ? 0 : 2 }} tabIndex={0}>
             {colorScale && (
               <LegendOrdinal scale={colorScale} domain={domain}>
                 {(labels) => (
-                  <Stack flexDirection="column" height="100%" maxHeight={chartHeight}>
+                  <Stack
+                    sx={{
+                      flexDirection: 'column',
+                      height: '100%',
+                      maxHeight: chartHeight,
+                    }}
+                  >
                     {labels.map((label, idx) => {
                       const isMultiple = label.text === 'Multiple';
                       return (
@@ -165,8 +191,10 @@ function ChartWrapper(
                                   component="span"
                                   variant="caption"
                                   color="textSecondary"
-                                  display="inline-block"
-                                  ml={1}
+                                  sx={{
+                                    display: 'inline-block',
+                                    ml: 1,
+                                  }}
                                 >
                                   ({labelValueMap[label.text]})
                                 </Typography>

@@ -27,7 +27,13 @@ function Tile({
 }: TileProps) {
   const tile = (
     <StyledPaper $invertColors={invertColors} $tileWidth={tileWidth} onClick={onClick} {...rest}>
-      <Stack p={1} boxSizing="content-box" direction="row">
+      <Stack
+        direction="row"
+        sx={{
+          p: 1,
+          boxSizing: 'content-box',
+        }}
+      >
         {icon}
         <FlexGrow>{bodyContent}</FlexGrow>
       </Stack>

@@ -118,7 +118,14 @@ function SummaryTitle({
       {organIcon && <OrganIcon organName={organIcon} color="primary" />}
       {href && tooltipText ? (
         <>
-          <Typography variant="subtitle1" color="primary" component="span" display="inline-block">
+          <Typography
+            variant="subtitle1"
+            color="primary"
+            component="span"
+            sx={{
+              display: 'inline-block',
+            }}
+          >
             {tooltipText}
           </Typography>
           <ChevronLeftRounded fontSize="small" />

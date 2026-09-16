@@ -119,9 +119,13 @@ export default function CollapsibleDetailPageSection({
                 // Prevent the accordion from expanding/collapsing when the action is clicked
                 e.stopPropagation();
               }}
-              ml="auto"
               className="accordion-section-action"
-              sx={{ position: 'absolute', right: 0, top: 7 }}
+              sx={{
+                ml: 'auto',
+                position: 'absolute',
+                right: 0,
+                top: 7,
+              }}
             >
               {action}
             </Box>

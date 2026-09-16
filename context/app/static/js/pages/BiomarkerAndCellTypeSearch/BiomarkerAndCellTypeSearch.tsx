@@ -13,11 +13,27 @@ import Box from '@mui/material/Box';
 
 function BiomarkerAndCellTypeSearch() {
   return (
-    <Box pb={2}>
-      <PageTitle data-testid="molecular-data-queries-title" color="primary">
+    <Box
+      sx={{
+        pb: 2,
+      }}
+    >
+      <PageTitle
+        data-testid="molecular-data-queries-title"
+        sx={{
+          color: 'primary',
+        }}
+      >
         Biomarker and Cell Type Search
       </PageTitle>
-      <Stack component={SectionPaper} direction="column" spacing={2} mb={2}>
+      <Stack
+        component={SectionPaper}
+        direction="column"
+        spacing={2}
+        sx={{
+          mb: 2,
+        }}
+      >
         <LabelledSectionText label="What is the biomarker and cell type search?">
           This tool helps retrieve datasets based on the abundance of transcriptomic and epigenomic biomarkers across
           cells, or cell types across datasets.

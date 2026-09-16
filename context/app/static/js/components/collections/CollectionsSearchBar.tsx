@@ -16,7 +16,12 @@ export default function CollectionsSearchBar() {
   const { downloadTable } = useCollections();
 
   return (
-    <Stack direction="row" justifyContent="space-between">
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: 'space-between',
+      }}
+    >
       <SearchBar
         sx={{ mb: 2, width: '50%' }}
         placeholder={text.placeholder}

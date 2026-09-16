@@ -141,7 +141,14 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
                 shouldDisplayRelationships ? (
                   <>
                     <MultiAssayRelationship />
-                    <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
+                    <Box
+                      component={Paper}
+                      sx={{
+                        height: datasetRelationshipsContainerHeight,
+                        width: '100%',
+                        p: 2,
+                      }}
+                    >
                       <DatasetRelationships uuid={uuid} processing={processing} />
                     </Box>
                   </>

@@ -21,8 +21,19 @@ interface StyledMenuItemProps extends MenuItemProps {
 const StyledMenuItem = styled(({ tooltip, isLoading, children, href, disabled, ...props }: StyledMenuItemProps) => {
   const menuItem = (
     <MenuItem disabled={disabled} {...props} {...(href ? { href, component: 'a' } : {})}>
-      <Stack direction="column" width="100%">
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <Stack
+        direction="column"
+        sx={{
+          width: '100%',
+        }}
+      >
+        <Stack
+          direction="row"
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
           <span>{children}</span>
           {tooltip && (
             <SecondaryBackgroundTooltip title={tooltip} placement="bottom-start">

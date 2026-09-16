@@ -32,7 +32,13 @@ function ContactCell({ isContact, email }: ContactCellProps) {
   }
 
   return (
-    <Stack direction="row" alignItems="center" spacing={1}>
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        alignItems: 'center',
+      }}
+    >
       <Check color="success" fontSize="1.5rem" />
       {isValidEmail(email) ? (
         <EmailIconLink email={encodeURI(email)} iconFontSize="1.1rem">

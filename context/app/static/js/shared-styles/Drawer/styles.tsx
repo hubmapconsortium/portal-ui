@@ -9,6 +9,7 @@ import Typography, { TypographyProps } from '@mui/material/Typography';
 import React from 'react';
 import Divider, { DividerProps } from '@mui/material/Divider';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
+import { mergeSx } from 'js/helpers/styled';
 
 export const StyledDrawer = styled(Drawer)(({ theme, anchor }) => ({
   '& .MuiDrawer-paper': {
@@ -29,11 +30,16 @@ export function DrawerTitle(props: TypographyProps) {
     <Typography
       variant="h3"
       color="primary"
-      display="flex"
-      flexDirection="row"
-      alignItems="center"
-      justifyContent="space-between"
       {...props}
+      sx={mergeSx(
+        {
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        },
+        props.sx,
+      )}
     />
   );
 }

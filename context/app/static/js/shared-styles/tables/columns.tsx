@@ -75,11 +75,22 @@ function HubmapIDCell({
   });
 
   return (
-    <Stack direction="column" gap={0.5} alignItems="flex-start">
+    <Stack
+      direction="column"
+      sx={{
+        gap: 0.5,
+        alignItems: 'flex-start',
+      }}
+    >
       {isCurrentEntity ? (
         <>
           <div>{hubmap_id}</div>
-          <Typography variant="caption" color="grey.500">
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'grey.500',
+            }}
+          >
             (Current {entity_type})
           </Typography>
         </>
@@ -165,7 +176,14 @@ function StatusCell({ hit: { mapped_status, mapped_data_access_level } }: CellCo
   // Retracted datasets get the retracted icon + color for emphasis, matching the search results table.
   if (isRetractedStatus(mapped_status)) {
     return (
-      <Stack direction="row" gap={0.5} alignItems="center" sx={{ color: 'retracted.main' }}>
+      <Stack
+        direction="row"
+        sx={{
+          gap: 0.5,
+          alignItems: 'center',
+          color: 'retracted.main',
+        }}
+      >
         <SeverityIcon status="retracted" fontSize="small" />
         {mapped_status}
       </Stack>

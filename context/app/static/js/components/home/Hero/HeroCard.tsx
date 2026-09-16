@@ -61,13 +61,25 @@ export default function HeroCard({
   return (
     <CardContainer href={href} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={handleClick}>
       <Stack spacing={0.5} sx={{ flex: 1, minWidth: 0 }}>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           <Icon sx={{ fontSize: '2rem' }} color="primary" />
           <Typography variant="h5" component="h3">
             {title}
           </Typography>
         </Stack>
-        <Typography variant="body2" color="text.secondary" sx={{ overflowWrap: 'break-word' }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.secondary',
+            overflowWrap: 'break-word',
+          }}
+        >
           {description}
         </Typography>
       </Stack>

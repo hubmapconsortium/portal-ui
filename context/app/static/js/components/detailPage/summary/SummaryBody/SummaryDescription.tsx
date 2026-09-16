@@ -27,8 +27,8 @@ function SummaryDescription({
     <LabelledSectionText
       label={label ?? 'Description'}
       childContainerComponent={clamp ? CustomClamp : undefined}
-      flexShrink={1}
       {...rest}
+      sx={{ flexShrink: 1 }}
     >
       {description}
     </LabelledSectionText>

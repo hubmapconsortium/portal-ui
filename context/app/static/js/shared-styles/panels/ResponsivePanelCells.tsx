@@ -5,25 +5,37 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack, { StackProps } from '@mui/material/Stack';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
+import { mergeSx } from 'js/helpers/styled';
 
 const mobileStackProps: Partial<StackProps> = {
-  height: '100%',
   direction: 'column',
   spacing: 2,
-  py: 2,
 };
 
 const desktopStackProps: Partial<StackProps> = {
-  height: 52,
   direction: 'row',
   spacing: 4,
-  py: 0,
 };
 
 export function StackTemplate(props: React.ComponentProps<typeof Stack>) {
   const isMobile = useIsMobile();
   const responsiveProps = isMobile ? mobileStackProps : desktopStackProps;
-  return <Stack marginX={2} marginY={1} useFlexGap width="100%" {...responsiveProps} {...props} />;
+  return (
+    <Stack
+      useFlexGap
+      {...responsiveProps}
+      {...props}
+      sx={mergeSx(
+        {
+          marginX: 2,
+          marginY: 1,
+          width: '100%',
+        },
+        isMobile ? { height: '100%', py: 2 } : { height: 52, py: 0 },
+        props.sx,
+      )}
+    />
+  );
 }
 
 export function MobileLabel({ children }: { children: React.ReactNode }) {
@@ -32,7 +44,14 @@ export function MobileLabel({ children }: { children: React.ReactNode }) {
     return null;
   }
   return (
-    <Typography component="label" width="33%" flexShrink={0} pr={2}>
+    <Typography
+      component="label"
+      sx={{
+        width: '33%',
+        flexShrink: 0,
+        pr: 2,
+      }}
+    >
       {children}
     </Typography>
   );
@@ -45,7 +64,16 @@ interface BodyCellProps extends React.ComponentProps<typeof Box> {
 export function BodyCell({ children, hideMobileLabel, ...props }: BodyCellProps) {
   const ariaLabel = props['aria-label'];
   return (
-    <Box display="flex" alignItems="center" {...props}>
+    <Box
+      {...props}
+      sx={mergeSx(
+        {
+          display: 'flex',
+          alignItems: 'center',
+        },
+        props.sx,
+      )}
+    >
       {!hideMobileLabel && <MobileLabel>{ariaLabel}</MobileLabel>}
       {children}
     </Box>
