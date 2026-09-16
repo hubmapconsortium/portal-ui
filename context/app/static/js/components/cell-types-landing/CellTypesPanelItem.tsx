@@ -85,7 +85,7 @@ function CellTypesHeaderPanel() {
   }
   return (
     <StackTemplate spacing={4}>
-      <HeaderCell {...desktopConfig.name}>
+      <HeaderCell sx={desktopConfig.name}>
         <TableSortLabel
           active={sortState.columnId === 'name'}
           direction={sortState.direction}
@@ -98,8 +98,8 @@ function CellTypesHeaderPanel() {
           Cell Type
         </TableSortLabel>
       </HeaderCell>
-      <HeaderCell {...desktopConfig.description}>Description</HeaderCell>
-      <HeaderCell {...desktopConfig.organs}>
+      <HeaderCell sx={desktopConfig.description}>Description</HeaderCell>
+      <HeaderCell sx={desktopConfig.organs}>
         <Button
           onClick={handleOpen}
           sx={{
@@ -182,7 +182,7 @@ function CellTypesHeaderPanel() {
           ))}
         </Box>
       </HeaderCell>
-      <HeaderCell {...desktopConfig.dataType}>
+      <HeaderCell sx={desktopConfig.dataType}>
         <InfoTextTooltip infoIconSize="small" tooltipTitle={dataTypeTooltip}>
           Data Type
         </InfoTextTooltip>
@@ -325,7 +325,7 @@ function CellTypesPanelItem({
     // Rows are a fixed height by default; when the description is expanded, let the row grow to fit
     // its full text (top-aligning the cells) instead of clipping it.
     <StackTemplate {...(descriptionExpanded ? { height: 'auto', minHeight: 52, alignItems: 'flex-start' } : {})}>
-      <BodyCell {...desktopConfig.name} aria-label="Cell Type">
+      <BodyCell sx={desktopConfig.name} aria-label="Cell Type">
         <Box>
           {href ? (
             <InternalLink
@@ -356,17 +356,17 @@ function CellTypesPanelItem({
           )}
         </Box>
       </BodyCell>
-      <BodyCell {...desktopConfig.description} aria-label="Description">
+      <BodyCell sx={desktopConfig.description} aria-label="Description">
         <ExpandableDescription
           description={description}
           expanded={descriptionExpanded}
           onToggle={() => setDescriptionExpanded((prev) => !prev)}
         />
       </BodyCell>
-      <BodyCell {...desktopConfig.organs} aria-label="Organs">
+      <BodyCell sx={desktopConfig.organs} aria-label="Organs">
         <OrganList organs={organs} />
       </BodyCell>
-      <BodyCell {...desktopConfig.dataType} aria-label="Data Type">
+      <BodyCell sx={desktopConfig.dataType} aria-label="Data Type">
         <DataTypeChips
           name={name}
           rnaOrgans={rnaOrgans}

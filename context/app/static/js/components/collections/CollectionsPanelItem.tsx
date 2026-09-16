@@ -37,16 +37,9 @@ function CollectionHeaderPanel() {
         zIndex: 1,
       }}
     >
-      <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
-      <HeaderCell {...desktopConfig.numDatasets}># of Datasets</HeaderCell>
-      <HeaderCell
-        {...desktopConfig.creationDate}
-        sx={{
-          marginRight: isMobile ? 0 : 3,
-        }}
-      >
-        Creation Date
-      </HeaderCell>
+      <HeaderCell sx={desktopConfig.name}>Name</HeaderCell>
+      <HeaderCell sx={desktopConfig.numDatasets}># of Datasets</HeaderCell>
+      <HeaderCell sx={{ ...desktopConfig.creationDate, marginRight: isMobile ? 0 : 3 }}>Creation Date</HeaderCell>
     </StackTemplate>
   );
 }
@@ -64,7 +57,7 @@ function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }
 
   return (
     <StackTemplate>
-      <BodyCell {...desktopConfig.name} aria-label="Name">
+      <BodyCell sx={desktopConfig.name} aria-label="Name">
         <Typography>
           <InternalLink href={href} data-testid="panel-title">
             {name}
@@ -73,15 +66,12 @@ function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }
         </Typography>
       </BodyCell>
       <BodyCell
-        {...desktopConfig.numDatasets}
         aria-label="Number of Datasets"
-        sx={{
-          justifyContent: isMobile ? 'inherit' : 'center',
-        }}
+        sx={{ ...desktopConfig.numDatasets, justifyContent: isMobile ? 'inherit' : 'center' }}
       >
         <Typography>{numDatasets}</Typography>
       </BodyCell>
-      <BodyCell {...desktopConfig.creationDate} aria-label="Creation Date">
+      <BodyCell sx={desktopConfig.creationDate} aria-label="Creation Date">
         <Typography>{creationDate && format(new Date(creationDate), 'yyyy-MM-dd')}</Typography>
       </BodyCell>
     </StackTemplate>

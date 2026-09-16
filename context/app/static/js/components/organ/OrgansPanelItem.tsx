@@ -75,21 +75,16 @@ function OrgansHeaderPanel() {
 
   return (
     <StackTemplate spacing={4}>
-      <HeaderCell
-        {...desktopConfig.name}
-        sx={{
-          pl: 4,
-        }}
-      >
+      <HeaderCell sx={{ ...desktopConfig.name, pl: 4 }}>
         <TableSortLabelTemplate columnId="name" label="Organ" />
       </HeaderCell>
-      <HeaderCell {...desktopConfig.description}>
+      <HeaderCell sx={desktopConfig.description}>
         <TableSortLabelTemplate columnId="description" label="Description" />
       </HeaderCell>
-      <HeaderCell {...desktopConfig.datasets}>
+      <HeaderCell sx={desktopConfig.datasets}>
         <TableSortLabelTemplate columnId="datasets" label="Datasets" />
       </HeaderCell>
-      <HeaderCell {...desktopConfig.samples}>
+      <HeaderCell sx={desktopConfig.samples}>
         <TableSortLabelTemplate columnId="samples" label="Samples" />
       </HeaderCell>
     </StackTemplate>
@@ -118,7 +113,7 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
     // Rows are a fixed height by default; when the description is expanded, let the row grow to fit
     // its full text (top-aligning the cells) instead of clipping it.
     <StackTemplate {...(descriptionExpanded ? { height: 'auto', minHeight: 52, alignItems: 'flex-start' } : {})}>
-      <BodyCell {...desktopConfig.name} aria-label="Organ" hideMobileLabel>
+      <BodyCell sx={desktopConfig.name} aria-label="Organ" hideMobileLabel>
         <InternalLink
           href={href}
           variant="body2"
@@ -178,7 +173,7 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
           </Stack>
         </InternalLink>
       </BodyCell>
-      <BodyCell {...desktopConfig.description} aria-label="Description" hideMobileLabel>
+      <BodyCell sx={desktopConfig.description} aria-label="Description" hideMobileLabel>
         <ExpandableDescription
           description={description}
           expanded={descriptionExpanded}
@@ -187,7 +182,7 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
       </BodyCell>
       {!isMobile && (
         <>
-          <BodyCell {...desktopConfig.datasets} aria-label="Datasets">
+          <BodyCell sx={desktopConfig.datasets} aria-label="Datasets">
             <InternalLink
               variant="body2"
               href={getSearchURL({
@@ -198,7 +193,7 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
               {datasetCount.toLocaleString()}
             </InternalLink>
           </BodyCell>
-          <BodyCell {...desktopConfig.samples} aria-label="Samples">
+          <BodyCell sx={desktopConfig.samples} aria-label="Samples">
             <InternalLink
               variant="body2"
               href={getSearchURL({
