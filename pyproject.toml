@@ -1,6 +1,6 @@
 [project]
 name = "hubmap-portal-ui"
-version = "1.52.1"
+version = "1.52.3"
 description = "HuBMAP Data Portal - Flask app with React frontend"
 readme = "README.md"
 # Note: keep in sync with .python-version, which is needed for `uv` to automatically
@@ -24,7 +24,6 @@ dependencies = [
     "requests>=2.32.5",
     "pyyaml>=6.0.2",
     "python-frontmatter>=1.1.0",
-    "hubmap-api-py-client>=0.0.11",
     "hubmap-commons>=2.1.20",
     "portal-visualization[full]>=0.5.13",
     "udiagent>=0.2.6",
@@ -47,13 +46,13 @@ build-backend = "setuptools.build_meta"
 # Security floors for transitive deps (Dependabot). Constraints bound resolution
 # without adding direct dependencies.
 constraint-dependencies = [
-    "aiohttp>=3.14.1",
-    "tornado>=6.5.7",
-    "cryptography>=48.0.1",
+    "aiohttp>=3.14.3",
+    "tornado>=6.5.8",
+    "cryptography>=50.0.0",
     "pyjwt>=2.13.0",
     "idna>=3.15",
     "urllib3>=2.7.0",
-    "pillow>=12.2.0",
+    "pillow>=12.3.0",
 ]
 
 [tool.pytest.ini_options]

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import MenuItem from '@mui/material/MenuItem';
 
 import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton';

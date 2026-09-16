@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import TableRow from '@mui/material/TableRow';

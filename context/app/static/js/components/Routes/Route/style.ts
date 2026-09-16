@@ -8,13 +8,17 @@ const routeContainerMaxWidth = globalTheme.breakpoints.values.lg;
 // 16px padding on either side of the route container at the lg breakpoint and above
 const routeContainerPadding = 32;
 
-const GridWrapper = styled(Box)<{ $shouldShowBoundaries: boolean }>(({ $shouldShowBoundaries }) => ({
-  display: 'grid',
-  gridTemplateColumns: $shouldShowBoundaries ? `1fr minmax(0, ${routeContainerMaxWidth}px) 1fr` : '1fr',
-  width: '100%',
-  flexGrow: 1,
-  gap: 0,
-}));
+const GridWrapper = styled(Box)<{ $shouldShowBoundaries: boolean; $disableTopMargin: boolean }>(
+  ({ theme, $shouldShowBoundaries, $disableTopMargin }) => ({
+    display: 'grid',
+    gridTemplateColumns: $shouldShowBoundaries ? `1fr minmax(0, ${routeContainerMaxWidth}px) 1fr` : '1fr',
+    width: '100%',
+    flexGrow: 1,
+    gap: 0,
+    // Breathing room between the header (or the entity header, where one is shown) and page content.
+    marginTop: $disableTopMargin ? 0 : theme.spacing(1),
+  }),
+);
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,

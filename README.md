@@ -24,9 +24,6 @@ graph LR
     top --> portal-visualization --> vitessce-python
     click portal-visualization href "https://github.com/hubmapconsortium/portal-visualization"
     click vitessce-python href "https://github.com/vitessce/vitessce-python"
-    top --> cells-sdk --> cells-api --> pipe
-    click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
-    click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
     top --> gateway
     gateway --> entity-api --> pipe[ingest-pipeline]
     click entity-api href "https://github.com/hubmapconsortium/entity-api"
@@ -45,7 +42,6 @@ graph LR
     subgraph APIs
         entity-api
         search-api
-        cells-api
         assets-api
         workspaces-api
     end
@@ -58,7 +54,6 @@ graph LR
         commons
         portal-visualization
         vitessce-python
-        cells-sdk
     end
 
     subgraph NPM Packages
@@ -77,7 +72,7 @@ graph LR
     end
 
     classDef contrib fill:#ddffdd,stroke:#88AA88,color:#000;
-    class owner,contributor,top,vitessce,viv,portal-visualization,vitessce-python,cells-sdk,portal-containers,valid,search-api contrib
+    class owner,contributor,top,vitessce,viv,portal-visualization,vitessce-python,portal-containers,valid,search-api contrib
 
     classDef owner stroke-width:3px,font-style:italic,color:#000;
     class owner,top,vitessce,viv,portal-visualization,vitessce-python,portal-containers owner

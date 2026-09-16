@@ -13,8 +13,7 @@ function QueryType() {
   return (
     <FormFieldContainer title="Query Type">
       <FormFieldSubtitle>
-        Choose to retrieve gene, protein or cell type data. Gene and cell type data will have a selection of methods to
-        choose from, while protein data will be retrieved with the Cells Cross-Modality method.
+        Choose to retrieve gene or cell type data. Each has a selection of query methods to choose from.
       </FormFieldSubtitle>
       <TextField
         id="query-select"
@@ -34,6 +33,10 @@ function QueryType() {
             {type.label}
           </MenuItem>
         ))}
+        {/* Protein queries were retired with the Cells Cross-Modality API. */}
+        <MenuItem value="protein" disabled>
+          Protein (Deprecated)
+        </MenuItem>
       </TextField>
     </FormFieldContainer>
   );

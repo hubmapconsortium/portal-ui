@@ -19,15 +19,17 @@ function BiomarkerAndCellTypeSearch() {
       </PageTitle>
       <Stack component={SectionPaper} direction="column" spacing={2} mb={2}>
         <LabelledSectionText label="What is the biomarker and cell type search?">
-          Retrieve datasets based on the abundance of transcriptomic, epigenomic, and proteomic biomarkers across cells,
-          or cell types across organs/datasets. For example, you can retrieve a list of datasets where normalized
-          transcript abundance for the UMOD (uromodulin) gene is above a user-defined cut off, e.g., 1, in at least 5%
-          of all cells. This query will return a list of kidney datasets.
+          This tool helps retrieve datasets based on the abundance of transcriptomic and epigenomic biomarkers across
+          cells, or cell types across datasets.
+        </LabelledSectionText>
+        <LabelledSectionText label="Example Query">
+          For example, you can retrieve a list of datasets that contain the UMOD (uromodulin) gene. This query will
+          return a list of kidney datasets.
         </LabelledSectionText>
         <LabelledSectionText label="How do I begin?">
-          To begin your search, select a query type (&quot;Gene&quot; for transcriptomic and epigenomic measurements,
-          &quot;Protein&quot; for proteomic measurements, &quot;Cell Type&quot; for cell type distribution) and set the
-          desired parameters.
+          To begin your search, select a query type (&quot;Gene&quot; for transcriptomic and epigenomic measurements or
+          &quot;Cell Type&quot; for cell type distribution) and set the desired parameters. Protein queries were retired
+          with the Cells Cross-Modality API.
         </LabelledSectionText>
         <LabelledSectionText label="Questions">
           <ContactUsLink>Contact us</ContactUsLink> with any questions and issues that may arise during your experience.

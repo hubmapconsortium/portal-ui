@@ -8,7 +8,6 @@ export interface ServiceResponse {
 
 export interface GatewayStatusResponse {
   file_assets: ServiceResponse;
-  cells_api: ServiceResponse;
   data_products_api: ServiceResponse;
   entity_api: ServiceResponse;
   gateway: ServiceResponse;

@@ -52,7 +52,6 @@ interface ServiceStatusTableProps {
   elasticsearchEndpoint: string;
   dataProductsEndpoint: string;
   assetsEndpoint: string;
-  xmodalityEndpoint: string;
   entityEndpoint: string;
   gatewayEndpoint: string;
   workspacesEndpoint: string;
@@ -67,7 +66,6 @@ function ServiceStatusTable({
   elasticsearchEndpoint,
   dataProductsEndpoint,
   assetsEndpoint,
-  xmodalityEndpoint,
   entityEndpoint,
   gatewayEndpoint,
   workspacesEndpoint,
@@ -85,13 +83,6 @@ function ServiceStatusTable({
           endpointUrl: assetsEndpoint,
           response: gatewayStatus.file_assets,
           noteFunction: (api) => `Status: ${String(api.file_assets_status)}`,
-        }),
-        buildServiceStatus({
-          apiName: 'cells',
-          githubUrl: 'https://github.com/hubmapconsortium/cross_modality_query',
-          endpointUrl: xmodalityEndpoint,
-          response: gatewayStatus.cells_api,
-          noteFunction: (api) => `Branch: ${String(api.branch)}; Commit ${String(api.commit).slice(0, 12)}`,
         }),
         buildServiceStatus({
           apiName: 'data-products',

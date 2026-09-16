@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.52.3 - 2026-09-16
+
+- Fix scFind method link to point to internal reference page.
+
+
+
+## v1.52.2 - 2026-09-15
+
+- Retire the Cells Cross-Modality API. Consortium funding for the service has ended, so the Biomarker and Cell Type Search now runs entirely on scFind. "Protein" remains listed as a query type but is greyed out and marked "(Deprecated)", since protein abundance was only ever available through the Cells API, and the page description explains the removal. The "Cells Cross-Modality" query methods are gone from the gene and cell type dropdowns, which leaves scFind RNAseq and scFind ATACseq for both. The cell type organ-distribution graph and disambiguation textbox, which had no scFind equivalent, are removed along with them. The `cells` row no longer appears on the services status page, and the `hubmap-api-py-client` dependency, the `XMODALITY_ENDPOINT` setting, and every `/cells/*` and `/x-modality/*` route have been deleted.
+- Added an 8px gap between the header (or the entity header, on pages that show one) and the page content throughout the site. The homepage keeps its hero flush against the header unless a sitewide alert is being displayed.
+- Bumped dependencies to resolve Dependabot alerts: `vite` (^8.3.0), `vitest` and `@vitest/ui` (^5.0.1), `svgo`, `fflate`, `postcss-selector-parser` and `immutable` via the lockfile; uv constraints raised for `aiohttp`, `tornado`, `cryptography` and `pillow`. Vitest 5 renamed the type used to extend matchers, so the jest-dom matchers are now re-declared against `Matchers` in `typings/jest-dom.d.ts`. Also moved the `onlyBuiltDependencies` and `overrides` settings from `package.json` to `pnpm-workspace.yaml`, since pnpm 10.27 no longer reads them from `package.json`.
+- Biomarker and Cell Type Search queries are now shareable. Running a query puts it in the page URL (`?genes=UMOD|ACTB&modality=ATAC`), so a search can be copied from the address bar, bookmarked, or pasted to a colleague. Opening such a link fills in the form and runs the query, landing on the results. Back and forward move between searches: going back from a query returns to the parameters view, and going forward to one restores its parameters and proceeds to its results.
+- Upgraded Storybook from 9.1 to 10.6. Story files now import their types from `@storybook/react-vite` instead of the removed `@storybook/react` package, `.storybook/main.ts` is valid ESM, and `msw-storybook-addon` moved to 3.0, whose CSF 3.0 entry point replaces the old `initialize()` call.
+- Added a Storybook build to the Node CI script, so a story that no longer compiles fails a pull request instead of waiting for someone to open Storybook.
+- Specs can now reuse a story as their fixture through `test-utils/storybook`, and the `Citation`, `DropdownMenuProvider`, `SummaryData` and `ExpandableRow` specs do so rather than redeclaring props their stories already define.
+- Replaced the nineteen per-hook scFind stories, which could only run against the live dev API, with one `SCFind/Explorer` story and a `hooks.spec.tsx` covering every hook's request and response shape.
+
+
+
 ## v1.52.1 - 2026-09-09
 
 - Increase visualization zIndex to ensure fullscreen visualization covers metadata tables.

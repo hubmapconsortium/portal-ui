@@ -70,6 +70,7 @@ function Routes({ flaskData }: RoutesProps) {
     tutorialName,
     type,
     integrated,
+    globalAlertMd,
   } = flaskData;
   const urlPath = window.location.pathname;
 
@@ -127,8 +128,9 @@ function Routes({ flaskData }: RoutesProps) {
   }
 
   if (urlPath === '/') {
+    // The hero sits flush against the header, unless the sitewide alert is pushing it down anyway.
     return (
-      <Route disableWidthConstraint>
+      <Route disableWidthConstraint disableTopMargin={!globalAlertMd}>
         <Home />
       </Route>
     );
