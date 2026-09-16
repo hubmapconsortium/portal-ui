@@ -34,8 +34,8 @@ function PublicationHeaderPanel() {
         zIndex: 1,
       }}
     >
-      <HeaderCell {...desktopConfig.title}>Title</HeaderCell>
-      <HeaderCell {...desktopConfig.publishedDate}>Published Date</HeaderCell>
+      <HeaderCell sx={desktopConfig.title}>Title</HeaderCell>
+      <HeaderCell sx={desktopConfig.publishedDate}>Published Date</HeaderCell>
     </StackTemplate>
   );
 }
@@ -57,7 +57,7 @@ function PublicationPanelItem({
 }: PublicationPanelItemProps) {
   return (
     <StackTemplate>
-      <BodyCell {...desktopConfig.title} aria-label="Title">
+      <BodyCell sx={desktopConfig.title} aria-label="Title">
         <Stack>
           <InternalLink href={href} data-testid="panel-title">
             <Typography>{title}</Typography>
@@ -65,7 +65,7 @@ function PublicationPanelItem({
           <Typography>{buildSecondaryText(publicationVenue, contributors?.map(normalizeContributor))}</Typography>
         </Stack>
       </BodyCell>
-      <BodyCell {...desktopConfig.publishedDate} aria-label="Publication Date">
+      <BodyCell sx={desktopConfig.publishedDate} aria-label="Publication Date">
         <Typography>{publishedDate}</Typography>
       </BodyCell>
     </StackTemplate>
