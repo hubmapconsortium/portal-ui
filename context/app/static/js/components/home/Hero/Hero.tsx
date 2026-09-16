@@ -12,14 +12,33 @@ import { HeroSection, HeroContentContainer } from './styles';
 
 function HeroLeftColumn() {
   return (
-    <Stack spacing={3} justifyContent="start" maxWidth={{ lg: 450 }}>
+    <Stack
+      spacing={3}
+      sx={{
+        justifyContent: 'start',
+        maxWidth: { lg: 450 },
+      }}
+    >
       <Typography variant="subtitle1" color="primary">
         Human BioMolecular Atlas Program Data Portal
       </Typography>
-      <Typography variant="h1" component="h1" data-testid="home-page-title" fontWeight={300}>
+      <Typography
+        variant="h1"
+        component="h1"
+        data-testid="home-page-title"
+        sx={{
+          fontWeight: 300,
+        }}
+      >
         Explore Healthy Human Single-Cell and Spatial Data
       </Typography>
-      <Typography variant="h4" component="p" color="text.secondary">
+      <Typography
+        variant="h4"
+        component="p"
+        sx={{
+          color: 'text.secondary',
+        }}
+      >
         An open-source platform to discover standardized organ, cell type, gene, and tissue data across the human body.
       </Typography>
       <Stack direction="row" spacing={2}>
@@ -60,7 +79,14 @@ interface HeroRightColumnProps {
 
 function HeroRightColumn({ onCardHover, onCardHoverEnd }: HeroRightColumnProps) {
   return (
-    <Stack spacing={2} justifyContent="center" maxWidth={{ lg: 420 }} ml="auto">
+    <Stack
+      spacing={2}
+      sx={{
+        justifyContent: 'center',
+        maxWidth: { lg: 420 },
+        ml: 'auto',
+      }}
+    >
       {HERO_CARDS.map((card, index) => (
         <HeroCard key={card.title} {...card} onCardHover={() => onCardHover?.(index)} onCardHoverEnd={onCardHoverEnd} />
       ))}

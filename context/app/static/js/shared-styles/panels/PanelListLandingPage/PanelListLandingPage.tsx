@@ -34,7 +34,12 @@ function PanelListLandingPage({
         {description}
       </StyledDescription>
       {sectionTitle && sectionDescription && (
-        <Stack spacing={2} marginBottom={2}>
+        <Stack
+          spacing={2}
+          sx={{
+            marginBottom: 2,
+          }}
+        >
           <Typography variant="h4" component="h2">
             {sectionTitle}
           </Typography>

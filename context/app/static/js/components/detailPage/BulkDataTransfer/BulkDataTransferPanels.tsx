@@ -30,7 +30,11 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
   const hasLinks = Boolean(showDbGaP ?? showGlobus ?? showSRA);
 
   return (
-    <Stack gap={1}>
+    <Stack
+      sx={{
+        gap: 1,
+      }}
+    >
       {panels.map((panel) => (
         <BulkDataTransferPanel {...panel} key={panel.title} />
       ))}

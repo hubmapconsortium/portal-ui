@@ -186,7 +186,13 @@ function TemplatePreviewSection() {
 function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typeof text }>) {
   return (
     <Stack>
-      <Stack component={Paper} p={2} spacing={2}>
+      <Stack
+        component={Paper}
+        spacing={2}
+        sx={{
+          p: 2,
+        }}
+      >
         {children}
         <Stack spacing={1}>
           {text[textKey].map(({ title, body }) => (
@@ -198,7 +204,12 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
         </Stack>
       </Stack>
       {!isAuthenticated && (
-        <Stack pt={2} spacing={2}>
+        <Stack
+          spacing={2}
+          sx={{
+            pt: 2,
+          }}
+        >
           <Typography variant="h4">Workspace Templates</Typography>
           <TemplatePreviewSection />
         </Stack>

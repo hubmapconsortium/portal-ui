@@ -20,7 +20,13 @@ type DetailAccordionProps = React.PropsWithChildren<{
 function FormattedSummary({ summary }: Pick<DetailAccordionProps, 'summary'>) {
   if (typeof summary === 'string') {
     return (
-      <Typography variant="body2" component="span" display="inline-block">
+      <Typography
+        variant="body2"
+        component="span"
+        sx={{
+          display: 'inline-block',
+        }}
+      >
         {summary}
       </Typography>
     );

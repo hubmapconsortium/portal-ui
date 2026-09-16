@@ -40,7 +40,17 @@ function DialogModal({
 
   return (
     <Dialog {...props} open={isOpen} onClose={handleClose} fullWidth>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1} pt={2} pl={3} pr={2}>
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexGrow: 1,
+          pt: 2,
+          pl: 3,
+          pr: 2,
+        }}
+      >
         <StyledDialogTitle variant="h3" component="h2">
           {title}
         </StyledDialogTitle>

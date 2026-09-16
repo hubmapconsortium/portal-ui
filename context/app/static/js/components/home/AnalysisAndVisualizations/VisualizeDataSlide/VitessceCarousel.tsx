@@ -144,10 +144,22 @@ function VitessceCarousel({ items }: VitessceCarouselProps) {
               >
                 <ThumbImage src={item.src} alt="" $isActive={index === selectedIndex} loading="lazy" decoding="async" />
                 <ThumbCaption>
-                  <Typography variant="caption" fontWeight={600} noWrap>
+                  <Typography
+                    variant="caption"
+                    noWrap
+                    sx={{
+                      fontWeight: 600,
+                    }}
+                  >
                     {item.assay}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" noWrap>
+                  <Typography
+                    variant="caption"
+                    noWrap
+                    sx={{
+                      color: 'text.secondary',
+                    }}
+                  >
                     {item.analyte}
                   </Typography>
                 </ThumbCaption>

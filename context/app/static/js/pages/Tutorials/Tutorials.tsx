@@ -24,8 +24,21 @@ const trackingInfo = {
 function Tutorials() {
   return (
     <DetailLayout sections={tableOfContentsSections} trackingInfo={trackingInfo}>
-      <Stack spacing={2} pb={2}>
-        <PageTitle data-testid="tutorials-title" display="flex" flexDirection="row" alignItems="center" gap={1}>
+      <Stack
+        spacing={2}
+        sx={{
+          pb: 2,
+        }}
+      >
+        <PageTitle
+          data-testid="tutorials-title"
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
           <TutorialIcon color="info" fontSize="2rem" />
           Tutorials
         </PageTitle>

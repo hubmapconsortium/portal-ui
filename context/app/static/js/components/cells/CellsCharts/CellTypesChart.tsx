@@ -57,7 +57,12 @@ function GeneTooltipContent({
 
   return (
     <>
-      <Typography variant="body2" fontWeight="bold">
+      <Typography
+        variant="body2"
+        sx={{
+          fontWeight: 'bold',
+        }}
+      >
         {cellType}
       </Typography>
       <Typography variant="body2">
@@ -67,7 +72,13 @@ function GeneTooltipContent({
         <>
           <Typography variant="body2" sx={{ mt: 1, fontWeight: 'medium' }} component="p">
             Associated genes:{' '}
-            <Typography variant="body2" color="text.secondary" component="span">
+            <Typography
+              variant="body2"
+              component="span"
+              sx={{
+                color: 'text.secondary',
+              }}
+            >
               {geneAssociation.genes.join(', ')}
             </Typography>
           </Typography>
@@ -192,7 +203,15 @@ function CellTypesChart({
     >
       <TotalCellsContext.Provider value={totalCells}>
         <ChartLoader isLoading={isLoading}>
-          <Stack direction="row" spacing={1} alignItems="center" height="600px" pl={2}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: 'center',
+              height: '600px',
+              pl: 2,
+            }}
+          >
             <BarChart
               data={cellTypeCounts}
               highlightedKeys={highlightedCellTypes}

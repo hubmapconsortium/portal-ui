@@ -42,7 +42,13 @@ function WorkspaceRelaunchAlert({ workspaceId }: { workspaceId: number }) {
       // the global alert banner's 24px top margin (see components/style.ts).
       sx={{ '&&': { mt: 3 } }}
       action={
-        <Stack direction="row" spacing={1} justifyContent="center">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            justifyContent: 'center',
+          }}
+        >
           <Button onClick={openLaunch}>Relaunch</Button>
           <IconButton onClick={closeAlert} sx={(theme) => ({ color: theme.palette.text.primary })}>
             <CloseIcon />

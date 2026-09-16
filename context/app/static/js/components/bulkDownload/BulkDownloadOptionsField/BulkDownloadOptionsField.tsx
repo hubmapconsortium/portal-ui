@@ -75,7 +75,11 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
           </Stack>
         )}
         {/* All download options */}
-        <Stack paddingLeft={multipleOptionsAvailable ? 4 : 0}>
+        <Stack
+          sx={{
+            paddingLeft: multipleOptionsAvailable ? 4 : 0,
+          }}
+        >
           {downloadOptions.map(({ key, label, count }) => (
             <FormControlLabel
               key={key}

@@ -27,7 +27,13 @@ export function RetractedAlert({ children, replacementHref }: RetractedAlertProp
         '.MuiAlert-message': { flexGrow: 1 },
       }}
     >
-      <Stack direction="row" alignItems="center" gap={1}>
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
         <Typography variant="body2" sx={{ flexGrow: 1, color: 'text.primary' }}>
           {children}
         </Typography>

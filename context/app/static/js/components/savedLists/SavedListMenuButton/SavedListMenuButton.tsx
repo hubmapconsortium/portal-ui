@@ -51,7 +51,13 @@ function DeleteListButton({ listUUID }: { listUUID: string }) {
             setDeleteListDialogIsOpen(true);
           }}
         >
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: 'center',
+            }}
+          >
             <DeleteIcon color="primary" />
             <Typography>Delete List</Typography>
           </Stack>

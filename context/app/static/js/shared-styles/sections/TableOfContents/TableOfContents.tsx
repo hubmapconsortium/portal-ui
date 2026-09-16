@@ -56,14 +56,16 @@ function ItemLink({
 
   return (
     <StyledItemLink
-      display="flex"
-      alignItems="center"
-      gap={0.5}
-      color={currentSection === item.hash ? 'textPrimary' : 'textSecondary'}
       href={isRoute ? item.hash : `#${item.hash}`}
       onClick={handleClickInternal}
       $isCurrentSection={currentSection === item.hash}
       $isNested={isNested}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 0.5,
+        color: currentSection === item.hash ? 'textPrimary' : 'textSecondary',
+      }}
     >
       {Icon && <Icon sx={{ fontSize: '1rem' }} color="primary" />}
       {externalIcon && (
@@ -129,7 +131,16 @@ function ItemLinks({
 
 function ItemSkeleton() {
   return (
-    <Stack direction="row" spacing={1} alignItems="center" sx={({ spacing }) => ({ margin: `${spacing(2)} 0px` })}>
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={[
+        {
+          alignItems: 'center',
+        },
+        ({ spacing }) => ({ margin: `${spacing(2)} 0px` }),
+      ]}
+    >
       <Skeleton variant="circular" width={16} height={16} />
       <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={150} />
     </Stack>

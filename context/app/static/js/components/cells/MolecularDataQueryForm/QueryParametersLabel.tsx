@@ -35,7 +35,16 @@ interface QueryParametersLabelProps {
 export default function QueryParametersLabel({ activeStep, handleBackToParameters }: QueryParametersLabelProps) {
   return (
     <StepLabel>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%" gap={2} useFlexGap>
+      <Stack
+        direction="row"
+        useFlexGap
+        sx={{
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+          gap: 2,
+        }}
+      >
         <Stack direction="column">
           <Typography variant="subtitle1">Parameters</Typography>
           {activeStep !== 0 && <VariableText />}

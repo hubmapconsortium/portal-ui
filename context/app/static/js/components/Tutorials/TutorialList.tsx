@@ -46,7 +46,9 @@ export function TutorialCard({ tutorial }: TutorialDisplayProps) {
         xs: 12,
         sm: 6,
       }}
-      justifyContent="stretch"
+      sx={{
+        justifyContent: 'stretch',
+      }}
     >
       <SelectableCard
         title={tutorial.title}
@@ -57,7 +59,11 @@ export function TutorialCard({ tutorial }: TutorialDisplayProps) {
         data-testid="tutorial-card"
         grow
       >
-        <Box mt={1}>
+        <Box
+          sx={{
+            mt: 1,
+          }}
+        >
           <TutorialButton tutorial={tutorial} />
         </Box>
       </SelectableCard>
@@ -79,12 +85,12 @@ function TutorialCategoryDisplay({ tutorials, title, description, id, icon: Icon
       <Stack
         component="header"
         direction="row"
-        alignItems="center"
-        sx={{
-          scrollPaddingTop: headerHeight + 10,
-        }}
         spacing={1}
         id={id}
+        sx={{
+          alignItems: 'center',
+          scrollPaddingTop: headerHeight + 10,
+        }}
       >
         {Icon && <Icon color="primary" fontSize="1.5rem" />}
         <Typography variant="subtitle1">{title}</Typography>
@@ -93,7 +99,14 @@ function TutorialCategoryDisplay({ tutorials, title, description, id, icon: Icon
         <p>{description}</p>
       </Grid>
 
-      <Grid container spacing={2} size={12} width="100%">
+      <Grid
+        container
+        spacing={2}
+        size={12}
+        sx={{
+          width: '100%',
+        }}
+      >
         {[...tutorials]
           .sort((a, b) => a.title.localeCompare(b.title))
           .map((tutorial) => (
@@ -116,7 +129,12 @@ function FeaturedTutorialsContainer() {
   }
 
   return (
-    <Box component={Paper} p={2}>
+    <Box
+      component={Paper}
+      sx={{
+        p: 2,
+      }}
+    >
       <TutorialCategoryDisplay {...TUTORIAL_CATEGORY_DATA['Featured Tutorials']} tutorials={featuredTutorials} />
     </Box>
   );
@@ -135,11 +153,28 @@ function NoTutorialsMessage() {
 
   if (!hasActiveFilters) {
     return (
-      <Box component={Paper} p={3} textAlign="center">
-        <Typography variant="h6" color="text.secondary" gutterBottom>
+      <Box
+        component={Paper}
+        sx={{
+          p: 3,
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
           No Tutorials Available
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography
+          variant="body1"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
           There are currently no tutorials available.
         </Typography>
       </Box>
@@ -147,25 +182,64 @@ function NoTutorialsMessage() {
   }
 
   return (
-    <Box component={Paper} p={3} textAlign="center">
-      <Typography variant="h6" color="text.secondary" gutterBottom>
+    <Box
+      component={Paper}
+      sx={{
+        p: 3,
+        textAlign: 'center',
+      }}
+    >
+      <Typography
+        variant="h6"
+        gutterBottom
+        sx={{
+          color: 'text.secondary',
+        }}
+      >
         No Tutorials Found
       </Typography>
-      <Typography variant="body1" color="text.secondary" gutterBottom>
+      <Typography
+        variant="body1"
+        gutterBottom
+        sx={{
+          color: 'text.secondary',
+        }}
+      >
         No tutorials match your current search and filter criteria.
       </Typography>
-      <Stack spacing={1} alignItems="center">
+      <Stack
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         {search.length > 0 && (
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+            }}
+          >
             Search: <strong>&ldquo;{search}&rdquo;</strong>
           </Typography>
         )}
         {filterCategories.length > 0 && (
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+            }}
+          >
             Categories: <strong>{filterCategories.join(', ')}</strong>
           </Typography>
         )}
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.secondary',
+            mt: 1,
+          }}
+        >
           Try adjusting your search terms or removing some filters.
         </Typography>
       </Stack>
@@ -185,7 +259,14 @@ export default function TutorialsList() {
     <>
       <Stack spacing={2}>
         <FeaturedTutorialsContainer />
-        <Stack component={Paper} p={2} gap={2} useFlexGap>
+        <Stack
+          component={Paper}
+          useFlexGap
+          sx={{
+            p: 2,
+            gap: 2,
+          }}
+        >
           {[...TUTORIAL_CATEGORIES]
             .sort((a, b) => a.localeCompare(b))
             .map((category) => (

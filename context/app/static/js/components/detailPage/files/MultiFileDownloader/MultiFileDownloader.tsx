@@ -21,7 +21,11 @@ function MultiFileDownloader({ files }: MultiFileDownloaderProps) {
     return null;
   }
   return (
-    <Box display="none">
+    <Box
+      sx={{
+        display: 'none',
+      }}
+    >
       {downloadLinks.map((file) => (
         <iframe title={file} src={file} key={file} />
       ))}

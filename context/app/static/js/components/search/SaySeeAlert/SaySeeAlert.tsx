@@ -37,7 +37,13 @@ function SaySeeAlert() {
       // the global alert banner's 24px top margin (see components/style.ts).
       sx={{ '&&': { mt: 3 } }}
       action={
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           <Button color="primary" size="small" onClick={exploreAndDismiss}>
             Explore with Say &amp; See Mode (Beta)
           </Button>
@@ -47,7 +53,7 @@ function SaySeeAlert() {
         </Stack>
       }
     >
-      Try a preview of the Say &amp; See Mode (Beta)! Explore data through a natural language chat interface and get
+      Try a preview of the Say & See Mode (Beta)! Explore data through a natural language chat interface and get
       visualizations back.
     </Alert>
   );

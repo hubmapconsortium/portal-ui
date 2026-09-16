@@ -48,13 +48,26 @@ function WorkspacesList() {
       <WorkspacesListDialogs selectedWorkspaceIds={selectedItems} />
       <Stack spacing={2}>
         <Typography variant="h4">{`My Workspaces (${workspacesList.length})`}</Typography>
-        <Stack spacing={1} direction="row" alignItems="center" justifyContent="space-between">
+        <Stack
+          spacing={1}
+          direction="row"
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
           <WorkspacesAutocomplete
             inputValue={inputValue}
             setInputValue={setInputValue}
             filteredWorkspaces={filteredWorkspaces}
           />
-          <Stack display="flex" direction="row" spacing={1.5}>
+          <Stack
+            direction="row"
+            spacing={1.5}
+            sx={{
+              display: 'flex',
+            }}
+          >
             <WorkspacesDeleteButton workspaceIds={selectedItems} disabled={disabled} tooltip={deleteTooltip} />
             <WorkspaceTooltipButton
               onClick={() => {

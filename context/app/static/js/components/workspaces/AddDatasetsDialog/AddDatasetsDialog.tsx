@@ -19,7 +19,13 @@ const searchPageRoute = buildSearchLink({
 
 function SearchPagePrompt() {
   return (
-    <Stack component={Paper} spacing={2} padding={2}>
+    <Stack
+      component={Paper}
+      spacing={2}
+      sx={{
+        padding: 2,
+      }}
+    >
       <Typography>
         Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be selected
         for deletion.

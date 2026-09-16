@@ -23,9 +23,22 @@ interface DatasetRelationshipsVisualizationProps {
 
 function DatasetRelationshipsHeader() {
   return (
-    <Stack direction="column" gap={1} px={1} id="section-dataset-relationships">
+    <Stack
+      direction="column"
+      id="section-dataset-relationships"
+      sx={{
+        gap: 1,
+        px: 1,
+      }}
+    >
       <Typography variant="subtitle1">Dataset Relationship Diagram</Typography>
-      <Stack direction="row" gap={1} alignItems="center">
+      <Stack
+        direction="row"
+        sx={{
+          gap: 1,
+          alignItems: 'center',
+        }}
+      >
         <InfoIcon color="primary" />
         This diagram illustrates any additional processing applied to this dataset.
       </Stack>
@@ -76,12 +89,26 @@ export function DatasetRelationshipsVisualization({
   );
 
   return (
-    <Stack height="100%" width="100%">
+    <Stack
+      sx={{
+        height: '100%',
+        width: '100%',
+      }}
+    >
       {showHeader && <DatasetRelationshipsHeader />}
-      <Box flexGrow={1}>
+      <Box
+        sx={{
+          flexGrow: 1,
+        }}
+      >
         <ReactFlowBody nodes={nodes} edges={edges} />
       </Box>
-      <Stack direction="row" gap={1}>
+      <Stack
+        direction="row"
+        sx={{
+          gap: 1,
+        }}
+      >
         <NodeLegend nodeTypes={types} retractedNodeKeys={retractedNodeKeys} />
         <StatusLegend statuses={statuses} />
       </Stack>

@@ -70,7 +70,14 @@ function TemplateTagsAutocomplete({
         <Typography variant="subtitle2" gutterBottom>
           Recommended Tags
         </Typography>
-        <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
+        <Stack
+          spacing={2}
+          direction="row"
+          useFlexGap
+          sx={{
+            flexWrap: 'wrap',
+          }}
+        >
           {RECOMMENDED_TAGS.map((tag) => (
             <SelectableChip
               isSelected={selectedRecommendedTags.has(tag)}

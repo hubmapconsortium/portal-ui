@@ -41,9 +41,21 @@ export default function DatasetListHeader() {
   const selectedUuids = useSelectableTableStore((state) => state.selectedRows);
   const { category, save, copy, download, label } = useDatasetListHeaderTracking();
   return (
-    <Stack direction="row" alignItems="center">
+    <Stack
+      direction="row"
+      sx={{
+        alignItems: 'center',
+      }}
+    >
       <Typography variant="subtitle1">Datasets</Typography>
-      <Stack ml="auto" direction="row" gap={1.5} alignItems="center">
+      <Stack
+        direction="row"
+        sx={{
+          ml: 'auto',
+          gap: 1.5,
+          alignItems: 'center',
+        }}
+      >
         <SaveEntitiesButton
           entity_type="Dataset"
           uuids={selectedUuids}

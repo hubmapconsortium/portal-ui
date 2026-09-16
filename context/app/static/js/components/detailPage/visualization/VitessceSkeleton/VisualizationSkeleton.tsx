@@ -5,7 +5,15 @@ import { vitessceFixedHeight } from '../style';
 
 function VisualizationSkeleton() {
   return (
-    <Grid container height={vitessceFixedHeight} spacing={1} mt={1} width="100%">
+    <Grid
+      container
+      spacing={1}
+      sx={{
+        height: vitessceFixedHeight,
+        mt: 1,
+        width: '100%',
+      }}
+    >
       {/* Top half - 4 squares */}
       <Grid
         size={{
@@ -13,7 +21,9 @@ function VisualizationSkeleton() {
         }}
         container
         spacing={1}
-        height="50%"
+        sx={{
+          height: '50%',
+        }}
       >
         {Array.from({ length: 4 }).map((_, i) => (
           <Grid
@@ -34,7 +44,9 @@ function VisualizationSkeleton() {
         }}
         container
         spacing={1}
-        height="50%"
+        sx={{
+          height: '50%',
+        }}
       >
         {Array.from({ length: 2 }).map((_, i) => (
           <Grid

@@ -86,7 +86,12 @@ export default function DetailPanel({ uuid, timeKey, idKey, prov, typeKey, ...ac
         <Created timeKey={timeKey} prov={prov} />
         <Actions uuid={uuid} prov={prov} typeKey={typeKey} idKey={idKey} timeKey={timeKey} {...actions} />
       </Stack>
-      <Typography variant="caption" visibility={isCurrentEntity ? 'visible' : 'hidden'}>
+      <Typography
+        variant="caption"
+        sx={{
+          visibility: isCurrentEntity ? 'visible' : 'hidden',
+        }}
+      >
         ✻ Indicates Current Entity Node
       </Typography>
     </StyledPaper>

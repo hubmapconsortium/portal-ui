@@ -37,9 +37,20 @@ function PublicationsPanel({
 }) {
   return (
     <TabPanel value={value} index={index}>
-      <Box width="100%">
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
         {publications.map(({ _source: { uuid, title, contributors, publication_date, publication_venue } }) => (
-          <Stack component={Paper} key={uuid} padding={1} paddingRight={2}>
+          <Stack
+            component={Paper}
+            key={uuid}
+            sx={{
+              padding: 1,
+              paddingRight: 2,
+            }}
+          >
             <PublicationPanel.Item
               title={title}
               href={`/browse/publication/${uuid}`}
@@ -100,7 +111,11 @@ function PublicationsSection() {
           />
         ))}
       </Tabs>
-      <Stack maxHeight={400}>
+      <Stack
+        sx={{
+          maxHeight: 400,
+        }}
+      >
         {datasetPublicationsTabs.map(({ uuid, publications }, index) => (
           <PublicationsPanel key={uuid} index={index} value={openTabIndex} publications={publications} />
         ))}

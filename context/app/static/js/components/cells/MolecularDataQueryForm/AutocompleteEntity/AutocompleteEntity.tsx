@@ -187,9 +187,9 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
             ? 'No results found'
             : `Start typing to search for ${queryTypes[targetEntity].label.toLowerCase()}s.`
         }
-        renderTags={(value, getTagProps) =>
+        renderValue={(value, getItemProps) =>
           value.map((option, index) => {
-            const tagProps = getTagProps({ index });
+            const tagProps = getItemProps({ index });
             // Removing onDelete removes the delete icon
             const optionIsDefault = defaultValue && option.full === defaultValue;
             const onDelete = optionIsDefault ? undefined : tagProps.onDelete;
@@ -210,7 +210,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
             );
           })
         }
-        renderInput={({ InputLabelProps, ...params }) => (
+        renderInput={({ slotProps: inputSlotProps, ...params }) => (
           <TextField
             {...labelAndHelperTextProps[targetEntity]}
             placeholder={`Select ${queryTypes[targetEntity].label.toLowerCase()} to query`}
@@ -220,17 +220,18 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
             onChange={handleSubstringChange}
             {...params}
             slotProps={{
+              ...inputSlotProps,
               input: {
-                ...params.InputProps,
+                ...inputSlotProps.input,
                 'aria-label': labelAndHelperTextProps[targetEntity].label as string,
                 startAdornment: isLoadingFromPathway ? (
                   <CircularProgress size={20} sx={{ mr: 1 }} color="primary" />
                 ) : (
-                  params.InputProps?.startAdornment
+                  inputSlotProps.input?.startAdornment
                 ),
-                endAdornment: params.InputProps?.endAdornment,
+                endAdornment: inputSlotProps.input?.endAdornment,
               },
-              inputLabel: { shrink: true, ...InputLabelProps },
+              inputLabel: { shrink: true, ...inputSlotProps.inputLabel },
             }}
           />
         )}

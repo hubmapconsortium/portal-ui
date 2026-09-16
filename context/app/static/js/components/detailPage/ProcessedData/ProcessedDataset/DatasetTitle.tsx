@@ -24,7 +24,14 @@ export function DatasetTitle() {
   const parentUuid = conf && 'parentUuid' in conf ? (conf.parentUuid as string) : undefined;
   const vitessceConfUrl = useVitessceConfLink(uuid, parentUuid);
   return (
-    <Typography variant="h5" display="flex" alignItems="center" gap={0.5}>
+    <Typography
+      variant="h5"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 0.5,
+      }}
+    >
       <StatusIcon status={status} tooltip />
       {hubmap_id}
       <SecondaryBackgroundTooltip title="Copy HuBMAP ID">
@@ -40,7 +47,14 @@ export function DatasetTitle() {
           <ContentCopyIcon color="info" />
         </IconButton>
       </SecondaryBackgroundTooltip>
-      <Stack ml="auto" direction="row" gap={1} alignItems="center">
+      <Stack
+        direction="row"
+        sx={{
+          ml: 'auto',
+          gap: 1,
+          alignItems: 'center',
+        }}
+      >
         {conf && <VisualizationIconButton href={vitessceConfUrl} />}
         <SummarySaveEntityButton uuid={uuid} />
         <SummaryJSONButton entity_type={entity_type} uuid={uuid} />

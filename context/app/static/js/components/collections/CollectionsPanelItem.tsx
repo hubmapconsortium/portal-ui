@@ -29,10 +29,22 @@ function CollectionHeaderPanel() {
     return null;
   }
   return (
-    <StackTemplate spacing={1} position="sticky" top={0} zIndex={1}>
+    <StackTemplate
+      spacing={1}
+      sx={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+      }}
+    >
       <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
       <HeaderCell {...desktopConfig.numDatasets}># of Datasets</HeaderCell>
-      <HeaderCell {...desktopConfig.creationDate} marginRight={isMobile ? 0 : 3}>
+      <HeaderCell
+        {...desktopConfig.creationDate}
+        sx={{
+          marginRight: isMobile ? 0 : 3,
+        }}
+      >
         Creation Date
       </HeaderCell>
     </StackTemplate>
@@ -63,7 +75,9 @@ function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }
       <BodyCell
         {...desktopConfig.numDatasets}
         aria-label="Number of Datasets"
-        justifyContent={isMobile ? 'inherit' : 'center'}
+        sx={{
+          justifyContent: isMobile ? 'inherit' : 'center',
+        }}
       >
         <Typography>{numDatasets}</Typography>
       </BodyCell>
