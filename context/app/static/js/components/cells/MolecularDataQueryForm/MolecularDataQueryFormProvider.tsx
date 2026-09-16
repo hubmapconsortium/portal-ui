@@ -10,7 +10,7 @@ export default function MolecularDataQueryFormProvider({ children, initialValues
       queryMethod: 'scFind',
       genes: [],
       ...initialValues,
-    } as Partial<MolecularDataQueryFormState>,
+    },
   });
 
   const { watch, reset } = methods;
@@ -31,7 +31,6 @@ export default function MolecularDataQueryFormProvider({ children, initialValues
         genes: [],
         cellTypes: [],
         ...initialValues,
-        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
         queryType,
         queryMethod: currentQueryMethod,
       },

@@ -1,13 +1,10 @@
 import { QueryType } from '../../queryTypes';
-import { CellTypeQueryFormState, SCFindGeneQueryFormState, SCFindATACGeneQueryFormState } from '../types';
+import { QueryMethod } from '../types';
 
 export interface AutocompleteQueryKey {
   targetEntity: QueryType;
   substring: string;
-  queryMethod:
-    | CellTypeQueryFormState['queryMethod']
-    | SCFindGeneQueryFormState['queryMethod']
-    | SCFindATACGeneQueryFormState['queryMethod'];
+  queryMethod: QueryMethod;
 }
 
 export interface AutocompleteResult {
