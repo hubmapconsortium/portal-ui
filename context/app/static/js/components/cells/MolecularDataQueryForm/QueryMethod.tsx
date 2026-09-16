@@ -12,7 +12,7 @@ const queryMethods = [
   { value: 'scFindATAC', label: 'ATACseq (DNA accessibility)', disabled: false },
 ];
 
-const scFindLink = <OutboundIconLink href="https://doi.org/10.1038/s41592-021-01076-9">scFind</OutboundIconLink>;
+const scFindLink = <OutboundIconLink href="/scfind/about">scFind</OutboundIconLink>;
 
 const description = (
   <>
