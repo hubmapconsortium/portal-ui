@@ -1,1 +1,0 @@
-- Fix scFind method link to point to internal reference page.
