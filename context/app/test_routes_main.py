@@ -217,4 +217,4 @@ def test_search_types(client, type_status):
 
 def test_files_search_title(client):
     response = client.get('/search/files')
-    assert 'Files Search' in response.data.decode('utf8')
+    assert 'Files Search (BETA)' in response.data.decode('utf8')

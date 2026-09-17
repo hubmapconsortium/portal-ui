@@ -9,9 +9,10 @@ import PlaylistAddRoundedIcon from '@mui/icons-material/PlaylistAddRounded';
 import { decimal } from 'js/helpers/number-format';
 import BulkDownloadDialog from 'js/components/bulkDownload/BulkDownloadDialog';
 import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
-import { useSearchStore } from '../../store';
-import { useFilesSelectionStore, countSelectedDatasets } from './useFilesSelectionStore';
+import { filterHasValues, useSearchStore } from '../../store';
+import { useFilesSelectionStore } from './useFilesSelectionStore';
 import useAddAllMatchingFiles, { ADD_ALL_MAX_FILES } from './useAddAllMatchingFiles';
+import useWholeDatasetFileCounts from './useWholeDatasetFileCounts';
 
 /**
  * Selection summary and transfer actions for the files search.
@@ -52,7 +53,7 @@ function AddAllMatchingButton() {
       case 'done':
         return `Added ${decimal.format(state.added)} files to the selection.`;
       default:
-        return 'Add every file matching the current filters to the selection.';
+        return 'Select every file matching the current filters, across all pages, not just the ones shown.';
     }
   }, [state]);
 
@@ -73,23 +74,42 @@ function AddAllMatchingButton() {
   );
 }
 
+/** True when anything is narrowing the result set, so "add all matching" is a bounded request. */
+function useHasQuery() {
+  const filters = useSearchStore((state) => state.filters);
+  const search = useSearchStore((state) => state.search);
+  const filenameFilter = useSearchStore((state) => state.filenameFilter);
+
+  return useMemo(
+    () =>
+      Boolean(search) ||
+      Boolean(filenameFilter) ||
+      Object.values(filters).some((filter) => Boolean(filterHasValues({ filter }))),
+    [filters, search, filenameFilter],
+  );
+}
+
 function FilesTableActions() {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
   const hubmapIds = useFilesSelectionStore((state) => state.hubmapIds);
   const clearAll = useFilesSelectionStore((state) => state.clearAll);
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+  const hasQuery = useHasQuery();
 
   const { isOpen, openDialog } = useBulkDownloadStore();
 
-  const selectedDatasetCount = useMemo(
-    () => countSelectedDatasets(wholeDatasets, selectedFiles),
-    [wholeDatasets, selectedFiles],
-  );
+  const wholeDatasetUuids = useMemo(() => [...wholeDatasets], [wholeDatasets]);
+  const { counts: wholeCounts, isLoading: areCountsLoading } = useWholeDatasetFileCounts(wholeDatasetUuids);
 
   const selectedFileCount = useMemo(
     () => [...selectedFiles.values()].reduce((total, files) => total + files.size, 0),
     [selectedFiles],
+  );
+
+  const wholeFileCount = useMemo(
+    () => wholeDatasetUuids.reduce((total, uuid) => total + (wholeCounts.get(uuid) ?? 0), 0),
+    [wholeDatasetUuids, wholeCounts],
   );
 
   const handleDownload = useCallback(() => {
@@ -100,21 +120,21 @@ function FilesTableActions() {
     });
   }, [openDialog, wholeDatasets, selectedFiles, hubmapIds, analyticsCategory]);
 
-  const hasSelection = selectedDatasetCount > 0;
+  const hasSelection = wholeDatasets.size > 0 || selectedFiles.size > 0;
 
   const summary = useMemo(() => {
     if (!hasSelection) {
       return 'Select datasets or individual files to transfer.';
     }
-    const parts = [`${decimal.format(selectedDatasetCount)} dataset${selectedDatasetCount === 1 ? '' : 's'} selected`];
-    if (wholeDatasets.size > 0) {
-      parts.push(`${decimal.format(wholeDatasets.size)} in full`);
+    const total = selectedFileCount + wholeFileCount;
+    // A whole-dataset count is only known once the unfiltered aggregation lands. Rather than show a
+    // number that will jump, mark the total as still settling.
+    const isPending = wholeDatasetUuids.some((uuid) => !wholeCounts.has(uuid)) || areCountsLoading;
+    if (isPending) {
+      return `${decimal.format(total)}… files selected`;
     }
-    if (selectedFileCount > 0) {
-      parts.push(`${decimal.format(selectedFileCount)} individual file${selectedFileCount === 1 ? '' : 's'}`);
-    }
-    return parts.join(' · ');
-  }, [hasSelection, wholeDatasets.size, selectedDatasetCount, selectedFileCount]);
+    return `${decimal.format(total)} file${total === 1 ? '' : 's'} selected`;
+  }, [hasSelection, selectedFileCount, wholeFileCount, wholeDatasetUuids, wholeCounts, areCountsLoading]);
 
   return (
     <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between" flexGrow={1}>
@@ -122,7 +142,9 @@ function FilesTableActions() {
         {summary}
       </Typography>
       <Stack direction="row" spacing={1} alignItems="center">
-        <AddAllMatchingButton />
+        {/* Unfiltered, this matches ~9.9M files and can only refuse, so it is noise until the
+            result set is narrowed. */}
+        {hasQuery && <AddAllMatchingButton />}
         {hasSelection && (
           <Button variant="text" color="primary" onClick={clearAll}>
             Clear Selection

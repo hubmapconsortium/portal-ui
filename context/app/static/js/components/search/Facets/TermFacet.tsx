@@ -13,7 +13,7 @@ import { AggregationsBuckets } from 'js/typings/elasticsearch';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { trackEvent } from 'js/helpers/trackers';
-import { useSearch, InnerBucket } from '../Search';
+import { useSearch, InnerBucket, HierarchicalBucket } from '../Search';
 import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter } from '../store';
 import {
   StyledCheckBoxBlankIcon,
@@ -412,7 +412,43 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
   );
 });
 
-export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
+/**
+ * Groups a flat bucket list into parent buckets, for an index with no parent field.
+ *
+ * Produces the same shape a nested parent/child terms aggregation would, so everything downstream
+ * -- including the single-child flattening and the indeterminate parent state -- is unchanged.
+ * Parent order follows first appearance, which preserves whatever order the aggregation asked for.
+ */
+function groupDerivedParents(
+  buckets: HierarchicalBucket[],
+  childField: string,
+  derivedParent: (childValue: string) => string,
+): HierarchicalBucket[] {
+  const byParent = new Map<string, { doc_count: number; children: InnerBucket[] }>();
+
+  buckets.forEach((bucket) => {
+    const key = getBucketKey(bucket);
+    const parent = derivedParent(key);
+    const entry = byParent.get(parent) ?? { doc_count: 0, children: [] };
+    entry.doc_count += bucket.doc_count;
+    entry.children.push({ key, doc_count: bucket.doc_count });
+    byParent.set(parent, entry);
+  });
+
+  return [...byParent.entries()].map(
+    ([key, { doc_count, children }]) => ({ key, doc_count, [childField]: { buckets: children } }) as HierarchicalBucket,
+  );
+}
+
+export function HierarchicalTermFacet({
+  field: parentField,
+  childField,
+  derivedParent,
+}: {
+  field: string;
+  childField: string;
+  derivedParent?: (childValue: string) => string;
+}) {
   const parentAggs = useSearch()?.aggregations?.[parentField]?.[parentField];
   const getFieldLabel = useGetFieldLabel();
 
@@ -422,11 +458,13 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
     return null;
   }
 
-  const parentBuckets = parentAggs.buckets;
+  const aggBuckets = parentAggs.buckets;
 
-  if (!parentBuckets || !Array.isArray(parentBuckets)) {
+  if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return [];
   }
+
+  const parentBuckets = derivedParent ? groupDerivedParents(aggBuckets, childField, derivedParent) : aggBuckets;
 
   if (!isHierarchicalFilter(filter)) {
     return null;

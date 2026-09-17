@@ -2,6 +2,7 @@ import React from 'react';
 
 import Search from 'js/components/search';
 import { FACETS } from 'js/components/search/store';
+import { stripPipelineSuffix } from 'js/components/search/Results/files/utils';
 import { useAppContext } from 'js/components/Contexts';
 
 /**
@@ -38,11 +39,16 @@ const filesFacetGroups = {
     { field: 'is_data_product', type: FACETS.term },
   ],
   Dataset: [
+    // Hierarchical like the dataset search's Dataset Type facet, but with the parent derived rather
+    // than aggregated: this index has `dataset_type` and no `raw_dataset_type`. See
+    // `stripPipelineSuffix`. The hierarchy is what makes the 40 values browsable, so the per-facet
+    // value filter box (term facets only) is not needed here.
     {
       field: 'dataset_type',
-      type: FACETS.term,
+      childField: 'dataset_type',
+      derivedParent: stripPipelineSuffix,
+      type: FACETS.hierarchical,
       order: { type: '_term', dir: 'asc' } as const,
-      isFilterable: true,
     },
     { field: 'data_class', type: FACETS.term },
     { field: 'analyte_class', type: FACETS.term },

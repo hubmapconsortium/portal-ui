@@ -75,6 +75,21 @@ const statsResponse = {
   },
 };
 
+/**
+ * Unfiltered totals, deliberately larger than the filtered counts above: selecting a dataset in full
+ * takes every file in it, not only the ones matching the query.
+ */
+const wholeCountsResponse = {
+  aggregations: {
+    by_dataset: {
+      buckets: [
+        { key: 'uuid-a', doc_count: 7 },
+        { key: 'uuid-b', doc_count: 4 },
+      ],
+    },
+  },
+};
+
 const facetsResponse = {
   aggregations: {
     total_groups: { doc_count: 3, total_groups: { value: 2 } },
@@ -82,9 +97,17 @@ const facetsResponse = {
       doc_count: 3,
       file_extension: { buckets: [{ key: '.h5ad', doc_count: 3 }] },
     },
+    // Flat buckets: the index has no parent field, so the Dataset Type hierarchy is grouped from
+    // these in the browser.
     dataset_type: {
-      doc_count: 3,
-      dataset_type: { buckets: [{ key: 'RNAseq [Salmon]', doc_count: 3 }] },
+      doc_count: 6,
+      dataset_type: {
+        buckets: [
+          { key: 'RNAseq', doc_count: 1 },
+          { key: 'RNAseq [Salmon]', doc_count: 3 },
+          { key: 'RNAseq [SnapATAC]', doc_count: 2 },
+        ],
+      },
     },
     // Empty on purpose: an empty facet should not render an accordion.
     analyte_class: { doc_count: 0, analyte_class: { buckets: [] } },
@@ -93,6 +116,7 @@ const facetsResponse = {
 
 let hitsRequestBodies: Record<string, unknown>[] = [];
 let statsRequestBodies: Record<string, unknown>[] = [];
+let wholeCountsRequestBodies: Record<string, unknown>[] = [];
 let facetsRequestBodies: Record<string, unknown>[] = [];
 
 const server = setupServer(
@@ -102,6 +126,13 @@ const server = setupServer(
     // The rows request and the per-page stats request both go to the index; the stats one asks for
     // aggregations with no hits.
     if (body.aggs) {
+      // Both aggregate by dataset; only the per-page stats request sums file sizes, and only the
+      // whole-dataset count request is issued without the page's filters.
+      const aggs = body.aggs as { by_dataset?: { aggs?: unknown } };
+      if (!aggs.by_dataset?.aggs) {
+        wholeCountsRequestBodies.push(body);
+        return HttpResponse.json(wholeCountsResponse);
+      }
       statsRequestBodies.push(body);
       return HttpResponse.json(statsResponse);
     }
@@ -119,6 +150,7 @@ afterEach(() => {
   server.resetHandlers();
   hitsRequestBodies = [];
   statsRequestBodies = [];
+  wholeCountsRequestBodies = [];
   facetsRequestBodies = [];
 });
 afterAll(() => server.close());
@@ -174,8 +206,8 @@ describe('Files search page', () => {
 
     // Exact, and independent of how many documents the hits request happened to return -- summing a
     // truncated inner-hit list is what previously produced an understated "≥" size.
-    expect(await screen.findByText(/2 files — select/)).toBeInTheDocument();
-    expect(screen.getByText(/1 file — select/)).toBeInTheDocument();
+    expect(await screen.findByText('Choose Files (2)')).toBeInTheDocument();
+    expect(screen.getByText('Choose Files (1)')).toBeInTheDocument();
     expect(screen.getByText('3 kB')).toBeInTheDocument();
     expect(screen.getByText('500 B')).toBeInTheDocument();
   });
@@ -222,7 +254,63 @@ describe('Files search page', () => {
     await userEvent.click(checkbox);
 
     await waitFor(() => expect(downloadButton).toBeEnabled());
-    expect(screen.getByText(/1 dataset selected/)).toBeInTheDocument();
+    // The count is of *files*, and for a whole dataset it is the unfiltered total (7 here), not the
+    // 2 files that match the active query -- the manifest's directory line brings all of them.
+    expect(await screen.findByText('7 files selected')).toBeInTheDocument();
+    // And the checkbox now offers to undo the file selection, not to remove the dataset.
+    expect(screen.getByRole('checkbox', { name: 'Deselect all files in HBM111.AAAA.111' })).toBeInTheDocument();
+  });
+
+  test('hides "add all matching" until something narrows the results', async () => {
+    render(<Files />);
+    await screen.findByText('HBM111.AAAA.111');
+
+    // Unfiltered the action can only refuse: every file in the index matches.
+    expect(screen.queryByRole('button', { name: /Add All Matching Files/ })).not.toBeInTheDocument();
+
+    await userEvent.type(screen.getByLabelText('Filter by file or folder name'), 'expr');
+
+    expect(await screen.findByRole('button', { name: /Add All Matching Files/ })).toBeInTheDocument();
+  });
+
+  test('groups dataset types under their derived raw assay', async () => {
+    render(<Files />);
+    await screen.findByText('HBM111.AAAA.111');
+    // Scoped to the sidebar: `dataset_type` is also a table column, so the page renders both.
+    const facets = within(screen.getByTestId('search-facets'));
+
+    // `RNAseq` is not a value in the index; it is `dataset_type` with the pipeline suffix stripped,
+    // which is how the portal index derives `raw_dataset_type`. Its count is the sum of its
+    // children's, and the children stay collapsed until the row is expanded.
+    expect(facets.getByText('RNAseq')).toBeInTheDocument();
+    expect(facets.getByText('6')).toBeInTheDocument();
+    expect(facets.queryByText('RNAseq [Salmon]')).not.toBeInTheDocument();
+
+    await userEvent.click(facets.getByTitle('View More'));
+
+    expect(await facets.findByText('RNAseq [Salmon]')).toBeInTheDocument();
+    expect(facets.getByText('RNAseq [SnapATAC]')).toBeInTheDocument();
+  });
+
+  test('filters on child values, never on the derived parent', async () => {
+    render(<Files />);
+    await screen.findByText('HBM111.AAAA.111');
+
+    // The label, not the checkbox: a parent and its children share an accessible name prefix, and
+    // clicking the label toggles its control.
+    await userEvent.click(within(screen.getByTestId('search-facets')).getByText('RNAseq'));
+
+    const datasetTypeBodies = () =>
+      hitsRequestBodies.map((body) => JSON.stringify(body)).filter((body) => body.includes('dataset_type.keyword'));
+
+    await waitFor(() => expect(datasetTypeBodies().length).toBeGreaterThan(0), { timeout: 5000 });
+
+    // Every child of the parent, and *no* bare "RNAseq" clause: selecting a parent seeds all its
+    // children, and no document holds the derived value, so querying it would match nothing.
+    const latest = datasetTypeBodies().at(-1)!;
+    expect(latest).toContain('RNAseq [Salmon]');
+    expect(latest).toContain('RNAseq [SnapATAC]');
+    expect(latest).not.toContain('["RNAseq"]');
   });
 
   test('offers a filename filter distinct from free-text search', async () => {

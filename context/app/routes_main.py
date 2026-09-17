@@ -53,6 +53,8 @@ def search(type):
     if type not in ['donors', 'samples', 'datasets', 'files']:
         abort(404)
     title = f'{type.capitalize()} Search'
+    if type == 'files':
+        title += ' (BETA)'
     flask_data = {
         'type': type,
         **get_default_flask_data(),

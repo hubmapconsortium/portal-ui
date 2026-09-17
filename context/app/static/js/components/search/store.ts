@@ -96,6 +96,15 @@ export interface HierarchicalTermConfig extends FacetConfig {
   childField: string;
   order?: AggregationOrder;
   type: typeof FACETS.hierarchical;
+  /**
+   * Derives the parent value from a child value, for an index that has no parent field.
+   *
+   * With this set the facet aggregates `field` flat and the parent buckets are grouped in the
+   * browser; the query then filters on child values only, since the derived parents match no
+   * document. Used by the files search, whose index carries `dataset_type` but no
+   * `raw_dataset_type`; set `childField` to the same field as `field`.
+   */
+  derivedParent?: (childValue: string) => string;
 }
 
 export interface HierarchicalTermValues<V = Set<string>> {

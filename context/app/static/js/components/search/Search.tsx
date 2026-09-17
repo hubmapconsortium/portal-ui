@@ -47,7 +47,7 @@ import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
-import { GROUP_COUNT_AGG, isDevSearch, SearchTypeProps } from './utils';
+import { GROUP_COUNT_AGG, isDevSearch, isFileSearch, SearchTypeProps } from './utils';
 import useFacetAggregations from './useFacetAggregations';
 import SaySeeAlert from './SaySeeAlert';
 import SearchModeTabs from './SearchModeTabs';
@@ -245,7 +245,8 @@ function Header({ type }: SearchTypeProps) {
     if (isDevSearch(type)) {
       return [type, ListsIcon];
     }
-    return [`${type}s`, entityIconMap[type as keyof typeof entityIconMap]];
+    // The files search is a prototype; the same marker appears in the tab title and the nav drawer.
+    return [isFileSearch(type) ? `${type}s (BETA)` : `${type}s`, entityIconMap[type as keyof typeof entityIconMap]];
   }, [type]);
 
   return (
@@ -341,10 +342,13 @@ function DataProductAlert() {
 const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
   const [mode] = useSearchMode();
   const { enableSaySeeMode } = useAppContext();
-  const effectiveMode = enableSaySeeMode ? mode : 'filter';
+  // Say & See reads the entity index and returns entities; the files search reads a different index
+  // and returns files, so its panel would answer a question the page did not ask.
+  const saySeeEnabled = enableSaySeeMode && !isFileSearch(type);
+  const effectiveMode = saySeeEnabled ? mode : 'filter';
   return (
     <Stack spacing={2} mb={4}>
-      {enableSaySeeMode && <SaySeeAlert />}
+      {saySeeEnabled && <SaySeeAlert />}
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
       <SCFindAlert />
@@ -353,11 +357,11 @@ const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps
       <Stack direction="column" spacing={1} mb={2}>
         <SearchNote />
         <div>
-          {enableSaySeeMode && <SearchModeTabs />}
+          {saySeeEnabled && <SearchModeTabs />}
           {effectiveMode === 'filter' && (
             <>
               <TileViewBar />
-              <Body facetGroups={facetGroups} withPaper={enableSaySeeMode} />
+              <Body facetGroups={facetGroups} withPaper={saySeeEnabled} />
             </>
           )}
           {effectiveMode === 'say-see' && <SaySeePanel />}

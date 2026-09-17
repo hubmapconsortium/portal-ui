@@ -161,11 +161,17 @@ export function useScrollSearchHits<Doc, Aggs>({
 
   const z = isLoading || !hasRun;
 
+  // SWR Infinite's own idiom for "a further page is in flight": the slot for the newest page exists
+  // but holds nothing yet. `isValidating` is not a substitute -- it also fires when a filter change
+  // re-keys and refetches page 0, which is not a "load more".
+  const isLoadingMore = size > 0 && Boolean(data) && typeof data?.[size - 1] === 'undefined';
+
   return {
     aggregations,
     searchHits,
     error,
     isLoading: z,
+    isLoadingMore,
     setSize,
     loadMore,
     totalHitsCount,

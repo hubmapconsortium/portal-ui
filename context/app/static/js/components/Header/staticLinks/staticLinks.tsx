@@ -125,7 +125,7 @@ export const dataLinks: DrawerSection[] = [
         icon: <SearchIcon color="primary" />,
       },
       {
-        label: 'Files',
+        label: 'Files (BETA)',
         description: 'Find files across datasets by file type, organ, and other metadata.',
         href: '/search/files',
         icon: <entityIconMap.File color="primary" />,

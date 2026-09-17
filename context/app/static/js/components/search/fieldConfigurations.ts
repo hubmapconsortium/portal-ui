@@ -169,7 +169,10 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
       label: 'Dataset Status',
     },
     data_access_level: {
+      // Stored lowercase on the files index ('public' / 'consortium'), unlike the portal index's
+      // pre-mapped `mapped_data_access_level`.
       label: 'Data Access Level',
+      valueTransformations: [capitalizeString],
     },
     is_qa_qc: {
       label: 'Quality Assurance/Control',

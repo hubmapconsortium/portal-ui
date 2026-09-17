@@ -35,3 +35,15 @@ export type CollapsedDatasetHit = SearchHit<FileDocument>;
 export function getOrganLabels(source?: FileDocument): string[] {
   return [...new Set((source?.organs ?? []).map((organ) => organ.label).filter(Boolean) as string[])];
 }
+
+/**
+ * The raw assay a `dataset_type` belongs to: `RNAseq [Salmon]` -> `RNAseq`.
+ *
+ * The files index has no `raw_dataset_type`, so the dataset search's Dataset Type hierarchy is
+ * rebuilt from this. That is exact rather than a heuristic: the portal index's `raw_dataset_type` is
+ * its `dataset_type` with the trailing pipeline suffix stripped, checked against every one of the 43
+ * values both indices carry.
+ */
+export function stripPipelineSuffix(datasetType: string): string {
+  return datasetType.replace(/\s*\[[^[\]]*\]\s*$/, '');
+}

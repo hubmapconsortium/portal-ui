@@ -284,7 +284,12 @@ export function buildQuery({
         if (filterHasValues({ filter })) {
           const childPortalField = getESField({ field: facetConfig.childField, mappings });
 
-          draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
+          // A derived parent is not a value any document holds, so querying it would match nothing.
+          // Selecting a parent seeds every one of its children (`filterHierarchicalParentTerm`), so
+          // the child clause alone is already complete.
+          if (!facetConfig.derivedParent) {
+            draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
+          }
 
           const childValues = Object.values(filter.values)
             .map((v) => [...v])
@@ -430,12 +435,31 @@ export function buildQuery({
       }
 
       if (isHierarchicalFacet(facet)) {
-        const { childField, order } = facet;
+        const { childField, order, derivedParent } = facet;
         if (!childField) {
           return;
         }
         const parentPortalField = getESField({ field, mappings });
         const childPortalField = getESField({ field: childField, mappings });
+
+        if (derivedParent) {
+          // No parent field exists to aggregate on; the parent buckets are grouped from these flat
+          // ones in `HierarchicalTermFacet`.
+          query.agg(
+            buildFilterAggregation({
+              portalFields: [childPortalField],
+              aggregations: [
+                esb
+                  .termsAggregation(field, childPortalField)
+                  .size(maxAggSize)
+                  .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+              ],
+              filters: { ...allFilters },
+              field,
+            }),
+          );
+          return;
+        }
 
         query.agg(
           buildFilterAggregation({

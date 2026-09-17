@@ -59,11 +59,14 @@ function DatasetRow({
 
   const isWhole = wholeDatasets.has(datasetUuid);
   const selected = selectedFiles.get(datasetUuid);
+  // "Deselect HBM…" read as removing the dataset from the results rather than from the selection.
+  const checkboxLabel = isWhole ? `Deselect all files in ${hubmapId}` : `Select all files in ${hubmapId}`;
+  const fileCount = stats?.fileCount ?? 0;
 
   return (
     <StyledTableRow>
       <StyledTableCell padding="checkbox">
-        <Tooltip title={isWhole ? `Deselect ${hubmapId}` : `Select all files in ${hubmapId}`}>
+        <Tooltip title={checkboxLabel}>
           <Checkbox
             color="secondary"
             checked={isWhole}
@@ -71,7 +74,7 @@ function DatasetRow({
             // toggles the whole dataset.
             indeterminate={Boolean(selected)}
             onChange={() => toggleWholeDataset(datasetUuid, hubmapId)}
-            inputProps={{ 'aria-label': `Select all files in ${hubmapId}` }}
+            inputProps={{ 'aria-label': checkboxLabel }}
           />
         </Tooltip>
       </StyledTableCell>
@@ -91,18 +94,19 @@ function DatasetRow({
             variant="text"
             size="small"
             sx={{ p: 0, minWidth: 0, textAlign: 'left' }}
+            aria-label={`Choose files in ${hubmapId}`}
             onClick={() =>
               onSelectFiles({
                 datasetUuid,
                 datasetHubmapId: hubmapId,
-                fileCount: stats?.fileCount ?? 0,
+                fileCount,
                 dataAccessLevel: source.data_access_level,
               })
             }
           >
-            {`${decimal.format(stats?.fileCount ?? 0)} file${stats?.fileCount === 1 ? '' : 's'}${
-              selected ? ` (${decimal.format(selected.size)} selected)` : ''
-            } — select`}
+            {`Choose Files (${decimal.format(fileCount)}${
+              selected ? `, ${decimal.format(selected.size)} selected` : ''
+            })`}
           </Button>
         )}
       </StyledTableCell>
