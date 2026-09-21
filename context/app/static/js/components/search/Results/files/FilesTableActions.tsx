@@ -42,6 +42,15 @@ function AddAllMatchingButton() {
     }
   }, [state]);
 
+  const buttonDisabled = useMemo(() => {
+    switch (state.status) {
+      case 'too-many':
+        return state.total > ADD_ALL_MAX_FILES ? true : false;
+      default:
+        return false;
+    }
+  }, [state]);
+
   const tooltip = useMemo(() => {
     switch (state.status) {
       case 'too-many':
@@ -64,7 +73,7 @@ function AddAllMatchingButton() {
           variant="text"
           color="primary"
           onClick={handleClick}
-          disabled={isBusy}
+          disabled={buttonDisabled || isBusy}
           startIcon={isBusy ? <CircularProgress size={16} /> : <PlaylistAddRoundedIcon />}
         >
           {label}

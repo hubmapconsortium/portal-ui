@@ -160,7 +160,7 @@ function ColumnFilterDropdown({
                             {value}
                           </Typography>
                           <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>
-                            ({count})
+                            ({new Intl.NumberFormat('en-US').format(count)})
                           </Typography>
                         </Box>
                       }
