@@ -5,12 +5,13 @@ import { useEventCallback } from '@mui/material/utils';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import { useHash } from 'js/hooks/useHash';
 import { useProvenanceStore } from '../ProvContext';
 import useProvData from '../hooks';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import LargeGraphWarning from '../LargeGraphWarning';
-import { hasDataTypes } from './utils';
+import { hasDataTypes, PROVENANCE_GRAPH_ID } from './utils';
 import { filterTabsToDisplay } from './filterTabsToDisplay';
 import ProvGraphErrorBoundary from '../ProvGraph/ProvGraphErrorBoundary';
 
@@ -66,6 +67,17 @@ function ProvTabs({ integratedDataset = false }: ProvTabsProps) {
 
   const filteredTabs = filterTabsToDisplay({ availableTabDetails, tabsToDisplay });
 
+  const graphTabIndex = filteredTabs?.graph?.index;
+  const [hash] = useHash();
+
+  // `#provenance-graph` links (e.g. the SNARE-seq2 alert) scroll to the tabs and open the graph tab.
+  useEffect(() => {
+    if (hash === `#${PROVENANCE_GRAPH_ID}` && graphTabIndex !== undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Effect syncs state on external change; derivation isn't a clean substitute.
+      setOpen(graphTabIndex);
+    }
+  }, [hash, graphTabIndex]);
+
   const handleChange = useEventCallback((event: unknown, newValue: number) => {
     trackEntityPageEvent({ action: `Provenance / ${filteredTabs[Object.keys(filteredTabs)[newValue]].label} Tab` });
     setOpen(newValue);
@@ -94,7 +106,7 @@ function ProvTabs({ integratedDataset = false }: ProvTabsProps) {
   }
 
   return (
-    <Paper>
+    <Paper id={PROVENANCE_GRAPH_ID}>
       <Tabs value={open} onChange={handleChange} aria-label="Provenance Tabs">
         {Object.values(filteredTabs).map(({ label, index, 'data-testid': dataTestID }) => (
           <Tab label={label} index={index} data-testid={dataTestID} key={label} />
