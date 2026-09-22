@@ -1,5 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import { PROVENANCE_GRAPH_ID } from 'js/components/detailPage/provenance/ProvTabs/utils';
@@ -42,17 +44,19 @@ function SnareSeq2Alert({ isHeader }: SnareSeq2AlertProps) {
           flexGrow: 1,
         },
       }}
-      action={
-        showProcessedDatasetButton ? (
+    >
+      <Stack direction="row" alignItems="center" spacing={1}>
+        <Typography variant="body2">
+          {descriptionText} For a detailed understanding of dataset relationships, scroll to the{' '}
+          <InternalLink href="#section-dataset-relationships">Dataset Relationship section</InternalLink> or explore the{' '}
+          <InternalLink href={`#${PROVENANCE_GRAPH_ID}`}>provenance</InternalLink> graph.
+        </Typography>
+        {showProcessedDatasetButton && (
           <Button href={processedHref} sx={{ flexShrink: 0 }}>
             View Processed Dataset
           </Button>
-        ) : undefined
-      }
-    >
-      {descriptionText} For a detailed understanding of dataset relationships, scroll to the{' '}
-      <InternalLink href="#section-dataset-relationships">Dataset Relationship section</InternalLink> or explore the{' '}
-      <InternalLink href={`#${PROVENANCE_GRAPH_ID}`}>provenance</InternalLink> graph.
+        )}
+      </Stack>
     </DetailPageAlert>
   );
 }
