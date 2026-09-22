@@ -235,7 +235,7 @@ const useCellPopDataForOrgan = (
 const yAxisConfig: CellPopProps['yAxis'] = {
   label: 'Dataset',
   createHref: (row: string) => `/browse/${row}`,
-  createSubtitle: (_: string, metadataValues: Record<string, string | number> | undefined) => {
+  createSubtitle: (_, metadataValues) => {
     const assay = metadataValues?.assay;
     const anatomy = metadataValues?.anatomy ?? 'Unknown';
     return `${anatomy} | ${assay}`;
@@ -245,9 +245,9 @@ const yAxisConfig: CellPopProps['yAxis'] = {
 
 const xAxisConfig: CellPopProps['xAxis'] = {
   label: 'Cell Type',
-  createHref: (col: string, metadataValues: Record<string, string | number> | undefined) =>
+  createHref: (col, metadataValues) =>
     `https://www.ebi.ac.uk/ols4/search?q=${metadataValues?.['Cell Ontology ID'] ?? col}&ontology=cl`,
-  createSubtitle: (_: string, metadataValues: Record<string, string | number> | undefined) => {
+  createSubtitle: (_, metadataValues) => {
     if (metadataValues && 'Cell Ontology Label' in metadataValues) {
       return metadataValues['Cell Ontology Label'] as string;
     }
