@@ -692,3 +692,20 @@ def test_sitemap_pagination_covers_every_entity(
 def test_sitemap_bad_page_404s(client, five_entities_per_sitemap, slug):
     """A page past the end, or of an unknown type, is a stale URL rather than an empty file."""
     assert client.get(f'/sitemap-{slug}.xml').status == '404 NOT FOUND'
+
+
+def test_llms_txt(client):
+    response = client.get('/llms.txt')
+    assert response.status == '200 OK'
+    assert response.mimetype == 'text/plain'
+    body = response.data.decode('utf8')
+    assert body.startswith('# HuBMAP Data Portal')
+    assert '](http://localhost/search/datasets)' in body
+    # The generated sections are populated, not empty headings.
+    assert '](http://localhost/organs/adipose-tissue)' in body
+    assert '](http://localhost/tutorials/getting-started)' in body
+    assert '](https://docs.hubmapconsortium.org/metadata)' in body
+
+
+def test_robots_txt_advertises_llms_txt(client):
+    assert 'http://localhost/llms.txt' in client.get('/robots.txt').data.decode('utf8')

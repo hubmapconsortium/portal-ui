@@ -3,6 +3,7 @@ from functools import cache
 from importlib.metadata import version
 import json
 from math import ceil
+from pathlib import Path
 import time
 from urllib.parse import urlparse, quote
 from xml.sax.saxutils import escape as xml_escape
@@ -11,7 +12,7 @@ from xml.sax.saxutils import escape as xml_escape
 # portal-visualization client that portal-ui pins.
 from portal_visualization.client import HEAVY_RELATIVE_FIELDS, _paginate_search_after
 
-from .utils import get_organs, get_valid_tutorial_routes
+from .utils import _load_tutorials, get_organs, get_valid_tutorial_routes
 
 from flask import (
     current_app,
@@ -379,6 +380,100 @@ def robots_txt():
 User-agent: *
 Disallow: {disallow}
 Sitemap: {get_url_base_from_request()}/sitemap.xml
+# LLMs: {get_url_base_from_request()}/llms.txt
+""",
+        mimetype='text/plain',
+    )
+
+
+# Built once at import, like the markdown routes these mirror: they are files on disk that
+# only change with a deploy. Top level only -- `markdown/docs/assays/` is 14 more stubs with
+# cryptic slugs, and the `assays` stub already links their index.
+_DOCS_LINKS = sorted(
+    (path.stem, path.read_text().strip())
+    for path in (Path(__file__).parent / 'markdown' / 'docs').glob('*.redirect')
+)
+
+
+@blueprint.route('/llms.txt')
+def llms_txt():
+    """
+    An index of the portal for LLM agents, in the https://llmstxt.org/ format: an H1, a
+    blockquote summary, then sections of annotated links. The curated sections carry the
+    descriptions, which are the whole point of the file; organs, tutorials and docs are
+    generated from the same files the pages are built from, so they cannot drift.
+    """
+    url_base = get_url_base_from_request()
+    organs = '\n'.join(
+        f'- [{organ["name"]}]({url_base}/organs/{slug}): {organ.get("description", "").strip()}'
+        for slug, organ in sorted(get_organs().items())
+    )
+    tutorials = '\n'.join(
+        f'- [{t["title"]}]({url_base}/tutorials/{t["route"]}): {t["description"]}'
+        for t in _load_tutorials()
+    )
+    docs = '\n'.join(f'- [{slug}]({url})' for slug, url in _DOCS_LINKS)
+    return Response(
+        f"""# HuBMAP Data Portal
+
+> The Human BioMolecular Atlas Program (HuBMAP) Data Portal publishes single-cell and spatial datasets from healthy human tissue, with faceted search, organ and cell type browsing, and interactive visualization.
+
+Entity pages live at {url_base}/browse/<type>/<uuid>, where <type> is one of {', '.join(SITEMAP_ENTITY_TYPES)} and <uuid> is a 32-character HuBMAP UUID. Adding a `.json` suffix to any entity page URL returns that entity's indexed metadata instead of the page. {url_base}/sitemap.xml indexes every entity and landing page URL on this host.
+
+## Search and browse
+
+- [Dataset search]({url_base}/search/datasets): Faceted search over every published dataset.
+- [Sample search]({url_base}/search/samples): Faceted search over tissue samples.
+- [Donor search]({url_base}/search/donors): Faceted search over donors, including demographics.
+- [Biomarker and cell type search]({url_base}/search/biomarkers-cell-types): Find datasets by the genes, proteins and cell types they contain.
+- [Organs]({url_base}/organs): One page per organ, with its datasets, samples and donors.
+- [Biomarkers]({url_base}/biomarkers): Genes and proteins measured across HuBMAP data.
+- [Cell types]({url_base}/cell-types): Cell Ontology cell types and the datasets they appear in.
+- [Collections]({url_base}/collections): Curated groups of related datasets.
+- [Publications]({url_base}/publications): Papers whose data is hosted in the portal.
+- [Integrated maps]({url_base}/integrated-maps): Cross-dataset integrated views of an organ.
+- [Donor diversity]({url_base}/diversity): Demographic breakdown of HuBMAP donors.
+- [Data overview]({url_base}/data-overview): Counts of the data currently published.
+
+## Machine-readable data
+
+- [Sitemap index]({url_base}/sitemap.xml): Every entity and landing page URL, split per entity type.
+- [Entity metadata JSON]({url_base}/browse/dataset/<uuid>.json): The indexed metadata for one entity; works for every entity type.
+- [Vitessce configuration JSON]({url_base}/browse/dataset/<uuid>.vitessce.json): The viewer configuration used to visualize a dataset.
+- [RUI location JSON]({url_base}/browse/sample/<uuid>.rui.json): Registration User Interface tissue block placement, where one exists.
+- [Metadata TSV]({url_base}/metadata/v0/datasets.tsv): Bulk metadata export; also `samples.tsv` and `donors.tsv`.
+- [Frictionless datapackage]({url_base}/metadata/v0/udi/datapackage.json): Schema for the unified dataset inventory exports.
+- [Metadata field descriptions]({url_base}/metadata/descriptions): Human-readable description of every metadata field.
+- [Organ JSON]({url_base}/organs/<name>.json): Structured record for one organ, including its UBERON term.
+- [robots.txt]({url_base}/robots.txt): Crawl policy for this host.
+
+Dataset pages additionally embed schema.org `Dataset` JSON-LD in an `application/ld+json` script tag.
+
+## Tools
+
+- [Workspaces]({url_base}/workspaces): Run Jupyter notebooks against HuBMAP data in the browser.
+- [Analysis templates]({url_base}/templates): Prebuilt notebook templates for workspaces.
+- [scFind]({url_base}/scfind/about): Query HuBMAP single-cell indices by gene or cell type.
+- [Common Coordinate Framework Exploration User Interface]({url_base}/ccf-eui): Browse registered tissue blocks in 3D reference organs.
+- [Service status]({url_base}/services): Current status of the services behind the portal.
+
+## Organs
+
+{organs}
+
+## Tutorials
+
+{tutorials}
+
+## Documentation
+
+- [HuBMAP documentation](https://docs.hubmapconsortium.org/): Consortium documentation covering assays, metadata, pipelines and APIs.
+{docs}
+
+## Optional
+
+- [Changelog]({url_base}/CHANGELOG): Release history of the portal.
+- [Dependencies]({url_base}/dependencies): Open source dependencies and their licenses.
 """,
         mimetype='text/plain',
     )
