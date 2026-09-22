@@ -76,12 +76,12 @@ describe('FilterChips', () => {
   });
 
   describe('expand/collapse behavior', () => {
-    // The expand/collapse behavior depends on DOM measurements (offsetTop)
-    // which are not available in jsdom. We test the toggle chip interaction instead.
+    // The expand/collapse behavior depends on DOM measurements (scrollHeight /
+    // clientHeight) which are not available in jsdom. The hook's own measurement
+    // logic is covered in js/hooks/useHasOverflow.spec.tsx, which stubs them.
 
     it('toggles expanded state when expand chip is clicked', () => {
-      // We mock the overflow by checking that the toggle chip exists after interacting with it
-      // Since jsdom doesn't support layout, overflowCount will always be 0
+      // Since jsdom doesn't support layout, hasOverflow is always false here.
       // This is a smoke test that the component renders without errors
       renderWithStore(
         {

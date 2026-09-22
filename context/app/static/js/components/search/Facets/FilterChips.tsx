@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { format } from 'date-fns/format';
 
-import useOverflowCount, { SINGLE_ROW_HEIGHT } from 'js/hooks/useOverflowCount';
+import useHasOverflow, { SINGLE_ROW_HEIGHT } from 'js/hooks/useHasOverflow';
 import { trackEvent } from 'js/helpers/trackers';
 import Divider from '@mui/material/Divider';
 import {
@@ -546,7 +546,7 @@ function FilterChips() {
   const chipElements = useChipElements(filters, facets);
   const hasActiveFilters = chipElements.length > 0 || Boolean(search) || Boolean(includeSupersededEntities);
 
-  const { containerRef, isExpanded, setIsExpanded, overflowCount } = useOverflowCount(hasActiveFilters, [
+  const { containerRef, isExpanded, setIsExpanded, hasOverflow } = useHasOverflow(hasActiveFilters, [
     filters,
     search,
     includeSupersededEntities,
@@ -580,13 +580,14 @@ function FilterChips() {
       </Box>
       <Stack direction="row" spacing={1} flexShrink={0} alignItems="flex-start">
         <Chip
-          label={isExpanded ? 'See less' : `+ ${overflowCount} more`}
+          label={isExpanded ? 'See less' : 'See more'}
           onClick={() => setIsExpanded((prev) => !prev)}
           variant="outlined"
           data-testid="filter-chips-expand-toggle"
+          aria-expanded={isExpanded}
           sx={{
             cursor: 'pointer',
-            visibility: overflowCount > 0 || isExpanded ? 'visible' : 'hidden',
+            visibility: hasOverflow || isExpanded ? 'visible' : 'hidden',
           }}
         />
         <ResetFiltersButton />
