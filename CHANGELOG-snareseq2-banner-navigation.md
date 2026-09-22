@@ -1,2 +1,0 @@
-- Add a "View Processed Dataset" action button to the SNARE-seq2 banner on raw dataset pages.
-- Make the banner's provenance link open the Graph tab of the provenance section instead of the Table tab.

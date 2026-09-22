@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.52.4 - 2026-09-22
+
+- Fix the search page filter chips flickering when a filter is toggled while long filter labels are active.
+- Add an `/llms.txt` route, an index of the portal for LLM agents in the [llmstxt.org](https://llmstxt.org/) format. It lists the search and browse pages, the machine-readable endpoints (entity JSON, Vitessce configs, metadata TSVs, the datapackage schema and the sitemaps), and the portal tools, each with a short description, followed by generated lists of every organ, tutorial and documentation page. `/robots.txt` now points at it.
+- Add a "View Processed Dataset" action button to the SNARE-seq2 banner on raw dataset pages.
+- Make the banner's provenance link open the Graph tab of the provenance section instead of the Table tab.
+
+
+
 ## v1.52.3 - 2026-09-16
 
 - Fix scFind method link to point to internal reference page.

@@ -1,1 +1,0 @@
-- Fix the search page filter chips flickering when a filter is toggled while long filter labels are active.
