@@ -1,8 +1,4 @@
-import useSWR from 'swr';
-import { useMemo } from 'react';
-
-import { fetcher } from 'js/helpers/swr';
-import { SWRError } from 'js/helpers/swr/errors';
+import { useCallback } from 'react';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 import { FACETS, useSearchStore } from '../../store';
@@ -42,10 +38,13 @@ interface StatsResponse {
  * cheap. Reuses the page's own filters so the count a row shows always matches what the
  * file-selection modal will list.
  */
-export default function useDatasetPageStats(datasetUuids: string[]): {
-  stats: Map<string, DatasetStats>;
-  error?: SWRError;
-  isLoading: boolean;
+
+type DatasetStatsMethod = (data: object) => Map<string, DatasetStats>;
+type FetchDatasetStatsMethod = (uuids: string[]) => Promise<StatsResponse>;
+
+export default function useDatasetPageStats(): {
+  getStats: DatasetStatsMethod;
+  fetchDatasetPageStats: FetchDatasetStatsMethod;
 } {
   const { groupsToken } = useAppContext();
   const endpoint = useSearchStore((state) => state.endpoint);
@@ -61,85 +60,157 @@ export default function useDatasetPageStats(datasetUuids: string[]): {
 
   const mappings = useESmapping(mappingIndex);
 
-  const body = useMemo(() => {
-    if (datasetUuids.length === 0 || !isESMapping(mappings)) {
-      return null;
-    }
-    // Build the query through the normal path so every active filter is honoured, then attach
-    // the aggregations, which `buildQuery` has no notion of.
-    const built = buildQuery({
-      filters: {
-        ...filters,
-        dataset_uuid: { type: FACETS.term, values: new Set(datasetUuids) },
-      },
-      facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
-      search,
-      size: 0,
-      searchFields,
-      sourceFields: {},
-      sortField: { field: 'dataset_uuid', direction: 'asc' },
-      filterMode: 'query',
-      uniqueSortField: 'dataset_uuid.keyword',
-      hubmapIdField,
-      uuidField,
-      filenameFilter,
-      filenameField,
-      mappings,
-      buildAggregations: false,
-    }) as Record<string, unknown> | null;
-
-    if (!built) {
-      return null;
-    }
-    // `sort` is meaningless with `size: 0`; the aggregation supplies the ordering that matters.
-    const { sort, ...rest } = built;
-    return {
-      ...rest,
-      size: 0,
-      aggs: {
-        [BY_DATASET_AGG]: {
-          terms: { field: 'dataset_uuid.keyword', size: datasetUuids.length },
-          aggs: { [BYTES_AGG]: { sum: { field: 'size' } } },
+  const buildQueryBody = useCallback(
+    (uuids: string[]) => {
+      if (uuids.length === 0 || !isESMapping(mappings)) {
+        return null;
+      }
+      // Build the query through the normal path so every active filter is honoured, then attach
+      // the aggregations, which `buildQuery` has no notion of.
+      const built = buildQuery({
+        filters: {
+          ...filters,
+          dataset_uuid: { type: FACETS.term, values: new Set(uuids) },
         },
-      },
-    };
-  }, [
-    datasetUuids,
-    mappings,
-    filters,
-    facets,
-    search,
-    searchFields,
-    hubmapIdField,
-    uuidField,
-    filenameFilter,
-    filenameField,
-  ]);
+        facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
+        search,
+        size: 0,
+        searchFields,
+        sourceFields: {},
+        sortField: { field: 'dataset_uuid', direction: 'asc' },
+        filterMode: 'query',
+        uniqueSortField: 'dataset_uuid.keyword',
+        hubmapIdField,
+        uuidField,
+        filenameFilter,
+        filenameField,
+        mappings,
+        buildAggregations: false,
+      }) as Record<string, unknown> | null;
 
-  const { data, error, isLoading } = useSWR<StatsResponse, SWRError>(
-    body
-      ? {
-          url: endpoint,
-          requestInit: {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...getAuthHeader(groupsToken) },
-            body: JSON.stringify(body),
+      if (!built) {
+        return null;
+      }
+      // `sort` is meaningless with `size: 0`; the aggregation supplies the ordering that matters.
+      const { sort, ...rest } = built;
+      return {
+        ...rest,
+        size: 0,
+        aggs: {
+          [BY_DATASET_AGG]: {
+            terms: { field: 'dataset_uuid.keyword', size: uuids.length },
+            aggs: { [BYTES_AGG]: { sum: { field: 'size' } } },
           },
-        }
-      : null,
-    fetcher,
-    // Paging appends rows, so keep the previous page's numbers on screen rather than blanking
-    // every row's count while the next page's stats load.
-    { keepPreviousData: true },
+        },
+      };
+    },
+    [mappings, filters, facets, search, searchFields, hubmapIdField, uuidField, filenameFilter, filenameField],
   );
 
-  const stats = useMemo(() => {
-    const map = new Map<string, DatasetStats>();
-    (data?.aggregations?.[BY_DATASET_AGG]?.buckets ?? []).forEach((bucket) => {
-      map.set(bucket.key, { fileCount: bucket.doc_count, bytes: bucket[BYTES_AGG]?.value ?? 0 });
-    });
-    return map;
-  }, [data]);
+  // const body = useMemo(() => {
+  //   if (datasetUuids.length === 0 || !isESMapping(mappings)) {
+  //     return null;
+  //   }
+  //   // Build the query through the normal path so every active filter is honoured, then attach
+  //   // the aggregations, which `buildQuery` has no notion of.
+  //   const built = buildQuery({
+  //     filters: {
+  //       ...filters,
+  //       dataset_uuid: { type: FACETS.term, values: new Set(datasetUuids) },
+  //     },
+  //     facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
+  //     search,
+  //     size: 0,
+  //     searchFields,
+  //     sourceFields: {},
+  //     sortField: { field: 'dataset_uuid', direction: 'asc' },
+  //     filterMode: 'query',
+  //     uniqueSortField: 'dataset_uuid.keyword',
+  //     hubmapIdField,
+  //     uuidField,
+  //     filenameFilter,
+  //     filenameField,
+  //     mappings,
+  //     buildAggregations: false,
+  //   }) as Record<string, unknown> | null;
 
-  return { stats, error, isLoading };
+  //   if (!built) {
+  //     return null;
+  //   }
+  //   // `sort` is meaningless with `size: 0`; the aggregation supplies the ordering that matters.
+  //   const { sort, ...rest } = built;
+  //   return {
+  //     ...rest,
+  //     size: 0,
+  //     aggs: {
+  //       [BY_DATASET_AGG]: {
+  //         terms: { field: 'dataset_uuid.keyword', size: datasetUuids.length },
+  //         aggs: { [BYTES_AGG]: { sum: { field: 'size' } } },
+  //       },
+  //     },
+  //   };
+  // }, [
+  //   datasetUuids,
+  //   mappings,
+  //   filters,
+  //   facets,
+  //   search,
+  //   searchFields,
+  //   hubmapIdField,
+  //   uuidField,
+  //   filenameFilter,
+  //   filenameField,
+  // ]);
+
+  const fetchDatasetPageStats = async (uuids: string[]): Promise<StatsResponse> => {
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeader(groupsToken),
+        },
+        body: JSON.stringify(buildQueryBody(uuids)),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = (await response.json()) as StatsResponse;
+      return result;
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
+    return {};
+  };
+
+  // const { data, error, isLoading } = useSWR<StatsResponse, SWRError>(
+  //   body
+  //     ? {
+  //         url: endpoint,
+  //         requestInit: {
+  //           method: 'POST',
+  //           headers: { 'Content-Type': 'application/json', ...getAuthHeader(groupsToken) },
+  //           body: JSON.stringify(body),
+  //         },
+  //       }
+  //     : null,
+  //   fetcher,
+  //   // Paging appends rows, so keep the previous page's numbers on screen rather than blanking
+  //   // every row's count while the next page's stats load.
+  //   { keepPreviousData: true },
+  // );
+
+  const getStats = (data: StatsResponse): Map<string, DatasetStats> => {
+    const map = new Map<string, DatasetStats>();
+    (data?.aggregations?.[BY_DATASET_AGG]?.buckets ?? []).forEach(
+      (bucket: { key: string; doc_count: number; bytes: { value: number } }) => {
+        map.set(bucket.key, { fileCount: bucket.doc_count, bytes: bucket[BYTES_AGG]?.value ?? 0 });
+      },
+    );
+    return map;
+  };
+
+  return { getStats, fetchDatasetPageStats };
 }

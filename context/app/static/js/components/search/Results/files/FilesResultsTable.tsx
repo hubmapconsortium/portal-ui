@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Skeleton from '@mui/material/Skeleton';
@@ -13,7 +13,6 @@ import prettyBytes from 'pretty-bytes';
 import { InternalLink } from 'js/shared-styles/Links';
 import { decimal } from 'js/helpers/number-format';
 import { StyledTable, StyledTableBody, StyledTableCell, StyledTableRow } from '../style';
-import { useSearch } from '../../Search';
 import { useSearchStore } from '../../store';
 import { useGetFieldLabel } from '../../fieldConfigurations';
 import SearchTableHeaderCell from '../SearchTableHeaderCell';
@@ -25,7 +24,7 @@ import FilesTableActions from './FilesTableActions';
 import FileSelectionModal, { FileSelectionTarget } from './FileSelectionModal';
 import { FilesSearchDUAProvider } from './FilesSearchDUA';
 import { useFilesSelectionStore } from './useFilesSelectionStore';
-import useDatasetPageStats, { DatasetStats } from './useDatasetPageStats';
+import { DatasetStats } from './useDatasetPageStats';
 import { CollapsedDatasetHit, getOrganLabels } from './utils';
 
 /** Columns derived from the per-page stats aggregation rather than a source field, so not sortable. */
@@ -130,22 +129,27 @@ function LoadingRows({ columnCount }: { columnCount: number }) {
   ));
 }
 
-function FilesResultsTable({ isLoading }: { isLoading: boolean }) {
-  const { searchHits } = useSearch();
+function FilesResultsTable({
+  isLoading,
+  hits,
+  datasetStats,
+}: {
+  isLoading: boolean;
+  hits: CollapsedDatasetHit[];
+  datasetStats: { isLoading: boolean; stats?: Map<string, DatasetStats> };
+}) {
   const tableFields = useSearchStore((state) => state.sourceFields.table);
   const getFieldLabel = useGetFieldLabel();
   const [selectionTarget, setSelectionTarget] = useState<FileSelectionTarget | null>(null);
 
-  const hits = searchHits as CollapsedDatasetHit[];
-
   // Checkbox column + sortable columns + the two derived columns.
   const columnCount = 1 + tableFields.length + derivedColumns.length;
 
-  const datasetUuids = useMemo(
-    () => hits.map((hit) => hit._source?.dataset_uuid).filter((uuid): uuid is string => Boolean(uuid)),
-    [hits],
-  );
-  const { stats, isLoading: isStatsLoading } = useDatasetPageStats(datasetUuids);
+  // const datasetUuids = useMemo(
+  //   () => hits.map((hit) => hit._source?.dataset_uuid).filter((uuid): uuid is string => Boolean(uuid)),
+  //   [hits],
+  // );
+  // const { stats, isLoading: isStatsLoading } = useDatasetPageStats(datasetUuids);
 
   const handleCloseModal = useCallback(() => setSelectionTarget(null), []);
 
@@ -189,13 +193,17 @@ function FilesResultsTable({ isLoading }: { isLoading: boolean }) {
             </TableRow>
           </TableHead>
           <StyledTableBody>
-            {isLoading && !hits.length && <LoadingRows columnCount={columnCount} />}
+            {isLoading && <LoadingRows columnCount={columnCount} />}
             {hits.map((hit) => (
               <DatasetRow
                 key={hit._source?.dataset_uuid ?? hit._id}
                 hit={hit}
-                stats={hit._source?.dataset_uuid ? stats.get(hit._source.dataset_uuid) : undefined}
-                isStatsLoading={isStatsLoading}
+                stats={
+                  hit._source?.dataset_uuid && !datasetStats?.isLoading
+                    ? datasetStats?.stats?.get(hit._source.dataset_uuid)
+                    : undefined
+                }
+                isStatsLoading={datasetStats?.isLoading}
                 onSelectFiles={setSelectionTarget}
               />
             ))}
