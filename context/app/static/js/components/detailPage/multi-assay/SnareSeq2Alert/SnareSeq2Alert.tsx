@@ -1,7 +1,13 @@
 import React from 'react';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { DetailPageAlert } from 'js/components/detailPage/style';
+import { PROVENANCE_GRAPH_ID } from 'js/components/detailPage/provenance/ProvTabs/utils';
 import { InternalLink } from 'js/shared-styles/Links';
+import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useIsMultiAssay } from '../hooks';
 
 interface SnareSeq2AlertProps {
@@ -13,12 +19,22 @@ const bulkDataSectionText = `SNARE-seq2 processed datasets are derived from mult
 
 function SnareSeq2Alert({ isHeader }: SnareSeq2AlertProps) {
   const { isSnareSeq2 } = useIsMultiAssay();
+  // Only populated on raw datasets, which is the only place the header alert appears.
+  const { searchHits: processedDatasets } = useProcessedDatasets();
 
   if (!isSnareSeq2) {
     return null;
   }
 
   const descriptionText = isHeader ? headerText : bulkDataSectionText;
+
+  // A single processed dataset gets a direct link, which also expands its accordion.
+  const processedHref =
+    processedDatasets.length === 1
+      ? `#${datasetSectionId(processedDatasets[0]._source, 'section')}`
+      : '#processed-data';
+
+  const showProcessedDatasetButton = Boolean(isHeader) && processedDatasets.length > 0;
 
   return (
     <DetailPageAlert
@@ -29,9 +45,18 @@ function SnareSeq2Alert({ isHeader }: SnareSeq2AlertProps) {
         },
       }}
     >
-      {descriptionText} For a detailed understanding of dataset relationships, scroll to the{' '}
-      <InternalLink href="#section-dataset-relationships">Dataset Relationship section</InternalLink> or explore the{' '}
-      <InternalLink href="#provenance">provenance</InternalLink> graph.
+      <Stack direction="row" alignItems="center" spacing={1}>
+        <Typography variant="body2">
+          {descriptionText} For a detailed understanding of dataset relationships, scroll to the{' '}
+          <InternalLink href="#section-dataset-relationships">Dataset Relationship section</InternalLink> or explore the{' '}
+          <InternalLink href={`#${PROVENANCE_GRAPH_ID}`}>provenance</InternalLink> graph.
+        </Typography>
+        {showProcessedDatasetButton && (
+          <Button href={processedHref} sx={{ flexShrink: 0 }}>
+            View Processed Dataset
+          </Button>
+        )}
+      </Stack>
     </DetailPageAlert>
   );
 }
