@@ -2,7 +2,7 @@ import React from 'react';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
 // udi-yac's markdown renderer sets the marker on the list itself (Tailwind's
-// `list-disc` / `list-decimal` on the <ul>/<ol>) and leaves each <li>
+// `udi:list-disc` / `udi:list-decimal` on the <ul>/<ol>) and leaves each <li>
 // unstyled, letting it inherit. The portal's global `li { list-style: none }`
 // reset in js/components/globalStyles.tsx matches the <li> directly, and a
 // direct match always beats an inherited value -- regardless of specificity

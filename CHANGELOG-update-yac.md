@@ -1,5 +1,5 @@
-- Upgrade `udi-yac` (Say & See chat) from 0.2.4 to 0.3.0, which scopes the chat's CSS custom properties to its own root element instead of leaking them onto `:root` portal-wide.
-- Upgrade `udiagent` from 0.2.6 to 0.3.0, so CI and local development test against the version production already resolves.
+- Upgrade `udi-yac` (Say & See chat) from 0.2.4 to 0.4.0. The chat's CSS custom properties are scoped to its own root element instead of leaking onto `:root`, its Tailwind utilities are prefixed and its preflight reset is scoped to the chat, so its stylesheet no longer overrides portal styles.
+- Upgrade `udiagent` from 0.2.6 to 0.4.0.
 - Fix Say & See chat lists rendering without bullets or numbers: the chat sets the marker on the list and lets each item inherit it, but the portal's global `li { list-style: none }` reset matched the items directly and won.
 - Fix Say & See returning an empty card for questions like "filter to datasets with assay type = Xenium": the agent was choosing `assay_type`, a sparse legacy ingest field that is empty for ~79% of datasets and never contains values such as Xenium, instead of `dataset_type`. `assay_type` is now excluded from the chat's schema, and `dataset_type` is described as the primary field for assay questions.
 - Request the top-level assay, processing, organ and count fields from Elasticsearch for the Say & See datapackage. `raw_dataset_type` in particular is populated for every dataset, where the previously-used `dataset_type` reached the export only via optional CEDAR metadata and was blank for 14% of rows.

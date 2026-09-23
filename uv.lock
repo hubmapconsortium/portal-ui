@@ -912,8 +912,8 @@ requires-dist = [
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "udiagent", specifier = ">=0.3.0" },
-    { name = "udiagent", extras = ["langfuse"], specifier = ">=0.3.0" },
+    { name = "udiagent", specifier = ">=0.4.0" },
+    { name = "udiagent", extras = ["langfuse"], specifier = ">=0.4.0" },
     { name = "whitenoise", extras = ["brotli"], specifier = ">=6.9.0" },
 ]
 
