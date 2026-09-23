@@ -37,7 +37,7 @@ interface DatasetFilesResult {
  * `dataset_uuid` term filter, so no query is hand-assembled here -- which also means the filename
  * filter is honoured automatically.
  */
-export default function useDatasetFiles(datasetUuid: string | null): DatasetFilesResult {
+export default function useDatasetFiles(datasetUuid: string | null, allFiles: boolean): DatasetFilesResult {
   const { groupsToken } = useAppContext();
   const endpoint = useSearchStore((state) => state.endpoint);
   const mappingIndex = useSearchStore((state) => state.mappingIndex);
@@ -49,6 +49,14 @@ export default function useDatasetFiles(datasetUuid: string | null): DatasetFile
   const uuidField = useSearchStore((state) => state.uuidField);
   const filenameFilter = useSearchStore((state) => state.filenameFilter);
   const filenameField = useSearchStore((state) => state.filenameField);
+  const userSelectedFilters = useMemo(() => {
+    if (!allFiles) return filters;
+    const unfiltered = structuredClone(filters);
+    for (const [key] of Object.entries(filters)) {
+      unfiltered[key].values = new Set();
+    }
+    return unfiltered;
+  }, [filters, allFiles]);
 
   const mappings = useESmapping(mappingIndex);
 
@@ -60,7 +68,7 @@ export default function useDatasetFiles(datasetUuid: string | null): DatasetFile
       // Adding the dataset as an ordinary term filter keeps this on the public API rather than
       // splicing a clause into the built query.
       filters: {
-        ...filters,
+        ...userSelectedFilters,
         dataset_uuid: { type: FACETS.term, values: new Set([datasetUuid]) },
       },
       facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
@@ -84,7 +92,7 @@ export default function useDatasetFiles(datasetUuid: string | null): DatasetFile
   }, [
     datasetUuid,
     mappings,
-    filters,
+    userSelectedFilters,
     facets,
     search,
     searchFields,

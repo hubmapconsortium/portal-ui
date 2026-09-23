@@ -99,6 +99,7 @@ function DatasetRow({
                 datasetUuid,
                 datasetHubmapId: hubmapId,
                 fileCount,
+                showAllFiles: false,
                 dataAccessLevel: source.data_access_level,
               })
             }

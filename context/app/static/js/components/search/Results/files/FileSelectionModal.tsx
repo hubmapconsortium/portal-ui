@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
+import Switch from '@mui/material/Switch';
 import prettyBytes from 'pretty-bytes';
 
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
@@ -22,6 +23,7 @@ import useDatasetFiles from './useDatasetFiles';
 import FileDownloadLink from './FileDownloadLink';
 import DatasetGlobusLink from './DatasetGlobusLink';
 import FilenameFilterBar from './FilenameFilterBar';
+import { useSearchStore } from '../../store';
 
 export interface FileSelectionTarget {
   datasetUuid: string;
@@ -29,6 +31,7 @@ export interface FileSelectionTarget {
   /** Files matching the current filters, from the exact per-page aggregation. */
   fileCount: number;
   dataAccessLevel?: string;
+  showAllFiles: boolean;
 }
 
 interface FileSelectionModalProps {
@@ -43,8 +46,8 @@ interface FileSelectionModalProps {
 const LARGE_DATASET_FILE_COUNT = 1_000;
 
 function FileRows({ target }: { target: FileSelectionTarget }) {
-  const { datasetUuid, datasetHubmapId, dataAccessLevel } = target;
-  const { files, error, isLoading, isReachingEnd, loadMore } = useDatasetFiles(datasetUuid);
+  const { datasetUuid, datasetHubmapId, dataAccessLevel, showAllFiles } = target;
+  const { files, error, isLoading, isReachingEnd, loadMore } = useDatasetFiles(datasetUuid, showAllFiles);
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
   const toggleFile = useFilesSelectionStore((state) => state.toggleFile);
@@ -148,6 +151,17 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
 function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
+  const filters = useSearchStore((state) => state.filters);
+  const hasFilters = useMemo(() => {
+    return Object.values(filters).some(({ values }) => {
+      return values !== false && values instanceof Set && values.size > 0;
+    });
+  }, [filters]);
+
+  const [showAllFiles, setShowAllFiles] = useState<boolean>(false);
+  const handleAllFilesChange = (event: React.ChangeEvent<HTMLInputElement, Element>) => {
+    setShowAllFiles(event.target.checked);
+  };
 
   const datasetUuid = target?.datasetUuid;
 
@@ -182,12 +196,21 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
             </Alert>
           )}
           <FilenameFilterBar />
-          <DatasetGlobusLink
-            datasetUuid={target.datasetUuid}
-            datasetHubmapId={target.datasetHubmapId}
-            dataAccessLevel={target.dataAccessLevel}
-          />
-          <FileRows target={target} />
+          <Stack direction={{ xs: 'column', sm: 'row' }}>
+            <DatasetGlobusLink
+              datasetUuid={target.datasetUuid}
+              datasetHubmapId={target.datasetHubmapId}
+              dataAccessLevel={target.dataAccessLevel}
+            />
+            {hasFilters && (
+              <FormControlLabel
+                sx={{ ml: 'auto' }}
+                control={<Switch onChange={handleAllFilesChange} checked={showAllFiles} />}
+                label="Show all files"
+              />
+            )}
+          </Stack>
+          <FileRows target={{ ...target, showAllFiles }} />
         </Stack>
       }
       actions={
