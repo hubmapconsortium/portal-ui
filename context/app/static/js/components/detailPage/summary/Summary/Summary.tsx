@@ -42,7 +42,11 @@ function Summary({
       >
         {children}
       </SummaryData>
-      <Box mt={1}>
+      <Box
+        sx={{
+          mt: 1,
+        }}
+      >
         <SummaryBody />
       </Box>
       {bottomFold}

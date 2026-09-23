@@ -26,7 +26,12 @@ function MainView() {
 
   return (
     <SectionPaper>
-      <Stack spacing={1} alignItems="start">
+      <Stack
+        spacing={1}
+        sx={{
+          alignItems: 'start',
+        }}
+      >
         <LabelledSectionText label="Workspaces Beta Testing Group">
           You currently have access to the workspace feature as part of the Workspace Beta Testing Group. Navigate to
           your workspaces to create new workspaces or manage existing workspaces. For additional information about

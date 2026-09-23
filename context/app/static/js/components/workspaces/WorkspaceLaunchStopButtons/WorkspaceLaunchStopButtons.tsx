@@ -133,7 +133,13 @@ function StopWorkspaceAlert() {
         alignItems: 'center',
       }}
     >
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
+      <Stack
+        direction="row"
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="body2">
           {runningWorkspace.name} is running. Stop jobs before editing that workspace.
         </Typography>

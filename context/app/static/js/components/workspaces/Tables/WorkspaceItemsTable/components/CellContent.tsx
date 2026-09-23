@@ -26,7 +26,13 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
       const href = hasWorkspacePage ? `/workspaces/${itemId}` : `/invitations/${itemId}`;
 
       return (
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           <InternalLink href={href} onClick={trackNameClick}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
@@ -49,7 +55,12 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
       const email = getFieldValue({ item, field: `${baseField}.email`, prefix });
 
       return (
-        <Stack direction="row" alignItems="center">
+        <Stack
+          direction="row"
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           <Typography>{`${firstName} ${lastName}`}</Typography>
           <TooltipButton
             sx={{ minWidth: 0 }}
@@ -72,7 +83,13 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
     case 'status': {
       const { icon, color } = workspaceStatusIconMap[fieldValue];
       return (
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           <Typography>{fieldValue}</Typography>
           <SvgIcon fontSize=".9rem" component={icon} color={color} />
         </Stack>

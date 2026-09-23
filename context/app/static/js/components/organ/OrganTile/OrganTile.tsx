@@ -22,7 +22,11 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path
       onClick={onClick}
       ariaLabelText={`Tile representing organ ${path}`}
       icon={
-        <Box mr={1}>
+        <Box
+          sx={{
+            mr: 1,
+          }}
+        >
           <URLSvgIcon invertColors={selected} iconURL={icon} ariaLabel={`Icon for ${name}`} />
         </Box>
       }

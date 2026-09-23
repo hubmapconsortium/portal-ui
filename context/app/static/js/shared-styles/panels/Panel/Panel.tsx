@@ -47,7 +47,13 @@ function Panel(props: PanelProps) {
   return (
     <PanelBox {...panelBoxProps} sx={{ position: 'relative', top: 0 }}>
       {icon && (
-        <Box pr={2} flexShrink={0} my="auto">
+        <Box
+          sx={{
+            pr: 2,
+            flexShrink: 0,
+            my: 'auto',
+          }}
+        >
           {icon}
         </Box>
       )}

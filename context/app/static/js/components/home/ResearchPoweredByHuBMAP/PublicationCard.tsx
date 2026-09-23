@@ -65,8 +65,19 @@ function PublicationCard({ publication, isPinned }: PublicationCardProps) {
         },
       })}
     >
-      <Box display="flex" height="100%">
-        <Stack spacing={2} flex={1} minWidth={0}>
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100%',
+        }}
+      >
+        <Stack
+          spacing={2}
+          sx={{
+            flex: 1,
+            minWidth: 0,
+          }}
+        >
           <Typography
             variant="h4"
             component="h3"
@@ -80,18 +91,39 @@ function PublicationCard({ publication, isPinned }: PublicationCardProps) {
           >
             {title}
           </Typography>
-          <Stack direction="row" justifyContent="space-between">
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: 'space-between',
+            }}
+          >
             <Stack direction="column" spacing={2}>
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                }}
+              >
                 {secondaryText}
               </Typography>
               {/* Visual affordance only — the whole card is the link, so this is not a nested anchor. */}
-              <Typography variant="body2" color="primary" fontWeight={500}>
+              <Typography
+                variant="body2"
+                color="primary"
+                sx={{
+                  fontWeight: 500,
+                }}
+              >
                 View Publication &rarr;
               </Typography>
             </Stack>
             {isPinned && (
-              <Box display="flex" alignItems="flex-end">
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                }}
+              >
                 <SecondaryBackgroundTooltip title="Highlighted Publication" placement="top">
                   <PushPinRounded color="success" sx={{ transform: 'rotate(-45deg)' }} />
                 </SecondaryBackgroundTooltip>

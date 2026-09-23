@@ -140,7 +140,11 @@ function CellTypesTable({ modality }: CellTypesTableProps) {
               sortState={sortState}
             />
             <TableCell sx={{ backgroundColor: 'background.paper' }} width={200}>
-              <Stack alignItems="end">
+              <Stack
+                sx={{
+                  alignItems: 'end',
+                }}
+              >
                 <DownloadButton
                   disabled={isLoading}
                   tooltip="Download table in TSV format."

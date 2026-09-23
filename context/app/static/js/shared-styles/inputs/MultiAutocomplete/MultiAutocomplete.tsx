@@ -23,13 +23,13 @@ function MultiAutocomplete<Value>({
   return (
     <Autocomplete
       options={options}
-      renderTags={(value, getTagProps) =>
+      renderValue={(value, getItemProps) =>
         value.map((option, index) => {
-          return <TagComponent option={option} {...getTagProps({ index })} key={option} />;
+          return <TagComponent option={option} {...getItemProps({ index })} key={option} />;
         })
       }
       {...rest}
-      renderInput={({ InputLabelProps, ...textFieldProps }) => (
+      renderInput={({ slotProps: inputSlotProps, ...textFieldProps }) => (
         <TextField
           value={substring}
           variant="outlined"
@@ -41,7 +41,8 @@ function MultiAutocomplete<Value>({
           {...textFieldProps}
           {...renderInputProps}
           slotProps={{
-            inputLabel: { shrink: true, ...InputLabelProps },
+            ...inputSlotProps,
+            inputLabel: { shrink: true, ...inputSlotProps.inputLabel },
           }}
         />
       )}

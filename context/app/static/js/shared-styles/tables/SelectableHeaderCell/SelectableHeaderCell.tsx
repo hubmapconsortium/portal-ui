@@ -47,11 +47,13 @@ function SelectableHeaderCell({
     <Checkbox
       color="secondary"
       checked={headerRowIsSelected}
-      inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }}
       disabled={disabled || filteredKeys.length === 0}
       onChange={(e) => {
         onSelectAllChange?.(e);
         toggleHeaderAndRows(filteredKeys);
+      }}
+      slotProps={{
+        input: { 'aria-label': `${tableLabel}-header-row-checkbox` },
       }}
     />
   );

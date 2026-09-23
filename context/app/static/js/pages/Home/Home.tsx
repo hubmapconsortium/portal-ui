@@ -51,7 +51,11 @@ function Home() {
   return (
     <>
       <Hero />
-      <Box gridArea="counts">
+      <Box
+        sx={{
+          gridArea: 'counts',
+        }}
+      >
         <EntityCounts />
       </Box>
       {isLargerThanMd && (
@@ -71,7 +75,13 @@ function Home() {
               />
             }
           >
-            <Typography variant="body1" color="text.secondary" mb={2}>
+            <Typography
+              variant="body1"
+              sx={{
+                color: 'text.secondary',
+                mb: 2,
+              }}
+            >
               Explore HuBMAP datasets through the{' '}
               <InternalLink
                 href="/search/datasets"

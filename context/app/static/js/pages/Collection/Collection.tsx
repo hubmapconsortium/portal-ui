@@ -120,7 +120,12 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
 
   return (
     <DetailLayout sections={shouldDisplaySection}>
-      <Stack gap={1} marginBottom={5}>
+      <Stack
+        sx={{
+          gap: 1,
+          marginBottom: 5,
+        }}
+      >
         <SavedListsSuccessAlert />
         <Summary title={title} />
         <Datasets datasets={datasets} />

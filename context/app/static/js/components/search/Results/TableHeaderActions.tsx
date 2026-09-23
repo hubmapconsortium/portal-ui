@@ -140,7 +140,14 @@ function TableHeaderActions() {
   const lcPluralType = devSearch ? 'entities' : `${type.toLowerCase()}s`;
 
   return (
-    <Stack direction="row" spacing={1} flexWrap="nowrap" alignItems="center">
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        flexWrap: 'nowrap',
+        alignItems: 'center',
+      }}
+    >
       <Copy />
       {!devSearch && (
         <>

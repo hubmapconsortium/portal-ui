@@ -35,7 +35,13 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   // If the item is a workspace
   if (isWorkspace(item)) {
     return (
-      <Stack direction="row" justifyContent="end" marginRight={2}>
+      <Stack
+        direction="row"
+        sx={{
+          justifyContent: 'end',
+          marginRight: 2,
+        }}
+      >
         <WorkspaceLaunchStopButtons
           workspace={item}
           button={LaunchStopButton}
@@ -56,7 +62,13 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   // If the item is a pending sent invitation
   if (isSender) {
     return (
-      <Stack direction="row" justifyContent="end" alignItems="center">
+      <Stack
+        direction="row"
+        sx={{
+          justifyContent: 'end',
+          alignItems: 'center',
+        }}
+      >
         <IconDropdownMenu tooltip={tooltips.moreOptions} icon={MoreIcon} button={RotatedTooltipButton}>
           {options.map((props) => (
             <IconDropdownMenuItem key={props.icon.muiName} {...props} />
@@ -68,7 +80,13 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
 
   // If the item is a pending received invitation
   return (
-    <Stack direction="row" justifyContent="end" alignItems="center">
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: 'end',
+        alignItems: 'center',
+      }}
+    >
       <TooltipIconButton tooltip={tooltips.declineInvite} onClick={onDeclineInvite}>
         <StyledSvgIcon as={CloseIcon} />
       </TooltipIconButton>

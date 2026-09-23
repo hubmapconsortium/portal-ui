@@ -107,18 +107,47 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
       customCurrentSection={currentTutorialHash}
       tableOfContentsTitle="Other Tutorials"
     >
-      <Stack spacing={2} pb={2}>
+      <Stack
+        spacing={2}
+        sx={{
+          pb: 2,
+        }}
+      >
         <SummaryTitle entityIcon="Tutorial">Tutorials</SummaryTitle>
-        <PageTitle data-testid="tutorial-title" display="flex" flexDirection="row" alignItems="center" gap={1}>
+        <PageTitle
+          data-testid="tutorial-title"
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
           {title}
         </PageTitle>
         <Description
           belowTheFold={
-            <Stack mt={2} gap={0.5}>
-              <Typography variant="subtitle2" color="text.secondary">
+            <Stack
+              sx={{
+                mt: 2,
+                gap: 0.5,
+              }}
+            >
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: 'text.secondary',
+                }}
+              >
                 Tags
               </Typography>
-              <Stack direction="row" gap={1} flexWrap="wrap">
+              <Stack
+                direction="row"
+                sx={{
+                  gap: 1,
+                  flexWrap: 'wrap',
+                }}
+              >
                 {tags.map((tag) => (
                   <Chip key={tag} label={tag} variant="outlined" sx={{ borderRadius: '4px' }} />
                 ))}
@@ -136,7 +165,14 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
             <Description>
               Explore other tutorials to continue learning about HuBMAP data and the features of the portal.
             </Description>
-            <Grid mt={2} spacing={2} container justifyContent="stretch">
+            <Grid
+              spacing={2}
+              container
+              sx={{
+                mt: 2,
+                justifyContent: 'stretch',
+              }}
+            >
               {relatedTutorials.map((tutorial) => (
                 <TutorialCard key={tutorial.route} tutorial={tutorial} />
               ))}

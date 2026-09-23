@@ -30,7 +30,13 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
   return (
     <BodyWrapper $thumbnailDimension={thumbnailDimension}>
       <StyledDiv>
-        <Stack direction="column" gap={0.5} alignItems="flex-start">
+        <Stack
+          direction="column"
+          sx={{
+            gap: 0.5,
+            alignItems: 'flex-start',
+          }}
+        >
           <Tile.Title>
             <Box component="span" sx={isStale ? { color: 'warning.main' } : undefined}>
               <HuBMAPIdLabel hubmapId={id} isSuperseded={isSuperseded} isRetracted={isRetracted} />

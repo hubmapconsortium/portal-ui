@@ -26,20 +26,20 @@ function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: Searc
   );
 }
 
-function HubmapIDTextField(params: AutocompleteRenderInputParams) {
-  const { InputProps } = params;
+function HubmapIDTextField({ slotProps, ...params }: AutocompleteRenderInputParams) {
   return (
     <TextField
       {...params}
       label="Enter HuBMAP ID"
       helperText="HuBMAP IDs follow the pattern HBM123.ABCD.456. Only one dataset can be added at a time."
       slotProps={{
+        ...slotProps,
         input: {
-          ...InputProps,
+          ...slotProps.input,
           startAdornment: (
             <>
               <InputAdornment position="start">HBM</InputAdornment>
-              {InputProps.startAdornment}
+              {slotProps.input.startAdornment}
             </>
           ),
         },
@@ -60,7 +60,12 @@ function AddDatasetsTable({
 }: Omit<UseDatasetsAutocompleteReturnType, 'selectedDatasets' | 'resetAutocompleteState' | 'setSelectedDatasets'>) {
   return (
     // The padding top offsets the textfield label.
-    <Stack spacing={3} pt={1}>
+    <Stack
+      spacing={3}
+      sx={{
+        pt: 1,
+      }}
+    >
       <Autocomplete
         value={autocompleteValue}
         onChange={addDataset}

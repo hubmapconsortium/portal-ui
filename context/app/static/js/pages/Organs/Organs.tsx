@@ -34,10 +34,22 @@ function Organs({ organs }: OrgansProps) {
       <SectionHeader data-testid="organs-title" variant="h1" component="h1">
         Organs
       </SectionHeader>
-      <Typography variant="subtitle1" component="h2" color="primary" mb={1.5}>
+      <Typography
+        variant="subtitle1"
+        component="h2"
+        color="primary"
+        sx={{
+          mb: 1.5,
+        }}
+      >
         {Object.keys(organs).length} Organs
       </Typography>
-      <Stack gap={2} useFlexGap>
+      <Stack
+        useFlexGap
+        sx={{
+          gap: 2,
+        }}
+      >
         <Description>
           Discover HuBMAP data by organ and interact with the data with visualizations including anatomical views and
           cell population plots.

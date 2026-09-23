@@ -51,14 +51,33 @@ function MultiAssayLink({
   // wrap their content in a <p>, and a second <Typography>/<p> nested inside
   // it produces invalid HTML. The inline-flex Stack carries the layout.
   return (
-    <Stack component="span" direction="row" useFlexGap gap={0.5} alignItems="center" display="inline-flex">
+    <Stack
+      component="span"
+      direction="row"
+      useFlexGap
+      sx={{
+        gap: 0.5,
+        alignItems: 'center',
+        display: 'inline-flex',
+      }}
+    >
       <SecondaryBackgroundTooltip title={tooltipText} disabled={!tooltipText}>
-        <Box display="inline-block" component="span">
+        <Box
+          component="span"
+          sx={{
+            display: 'inline-block',
+          }}
+        >
           {assay_display_name}: {link}
         </Box>
       </SecondaryBackgroundTooltip>
       <SecondaryBackgroundTooltip title={`Status: ${status}`}>
-        <Box display="inline-block" component="span">
+        <Box
+          component="span"
+          sx={{
+            display: 'inline-block',
+          }}
+        >
           <StatusIcon status={status} />
         </Box>
       </SecondaryBackgroundTooltip>
@@ -117,7 +136,13 @@ function RelatedMultiAssayLinks() {
       <LabelledSectionText label={text?.[key]?.label} key={key} iconTooltipText={text?.[key]?.tooltip}>
         {/* LabelledSectionText wraps content in a <p>; keep this column
             stack inline-block so we don't nest a <div> inside it. */}
-        <Stack component="span" display="inline-flex" flexDirection="column">
+        <Stack
+          component="span"
+          sx={{
+            display: 'inline-flex',
+            flexDirection: 'column',
+          }}
+        >
           {v.map((dataset) =>
             dataset.uuid === uuid ? (
               <CurrentMultiAssayLink dataset={dataset} key={dataset.uuid} />

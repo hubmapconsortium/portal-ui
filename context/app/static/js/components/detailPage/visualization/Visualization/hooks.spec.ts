@@ -23,7 +23,12 @@ describe('useVitessceConfig', () => {
   beforeEach(() => {
     originalLocation = window.location;
     staticConfData = undefined;
-    mockedUseSWR.mockImplementation((key) => ({ data: key ? staticConfData : undefined }) as ReturnType<typeof useSWR>);
+    mockedUseSWR.mockImplementation(
+      (key) =>
+        ({
+          data: key ? staticConfData : undefined,
+        }) as ReturnType<typeof useSWR>,
+    );
   });
 
   afterEach(() => {

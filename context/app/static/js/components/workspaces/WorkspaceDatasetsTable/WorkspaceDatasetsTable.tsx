@@ -101,7 +101,12 @@ function WorkspaceDatasetsTable({
         <SpacedSectionButtonRow
           leftText={label}
           buttons={
-            <Stack direction="row" gap={1}>
+            <Stack
+              direction="row"
+              sx={{
+                gap: 1,
+              }}
+            >
               {copyDatasets && datasetsPresent && <Copy trackingInfo={trackingInfo} />}
               {addDatasets && (
                 <WorkspacesUpdateButton

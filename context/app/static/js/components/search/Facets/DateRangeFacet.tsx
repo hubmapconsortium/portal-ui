@@ -175,7 +175,13 @@ function DateRangeFacet({
 
   return (
     <FacetAccordion title={getFieldLabel(field)} position="inner">
-      <Stack spacing={1.5} mt={1} pr={RIGHT_CHEVRON_SIZE}>
+      <Stack
+        spacing={1.5}
+        sx={{
+          mt: 1,
+          pr: RIGHT_CHEVRON_SIZE,
+        }}
+      >
         <DatePickerComponent
           label="Start"
           value={new Date(values[0])}

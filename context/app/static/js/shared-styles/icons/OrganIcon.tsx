@@ -4,8 +4,15 @@ import Skeleton from '@mui/material/Skeleton';
 import { useOrgan } from 'js/hooks/useOrgansApi';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
 import { URLSvgIconProps } from './URLSvgIcon/URLSvgIcon';
+import { mergeSx } from 'js/helpers/styled';
 
-type OrganIconProps = { organName: string; component?: ElementType } & Partial<URLSvgIconProps>;
+type OrganIconProps = {
+  organName: string;
+  component?: ElementType;
+  // `fontSize` drives both the icon size and the loading skeleton's dimensions. Box no
+  // longer carries it as a system prop, so declare it on this component instead.
+  fontSize?: string | number;
+} & Partial<URLSvgIconProps>;
 
 function OrganIcon({ organName, fontSize = '1.25rem', component, ...iconProps }: OrganIconProps) {
   const { data } = useOrgan(organName);
@@ -22,11 +29,16 @@ function OrganIcon({ organName, fontSize = '1.25rem', component, ...iconProps }:
 
   return (
     <URLSvgIcon
-      fontSize={fontSize}
       iconURL={icon}
       ariaLabel={`Icon for ${organName}`}
       {...componentProp}
       {...iconProps}
+      sx={mergeSx(
+        {
+          fontSize: fontSize,
+        },
+        iconProps.sx,
+      )}
     />
   );
 }

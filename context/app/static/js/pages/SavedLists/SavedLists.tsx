@@ -10,7 +10,12 @@ function SavedLists() {
   const { isHubmapUser } = useAppContext();
 
   return (
-    <Stack spacing={1} marginBottom={10}>
+    <Stack
+      spacing={1}
+      sx={{
+        marginBottom: 10,
+      }}
+    >
       <Typography variant="h2" data-testid="my-lists-title">
         My Lists
       </Typography>

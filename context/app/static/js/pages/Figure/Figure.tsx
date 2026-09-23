@@ -52,10 +52,19 @@ export default function InlineFigures() {
   const jsDate = new Date(MANIFEST.generated_at * 1000);
 
   return (
-    <Stack gap={1} mb={1}>
+    <Stack
+      sx={{
+        gap: 1,
+        mb: 1,
+      }}
+    >
       <PageTitle>Data Overview</PageTitle>
       <Description>
-        <Box mb={1}>
+        <Box
+          sx={{
+            mb: 1,
+          }}
+        >
           This page provides an overview of the data available in the HuBMAP Data Portal through a series of summary
           charts, including:
           <br />

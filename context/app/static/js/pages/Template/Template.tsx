@@ -90,7 +90,13 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
     <>
       <PrimaryColorAccordion defaultExpanded={defaultExpanded}>
         <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
-          <Typography variant="subtitle1" color="inherit" component="h4">
+          <Typography
+            variant="subtitle1"
+            component="h4"
+            sx={{
+              color: 'inherit',
+            }}
+          >
             {title}
           </Typography>
         </AccordionSummary>
@@ -174,14 +180,25 @@ function Template({ templateKey }: TemplatePageProps) {
 
   return (
     <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceTemplateDetailPage}>
-      <Stack spacing={4} marginBottom={5}>
+      <Stack
+        spacing={4}
+        sx={{
+          marginBottom: 5,
+        }}
+      >
         <Stack spacing={2}>
           <SummaryData title={template.title} entity_type="WorkspaceTemplate" entityTypeDisplay="Workspace Template" />
           <Stack component={SummaryPaper} spacing={1}>
             <LabelledSectionText label="Description">{template.description}</LabelledSectionText>
             {template.tags.length > 0 && (
               <LabelledSectionText label="Tags">
-                <Stack spacing={1} marginTop={1} direction="row">
+                <Stack
+                  spacing={1}
+                  direction="row"
+                  sx={{
+                    marginTop: 1,
+                  }}
+                >
                   {template.tags.map((tag) => (
                     <StyledChip key={tag} label={tag} variant="outlined" />
                   ))}

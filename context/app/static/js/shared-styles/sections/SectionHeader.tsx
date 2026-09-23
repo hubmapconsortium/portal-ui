@@ -13,7 +13,13 @@ type SectionHeaderProps = PropsWithChildren<
 
 function SectionHeader({ children, iconTooltipText, ...rest }: SectionHeaderProps) {
   return (
-    <Box display="flex" alignItems="center" mb={1}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        mb: 1,
+      }}
+    >
       <Typography variant="h4" component="h2" {...rest}>
         {children}
       </Typography>

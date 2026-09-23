@@ -96,7 +96,14 @@ export default function CollapsibleDetailPageSection({
         disableGutters
         variant="unstyled"
       >
-        <AccordionSummary expandIcon={<ExpandMore />}>
+        {/*
+          `buttons` renders real buttons inside the summary. AccordionSummary is a ButtonBase,
+          which defaults to a native <button>, so that nests a button inside a button -- invalid
+          HTML, and MUI v9 now reports it. Rendering the summary as a div makes ButtonBase treat
+          it as non-native and add role="button", tabIndex and Enter/Space handling itself, so
+          the summary stays keyboard-operable.
+        */}
+        <AccordionSummary expandIcon={<ExpandMore />} component="div">
           <Stack direction="row" sx={{ alignItems: 'center', flexGrow: 1 }}>
             <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
               <IconDisplay icon={icon} id={rest.id!} isRetracted={isRetracted} />
@@ -119,9 +126,13 @@ export default function CollapsibleDetailPageSection({
                 // Prevent the accordion from expanding/collapsing when the action is clicked
                 e.stopPropagation();
               }}
-              ml="auto"
               className="accordion-section-action"
-              sx={{ position: 'absolute', right: 0, top: 7 }}
+              sx={{
+                ml: 'auto',
+                position: 'absolute',
+                right: 0,
+                top: 7,
+              }}
             >
               {action}
             </Box>

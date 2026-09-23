@@ -66,7 +66,11 @@ function RestrictedDatasetsSection({
   }
 
   return (
-    <Stack paddingY={1}>
+    <Stack
+      sx={{
+        paddingY: 1,
+      }}
+    >
       <ErrorOrWarningMessages errorMessages={errorMessages} />
       <RemoveRestrictedDatasetsFormField
         control={control}
@@ -207,7 +211,13 @@ function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
       isOpen={isOpen}
       handleClose={handleClose}
       actions={
-        <Stack direction="row" spacing={2} alignItems="end">
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            alignItems: 'end',
+          }}
+        >
           <Button type="button" onClick={handleClose}>
             Cancel
           </Button>

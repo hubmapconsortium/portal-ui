@@ -18,15 +18,23 @@ function NodeLegendItem({ name, nodeKey, bgColor, iconColor = 'primary' }: NodeL
   const Icon = nodeIcons[nodeKey];
   const borderRadius = nodeKey === 'pipeline' ? 0 : 4;
   return (
-    <Stack direction="row" gap={0.5} alignItems="center">
+    <Stack
+      direction="row"
+      sx={{
+        gap: 0.5,
+        alignItems: 'center',
+      }}
+    >
       <Box
-        width={32}
-        height={16}
-        borderRadius={borderRadius}
-        bgcolor={bgColor}
-        display="inline-flex"
-        alignItems="center"
-        justifyContent="center"
+        sx={{
+          width: 32,
+          height: 16,
+          borderRadius: borderRadius,
+          bgcolor: bgColor,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
         {Icon && <Icon color={iconColor} fontSize="0.75rem" />}
       </Box>
@@ -56,11 +64,22 @@ interface LegendProps {
 
 function Legend({ children, title, tooltip }: PropsWithChildren<LegendProps>) {
   return (
-    <Stack flexBasis="50%" gap={1} px={1}>
+    <Stack
+      sx={{
+        flexBasis: '50%',
+        gap: 1,
+        px: 1,
+      }}
+    >
       <Typography variant="subtitle2">
         {title} {tooltip && <InfoTooltipIcon iconTooltipText={tooltip} />}
       </Typography>
-      <Stack direction="row" gap={1}>
+      <Stack
+        direction="row"
+        sx={{
+          gap: 1,
+        }}
+      >
         {children}
       </Stack>
     </Stack>
@@ -104,9 +123,20 @@ interface StatusLegendProps {
 
 function StatusItem({ status }: { status: string }) {
   return (
-    <Stack direction="row" gap={0.5} alignItems="center">
+    <Stack
+      direction="row"
+      sx={{
+        gap: 0.5,
+        alignItems: 'center',
+      }}
+    >
       <StatusIcon status={status} />
-      <Typography variant="caption" textTransform="capitalize">
+      <Typography
+        variant="caption"
+        sx={{
+          textTransform: 'capitalize',
+        }}
+      >
         {status}
       </Typography>
     </Stack>

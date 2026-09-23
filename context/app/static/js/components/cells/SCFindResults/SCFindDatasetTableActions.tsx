@@ -117,7 +117,14 @@ const DownloadMenu = withDropdownMenuProvider(DownloadMenuInner, false);
  */
 export default function SCFindDatasetTableActions() {
   return (
-    <Stack direction="row" spacing={1} flexWrap="nowrap" alignItems="center">
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        flexWrap: 'nowrap',
+        alignItems: 'center',
+      }}
+    >
       <Copy />
       <SaveEntitiesButtonFromSearch entity_type={ENTITY_TYPE} />
       <LineUpButton />

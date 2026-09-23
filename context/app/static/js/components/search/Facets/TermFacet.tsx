@@ -46,9 +46,21 @@ type TermLabelCount = Omit<CheckboxItem, 'field' | 'indeterminate' | 'onClick' |
 
 export function TermLabelAndCount({ label, count, active, addRightPadding }: TermLabelCount) {
   return (
-    <StyledStack direction="row" justifyContent="space-between" $active={active}>
+    <StyledStack
+      direction="row"
+      $active={active}
+      sx={{
+        justifyContent: 'space-between',
+      }}
+    >
       <FormLabelText>{label}</FormLabelText>
-      <Typography pr={addRightPadding ? RIGHT_CHEVRON_SIZE : 0}>{decimal.format(count)}</Typography>
+      <Typography
+        sx={{
+          pr: addRightPadding ? RIGHT_CHEVRON_SIZE : 0,
+        }}
+      >
+        {decimal.format(count)}
+      </Typography>
     </StyledStack>
   );
 }
@@ -254,7 +266,11 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 
   if (childValues.length === 1 && childBuckets[0].key === label) {
     return (
-      <Box pr={RIGHT_CHEVRON_SIZE}>
+      <Box
+        sx={{
+          pr: RIGHT_CHEVRON_SIZE,
+        }}
+      >
         <HierarchicalFacetParent
           childValues={childValues}
           label={label}

@@ -21,7 +21,13 @@ function SavedListScrollbox({ savedLists }: SavedListScrollboxProps) {
     <Stack>
       <SeparatedFlexRow>
         <div>
-          <Typography variant="h3" component="h2" marginBottom={2}>
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              marginBottom: 2,
+            }}
+          >
             All Created Lists
           </Typography>
           <Typography variant="subtitle1">

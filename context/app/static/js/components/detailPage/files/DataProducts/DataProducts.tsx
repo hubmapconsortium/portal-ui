@@ -42,10 +42,28 @@ function DataProducts({ files }: DataProductsProps) {
   return (
     <FilesContextProvider>
       <Paper sx={{ p: 2, borderTop: `1px solid ${theme.palette.divider}` }} data-testid="data-products-container">
-        <Box display="flex" justifyContent="space-between" alignItems="start" pb={2}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+            pb: 2,
+          }}
+        >
           <Box data-testid="data-products-title-and-size">
-            <Box display="flex" alignItems="center">
-              <Typography component="h5" variant="subtitle2" display="inline-block">
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                component="h5"
+                variant="subtitle2"
+                sx={{
+                  display: 'inline-block',
+                }}
+              >
                 Data Products
               </Typography>
               <SecondaryBackgroundTooltip title="Essential files of interest for this dataset.">
@@ -57,7 +75,13 @@ function DataProducts({ files }: DataProductsProps) {
           <DownloadAllButton onDownloadAll={onDownloadAll} disabled={downloadAllClicked} />
           {downloadAllClicked && <MultiFileDownloader files={dataProducts} />}
         </Box>
-        <Stack divider={<Divider />} maxHeight={600} overflow="auto">
+        <Stack
+          divider={<Divider />}
+          sx={{
+            maxHeight: 600,
+            overflow: 'auto',
+          }}
+        >
           {dataProducts.map((file) => (
             <DataProduct file={file} key={file.rel_path} />
           ))}
