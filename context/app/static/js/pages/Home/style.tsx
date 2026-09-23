@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Box from '@mui/material/Box';
 import Container, { ContainerProps } from '@mui/material/Container';
 import Typography, { TypographyProps } from '@mui/material/Typography';
@@ -10,7 +11,7 @@ interface GridAreaContainerProps extends ContainerProps {
   $gridArea: string;
 }
 
-const GridAreaContainer = styled(Container)<GridAreaContainerProps>(({ $gridArea }) => ({
+const GridAreaContainer = styled(Container, { shouldForwardProp })<GridAreaContainerProps>(({ $gridArea }) => ({
   gridArea: $gridArea,
 }));
 

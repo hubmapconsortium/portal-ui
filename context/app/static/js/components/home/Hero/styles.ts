@@ -124,21 +124,21 @@ export const PillBarOuter = styled('div')(({ theme }) => ({
   marginLeft: 'auto',
   marginRight: 'auto',
   // When not stuck, pill bar fills the container width
-  [`& ${PillBar}`]: {
+  '& > nav': {
     maxWidth: '100%',
     width: '100%',
     paddingY: 1,
     transition: theme.transitions.create(['max-width', 'box-shadow', 'border-radius', 'padding', 'margin']),
     margin: 0,
 
-    [`& ${BottomBarLink}`]: {
+    '& > button': {
       padding: theme.spacing(3, 2),
     },
   },
   // When stuck, shrink via max-width
   '&.stuck': {
     padding: theme.spacing(0, 2),
-    [`& ${PillBar}`]: {
+    '& > nav': {
       maxWidth: 700,
       boxShadow: theme.shadows[3],
       borderRadius: theme.spacing(0.5),
@@ -149,7 +149,7 @@ export const PillBarOuter = styled('div')(({ theme }) => ({
       // 2 to make up for py reduction on pillbar, 2 to make up for padding reduction on links
       marginBottom: theme.spacing(4),
 
-      [`& ${BottomBarLink}`]: {
+      '& > button': {
         padding: theme.spacing(1, 1.5),
       },
     },
