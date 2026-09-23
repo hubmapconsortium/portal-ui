@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import prettyBytes from 'pretty-bytes';
 
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
@@ -47,6 +48,17 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
   const toggleFile = useFilesSelectionStore((state) => state.toggleFile);
+  const toggleWholeDataset = useFilesSelectionStore((state) => state.toggleWholeDataset);
+  const clearDataset = useFilesSelectionStore((state) => state.clearDataset);
+
+  const handleSelectAll = useCallback(() => {
+    if (!target) return;
+    if (wholeDatasets.has(target.datasetUuid) || selectedFiles.has(target.datasetUuid)) {
+      clearDataset(target.datasetUuid);
+    } else {
+      toggleWholeDataset(target.datasetUuid, target.datasetHubmapId);
+    }
+  }, [target, wholeDatasets, selectedFiles, clearDataset, toggleWholeDataset]);
 
   const isWholeSelected = wholeDatasets.has(datasetUuid);
   const selected = selectedFiles.get(datasetUuid);
@@ -74,7 +86,29 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox" />
+            <TableCell>
+              <Box>
+                <Tooltip
+                  title={
+                    <Typography variant="body2">
+                      {`Select all files in this dataset (${decimal.format(target.fileCount)})`}
+                    </Typography>
+                  }
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        color="secondary"
+                        checked={wholeDatasets.has(target.datasetUuid)}
+                        indeterminate={selectedFiles.has(target.datasetUuid)}
+                        onChange={handleSelectAll}
+                      />
+                    }
+                    label={''}
+                  />
+                </Tooltip>
+              </Box>
+            </TableCell>
             <TableCell>File</TableCell>
             <TableCell>Description</TableCell>
             <TableCell align="right">Size</TableCell>
@@ -114,8 +148,6 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
 function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
-  const toggleWholeDataset = useFilesSelectionStore((state) => state.toggleWholeDataset);
-  const clearDataset = useFilesSelectionStore((state) => state.clearDataset);
 
   const datasetUuid = target?.datasetUuid;
 
@@ -124,15 +156,6 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
     if (wholeDatasets.has(datasetUuid)) return target?.fileCount ?? 0;
     return selectedFiles.get(datasetUuid)?.size ?? 0;
   }, [datasetUuid, wholeDatasets, selectedFiles, target?.fileCount]);
-
-  const handleSelectAll = useCallback(() => {
-    if (!target) return;
-    if (wholeDatasets.has(target.datasetUuid) || selectedFiles.has(target.datasetUuid)) {
-      clearDataset(target.datasetUuid);
-    } else {
-      toggleWholeDataset(target.datasetUuid, target.datasetHubmapId);
-    }
-  }, [target, wholeDatasets, selectedFiles, clearDataset, toggleWholeDataset]);
 
   if (!target) {
     return null;
@@ -159,23 +182,6 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
             </Alert>
           )}
           <FilenameFilterBar />
-          <Box>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  color="secondary"
-                  checked={wholeDatasets.has(target.datasetUuid)}
-                  indeterminate={selectedFiles.has(target.datasetUuid)}
-                  onChange={handleSelectAll}
-                />
-              }
-              label={
-                <Typography variant="body2">
-                  {`Select all files in this dataset (${decimal.format(target.fileCount)})`}
-                </Typography>
-              }
-            />
-          </Box>
           <DatasetGlobusLink
             datasetUuid={target.datasetUuid}
             datasetHubmapId={target.datasetHubmapId}
