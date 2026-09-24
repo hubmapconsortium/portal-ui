@@ -8,6 +8,9 @@ enableMapSet();
 
 const appProviderEndpoints = {
   elasticsearchEndpoint: 'fakeElasticsearchEndpoint',
+  baseElasticsearchEndpoint: 'fakeBaseElasticsearchEndpoint',
+  filesElasticsearchEndpoint: 'fakeFilesElasticsearchEndpoint',
+  filesFacetsEndpoint: 'fakeFilesFacetsEndpoint',
   entityEndpoint: 'fakeEntityEndpoint',
   assetsEndpoint: 'fakeAssetsEndpoint',
 };
@@ -27,10 +30,13 @@ vi.mock('@grafana/faro-web-sdk', () => ({
 
 interface AllTheProvidersProps extends PropsWithChildren {
   flaskData?: FlaskData;
+  /** Extra or overriding endpoints, for tests that exercise a non-default index. */
+  endpoints?: Record<string, string>;
 }
 
 export function AllTheProviders({
   children,
+  endpoints,
   flaskData = {
     endpoints: {},
     entity: {
@@ -41,7 +47,7 @@ export function AllTheProviders({
 }: AllTheProvidersProps) {
   return (
     <Providers
-      endpoints={appProviderEndpoints}
+      endpoints={{ ...appProviderEndpoints, ...endpoints }}
       groupsToken={appProviderToken}
       isWorkspacesUser={isWorkspacesUser}
       flaskData={flaskData}
@@ -52,18 +58,29 @@ export function AllTheProviders({
   );
 }
 
-const customRender = (ui: React.ReactNode, options?: Exclude<RenderOptions, 'wrapper'> & { flaskData?: FlaskData }) =>
+const customRender = (
+  ui: React.ReactNode,
+  options?: Exclude<RenderOptions, 'wrapper'> & { flaskData?: FlaskData; endpoints?: Record<string, string> },
+) =>
   render(ui, {
-    wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
+    wrapper: ({ children }) => (
+      <AllTheProviders flaskData={options?.flaskData} endpoints={options?.endpoints}>
+        {children}
+      </AllTheProviders>
+    ),
     ...options,
   });
 
 const customRenderHook = <TProps, TResult>(
   callback: (props: TProps) => TResult,
-  options?: Partial<RenderHookOptions<TProps>> & { flaskData?: FlaskData },
+  options?: Partial<RenderHookOptions<TProps>> & { flaskData?: FlaskData; endpoints?: Record<string, string> },
 ) =>
   renderHook(callback, {
-    wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
+    wrapper: ({ children }) => (
+      <AllTheProviders flaskData={options?.flaskData} endpoints={options?.endpoints}>
+        {children}
+      </AllTheProviders>
+    ),
     ...options,
   });
 

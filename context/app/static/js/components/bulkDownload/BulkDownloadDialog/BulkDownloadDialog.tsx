@@ -11,6 +11,8 @@ import { BulkDownloadFormTypes, useBulkDownloadDialog } from 'js/components/bulk
 import RemoveRestrictedDatasetsFormField from 'js/components/workspaces/RemoveRestrictedDatasetsFormField';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
+import BulkDownloadMetadataJsonField from 'js/components/bulkDownload/BulkDownloadMetadataJsonField';
+import { decimal } from 'js/helpers/number-format';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
@@ -105,6 +107,27 @@ function DownloadOptionsDescription() {
   );
 }
 
+/** Summarises individually chosen files, which the processing-type options deliberately exclude. */
+function FileSelectionSummary({
+  selectedFileCount,
+  fileSelectionDatasetCount,
+}: {
+  selectedFileCount: number;
+  fileSelectionDatasetCount: number;
+}) {
+  if (selectedFileCount === 0) {
+    return null;
+  }
+  return (
+    <LabelledSectionText label="Individually Selected Files" spacing={1}>
+      {`${decimal.format(selectedFileCount)} file${selectedFileCount === 1 ? '' : 's'} you selected `}
+      {fileSelectionDatasetCount > 0 &&
+        `across ${decimal.format(fileSelectionDatasetCount)} dataset${fileSelectionDatasetCount === 1 ? '' : 's'} `}
+      are always included in the manifest. The raw/processed options above apply only to datasets selected in full.
+    </LabelledSectionText>
+  );
+}
+
 interface DownloadOptionsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   downloadOptions: {
@@ -117,6 +140,9 @@ interface DownloadOptionsSectionProps {
   restrictedHubmapIds: string[];
   restrictedRows: string[];
   removeRestrictedDatasets: () => void;
+  hasFileSelection?: boolean;
+  selectedFileCount?: number;
+  fileSelectionDatasetCount?: number;
 }
 function DownloadOptionsSection({
   control,
@@ -126,6 +152,9 @@ function DownloadOptionsSection({
   restrictedHubmapIds,
   restrictedRows,
   removeRestrictedDatasets,
+  hasFileSelection = false,
+  selectedFileCount = 0,
+  fileSelectionDatasetCount = 0,
 }: DownloadOptionsSectionProps) {
   if (isLoading) {
     return (
@@ -137,7 +166,9 @@ function DownloadOptionsSection({
     );
   }
 
-  if (downloadOptions.length === 0) {
+  // Only a genuine dead end when nothing at all was selected. With individually chosen files there
+  // is always something to download, even though no processing-type option applies to them.
+  if (downloadOptions.length === 0 && !hasFileSelection) {
     return (
       <Alert severity="warning">
         <Typography>Files are not available for any of the selected datasets.</Typography>
@@ -155,11 +186,22 @@ function DownloadOptionsSection({
           restrictedRows={restrictedRows}
           removeRestrictedDatasets={removeRestrictedDatasets}
         />
-        <DownloadOptionsDescription />
+        {downloadOptions.length > 0 && <DownloadOptionsDescription />}
         <SummaryPaper>
           <Stack direction="column" spacing={2}>
-            <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" downloadOptions={downloadOptions} />
+            {downloadOptions.length > 0 && (
+              <BulkDownloadOptionsField
+                control={control}
+                name="bulkDownloadOptions"
+                downloadOptions={downloadOptions}
+              />
+            )}
+            <FileSelectionSummary
+              selectedFileCount={selectedFileCount}
+              fileSelectionDatasetCount={fileSelectionDatasetCount}
+            />
             <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
+            {hasFileSelection && <BulkDownloadMetadataJsonField control={control} name="bulkDownloadMetadataJson" />}
           </Stack>
         </SummaryPaper>
       </Step>

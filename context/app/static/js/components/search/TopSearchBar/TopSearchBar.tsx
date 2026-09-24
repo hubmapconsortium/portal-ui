@@ -71,8 +71,10 @@ function TopSearchBar() {
       placeholder="Search"
       value={inputValue}
       onChange={handleChange}
-      aria-label="Freetext search"
       slotProps={{
+        // On the input element rather than TextField's root: a top-level `aria-label` lands on the
+        // wrapper div, leaving the input itself unlabelled for assistive technology.
+        htmlInput: { 'aria-label': 'Freetext search' },
         input: {
           startAdornment: (
             <InputAdornment position="start">

@@ -64,7 +64,15 @@ function buildFilterAggregation({
   return esb.filterAggregation(field, otherFiltersQuery).aggs(aggregations);
 }
 
-function buildSortField({ sortField, mappings }: { sortField: SortField; mappings: Mappings }) {
+function buildSortField({
+  sortField,
+  mappings,
+  uniqueSortField,
+}: {
+  sortField: SortField;
+  mappings: Mappings;
+  uniqueSortField: string;
+}) {
   const primarySort = esb.sort(getESField({ field: sortField.field, mappings }), sortField.direction);
   const secondarySortField = sortField?.secondarySort;
 
@@ -72,11 +80,58 @@ function buildSortField({ sortField, mappings }: { sortField: SortField; mapping
     ? [esb.sort(getESField({ field: secondarySortField.field, mappings }), secondarySortField.direction)]
     : [];
 
-  // Sort values need to be unique for search_after.
-  const uniqueSort = esb.sort('uuid.keyword', 'desc');
+  // Sort values need to be unique for search_after. Indices without a `uuid` field must
+  // override this: sorting on a field absent from the mapping is a hard ES error
+  // ("No mapping found for [uuid.keyword] in order to sort on"), not a silent no-op.
+  const uniqueSort = esb.sort(uniqueSortField, 'desc');
 
   return [primarySort, ...secondarySort, uniqueSort];
 }
+
+/**
+ * Groups hits by `field`, returning one hit per distinct value.
+ *
+ * `innerHits` additionally returns the grouped documents, but it is **very** expensive: against
+ * the ~10M-document files index, collapsing alone costs ~200ms while collapsing with `inner_hits`
+ * costs 12-18s for the same query. Prefer leaving it unset and fetching per-group detail
+ * separately (see `useDatasetPageStats`), which is both far faster and gives exact aggregate
+ * numbers rather than sums over a truncated inner-hit list.
+ */
+export interface CollapseConfig {
+  field: string;
+  innerHits?: {
+    name: string;
+    size: number;
+    /** Order within each group. Independent of the outer result sort. */
+    sort?: SortField;
+  };
+}
+
+/**
+ * Where active filters are applied.
+ *
+ * `post_filter` (the default) keeps them out of the main query so aggregations see the
+ * unfiltered document set. `query` puts them in the main query instead, which is required
+ * when `collapse` is used, since a collapsed group's representative must be chosen from the
+ * documents that actually match. Callers using `query` mode should request aggregations
+ * separately (see `useFacetAggregations`), since a single request cannot both filter the hits
+ * and leave the aggregations unfiltered.
+ */
+export type FilterMode = 'post_filter' | 'query';
+
+export const DEFAULT_UNIQUE_SORT_FIELD = 'uuid.keyword';
+
+/**
+ * Aggregation holding the number of distinct groups when results are collapsed.
+ *
+ * `hits.total` counts matching documents, which under `collapse` is not the number of rows,
+ * so the group count has to be aggregated separately.
+ */
+export const GROUP_COUNT_AGG = 'total_groups';
+
+// `cardinality` is approximate above its precision threshold. 40000 is the maximum ES honours
+// and is comfortably above the number of datasets, so the count comes back exact.
+const groupCountPrecisionThreshold = 40000;
 
 export function buildQuery({
   filters,
@@ -92,7 +147,38 @@ export function buildQuery({
   includeSupersededEntities,
   mappings,
   buildAggregations = true,
-}: { buildAggregations?: boolean; mappings: UseESMappingType } & Pick<
+  uniqueSortField = DEFAULT_UNIQUE_SORT_FIELD,
+  filterMode = 'post_filter',
+  collapse,
+  groupCountField,
+  hubmapIdField = 'hubmap_id',
+  uuidField = 'uuid',
+  filenameFilter,
+  filenameField = 'rel_path',
+}: {
+  buildAggregations?: boolean;
+  mappings: UseESMappingType;
+  uniqueSortField?: string;
+  filterMode?: FilterMode;
+  collapse?: CollapseConfig;
+  /** Emit a `GROUP_COUNT_AGG` counting distinct values of this field. */
+  groupCountField?: string;
+  /**
+   * Substring to match against `filenameField`, with "contains" semantics.
+   *
+   * A separate slot from `search` because the two are different questions ("anywhere in the
+   * document" vs "in the path"), and because `search`'s `*...*` form is routed to the ID field.
+   */
+  filenameFilter?: string;
+  filenameField?: string;
+  /**
+   * Fields an ID-shaped search term is matched against. Indices that name them differently
+   * must override: an unmapped field in a query matches nothing *silently*, so a pasted ID
+   * would simply return no results.
+   */
+  hubmapIdField?: string;
+  uuidField?: string;
+} & Pick<
   SearchStoreState,
   | 'filters'
   | 'facets'
@@ -113,7 +199,7 @@ export function buildQuery({
     .requestBodySearch()
     .size(size)
     .source([...new Set(Object.values(sourceFields).flat())])
-    .sorts(buildSortField({ sortField, mappings }));
+    .sorts(buildSortField({ sortField, mappings, uniqueSortField }));
 
   const hasTextQuery = search.length > 0;
 
@@ -133,13 +219,20 @@ export function buildQuery({
   // lowercase, so normalize the search term to the canonical case before exact match.
   const freeTextQueries = hasTextQuery
     ? isWildcardIdSearch
-      ? [esb.wildcardQuery(getESField({ field: 'hubmap_id', mappings }), search)]
+      ? [esb.wildcardQuery(getESField({ field: hubmapIdField, mappings }), search)]
       : isHbmIdFormatSearch
-        ? [esb.termQuery(getESField({ field: 'hubmap_id', mappings }), search.toUpperCase())]
+        ? [esb.termQuery(getESField({ field: hubmapIdField, mappings }), search.toUpperCase())]
         : isUuidFormatSearch
-          ? [esb.termQuery(getESField({ field: 'uuid', mappings }), search.toLowerCase())]
+          ? [esb.termQuery(getESField({ field: uuidField, mappings }), search.toLowerCase())]
           : [esb.simpleQueryStringQuery(search).fields(searchFields)]
     : [];
+  // "Contains" matching on the path. A wildcard is needed rather than a text match because the
+  // analyzed field tokenizes into whole path segments, so `secondary` does not match
+  // `secondary_analysis.h5ad`; only the complete segment does.
+  const filenameQueries = filenameFilter
+    ? [esb.wildcardQuery(getESField({ field: filenameField, mappings }), `*${filenameFilter}*`).caseInsensitive(true)]
+    : [];
+
   const ancestorIdsFilter = filters?.ancestor_ids;
   const hasAncestorIdsFilter = Boolean(ancestorIdsFilter && filterHasValues({ filter: ancestorIdsFilter }));
   const effectiveDefaultQuery =
@@ -148,7 +241,9 @@ export function buildQuery({
   const revisionFilterQueries =
     latestRevisionFilter && !isIdLookupSearch && !includeSupersededEntities ? [latestRevisionFilter] : [];
 
-  query.query(esb.boolQuery().must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries]));
+  query.query(
+    esb.boolQuery().must([...defaultQueries, ...revisionFilterQueries, ...freeTextQueries, ...filenameQueries]),
+  );
 
   // Highlight only for free-text queries; exact-match ID lookups don't need highlighting.
   if (hasTextQuery && !isWildcardIdSearch && !isHbmIdFormatSearch && !isUuidFormatSearch) {
@@ -189,7 +284,12 @@ export function buildQuery({
         if (filterHasValues({ filter })) {
           const childPortalField = getESField({ field: facetConfig.childField, mappings });
 
-          draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
+          // A derived parent is not a value any document holds, so querying it would match nothing.
+          // Selecting a parent seeds every one of its children (`filterHierarchicalParentTerm`), so
+          // the child clause alone is already complete.
+          if (!facetConfig.derivedParent) {
+            draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
+          }
 
           const childValues = Object.values(filter.values)
             .map((v) => [...v])
@@ -237,7 +337,53 @@ export function buildQuery({
     });
   }, {});
 
-  query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
+  if (filterMode === 'query') {
+    // Filters belong to the main query so a collapsed group's representative is chosen from the
+    // documents that actually match. Aggregations for this mode come from a separate request.
+    // This replaces the bool query set above, re-listing its clauses plus the filters.
+    query.query(
+      esb
+        .boolQuery()
+        .must([
+          ...defaultQueries,
+          ...revisionFilterQueries,
+          ...freeTextQueries,
+          ...filenameQueries,
+          ...Object.values(allFilters),
+        ]),
+    );
+  } else {
+    query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
+  }
+
+  if (collapse) {
+    const collapseField = getESField({ field: collapse.field, mappings });
+    if (collapse.innerHits) {
+      const innerHits = esb.innerHits(collapse.innerHits.name).size(collapse.innerHits.size);
+      const innerSort = collapse.innerHits.sort;
+      if (innerSort) {
+        innerHits.sort(esb.sort(getESField({ field: innerSort.field, mappings }), innerSort.direction));
+      }
+      // Bounds how many group-expansion queries ES runs at once.
+      query.collapse(collapseField, innerHits, 4);
+    } else {
+      query.collapse(collapseField);
+    }
+  }
+
+  if (buildAggregations && groupCountField) {
+    // Unlike the facet aggregations, this one applies every active filter: it reports how
+    // many rows the current query yields, so nothing may be excluded from it.
+    query.agg(
+      esb
+        .filterAggregation(GROUP_COUNT_AGG, esb.boolQuery().must(Object.values(allFilters)))
+        .agg(
+          esb
+            .cardinalityAggregation(GROUP_COUNT_AGG, getESField({ field: groupCountField, mappings }))
+            .precisionThreshold(groupCountPrecisionThreshold),
+        ),
+    );
+  }
 
   if (buildAggregations) {
     Object.values(facets).forEach((facet) => {
@@ -289,12 +435,31 @@ export function buildQuery({
       }
 
       if (isHierarchicalFacet(facet)) {
-        const { childField, order } = facet;
+        const { childField, order, derivedParent } = facet;
         if (!childField) {
           return;
         }
         const parentPortalField = getESField({ field, mappings });
         const childPortalField = getESField({ field: childField, mappings });
+
+        if (derivedParent) {
+          // No parent field exists to aggregate on; the parent buckets are grouped from these flat
+          // ones in `HierarchicalTermFacet`.
+          query.agg(
+            buildFilterAggregation({
+              portalFields: [childPortalField],
+              aggregations: [
+                esb
+                  .termsAggregation(field, childPortalField)
+                  .size(maxAggSize)
+                  .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+              ],
+              filters: { ...allFilters },
+              field,
+            }),
+          );
+          return;
+        }
 
         query.agg(
           buildFilterAggregation({
@@ -343,9 +508,17 @@ export function buildQuery({
 }
 
 export interface SearchTypeProps {
-  type: 'Dataset' | 'Donor' | 'Sample' | 'Dev Search';
+  type: 'Dataset' | 'Donor' | 'Sample' | 'File' | 'Dev Search';
 }
 
 export function isDevSearch(type: string): type is 'Dev Search' {
   return type === 'Dev Search';
+}
+
+/**
+ * Files are not HuBMAP entities: they have no detail page, cannot be saved to lists,
+ * added to workspaces or visualized, so the entity-only result actions are hidden for them.
+ */
+export function isFileSearch(type: string): type is 'File' {
+  return type === 'File';
 }

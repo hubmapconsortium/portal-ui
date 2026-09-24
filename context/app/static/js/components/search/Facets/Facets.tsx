@@ -27,7 +27,7 @@ import Divider from '@mui/material/Divider';
 export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box sx={{ minWidth: 250, maxWidth: '25%' }}>
+      <Box sx={{ minWidth: 250, maxWidth: '25%' }} data-testid="search-facets">
         <Stack
           sx={(theme) => ({
             alignItems: 'center',

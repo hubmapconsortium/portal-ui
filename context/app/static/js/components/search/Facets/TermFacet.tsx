@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Typography from '@mui/material/Typography';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import Accordion from '@mui/material/Accordion';
@@ -10,7 +13,7 @@ import { AggregationsBuckets } from 'js/typings/elasticsearch';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { trackEvent } from 'js/helpers/trackers';
-import { useSearch, InnerBucket } from '../Search';
+import { useSearch, InnerBucket, HierarchicalBucket } from '../Search';
 import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter } from '../store';
 import {
   StyledCheckBoxBlankIcon,
@@ -131,14 +134,28 @@ function FacetSizeButton({ handleExpand, hasMoreBuckets }: { handleExpand: () =>
   );
 }
 
-function TermFacetContent({ filter, field }: { filter: TermValues; field: string }) {
+function TermFacetContent({
+  filter,
+  field,
+  isFilterable,
+}: {
+  filter: TermValues;
+  field: string;
+  isFilterable?: boolean;
+}) {
   const { aggregations } = useSearch();
   const [showLessTerms, setShowLessTerms] = useState(true);
+  const [valueFilter, setValueFilter] = useState('');
   const getFieldLabel = useGetFieldLabel();
+  const getTransformedFieldValue = useGetTransformedFieldValue();
 
   const toggleTermsCount = useCallback(() => {
     setShowLessTerms((prev) => !prev);
   }, [setShowLessTerms]);
+
+  const handleValueFilterChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueFilter(event.target.value);
+  }, []);
 
   const innerAggregations = aggregations?.[field]?.[field];
 
@@ -151,10 +168,61 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
     return null;
   }
 
+  // An empty accordion is never useful, so hide a facet with nothing to offer -- but never hide
+  // one the user is actively filtering on, which would strand a filter they cannot see to undo.
+  // (A facet's own filter is excluded from its aggregation, so a filtered facet normally still
+  // has buckets; this only guards the edge case.)
+  if (aggBuckets.length === 0 && filter.values.size === 0) {
+    return null;
+  }
+
   const title = getFieldLabel(field);
+
+  // Matches the displayed value, which is what the user is reading -- the same choice
+  // `FacetSearchCombobox` makes. Selected values always stay visible so a filter can be undone
+  // without first clearing the text box.
+  const matchingBuckets = valueFilter
+    ? aggBuckets.filter((bucket) => {
+        const key = getBucketKey(bucket);
+        if (filter.values.has(key)) return true;
+        return getTransformedFieldValue({ value: key, field }).toLowerCase().includes(valueFilter.toLowerCase());
+      })
+    : aggBuckets;
+
+  // With a text filter the list is already narrowed, so paging it again just hides matches.
+  const visibleBuckets = showLessTerms && !valueFilter ? matchingBuckets.slice(0, smallAggSize) : matchingBuckets;
+
   return (
     <FacetAccordion title={title} position="inner">
-      {aggBuckets.slice(...(showLessTerms ? [0, smallAggSize] : [undefined, undefined])).map((bucket) => {
+      {isFilterable && aggBuckets.length > smallAggSize && (
+        <Box sx={{ px: 1, pb: 1 }}>
+          <TextField
+            size="small"
+            fullWidth
+            value={valueFilter}
+            onChange={handleValueFilterChange}
+            placeholder={`Find ${title.toLowerCase()}`}
+            aria-label={`Find a value in ${title}`}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchRoundedIcon fontSize="small" color="primary" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        </Box>
+      )}
+      {valueFilter && matchingBuckets.length === 0 && (
+        <Box sx={{ px: 1, pb: 1 }}>
+          <Typography variant="caption" color="secondary">
+            No matching values.
+          </Typography>
+        </Box>
+      )}
+      {visibleBuckets.map((bucket) => {
         const key = getBucketKey(bucket);
         return (
           <TermFacetItem
@@ -167,21 +235,21 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
           />
         );
       })}
-      {aggBuckets.length > smallAggSize && (
+      {!valueFilter && matchingBuckets.length > smallAggSize && (
         <FacetSizeButton hasMoreBuckets={showLessTerms} handleExpand={toggleTermsCount} />
       )}
     </FacetAccordion>
   );
 }
 
-export function TermFacet({ field }: { field: string }) {
+export function TermFacet({ field, isFilterable }: { field: string; isFilterable?: boolean }) {
   const filter = useSearchStore((state) => state.filters[field]);
 
   if (!isTermFilter(filter)) {
     return null;
   }
 
-  return <TermFacetContent field={field} filter={filter} />;
+  return <TermFacetContent field={field} filter={filter} isFilterable={isFilterable} />;
 }
 
 function buildExpandTooltip({ expanded, disabled }: { expanded: boolean; disabled: boolean }) {
@@ -344,7 +412,43 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
   );
 });
 
-export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
+/**
+ * Groups a flat bucket list into parent buckets, for an index with no parent field.
+ *
+ * Produces the same shape a nested parent/child terms aggregation would, so everything downstream
+ * -- including the single-child flattening and the indeterminate parent state -- is unchanged.
+ * Parent order follows first appearance, which preserves whatever order the aggregation asked for.
+ */
+function groupDerivedParents(
+  buckets: HierarchicalBucket[],
+  childField: string,
+  derivedParent: (childValue: string) => string,
+): HierarchicalBucket[] {
+  const byParent = new Map<string, { doc_count: number; children: InnerBucket[] }>();
+
+  buckets.forEach((bucket) => {
+    const key = getBucketKey(bucket);
+    const parent = derivedParent(key);
+    const entry = byParent.get(parent) ?? { doc_count: 0, children: [] };
+    entry.doc_count += bucket.doc_count;
+    entry.children.push({ key, doc_count: bucket.doc_count });
+    byParent.set(parent, entry);
+  });
+
+  return [...byParent.entries()].map(
+    ([key, { doc_count, children }]) => ({ key, doc_count, [childField]: { buckets: children } }) as HierarchicalBucket,
+  );
+}
+
+export function HierarchicalTermFacet({
+  field: parentField,
+  childField,
+  derivedParent,
+}: {
+  field: string;
+  childField: string;
+  derivedParent?: (childValue: string) => string;
+}) {
   const parentAggs = useSearch()?.aggregations?.[parentField]?.[parentField];
   const getFieldLabel = useGetFieldLabel();
 
@@ -354,11 +458,13 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
     return null;
   }
 
-  const parentBuckets = parentAggs.buckets;
+  const aggBuckets = parentAggs.buckets;
 
-  if (!parentBuckets || !Array.isArray(parentBuckets)) {
+  if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return [];
   }
+
+  const parentBuckets = derivedParent ? groupDerivedParents(aggBuckets, childField, derivedParent) : aggBuckets;
 
   if (!isHierarchicalFilter(filter)) {
     return null;

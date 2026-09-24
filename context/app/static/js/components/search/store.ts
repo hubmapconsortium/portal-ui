@@ -5,7 +5,7 @@ import history from 'history/browser';
 import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
 import { SCFindParams } from '../organ/utils';
-import { SearchTypeProps } from './utils';
+import { CollapseConfig, FilterMode, SearchTypeProps } from './utils';
 import {
   DATASET_FEATURES_FIELD,
   READABLE_PARAM_FIELDS,
@@ -43,6 +43,13 @@ interface AggregationOrder {
 export interface TermConfig extends FacetConfig {
   type: typeof FACETS.term;
   order?: AggregationOrder;
+  /**
+   * Show a text box that filters this facet's own values.
+   *
+   * Worth setting for high-cardinality facets, where scrolling a "View More" list is impractical.
+   * Costs no extra request: term aggregations already return every bucket.
+   */
+  isFilterable?: boolean;
 }
 
 export interface TermValues<V = Set<string>> {
@@ -89,6 +96,15 @@ export interface HierarchicalTermConfig extends FacetConfig {
   childField: string;
   order?: AggregationOrder;
   type: typeof FACETS.hierarchical;
+  /**
+   * Derives the parent value from a child value, for an index that has no parent field.
+   *
+   * With this set the facet aggregates `field` flat and the parent buckets are grouped in the
+   * browser; the query then filters on child values only, since the derived parents match no
+   * document. Used by the files search, whose index carries `dataset_type` but no
+   * `raw_dataset_type`; set `childField` to the same field as `field`.
+   */
+  derivedParent?: (childValue: string) => string;
 }
 
 export interface HierarchicalTermValues<V = Set<string>> {
@@ -150,11 +166,42 @@ export interface SearchState<V> {
   includeSupersededEntities?: boolean;
   search: string;
   searchFields: string[];
+  /**
+   * "Contains" filter on the file path, kept separate from `search`.
+   *
+   * Two reasons it is not folded into `search`: the analyzed path field only matches whole path
+   * segments (so `secondary` misses `secondary_analysis.h5ad`), and `search`'s `*...*` form is
+   * routed to the ID field rather than the path.
+   */
+  filenameFilter?: string;
+  /** Path field `filenameFilter` matches. Defaults to `rel_path`. */
+  filenameField?: string;
   sortField: SortField;
   sourceFields: SourceFields;
   view: string;
   size: number;
   endpoint: string;
+  /**
+   * Field providing the unique `search_after` sort tiebreaker. Defaults to `uuid.keyword`;
+   * indices without a `uuid` field must override it (sorting on an unmapped field errors).
+   */
+  uniqueSortField?: string;
+  /** Where active filters go. See `FilterMode`. */
+  filterMode?: FilterMode;
+  /** Groups hits by a field, e.g. one row per dataset on the files search. */
+  collapse?: CollapseConfig;
+  /** Index whose mapping resolves `.keyword` subfields. Defaults to `portal`. */
+  mappingIndex?: string;
+  /** Field an ID-shaped search term matches. Defaults to `hubmap_id`. */
+  hubmapIdField?: string;
+  /** Field a UUID-shaped search term matches. Defaults to `uuid`. */
+  uuidField?: string;
+  /**
+   * When set, facet aggregations are fetched from this endpoint instead of riding along with
+   * the hits request. Required with `collapse`, whose `filterMode: 'query'` cannot also serve
+   * unfiltered aggregations.
+   */
+  facetsEndpoint?: string;
   swrConfig?: SWRConfiguration;
   type: SearchTypeProps['type'];
   analyticsCategory: string;
@@ -222,6 +269,7 @@ const sortFieldSchema = z.object({
 const searchURLStateSchema = z
   .object({
     search: z.string(),
+    filenameFilter: z.string(),
     sortField: sortFieldSchema,
     filters: filtersSchema,
     includeSupersededEntities: z.boolean(),
@@ -253,6 +301,7 @@ export type SearchURLState = Partial<SearchState<string[]>>;
 export interface SearchStoreActions {
   resetFilters: () => void;
   setSearch: (search: string) => void;
+  setFilenameFilter: (filenameFilter: string) => void;
   setView: (view: string) => void;
   setSortField: (sortField: SortField) => void;
   filterTerm: ({ term, value }: { term: string; value: string }) => void;
@@ -434,7 +483,7 @@ export function createDatasetSearchLink(values: Record<string, string[]>) {
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, filters, includeSupersededEntities, scFindParams, dataProductID } = state;
+  const { search, filenameFilter, sortField, filters, includeSupersededEntities, scFindParams, dataProductID } = state;
 
   // When the uuid filter was derived from scFind / data product params, keep those compact readable
   // params as the source of truth (re-resolved on load) rather than serializing every UUID into `q`.
@@ -470,11 +519,12 @@ function replaceURLSearchParams(state: SearchStoreState) {
     }
   }
 
-  const hasRemaining = search || Object.keys(remainingFilters).length > 0 || includeSupersededEntities;
+  const hasRemaining =
+    search || filenameFilter || Object.keys(remainingFilters).length > 0 || includeSupersededEntities;
   const qValue = hasRemaining
     ? LZString.compressToEncodedURIComponent(
         JSON.stringify(
-          { search, sortField, filters: remainingFilters, includeSupersededEntities },
+          { search, filenameFilter, sortField, filters: remainingFilters, includeSupersededEntities },
           (_key, value: unknown) => (value instanceof Set ? [...value] : value),
         ),
       )
@@ -498,12 +548,19 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
       set((state) => {
         state.includeSupersededEntities = false;
         state.filters = state.initialFilters;
+        state.filenameFilter = '';
         replaceURLSearchParams(state);
       });
     },
     setSearch: (search) => {
       set((state) => {
         state.search = search;
+        replaceURLSearchParams(state);
+      });
+    },
+    setFilenameFilter: (filenameFilter) => {
+      set((state) => {
+        state.filenameFilter = filenameFilter;
         replaceURLSearchParams(state);
       });
     },
