@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, memo } from 'react';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Skeleton from '@mui/material/Skeleton';
@@ -211,4 +211,4 @@ function FilesResultsTable({
   );
 }
 
-export default FilesResultsTable;
+export default memo(FilesResultsTable);
