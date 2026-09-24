@@ -6,7 +6,7 @@ import { stripPipelineSuffix } from 'js/components/search/Results/files/utils';
 import { useAppContext } from 'js/components/Contexts';
 
 /**
- * Search over the `files` index: one row per dataset, expandable to its matching files.
+ * Search over the `files` index: one row per dataset, whose matching files are chosen in a modal.
  *
  * Unlike the entity searches this reads a different index, which shapes the config in ways
  * worth stating up front:
@@ -79,10 +79,10 @@ export function buildFilesSearchConfig({ endpoint, facetsEndpoint }: { endpoint:
     uuidField: 'dataset_uuid',
     size: 18,
     sourceFields: {
-      // Sortable dataset-level columns. The file-count and total-size columns are derived from
-      // `inner_hits` rather than from a source field, so they are not listed here.
+      // Sortable dataset-level columns. The file-count and total-size columns come from the
+      // `useDatasetPageStats` aggregation rather than from a source field, so they are not listed here.
       table: ['dataset_hubmap_id', 'dataset_type', 'data_class', 'organs.label'],
-      // Fetched for the row and its expanded file list, but not rendered as their own columns.
+      // Fetched for the row, but not rendered as their own columns.
       _extra: ['dataset_uuid', 'rel_path', 'file_extension', 'size', 'description', 'file_uuid'],
     },
     sortField: { field: 'dataset_hubmap_id', direction: 'asc' as const },

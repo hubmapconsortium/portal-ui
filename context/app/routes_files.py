@@ -6,8 +6,8 @@ page needs take 2.7-4.4s against it. Those aggregations are identical for every 
 given scope, so they are cached here rather than being issued per browser.
 
 Only the *aggregations* go through Flask. The result hits still go straight from the
-browser to search-api (as every other portal search does), because ``collapse`` +
-``inner_hits`` is already fast (~110ms) and posting with the user's own token is what
+browser to search-api (as every other portal search does), because ``collapse`` without
+``inner_hits`` is already fast (~215ms) and posting with the user's own token is what
 selects the public vs. private index correctly.
 
 Scope and cache safety

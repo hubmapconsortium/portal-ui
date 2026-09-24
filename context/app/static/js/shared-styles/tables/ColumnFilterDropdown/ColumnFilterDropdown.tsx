@@ -11,6 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useEventCallback } from '@mui/material/utils';
 import IconButton from '@mui/material/IconButton';
+import { decimal } from 'js/helpers/number-format';
 
 interface ColumnFilterDropdownProps {
   columnId: string;
@@ -160,7 +161,7 @@ function ColumnFilterDropdown({
                             {value}
                           </Typography>
                           <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>
-                            ({new Intl.NumberFormat('en-US').format(count)})
+                            ({decimal.format(count)})
                           </Typography>
                         </Box>
                       }
