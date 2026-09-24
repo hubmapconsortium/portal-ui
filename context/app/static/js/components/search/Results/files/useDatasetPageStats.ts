@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
-import { FACETS, useSearchStore } from '../../store';
+import { FACETS, FiltersType, useSearchStore } from '../../store';
 import { buildQuery } from '../../utils';
 import useESmapping, { isESMapping } from '../../useEsMapping';
 
@@ -40,7 +40,7 @@ interface StatsResponse {
  */
 
 type DatasetStatsMethod = (data: object) => Map<string, DatasetStats>;
-type FetchDatasetStatsMethod = (uuids: string[]) => Promise<StatsResponse>;
+type FetchDatasetStatsMethod = (uuids: string[], overrideFilters?: FiltersType) => Promise<StatsResponse>;
 
 export default function useDatasetPageStats(): {
   getStats: DatasetStatsMethod;
@@ -61,7 +61,7 @@ export default function useDatasetPageStats(): {
   const mappings = useESmapping(mappingIndex);
 
   const buildQueryBody = useCallback(
-    (uuids: string[]) => {
+    (uuids: string[], overrideFilters?: FiltersType) => {
       if (uuids.length === 0 || !isESMapping(mappings)) {
         return null;
       }
@@ -69,7 +69,7 @@ export default function useDatasetPageStats(): {
       // the aggregations, which `buildQuery` has no notion of.
       const built = buildQuery({
         filters: {
-          ...filters,
+          ...(overrideFilters || filters),
           dataset_uuid: { type: FACETS.term, values: new Set(uuids) },
         },
         facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
@@ -107,62 +107,7 @@ export default function useDatasetPageStats(): {
     [mappings, filters, facets, search, searchFields, hubmapIdField, uuidField, filenameFilter, filenameField],
   );
 
-  // const body = useMemo(() => {
-  //   if (datasetUuids.length === 0 || !isESMapping(mappings)) {
-  //     return null;
-  //   }
-  //   // Build the query through the normal path so every active filter is honoured, then attach
-  //   // the aggregations, which `buildQuery` has no notion of.
-  //   const built = buildQuery({
-  //     filters: {
-  //       ...filters,
-  //       dataset_uuid: { type: FACETS.term, values: new Set(datasetUuids) },
-  //     },
-  //     facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
-  //     search,
-  //     size: 0,
-  //     searchFields,
-  //     sourceFields: {},
-  //     sortField: { field: 'dataset_uuid', direction: 'asc' },
-  //     filterMode: 'query',
-  //     uniqueSortField: 'dataset_uuid.keyword',
-  //     hubmapIdField,
-  //     uuidField,
-  //     filenameFilter,
-  //     filenameField,
-  //     mappings,
-  //     buildAggregations: false,
-  //   }) as Record<string, unknown> | null;
-
-  //   if (!built) {
-  //     return null;
-  //   }
-  //   // `sort` is meaningless with `size: 0`; the aggregation supplies the ordering that matters.
-  //   const { sort, ...rest } = built;
-  //   return {
-  //     ...rest,
-  //     size: 0,
-  //     aggs: {
-  //       [BY_DATASET_AGG]: {
-  //         terms: { field: 'dataset_uuid.keyword', size: datasetUuids.length },
-  //         aggs: { [BYTES_AGG]: { sum: { field: 'size' } } },
-  //       },
-  //     },
-  //   };
-  // }, [
-  //   datasetUuids,
-  //   mappings,
-  //   filters,
-  //   facets,
-  //   search,
-  //   searchFields,
-  //   hubmapIdField,
-  //   uuidField,
-  //   filenameFilter,
-  //   filenameField,
-  // ]);
-
-  const fetchDatasetPageStats = async (uuids: string[]): Promise<StatsResponse> => {
+  const fetchDatasetPageStats = async (uuids: string[], overrideFilters?: FiltersType): Promise<StatsResponse> => {
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -170,7 +115,7 @@ export default function useDatasetPageStats(): {
           'Content-Type': 'application/json',
           ...getAuthHeader(groupsToken),
         },
-        body: JSON.stringify(buildQueryBody(uuids)),
+        body: JSON.stringify(buildQueryBody(uuids, overrideFilters)),
       });
 
       if (!response.ok) {
@@ -184,23 +129,6 @@ export default function useDatasetPageStats(): {
     }
     return {};
   };
-
-  // const { data, error, isLoading } = useSWR<StatsResponse, SWRError>(
-  //   body
-  //     ? {
-  //         url: endpoint,
-  //         requestInit: {
-  //           method: 'POST',
-  //           headers: { 'Content-Type': 'application/json', ...getAuthHeader(groupsToken) },
-  //           body: JSON.stringify(body),
-  //         },
-  //       }
-  //     : null,
-  //   fetcher,
-  //   // Paging appends rows, so keep the previous page's numbers on screen rather than blanking
-  //   // every row's count while the next page's stats load.
-  //   { keepPreviousData: true },
-  // );
 
   const getStats = (data: StatsResponse): Map<string, DatasetStats> => {
     const map = new Map<string, DatasetStats>();

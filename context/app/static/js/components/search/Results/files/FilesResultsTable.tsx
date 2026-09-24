@@ -146,12 +146,6 @@ function FilesResultsTable({
   // Checkbox column + sortable columns + the two derived columns.
   const columnCount = 1 + tableFields.length + derivedColumns.length;
 
-  // const datasetUuids = useMemo(
-  //   () => hits.map((hit) => hit._source?.dataset_uuid).filter((uuid): uuid is string => Boolean(uuid)),
-  //   [hits],
-  // );
-  // const { stats, isLoading: isStatsLoading } = useDatasetPageStats(datasetUuids);
-
   const handleCloseModal = useCallback(() => setSelectionTarget(null), []);
 
   return (

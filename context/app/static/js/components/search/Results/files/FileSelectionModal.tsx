@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
@@ -23,7 +23,7 @@ import useDatasetFiles from './useDatasetFiles';
 import FileDownloadLink from './FileDownloadLink';
 import DatasetGlobusLink from './DatasetGlobusLink';
 import FilenameFilterBar from './FilenameFilterBar';
-import { useSearchStore } from '../../store';
+import useDatasetPageStats, { DatasetStats } from './useDatasetPageStats';
 
 export interface FileSelectionTarget {
   datasetUuid: string;
@@ -151,12 +151,23 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
 function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
-  const filters = useSearchStore((state) => state.filters);
-  const hasFilters = useMemo(() => {
-    return Object.values(filters).some(({ values }) => {
-      return values !== false && values instanceof Set && values.size > 0;
-    });
-  }, [filters]);
+  const { getStats, fetchDatasetPageStats } = useDatasetPageStats();
+  const [showToggleFiles, setShowToggleFiles] = useState(false);
+  const [datasetStats, setDatasetStats] = useState<DatasetStats>();
+
+  useEffect(() => {
+    if (!target) return;
+    const fetchStats = async () => {
+      const data = await fetchDatasetPageStats([`${target?.datasetUuid}`], {});
+      const stats = getStats(data);
+      const targetStats = stats.get(target?.datasetUuid);
+      if (targetStats !== undefined) {
+        setShowToggleFiles(targetStats?.fileCount !== target.fileCount);
+        setDatasetStats(targetStats);
+      }
+    };
+    void fetchStats();
+  }, [target, fetchDatasetPageStats, getStats]);
 
   const [showAllFiles, setShowAllFiles] = useState<boolean>(false);
   const handleAllFilesChange = (event: React.ChangeEvent<HTMLInputElement, Element>) => {
@@ -179,11 +190,18 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
 
   return (
     <DialogModal
+      slotProps={{
+        paper: {
+          sx: {
+            minHeight: '500px',
+          },
+        },
+      }}
       isOpen
       withCloseButton
       maxWidth="lg"
       title={`Select Files — ${target.datasetHubmapId}`}
-      secondaryText={`${decimal.format(target.fileCount)} files match the current filters. ${decimal.format(selectedCount)} selected.`}
+      secondaryText={`${decimal.format(target.fileCount)} files match the current filters. ${decimal.format(selectedCount)} selected. ${datasetStats ? `${decimal.format(datasetStats.fileCount)} total files.` : ''} `}
       handleClose={handleClose}
       content={
         <Stack spacing={2}>
@@ -202,11 +220,16 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
               datasetHubmapId={target.datasetHubmapId}
               dataAccessLevel={target.dataAccessLevel}
             />
-            {hasFilters && (
+            {showToggleFiles && (
               <FormControlLabel
                 sx={{ ml: 'auto' }}
                 control={<Switch onChange={handleAllFilesChange} checked={showAllFiles} />}
-                label="Show all files"
+                labelPlacement={showAllFiles ? 'start' : 'end'}
+                label={
+                  !showAllFiles
+                    ? `Show all ${decimal.format(datasetStats?.fileCount || 0)} files`
+                    : `Show ${decimal.format(target.fileCount)} filtered files`
+                }
               />
             )}
           </Stack>
