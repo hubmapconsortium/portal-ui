@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
@@ -23,7 +23,8 @@ import useDatasetFiles from './useDatasetFiles';
 import FileDownloadLink from './FileDownloadLink';
 import DatasetGlobusLink from './DatasetGlobusLink';
 import FilenameFilterBar from './FilenameFilterBar';
-import useDatasetPageStats, { DatasetStats } from './useDatasetPageStats';
+import useDatasetPageStats from './useDatasetPageStats';
+import { FiltersType } from '../../store';
 
 export interface FileSelectionTarget {
   datasetUuid: string;
@@ -44,6 +45,9 @@ interface FileSelectionModalProps {
  * is surfaced rather than merely available. The largest dataset in the index holds 480,337 files.
  */
 const LARGE_DATASET_FILE_COUNT = 1_000;
+
+/** Module-level so the stats query is not rebuilt on every render. */
+const NO_FACET_FILTERS: FiltersType = {};
 
 function FileRows({ target }: { target: FileSelectionTarget }) {
   const { datasetUuid, datasetHubmapId, dataAccessLevel, showAllFiles } = target;
@@ -151,30 +155,18 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
 function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
   const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
-  const { getStats, fetchDatasetPageStats } = useDatasetPageStats();
-  const [showToggleFiles, setShowToggleFiles] = useState(false);
-  const [datasetStats, setDatasetStats] = useState<DatasetStats>();
 
-  useEffect(() => {
-    if (!target) return;
-    const fetchStats = async () => {
-      const data = await fetchDatasetPageStats([`${target?.datasetUuid}`], {});
-      const stats = getStats(data);
-      const targetStats = stats.get(target?.datasetUuid);
-      if (targetStats !== undefined) {
-        setShowToggleFiles(targetStats?.fileCount !== target.fileCount);
-        setDatasetStats(targetStats);
-      }
-    };
-    void fetchStats();
-  }, [target, fetchDatasetPageStats, getStats]);
+  const datasetUuid = target?.datasetUuid;
+
+  const datasetUuids = useMemo(() => (datasetUuid ? [datasetUuid] : []), [datasetUuid]);
+  const { stats } = useDatasetPageStats(datasetUuids, NO_FACET_FILTERS);
+  const datasetStats = datasetUuid ? stats.get(datasetUuid) : undefined;
+  const showToggleFiles = datasetStats !== undefined && datasetStats.fileCount !== target?.fileCount;
 
   const [showAllFiles, setShowAllFiles] = useState<boolean>(false);
   const handleAllFilesChange = (event: React.ChangeEvent<HTMLInputElement, Element>) => {
     setShowAllFiles(event.target.checked);
   };
-
-  const datasetUuid = target?.datasetUuid;
 
   const selectedCount = useMemo(() => {
     if (!datasetUuid) return 0;

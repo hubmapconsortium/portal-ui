@@ -1,4 +1,8 @@
-import { useCallback } from 'react';
+import useSWR from 'swr';
+import { useMemo, useState } from 'react';
+
+import { fetcher } from 'js/helpers/swr';
+import { SWRError } from 'js/helpers/swr/errors';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 import { FACETS, FiltersType, useSearchStore } from '../../store';
@@ -37,14 +41,17 @@ interface StatsResponse {
  * Scoped to the page's dataset uuids rather than the whole result set, which is what keeps it
  * cheap. Reuses the page's own filters so the count a row shows always matches what the
  * file-selection modal will list.
+ *
+ * `overrideFilters` replaces the facet filters (the search and filename filter still apply), e.g.
+ * `{}` to count every file in a dataset regardless of the selected facets.
  */
-
-type DatasetStatsMethod = (data: object) => Map<string, DatasetStats>;
-type FetchDatasetStatsMethod = (uuids: string[], overrideFilters?: FiltersType) => Promise<StatsResponse>;
-
-export default function useDatasetPageStats(): {
-  getStats: DatasetStatsMethod;
-  fetchDatasetPageStats: FetchDatasetStatsMethod;
+export default function useDatasetPageStats(
+  datasetUuids: string[],
+  overrideFilters?: FiltersType,
+): {
+  stats: Map<string, DatasetStats>;
+  error?: SWRError;
+  isLoading: boolean;
 } {
   const { groupsToken } = useAppContext();
   const endpoint = useSearchStore((state) => state.endpoint);
@@ -60,85 +67,96 @@ export default function useDatasetPageStats(): {
 
   const mappings = useESmapping(mappingIndex);
 
-  const buildQueryBody = useCallback(
-    (uuids: string[], overrideFilters?: FiltersType) => {
-      if (uuids.length === 0 || !isESMapping(mappings)) {
-        return null;
-      }
-      // Build the query through the normal path so every active filter is honoured, then attach
-      // the aggregations, which `buildQuery` has no notion of.
-      const built = buildQuery({
-        filters: {
-          ...(overrideFilters || filters),
-          dataset_uuid: { type: FACETS.term, values: new Set(uuids) },
-        },
-        facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
-        search,
-        size: 0,
-        searchFields,
-        sourceFields: {},
-        sortField: { field: 'dataset_uuid', direction: 'asc' },
-        filterMode: 'query',
-        uniqueSortField: 'dataset_uuid.keyword',
-        hubmapIdField,
-        uuidField,
-        filenameFilter,
-        filenameField,
-        mappings,
-        buildAggregations: false,
-      }) as Record<string, unknown> | null;
+  const body = useMemo(() => {
+    if (datasetUuids.length === 0 || !isESMapping(mappings)) {
+      return null;
+    }
+    // Build the query through the normal path so every active filter is honoured, then attach
+    // the aggregations, which `buildQuery` has no notion of.
+    const built = buildQuery({
+      filters: {
+        ...(overrideFilters ?? filters),
+        dataset_uuid: { type: FACETS.term, values: new Set(datasetUuids) },
+      },
+      facets: { ...facets, dataset_uuid: { field: 'dataset_uuid', type: FACETS.term } },
+      search,
+      size: 0,
+      searchFields,
+      sourceFields: {},
+      sortField: { field: 'dataset_uuid', direction: 'asc' },
+      filterMode: 'query',
+      uniqueSortField: 'dataset_uuid.keyword',
+      hubmapIdField,
+      uuidField,
+      filenameFilter,
+      filenameField,
+      mappings,
+      buildAggregations: false,
+    }) as Record<string, unknown> | null;
 
-      if (!built) {
-        return null;
-      }
-      // `sort` is meaningless with `size: 0`; the aggregation supplies the ordering that matters.
-      const { sort, ...rest } = built;
-      return {
-        ...rest,
-        size: 0,
-        aggs: {
-          [BY_DATASET_AGG]: {
-            terms: { field: 'dataset_uuid.keyword', size: uuids.length },
-            aggs: { [BYTES_AGG]: { sum: { field: 'size' } } },
-          },
+    if (!built) {
+      return null;
+    }
+    // `sort` is meaningless with `size: 0`; the aggregation supplies the ordering that matters.
+    const { sort, ...rest } = built;
+    return {
+      ...rest,
+      size: 0,
+      aggs: {
+        [BY_DATASET_AGG]: {
+          terms: { field: 'dataset_uuid.keyword', size: datasetUuids.length },
+          aggs: { [BYTES_AGG]: { sum: { field: 'size' } } },
         },
-      };
-    },
-    [mappings, filters, facets, search, searchFields, hubmapIdField, uuidField, filenameFilter, filenameField],
+      },
+    };
+  }, [
+    datasetUuids,
+    mappings,
+    filters,
+    overrideFilters,
+    facets,
+    search,
+    searchFields,
+    hubmapIdField,
+    uuidField,
+    filenameFilter,
+    filenameField,
+  ]);
+
+  // `useScrollSearchHits` keeps the previous page on screen while a new query loads, so right after
+  // a filter change `body` pairs the new filters with the old page's datasets -- a request that is
+  // both wasted and immediately superseded. Only adopt a new body once the datasets change, i.e. once
+  // results for the current query have arrived. (Cached queries return their hits in the same
+  // render as the filter change, so those adopt the new body at once.)
+  const [settled, setSettled] = useState({ datasetUuids, body });
+  if (body !== settled.body && (datasetUuids !== settled.datasetUuids || !settled.body)) {
+    setSettled({ datasetUuids, body });
+  }
+
+  const { data, error, isLoading } = useSWR<StatsResponse, SWRError>(
+    settled.body
+      ? {
+          url: endpoint,
+          requestInit: {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...getAuthHeader(groupsToken) },
+            body: JSON.stringify(settled.body),
+          },
+        }
+      : null,
+    fetcher,
+    // Paging appends rows, so keep the previous page's numbers on screen rather than blanking
+    // every row's count while the next page's stats load.
+    { keepPreviousData: true },
   );
 
-  const fetchDatasetPageStats = async (uuids: string[], overrideFilters?: FiltersType): Promise<StatsResponse> => {
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getAuthHeader(groupsToken),
-        },
-        body: JSON.stringify(buildQueryBody(uuids, overrideFilters)),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = (await response.json()) as StatsResponse;
-      return result;
-    } catch (error) {
-      console.error('Error posting data:', error);
-    }
-    return {};
-  };
-
-  const getStats = (data: StatsResponse): Map<string, DatasetStats> => {
+  const stats = useMemo(() => {
     const map = new Map<string, DatasetStats>();
-    (data?.aggregations?.[BY_DATASET_AGG]?.buckets ?? []).forEach(
-      (bucket: { key: string; doc_count: number; bytes: { value: number } }) => {
-        map.set(bucket.key, { fileCount: bucket.doc_count, bytes: bucket[BYTES_AGG]?.value ?? 0 });
-      },
-    );
+    (data?.aggregations?.[BY_DATASET_AGG]?.buckets ?? []).forEach((bucket) => {
+      map.set(bucket.key, { fileCount: bucket.doc_count, bytes: bucket[BYTES_AGG]?.value ?? 0 });
+    });
     return map;
-  };
+  }, [data]);
 
-  return { getStats, fetchDatasetPageStats };
+  return { stats, error, isLoading };
 }

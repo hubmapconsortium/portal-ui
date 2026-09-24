@@ -2,6 +2,7 @@ import React from 'react';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import userEvent from '@testing-library/user-event';
+import history from 'history/browser';
 
 import { render, screen, waitFor, within, appProviderEndpoints } from 'test-utils/functions';
 import Files from './Files';
@@ -137,6 +138,12 @@ const server = setupServer(
       return HttpResponse.json(statsResponse);
     }
     hitsRequestBodies.push(body);
+    // Honour a filename filter, so that narrowing the results changes which datasets are on the page.
+    const fragment = /"\*([^*"]+)\*"/.exec(JSON.stringify(body))?.[1];
+    if (fragment) {
+      const hits = hitsResponse.hits.hits.filter((hit) => hit._source.rel_path.includes(fragment));
+      return HttpResponse.json({ hits: { ...hitsResponse.hits, total: { value: hits.length, relation: 'eq' }, hits } });
+    }
     return HttpResponse.json(hitsResponse);
   }),
   http.post(`/${appProviderEndpoints.filesFacetsEndpoint}`, async ({ request }) => {
@@ -360,5 +367,26 @@ describe('Files search page', () => {
       { timeout: 5000 },
     );
     expect(screen.getByText('File Type')).toBeInTheDocument();
+  });
+
+  test('requests stats only for the datasets a query actually returned', async () => {
+    // The bug this guards: the rows keep the previous page on screen while a new query loads, so a
+    // stats request keyed on the live filters would first pair the new filter with the old page's
+    // datasets -- here asking about `uuid-a`, which no file named `*s*` belongs to.
+    // Search state lives in the URL, and the tests above left a filename filter there.
+    history.replace(history.location.pathname);
+    render(<Files />);
+    await screen.findByText('HBM111.AAAA.111');
+
+    await userEvent.type(screen.getByLabelText('Filter by file or folder name'), 'sec');
+
+    const filteredStatsBodies = () =>
+      statsRequestBodies.map((body) => JSON.stringify(body)).filter((body) => body.includes('wildcard'));
+
+    await waitFor(() => expect(filteredStatsBodies().some((body) => body.includes('"*sec*"'))).toBe(true), {
+      timeout: 5000,
+    });
+    filteredStatsBodies().forEach((body) => expect(body).not.toContain('uuid-a'));
+    expect(screen.queryByText('HBM111.AAAA.111')).not.toBeInTheDocument();
   });
 });

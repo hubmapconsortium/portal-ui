@@ -171,6 +171,7 @@ export function useScrollSearchHits<Doc, Aggs>({
     searchHits,
     error,
     isLoading: z,
+    isValidating,
     isLoadingMore,
     setSize,
     loadMore,

@@ -5,9 +5,9 @@ import { Alert } from 'js/shared-styles/alerts';
 import { useSearch } from '../Search';
 import ResultsTable from './ResultsTable';
 import ResultsTiles from './ResultsTiles';
+import FilesResultsTable from './files/FilesResultsTable';
 import { useSearchStore } from '../store';
 import { isFileSearch } from '../utils';
-import FilesResultsMount from './files/FilesResultsMount';
 
 function NoResults() {
   const { isAuthenticated } = useAppContext();
@@ -33,7 +33,7 @@ const Results = React.memo(function Results({
   if (isFiles) {
     return (
       <>
-        <FilesResultsMount isLoading={isLoading} />
+        <FilesResultsTable isLoading={isLoading} />
         {noResults && <NoResults />}
       </>
     );

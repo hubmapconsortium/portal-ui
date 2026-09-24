@@ -1,4 +1,4 @@
-import React, { useCallback, useState, memo } from 'react';
+import React, { useCallback, useMemo, useState, memo } from 'react';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Skeleton from '@mui/material/Skeleton';
@@ -13,6 +13,7 @@ import prettyBytes from 'pretty-bytes';
 import { InternalLink } from 'js/shared-styles/Links';
 import { decimal } from 'js/helpers/number-format';
 import { StyledTable, StyledTableBody, StyledTableCell, StyledTableRow } from '../style';
+import { useSearch } from '../../Search';
 import { useSearchStore } from '../../store';
 import { useGetFieldLabel } from '../../fieldConfigurations';
 import SearchTableHeaderCell from '../SearchTableHeaderCell';
@@ -24,7 +25,7 @@ import FilesTableActions from './FilesTableActions';
 import FileSelectionModal, { FileSelectionTarget } from './FileSelectionModal';
 import { FilesSearchDUAProvider } from './FilesSearchDUA';
 import { useFilesSelectionStore } from './useFilesSelectionStore';
-import { DatasetStats } from './useDatasetPageStats';
+import useDatasetPageStats, { DatasetStats } from './useDatasetPageStats';
 import { CollapsedDatasetHit, getOrganLabels } from './utils';
 
 /** Columns derived from the per-page stats aggregation rather than a source field, so not sortable. */
@@ -130,21 +131,26 @@ function LoadingRows({ columnCount }: { columnCount: number }) {
   ));
 }
 
-function FilesResultsTable({
-  isLoading,
-  hits,
-  datasetStats,
-}: {
-  isLoading: boolean;
-  hits: CollapsedDatasetHit[];
-  datasetStats: { isLoading: boolean; stats?: Map<string, DatasetStats> };
-}) {
+function FilesResultsTable({ isLoading }: { isLoading: boolean }) {
+  const { searchHits, isValidating, isLoadingMore } = useSearch();
   const tableFields = useSearchStore((state) => state.sourceFields.table);
   const getFieldLabel = useGetFieldLabel();
   const [selectionTarget, setSelectionTarget] = useState<FileSelectionTarget | null>(null);
 
+  const hits = searchHits as CollapsedDatasetHit[];
+
   // Checkbox column + sortable columns + the two derived columns.
   const columnCount = 1 + tableFields.length + derivedColumns.length;
+
+  const datasetUuids = useMemo(
+    () => hits.map((hit) => hit._source?.dataset_uuid).filter((uuid): uuid is string => Boolean(uuid)),
+    [hits],
+  );
+  const { stats, isLoading: isStatsLoading } = useDatasetPageStats(datasetUuids);
+
+  // `isLoading` latches false after the first load, so a filter change is only visible as the first
+  // page revalidating. Loading a further page also validates, but appends rows instead.
+  const isRefreshing = isValidating && !isLoadingMore;
 
   const handleCloseModal = useCallback(() => setSelectionTarget(null), []);
 
@@ -188,17 +194,13 @@ function FilesResultsTable({
             </TableRow>
           </TableHead>
           <StyledTableBody>
-            {isLoading && <LoadingRows columnCount={columnCount} />}
+            {((isLoading && !hits.length) || isRefreshing) && <LoadingRows columnCount={columnCount} />}
             {hits.map((hit) => (
               <DatasetRow
                 key={hit._source?.dataset_uuid ?? hit._id}
                 hit={hit}
-                stats={
-                  hit._source?.dataset_uuid && !datasetStats?.isLoading
-                    ? datasetStats?.stats?.get(hit._source.dataset_uuid)
-                    : undefined
-                }
-                isStatsLoading={datasetStats?.isLoading}
+                stats={hit._source?.dataset_uuid ? stats.get(hit._source.dataset_uuid) : undefined}
+                isStatsLoading={isStatsLoading}
                 onSelectFiles={setSelectionTarget}
               />
             ))}
