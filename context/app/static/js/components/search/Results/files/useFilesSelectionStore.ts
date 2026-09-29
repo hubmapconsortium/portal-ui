@@ -24,19 +24,11 @@ interface FilesSelectionStore {
   /** Datasets selected in their entirety. */
   wholeDatasets: Set<string>;
   /** Explicitly chosen files, by dataset uuid. Never holds an empty set. */
-  selectedFiles: Map<string, Set<string>>;
-  /**
-   * HuBMAP ID per selected dataset uuid, recorded at selection time.
-   *
-   * The manifest needs an ID for every selected dataset, and "add all matching files" selects
-   * datasets that were never rendered, so the IDs cannot be recovered from the loaded rows.
-   */
-  hubmapIds: Map<string, string>;
-  toggleWholeDataset: (datasetUuid: string, hubmapId: string) => void;
-  toggleFile: (datasetUuid: string, hubmapId: string, relPath: string) => void;
-  setDatasetFiles: (datasetUuid: string, hubmapId: string, relPaths: string[]) => void;
-  /** Replaces the selection with the given datasets and their files, in one update. */
-  addFiles: (byDataset: Map<string, { hubmapId: string; relPaths: string[] }>) => void;
+  selectedFilesByDataset: Map<string, Set<string>>;
+  toggleWholeDataset: (datasetUuid: string) => void;
+  toggleFile: (datasetUuid: string, relPath: string) => void;
+  /** Merges the given files into the selection, by dataset uuid, in one update. */
+  addFiles: (byDataset: Map<string, string[]>) => void;
   clearDataset: (datasetUuid: string) => void;
   clearDatasets: (datasetUuids: string[]) => void;
   clearAll: () => void;
@@ -53,11 +45,10 @@ const storeDefinition = (
   get: StoreApi<FilesSelectionStore>['getState'],
 ) => ({
   wholeDatasets: new Set<string>(),
-  selectedFiles: new Map<string, Set<string>>(),
-  hubmapIds: new Map<string, string>(),
+  selectedFilesByDataset: new Map<string, Set<string>>(),
 
-  toggleWholeDataset: (datasetUuid: string, hubmapId: string) => {
-    const { wholeDatasets, selectedFiles, hubmapIds } = get();
+  toggleWholeDataset: (datasetUuid: string) => {
+    const { wholeDatasets, selectedFilesByDataset } = get();
     const next = new Set(wholeDatasets);
     if (next.has(datasetUuid)) {
       next.delete(datasetUuid);
@@ -65,16 +56,12 @@ const storeDefinition = (
       next.add(datasetUuid);
     }
     // Whole and partial selection are mutually exclusive.
-    set({
-      wholeDatasets: next,
-      selectedFiles: withoutDataset(selectedFiles, datasetUuid),
-      hubmapIds: new Map(hubmapIds).set(datasetUuid, hubmapId),
-    });
+    set({ wholeDatasets: next, selectedFilesByDataset: withoutDataset(selectedFilesByDataset, datasetUuid) });
   },
 
-  toggleFile: (datasetUuid: string, hubmapId: string, relPath: string) => {
-    const { wholeDatasets, selectedFiles, hubmapIds } = get();
-    const nextFiles = new Map(selectedFiles);
+  toggleFile: (datasetUuid: string, relPath: string) => {
+    const { wholeDatasets, selectedFilesByDataset } = get();
+    const nextFiles = new Map(selectedFilesByDataset);
     const current = new Set(nextFiles.get(datasetUuid) ?? []);
 
     if (current.has(relPath)) {
@@ -91,51 +78,23 @@ const storeDefinition = (
 
     const nextWhole = new Set(wholeDatasets);
     nextWhole.delete(datasetUuid);
-    set({
-      wholeDatasets: nextWhole,
-      selectedFiles: nextFiles,
-      hubmapIds: new Map(hubmapIds).set(datasetUuid, hubmapId),
-    });
+    set({ wholeDatasets: nextWhole, selectedFilesByDataset: nextFiles });
   },
 
-  setDatasetFiles: (datasetUuid: string, hubmapId: string, relPaths: string[]) => {
-    const { wholeDatasets, selectedFiles, hubmapIds } = get();
-    const nextFiles = new Map(selectedFiles);
-    if (relPaths.length === 0) {
-      nextFiles.delete(datasetUuid);
-    } else {
-      nextFiles.set(datasetUuid, new Set(relPaths));
-    }
-    const nextWhole = new Set(wholeDatasets);
-    nextWhole.delete(datasetUuid);
-    set({
-      wholeDatasets: nextWhole,
-      selectedFiles: nextFiles,
-      hubmapIds: new Map(hubmapIds).set(datasetUuid, hubmapId),
-    });
-  },
+  addFiles: (byDataset: Map<string, string[]>) => {
+    const { wholeDatasets, selectedFilesByDataset } = get();
+    const nextFiles = new Map(selectedFilesByDataset);
 
-  addFiles: (byDataset: Map<string, { hubmapId: string; relPaths: string[] }>) => {
-    const { wholeDatasets, selectedFiles, hubmapIds } = get();
-    const nextFiles = new Map(selectedFiles);
-    const nextWhole = new Set(wholeDatasets);
-    const nextIds = new Map(hubmapIds);
-
-    byDataset.forEach(({ hubmapId, relPaths }, datasetUuid) => {
-      if (relPaths.length === 0) return;
+    byDataset.forEach((relPaths, datasetUuid) => {
       // A dataset already selected in full stays that way: it is a superset of any file list, and
       // its single manifest line is cheaper than enumerating.
-      if (nextWhole.has(datasetUuid)) {
-        nextIds.set(datasetUuid, hubmapId);
-        return;
-      }
+      if (relPaths.length === 0 || wholeDatasets.has(datasetUuid)) return;
       const merged = new Set(nextFiles.get(datasetUuid) ?? []);
       relPaths.forEach((relPath) => merged.add(relPath));
       nextFiles.set(datasetUuid, merged);
-      nextIds.set(datasetUuid, hubmapId);
     });
 
-    set({ wholeDatasets: nextWhole, selectedFiles: nextFiles, hubmapIds: nextIds });
+    set({ selectedFilesByDataset: nextFiles });
   },
 
   clearDataset: (datasetUuid: string) => {
@@ -143,23 +102,20 @@ const storeDefinition = (
   },
 
   clearDatasets: (datasetUuids: string[]) => {
-    const { wholeDatasets, selectedFiles, hubmapIds } = get();
+    const { wholeDatasets, selectedFilesByDataset } = get();
     const nextWhole = new Set(wholeDatasets);
-    const nextFiles = new Map(selectedFiles);
-    const nextIds = new Map(hubmapIds);
+    const nextFiles = new Map(selectedFilesByDataset);
     datasetUuids.forEach((uuid) => {
       nextWhole.delete(uuid);
       nextFiles.delete(uuid);
-      nextIds.delete(uuid);
     });
-    set({ wholeDatasets: nextWhole, selectedFiles: nextFiles, hubmapIds: nextIds });
+    set({ wholeDatasets: nextWhole, selectedFilesByDataset: nextFiles });
   },
 
   clearAll: () => {
     set({
       wholeDatasets: new Set<string>(),
-      selectedFiles: new Map<string, Set<string>>(),
-      hubmapIds: new Map<string, string>(),
+      selectedFilesByDataset: new Map<string, Set<string>>(),
     });
   },
 });
@@ -170,15 +126,18 @@ export const useFilesSelectionStore = create<FilesSelectionStore>(storeDefinitio
 export function getDatasetSelectionState(
   datasetUuid: string,
   wholeDatasets: Set<string>,
-  selectedFiles: Map<string, Set<string>>,
+  selectedFilesByDataset: Map<string, Set<string>>,
 ): DatasetSelectionState {
   if (wholeDatasets.has(datasetUuid)) {
     return 'whole';
   }
-  return selectedFiles.has(datasetUuid) ? 'partial' : 'none';
+  return selectedFilesByDataset.has(datasetUuid) ? 'partial' : 'none';
 }
 
 /** Number of datasets with any selection, for the "N selected" header. */
-export function countSelectedDatasets(wholeDatasets: Set<string>, selectedFiles: Map<string, Set<string>>): number {
-  return new Set([...wholeDatasets, ...selectedFiles.keys()]).size;
+export function countSelectedDatasets(
+  wholeDatasets: Set<string>,
+  selectedFilesByDataset: Map<string, Set<string>>,
+): number {
+  return new Set([...wholeDatasets, ...selectedFilesByDataset.keys()]).size;
 }

@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import PlaylistAddRoundedIcon from '@mui/icons-material/PlaylistAddRounded';
 
-import { decimal } from 'js/helpers/number-format';
+import { decimal, formatCount } from 'js/helpers/number-format';
 import BulkDownloadDialog from 'js/components/bulkDownload/BulkDownloadDialog';
 import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { filterHasValues, useSearchStore } from '../../store';
@@ -60,7 +60,7 @@ function AddAllMatchingButton() {
       case 'error':
         return 'Could not add the matching files. Try again.';
       case 'done':
-        return `Added ${decimal.format(state.added)} files to the selection.`;
+        return `Added ${formatCount(state.added, 'file')} to the selection.`;
       default:
         return 'Select every file matching the current filters, across all pages, not just the ones shown.';
     }
@@ -100,8 +100,7 @@ function useHasQuery() {
 
 function FilesTableActions() {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
-  const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
-  const hubmapIds = useFilesSelectionStore((state) => state.hubmapIds);
+  const selectedFilesByDataset = useFilesSelectionStore((state) => state.selectedFilesByDataset);
   const clearAll = useFilesSelectionStore((state) => state.clearAll);
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const hasQuery = useHasQuery();
@@ -112,8 +111,8 @@ function FilesTableActions() {
   const { counts: wholeCounts, isLoading: areCountsLoading } = useWholeDatasetFileCounts(wholeDatasetUuids);
 
   const selectedFileCount = useMemo(
-    () => [...selectedFiles.values()].reduce((total, files) => total + files.size, 0),
-    [selectedFiles],
+    () => [...selectedFilesByDataset.values()].reduce((total, files) => total + files.size, 0),
+    [selectedFilesByDataset],
   );
 
   const wholeFileCount = useMemo(
@@ -122,14 +121,10 @@ function FilesTableActions() {
   );
 
   const handleDownload = useCallback(() => {
-    openDialog(new Set(wholeDatasets), {
-      selectedFiles,
-      hubmapIdsByUuid: hubmapIds,
-      analyticsCategory,
-    });
-  }, [openDialog, wholeDatasets, selectedFiles, hubmapIds, analyticsCategory]);
+    openDialog(new Set(wholeDatasets), { selectedFilesByDataset, analyticsCategory });
+  }, [openDialog, wholeDatasets, selectedFilesByDataset, analyticsCategory]);
 
-  const hasSelection = wholeDatasets.size > 0 || selectedFiles.size > 0;
+  const hasSelection = wholeDatasets.size > 0 || selectedFilesByDataset.size > 0;
 
   const summary = useMemo(() => {
     if (!hasSelection) {
@@ -142,7 +137,7 @@ function FilesTableActions() {
     if (isPending) {
       return `${decimal.format(total)}… files selected`;
     }
-    return `${decimal.format(total)} file${total === 1 ? '' : 's'} selected`;
+    return `${formatCount(total, 'file')} selected`;
   }, [hasSelection, selectedFileCount, wholeFileCount, wholeDatasetUuids, wholeCounts, areCountsLoading]);
 
   return (

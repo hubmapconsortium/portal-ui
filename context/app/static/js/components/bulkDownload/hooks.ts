@@ -93,14 +93,13 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     close,
     setUuids,
     setDownloadSuccess,
-    selectedFiles,
-    setSelectedFiles,
-    hubmapIdsByUuid,
+    selectedFilesByDataset,
+    setSelectedFilesByDataset,
     analyticsCategory,
   } = useBulkDownloadStore();
   // Individually chosen files, if the caller supplied any. Datasets selected in full stay in
   // `uuids` and keep behaving exactly as they did for every existing caller.
-  const hasFileSelection = Boolean(selectedFiles && selectedFiles.size > 0);
+  const hasFileSelection = Boolean(selectedFilesByDataset && selectedFilesByDataset.size > 0);
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm(hasFileSelection);
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
@@ -108,7 +107,10 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   // Every dataset the download touches: selected in full, or reached through one of its files.
   // Permissions, the metadata TSV and the restricted-dataset messaging are all per dataset, so all
   // of them need this union rather than just the whole-dataset selection.
-  const allSelectedUuids = useMemo(() => new Set([...uuids, ...(selectedFiles?.keys() ?? [])]), [uuids, selectedFiles]);
+  const allSelectedUuids = useMemo(
+    () => new Set([...uuids, ...(selectedFilesByDataset?.keys() ?? [])]),
+    [uuids, selectedFilesByDataset],
+  );
 
   // Fetch datasets for the selected uuids, batching to stay within ES limits.
   // Use a hash for the SWR key to avoid creating a large key string from all UUIDs.
@@ -170,13 +172,13 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
       setUuids(new Set([...uuids].filter((uuid) => !uuidsToRemove.includes(uuid))));
       // A restricted dataset has to leave the file selection too, or its files would still reach
       // the manifest after the user removed it.
-      if (selectedFiles) {
-        const next = new Map(selectedFiles);
+      if (selectedFilesByDataset) {
+        const next = new Map(selectedFilesByDataset);
         uuidsToRemove.forEach((uuid) => next.delete(uuid));
-        setSelectedFiles(next);
+        setSelectedFilesByDataset(next);
       }
     },
-    [deselectRows, setUuids, uuids, selectedFiles, setSelectedFiles],
+    [deselectRows, setUuids, uuids, selectedFilesByDataset, setSelectedFilesByDataset],
   );
 
   const selectedRowsSet = allSelectedUuids;
@@ -218,14 +220,13 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
       // chosen files are added verbatim, since naming a path is already an explicit choice and the
       // processing-type classification says nothing about it.
       const wholeDatasets = new Set(datasetsToDownload.map((dataset) => dataset.uuid));
-      const ids = new Map(hubmapIdsByUuid ?? []);
-      datasetsToDownload.forEach((dataset) => ids.set(dataset.uuid, dataset.hubmap_id));
 
       const manifest = buildManifest({
         wholeDatasets,
-        selectedFiles,
-        hubmapIdsByUuid: ids,
-        withMetadataJson: includeMetadataJson ? new Set(selectedFiles?.keys() ?? []) : undefined,
+        selectedFilesByDataset,
+        // `datasets` covers file-selected datasets too, since the fetch is over `allSelectedUuids`.
+        hubmapIdsByUuid: new Map(datasets.map((dataset) => [dataset.uuid, dataset.hubmap_id])),
+        withMetadataJson: includeMetadataJson ? new Set(selectedFilesByDataset?.keys() ?? []) : undefined,
       });
 
       const url = createDownloadUrl(manifest, 'text/plain');
@@ -248,19 +249,19 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
           console.error(e);
         });
     },
-    [toastErrorDownloadFile, setDownloadSuccess, selectedFiles, hubmapIdsByUuid, analyticsCategory],
+    [toastErrorDownloadFile, setDownloadSuccess, selectedFilesByDataset, datasets, analyticsCategory],
   );
 
   // Datasets present only because one of their files was chosen. Needed for the metadata TSV and
   // for the dialog's summary copy; they are deliberately absent from `downloadOptions`.
   const fileSelectionDatasets = useMemo(
-    () => datasets.filter((dataset) => selectedFiles?.has(dataset.uuid) && !uuids.has(dataset.uuid)),
-    [datasets, selectedFiles, uuids],
+    () => datasets.filter((dataset) => selectedFilesByDataset?.has(dataset.uuid) && !uuids.has(dataset.uuid)),
+    [datasets, selectedFilesByDataset, uuids],
   );
 
   const selectedFileCount = useMemo(
-    () => [...(selectedFiles?.values() ?? [])].reduce((total, files) => total + files.size, 0),
-    [selectedFiles],
+    () => [...(selectedFilesByDataset?.values() ?? [])].reduce((total, files) => total + files.size, 0),
+    [selectedFilesByDataset],
   );
 
   const handleClose = useCallback(() => {

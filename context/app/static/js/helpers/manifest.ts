@@ -17,7 +17,7 @@ export interface ManifestSelection {
   /** Datasets to include in full. */
   wholeDatasets: Set<string>;
   /** Individually chosen files, by dataset uuid. */
-  selectedFiles?: Map<string, Set<string>>;
+  selectedFilesByDataset?: Map<string, Set<string>>;
   /** HuBMAP ID per dataset uuid. A dataset with no known ID is skipped. */
   hubmapIdsByUuid: Map<string, string>;
   /**
@@ -29,7 +29,7 @@ export interface ManifestSelection {
 
 export function buildManifest({
   wholeDatasets,
-  selectedFiles = new Map(),
+  selectedFilesByDataset = new Map(),
   hubmapIdsByUuid,
   withMetadataJson,
 }: ManifestSelection): string {
@@ -44,12 +44,12 @@ export function buildManifest({
     }
   });
 
-  [...selectedFiles.keys()].sort().forEach((datasetUuid) => {
+  [...selectedFilesByDataset.keys()].sort().forEach((datasetUuid) => {
     const hubmapId = hubmapIdsByUuid.get(datasetUuid);
     if (!hubmapId) {
       return;
     }
-    const relPaths = new Set(selectedFiles.get(datasetUuid) ?? []);
+    const relPaths = new Set(selectedFilesByDataset.get(datasetUuid) ?? []);
     // Requested explicitly, so add it even though it was not among the matching files.
     if (withMetadataJson?.has(datasetUuid)) {
       relPaths.add(DATASET_METADATA_FILE);

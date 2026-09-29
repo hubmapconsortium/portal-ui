@@ -11,14 +11,7 @@ export type BulkDownloadDataset = Pick<Dataset, 'hubmap_id' | 'processing' | 'fi
  */
 export interface BulkDownloadFileSelection {
   /** Chosen `rel_path`s by dataset uuid. */
-  selectedFiles: Map<string, Set<string>>;
-  /**
-   * HuBMAP ID per dataset uuid.
-   *
-   * Supplied by the caller because a selection can include datasets the dialog never fetches --
-   * "add all matching files" selects across the whole result set, not just the rendered page.
-   */
-  hubmapIdsByUuid: Map<string, string>;
+  selectedFilesByDataset: Map<string, Set<string>>;
   /** Overrides the analytics category so files-search downloads are attributable. */
   analyticsCategory?: string;
 }
@@ -32,7 +25,7 @@ interface BulkDownloadStore extends Partial<BulkDownloadFileSelection> {
   open: () => void;
   close: () => void;
   setUuids: (uuids: Set<string>) => void;
-  setSelectedFiles: (selectedFiles: Map<string, Set<string>>) => void;
+  setSelectedFilesByDataset: (selectedFilesByDataset: Map<string, Set<string>>) => void;
   openDialog: (uuids: Set<string>, fileSelection?: BulkDownloadFileSelection) => void;
 }
 
@@ -40,8 +33,7 @@ const storeDefinition = (set: StoreApi<BulkDownloadStore>['setState']) => ({
   downloadSuccess: false,
   isOpen: false,
   uuids: new Set<string>(),
-  selectedFiles: undefined,
-  hubmapIdsByUuid: undefined,
+  selectedFilesByDataset: undefined,
   analyticsCategory: undefined,
   setDownloadSuccess: (downloadSuccess: boolean) => {
     set({ downloadSuccess });
@@ -52,20 +44,19 @@ const storeDefinition = (set: StoreApi<BulkDownloadStore>['setState']) => ({
   close: () => {
     // Clear the file selection: unlike `uuids` (which callers re-supply on every open), a stale
     // file selection would silently join the next download.
-    set({ isOpen: false, selectedFiles: undefined, hubmapIdsByUuid: undefined, analyticsCategory: undefined });
+    set({ isOpen: false, selectedFilesByDataset: undefined, analyticsCategory: undefined });
   },
   setUuids: (uuids: Set<string>) => {
     set({ uuids });
   },
-  setSelectedFiles: (selectedFiles: Map<string, Set<string>>) => {
-    set({ selectedFiles });
+  setSelectedFilesByDataset: (selectedFilesByDataset: Map<string, Set<string>>) => {
+    set({ selectedFilesByDataset });
   },
   openDialog: (uuids: Set<string>, fileSelection?: BulkDownloadFileSelection) => {
     set({
       uuids,
       isOpen: true,
-      selectedFiles: fileSelection?.selectedFiles,
-      hubmapIdsByUuid: fileSelection?.hubmapIdsByUuid,
+      selectedFilesByDataset: fileSelection?.selectedFilesByDataset,
       analyticsCategory: fileSelection?.analyticsCategory,
     });
   },

@@ -17,7 +17,7 @@ import prettyBytes from 'pretty-bytes';
 
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
-import { decimal } from 'js/helpers/number-format';
+import { decimal, formatCount } from 'js/helpers/number-format';
 import { useFilesSelectionStore } from './useFilesSelectionStore';
 import useDatasetFiles from './useDatasetFiles';
 import FileDownloadLink from './FileDownloadLink';
@@ -50,25 +50,25 @@ const LARGE_DATASET_FILE_COUNT = 1_000;
 const NO_FACET_FILTERS: FiltersType = {};
 
 function FileRows({ target }: { target: FileSelectionTarget }) {
-  const { datasetUuid, datasetHubmapId, dataAccessLevel, showAllFiles } = target;
+  const { datasetUuid, dataAccessLevel, showAllFiles, fileCount } = target;
   const { files, error, isLoading, isReachingEnd, loadMore } = useDatasetFiles(datasetUuid, showAllFiles);
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
-  const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
+  const selectedFilesByDataset = useFilesSelectionStore((state) => state.selectedFilesByDataset);
   const toggleFile = useFilesSelectionStore((state) => state.toggleFile);
   const toggleWholeDataset = useFilesSelectionStore((state) => state.toggleWholeDataset);
   const clearDataset = useFilesSelectionStore((state) => state.clearDataset);
 
   const handleSelectAll = useCallback(() => {
     if (!target) return;
-    if (wholeDatasets.has(target.datasetUuid) || selectedFiles.has(target.datasetUuid)) {
+    if (wholeDatasets.has(target.datasetUuid) || selectedFilesByDataset.has(target.datasetUuid)) {
       clearDataset(target.datasetUuid);
     } else {
-      toggleWholeDataset(target.datasetUuid, target.datasetHubmapId);
+      toggleWholeDataset(target.datasetUuid);
     }
-  }, [target, wholeDatasets, selectedFiles, clearDataset, toggleWholeDataset]);
+  }, [target, wholeDatasets, selectedFilesByDataset, clearDataset, toggleWholeDataset]);
 
   const isWholeSelected = wholeDatasets.has(datasetUuid);
-  const selected = selectedFiles.get(datasetUuid);
+  const selected = selectedFilesByDataset.get(datasetUuid);
 
   if (error) {
     return <Alert severity="error">Unable to load the files for this dataset.</Alert>;
@@ -98,7 +98,7 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                 <Tooltip
                   title={
                     <Typography variant="body2">
-                      {`Select all files in this dataset (${decimal.format(target.fileCount)})`}
+                      {`Select all files in this dataset (${decimal.format(fileCount)})`}
                     </Typography>
                   }
                 >
@@ -106,8 +106,8 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                     control={
                       <Checkbox
                         color="secondary"
-                        checked={wholeDatasets.has(target.datasetUuid)}
-                        indeterminate={selectedFiles.has(target.datasetUuid)}
+                        checked={isWholeSelected}
+                        indeterminate={Boolean(selected)}
                         onChange={handleSelectAll}
                       />
                     }
@@ -130,7 +130,7 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                   // A whole-dataset selection includes every file, so each row reads as checked
                   // without the individual paths having to be enumerated in the store.
                   checked={isWholeSelected || Boolean(selected?.has(file.rel_path))}
-                  onChange={() => toggleFile(datasetUuid, datasetHubmapId, file.rel_path)}
+                  onChange={() => toggleFile(datasetUuid, file.rel_path)}
                   inputProps={{ 'aria-label': `Select ${file.rel_path}` }}
                 />
               </TableCell>
@@ -154,7 +154,7 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
 
 function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
-  const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
+  const selectedFilesByDataset = useFilesSelectionStore((state) => state.selectedFilesByDataset);
 
   const datasetUuid = target?.datasetUuid;
 
@@ -171,8 +171,8 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
   const selectedCount = useMemo(() => {
     if (!datasetUuid) return 0;
     if (wholeDatasets.has(datasetUuid)) return target?.fileCount ?? 0;
-    return selectedFiles.get(datasetUuid)?.size ?? 0;
-  }, [datasetUuid, wholeDatasets, selectedFiles, target?.fileCount]);
+    return selectedFilesByDataset.get(datasetUuid)?.size ?? 0;
+  }, [datasetUuid, wholeDatasets, selectedFilesByDataset, target?.fileCount]);
 
   if (!target) {
     return null;
@@ -193,7 +193,7 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
       withCloseButton
       maxWidth="lg"
       title={`Select Files — ${target.datasetHubmapId}`}
-      secondaryText={`${decimal.format(target.fileCount)} files match the current filters. ${decimal.format(selectedCount)} selected. ${datasetStats ? `${decimal.format(datasetStats.fileCount)} total files.` : ''} `}
+      secondaryText={`${formatCount(target.fileCount, 'file')} ${target.fileCount === 1 ? 'matches' : 'match'} the current filters. ${decimal.format(selectedCount)} selected.${datasetStats ? ` ${formatCount(datasetStats.fileCount, 'total file')}.` : ''}`}
       handleClose={handleClose}
       content={
         <Stack spacing={2}>
@@ -219,8 +219,8 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
                 labelPlacement={showAllFiles ? 'start' : 'end'}
                 label={
                   !showAllFiles
-                    ? `Show all ${decimal.format(datasetStats?.fileCount || 0)} files`
-                    : `Show ${decimal.format(target.fileCount)} filtered files`
+                    ? `Show all ${formatCount(datasetStats?.fileCount ?? 0, 'file')}`
+                    : `Show ${formatCount(target.fileCount, 'filtered file')}`
                 }
               />
             )}

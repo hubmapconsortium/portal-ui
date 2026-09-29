@@ -71,7 +71,7 @@ export default function useAddAllMatchingFiles() {
       search,
       size: ENUMERATE_PAGE_SIZE,
       searchFields,
-      sourceFields: { manifest: ['dataset_uuid', 'dataset_hubmap_id', 'rel_path'] },
+      sourceFields: { manifest: ['dataset_uuid', 'rel_path'] },
       // Unique per document, which `search_after` requires.
       sortField: { field: 'dataset_uuid', direction: 'asc' },
       uniqueSortField: 'rel_path.keyword',
@@ -115,7 +115,7 @@ export default function useAddAllMatchingFiles() {
         return;
       }
 
-      const byDataset = new Map<string, { hubmapId: string; relPaths: string[] }>();
+      const byDataset = new Map<string, string[]>();
       let searchAfter: unknown[] | undefined;
       let added = 0;
 
@@ -129,12 +129,9 @@ export default function useAddAllMatchingFiles() {
         hits.forEach((hit) => {
           const source = hit._source;
           if (!source?.dataset_uuid || !source?.rel_path) return;
-          const entry = byDataset.get(source.dataset_uuid) ?? {
-            hubmapId: source.dataset_hubmap_id,
-            relPaths: [],
-          };
-          entry.relPaths.push(source.rel_path);
-          byDataset.set(source.dataset_uuid, entry);
+          const relPaths = byDataset.get(source.dataset_uuid) ?? [];
+          relPaths.push(source.rel_path);
+          byDataset.set(source.dataset_uuid, relPaths);
         });
         added += hits.length;
         searchAfter = hits[hits.length - 1]?.sort as unknown[] | undefined;

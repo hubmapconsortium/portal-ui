@@ -46,7 +46,7 @@ function DatasetRow({
   onSelectFiles: (target: FileSelectionTarget) => void;
 }) {
   const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
-  const selectedFiles = useFilesSelectionStore((state) => state.selectedFiles);
+  const selectedFilesByDataset = useFilesSelectionStore((state) => state.selectedFilesByDataset);
   const toggleWholeDataset = useFilesSelectionStore((state) => state.toggleWholeDataset);
 
   const source = hit._source;
@@ -58,7 +58,7 @@ function DatasetRow({
   const organs = getOrganLabels(source);
 
   const isWhole = wholeDatasets.has(datasetUuid);
-  const selected = selectedFiles.get(datasetUuid);
+  const selected = selectedFilesByDataset.get(datasetUuid);
   // "Deselect HBM…" read as removing the dataset from the results rather than from the selection.
   const checkboxLabel = isWhole ? `Deselect all files in ${hubmapId}` : `Select all files in ${hubmapId}`;
   const fileCount = stats?.fileCount ?? 0;
@@ -73,7 +73,7 @@ function DatasetRow({
             // Partial selections come from the file-selection modal; the row checkbox itself only
             // toggles the whole dataset.
             indeterminate={Boolean(selected)}
-            onChange={() => toggleWholeDataset(datasetUuid, hubmapId)}
+            onChange={() => toggleWholeDataset(datasetUuid)}
             inputProps={{ 'aria-label': checkboxLabel }}
           />
         </Tooltip>

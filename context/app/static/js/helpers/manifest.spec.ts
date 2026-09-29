@@ -16,7 +16,7 @@ describe('buildManifest', () => {
   test('emits one line per file for a partial selection', () => {
     const manifest = buildManifest({
       wholeDatasets: new Set(),
-      selectedFiles: new Map([['uuid-a', new Set(['expr.h5ad', 'metadata.tsv'])]]),
+      selectedFilesByDataset: new Map([['uuid-a', new Set(['expr.h5ad', 'metadata.tsv'])]]),
       hubmapIdsByUuid,
     });
     expect(manifest).toBe('HBM111.AAAA.111 expr.h5ad\nHBM111.AAAA.111 metadata.tsv');
@@ -25,7 +25,7 @@ describe('buildManifest', () => {
   test('combines whole and partial selections across datasets', () => {
     const manifest = buildManifest({
       wholeDatasets: new Set(['uuid-b']),
-      selectedFiles: new Map([['uuid-a', new Set(['expr.h5ad'])]]),
+      selectedFilesByDataset: new Map([['uuid-a', new Set(['expr.h5ad'])]]),
       hubmapIdsByUuid,
     });
     expect(manifest.split('\n')).toEqual(['HBM222.BBBB.222 /', 'HBM111.AAAA.111 expr.h5ad']);
@@ -46,7 +46,7 @@ describe('buildManifest', () => {
     test('is added to file-level selections when requested', () => {
       const manifest = buildManifest({
         wholeDatasets: new Set(),
-        selectedFiles: new Map([['uuid-a', new Set(['expr.h5ad'])]]),
+        selectedFilesByDataset: new Map([['uuid-a', new Set(['expr.h5ad'])]]),
         hubmapIdsByUuid,
         withMetadataJson: new Set(['uuid-a']),
       });
@@ -57,7 +57,7 @@ describe('buildManifest', () => {
     test('is not duplicated when already selected', () => {
       const manifest = buildManifest({
         wholeDatasets: new Set(),
-        selectedFiles: new Map([['uuid-a', new Set([DATASET_METADATA_FILE])]]),
+        selectedFilesByDataset: new Map([['uuid-a', new Set([DATASET_METADATA_FILE])]]),
         hubmapIdsByUuid,
         withMetadataJson: new Set(['uuid-a']),
       });
