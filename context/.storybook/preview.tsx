@@ -60,6 +60,8 @@ export const mockEndpoints = {
   entityEndpoint: '/entity-endpoint',
   softAssayEndpoint: '/soft-assay-endpoint',
   elasticsearchEndpoint: '/search',
+  filesElasticsearchEndpoint: '/files/search',
+  filesFacetsEndpoint: '/api/files/facets',
   scFindEndpoint: SCFIND_BASE_STORYBOOK,
 };
 export const mockGroupsToken = '';

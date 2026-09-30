@@ -34,6 +34,10 @@ export interface AppContextType {
   entityEndpoint: string;
   baseElasticsearchEndpoint: string;
   elasticsearchEndpoint: string;
+  /** Files index search endpoint; result hits are posted here directly. */
+  filesElasticsearchEndpoint: string;
+  /** Flask route serving cached files-index facet aggregations. */
+  filesFacetsEndpoint: string;
   softAssayEndpoint: string;
   groupsToken: string;
   workspacesToken: string;

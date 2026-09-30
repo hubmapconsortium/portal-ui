@@ -18,6 +18,7 @@ from . import (
     routes_workspaces,
     routes_cell_types,
     routes_scfind,
+    routes_files,
     default_config,
 )
 from .flask_static_digest import FlaskStaticDigest
@@ -99,6 +100,7 @@ def create_app(testing=False):
     app.register_blueprint(routes_workspaces.blueprint)
     app.register_blueprint(routes_cell_types.blueprint)
     app.register_blueprint(routes_scfind.blueprint)
+    app.register_blueprint(routes_files.blueprint)
 
     # Route Flask's app logger through gunicorn's handlers so server-side app
     # logs (scfind warming/timing, slow-query notes, errors) reach stdout and

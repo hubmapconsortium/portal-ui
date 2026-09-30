@@ -1,0 +1,18 @@
+- Add a Files search page at `/search/files`, backed by the new `files` Elasticsearch index. Results are grouped one row per dataset with exact file counts and sizes, and open a file picker offering per-file downloads and Globus transfer.
+- Add a "filter by file or folder name" control to the Files search, matching anywhere in a file's path. Free-text search cannot do this, because the path field is indexed as whole path segments.
+- Add an "Add All Matching Files" action to the Files search, which adds every file matching the current filters to the selection.
+- Add value-search boxes to high-cardinality search facets (file type, organ), so a value can be found without scrolling.
+- Group the Files search's Dataset Type facet by raw assay, matching the hierarchy on the dataset search.
+- Mark the Files search as BETA, and hide the Say & See tabs there, which do not yet search files.
+- The Files search selection summary now counts selected files rather than datasets, and reports every file in a dataset selected in full.
+- "Add All Matching Files" is now shown only once a filter narrows the results, and "See More Search Results" now shows a loading state while the next page loads.
+- Clearer Files search labels: "Choose Files" on each row, and a dataset checkbox tooltip that says it selects or deselects that dataset's files.
+- Title-case the data access level values shown in search facets.
+- Downloads from the Files search now go through the shared bulk download dialog, which checks dataset access permissions, offers the metadata TSV, and can add each dataset's `metadata.json` to the manifest.
+- Fix search facets briefly disappearing while a newly selected filter reloaded them.
+- Fix the free-text search input being unlabelled for assistive technology.
+- The Files search file picker can now list every file in a dataset, not only the files matching the current filters.
+- The "Add All Matching Files" button is now disabled, with a tooltip explaining why, while more files match than it can add.
+- The Files search now shows loading rows while a filter change reloads the results.
+- Counts in table column filters are now formatted with thousands separators.
+- Widen the page container on large screens from 1280px to 1440px.

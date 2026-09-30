@@ -111,4 +111,4 @@ function useFileLink(file: UnprocessedFile) {
   return useFileLinks([file])[0];
 }
 
-export { usePipelineInfo, useFileLink, useFileLinks };
+export { usePipelineInfo, useFileLink, useFileLinks, formatFileLink };
