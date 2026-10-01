@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
-export const StyledHeaderButton = styled(Button)<{ $disableTextTransform?: boolean }>(
+export const StyledHeaderButton = styled(Button, { shouldForwardProp })<{ $disableTextTransform?: boolean }>(
   ({ theme, $disableTextTransform }) => ({
     color: theme.palette.common.white,
     '.MuiButton-startIcon': {

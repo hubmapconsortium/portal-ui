@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Box from '@mui/material/Box';
 
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
@@ -21,7 +22,7 @@ interface ScrollRunwayProps {
   $zIndex: number;
 }
 
-export const ScrollRunway = styled(Box)<ScrollRunwayProps>(({ theme, $zIndex }) => ({
+export const ScrollRunway = styled(Box, { shouldForwardProp })<ScrollRunwayProps>(({ theme, $zIndex }) => ({
   position: 'relative',
 
   [theme.breakpoints.up('md')]: {
@@ -82,7 +83,7 @@ interface SlideGridProps {
   $layout: 'text-left' | 'text-right';
 }
 
-export const SlideGrid = styled(Box)<SlideGridProps>(({ theme, $layout }) => ({
+export const SlideGrid = styled(Box, { shouldForwardProp })<SlideGridProps>(({ theme, $layout }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing(3),
@@ -114,7 +115,7 @@ interface ImageGroupProps {
   $layout: 'text-left' | 'text-right';
 }
 
-export const ImageGroup = styled(Box)<ImageGroupProps>(({ theme, $layout }) => ({
+export const ImageGroup = styled(Box, { shouldForwardProp })<ImageGroupProps>(({ theme, $layout }) => ({
   display: 'grid',
   // Single full-width media (video) filling this column — not a grid of thumbnails.
   gridTemplateColumns: '1fr',

@@ -10,20 +10,20 @@ function MuiGlobalStyles() {
           '--header-height': '64px',
         },
         body: {
-          '-webkit-font-smoothing': 'antialiased',
-          '-moz-osx-font-smoothing': 'grayscale',
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
         },
         li: {
-          'list-style': 'none',
+          listStyle: 'none',
         },
         '#react-content': {
           display: 'flex',
-          'min-height': '100vh',
-          'flex-direction': 'column',
+          minHeight: '100vh',
+          flexDirection: 'column',
         },
         a: {
-          'text-decoration': 'none',
-          'background-color': 'transparent',
+          textDecoration: 'none',
+          backgroundColor: 'transparent',
         },
         '.lu-wrapper': {
           height: `calc(100vh - ${headerHeight}px - 100px)`,

@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
@@ -7,7 +8,7 @@ const TableTitle = styled(Typography)(({ theme }) => ({
   marginLeft: theme.spacing(1),
 })) as typeof Typography;
 
-const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boolean }>(
+const StyledItemLink = styled(Link, { shouldForwardProp })<{ $isCurrentSection: boolean; $isNested: boolean }>(
   ({ theme, $isCurrentSection, $isNested }) => ({
     fontSize: theme.typography.body1.fontSize,
     lineHeight: 1.25,

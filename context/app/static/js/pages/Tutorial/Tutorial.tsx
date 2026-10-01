@@ -120,7 +120,7 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
               </Typography>
               <Stack direction="row" gap={1} flexWrap="wrap">
                 {tags.map((tag) => (
-                  <Chip key={tag} label={tag} variant="outlined" $borderRadius="halfRound" />
+                  <Chip key={tag} label={tag} variant="outlined" sx={{ borderRadius: '4px' }} />
                 ))}
               </Stack>
             </Stack>

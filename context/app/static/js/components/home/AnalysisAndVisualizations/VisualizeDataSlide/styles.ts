@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import { animated } from '@react-spring/web';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -115,7 +116,7 @@ export const SwipeContainer = styled(Box)({
   touchAction: 'pan-y',
 });
 
-export const SwipeTrack = styled(Box)<{ $activeIndex: number }>(({ $activeIndex }) => ({
+export const SwipeTrack = styled(Box, { shouldForwardProp })<{ $activeIndex: number }>(({ $activeIndex }) => ({
   display: 'flex',
   transform: `translateX(-${$activeIndex * 100}%)`,
   transition: 'transform 0.3s ease-in-out',
@@ -259,16 +260,18 @@ export const ThumbCaption = styled(Box)(({ theme }) => ({
   padding: theme.spacing(0.5, 1),
 }));
 
-export const CarouselButton = styled(IconButton)<{ $side: 'left' | 'right' }>(({ theme, $side }) => ({
-  position: 'absolute',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  [$side]: theme.spacing(0.5),
-  zIndex: 1,
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[2],
-
-  '&:hover': {
+export const CarouselButton = styled(IconButton, { shouldForwardProp })<{ $side: 'left' | 'right' }>(
+  ({ theme, $side }) => ({
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    [$side]: theme.spacing(0.5),
+    zIndex: 1,
     backgroundColor: theme.palette.background.paper,
-  },
-}));
+    boxShadow: theme.shadows[2],
+
+    '&:hover': {
+      backgroundColor: theme.palette.background.paper,
+    },
+  }),
+);

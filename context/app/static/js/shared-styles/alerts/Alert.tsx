@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Alert, { AlertProps } from '@mui/material/Alert';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
@@ -27,7 +28,7 @@ interface StyledAlertProps extends AlertProps {
   $width?: string;
 }
 
-const StyledAlert = styled(OutlinedAlert, { shouldForwardProp: () => true })<StyledAlertProps>(
+const StyledAlert = styled(OutlinedAlert, { shouldForwardProp })<StyledAlertProps>(
   ({ theme, $marginBottom, $marginTop, $width }) => ({
     '> &:not(svg)': {
       color: theme.palette.text.primary,

@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import globalTheme from 'js/theme';
@@ -8,7 +9,7 @@ const routeContainerMaxWidth = globalTheme.breakpoints.values.lg;
 // 16px padding on either side of the route container at the lg breakpoint and above
 const routeContainerPadding = 32;
 
-const GridWrapper = styled(Box)<{ $shouldShowBoundaries: boolean; $disableTopMargin: boolean }>(
+const GridWrapper = styled(Box, { shouldForwardProp })<{ $shouldShowBoundaries: boolean; $disableTopMargin: boolean }>(
   ({ theme, $shouldShowBoundaries, $disableTopMargin }) => ({
     display: 'grid',
     gridTemplateColumns: $shouldShowBoundaries ? `1fr minmax(0, ${routeContainerMaxWidth}px) 1fr` : '1fr',

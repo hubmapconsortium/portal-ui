@@ -51,7 +51,11 @@ export const DrawerListItem = styled(ListItem)(({ theme }) => ({
 export const DrawerListItemIcon = styled(ListItemIcon)(({ theme }) => ({
   width: theme.spacing(6),
   position: 'relative',
-  '& > *': {
+  // `&&` doubles the specificity on purpose. A single `&` ties with MUI's own
+  // `.MuiSvgIcon-root` (`width: 1em; height: 1em`), so which one wins depends on
+  // stylesheet insertion order. Losing that race while the padding below still
+  // applies leaves a 16px box with 16px of padding, collapsing the icon to nothing.
+  '&& > *': {
     padding: theme.spacing(1),
     width: '100%',
     height: '100%',

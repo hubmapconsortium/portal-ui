@@ -158,10 +158,6 @@ declare module '@mui/material' {
   export interface ChipPropsVariantOverrides {
     elevated: true;
   }
-
-  export interface ChipOwnProps {
-    $borderRadius?: 'halfRound';
-  }
 }
 
 // default HuBMAP color and font theme
@@ -396,12 +392,6 @@ const theme = createTheme({
             },
             boxShadow:
               '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
-          },
-        },
-        {
-          props: { $borderRadius: 'halfRound' },
-          style: {
-            borderRadius: '4px',
           },
         },
       ],

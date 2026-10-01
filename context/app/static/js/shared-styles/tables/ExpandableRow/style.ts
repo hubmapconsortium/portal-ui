@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import TableCell, { TableCellProps } from '@mui/material/TableCell';
 import TableRow, { TableRowProps } from '@mui/material/TableRow';
 
@@ -10,17 +11,21 @@ interface ExpandableComponentProps {
 
 interface ExpandableRowProps extends ExpandableComponentProps, TableRowProps {}
 
-const ExpandedRow = styled(TableRow)<ExpandableRowProps>(({ $isExpanded }: ExpandableComponentProps) => ({
-  visibility: $isExpanded ? undefined : 'hidden',
-}));
+const ExpandedRow = styled(TableRow, { shouldForwardProp })<ExpandableRowProps>(
+  ({ $isExpanded }: ExpandableComponentProps) => ({
+    visibility: $isExpanded ? undefined : 'hidden',
+  }),
+);
 
 interface ExpandableCellProps extends ExpandableComponentProps, TableCellProps {}
 
-const ExpandedCell = styled(TableCell)<ExpandableCellProps>(({ $isExpanded }: ExpandableCellProps) => ({
-  padding: 0,
-  borderBottom: $isExpanded ? ' 1px solid rgba(224, 224, 224, 1)' : 'none', // border color taken from MUI table cell
-  maxWidth: 0, // This prevents the cell from affecting the width of the table
-}));
+const ExpandedCell = styled(TableCell, { shouldForwardProp })<ExpandableCellProps>(
+  ({ $isExpanded }: ExpandableCellProps) => ({
+    padding: 0,
+    borderBottom: $isExpanded ? ' 1px solid rgba(224, 224, 224, 1)' : 'none', // border color taken from MUI table cell
+    maxWidth: 0, // This prevents the cell from affecting the width of the table
+  }),
+);
 
 const StyledExpandCollapseIcon = styled(ExpandCollapseIcon)({
   fontSize: '2rem',

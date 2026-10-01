@@ -72,7 +72,6 @@ function TemplateGrid({
             key={templateKey}
             disabled={templateKey in disabledTemplates}
             tooltip={getTooltip(templateKey, job_types)}
-            jobTypes={job_types}
           />
         </Grid>
       ))}
