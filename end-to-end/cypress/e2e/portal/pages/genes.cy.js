@@ -1,6 +1,7 @@
 const geneSymbol = "MMRN1";
 const geneName = "Multimerin 1";
 const genePath = `/genes/${geneSymbol}`;
+const geneTitle = `${geneName} (${geneSymbol})`;
 
 describe("Gene Detail Page", () => {
   context("macbook-size", () => {
@@ -15,7 +16,7 @@ describe("Gene Detail Page", () => {
         });
 
         // Wait for the page to fully load before running tests
-        cy.findByRole("heading", { level: 1, name: new RegExp(geneSymbol) }).should("contain", geneSymbol);
+        cy.findByRole("heading", { level: 2, name: geneTitle }).should("contain", geneSymbol);
         cy.get("#summary").should("exist");
         cy.get("#cell-types").should("exist");
 
@@ -24,8 +25,9 @@ describe("Gene Detail Page", () => {
       });
 
       it("displays the correct page title and gene name", () => {
-        // Test that the gene full name and symbol appear in h1 element
-        cy.findByRole("heading", { level: 1, name: new RegExp(geneSymbol) })
+        // The "Gene" entity type is the page's only h1; the gene name and symbol are the h2 below it.
+        cy.get("h1").should("have.length", 1).and("contain", "Gene");
+        cy.findByRole("heading", { level: 2, name: geneTitle })
           .should("contain", geneName)
           .and("contain", geneSymbol);
 
