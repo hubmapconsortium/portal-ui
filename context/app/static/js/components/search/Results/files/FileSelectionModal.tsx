@@ -52,23 +52,31 @@ const NO_FACET_FILTERS: FiltersType = {};
 function FileRows({ target }: { target: FileSelectionTarget }) {
   const { datasetUuid, dataAccessLevel, showAllFiles, fileCount } = target;
   const { files, error, isLoading, isReachingEnd, loadMore } = useDatasetFiles(datasetUuid, showAllFiles);
-  const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
+
   const selectedFilesByDataset = useFilesSelectionStore((state) => state.selectedFilesByDataset);
   const toggleFile = useFilesSelectionStore((state) => state.toggleFile);
-  const toggleWholeDataset = useFilesSelectionStore((state) => state.toggleWholeDataset);
   const clearDataset = useFilesSelectionStore((state) => state.clearDataset);
+
+  const selected = selectedFilesByDataset.get(datasetUuid);
+  const isAllSelected = selected && files.every((file) => selected.has(file.rel_path));
+  const isIndeterminate = selected && !isAllSelected;
 
   const handleSelectAll = useCallback(() => {
     if (!target) return;
-    if (wholeDatasets.has(target.datasetUuid) || selectedFilesByDataset.has(target.datasetUuid)) {
-      clearDataset(target.datasetUuid);
+    if (isAllSelected || isIndeterminate) {
+      if (showAllFiles) {
+        clearDataset(target.datasetUuid);
+      } else {
+        files.forEach((file) => {
+          toggleFile(target.datasetUuid, file.rel_path);
+        });
+      }
     } else {
-      toggleWholeDataset(target.datasetUuid);
+      files.forEach((file) => {
+        toggleFile(target.datasetUuid, file.rel_path);
+      });
     }
-  }, [target, wholeDatasets, selectedFilesByDataset, clearDataset, toggleWholeDataset]);
-
-  const isWholeSelected = wholeDatasets.has(datasetUuid);
-  const selected = selectedFilesByDataset.get(datasetUuid);
+  }, [target, isAllSelected, isIndeterminate, showAllFiles, clearDataset, files, toggleFile]);
 
   if (error) {
     return <Alert severity="error">Unable to load the files for this dataset.</Alert>;
@@ -106,8 +114,8 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                     control={
                       <Checkbox
                         color="secondary"
-                        checked={isWholeSelected}
-                        indeterminate={Boolean(selected)}
+                        checked={isAllSelected}
+                        indeterminate={isIndeterminate}
                         onChange={handleSelectAll}
                       />
                     }
@@ -129,7 +137,7 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                   color="secondary"
                   // A whole-dataset selection includes every file, so each row reads as checked
                   // without the individual paths having to be enumerated in the store.
-                  checked={isWholeSelected || Boolean(selected?.has(file.rel_path))}
+                  checked={isAllSelected || Boolean(selected?.has(file.rel_path))}
                   onChange={() => toggleFile(datasetUuid, file.rel_path)}
                   slotProps={{ input: { 'aria-label': `Select ${file.rel_path}` } }}
                 />
