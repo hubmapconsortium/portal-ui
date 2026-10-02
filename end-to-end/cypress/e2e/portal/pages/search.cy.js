@@ -129,3 +129,18 @@ describe("datasets search only", () => {
     });
   });
 });
+
+describe("search errors", () => {
+  // Without an error state, a failed request left the results as loading skeletons forever.
+  [
+    { name: "the search request", method: "POST", url: "**/v3/portal/search" },
+    { name: "the field mapping request the search waits on", method: "GET", url: "**/v3/portal/mapping" },
+  ].forEach(({ name, method, url }) => {
+    it(`shows an error when ${name} fails`, () => {
+      cy.intercept(method, url, { statusCode: 500, body: {} });
+      cy.visit("/search/datasets");
+      cy.contains("Search results could not be loaded (HTTP 500).").should("be.visible");
+      cy.findAllByTestId("hubmap-id-link").should("not.exist");
+    });
+  });
+});
