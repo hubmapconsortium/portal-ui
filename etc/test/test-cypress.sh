@@ -38,7 +38,8 @@ case $1 in
     ;;
 esac
 
-end-to-end/test.sh $CYPRESS_ARGS
+# Electron is deprecated as a test browser since Cypress 16; Chrome also intercepts natively.
+end-to-end/test.sh $CYPRESS_ARGS --browser "${CYPRESS_BROWSER:-chrome}"
 docker kill hubmap-portal-ui || true #Kills docker container if it is running, but does not error if the container is not.
 
 end cypress
