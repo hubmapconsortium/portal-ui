@@ -1,8 +1,7 @@
 // One representative dataset per visualization variant, from the release QA checklist.
 // Each is Published with a visualization in both the test and prod indexes.
 // Processed datasets redirect to their raw parent, scrolled to `#section-<hubmap id>`.
-// `envs` limits a dataset to the API_ENVs where it can render: the Salmon datasets' files are missing from
-// assets.test (404 as of 2026-10-02), so those only run against prod.
+// `notOnTest`: the dataset's files are not present in the test environment, so it is skipped unless API_ENV=prod.
 const datasets = [
   {
     name: "CODEX [Cytokit + SPRM]",
@@ -16,13 +15,13 @@ const datasets = [
     name: "Slide-seq [Salmon]",
     uuid: "a1d17fdd270a69c813b872a927dfa5f3",
     views: ["Scatterplot (UMAP)", "Cell Sets", "Gene List", "Heatmap", "Expression by Cell Set", "Spatial"],
-    envs: ["prod"],
+    notOnTest: true,
   },
   {
     name: "snRNA-seq [Salmon] (zarr)",
     uuid: "0b590c9e3a62178da592e85572e2f1bf",
     views: ["Scatterplot (UMAP)", "Cell Sets", "Gene List", "Heatmap", "Expression by Cell Set"],
-    envs: ["prod"],
+    notOnTest: true,
   },
   {
     name: "snRNA-seq [Salmon] (JSON)",
@@ -40,10 +39,11 @@ const datasets = [
 const vitessceTimeout = { timeout: 90000 };
 
 describe("Dataset visualizations", () => {
-  datasets.forEach(({ name, uuid, views, envs }) => {
-    it(`${name} renders every Vitessce view without errors`, function () {
+  datasets.forEach(({ name, uuid, views, notOnTest }) => {
+    const suffix = notOnTest ? " (not present on test)" : "";
+    it(`${name} renders every Vitessce view without errors${suffix}`, function () {
       cy.env(["API_ENV"]).then(({ API_ENV = "test" }) => {
-        if (envs && !envs.includes(API_ENV)) this.skip();
+        if (notOnTest && API_ENV !== "prod") this.skip();
       });
       cy.visit(`/browse/dataset/${uuid}`);
       cy.findByTestId("entity-title").should("be.visible");
