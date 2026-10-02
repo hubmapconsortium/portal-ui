@@ -10,7 +10,7 @@ interface ErrorBoundaryProps {
 
 function ErrorFallback({ error }: FallbackProps) {
   return (
-    <Stack p={4}>
+    <Stack p={4} data-testid="prov-graph-error">
       <Typography variant="subtitle1">An error occurred while attempting to display the provenance graph.</Typography>
       <DetailsAccordion summary="Click to expand error details">
         <Typography variant="body2">{(error as Error | null)?.message}</Typography>

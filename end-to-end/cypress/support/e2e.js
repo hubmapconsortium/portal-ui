@@ -1,20 +1,29 @@
-// ***********************************************************
-// This example support/index.js is processed and
-// loaded automatically before your test files.
-//
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
-//
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
+import "@testing-library/cypress/add-commands";
 
-// Import commands.js using ES2015 syntax:
-import "./commands";
+// Upstream API flakiness is absorbed by retries; a 5xx page from the portal itself is a bug.
+// Match on Accept, not resourceType: link-click navigations report resourceType "other".
+beforeEach(() => {
+  cy.intercept({ url: `${Cypress.config("baseUrl")}/**`, headers: { accept: /^text\/html/ } }, (req) =>
+    req.continue((res) => {
+      if (res.statusCode >= 500) {
+        throw new Error(`Portal returned ${res.statusCode} for ${req.url}`);
+      }
+    }),
+  );
+});
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+// React 19 error boundaries swallow render errors, so uncaught:exception never sees them.
+// Rethrow from the page as soon as any error UI renders; Cypress then fails the test.
+// Tests that expect error UI opt out with cy.on("uncaught:exception", ...).
+const errorUI = "[data-testid=error-boundary], [data-testid=visualization-error], [data-testid=prov-graph-error]";
+
+Cypress.on("window:before:load", (win) => {
+  const observer = new win.MutationObserver(() => {
+    const el = win.document.querySelector(errorUI);
+    if (el) {
+      observer.disconnect();
+      throw new Error(`Error UI rendered (${el.dataset.testid}): ${el.textContent.slice(0, 500)}`);
+    }
+  });
+  observer.observe(win.document, { childList: true, subtree: true });
+});
