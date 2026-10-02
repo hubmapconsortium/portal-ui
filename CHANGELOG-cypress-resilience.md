@@ -4,3 +4,4 @@
 - Add Cypress coverage for the anonymous parts of the release QA checklist: home page counts, chart and links, the services page endpoints, search pages, entity detail pages, Vitessce for each representative dataset type, collections, organs, publications, and preview pages.
 - Add an `API_ENV=test|prod` switch to `etc/test/test-cypress.sh` and a matching `workflow_dispatch` input, to choose which backend APIs the portal under test uses. It defaults to `test`.
 - Show an error on search pages when the search or field mapping request fails, instead of loading skeletons that never resolve.
+- Make the gene page title an `h2`, so the "Gene" entity type is the page's only `h1`.
