@@ -16,7 +16,7 @@ describe("Gene Detail Page", () => {
         });
 
         // Wait for the page to fully load before running tests
-        cy.findByRole("heading", { level: 2, name: geneTitle }).should("contain", geneSymbol);
+        cy.findByRole("heading", { level: 1, name: geneTitle }).should("contain", geneSymbol);
         cy.get("#summary").should("exist");
         cy.get("#cell-types").should("exist");
 
@@ -25,11 +25,9 @@ describe("Gene Detail Page", () => {
       });
 
       it("displays the correct page title and gene name", () => {
-        // The "Gene" entity type is the page's only h1; the gene name and symbol are the h2 below it.
-        cy.get("h1").should("have.length", 1).and("contain", "Gene");
-        cy.findByRole("heading", { level: 2, name: geneTitle })
-          .should("contain", geneName)
-          .and("contain", geneSymbol);
+        // The gene's name is human-readable, so it is the page's only h1 (not the "Gene" entity type).
+        cy.get("h1").should("have.length", 1);
+        cy.findByRole("heading", { level: 1, name: geneTitle }).should("contain", geneName).and("contain", geneSymbol);
 
         // Test that the page title is set correctly
         cy.title().should("include", geneSymbol);

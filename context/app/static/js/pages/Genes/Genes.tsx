@@ -26,7 +26,9 @@ function GeneDetails({ geneSymbol }: Props) {
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
       <DetailLayout sections={shouldDisplaySection}>
-        <SummaryTitle entityIcon="Gene">Gene</SummaryTitle>
+        <SummaryTitle entityIcon="Gene" component="p">
+          Gene
+        </SummaryTitle>
         <GenePageTitle />
         <Summary />
         <CellTypes />

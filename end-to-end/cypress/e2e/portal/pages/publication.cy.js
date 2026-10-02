@@ -7,8 +7,9 @@ describe("Publication page", () => {
     beforeEach(() => {
       cy.visit(`/browse/publication/${publicationId}`);
     });
-    it("has a title", () => {
+    it("has a title, which is the page's h1", () => {
       cy.findByTestId("entity-title").contains(title);
+      cy.get("h1").should("have.length", 1).and("contain", title);
     });
     it("has an abstract", () => {
       cy.findByTestId("publication-abstract").contains(
