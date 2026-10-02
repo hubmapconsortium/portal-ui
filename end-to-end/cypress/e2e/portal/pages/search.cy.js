@@ -1,162 +1,131 @@
-describe('Search Page - Bulk Download Permissions', () => {
+// Parses "X Results Shown | Y Total Results" below the results table.
+const parseTotal = ($p) =>
+  Number(
+    $p
+      .text()
+      .match(/([\d,]+) Total Results/)[1]
+      .replace(/,/g, ""),
+  );
+
+function totalResults() {
+  return cy.contains("p", /Total Results/).then(parseTotal);
+}
+
+// Retries until the total satisfies `check`, so it waits out the search debounce and refetch.
+function totalResultsShould(check) {
+  cy.contains("p", /Total Results/).should(($p) => check(expect(parseTotal($p))));
+}
+
+function waitForResults() {
+  // tbody rows can be loading skeletons; HuBMAP ID links only render with real hits.
+  cy.findAllByTestId("hubmap-id-link").should("have.length.at.least", 1);
+}
+
+["datasets", "samples", "donors"].forEach((type) => {
+  describe(`${type} search`, () => {
+    beforeEach(() => {
+      cy.visit(`/search/${type}`);
+      waitForResults();
+    });
+
+    it("narrows results with a free-text search", () => {
+      totalResults().then((initial) => {
+        cy.get('input[aria-label="Freetext search"]').type("kidney");
+        totalResultsShould((total) => total.to.be.lessThan(initial));
+      });
+    });
+
+    it("warns when a search has no results", () => {
+      cy.get('input[aria-label="Freetext search"]').type("zzqxjvwk");
+      cy.contains("No results found. Login to view more results.").should("be.visible");
+    });
+
+    it("narrows results with a facet, and clears it", () => {
+      totalResults().then((initial) => {
+        cy.findByTestId("search-facets").find('input[type="checkbox"][name$="-checkbox"]').first().check();
+        totalResultsShould((total) => total.to.be.lessThan(initial));
+        cy.findByTestId("clear-filters-button").click();
+        totalResultsShould((total) => total.to.equal(initial));
+      });
+    });
+
+    it("sorts by a column header", () => {
+      cy.get("th .MuiTableSortLabel-root").first().as("sort").click();
+      cy.get("@sort")
+        .should("have.class", "Mui-active")
+        .then(($sort) => {
+          const first = $sort.hasClass("MuiTableSortLabel-directionAsc") ? "Asc" : "Desc";
+          cy.get("@sort").click();
+          cy.get("@sort").should("have.class", `MuiTableSortLabel-direction${first === "Asc" ? "Desc" : "Asc"}`);
+        });
+      waitForResults();
+    });
+
+    it("switches to tile view, with tiles linking to detail pages", () => {
+      cy.findByTestId("tile-view-toggle-button").click();
+      cy.get(`a[href^="/browse/${type.slice(0, -1)}/"]`).should("have.length.at.least", 1);
+      cy.findByTestId("table-view-toggle-button").click();
+      cy.findByTestId("search-results-table").should("be.visible");
+    });
+
+    it("links HuBMAP IDs to detail pages", () => {
+      cy.findAllByTestId("hubmap-id-link").first().click();
+      cy.findByTestId("entity-title").should("be.visible");
+    });
+
+    it("downloads a metadata TSV", () => {
+      cy.window().then((win) => cy.spy(win.URL, "createObjectURL").as("createObjectURL"));
+      cy.contains("button", "Download").click();
+      cy.contains("#download-menu li", "Download Metadata").click();
+      // The TSV is built client-side from every hit; all datasets take a while on the test env.
+      cy.get("@createObjectURL", { timeout: 60000 })
+        .should("have.been.called")
+        .then((spy) => spy.getCall(0).args[0].text())
+        .should("match", /^uuid\t/);
+    });
+
+    it("opens LineUp", () => {
+      cy.get(`button[title="Visualize ${type}' metadata in Lineup."]`).click();
+      cy.get("[role=dialog]").should("contain", "Lineup Visualization");
+    });
+  });
+});
+
+describe("datasets search only", () => {
   beforeEach(() => {
-    // Visit the datasets search page
-    cy.visit('/search/datasets');
-    
-    // Wait for the page to load and data to populate
-    cy.get('[data-testid="search-results-table"]', { timeout: 10000 }).should('be.visible');
+    cy.visit("/search/datasets");
+    waitForResults();
   });
 
-  it('should verify bulk download permissions for restricted datasets', () => {
-    // Wait for search results to load
-    cy.get('[data-testid="search-results-table"] tbody tr').should('have.length.greaterThan', 0);
-
-    // Find a dataset with "Published" status and select its checkbox
-    // The status is displayed in one of the table cells
-    cy.get('[data-testid="search-results-table"] tbody tr')
-      .contains('Published')
-      .parents('tr')
-      .first()
-      .within(() => {
-        // Click the checkbox in the first cell (SelectableRowCell)
-        cy.get('input[type="checkbox"]').first().check();
-      });
-
-    // Verify the checkbox is selected
-    cy.get('[data-testid="search-results-table"] tbody tr')
-      .contains('Published')
-      .parents('tr')
-      .first()
-      .within(() => {
-        cy.get('input[type="checkbox"]').first().should('be.checked');
-      });
-
-    // scroll to the top before clicking the bulk download button since it might be out of view
-    cy.scrollTo('top');
-
-    // Click the bulk download button
-    // The button should be visible in the search bar when datasets are selected
-    cy.get('button[aria-label="Bulk Download selected datasets"]', { timeout: 5000 })
-      .should('be.visible')
-      .and('not.be.disabled')
-      .click();
-
-    // Wait for the bulk download dialog to open
-    cy.get('[role="dialog"]', { timeout: 10000 }).should('be.visible');
-    
-    // Verify the dialog has the correct title
-    cy.get('[role="dialog"]').within(() => {
-      cy.contains('Bulk Download Files').should('be.visible');
-    });
-
-    // Check that the dialog content is loaded (not just skeleton loading)
-    cy.get('[id="bulk-download-form"]', { timeout: 15000 }).should('be.visible');
-
-    // Verify that the dialog handles restricted datasets appropriately
-    // This section will either:
-    // 1. Show no error messages if no restricted datasets were selected
-    // 2. Show error messages and restricted dataset handling options if restricted datasets were selected
-    
-    // Check if there are any error/warning messages about restricted datasets
-    cy.get('[role="dialog"]').within(() => {
-      // Look for error messages that might indicate restricted datasets
-      cy.get('form').then(($body) => {
-        const hasErrorMessages = $body.find('[role="alert"]').length > 0 || 
-                                 $body.find('[class*="error"]').length > 0 ||
-                                 $body.find(':contains("access")').length > 0 ||
-                                 $body.find(':contains("restricted")').length > 0 ||
-                                 $body.find(':contains("permission")').length > 0;
-
-        if (hasErrorMessages) {
-          // If there are restricted datasets, verify the appropriate handling
-          cy.log('Found restricted datasets in selection');
-          
-          // Look for restricted dataset messaging
-          cy.get('body').should('contain.text', 'access').or('contain.text', 'permission');
-          
-          // Verify that there might be a button to remove restricted datasets
-          // This is based on the RemoveRestrictedDatasetsFormField component
-          cy.get('body').then(($dialogBody) => {
-            const hasRemoveButton = $dialogBody.find('button:contains("Remove")').length > 0;
-            if (hasRemoveButton) {
-              cy.get('button').contains('Remove').should('be.visible');
-            }
-          });
-        } else {
-          // If no restricted datasets, verify download options are available
-          cy.log('No restricted datasets found in selection');
-          
-          // Should see download options
-          cy.contains('Download Options').should('be.visible');
-          
-          // Should see checkboxes for different file types
-          cy.get('input[type="checkbox"]').should('have.length.greaterThan', 0);
-        }
-      });
-    });
-
-    // Verify that the form has the expected structure
-    cy.get('[id="bulk-download-form"]').within(() => {
-      // Should have download options section
-      cy.contains('Download Options').should('be.visible');
-    });
-
-    // Close the dialog to clean up
-    cy.get('[role="dialog"]').within(() => {
-      // Look for close button (usually X or Cancel)
-      cy.get('button').contains('Cancel').click();
-    });
-
-    // Verify dialog is closed
-    cy.get('[role="dialog"]').should('not.exist');
+  it("disables bulk download until datasets are selected", () => {
+    cy.contains("button", "Download").click();
+    cy.contains("#download-menu li", "Download Datasets").should("have.attr", "aria-disabled", "true");
   });
 
-  it('should handle multiple dataset selection with mixed permissions', () => {
-    // Wait for search results to load
-    cy.get('[data-testid="search-results-table"] tbody tr').should('have.length.greaterThan', 1);
-
-    // Select multiple datasets with Published status
-    cy.get('[data-testid="search-results-table"] tbody tr')
-      .contains('Published')
-      .parents('tr')
-      .each(($row, index) => {
-        if (index < 3) { // Select up to 3 published datasets
-          cy.wrap($row).within(() => {
-            cy.get('input[type="checkbox"]').first().check();
-          });
-        }
-      });
-
-    // Click the bulk download button
-    cy.get('button[aria-label="Bulk Download selected datasets"]')
-      .should('be.visible')
-      .and('not.be.disabled')
-      .click();
-
-    // Wait for the dialog to open and verify it handles multiple selections
-    cy.get('[role="dialog"]', { timeout: 10000 }).should('be.visible');
-    cy.get('[id="bulk-download-form"]', { timeout: 15000 }).should('be.visible');
-
-    // Verify the dialog shows appropriate content for multiple datasets
-    cy.get('[role="dialog"]').within(() => {
-      cy.contains('Download Options').should('be.visible');
-      
-      // Should have some file type options
-      cy.get('input[type="checkbox"]').should('have.length.greaterThan', 0);
-    });
-
-    // Close dialog
-    cy.get('[role="dialog"]').within(() => {
-      cy.get('button').contains('Cancel').click();
-    });
+  it("filters by a nested dataset type", () => {
+    // Dataset Type is hierarchical: expand Histology to reach PAS Stained Microscopy.
+    cy.get('input[name="Histology-checkbox"]').closest(".MuiAccordionSummary-root").find("[role=presentation]").click();
+    cy.get('input[name="PAS Stained Microscopy-checkbox"]').check();
+    cy.location("search").should("eq", "?dataset_type=Histology.PAS+Stained+Microscopy");
+    waitForResults();
   });
 
-  it('should show appropriate message when no datasets are selected', () => {
-    // Ensure no datasets are selected by default
-    cy.get('[data-testid="search-results-table"] tbody tr input[type="checkbox"]:checked')
-      .should('have.length', 0);
-
-    // The bulk download button should be disabled when no datasets are selected
-    cy.get('button[aria-label="Bulk Download selected datasets"]').should('be.disabled');
+  it("shows PAS microscopy thumbnails in tile view", function () {
+    // assets.test returns 403 for thumbnails (as of 2026-10-01), so this only runs with API_ENV=prod.
+    cy.env(["API_ENV"]).then(({ API_ENV = "test" }) => {
+      if (API_ENV !== "prod") this.skip();
+    });
+    // Only some PAS datasets have thumbnails, and not on the first page, so pick one that does.
+    cy.visit("/search/datasets?dataset_type=Histology.PAS+Stained+Microscopy");
+    waitForResults();
+    cy.get('input[aria-label="Freetext search"]').type("HBM484.RDZR.494");
+    cy.findAllByTestId("hubmap-id-link").should("have.length", 1);
+    cy.findByTestId("tile-view-toggle-button").click();
+    cy.get('a[href^="/browse/dataset/"] img[src$="/thumbnail.jpg"]').should(($imgs) => {
+      expect(
+        [...$imgs].some((img) => img.naturalWidth > 0),
+        "a thumbnail loaded",
+      ).to.be.true;
+    });
   });
 });

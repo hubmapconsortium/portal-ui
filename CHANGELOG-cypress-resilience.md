@@ -1,0 +1,5 @@
+- Run every Cypress spec in CI. The spec glob previously matched only `load-all-pages.cy.js`, so the specs under `pages/` and `flows/` never ran.
+- Make the Cypress suite tolerant of the slow test environment: failed tests retry twice, and the default command timeout is now 20 seconds.
+- Fail Cypress tests on errors that retries can't hide: any 5xx page from the portal, the app error boundary, and the Vitessce and provenance graph error boundaries. These three error UIs now have `data-testid`s.
+- Add Cypress coverage for the anonymous parts of the release QA checklist: home page counts, chart and links, the services page endpoints, search pages, entity detail pages, Vitessce for each representative dataset type, collections, organs, publications, and preview pages.
+- Add an `API_ENV=test|prod` switch to `etc/test/test-cypress.sh` and a matching `workflow_dispatch` input, to choose which backend APIs the portal under test uses. It defaults to `test`.

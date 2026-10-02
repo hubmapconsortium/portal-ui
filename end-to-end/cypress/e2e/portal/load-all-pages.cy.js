@@ -1,12 +1,12 @@
 /******************************************************************************************
- * 
+ *
  *  Tests whether all page types load successfully.
- * 
+ *
  *  Description:
  *  ----------------------------------------------------------------------------
  *  Checks that the title element of each page type is visible. Navigates to an example of
  *  each detail page by clicking on the first available option from the list/table.
- * 
+ *
  ******************************************************************************************/
 
 describe("Landing pages all load", () => {
@@ -20,7 +20,11 @@ describe("Landing pages all load", () => {
     { name: "Home", url: "/", testId: "home-page-title" },
     { name: "My Lists", url: "/my-lists", testId: "my-lists-title" },
     { name: "My Workspaces", url: "/workspaces", testId: "my-workspaces-title" },
-    { name: "Biomarker and Cell Type Search", url: "/search/biomarkers-cell-types", testId: "molecular-data-queries-title" },
+    {
+      name: "Biomarker and Cell Type Search",
+      url: "/search/biomarkers-cell-types",
+      testId: "molecular-data-queries-title",
+    },
     { name: "Organs", url: "/organs", testId: "organs-title" },
     { name: "Profile", url: "/profile", testId: "login-alert" },
     { name: "Publications", url: "/publications", testId: "publications-title" },
@@ -28,18 +32,12 @@ describe("Landing pages all load", () => {
     { name: "Services", url: "/services", testId: "services-title" },
     { name: "Templates", url: "/templates", testId: "templates-title" },
     { name: "Tutorials", url: "/tutorials", testId: "tutorials-title" },
-  ];  
+  ];
 
-  context("macbook-size", () => {
-    beforeEach(() => {
-      cy.viewport("macbook-15");
-    });
-
-    pages.forEach((page) => {
-      it(`loads ${page.name} page`, () => {
-        cy.visit(page.url);
-        cy.findByTestId(page.testId).should("exist").and("be.visible");
-      });
+  pages.forEach((page) => {
+    it(`loads ${page.name} page`, () => {
+      cy.visit(page.url);
+      cy.findByTestId(page.testId).should("exist").and("be.visible");
     });
   });
 });
@@ -52,42 +50,33 @@ describe("Entity detail page all load", () => {
     { name: "Organ", url: "/organs/kidney", testId: "entity-title" },
     { name: "Publication", url: "/publications", testId: "panel-title" },
     { name: "Sample", url: "/search/samples", testId: "hubmap-id-link" },
-  ];  
+  ];
 
-  context("macbook-size", () => {
-    beforeEach(() => {
-      cy.viewport("macbook-15");
-    });
-
-    pages.forEach((page) => {
-      it(`loads a ${page.name} detail page`, () => {
-        cy.visit(page.url);
-        // live ES search results routinely take ~10s in CI (Donor/Publication/Sample
-        // all landed at 9-11s); 20s headroom removes the flake. Lower it if CI gets faster.
-        cy.findAllByTestId(page.testId, { timeout: 20000 }).first().click();
-        cy.findByTestId("entity-title").should("exist").and("be.visible");
-      });
+  pages.forEach((page) => {
+    it(`loads a ${page.name} detail page`, () => {
+      cy.visit(page.url);
+      cy.findAllByTestId(page.testId).first().click();
+      cy.findByTestId("entity-title").should("exist").and("be.visible");
     });
   });
 });
 
 describe("Other detail pages all load", () => {
   const pages = [
-    { name: "Tutorial", url: "/tutorials/getting-started", testId: "tutorial-iframe-section", titleTestId: "tutorial-title" },
+    {
+      name: "Tutorial",
+      url: "/tutorials/getting-started",
+      testId: "tutorial-iframe-section",
+      titleTestId: "tutorial-title",
+    },
     { name: "Template", url: "/templates", testId: "template-card", titleTestId: "entity-title" },
-  ];  
+  ];
 
-  context("macbook-size", () => {
-    beforeEach(() => {
-      cy.viewport("macbook-15");
-    });
-
-    pages.forEach((page) => {
-      it(`loads a ${page.name} page`, () => {
-        cy.visit(page.url);
-        cy.findAllByTestId(page.testId).first().click();
-        cy.findByTestId(page.titleTestId).should("exist").and("be.visible");
-      });
+  pages.forEach((page) => {
+    it(`loads a ${page.name} page`, () => {
+      cy.visit(page.url);
+      cy.findAllByTestId(page.testId).first().click();
+      cy.findByTestId(page.titleTestId).should("exist").and("be.visible");
     });
   });
 });

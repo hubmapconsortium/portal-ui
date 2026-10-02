@@ -19,7 +19,7 @@ function VisualizationFallback({ error }: FallbackProps): JSX.Element {
           <SpacedSectionButtonRow
             leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           />
-          <VisualizationErrorBoundaryBackground>
+          <VisualizationErrorBoundaryBackground data-testid="visualization-error">
             <div>The Vitessce visualization encountered an error. Please try again or contact support.</div>
             <DetailsAccordion summary="Click to expand error details">
               <div>{err?.name}</div>

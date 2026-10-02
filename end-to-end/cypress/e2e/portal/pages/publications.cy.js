@@ -1,44 +1,30 @@
 describe("publications list page", () => {
-  context("macbook-size", () => {
-    beforeEach(() => {
-      cy.viewport("macbook-15");
-      cy.visit("/publications");
-    });
-    it("has a title, subtitle, and description at the top", () => {
-      cy.findByTestId("publications-title").findByText("Publications");
-      cy.findByTestId("landing-page-description").contains(
-        "The following publications"
-      );
-    });
-    it("has tabs for published and preprint entities", () => {
-      cy.findByTestId("publication-tabs").should("exist");
-      const publishedTab = cy.findByTestId("publication-tab-peer-reviewed");
-      const preprintTab = cy.findByTestId("publication-tab-preprint");
-      const tabs = [publishedTab, preprintTab];
-      // publishedTab.should("have.attr", "aria-selected", "true");
-      // preprintTab.should("have.attr", "aria-selected", "false");
-      tabs.forEach((tab) => {
-        tab.should("exist").then(($tab) => {
-          if ($tab.text().includes("(0)")) {
-            tab.should("be.disabled");
-          } else {
-            tab.should("not.be.disabled");
-          }
-        });
-      });
-    });
-    it("has clickable publication links", () => {
-      const publishedTab = cy.findByTestId("publication-tab-peer-reviewed");
-      const preprintTab = cy.findByTestId("publication-tab-preprint");
-      // publishedTab.should("exist").then(($pubTab) => {
-      //   if ($pubTab.text().includes("(0)")) {
-      //     preprintTab.click();
-      //     cy.wait(1000);
-      //   }
-      // });
-      cy.findAllByTestId("panel-title")
-        .should("exist")
-        .and("have.attr", "href");
+  beforeEach(() => {
+    cy.visit("/publications");
+  });
+
+  it("has a title and description", () => {
+    cy.findByTestId("publications-title").findByText("Publications");
+    cy.findByTestId("landing-page-description").contains("Browse peer-reviewed publications and preprints");
+  });
+
+  it("lists at least nine peer-reviewed publications, with links", () => {
+    cy.findByTestId("publication-tab-Peer-Reviewed").should("have.attr", "aria-selected", "true");
+    cy.findAllByTestId("panel-title")
+      .should("have.length.at.least", 9)
+      .first()
+      .should("have.attr", "href")
+      .and("match", /^\/browse\/publication\//);
+  });
+
+  it("has a preprint tab", () => {
+    cy.findByTestId("publication-tab-Preprint").then(($tab) => {
+      if ($tab.text().includes("(0)")) {
+        cy.wrap($tab).should("be.disabled");
+      } else {
+        cy.wrap($tab).click().should("have.attr", "aria-selected", "true");
+        cy.findAllByTestId("panel-title").should("have.length.at.least", 1);
+      }
     });
   });
 });
