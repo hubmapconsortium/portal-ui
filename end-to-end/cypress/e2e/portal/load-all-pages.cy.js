@@ -38,6 +38,7 @@ describe("Landing pages all load", () => {
     it(`loads ${page.name} page`, () => {
       cy.visit(page.url);
       cy.findByTestId(page.testId).should("exist").and("be.visible");
+      cy.get("h1").should("have.length", 1);
     });
   });
 });
@@ -57,6 +58,7 @@ describe("Entity detail page all load", () => {
       cy.visit(page.url);
       cy.findAllByTestId(page.testId).first().click();
       cy.findByTestId("entity-title").should("exist").and("be.visible");
+      cy.get("h1").should("have.length", 1);
     });
   });
 });
@@ -77,6 +79,7 @@ describe("Other detail pages all load", () => {
       cy.visit(page.url);
       cy.findAllByTestId(page.testId).first().click();
       cy.findByTestId(page.titleTestId).should("exist").and("be.visible");
+      cy.get("h1").should("have.length", 1);
     });
   });
 });
