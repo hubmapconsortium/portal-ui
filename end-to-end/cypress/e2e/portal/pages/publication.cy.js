@@ -1,4 +1,5 @@
 const publicationId = "2ced91fd6d543e79af90313e52ada57d";
+const hubmapId = "HBM885.XBTV.869";
 const title = "Vitessce: integrative visualization of multimodal and spatially-resolved single-cell data";
 
 describe("Publication page", () => {
@@ -53,13 +54,11 @@ describe("Publication page", () => {
       });
     });
 
-    // Disabled this test because it's flaky and fails for no good reason
-    // This behavior would be better to test with unit tests
-    xit("has a visible Entity Header when the user scrolls down the page", () => {
-      cy.findByTestId("entity-header").should("not.exist");
+    it("reveals the entity header after scrolling past the summary", () => {
+      // The header is always rendered; its content fades in once the summary leaves the viewport.
+      cy.findByTestId("entity-header").contains(hubmapId).should("not.be.visible");
       cy.scrollTo("bottom");
-      cy.wait(200);
-      cy.findByTestId("entity-header").should("be.visible").and("contain", title);
+      cy.findByTestId("entity-header").contains(hubmapId).should("be.visible");
     });
 
     it("has six vignettes", () => {

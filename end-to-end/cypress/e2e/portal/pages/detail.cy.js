@@ -30,6 +30,18 @@ entities.forEach(({ type, uuid, provenance, files }) => {
       cy.request(`/browse/${type}/${uuid}.json`).its("body.uuid").should("eq", uuid);
     });
 
+    it("reveals the entity header, with a JSON link, after scrolling past the summary", () => {
+      // The header is always rendered; its content fades in once the summary leaves the viewport.
+      const hubmapId = /HBM\d{3}\.[A-Z]{4}\.\d{3}/;
+      cy.findByTestId("entity-header").contains(hubmapId).should("not.be.visible");
+      cy.scrollTo("bottom");
+      cy.findByTestId("entity-header").contains(hubmapId).should("be.visible");
+      cy.findByTestId("entity-header")
+        .find('a[href$=".json"]')
+        .should("have.attr", "href", `/browse/${type}/${uuid}.json`)
+        .and("have.attr", "target", "_blank");
+    });
+
     it("has a populated metadata table", () => {
       cy.get("#metadata").find("tbody tr").should("have.length.at.least", 1);
     });
