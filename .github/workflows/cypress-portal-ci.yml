@@ -4,12 +4,20 @@ on:
   push:
     branches: [main]
   pull_request: {}
+  workflow_dispatch:
+    inputs:
+      api_env:
+        description: "Backend APIs the portal under test points at"
+        type: choice
+        options: [test, prod]
+        default: test
 
 jobs:
   build:
     # Available versions:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-24.04
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v6
@@ -36,6 +44,11 @@ jobs:
         env:
           GH_ACTIONS_BRANCH: ${{ github.ref }}
           GH_ACTIONS: true
+          API_ENV: ${{ inputs.api_env || 'test' }}
+
+      - name: Show portal logs
+        if: failure()
+        run: docker logs hubmap-portal-ui 2>&1 | tail -300
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v7

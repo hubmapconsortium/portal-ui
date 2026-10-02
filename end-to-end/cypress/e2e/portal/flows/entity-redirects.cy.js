@@ -1,12 +1,12 @@
 /******************************************************************************************
- * 
+ *
  *  Tests whether entities redirect to the appropriate detail page.
- * 
+ *
  *  Description:
  *  ----------------------------------------------------------------------------
  *  Checks that the title element of each page type is visible and that the URL contains
  *  the expected UUID.
- * 
+ *
  ******************************************************************************************/
 
 describe("Entity does not redirect unnecessarily", () => {
@@ -33,17 +33,11 @@ describe("Entity does not redirect unnecessarily", () => {
     },
   ];
 
-  context("macbook-size", () => {
-    beforeEach(() => {
-      cy.viewport("macbook-15");
-    });
-
-    testCases.forEach(({ name, entityType, uuid }) => {
-      it(`${name}`, () => {
-        cy.visit(`/browse/${entityType}/${uuid}`, { failOnStatusCode: false });
-        cy.url().should("include", `/browse/${entityType}/${uuid}`);
-        cy.findByTestId("entity-title").should("exist").and("be.visible");
-      });
+  testCases.forEach(({ name, entityType, uuid }) => {
+    it(`${name}`, () => {
+      cy.visit(`/browse/${entityType}/${uuid}`, { failOnStatusCode: false });
+      cy.url().should("include", `/browse/${entityType}/${uuid}`);
+      cy.findByTestId("entity-title").should("exist").and("be.visible");
     });
   });
 });
@@ -71,17 +65,11 @@ describe("Entity redirects successfully", () => {
     // TODO: add EPICs when they are available
   ];
 
-  context("macbook-size", () => {
-    beforeEach(() => {
-      cy.viewport("macbook-15");
-    });
-
-    testCases.forEach(({ name, entityType, uuid, expectedRedirectUuid }) => {
-      it(`${name}`, () => {
-        cy.visit(`/browse/${entityType}/${uuid}`, { failOnStatusCode: false });
-        cy.url().should("include", `/browse/${entityType}/${expectedRedirectUuid}`);
-        cy.findByTestId("entity-title").should("exist").and("be.visible");
-      });
+  testCases.forEach(({ name, entityType, uuid, expectedRedirectUuid }) => {
+    it(`${name}`, () => {
+      cy.visit(`/browse/${entityType}/${uuid}`, { failOnStatusCode: false });
+      cy.url().should("include", `/browse/${entityType}/${expectedRedirectUuid}`);
+      cy.findByTestId("entity-title").should("exist").and("be.visible");
     });
   });
 });
@@ -91,21 +79,14 @@ describe("Entity redirects to 404 when appropriate", () => {
     {
       name: "Invalid UUID",
       entityType: "dataset",
-      uuid: "not-valid"
+      uuid: "not-valid",
     },
   ];
 
-  context("macbook-size", () => {
-    beforeEach(() => {
-      cy.viewport("macbook-15");
-    });
-
-    testCases.forEach(({ name, entityType, uuid }) => {
-      it(`${name}`, () => {
-        cy.visit(`/browse/${entityType}/${uuid}`, { failOnStatusCode: false });
-        cy.contains("404").should("be.visible");
-      });
+  testCases.forEach(({ name, entityType, uuid }) => {
+    it(`${name}`, () => {
+      cy.visit(`/browse/${entityType}/${uuid}`, { failOnStatusCode: false });
+      cy.contains("404").should("be.visible");
     });
   });
 });
-

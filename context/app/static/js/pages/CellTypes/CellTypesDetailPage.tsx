@@ -25,7 +25,9 @@ function CellTypes({ cellId }: Props) {
   return (
     <CellTypesProvider cellId={cellId}>
       <DetailLayout sections={shouldDisplaySection}>
-        <SummaryTitle entityIcon="CellType">Cell Type</SummaryTitle>
+        <SummaryTitle entityIcon="CellType" component="p">
+          Cell Type
+        </SummaryTitle>
         <CellTypesTitle />
         <CellTypesSummary />
         <CellTypesVisualization shouldDisplay={shouldDisplaySection['cell-type-distribution']} />

@@ -27,7 +27,7 @@ function ErrorPage({
   const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage, isErrorBoundary);
 
   return (
-    <Background $isMaintenancePage={isMaintenancePage}>
+    <Background $isMaintenancePage={isMaintenancePage} data-testid={isErrorBoundary ? 'error-boundary' : 'http-error'}>
       <StyledPaper>
         <StyledTypography variant="h1" $mb={2}>
           {title}

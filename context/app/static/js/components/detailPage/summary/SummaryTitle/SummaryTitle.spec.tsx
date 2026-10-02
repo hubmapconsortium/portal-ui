@@ -17,6 +17,21 @@ describe('SummaryTitle', () => {
     expect(screen.getByRole('heading', { name: 'Test Title' })).toBeInTheDocument();
   });
 
+  it('applies data-testid to the entity type text', () => {
+    render(<SummaryTitle data-testid="entity-type">Dataset</SummaryTitle>);
+    expect(screen.getByTestId('entity-type')).toHaveTextContent(/^Dataset$/);
+  });
+
+  it('renders as a plain label instead of a heading when component is "p"', () => {
+    render(
+      <SummaryTitle data-testid="entity-type" component="p">
+        Collection
+      </SummaryTitle>,
+    );
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+    expect(screen.getByTestId('entity-type').tagName).toBe('P');
+  });
+
   it('renders tooltip icon when iconTooltipText is provided', () => {
     render(<SummaryTitle iconTooltipText="Some tooltip">Title</SummaryTitle>);
     expect(screen.getByTestId('InfoRoundedIcon')).toBeInTheDocument();

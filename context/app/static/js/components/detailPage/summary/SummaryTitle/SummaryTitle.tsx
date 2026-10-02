@@ -16,6 +16,13 @@ interface SummaryTitleProps extends PropsWithChildren {
   iconTooltipText?: string;
   entityIcon?: keyof typeof entityIconMap;
   organIcon?: string; // name of the organ to fetch icon for (e.g. 'Kidney', 'Lung', etc.
+  /**
+   * The entity type is the page's h1 only when the page title isn't human-readable (a HuBMAP ID).
+   * Pages whose title is a name make that the h1 and render this as a plain label.
+   */
+  component?: 'h1' | 'p';
+  /** Applied to the entity type text. */
+  'data-testid'?: string;
 }
 
 const titleLinks: Record<AllEntityTypes, string | undefined> = {
@@ -70,7 +77,14 @@ const getSummaryHref = (entityIcon?: keyof typeof entityIconMap, organIcon?: str
   return undefined;
 };
 
-function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon }: SummaryTitleProps) {
+function SummaryTitle({
+  children,
+  iconTooltipText,
+  entityIcon,
+  organIcon,
+  component = 'h1',
+  'data-testid': testId,
+}: SummaryTitleProps) {
   const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
   const { ref, inView, entry } = useInView({
@@ -89,10 +103,17 @@ function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon }: Summ
 
   const href = getSummaryHref(entityIcon, organIcon);
   const tooltipText = getTitleLinkTooltipText(entityIcon, organIcon);
-  const component = href ? 'a' : 'div';
+  const containerComponent = href ? 'a' : 'div';
 
   const summaryTitle = (
-    <Stack direction="row" alignItems="center" gap={1} component={component} href={href} maxWidth="fit-content">
+    <Stack
+      direction="row"
+      alignItems="center"
+      gap={1}
+      component={containerComponent}
+      href={href}
+      maxWidth="fit-content"
+    >
       {Icon && <Icon color="primary" />}
       {organIcon && <OrganIcon organName={organIcon} color="primary" />}
       {href && tooltipText ? (
@@ -103,7 +124,7 @@ function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon }: Summ
           <ChevronLeftRounded fontSize="small" />
         </>
       ) : null}
-      <Typography variant="subtitle1" color="primary" ref={ref} component="h1">
+      <Typography variant="subtitle1" color="primary" ref={ref} component={component} data-testid={testId}>
         {children}
       </Typography>
       <InfoTooltipIcon iconTooltipText={iconTooltipText} />
