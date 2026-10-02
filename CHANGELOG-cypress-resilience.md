@@ -4,4 +4,6 @@
 - Add Cypress coverage for the anonymous parts of the release QA checklist: home page counts, chart and links, the services page endpoints, search pages, entity detail pages, Vitessce for each representative dataset type, collections, organs, publications, and preview pages.
 - Add an `API_ENV=test|prod` switch to `etc/test/test-cypress.sh` and a matching `workflow_dispatch` input, to choose which backend APIs the portal under test uses. It defaults to `test`.
 - Show an error on search pages when the search or field mapping request fails, instead of loading skeletons that never resolve.
-- Make the gene page title an `h2`, so the "Gene" entity type is the page's only `h1`.
+- Make entity page titles `h2`s, so the entity type above them is each page's only `h1`. This covers dataset, sample, donor, collection, publication, workspace, gene, cell type and tutorial pages. The My Lists title is now an `h1`, and every page in the Cypress page-load spec must have exactly one.
+- Show errors on the home page when the entity counts or datasets chart requests fail, instead of loading skeletons that never resolve. The shared `useSearchData` hook now returns the request error. The organs page chart gets the same error state.
+- Upgrade Cypress to 16 and run it in Chrome, since Electron is deprecated as a test browser. Re-enable the publication page's entity header test and add the same check, plus its JSON link, to the detail page spec.

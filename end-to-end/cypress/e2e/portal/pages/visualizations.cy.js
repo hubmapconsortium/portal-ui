@@ -1,16 +1,13 @@
 // One representative dataset per visualization variant, from the release QA checklist.
 // Each is Published with a visualization in both the test and prod indexes.
 // Processed datasets redirect to their raw parent, scrolled to `#section-<hubmap id>`.
-// `envs` limits a dataset to the API_ENVs where it can render under Cypress (as of 2026-10-01):
-// - assets.test returns 403 for the Salmon anndata-zarr stores, so those only run against prod.
-// - On prod, CODEX loads a .zarr.zip, whose size Vitessce reads from a HEAD request; the Cypress proxy
-//   drops Content-Length from HEAD responses, so that one only runs against test.
+// `envs` limits a dataset to the API_ENVs where it can render (as of 2026-10-01): assets.test returns 403
+// for the Salmon anndata-zarr stores, so those only run against prod.
 const datasets = [
   {
     name: "CODEX [Cytokit + SPRM]",
     uuid: "69c70762689b20308bb049ac49653342",
     views: ["Spatial", "Spatial Layers", "Scatterplot (t-SNE)", "Cell Sets", "Antigen List", "Heatmap"],
-    envs: ["test"],
   },
   { name: "seqFISH", uuid: "c6a254b2dc2ed46b002500ade163a7cc", views: ["Spatial", "Spatial Layers"] },
   { name: "MALDI IMS", uuid: "3bc3ad124014a632d558255626bf38c9", views: ["Spatial", "Spatial Layers"] },
