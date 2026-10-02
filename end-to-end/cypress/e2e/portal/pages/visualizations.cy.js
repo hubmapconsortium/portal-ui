@@ -1,8 +1,8 @@
 // One representative dataset per visualization variant, from the release QA checklist.
 // Each is Published with a visualization in both the test and prod indexes.
 // Processed datasets redirect to their raw parent, scrolled to `#section-<hubmap id>`.
-// `envs` limits a dataset to the API_ENVs where it can render (as of 2026-10-01): assets.test returns 403
-// for the Salmon anndata-zarr stores, so those only run against prod.
+// `envs` limits a dataset to the API_ENVs where it can render: the Salmon datasets' files are missing from
+// assets.test (404 as of 2026-10-02), so those only run against prod.
 const datasets = [
   {
     name: "CODEX [Cytokit + SPRM]",
