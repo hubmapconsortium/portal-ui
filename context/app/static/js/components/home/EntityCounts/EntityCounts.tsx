@@ -5,6 +5,7 @@ import EntityCount from 'js/components/home/EntityCount';
 import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon, PublicationIcon } from 'js/shared-styles/icons';
 import { buildSearchLink } from 'js/components/search/store';
 import { trackEvent } from 'js/helpers/trackers';
+import LoadErrorAlert from 'js/shared-styles/alerts/LoadErrorAlert';
 import { useEntityCounts } from './hooks';
 import { Background, FlexContainer, StyledSvgIcon } from './style';
 
@@ -55,7 +56,7 @@ const entities: EntityCountConfig[] = [
 ];
 
 function EntityCounts() {
-  const entityCounts = useEntityCounts();
+  const { counts: entityCounts, error } = useEntityCounts();
 
   const inIframe = window.self !== window.top;
   const handleTrack = useEventCallback((type: string) => {
@@ -76,6 +77,7 @@ function EntityCounts() {
               <StyledSvgIcon as={icon} color="primary" aria-label={`Number of unique ${entity_type.toLowerCase()}s`} />
             }
             count={entityCounts?.[entity_type]}
+            hasError={Boolean(error)}
             {...props}
             onClick={() => {
               handleTrack(entity_type);
@@ -83,6 +85,7 @@ function EntityCounts() {
           />
         ))}
       </FlexContainer>
+      {error ? <LoadErrorAlert subject="Entity counts" error={error} /> : null}
     </Background>
   );
 }

@@ -54,15 +54,16 @@ interface EntityCounts {
   };
 }
 
-function useEntityCounts() {
-  const { searchData: elasticsearchData } = useSearchData<unknown, EntityCounts>(entityCountsQuery);
+function useEntityCounts(): { counts: Record<string, number>; error: unknown } {
+  const { searchData: elasticsearchData, error } = useSearchData<unknown, EntityCounts>(entityCountsQuery);
   if (elasticsearchData?.aggregations) {
-    return elasticsearchData.aggregations.entity_type.buckets.reduce((acc, entity) => {
+    const counts = elasticsearchData.aggregations.entity_type.buckets.reduce((acc, entity) => {
       return { ...acc, [entity.key]: entity.doc_count };
     }, {});
+    return { counts, error };
   }
 
-  return {};
+  return { counts: {}, error };
 }
 
 export { useEntityCounts };

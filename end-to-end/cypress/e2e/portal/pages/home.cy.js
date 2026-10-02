@@ -94,6 +94,18 @@ describe("Home page", () => {
   });
 });
 
+describe("Home page errors", () => {
+  // Without an error state, failed requests left the counts and chart as loading skeletons forever.
+  it("shows errors when the counts and chart requests fail", () => {
+    cy.intercept("POST", "**/v3/portal/search", { statusCode: 500, body: {} });
+    cy.visit("/");
+    cy.contains("Entity counts could not be loaded (HTTP 500).").should("be.visible");
+    cy.get('[aria-label="Number of unique datasets"]').closest("a").should("contain", "—");
+    cy.get("#hubmap-datasets").scrollIntoView();
+    cy.contains("The datasets chart could not be loaded (HTTP 500).").should("be.visible");
+  });
+});
+
 describe("Error pages", () => {
   it("has a nice 404", () => {
     cy.visit("/no-such-page", { failOnStatusCode: false });

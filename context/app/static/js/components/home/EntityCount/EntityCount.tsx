@@ -12,9 +12,11 @@ interface EntityCountProps {
   label: string;
   href: string;
   onClick?: () => void;
+  /** The counts request failed: show a dash instead of a loading skeleton. */
+  hasError?: boolean;
 }
 
-function EntityCount({ icon, count, label, href, onClick }: EntityCountProps) {
+function EntityCount({ icon, count, label, href, onClick, hasError = false }: EntityCountProps) {
   const title = count ? `${count} ${label}` : '';
   return (
     <SecondaryBackgroundTooltip title={title} placement="bottom" disabled={!count || count < 10000}>
@@ -22,7 +24,7 @@ function EntityCount({ icon, count, label, href, onClick }: EntityCountProps) {
         <StyledDiv>{icon}</StyledDiv>
         <div>
           <Typography variant="h2" component="p">
-            {formatCount(count) || <Skeleton />}
+            {formatCount(count) || (hasError ? '—' : <Skeleton />)}
           </Typography>
           <Typography variant="h6" component="p">
             {label}

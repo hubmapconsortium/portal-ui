@@ -8,6 +8,7 @@ import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarCha
 import { ChartArea } from 'js/shared-styles/charts/HorizontalStackedBarChart/style';
 import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import Skeleton from '@mui/material/Skeleton';
+import LoadErrorAlert from 'js/shared-styles/alerts/LoadErrorAlert';
 import { trackEvent } from 'js/helpers/trackers';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import Typography from '@mui/material/Typography';
@@ -88,6 +89,7 @@ interface ColorOption {
   keys: string[];
   getBarHref?: ComponentProps<typeof HorizontalStackedBarChart<AggregatedDatum, AnyD3Scale, AnyD3Scale>>['getBarHref'];
   getAriaLabel?: (d: TooltipData<AggregatedDatum>) => string;
+  error?: unknown;
 }
 
 interface HuBMAPDatasetsChartProps {
@@ -100,18 +102,28 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
   const colors = useChartPalette();
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
-  const { organOrder } = useOrganOrder();
+  const { organOrder, error: organOrderError } = useOrganOrder();
 
   const { selectedEntityType, setSelectedEntityType } = useSelectedEntityType();
 
-  const assayBuckets = useAggregatedChartData<AssaysQueryKey>(assayTypeQuery, selectedEntityType);
-  const donorSexBuckets = useAggregatedChartData<DonorSexQueryKey>(donorSexQuery, selectedEntityType);
-  const donorRaceBuckets = useAggregatedChartData<DonorRaceQueryKey>(donorRaceQuery, selectedEntityType);
-  const analyteClassBuckets = useAggregatedChartData<AnalyteClassQueryKey>(analyteClassQuery, selectedEntityType);
-  const processingStatusBuckets = useAggregatedChartData<ProcessingStatusQueryKey>(
-    processingStatusQuery,
+  const { data: assayBuckets, error: assayError } = useAggregatedChartData<AssaysQueryKey>(
+    assayTypeQuery,
     selectedEntityType,
   );
+  const { data: donorSexBuckets, error: donorSexError } = useAggregatedChartData<DonorSexQueryKey>(
+    donorSexQuery,
+    selectedEntityType,
+  );
+  const { data: donorRaceBuckets, error: donorRaceError } = useAggregatedChartData<DonorRaceQueryKey>(
+    donorRaceQuery,
+    selectedEntityType,
+  );
+  const { data: analyteClassBuckets, error: analyteClassError } = useAggregatedChartData<AnalyteClassQueryKey>(
+    analyteClassQuery,
+    selectedEntityType,
+  );
+  const { data: processingStatusBuckets, error: processingStatusError } =
+    useAggregatedChartData<ProcessingStatusQueryKey>(processingStatusQuery, selectedEntityType);
 
   const datasetTypeMap = useDatasetTypeMap();
 
@@ -124,6 +136,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
         data: assayBuckets,
         dropdownLabel: 'Assay Type',
         keys: getKeysFromAggregatedData(assayBuckets),
+        error: assayError,
         getBarHref:
           selectedEntityType === 'Dataset'
             ? (d) => {
@@ -149,6 +162,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
         data: donorSexBuckets,
         dropdownLabel: 'Donor Sex',
         keys: getKeysFromAggregatedData(donorSexBuckets),
+        error: donorSexError,
         getBarHref:
           selectedEntityType === 'Dataset'
             ? (d) => {
@@ -173,6 +187,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
         data: donorRaceBuckets,
         dropdownLabel: 'Donor Race',
         keys: getKeysFromAggregatedData(donorRaceBuckets),
+        error: donorRaceError,
         getBarHref:
           selectedEntityType === 'Dataset'
             ? (d) => {
@@ -197,6 +212,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
         data: analyteClassBuckets,
         dropdownLabel: 'Analyte Class',
         keys: getKeysFromAggregatedData(analyteClassBuckets),
+        error: analyteClassError,
         getBarHref:
           selectedEntityType === 'Dataset'
             ? (d) => {
@@ -221,6 +237,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
         data: processingStatusBuckets,
         dropdownLabel: 'Processing Status',
         keys: getKeysFromAggregatedData(processingStatusBuckets),
+        error: processingStatusError,
         getBarHref:
           selectedEntityType === 'Dataset'
             ? (d) => {
@@ -243,11 +260,16 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
     ],
     [
       assayBuckets,
+      assayError,
       selectedEntityType,
       donorSexBuckets,
+      donorSexError,
       donorRaceBuckets,
+      donorRaceError,
       analyteClassBuckets,
+      analyteClassError,
       processingStatusBuckets,
+      processingStatusError,
       datasetTypeMap,
     ],
   );
@@ -298,6 +320,8 @@ function HuBMAPDatasetsChart({ getBarHrefOverride, chartRef, onSelectionChange }
     onSelectionChange?.(`${selectedEntityType} vs ${selectedColor.dropdownLabel}`);
   }, [selectedEntityType, selectedColor.dropdownLabel, onSelectionChange]);
 
+  const chartError = organOrderError ?? selectedColor.error;
+  if (chartError) return <LoadErrorAlert subject="The datasets chart" error={chartError} />;
   if (!selectedColor.data.length || !organOrder) return <Skeleton height="500px" />;
   return (
     <Paper sx={{ px: 2 }} ref={chartRef}>

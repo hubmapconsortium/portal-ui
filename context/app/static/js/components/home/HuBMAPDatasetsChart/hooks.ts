@@ -123,13 +123,14 @@ export function aggregateByOrgan<T extends object>(
 export function useAggregatedChartData<T extends object>(
   query: SearchRequest,
   selectedEntityType: ESEntityType,
-): AggregatedData {
+): { data: AggregatedData; error: unknown } {
   const {
     searchData: { aggregations },
+    error,
   } = useSearchData<unknown, QueryAggs<T>>(query);
   const aggregatedData = aggregateByOrgan(aggregations?.organs.buckets, selectedEntityType === 'Donor');
 
-  return aggregatedData ?? [];
+  return { data: aggregatedData ?? [], error };
 }
 
 export function getKeysFromAggregatedData(aggregatedData: AggregatedData): string[] {
