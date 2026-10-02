@@ -21,6 +21,8 @@ interface SummaryTitleProps extends PropsWithChildren {
    * Pages whose title is a name make that the h1 and render this as a plain label.
    */
   component?: 'h1' | 'p';
+  /** Applied to the entity type text. */
+  'data-testid'?: string;
 }
 
 const titleLinks: Record<AllEntityTypes, string | undefined> = {
@@ -75,7 +77,14 @@ const getSummaryHref = (entityIcon?: keyof typeof entityIconMap, organIcon?: str
   return undefined;
 };
 
-function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon, component = 'h1' }: SummaryTitleProps) {
+function SummaryTitle({
+  children,
+  iconTooltipText,
+  entityIcon,
+  organIcon,
+  component = 'h1',
+  'data-testid': testId,
+}: SummaryTitleProps) {
   const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
   const { ref, inView, entry } = useInView({
@@ -115,7 +124,7 @@ function SummaryTitle({ children, iconTooltipText, entityIcon, organIcon, compon
           <ChevronLeftRounded fontSize="small" />
         </>
       ) : null}
-      <Typography variant="subtitle1" color="primary" ref={ref} component={component}>
+      <Typography variant="subtitle1" color="primary" ref={ref} component={component} data-testid={testId}>
         {children}
       </Typography>
       <InfoTooltipIcon iconTooltipText={iconTooltipText} />

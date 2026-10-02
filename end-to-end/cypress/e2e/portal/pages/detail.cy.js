@@ -27,9 +27,10 @@ entities.forEach(({ type, uuid, provenance, files }) => {
     });
 
     it("uses the entity type as the h1, since its title is a HuBMAP ID", () => {
-      cy.get("h1")
-        .should("have.length", 1)
-        .and("contain", type[0].toUpperCase() + type.slice(1));
+      cy.get("h1").should("have.length", 1);
+      cy.findByTestId("entity-type")
+        .should("have.prop", "tagName", "H1")
+        .and("have.text", type[0].toUpperCase() + type.slice(1));
     });
 
     it("serves its JSON", () => {

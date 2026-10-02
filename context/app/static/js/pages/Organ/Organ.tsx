@@ -65,7 +65,7 @@ function Organ({ organ }: OrganProps) {
   return (
     <OrganContextProvider organ={organ}>
       <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-        <SummaryTitle organIcon={organ.name} data-testid="organs-title" component="p">
+        <SummaryTitle organIcon={organ.name} data-testid="entity-type" component="p">
           Organ
         </SummaryTitle>
         <Typography variant="h1" data-testid="entity-title">

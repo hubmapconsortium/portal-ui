@@ -32,6 +32,7 @@ describe("Organ detail pages", () => {
     cy.visit("/organs/kidney");
     cy.findByTestId("entity-title").should("contain", "Kidney");
     cy.get("h1").should("have.length", 1).and("contain", "Kidney");
+    cy.findByTestId("entity-type").should("have.prop", "tagName", "P").and("have.text", "Organ");
     cy.findByTestId("table-of-contents").find('a[href^="#"]').first().should("contain", "Summary");
     cy.get("#summary").within(() => {
       cy.get('a[href="http://purl.obolibrary.org/obo/UBERON_0002113"]').should("exist");
