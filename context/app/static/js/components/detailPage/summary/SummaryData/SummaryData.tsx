@@ -50,7 +50,8 @@ function SummaryData({
           <LeftTextContainer>
             <Stack direction="row" alignItems="center" gap={1}>
               {titlePrefixIcon}
-              <Typography component="h1" variant="h2" marginBottom={0.5} data-testid="entity-title">
+              {/* An h2: the entity type SummaryTitle above it is the page's h1. */}
+              <Typography component="h2" variant="h2" marginBottom={0.5} data-testid="entity-title">
                 {title}
               </Typography>
             </Stack>
