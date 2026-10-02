@@ -38,11 +38,14 @@ function SummaryData({
   titlePrefixIcon,
 }: SummaryDataProps) {
   const isPublication = publicationEntityTypes.includes(entity_type);
+  // Datasets, samples, and donors are titled by HuBMAP ID, which isn't human-readable, so their entity type is the
+  // page's h1. Other titles (collections, publications, workspaces) are names, so the title is the h1.
+  const titleIsHubmapId = /^HBM\d{3}\.[A-Z]{4}\.\d{3}$/.test(title ?? '');
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
 
   return (
     <Stack spacing={1}>
-      <SummaryTitle data-testid="entity-type" entityIcon={entity_type}>
+      <SummaryTitle data-testid="entity-type" entityIcon={entity_type} component={titleIsHubmapId ? 'h1' : 'p'}>
         {entityTypeDisplay ?? entity_type}
       </SummaryTitle>
       <SpacedSectionButtonRow
@@ -50,8 +53,12 @@ function SummaryData({
           <LeftTextContainer>
             <Stack direction="row" alignItems="center" gap={1}>
               {titlePrefixIcon}
-              {/* An h2: the entity type SummaryTitle above it is the page's h1. */}
-              <Typography component="h2" variant="h2" marginBottom={0.5} data-testid="entity-title">
+              <Typography
+                component={titleIsHubmapId ? 'h2' : 'h1'}
+                variant="h2"
+                marginBottom={0.5}
+                data-testid="entity-title"
+              >
                 {title}
               </Typography>
             </Stack>

@@ -7,6 +7,5 @@ import { useCellTypeName } from './hooks';
 
 export default function CellTypesTitle() {
   const name = useCellTypeName();
-  // An h2: the "Cell Type" SummaryTitle above it is the page's h1.
-  return <PageTitle component="h2">{capitalizeString(name) ?? <Skeleton />}</PageTitle>;
+  return <PageTitle>{capitalizeString(name) ?? <Skeleton />}</PageTitle>;
 }

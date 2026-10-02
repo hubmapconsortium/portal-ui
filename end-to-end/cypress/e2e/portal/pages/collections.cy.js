@@ -25,6 +25,7 @@ describe("Collections", () => {
   it("has a detail page with citation, datasets, and contributors", () => {
     cy.visit(`/browse/collection/${collection.uuid}`);
     cy.findByTestId("entity-title").should("contain", collection.title);
+    cy.get("h1").should("have.length", 1).and("contain", collection.title);
     cy.get("#summary").within(() => {
       cy.contains("Citation");
       cy.get('[aria-label="This DOI link leads to the page you are currently viewing. Click to copy."]').should(

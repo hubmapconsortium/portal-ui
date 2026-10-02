@@ -108,16 +108,10 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
       tableOfContentsTitle="Other Tutorials"
     >
       <Stack spacing={2} pb={2}>
-        <SummaryTitle entityIcon="Tutorial">Tutorials</SummaryTitle>
-        {/* An h2: the SummaryTitle above it is the page's h1. */}
-        <PageTitle
-          component="h2"
-          data-testid="tutorial-title"
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          gap={1}
-        >
+        <SummaryTitle entityIcon="Tutorial" component="p">
+          Tutorials
+        </SummaryTitle>
+        <PageTitle data-testid="tutorial-title" display="flex" flexDirection="row" alignItems="center" gap={1}>
           {title}
         </PageTitle>
         <Description

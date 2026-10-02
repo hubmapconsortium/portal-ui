@@ -16,10 +16,9 @@ function GeneName() {
   return `${capitalizeString(data.approved_name)} (${data.approved_symbol})`;
 }
 
-// An h2: the "Gene" SummaryTitle above it is the page's h1.
 function GenePageTitle() {
   return (
-    <PageTitle component="h2">
+    <PageTitle>
       <Stack direction="row">
         <GeneName />
       </Stack>

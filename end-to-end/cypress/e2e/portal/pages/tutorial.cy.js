@@ -31,6 +31,7 @@ describe("Tutorial Detail Page", () => {
 
       it("displays the tutorial title and summary", () => {
         cy.findByTestId("tutorial-title").should("be.visible").and("contain", tutorialWithIframe.title);
+        cy.get("h1").should("have.length", 1).and("contain", tutorialWithIframe.title);
 
         cy.contains("Tutorials").should("be.visible");
         cy.contains(tutorialWithIframe.description).should("be.visible");
