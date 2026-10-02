@@ -111,7 +111,7 @@ describe("datasets search only", () => {
   });
 
   it("shows PAS microscopy thumbnails in tile view", function () {
-    // assets.test returns 403 for thumbnails (as of 2026-10-01), so this only runs with API_ENV=prod.
+    // This dataset's thumbnail is missing from assets.test (404 as of 2026-10-02), so this only runs with API_ENV=prod.
     cy.env(["API_ENV"]).then(({ API_ENV = "test" }) => {
       if (API_ENV !== "prod") this.skip();
     });
