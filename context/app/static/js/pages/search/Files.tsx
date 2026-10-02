@@ -25,18 +25,13 @@ import { useAppContext } from 'js/components/Contexts';
  *   `useFacetAggregations` for why.
  */
 const filesFacetGroups = {
-  File: [
-    // `isFilterable` adds a text box over the facet's own values. The index has 74 distinct
-    // extensions, well past what a "View More" list makes browsable, and file type is one of the
-    // two things people search by.
-    {
-      field: 'file_extension',
-      type: FACETS.term,
-      order: { type: '_count', dir: 'desc' } as const,
-      isFilterable: true,
-    },
-    { field: 'is_qa_qc', type: FACETS.term },
-    { field: 'is_data_product', type: FACETS.term },
+  // Flat rather than an `organs.hierarchy` -> `organs.label` hierarchy: `organs` is a plain
+  // object array (not `nested`), so a nested terms aggregation cross-multiplies every organ's
+  // hierarchy against every organ's label. Multi-organ datasets then list unrelated children
+  // (the "Small Intestine" bucket shows "Lung (Left)"), which is why SenNet's organ
+  // megahierarchy is not portable here.
+  Organ: [
+    { field: 'organs.label', type: FACETS.term, order: { type: '_term', dir: 'asc' } as const, isFilterable: true },
   ],
   Dataset: [
     // Hierarchical like the dataset search's Dataset Type facet, but with the parent derived rather
@@ -55,13 +50,18 @@ const filesFacetGroups = {
     { field: 'dataset_status', type: FACETS.term },
     { field: 'data_access_level', type: FACETS.term },
   ],
-  // Flat rather than an `organs.hierarchy` -> `organs.label` hierarchy: `organs` is a plain
-  // object array (not `nested`), so a nested terms aggregation cross-multiplies every organ's
-  // hierarchy against every organ's label. Multi-organ datasets then list unrelated children
-  // (the "Small Intestine" bucket shows "Lung (Left)"), which is why SenNet's organ
-  // megahierarchy is not portable here.
-  Organ: [
-    { field: 'organs.label', type: FACETS.term, order: { type: '_term', dir: 'asc' } as const, isFilterable: true },
+  File: [
+    // `isFilterable` adds a text box over the facet's own values. The index has 74 distinct
+    // extensions, well past what a "View More" list makes browsable, and file type is one of the
+    // two things people search by.
+    {
+      field: 'file_extension',
+      type: FACETS.term,
+      order: { type: '_count', dir: 'desc' } as const,
+      isFilterable: true,
+    },
+    { field: 'is_qa_qc', type: FACETS.term },
+    { field: 'is_data_product', type: FACETS.term },
   ],
 };
 

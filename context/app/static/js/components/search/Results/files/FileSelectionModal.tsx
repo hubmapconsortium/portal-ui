@@ -193,7 +193,19 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
       withCloseButton
       maxWidth="lg"
       title={`Select Files — ${target.datasetHubmapId}`}
-      secondaryText={`${formatCount(target.fileCount, 'file')} ${target.fileCount === 1 ? 'matches' : 'match'} the current filters. ${decimal.format(selectedCount)} selected.${datasetStats ? ` ${formatCount(datasetStats.fileCount, 'total file')}.` : ''}`}
+      secondaryText={
+        <>
+          <p>
+            Choose files from this dataset here. They will be included with other files picked for download from the
+            main search page via the &quot;Download Files&quot; button.
+          </p>
+          <Box sx={{ mt: 2, mb: 1 }}>
+            {formatCount(target.fileCount, 'file')} {target.fileCount === 1 ? 'matches' : 'match'} the current filters.{' '}
+            {decimal.format(selectedCount)} selected.
+            {datasetStats ? ` ${formatCount(datasetStats.fileCount, 'total file')}.` : ''}
+          </Box>
+        </>
+      }
       handleClose={handleClose}
       content={
         <Stack spacing={2}>
