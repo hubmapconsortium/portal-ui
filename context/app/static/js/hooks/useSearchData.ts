@@ -79,6 +79,7 @@ interface UseSearchDataConfig extends SWRConfiguration {
 interface UseSearchData<Documents, Aggs = Record<string, AggregationsAggregate>> {
   searchData: SearchResponseBody<Documents, Aggs>;
   isLoading: boolean;
+  error: SWRError | undefined;
 }
 
 interface UseHitsData<Documents> {
@@ -130,14 +131,14 @@ export default function useSearchData<Documents, Aggs>(
     return `search:${elasticsearchEndpoint}:${hashString(requestInit.body as string)}`;
   }, [shouldFetch, elasticsearchEndpoint, requestInit]);
 
-  const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
+  const { data, isLoading, error } = useSWR<SearchResponseBody<Documents, Aggs>, SWRError>(
     swrKey,
     () => fetchFn({ url: elasticsearchEndpoint, requestInit }) as Promise<SearchResponseBody<Documents, Aggs>>,
     swrConfig,
   );
 
   // The data is guaranteed to be defined because we provide a fallbackData
-  return { searchData: data!, isLoading };
+  return { searchData: data!, isLoading, error };
 }
 
 const EMPTY_HITS: never[] = [];
