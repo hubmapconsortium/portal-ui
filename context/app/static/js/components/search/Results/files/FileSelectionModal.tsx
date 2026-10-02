@@ -131,7 +131,7 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                   // without the individual paths having to be enumerated in the store.
                   checked={isWholeSelected || Boolean(selected?.has(file.rel_path))}
                   onChange={() => toggleFile(datasetUuid, file.rel_path)}
-                  inputProps={{ 'aria-label': `Select ${file.rel_path}` }}
+                  slotProps={{ input: { 'aria-label': `Select ${file.rel_path}` } }}
                 />
               </TableCell>
               <TableCell sx={{ wordBreak: 'break-all' }}>
