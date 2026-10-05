@@ -56,6 +56,16 @@ def forbidden(e):
     return render_react_error(403, 'Forbidden')
 
 
+def bad_gateway(e):
+    """A 502 means an API could not be reached or returned an invalid response."""
+    return render_react_error(502, 'Bad Gateway')
+
+
+def service_unavailable(e):
+    """A 503 means an API is temporarily unavailable."""
+    return render_react_error(503, 'Service Unavailable')
+
+
 def gateway_timeout(e):
     """A 504 means the API has timed out."""
     return render_react_error(504, 'Gateway Timeout')
@@ -121,6 +131,8 @@ def create_app(testing=False):
     app.register_error_handler(401, unauthorized)
     app.register_error_handler(403, forbidden)
     app.register_error_handler(404, not_found)
+    app.register_error_handler(502, bad_gateway)
+    app.register_error_handler(503, service_unavailable)
     app.register_error_handler(504, gateway_timeout)
     app.register_error_handler(500, any_other_error)
 
