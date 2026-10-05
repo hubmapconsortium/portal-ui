@@ -8,8 +8,8 @@ import time
 from urllib.parse import urlparse, quote
 from xml.sax.saxutils import escape as xml_escape
 
-# Private, but so is the `_request` this module already relies on; both come from the
-# portal-visualization client that portal-ui pins.
+# `_paginate_search_after` is private, but it comes from the portal-visualization client
+# that portal-ui pins.
 from portal_visualization.client import HEAVY_RELATIVE_FIELDS, _paginate_search_after
 
 from .utils import _load_tutorials, get_organs, get_valid_tutorial_routes
@@ -707,7 +707,7 @@ def _get_publication_data_types_and_organs(uuid: str):
 
     data_types, organs = [[], []]
     try:
-        response = client._request(elasticsearch_url, request)
+        response = client.request(elasticsearch_url, request)
         aggregations = response.get('aggregations')
         data_types = [
             bucket.get('key') for bucket in aggregations.get('data_types').get('buckets')
@@ -792,7 +792,7 @@ def _get_sitemap_entities_cached(entity_type, hour_bucket):
     }
     try:
         hits = _paginate_search_after(
-            lambda body: client._request(elasticsearch_url, body),
+            lambda body: client.request(elasticsearch_url, body),
             query,
             description=f'{entity_type} sitemap',
         )
@@ -816,7 +816,7 @@ def _get_all_template_keys(hour_bucket):
     client = get_client()
     templates_url = current_app.config['USER_TEMPLATES_ENDPOINT'] + '/templates/jupyter_lab'
     try:
-        return list(client._request(templates_url)['data'].keys())
+        return list(client.request(templates_url)['data'].keys())
     except Exception as e:
         # A `finally: return response_json['data'].keys()` here swallowed the request error
         # and then raised KeyError, taking down the whole sitemap. Losing the template pages
@@ -1063,7 +1063,7 @@ def _get_related_publication_citations(entity):
         ],
     }
     try:
-        response = client._request(elasticsearch_url, query)
+        response = client.request(elasticsearch_url, query)
         hits = response.get('hits', {}).get('hits', [])
     except Exception as e:
         # The dataset page must still render, and the rest of the LD is still worth serving,

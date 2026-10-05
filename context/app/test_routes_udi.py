@@ -77,7 +77,7 @@ mock_ontology_field_types = [
 def mock_es_post(path, **kwargs):
     class MockResponse:
         def __init__(self):
-            self.status_code = 0  # _request requires a status code
+            self.status_code = 0  # ApiClient.request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
@@ -97,7 +97,7 @@ def mock_es_get(path, **kwargs):
 
     class MockResponse:
         def __init__(self):
-            self.status_code = 0  # _request requires a status code
+            self.status_code = 0  # ApiClient.request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
@@ -110,8 +110,8 @@ def mock_es_get(path, **kwargs):
 
 
 def test_datapackage(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.get('/metadata/v0/udi/datapackage.json')
     assert response.status == '200 OK'
     data = response.get_json()
@@ -167,8 +167,8 @@ def test_datapackage(client, mocker):
 
 
 def test_datapackage_cors(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.get(
         '/metadata/v0/udi/datapackage.json',
         headers={'Origin': 'https://hms-dbmi.github.io'},
@@ -177,8 +177,8 @@ def test_datapackage_cors(client, mocker):
 
 
 def test_datapackage_no_cors_for_unknown_origin(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.get(
         '/metadata/v0/udi/datapackage.json',
         headers={'Origin': 'https://evil.com'},
@@ -478,8 +478,8 @@ def test_yac_completions_non_hubmap_authed_user_needs_header(client):
 
 def _patch_es(mocker):
     return (
-        mocker.patch('requests.post', side_effect=mock_es_post),
-        mocker.patch('requests.get', side_effect=mock_es_get),
+        mocker.patch('requests.Session.post', side_effect=mock_es_post),
+        mocker.patch('requests.Session.get', side_effect=mock_es_get),
     )
 
 
@@ -651,8 +651,8 @@ def _patch_es_with_assaytype(mocker):
         return MockResponse()
 
     return (
-        mocker.patch('requests.post', side_effect=_post),
-        mocker.patch('requests.get', side_effect=mock_es_get),
+        mocker.patch('requests.Session.post', side_effect=_post),
+        mocker.patch('requests.Session.get', side_effect=mock_es_get),
     )
 
 
@@ -695,8 +695,8 @@ def _capture_es_post_bodies(mocker):
 
         return MockResponse()
 
-    mocker.patch('requests.post', side_effect=_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     return bodies
 
 

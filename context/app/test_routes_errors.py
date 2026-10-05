@@ -30,7 +30,7 @@ def mock_post_400(path, **kwargs):
 
 
 def test_400_html_page(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_post_400)
+    mocker.patch('requests.Session.post', side_effect=mock_post_400)
     response = client.get('/browse/donor/FAKE')
     assert response.status == '400 BAD REQUEST'
 
@@ -48,7 +48,7 @@ def mock_post_401(path, **kwargs):
 
 
 def test_401_html_page(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_post_401)
+    mocker.patch('requests.Session.post', side_effect=mock_post_401)
     response = client.get('/browse/donor/FAKE')
     assert response.status == '401 UNAUTHORIZED'
 
@@ -69,11 +69,17 @@ def test_404_html_page(client, path):
     assert response.status == '404 NOT FOUND'
 
 
-def mock_timeout_post(path, **kwargs):
-    raise requests.exceptions.ConnectTimeout()
-
-
-def test_504_html_page(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_timeout_post)
+@pytest.mark.parametrize(
+    ('error', 'status'),
+    [
+        (requests.exceptions.ConnectTimeout(), '504 GATEWAY TIMEOUT'),
+        (requests.exceptions.ReadTimeout(), '504 GATEWAY TIMEOUT'),
+        (requests.exceptions.ConnectionError(), '502 BAD GATEWAY'),
+    ],
+)
+def test_upstream_failure_html_page(client, mocker, error, status):
+    mocker.patch('requests.Session.post', side_effect=error)
     response = client.get('/browse/donor/FAKE')
-    assert response.status == '504 GATEWAY TIMEOUT'
+    assert response.status == status
+    # Rendered by our handler (the React error page), not werkzeug's bare default page.
+    assert f'"errorCode": {status[:3]}' in response.get_data(as_text=True)
