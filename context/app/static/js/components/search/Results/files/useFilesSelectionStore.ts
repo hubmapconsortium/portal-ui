@@ -26,6 +26,8 @@ interface FilesSelectionStore {
   /** Explicitly chosen files, by dataset uuid. Never holds an empty set. */
   selectedFilesByDataset: Map<string, Set<string>>;
   toggleWholeDataset: (datasetUuid: string) => void;
+  removeFiles: (datasetUuid: string, files: string[]) => void;
+  toggleFiles: (datasetUuid: string, files: string[]) => void;
   toggleFile: (datasetUuid: string, relPath: string) => void;
   /** Merges the given files into the selection, by dataset uuid, in one update. */
   addFiles: (byDataset: Map<string, string[]>) => void;
@@ -57,6 +59,50 @@ const storeDefinition = (
     }
     // Whole and partial selection are mutually exclusive.
     set({ wholeDatasets: next, selectedFilesByDataset: withoutDataset(selectedFilesByDataset, datasetUuid) });
+  },
+
+  removeFiles: (datasetUuid: string, files: string[]) => {
+    const { wholeDatasets, selectedFilesByDataset } = get();
+    const nextFiles = new Map(selectedFilesByDataset);
+    const current = new Set(nextFiles.get(datasetUuid) ?? []);
+
+    files.forEach((relPath) => {
+      if (current.has(relPath)) {
+        current.delete(relPath);
+      }
+    });
+
+    if (current.size === 0) {
+      nextFiles.delete(datasetUuid);
+    }
+
+    const nextWhole = new Set(wholeDatasets);
+    nextWhole.delete(datasetUuid);
+    set({ wholeDatasets: nextWhole, selectedFilesByDataset: nextFiles });
+  },
+
+  toggleFiles: (datasetUuid: string, files: string[]) => {
+    const { wholeDatasets, selectedFilesByDataset } = get();
+    const nextFiles = new Map(selectedFilesByDataset);
+    const current = new Set(nextFiles.get(datasetUuid) ?? []);
+
+    files.forEach((relPath) => {
+      if (current.has(relPath)) {
+        current.delete(relPath);
+      } else {
+        current.add(relPath);
+      }
+    });
+
+    if (current.size === 0) {
+      nextFiles.delete(datasetUuid);
+    } else {
+      nextFiles.set(datasetUuid, current);
+    }
+
+    const nextWhole = new Set(wholeDatasets);
+    nextWhole.delete(datasetUuid);
+    set({ wholeDatasets: nextWhole, selectedFilesByDataset: nextFiles });
   },
 
   toggleFile: (datasetUuid: string, relPath: string) => {

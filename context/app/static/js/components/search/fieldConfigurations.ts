@@ -160,7 +160,7 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
       label: 'Files',
     },
     file_extension: {
-      label: 'File Type',
+      label: 'File Extension',
     },
     data_class: {
       label: 'Data Class',

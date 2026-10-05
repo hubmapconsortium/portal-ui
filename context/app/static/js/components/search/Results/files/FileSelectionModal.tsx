@@ -52,23 +52,38 @@ const NO_FACET_FILTERS: FiltersType = {};
 function FileRows({ target }: { target: FileSelectionTarget }) {
   const { datasetUuid, dataAccessLevel, showAllFiles, fileCount } = target;
   const { files, error, isLoading, isReachingEnd, loadMore } = useDatasetFiles(datasetUuid, showAllFiles);
-  const wholeDatasets = useFilesSelectionStore((state) => state.wholeDatasets);
+
   const selectedFilesByDataset = useFilesSelectionStore((state) => state.selectedFilesByDataset);
   const toggleFile = useFilesSelectionStore((state) => state.toggleFile);
-  const toggleWholeDataset = useFilesSelectionStore((state) => state.toggleWholeDataset);
+  const toggleFiles = useFilesSelectionStore((state) => state.toggleFiles);
+  const removeFiles = useFilesSelectionStore((state) => state.removeFiles);
   const clearDataset = useFilesSelectionStore((state) => state.clearDataset);
+
+  const selected = useMemo(() => selectedFilesByDataset.get(datasetUuid), [selectedFilesByDataset, datasetUuid]);
+  const isAllSelected = useMemo(() => {
+    if (!selected) return false;
+    return files.every((file) => selected.has(file.rel_path));
+  }, [selected, files]);
+  const isIndeterminate = selected && !isAllSelected;
 
   const handleSelectAll = useCallback(() => {
     if (!target) return;
-    if (wholeDatasets.has(target.datasetUuid) || selectedFilesByDataset.has(target.datasetUuid)) {
-      clearDataset(target.datasetUuid);
+    if (isAllSelected || isIndeterminate) {
+      if (showAllFiles) {
+        clearDataset(target.datasetUuid);
+      } else {
+        removeFiles(
+          target.datasetUuid,
+          files.map((file) => file.rel_path),
+        );
+      }
     } else {
-      toggleWholeDataset(target.datasetUuid);
+      toggleFiles(
+        target.datasetUuid,
+        files.map((file) => file.rel_path),
+      );
     }
-  }, [target, wholeDatasets, selectedFilesByDataset, clearDataset, toggleWholeDataset]);
-
-  const isWholeSelected = wholeDatasets.has(datasetUuid);
-  const selected = selectedFilesByDataset.get(datasetUuid);
+  }, [target, isAllSelected, isIndeterminate, showAllFiles, clearDataset, files, toggleFiles, removeFiles]);
 
   if (error) {
     return <Alert severity="error">Unable to load the files for this dataset.</Alert>;
@@ -106,8 +121,8 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                     control={
                       <Checkbox
                         color="secondary"
-                        checked={isWholeSelected}
-                        indeterminate={Boolean(selected)}
+                        checked={isAllSelected}
+                        indeterminate={isIndeterminate}
                         onChange={handleSelectAll}
                       />
                     }
@@ -129,9 +144,9 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
                   color="secondary"
                   // A whole-dataset selection includes every file, so each row reads as checked
                   // without the individual paths having to be enumerated in the store.
-                  checked={isWholeSelected || Boolean(selected?.has(file.rel_path))}
+                  checked={isAllSelected || Boolean(selected?.has(file.rel_path))}
                   onChange={() => toggleFile(datasetUuid, file.rel_path)}
-                  inputProps={{ 'aria-label': `Select ${file.rel_path}` }}
+                  slotProps={{ input: { 'aria-label': `Select ${file.rel_path}` } }}
                 />
               </TableCell>
               <TableCell sx={{ wordBreak: 'break-all' }}>
@@ -193,7 +208,19 @@ function FileSelectionModal({ target, handleClose }: FileSelectionModalProps) {
       withCloseButton
       maxWidth="lg"
       title={`Select Files — ${target.datasetHubmapId}`}
-      secondaryText={`${formatCount(target.fileCount, 'file')} ${target.fileCount === 1 ? 'matches' : 'match'} the current filters. ${decimal.format(selectedCount)} selected.${datasetStats ? ` ${formatCount(datasetStats.fileCount, 'total file')}.` : ''}`}
+      secondaryText={
+        <>
+          <p>
+            Choose files from this dataset here. They will be included with other files picked for download from the
+            main search page via the &quot;Download Files&quot; button.
+          </p>
+          <Box sx={{ mt: 2, mb: 1 }}>
+            {formatCount(target.fileCount, 'file')} {target.fileCount === 1 ? 'matches' : 'match'} the current filters.{' '}
+            {decimal.format(selectedCount)} selected.
+            {datasetStats ? ` ${formatCount(datasetStats.fileCount, 'total file')}.` : ''}
+          </Box>
+        </>
+      }
       handleClose={handleClose}
       content={
         <Stack spacing={2}>
