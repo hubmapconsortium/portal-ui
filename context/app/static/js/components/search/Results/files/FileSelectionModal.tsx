@@ -55,10 +55,11 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
 
   const selectedFilesByDataset = useFilesSelectionStore((state) => state.selectedFilesByDataset);
   const toggleFile = useFilesSelectionStore((state) => state.toggleFile);
+  const toggleFiles = useFilesSelectionStore((state) => state.toggleFiles);
   const removeFiles = useFilesSelectionStore((state) => state.removeFiles);
   const clearDataset = useFilesSelectionStore((state) => state.clearDataset);
 
-  const selected = selectedFilesByDataset.get(datasetUuid);
+  const selected = useMemo(() => selectedFilesByDataset.get(datasetUuid), [selectedFilesByDataset, datasetUuid]);
   const isAllSelected = useMemo(() => {
     if (!selected) return false;
     return files.every((file) => selected.has(file.rel_path));
@@ -77,11 +78,12 @@ function FileRows({ target }: { target: FileSelectionTarget }) {
         );
       }
     } else {
-      files.forEach((file) => {
-        toggleFile(target.datasetUuid, file.rel_path);
-      });
+      toggleFiles(
+        target.datasetUuid,
+        files.map((file) => file.rel_path),
+      );
     }
-  }, [target, isAllSelected, isIndeterminate, showAllFiles, clearDataset, files, toggleFile, removeFiles]);
+  }, [target, isAllSelected, isIndeterminate, showAllFiles, clearDataset, files, toggleFiles, removeFiles]);
 
   if (error) {
     return <Alert severity="error">Unable to load the files for this dataset.</Alert>;
