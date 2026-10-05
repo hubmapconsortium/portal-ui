@@ -1,0 +1,5 @@
+- Change the "File Type" to "File Extension" and the "Find file type" description in the search box to "Find file extension"
+- Move the "File" facet section to the bottom of the list of facets
+- Move the "Organ" facet section to the top of the list of facets
+- Add a description to the top of the dialog/screen that pops up for individual file selection when clicking on a "Choose Files (x)" link in the "Files" column: Choose files from this dataset here. They will be included with other files picked for download from the main search page via the "Download Files" button
+- Fix issue of selected label counts and checkbox check state when toggling between the "Show all x files" / "Show x filtered files" switch in modal
