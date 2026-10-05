@@ -246,7 +246,7 @@ describe('Files search page', () => {
   test('hides a facet with no buckets but shows one with buckets', async () => {
     render(<Files />);
 
-    expect(await screen.findByText('File Type')).toBeInTheDocument();
+    expect(await screen.findByText('File Extension')).toBeInTheDocument();
     // `analyte_class` came back with no buckets, so it must not render an empty accordion.
     expect(screen.queryByText('Analyte Class')).not.toBeInTheDocument();
   });
