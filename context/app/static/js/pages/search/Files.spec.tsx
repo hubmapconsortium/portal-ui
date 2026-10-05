@@ -355,18 +355,18 @@ describe('Files search page', () => {
     // the whole sidebar visibly disappears as the user clicks.
     render(<Files />);
 
-    const facetLabel = await screen.findByText('File Type');
+    const facetLabel = await screen.findByText('File Extension');
     expect(facetLabel).toBeInTheDocument();
 
     await userEvent.type(screen.getByLabelText('Filter by file or folder name'), 'expr');
 
     // Present continuously, not merely present again once the new response lands.
-    expect(screen.getByText('File Type')).toBeInTheDocument();
+    expect(screen.getByText('File Extension')).toBeInTheDocument();
     await waitFor(
       () => expect(facetsRequestBodies.some((body) => JSON.stringify(body).includes('wildcard'))).toBe(true),
       { timeout: 5000 },
     );
-    expect(screen.getByText('File Type')).toBeInTheDocument();
+    expect(screen.getByText('File Extension')).toBeInTheDocument();
   });
 
   test('requests stats only for the datasets a query actually returned', async () => {
