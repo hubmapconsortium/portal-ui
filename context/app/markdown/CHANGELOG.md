@@ -1,6 +1,7 @@
 # Changelog
 
 ## v1.53.1 - 2026-10-05
+
 - Change the "File Type" to "File Extension" and the "Find file type" description in the search box to "Find file extension"
 - Move the "File" facet section to the bottom of the list of facets
 - Move the "Organ" facet section to the top of the list of facets
