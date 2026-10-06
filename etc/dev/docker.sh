@@ -4,7 +4,7 @@ set -o errexit
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 CONTAINER_NAME=hubmap-portal-ui
-CONF_PATH=context/instance/app.conf
+CONF_PATH=${CONF_PATH:-context/instance/app.conf}
 PORT=$1
 
 [ "$PORT" = 5000 ] || [ "$PORT" = 5001 ] || die "Usage: $0 PORT [IMAGE_NAME]

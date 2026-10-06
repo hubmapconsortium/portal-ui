@@ -24,3 +24,5 @@ overrides:
   piscina: '>=4.9.3'
   lodash: '>=4.18.1'
   minimatch: '>=10.2.5'
+  qs: ^6.16.0
+  d3-color: ^3.1.0

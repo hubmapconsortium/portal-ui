@@ -65,10 +65,10 @@ function Organ({ organ }: OrganProps) {
   return (
     <OrganContextProvider organ={organ}>
       <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-        <SummaryTitle organIcon={organ.name} data-testid="organs-title">
+        <SummaryTitle organIcon={organ.name} data-testid="entity-type" component="p">
           Organ
         </SummaryTitle>
-        <Typography variant="h1" component="h2" data-testid="entity-title">
+        <Typography variant="h1" data-testid="entity-title">
           {organ.name}
         </Typography>
         <Description shouldDisplay={shouldDisplaySection[summaryId]} />

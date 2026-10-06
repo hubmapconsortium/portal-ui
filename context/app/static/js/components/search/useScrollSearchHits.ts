@@ -9,7 +9,7 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { getSearchAfterSort, getCombinedHits } from 'js/hooks/useSearchData';
 import { buildQuery } from './utils';
 import { SearchStoreState } from './store';
-import useESmapping, { isESMapping, Mappings } from './useEsMapping';
+import { isESMapping, Mappings, useESmappingRequest } from './useEsMapping';
 
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
@@ -88,7 +88,7 @@ export function useScrollSearchHits<Doc, Aggs>({
   ...rest
 }: Omit<SearchStoreState, 'view' | 'type' | 'analyticsCategory' | 'initialFilters'>) {
   const authHeader = useAuthHeader();
-  const mappings = useESmapping(mappingIndex);
+  const { mappings, error: mappingError } = useESmappingRequest(mappingIndex);
   // When a separate endpoint serves the facets, asking for aggregations here as well would
   // pay their full cost twice -- and against a large index the combined request is far
   // slower than either half (see `useFacetAggregations`).
@@ -159,7 +159,10 @@ export function useScrollSearchHits<Doc, Aggs>({
     setHasRun(true);
   }
 
-  const z = isLoading || !hasRun;
+  // A failed request never delivers data, so without this a search error would look like loading forever.
+  // A failed mapping request also counts: the search waits on the mapping and would never start.
+  const searchError = error ?? mappingError;
+  const z = !searchError && (isLoading || !hasRun);
 
   // SWR Infinite's own idiom for "a further page is in flight": the slot for the newest page exists
   // but holds nothing yet. `isValidating` is not a substitute -- it also fires when a filter change
@@ -169,7 +172,7 @@ export function useScrollSearchHits<Doc, Aggs>({
   return {
     aggregations,
     searchHits,
-    error,
+    error: searchError,
     isLoading: z,
     isValidating,
     isLoadingMore,

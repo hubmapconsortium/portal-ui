@@ -11,7 +11,7 @@ function SavedLists() {
 
   return (
     <Stack spacing={1} marginBottom={10}>
-      <Typography variant="h2" data-testid="my-lists-title">
+      <Typography variant="h2" component="h1" data-testid="my-lists-title">
         My Lists
       </Typography>
       <Stack spacing={3}>

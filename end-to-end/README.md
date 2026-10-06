@@ -20,3 +20,7 @@ Some additional steps are necessary in order to run GUI applications (such as Cy
 5. Launch the X server (if using VcXsrv, look for XLaunch). Client/startup settings can be left default, but under Extra settings make sure to check the "Disable access control" checkbox. Allow public AND private networks when Windows prompts for permissions on first launch.
 6. Make sure you've used `source ~/.bashrc` to add the DISPLAY environment variable to your shell's environment or have launched another terminal since adding those lines.
 7. Launch Cypress by running `npm run cypress` in this directory.
+
+## Running the portal suite
+
+`./etc/test/test-cypress.sh portal` builds the portal image and runs every spec under `cypress/e2e/portal/` against it. By default the portal uses the test environment APIs from `example-app.conf`; set `API_ENV=prod` to use the production APIs from `etc/test/prod-endpoints.conf`. The services spec checks the endpoints for whichever environment is selected.
