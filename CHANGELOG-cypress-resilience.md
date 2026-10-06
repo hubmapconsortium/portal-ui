@@ -8,3 +8,4 @@
 - Show errors on the home page when the entity counts or datasets chart requests fail, instead of loading skeletons that never resolve. The shared `useSearchData` hook now returns the request error. The organs page chart gets the same error state.
 - Upgrade Cypress to 16 and run it in Chrome, since Electron is deprecated as a test browser. Re-enable the publication page's entity header test and add the same check, plus its JSON link, to the detail page spec.
 - Update urllib3 to 2.8.0, PyJWT to 2.15.1, and anyio to 4.14.2 to address Dependabot security alerts, and raise their security floors in `pyproject.toml`.
+- Update JavaScript dependencies flagged by Dependabot, including hono, undici, fast-uri, ip-address, js-yaml, dompurify, form-data, tmp and systeminformation, within their existing version ranges. Add pnpm overrides for `qs` (6.16) and `d3-color` (3.1), whose parents pin vulnerable ranges.
