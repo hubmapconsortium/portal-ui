@@ -47,7 +47,7 @@ def mock_publications_post(publications):
 def app_context(mocker):
     # _get_dataset_ld reads request.base_url for the `url` field, and queries Elasticsearch
     # for related publications. Default to none, so citation-specific tests opt in.
-    mocker.patch('requests.post', side_effect=mock_publications_post([]))
+    mocker.patch('requests.Session.post', side_effect=mock_publications_post([]))
     app = create_app(testing=True)
     with app.test_request_context('/browse/dataset/fake-uuid?redirected=True'):
         yield
@@ -148,7 +148,7 @@ def test_citation_holds_related_publications(mocker):
     "whenever possible", so each snippet ends in the publication's DOI.
     """
     mocker.patch(
-        'requests.post',
+        'requests.Session.post',
         side_effect=mock_publications_post(
             [
                 {
@@ -183,7 +183,7 @@ def test_citation_query_covers_processed_descendants(mocker):
     A publication may reference a processed descendant rather than the raw dataset, so the
     lookup has to match on the dataset and every descendant.
     """
-    post = mocker.patch('requests.post', side_effect=mock_publications_post([]))
+    post = mocker.patch('requests.Session.post', side_effect=mock_publications_post([]))
     app = create_app(testing=True)
     with app.test_request_context('/browse/dataset/fake-uuid'):
         _get_dataset_ld({**DATASET, 'descendant_ids': ['processed-uuid', 'support-uuid']})
@@ -199,7 +199,7 @@ def test_citation_query_covers_processed_descendants(mocker):
 
 def test_citation_survives_a_failed_publication_lookup(mocker):
     """The rest of the LD is still worth serving if the publication query fails."""
-    mocker.patch('requests.post', side_effect=Exception('Elasticsearch is down'))
+    mocker.patch('requests.Session.post', side_effect=Exception('Elasticsearch is down'))
     app = create_app(testing=True)
     with app.test_request_context('/browse/dataset/fake-uuid'):
         ld = _get_dataset_ld(DATASET)
@@ -355,8 +355,8 @@ def test_funder_ror_is_the_common_fund(app_context):
 def test_canonical_link_drops_query_string(client, mocker):
     from .test_routes_main import mock_prov_get, mock_search_donor_post
 
-    mocker.patch('requests.get', side_effect=mock_prov_get)
-    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    mocker.patch('requests.Session.get', side_effect=mock_prov_get)
+    mocker.patch('requests.Session.post', side_effect=mock_search_donor_post)
     response = client.get('/browse/donor/fake-uuid?redirected=True&redirectedFromId=HBM999')
     html = response.data.decode('utf8')
     assert '<link rel="canonical" href="http://localhost/browse/donor/fake-uuid">' in html
@@ -367,8 +367,8 @@ def test_no_ld_script_for_non_datasets(client, mocker):
     # tag is decided server-side, not by the bundle.
     from .test_routes_main import mock_prov_get, mock_search_donor_post
 
-    mocker.patch('requests.get', side_effect=mock_prov_get)
-    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    mocker.patch('requests.Session.get', side_effect=mock_prov_get)
+    mocker.patch('requests.Session.post', side_effect=mock_search_donor_post)
     response = client.get('/browse/donor/fake-uuid')
     assert 'application/ld+json' not in response.data.decode('utf8')
 
@@ -404,8 +404,8 @@ def test_details_excludes_heavy_relative_lists(client, mocker):
         bodies.append(kwargs.get('json'))
         return mock_search_dataset_post(path, **kwargs)
 
-    mocker.patch('requests.get', side_effect=mock_prov_get)
-    mocker.patch('requests.post', side_effect=capture)
+    mocker.patch('requests.Session.get', side_effect=mock_prov_get)
+    mocker.patch('requests.Session.post', side_effect=capture)
 
     client.get('/browse/dataset/fake-uuid')
     entity_queries = [b for b in bodies if b and 'ids' in str(b.get('query', ''))]
@@ -426,8 +426,8 @@ def test_dataset_ld_is_in_the_served_html(client, mocker):
     """
     from .test_routes_main import mock_prov_get
 
-    mocker.patch('requests.get', side_effect=mock_prov_get)
-    mocker.patch('requests.post', side_effect=mock_search_dataset_post)
+    mocker.patch('requests.Session.get', side_effect=mock_prov_get)
+    mocker.patch('requests.Session.post', side_effect=mock_search_dataset_post)
     response = client.get('/browse/dataset/fake-uuid')
     assert response.status == '200 OK'
     html = response.data.decode('utf8')
@@ -502,7 +502,7 @@ def test_processed_dataset_redirects_permanently(client, mocker):
     permanent. A 302 would leave each processed URL canonical in Google's eyes and eligible
     for indexing as a near-duplicate of the primary dataset page.
     """
-    mocker.patch('requests.post', side_effect=mock_processed_dataset_post)
+    mocker.patch('requests.Session.post', side_effect=mock_processed_dataset_post)
     response = client.get('/browse/dataset/processed-uuid')
     assert response.status == '301 MOVED PERMANENTLY'
     assert response.location.startswith('/browse/dataset/raw-uuid')
@@ -513,7 +513,7 @@ def test_sitemap_index(client, mocker):
     from .routes_browse import _get_sitemap_entities_cached
 
     _get_sitemap_entities_cached.cache_clear()
-    mocker.patch('requests.post', side_effect=mock_sitemap_search_post)
+    mocker.patch('requests.Session.post', side_effect=mock_sitemap_search_post)
     response = client.get('/sitemap.xml')
     _get_sitemap_entities_cached.cache_clear()
 
@@ -573,7 +573,7 @@ def test_sitemap_entity_includes_lastmod(client, mocker):
 
     # The lookup is memoized per hour bucket; clear it so this test sees the mock.
     _get_sitemap_entities_cached.cache_clear()
-    mocker.patch('requests.post', side_effect=mock_sitemap_search_post)
+    mocker.patch('requests.Session.post', side_effect=mock_sitemap_search_post)
     response = client.get('/sitemap-dataset.xml')
     _get_sitemap_entities_cached.cache_clear()
 
@@ -593,7 +593,7 @@ def test_sitemap_lists_only_datasets_with_their_own_page(client, mocker):
     from .routes_browse import _get_sitemap_entities_cached
 
     _get_sitemap_entities_cached.cache_clear()
-    post = mocker.patch('requests.post', side_effect=mock_sitemap_search_post)
+    post = mocker.patch('requests.Session.post', side_effect=mock_sitemap_search_post)
     client.get('/sitemap-dataset.xml')
     _get_sitemap_entities_cached.cache_clear()
 
@@ -647,7 +647,7 @@ def five_entities_per_sitemap(mocker):
     from . import routes_browse
 
     mocker.patch.object(routes_browse, 'SITEMAP_MAX_URLS', 5)
-    mocker.patch('requests.post', side_effect=mock_many_entities_post(12))
+    mocker.patch('requests.Session.post', side_effect=mock_many_entities_post(12))
     routes_browse._get_sitemap_entities_cached.cache_clear()
     yield
     routes_browse._get_sitemap_entities_cached.cache_clear()
