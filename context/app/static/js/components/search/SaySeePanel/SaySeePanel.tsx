@@ -20,6 +20,7 @@ import SaySeePanelDescription from './SeeSayPanelDescription';
 import SaySeeWelcomeDialog from './SaySeeWelcomeDialog';
 import OpenInWorkspacesFromYAC from './OpenInWorkspacesFromYAC';
 import useSaySeeDownloadActions from './saySeeDownloadActions';
+import SaySeeChatCSS from './SaySeeChatCSS';
 
 import 'udi-yac/style.css';
 
@@ -152,6 +153,7 @@ function SaySeePanel() {
             )}
           </Suspense>
           <BodyExpandedCSS id={SAY_SEE_VIZ_ID} />
+          <SaySeeChatCSS />
         </ExpandableDiv>
       </Paper>
     </Stack>
