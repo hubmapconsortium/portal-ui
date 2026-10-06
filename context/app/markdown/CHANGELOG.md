@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.53.2 - 2026-10-06
+
+- Fix search page filters stored in the URL's `q` parameter being lost when the page is reloaded or the link is shared, which affected most facets on the Files search page.
+
+
+
 ## v1.53.1 - 2026-10-05
 
 - Change the "File Type" to "File Extension" and the "Find file type" description in the search box to "Find file extension"
