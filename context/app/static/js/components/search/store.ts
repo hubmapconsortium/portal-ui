@@ -525,7 +525,13 @@ function replaceURLSearchParams(state: SearchStoreState) {
     ? LZString.compressToEncodedURIComponent(
         JSON.stringify(
           { search, filenameFilter, sortField, filters: remainingFilters, includeSupersededEntities },
-          (_key, value: unknown) => (value instanceof Set ? [...value] : value),
+          // Reads the raw value from the holder rather than `value`, which is the result of `toJSON`:
+          // vega-lite patches `Set.prototype.toJSON` to return a `"Set(...)"` string, which the URL
+          // state schema then rejects on reload, dropping every filter in `q`.
+          function replacer(this: Record<string, unknown>, key: string, value: unknown) {
+            const raw = this[key];
+            return raw instanceof Set ? [...raw] : value;
+          },
         ),
       )
     : null;
