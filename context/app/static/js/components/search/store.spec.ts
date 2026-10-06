@@ -172,6 +172,31 @@ describe('replaceURLSearchParams', () => {
     expect(params.get('visualization')).toBeNull();
     expect(params.get('mode')).toBe('say-see');
   });
+
+  test('round-trips q-blob filters when Set.prototype.toJSON is patched', () => {
+    // Regression: vega-lite patches `Set.prototype.toJSON` globally, so filter values were written
+    // to `q` as `"Set(...)"` strings, and every filter in `q` was dropped on reload.
+    const { toJSON } = Set.prototype as { toJSON?: unknown };
+    Object.assign(Set.prototype, { toJSON: () => 'Set()' });
+    try {
+      history.replace('/search/files');
+      const store = createStore({
+        initialState: {
+          ...initialState,
+          filters: { file_extension: { type: 'TERM', values: new Set<string>() } },
+        },
+      });
+      store.getState().filterTerm({ term: 'file_extension', value: '.tif' });
+
+      expect(parseReadableParams(history.location.search).filters?.file_extension).toEqual({
+        type: 'TERM',
+        values: ['.tif'],
+      });
+    } finally {
+      Object.assign(Set.prototype, { toJSON });
+      if (toJSON === undefined) delete (Set.prototype as { toJSON?: unknown }).toJSON;
+    }
+  });
 });
 
 describe('getSearchURL', () => {

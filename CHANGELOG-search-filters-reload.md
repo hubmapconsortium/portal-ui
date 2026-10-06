@@ -1,0 +1,1 @@
+- Fix search page filters stored in the URL's `q` parameter being lost when the page is reloaded or the link is shared, which affected most facets on the Files search page.
