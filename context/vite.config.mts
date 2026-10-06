@@ -1,5 +1,5 @@
 import { defineConfig, type Plugin } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import viteCompression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -109,18 +109,15 @@ export default defineConfig(({ command }) => ({
       js: resolve(__dirname, 'app/static/js'),
       assets: resolve(__dirname, 'app/static/assets'),
       'shared-styles': resolve(__dirname, 'app/static/js/shared-styles'),
-      '@mui/styled-engine': '@mui/styled-engine-sc',
       'txml/txml': 'txml/dist/txml',
     },
-    dedupe: ['react', 'react-dom', '@mui/material', 'styled-components'],
+    dedupe: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled'],
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', '@mui/material', 'styled-components'],
+    include: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled'],
   },
   plugins: [
-    react({
-      plugins: [['@swc/plugin-styled-components', { displayName: true, ssr: false }]],
-    }),
+    react(),
     svgr({
       svgrOptions: { exportType: 'default' },
       include: '**/*.svg',

@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -14,17 +15,19 @@ const FacetAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   width: '100%',
 }));
 
-const FacetAccordionSummary = styled(AccordionSummary)<{ $position: 'inner' | 'outer' }>(({ $position, theme }) => ({
-  padding: $position === 'outer' ? theme.spacing(0.5, 0.625, 0.5, 0) : theme.spacing(0, 0.625, 0, 0.5),
-  justifyContent: 'left',
-  width: '100%',
-  '& > *': {
-    padding: 0,
+const FacetAccordionSummary = styled(AccordionSummary, { shouldForwardProp })<{ $position: 'inner' | 'outer' }>(
+  ({ $position, theme }) => ({
+    padding: $position === 'outer' ? theme.spacing(0.5, 0.625, 0.5, 0) : theme.spacing(0, 0.625, 0, 0.5),
+    justifyContent: 'left',
+    width: '100%',
+    '& > *': {
+      padding: 0,
+      margin: 0,
+      color: '#000',
+    },
     margin: 0,
-    color: '#000',
-  },
-  margin: 0,
-}));
+  }),
+);
 
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)(({ theme }) => ({
   fontSize: '1rem',
@@ -56,7 +59,7 @@ const StyledFormControlLabel = styled(FormControlLabel)({
   alignItems: 'start',
 });
 
-const StyledStack = styled(Stack)<{ $active: boolean }>(({ theme, $active }) => ({
+const StyledStack = styled(Stack, { shouldForwardProp })<{ $active: boolean }>(({ theme, $active }) => ({
   cursor: 'pointer',
   p: {
     fontSize: theme.typography.subtitle2.fontSize,

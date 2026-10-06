@@ -8,7 +8,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledCard, SelectableCardText } from './styles';
 import Box from '@mui/material/Box';
 
-interface SelectableCardProps extends React.ComponentProps<typeof StyledCard> {
+interface SelectableCardProps extends Omit<React.ComponentProps<typeof StyledCard>, 'title'> {
   title: React.ReactNode;
   description: string;
   tags?: string[];
@@ -52,7 +52,7 @@ function SelectableCard({
         <CardContent component={Stack} direction="column" sx={{ height: '100%' }}>
           {category && (
             <Box>
-              <Chip label={category} $borderRadius="halfRound" sx={{ backgroundColor: 'accent.info90', mb: 1 }} />
+              <Chip label={category} sx={{ backgroundColor: 'accent.info90', mb: 1, borderRadius: '4px' }} />
             </Box>
           )}
           <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -68,10 +68,9 @@ function SelectableCard({
             <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" mt="auto">
               {tags.map((tag) => (
                 <Chip
-                  $borderRadius="halfRound"
                   label={tag}
                   variant="outlined"
-                  sx={{ backgroundColor: 'white.main' }}
+                  sx={{ backgroundColor: 'white.main', borderRadius: '4px' }}
                   key={tag}
                 />
               ))}

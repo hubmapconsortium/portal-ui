@@ -51,7 +51,6 @@ export function TutorialCard({ tutorial }: TutorialDisplayProps) {
       <SelectableCard
         title={tutorial.title}
         description={tutorial.description}
-        route={tutorial.route}
         cardKey={tutorial.title}
         tags={tutorial.tags}
         category={tutorial.category}
