@@ -62,8 +62,10 @@ function SummaryData({
               <Typography
                 component={titleIsHubmapId ? 'h2' : 'h1'}
                 variant="h2"
-                marginBottom={0.5}
                 data-testid="entity-title"
+                sx={{
+                  marginBottom: 0.5,
+                }}
               >
                 {title}
               </Typography>

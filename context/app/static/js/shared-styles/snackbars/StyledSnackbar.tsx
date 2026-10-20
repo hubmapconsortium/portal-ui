@@ -17,7 +17,7 @@ export default function StyledSnackbar() {
     })),
   );
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (event?: React.SyntheticEvent | Event | null, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }

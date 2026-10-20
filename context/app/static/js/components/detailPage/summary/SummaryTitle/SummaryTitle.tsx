@@ -108,11 +108,13 @@ function SummaryTitle({
   const summaryTitle = (
     <Stack
       direction="row"
-      alignItems="center"
-      gap={1}
       component={containerComponent}
       href={href}
-      maxWidth="fit-content"
+      sx={{
+        alignItems: 'center',
+        gap: 1,
+        maxWidth: 'fit-content',
+      }}
     >
       {Icon && <Icon color="primary" />}
       {organIcon && <OrganIcon organName={organIcon} color="primary" />}

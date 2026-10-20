@@ -107,11 +107,24 @@ function TutorialDetailPage({ tutorialRoute }: TutorialProps) {
       customCurrentSection={currentTutorialHash}
       tableOfContentsTitle="Other Tutorials"
     >
-      <Stack spacing={2} pb={2}>
+      <Stack
+        spacing={2}
+        sx={{
+          pb: 2,
+        }}
+      >
         <SummaryTitle entityIcon="Tutorial" component="p">
           Tutorials
         </SummaryTitle>
-        <PageTitle data-testid="tutorial-title" display="flex" flexDirection="row" alignItems="center" gap={1}>
+        <PageTitle
+          data-testid="tutorial-title"
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
           {title}
         </PageTitle>
         <Description

@@ -175,7 +175,14 @@ function ColumnFilterDropdown({
                           >
                             {value}
                           </Typography>
-                          <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: 'text.secondary',
+                              ml: 1,
+                              flexShrink: 0,
+                            }}
+                          >
                             ({decimal.format(count)})
                           </Typography>
                         </Box>

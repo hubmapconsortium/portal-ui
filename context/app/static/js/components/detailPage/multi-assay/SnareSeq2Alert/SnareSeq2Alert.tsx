@@ -45,7 +45,13 @@ function SnareSeq2Alert({ isHeader }: SnareSeq2AlertProps) {
         },
       }}
     >
-      <Stack direction="row" alignItems="center" spacing={1}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="body2">
           {descriptionText} For a detailed understanding of dataset relationships, scroll to the{' '}
           <InternalLink href="#section-dataset-relationships">Dataset Relationship section</InternalLink> or explore the{' '}

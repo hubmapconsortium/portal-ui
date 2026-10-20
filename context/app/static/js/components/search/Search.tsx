@@ -366,7 +366,12 @@ const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps
   const saySeeEnabled = enableSaySeeMode && !isFileSearch(type);
   const effectiveMode = saySeeEnabled ? mode : 'filter';
   return (
-    <Stack spacing={2} mb={4}>
+    <Stack
+      spacing={2}
+      sx={{
+        mb: 4,
+      }}
+    >
       {saySeeEnabled && <SaySeeAlert />}
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
