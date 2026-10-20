@@ -18,8 +18,8 @@ portal-visualization[full]>=0.5.13
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
-udiagent>=0.2.6
-udiagent[langfuse]>=0.2.6
+udiagent>=0.6.0
+udiagent[langfuse]>=0.6.0
 whitenoise[brotli]>=6.9.0
 
 # Development dependencies
@@ -37,16 +37,16 @@ ruff>=0.14.0
 "@dagrejs/dagre": "^1.1.5",
 "@datapunt/matomo-tracker-js": "^0.5.1",
 "@elastic/elasticsearch": "^8.13.0",
+"@emotion/react": "^11.14.0",
+"@emotion/styled": "^11.14.1",
 "@fontsource-variable/inter": "^5.2.8",
 "@fontsource-variable/jetbrains-mono": "^5.2.8",
 "@hookform/resolvers": "^3.3.4",
-"@mui/icons-material": "^7.3.11",
-"@mui/lab": "7.0.0-beta.17",
-"@mui/material": "^7.3.11",
-"@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-"@mui/styled-engine-sc": "^7.3.10",
-"@mui/system": "^7.3.11",
-"@mui/x-date-pickers": "^8.28.7",
+"@mui/icons-material": "^9.4.0",
+"@mui/lab": "9.0.0-beta.9",
+"@mui/material": "^9.4.0",
+"@mui/system": "^9.4.0",
+"@mui/x-date-pickers": "^9.13.0",
 "@react-spring/web": "^10.0.3",
 "@react-three/xr": "^6.6.30",
 "@tanstack/react-virtual": "^3.2.0",
@@ -88,16 +88,15 @@ ruff>=0.14.0
 "react-pdf": "^9.2.1",
 "reactify-wc": "^4.0.0",
 "rehype-raw": "^7.0.0",
-"scellop": "^0.1.1",
-"styled-components": "^6.1.12",
+"scellop": "^0.3.0",
 "swr": "^2.4.1",
-"udi-yac": "^0.2.4",
+"udi-yac": "^0.5.0",
 "universal-cookie": "^7.1.2",
 "use-resize-observer": "^9.1.0",
 "uuid": "^14.0.0",
 "vega": "^6.2.0",
 "vega-embed": "^7.1.0",
-"vitessce": "4.0.6",
+"vitessce": "4.1.1",
 "zod": "^3.25.76",
 "zustand": "^5.0.13"
 }
