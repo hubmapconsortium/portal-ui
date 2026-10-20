@@ -25,7 +25,12 @@ function LabelledSectionText({
 }: LabelledSectionTextProps) {
   return (
     <TextContainer $bottomSpacing={bottomSpacing} className={className} {...props}>
-      <Stack direction="row" alignItems="center">
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="subtitle2" component="h3" color="primary">
           {label}
         </Typography>

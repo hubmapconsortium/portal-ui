@@ -141,11 +141,25 @@ function FilesTableActions() {
   }, [hasSelection, selectedFileCount, wholeFileCount, wholeDatasetUuids, wholeCounts, areCountsLoading]);
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between" flexGrow={1}>
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexGrow: 1,
+      }}
+    >
       <Typography variant="body2" color="secondary">
         {summary}
       </Typography>
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         {/* Unfiltered, this matches ~9.9M files and can only refuse, so it is noise until the
             result set is narrowed. */}
         {hasQuery && <AddAllMatchingButton />}

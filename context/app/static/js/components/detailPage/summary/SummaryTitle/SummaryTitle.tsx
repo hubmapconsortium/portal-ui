@@ -108,17 +108,26 @@ function SummaryTitle({
   const summaryTitle = (
     <Stack
       direction="row"
-      alignItems="center"
-      gap={1}
       component={containerComponent}
       href={href}
-      maxWidth="fit-content"
+      sx={{
+        alignItems: 'center',
+        gap: 1,
+        maxWidth: 'fit-content',
+      }}
     >
       {Icon && <Icon color="primary" />}
       {organIcon && <OrganIcon organName={organIcon} color="primary" />}
       {href && tooltipText ? (
         <>
-          <Typography variant="subtitle1" color="primary" component="span" display="inline-block">
+          <Typography
+            variant="subtitle1"
+            color="primary"
+            component="span"
+            sx={{
+              display: 'inline-block',
+            }}
+          >
             {tooltipText}
           </Typography>
           <ChevronLeftRounded fontSize="small" />

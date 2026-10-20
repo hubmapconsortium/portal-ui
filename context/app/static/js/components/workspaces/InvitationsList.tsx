@@ -14,7 +14,13 @@ function InvitationsList() {
 
   return (
     <Stack spacing={1}>
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="h4">Workspace Invitations</Typography>
         <Box>
           <NotificationBell numNotifications={numNotifications} notificationTitle="Pending" />

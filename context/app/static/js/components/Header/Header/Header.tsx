@@ -15,7 +15,14 @@ function Header() {
   return (
     <>
       <FixedHeightBanner>
-        <Stack direction="row" spacing={1} marginX={1} alignItems="center">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            marginX: 1,
+            alignItems: 'center',
+          }}
+        >
           <InfoIcon />
           <StyledTypography variant="button">
             This repository is under review for potential modification in compliance with Administration directives.

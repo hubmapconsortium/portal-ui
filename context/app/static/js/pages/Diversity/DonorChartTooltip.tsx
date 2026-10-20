@@ -25,7 +25,13 @@ export default function DonorChartTooltip({ tooltipData }: DonorChartTooltipProp
 
   return (
     <Stack spacing={0.5}>
-      <Typography variant="subtitle2" component="p" fontWeight="bold">
+      <Typography
+        variant="subtitle2"
+        component="p"
+        sx={{
+          fontWeight: 'bold',
+        }}
+      >
         {group}
       </Typography>
       <Typography variant="body2" component="p" color="textSecondary">

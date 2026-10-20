@@ -59,7 +59,11 @@ function SegmentationChannelsAndQuality({
   }
 
   return (
-    <Box mt={2}>
+    <Box
+      sx={{
+        mt: 2,
+      }}
+    >
       <Typography variant="subtitle1" component="h3" gutterBottom>
         Segmentation Channels & Quality
       </Typography>
@@ -69,7 +73,13 @@ function SegmentationChannelsAndQuality({
         workflow description in the <InternalLink href={workflowDetailsHref}>Protocols & Workflow Details</InternalLink>{' '}
         section.
       </Typography>
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} mt={2}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        spacing={2}
+        sx={{
+          mt: 2,
+        }}
+      >
         <SectionPaper sx={{ flex: 1 }}>
           <Typography variant="subtitle1" component="h4" gutterBottom>
             Segmentation Channels

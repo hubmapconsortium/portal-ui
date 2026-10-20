@@ -108,7 +108,11 @@ function LineUpTransferList({ initialItems, onConfirm, hitCount, entityType }: L
   const confirmTooltip = confirmIsDisabled ? 'Select fields to visualize in Lineup.' : undefined;
 
   return (
-    <Stack gap={1}>
+    <Stack
+      sx={{
+        gap: 1,
+      }}
+    >
       <Typography variant="h4">Select Fields to Visualize for {entityLabel}</Typography>
       <SelectableTransferList
         left={left}
@@ -123,7 +127,11 @@ function LineUpTransferList({ initialItems, onConfirm, hitCount, entityType }: L
         moveToRightTooltip="Move selected to Visualize."
       />
       <SecondaryBackgroundTooltip title={confirmTooltip}>
-        <Box alignSelf="center">
+        <Box
+          sx={{
+            alignSelf: 'center',
+          }}
+        >
           <Button variant="contained" onClick={confirm} disabled={confirmIsDisabled}>
             Confirm
           </Button>
@@ -166,7 +174,12 @@ function LineUpWrapper({ uuids, entityType, filters }: LineUpProps) {
         }}
       >
         {totalHitsCount && totalHitsCount > 0 && (
-          <Typography variant="h4" alignSelf={'flex-start'}>
+          <Typography
+            variant="h4"
+            sx={{
+              alignSelf: 'flex-start',
+            }}
+          >
             Loading data for {decimal.format(totalHitsCount)} {label.toLocaleLowerCase()}...
           </Typography>
         )}

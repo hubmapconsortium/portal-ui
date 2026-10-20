@@ -13,7 +13,12 @@ interface NameAndEmailLinkProps {
 }
 function NameAndEmailLink({ first_name, last_name, email }: NameAndEmailLinkProps) {
   return (
-    <Stack direction="row" alignItems="center">
+    <Stack
+      direction="row"
+      sx={{
+        alignItems: 'center',
+      }}
+    >
       <Typography>
         {first_name} {last_name} |&nbsp;
       </Typography>

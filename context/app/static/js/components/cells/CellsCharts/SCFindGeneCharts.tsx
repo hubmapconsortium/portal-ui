@@ -16,7 +16,13 @@ function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
   const { data: vitessceConf, isLoading } = useVitessceConf(uuid, undefined, gene, true);
 
   return (
-    <Box p={2} width="100%" height="700px">
+    <Box
+      sx={{
+        p: 2,
+        width: '100%',
+        height: '700px',
+      }}
+    >
       <ChartLoader isLoading={isLoading || !vitessceConf}>
         <VisualizationWrapper
           vitData={vitessceConf}
@@ -110,14 +116,22 @@ export default function SCFindGeneCharts(dataset: Dataset) {
 
   if (hyperQueryError) {
     return (
-      <Box py={2}>
+      <Box
+        sx={{
+          py: 2,
+        }}
+      >
         <Alert severity="error">Failed to load gene expression chart data.</Alert>
       </Box>
     );
   }
 
   return (
-    <Box py={2}>
+    <Box
+      sx={{
+        py: 2,
+      }}
+    >
       {gene && <SCFindVitesscePreview {...dataset} gene={gene} />}
       <SCFindCellTypesChart
         {...dataset}

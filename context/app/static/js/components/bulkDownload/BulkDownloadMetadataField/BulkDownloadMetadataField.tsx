@@ -25,7 +25,7 @@ function BulkDownloadMetadataField<FormType extends FieldValues>({
         onChange={(e) => {
           field.onChange(!!e.target.checked);
         }}
-        inputProps={{ 'aria-labelledby': 'bulk-download-metadata' }}
+        slotProps={{ input: { 'aria-labelledby': 'bulk-download-metadata' } }}
         sx={(theme) => ({ marginLeft: theme.spacing(-1) })}
       />
     </Stack>

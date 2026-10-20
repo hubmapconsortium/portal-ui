@@ -207,7 +207,13 @@ const Table = React.memo(function Table({
             }}
           >
             <StyledTableCell colSpan={colSpan} sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
-              <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Stack
+                direction="row"
+                sx={{
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <NumSelectedHeader numSelected={selectedRows.size} $noBorderBottom />
                 <TableHeaderActions />
               </Stack>

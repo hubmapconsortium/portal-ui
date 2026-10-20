@@ -113,10 +113,13 @@ function RelatedToolsAndResources() {
           xs: 'column',
           md: 'row',
         }}
-        alignItems="start"
-        gap={{
-          xs: 0,
-          md: 4,
+        sx={{
+          alignItems: 'start',
+
+          gap: {
+            xs: 0,
+            md: 4,
+          },
         }}
       >
         <LinkSectionContainer links={relatedTools} title="Related Tools" />

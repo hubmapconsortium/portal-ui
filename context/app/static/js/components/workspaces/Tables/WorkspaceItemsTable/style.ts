@@ -53,12 +53,9 @@ const BorderedTableRow = styled(TableRow)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.grey[300]}`,
 }));
 
-const CompactTableRow = styled(StyledTableRow)(({ theme }) => ({
-  td: {
-    paddingY: theme.spacing(1.25),
-  },
+const CompactTableRow = styled(StyledTableRow)({
   border: 'none',
-}));
+});
 
 const ExpandedTableRow = styled(StyledTableRow)({
   paddingBottom: 0,

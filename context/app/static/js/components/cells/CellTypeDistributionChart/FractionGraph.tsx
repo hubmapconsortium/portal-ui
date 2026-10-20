@@ -62,7 +62,16 @@ function Fraction({ data, parentWidth, tissue, targetCellTypes }: FractionGraphP
 
   return (
     <>
-      <Typography variant="subtitle2" component="label" color="primary" display="block" my={1} htmlFor={id}>
+      <Typography
+        variant="subtitle2"
+        component="label"
+        color="primary"
+        htmlFor={id}
+        sx={{
+          display: 'block',
+          my: 1,
+        }}
+      >
         Cell Type Distribution Across {capitalizeString(tissue)} Datasets
       </Typography>
       <svg direction="row" width={parentWidth} height="50" ref={containerRef} id={id}>
@@ -89,7 +98,13 @@ function Fraction({ data, parentWidth, tissue, targetCellTypes }: FractionGraphP
           );
         })}
       </svg>
-      <Typography variant="body1" color="textSecondary" my={1}>
+      <Typography
+        variant="body1"
+        color="textSecondary"
+        sx={{
+          my: 1,
+        }}
+      >
         Indexed {tissue} datasets contain {decimal.format(totalCellCount)} cells in {data.length} cell types.
       </Typography>
       <FractionGraphLegend

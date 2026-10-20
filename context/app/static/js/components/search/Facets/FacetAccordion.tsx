@@ -30,7 +30,9 @@ function FacetAccordion({
         <Typography
           variant={isInner ? 'subtitle2' : 'subtitle1'}
           color={isInner ? 'textPrimary' : 'primary'}
-          paddingLeft={isInner ? 0 : 1}
+          sx={{
+            paddingLeft: isInner ? 0 : 1,
+          }}
         >
           {title}
         </Typography>

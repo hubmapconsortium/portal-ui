@@ -27,8 +27,18 @@ function HomepageSection({
   const Header = useOffset ? OffsetDatasetsHeader : SectionHeader;
 
   return (
-    <Box gridArea={gridArea}>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
+    <Box
+      sx={{
+        gridArea: gridArea,
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <Header variant="h2" component="h3" icon={icon} id={id} ref={headerRef}>
           {title}
         </Header>

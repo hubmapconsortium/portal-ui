@@ -43,9 +43,23 @@ function TemplateGrid({
   const sortedTemplates = useMemo(() => sortTemplates(templates, disabledTemplates), [templates, disabledTemplates]);
 
   return (
-    <Grid container alignItems="stretch" sx={{ maxHeight: '625px', overflowY: 'auto' }}>
+    <Grid
+      container
+      sx={{
+        alignItems: 'stretch',
+        maxHeight: '625px',
+        overflowY: 'auto',
+      }}
+    >
       {Object.entries(sortedTemplates).map(([templateKey, { title, description, tags, job_types }]) => (
-        <Grid size={{ md: 4, xs: 12 }} key={templateKey} paddingBottom={2} paddingX={1}>
+        <Grid
+          size={{ md: 4, xs: 12 }}
+          key={templateKey}
+          sx={{
+            paddingBottom: 2,
+            paddingX: 1,
+          }}
+        >
           <SelectableCard
             title={
               <InternalLink

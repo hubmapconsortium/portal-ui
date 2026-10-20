@@ -55,7 +55,13 @@ function SelectableCard({
               <Chip label={category} sx={{ backgroundColor: 'accent.info90', mb: 1, borderRadius: '4px' }} />
             </Box>
           )}
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <SelectableCardText variant="subtitle1" $colorVariant={colorVariant}>
               {title}
             </SelectableCardText>
@@ -65,7 +71,15 @@ function SelectableCard({
             {description}
           </SelectableCardText>
           {tags.length > 0 && (
-            <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" mt="auto">
+            <Stack
+              spacing={2}
+              direction="row"
+              useFlexGap
+              sx={{
+                flexWrap: 'wrap',
+                mt: 'auto',
+              }}
+            >
               {tags.map((tag) => (
                 <Chip
                   label={tag}

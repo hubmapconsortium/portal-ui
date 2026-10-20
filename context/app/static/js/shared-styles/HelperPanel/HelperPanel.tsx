@@ -9,10 +9,23 @@ import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfCon
 import { LineClampWithTooltip } from 'js/shared-styles/text';
 
 import { HelperPanelPortal } from 'js/components/detailPage/DetailLayout/DetailLayout';
+import { mergeSx } from 'js/helpers/styled';
 
 export function HelperPanelHeader({ children, ...rest }: TypographyProps) {
   return (
-    <Typography variant="subtitle2" display="flex" alignItems="center" gap={0.5} whiteSpace="nowrap" {...rest}>
+    <Typography
+      variant="subtitle2"
+      {...rest}
+      sx={mergeSx(
+        {
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.5,
+          whiteSpace: 'nowrap',
+        },
+        rest.sx,
+      )}
+    >
       {children}
     </Typography>
   );
@@ -58,14 +71,18 @@ export default function HelperPanelBase({ shouldDisplay, children, sx }: HelperP
       >
         <AnimatedStack
           direction="column"
-          maxWidth="12rem"
-          padding={1}
-          gap={1}
-          bgcolor="secondaryContainer.main"
-          boxShadow={2}
           style={style!}
-          position="sticky"
-          sx={sx}
+          sx={mergeSx(
+            {
+              maxWidth: '12rem',
+              padding: 1,
+              gap: 1,
+              bgcolor: 'secondaryContainer.main',
+              boxShadow: 2,
+              position: 'sticky',
+            },
+            sx,
+          )}
         >
           {children}
         </AnimatedStack>

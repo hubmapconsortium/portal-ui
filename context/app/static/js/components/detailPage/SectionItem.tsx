@@ -1,18 +1,26 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
+import { mergeSx } from 'js/helpers/styled';
 
-interface SectionItemProps extends PropsWithChildren {
+interface SectionItemProps extends BoxProps {
   ml?: boolean;
   label?: string;
-  flexBasis?: string;
 }
 
-function SectionItem({ children, ml, label, flexBasis, ...rest }: SectionItemProps) {
+function SectionItem({ children, ml, label, ...rest }: SectionItemProps) {
   const childrenArray = Array.isArray(children) ? children : [children];
 
   return (
-    <Box ml={ml ? '75px' : undefined} flexBasis={flexBasis} {...rest}>
+    <Box
+      {...rest}
+      sx={mergeSx(
+        {
+          ml: ml ? '75px' : undefined,
+        },
+        rest.sx,
+      )}
+    >
       {label && (
         <Typography variant="subtitle2" component="h3" color="primary">
           {label}

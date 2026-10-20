@@ -62,8 +62,8 @@ function WorkspaceListItem({
         <SecondaryBackgroundTooltip title={tooltipToDisplay}>
           <span>
             <ToggleComponent
-              inputProps={{
-                'aria-label': `Select ${workspace.name}.`,
+              slotProps={{
+                input: { 'aria-label': `Select ${workspace.name}.` },
               }}
               checked={selected}
               onChange={() => {

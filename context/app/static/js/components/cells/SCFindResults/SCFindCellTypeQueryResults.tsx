@@ -119,7 +119,7 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
 
   return (
     <HelperPanel shouldDisplay={shouldDisplay} sx={{ minWidth: shouldDisplay ? 192 : 0 }}>
-      <HelperPanel.Header gap={1}>
+      <HelperPanel.Header sx={{ gap: 1 }}>
         <OrganIcon organName={currentTissue} />
         {currentTissue && capitalize(currentTissue)}
       </HelperPanel.Header>
@@ -205,8 +205,18 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
           <Tab
             key={tissue}
             label={
-              <Stack direction="row" alignItems="center" gap={1}>
-                <Box flexShrink={0}>
+              <Stack
+                direction="row"
+                sx={{
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
+                <Box
+                  sx={{
+                    flexShrink: 0,
+                  }}
+                >
                   <OrganIcon organName={tissue} />
                 </Box>
                 <Box component="span" sx={{ textTransform: 'capitalize' }}>
@@ -258,8 +268,20 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
     <Tab
       ref={ref}
       label={
-        <Stack direction="row" alignItems="center" gap={1}>
-          <Box flexShrink={0}>{icon}</Box>
+        <Stack
+          direction="row"
+          sx={{
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Box
+            sx={{
+              flexShrink: 0,
+            }}
+          >
+            {icon}
+          </Box>
           <Box component="span" sx={{ textTransform: 'capitalize' }}>
             {formattedLabel ?? label} ({datasetCount})
           </Box>
@@ -351,7 +373,12 @@ function SCFindCellTypeQueryResultsLoader({ trackingInfo }: SCFindCellTypeQueryR
   }
 
   return (
-    <Stack spacing={1} py={2}>
+    <Stack
+      spacing={1}
+      sx={{
+        py: 2,
+      }}
+    >
       <Typography variant="subtitle1">Cell Type Distribution Across Organs</Typography>
       <OrganCellTypeDistributionCharts trackingInfo={trackingInfo} />
       <DatasetListSection />

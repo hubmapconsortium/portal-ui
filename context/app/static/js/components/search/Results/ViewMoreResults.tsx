@@ -47,8 +47,19 @@ function ViewMoreResults() {
           {isLoadingMore ? 'Loading…' : 'See More Search Results'}
         </Button>
       )}
-      <Box mt={2}>
-        <Typography variant="caption" color="secondary" textAlign="right" component="p">
+      <Box
+        sx={{
+          mt: 2,
+        }}
+      >
+        <Typography
+          variant="caption"
+          color="secondary"
+          component="p"
+          sx={{
+            textAlign: 'right',
+          }}
+        >
           {resultsShown}
         </Typography>
       </Box>

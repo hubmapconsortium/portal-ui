@@ -67,7 +67,14 @@ export default function DatasetsOverviewTable({ matched, indexed, all, children 
               <InfoTextTooltip tooltipTitle={tooltips.all}>Total Datasets in HuBMAP Data Portal</InfoTextTooltip>
             </TableCell>
             <TableCell colSpan={2}>
-              <Stack direction="row" alignItems="center" gap={1} useFlexGap>
+              <Stack
+                direction="row"
+                useFlexGap
+                sx={{
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
                 Matched/Total (%)
                 <DownloadDatasetsOverview rows={rows} />
               </Stack>

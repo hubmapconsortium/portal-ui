@@ -64,12 +64,26 @@ function ConfigSlider<FormType extends FieldValues>({
   });
 
   return (
-    <Stack marginTop={1}>
-      <Stack direction="row" spacing={1} alignItems="center">
+    <Stack
+      sx={{
+        marginTop: 1,
+      }}
+    >
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <StyledSubtitle2>{label}</StyledSubtitle2>
         <InfoTooltipIcon iconTooltipText={tooltip} />
       </Stack>
-      <Stack padding={1}>
+      <Stack
+        sx={{
+          padding: 1,
+        }}
+      >
         <Slider
           value={convert(field.value[id] as number, conversionFactor)}
           onChange={(e, value) => {
@@ -158,7 +172,13 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
       </AccordionSummary>
       <AccordionDetails>
         <Stack>
-          <Typography marginBottom={1}>{description}</Typography>
+          <Typography
+            sx={{
+              marginBottom: 1,
+            }}
+          >
+            {description}
+          </Typography>
           <Button
             variant="contained"
             sx={{ alignSelf: 'flex-end' }}

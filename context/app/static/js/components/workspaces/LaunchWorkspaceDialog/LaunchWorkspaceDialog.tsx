@@ -132,7 +132,13 @@ function LaunchWorkspaceDialog() {
         isOpen={isOpen}
         handleClose={handleClose}
         actions={
-          <Stack direction="row" spacing={2} alignItems="end">
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              alignItems: 'end',
+            }}
+          >
             <Button type="button" onClick={handleClose} disabled={isSubmitting}>
               Cancel
             </Button>

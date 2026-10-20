@@ -114,7 +114,13 @@ export default function HeroBottomBar() {
                 }}
               >
                 <Icon fontSize="small" color="primary" />
-                <Typography variant="body2" fontWeight={500} noWrap>
+                <Typography
+                  variant="body2"
+                  noWrap
+                  sx={{
+                    fontWeight: 500,
+                  }}
+                >
                   {label}
                 </Typography>
               </BottomBarLink>

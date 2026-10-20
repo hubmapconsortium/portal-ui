@@ -26,14 +26,19 @@ function OrganLinkContent({ organ }: { organ: string }) {
       component="span"
       direction="row"
       spacing={0.5}
-      alignItems="center"
-      display="inline-flex"
-      // A center-aligned inline-flex box synthesizes its baseline at its bottom edge, so it rides
-      // above the adjacent plain-text links; middle-align it against the surrounding text instead.
-      sx={{ verticalAlign: 'middle' }}
+      sx={{
+        alignItems: 'center',
+        display: 'inline-flex',
+        verticalAlign: 'middle',
+      }}
     >
       <OrganIcon component="span" organName={organ} />
-      <Typography component="span" fontSize="inherit">
+      <Typography
+        component="span"
+        sx={{
+          fontSize: 'inherit',
+        }}
+      >
         {organ}
       </Typography>
     </Stack>

@@ -17,13 +17,23 @@ export default function Biomarkers() {
     <BiomarkersSearchProvider>
       <PanelListLandingPage
         title={
-          <Stack direction="row" alignItems="center" gap={1}>
+          <Stack
+            direction="row"
+            sx={{
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
             <GeneIcon fontSize="inherit" color="primary" />
             <span>Biomarkers</span>
           </Stack>
         }
         description={
-          <Stack gap={1}>
+          <Stack
+            sx={{
+              gap: 1,
+            }}
+          >
             <Box>
               Explore gene biomarker information in HuBMAP data. Search for a gene by entering its symbol below, or use
               the <InternalLink href="/search/biomarkers-cell-types">Biomarker and Cell Type Search</InternalLink> for

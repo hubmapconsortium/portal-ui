@@ -14,7 +14,13 @@ export default function CompletedStepText({ completedStepText, isExpanded, index
     return null;
   }
   return (
-    <Stack flexBasis="80%" direction="row" justifyContent="space-between">
+    <Stack
+      direction="row"
+      sx={{
+        flexBasis: '80%',
+        justifyContent: 'space-between',
+      }}
+    >
       <AccordionText variant="body2" $isExpanded={isExpanded}>
         {completedStepText}
       </AccordionText>

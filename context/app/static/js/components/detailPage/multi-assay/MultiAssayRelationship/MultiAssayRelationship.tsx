@@ -14,7 +14,14 @@ function MultiAssayRelationship() {
   }
   return (
     <Paper sx={(theme) => ({ p: 2, borderTop: `1px solid ${theme.palette.divider}` })}>
-      <Stack justifyContent="space-between" alignItems="start" pb={2} spacing={2}>
+      <Stack
+        spacing={2}
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'start',
+          pb: 2,
+        }}
+      >
         <Typography component="h3" variant="h4">
           Multi-Assay Relationship
         </Typography>

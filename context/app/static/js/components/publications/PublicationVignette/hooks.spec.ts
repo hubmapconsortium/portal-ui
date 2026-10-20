@@ -55,7 +55,10 @@ function renderConfs(mapped_data_access_level?: string) {
 describe('usePublicationVignetteConfs', () => {
   beforeEach(() => {
     mockedUseSWR.mockImplementation(
-      (key) => ({ data: key ? [structuredClone(templateConf)] : undefined }) as ReturnType<typeof useSWR>,
+      (key) =>
+        ({
+          data: key ? [structuredClone(templateConf)] : undefined,
+        }) as ReturnType<typeof useSWR>,
     );
   });
 

@@ -112,12 +112,22 @@ function NewWorkspaceDialogFromExample({
         aria-labelledby="create-workspace-dialog-title"
         maxWidth="lg"
       >
-        <Box mb={2}>
+        <Box
+          sx={{
+            mb: 2,
+          }}
+        >
           <DialogTitle id="create-workspace-dialog-title" variant="h3">
             {text.overview.title}
           </DialogTitle>
           <Box sx={{ px: 3 }}>
-            <Stack spacing={1} p={2} component={Paper}>
+            <Stack
+              spacing={1}
+              component={Paper}
+              sx={{
+                p: 2,
+              }}
+            >
               <Typography>{text.overview.description}</Typography>
               <Typography variant="subtitle2">{example.title}</Typography>
               <Typography>{example.description}</Typography>
@@ -134,11 +144,13 @@ function NewWorkspaceDialogFromExample({
           </Step>
           <Step title={text.configure.title} index={1} isRequired>
             <Stack
-              gap={2}
-              mt={1}
               component="form"
               id="create-workspace-form"
               onSubmit={(e) => void handleSubmit(submit)(e)}
+              sx={{
+                gap: 2,
+                mt: 1,
+              }}
             >
               <WorkspaceNameField control={control} name="workspace-name" />
               <Accordion>

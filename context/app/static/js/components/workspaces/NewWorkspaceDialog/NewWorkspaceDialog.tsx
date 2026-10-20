@@ -169,7 +169,11 @@ function NewWorkspaceDialog({
         aria-labelledby="create-workspace-dialog-title"
         maxWidth="lg"
       >
-        <Box mb={2}>
+        <Box
+          sx={{
+            mb: 2,
+          }}
+        >
           <DialogTitle id="create-workspace-dialog-title" variant="h3">
             {text.overview.title}
           </DialogTitle>
@@ -224,7 +228,14 @@ function NewWorkspaceDialog({
             >
               <WorkspaceNameField control={control} name="workspace-name" />
               <WorkspaceDescriptionField control={control} name="workspace-description" />
-              <Stack spacing={2} p={2} component={Paper} direction="column">
+              <Stack
+                spacing={2}
+                component={Paper}
+                direction="column"
+                sx={{
+                  p: 2,
+                }}
+              >
                 <StyledSubtitle1>Environment Selection</StyledSubtitle1>
                 {text.configure.description}
                 <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />

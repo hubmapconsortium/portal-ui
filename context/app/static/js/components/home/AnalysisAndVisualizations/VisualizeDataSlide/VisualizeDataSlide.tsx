@@ -48,13 +48,36 @@ function VisualizeDataSlide({ config, zIndex, stickyRef }: VisualizeDataSlidePro
 
         {/* Section title and description centered. Icon + title share a flex row so the icon stays
             vertically centered with the heading rather than baseline-aligned inside the Typography. */}
-        <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" sx={{ mb: 0.5 }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            mb: 0.5,
+          }}
+        >
           <Icon color={activeView.theme} />
-          <Typography variant="h4" component="h3" fontWeight={400}>
+          <Typography
+            variant="h4"
+            component="h3"
+            sx={{
+              fontWeight: 400,
+            }}
+          >
             {config.sectionTitle}
           </Typography>
         </Stack>
-        <Typography variant="body1" color="text.secondary" align="center" sx={{ mb: 3, maxWidth: 700, mx: 'auto' }}>
+        <Typography
+          variant="body1"
+          align="center"
+          sx={{
+            color: 'text.secondary',
+            mb: 3,
+            maxWidth: 700,
+            mx: 'auto',
+          }}
+        >
           {config.sectionDescription}
         </Typography>
 

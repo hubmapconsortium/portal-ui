@@ -13,8 +13,20 @@ interface SectionDescriptionProps extends PropsWithChildren {
 export function SectionDescription({ addendum, children, subsection }: SectionDescriptionProps) {
   const iconSize = subsection ? '1rem' : '1.5rem';
   const contents = (
-    <Stack direction="column" gap={1} marginBottom={subsection ? 2 : 0}>
-      <Stack direction="row" gap={1} alignItems="start">
+    <Stack
+      direction="column"
+      sx={{
+        gap: 1,
+        marginBottom: subsection ? 2 : 0,
+      }}
+    >
+      <Stack
+        direction="row"
+        sx={{
+          gap: 1,
+          alignItems: 'start',
+        }}
+      >
         <Box>
           <InfoIcon color="primary" fontSize={iconSize} />
         </Box>
@@ -22,7 +34,13 @@ export function SectionDescription({ addendum, children, subsection }: SectionDe
             than the default <p> so callers can pass arbitrary block-level
             content (Stacks, additional Typography, action buttons, etc.)
             without producing invalid <p>-inside-<p> HTML. */}
-        <Typography component="div" variant="body1" marginTop={0.5}>
+        <Typography
+          component="div"
+          variant="body1"
+          sx={{
+            marginTop: 0.5,
+          }}
+        >
           {children}
         </Typography>
       </Stack>

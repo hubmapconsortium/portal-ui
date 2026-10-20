@@ -22,12 +22,23 @@ function SampleTissue() {
   return (
     <CollapsibleDetailPageSection title="Tissue" id="tissue">
       <FlexPaper>
-        <SectionItem label="Organ Type" flexBasis="25%">
+        <SectionItem
+          label="Organ Type"
+          sx={{
+            flexBasis: '25%',
+          }}
+        >
           <InternalLink variant="h6" href={`/organs/${mapped_organ}`} underline="none">
             {mapped_organ || 'Organ Type not defined'}
           </InternalLink>
         </SectionItem>
-        <SectionItem label="Sample Category" ml flexBasis="25%">
+        <SectionItem
+          label="Sample Category"
+          ml
+          sx={{
+            flexBasis: '25%',
+          }}
+        >
           {sample_category || 'Sample Category not defined'}
         </SectionItem>
         {hasRUI && (

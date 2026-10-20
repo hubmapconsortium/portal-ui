@@ -75,16 +75,16 @@ function OrgansHeaderPanel() {
 
   return (
     <StackTemplate spacing={4}>
-      <HeaderCell {...desktopConfig.name} pl={4}>
+      <HeaderCell sx={{ ...desktopConfig.name, pl: 4 }}>
         <TableSortLabelTemplate columnId="name" label="Organ" />
       </HeaderCell>
-      <HeaderCell {...desktopConfig.description}>
+      <HeaderCell sx={desktopConfig.description}>
         <TableSortLabelTemplate columnId="description" label="Description" />
       </HeaderCell>
-      <HeaderCell {...desktopConfig.datasets}>
+      <HeaderCell sx={desktopConfig.datasets}>
         <TableSortLabelTemplate columnId="datasets" label="Datasets" />
       </HeaderCell>
-      <HeaderCell {...desktopConfig.samples}>
+      <HeaderCell sx={desktopConfig.samples}>
         <TableSortLabelTemplate columnId="samples" label="Samples" />
       </HeaderCell>
     </StackTemplate>
@@ -113,7 +113,7 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
     // Rows are a fixed height by default; when the description is expanded, let the row grow to fit
     // its full text (top-aligning the cells) instead of clipping it.
     <StackTemplate {...(descriptionExpanded ? { height: 'auto', minHeight: 52, alignItems: 'flex-start' } : {})}>
-      <BodyCell {...desktopConfig.name} aria-label="Organ" hideMobileLabel>
+      <BodyCell sx={desktopConfig.name} aria-label="Organ" hideMobileLabel>
         <InternalLink
           href={href}
           variant="body2"
@@ -122,12 +122,37 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
             width: '100%',
           }}
         >
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: 'center',
+            }}
+          >
             {/* Using URLSvgIcon here directly instead of OrganIcon to prevent redundant request for icon URL */}
-            <URLSvgIcon iconURL={icon} ariaLabel={name} aria-hidden fontSize="small" />
+            <URLSvgIcon
+              iconURL={icon}
+              ariaLabel={name}
+              aria-hidden
+              sx={{
+                fontSize: 'small',
+              }}
+            />
 
-            <Stack direction="column" alignItems="start" spacing={0.25}>
-              <Stack direction="row" spacing={0.5} alignItems="center">
+            <Stack
+              direction="column"
+              spacing={0.25}
+              sx={{
+                alignItems: 'start',
+              }}
+            >
+              <Stack
+                direction="row"
+                spacing={0.5}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
                 <Typography variant="body2">{name}</Typography>
                 {cellTypes.length > 0 && (
                   <SecondaryBackgroundTooltip title="This organ contains datasets with annotated cell types.">
@@ -135,14 +160,20 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
                   </SecondaryBackgroundTooltip>
                 )}
               </Stack>
-              <Typography variant="body2" color="text.secondary" component="span">
+              <Typography
+                variant="body2"
+                component="span"
+                sx={{
+                  color: 'text.secondary',
+                }}
+              >
                 {uberon_short}
               </Typography>
             </Stack>
           </Stack>
         </InternalLink>
       </BodyCell>
-      <BodyCell {...desktopConfig.description} aria-label="Description" hideMobileLabel>
+      <BodyCell sx={desktopConfig.description} aria-label="Description" hideMobileLabel>
         <ExpandableDescription
           description={description}
           expanded={descriptionExpanded}
@@ -151,7 +182,7 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
       </BodyCell>
       {!isMobile && (
         <>
-          <BodyCell {...desktopConfig.datasets} aria-label="Datasets">
+          <BodyCell sx={desktopConfig.datasets} aria-label="Datasets">
             <InternalLink
               variant="body2"
               href={getSearchURL({
@@ -162,7 +193,7 @@ function OrgansPanelItem({ organ, href }: OrganPanelItemProps) {
               {datasetCount.toLocaleString()}
             </InternalLink>
           </BodyCell>
-          <BodyCell {...desktopConfig.samples} aria-label="Samples">
+          <BodyCell sx={desktopConfig.samples} aria-label="Samples">
             <InternalLink
               variant="body2"
               href={getSearchURL({

@@ -56,8 +56,20 @@ function WorkflowParameters({ input_parameters }: Required<Pick<Pipeline, 'input
   }, [input_parameters, copyText]);
 
   return (
-    <Stack spacing={1} pl={4} mb={1}>
-      <Stack direction="row" spacing="1" alignItems="center">
+    <Stack
+      spacing={1}
+      sx={{
+        pl: 4,
+        mb: 1,
+      }}
+    >
+      <Stack
+        direction="row"
+        spacing="1"
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="subtitle2">Input Parameters</Typography>
         <Box>
           <SecondaryBackgroundTooltip title="Copy input parameters to clipboard.">
@@ -300,7 +312,13 @@ function AnalysisDetails({ dagListData, workflow_description, workflow_version }
           </Button>
         </Box>
       )}
-      <Stack direction="row" alignItems="center" spacing={1}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         <InfoIcon sx={{ fontSize: '1rem' }} color="primary" />
         <Typography>These are the steps executed in the workflow to produce the processed dataset.</Typography>
       </Stack>

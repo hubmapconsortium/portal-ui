@@ -101,7 +101,12 @@ function ColumnFilterDropdown({
         }}
       >
         <Box sx={{ px: 2, py: 1 }}>
-          <Typography variant="subtitle2" color="text.primary">
+          <Typography
+            variant="subtitle2"
+            sx={{
+              color: 'text.primary',
+            }}
+          >
             Filter by {columnLabel}
           </Typography>
         </Box>
@@ -117,7 +122,12 @@ function ColumnFilterDropdown({
         ) : (
           [
             <MenuItem key="clear-all" onClick={handleClearAll} disabled={selectedCount === 0}>
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                }}
+              >
                 Clear all filters {selectedCount > 0 && `(${selectedCount})`}
               </Typography>
             </MenuItem>,
@@ -125,7 +135,12 @@ function ColumnFilterDropdown({
             ...(values.length === 0
               ? [
                   <MenuItem key="empty" disabled>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: 'text.secondary',
+                      }}
+                    >
                       No values available
                     </Typography>
                   </MenuItem>,
@@ -160,7 +175,14 @@ function ColumnFilterDropdown({
                           >
                             {value}
                           </Typography>
-                          <Typography variant="caption" color="text.secondary" sx={{ ml: 1, flexShrink: 0 }}>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: 'text.secondary',
+                              ml: 1,
+                              flexShrink: 0,
+                            }}
+                          >
                             ({decimal.format(count)})
                           </Typography>
                         </Box>

@@ -45,9 +45,9 @@ function BiomarkerHeaderPanel() {
   // left edge of each column's content.
   return (
     <StackTemplate spacing={4}>
-      <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
-      <HeaderCell {...desktopConfig.description}>Description</HeaderCell>
-      <HeaderCell {...desktopConfig.dataType}>
+      <HeaderCell sx={desktopConfig.name}>Name</HeaderCell>
+      <HeaderCell sx={desktopConfig.description}>Description</HeaderCell>
+      <HeaderCell sx={desktopConfig.dataType}>
         <InfoTextTooltip infoIconSize="small" tooltipTitle={dataTypeTooltip}>
           Data Type
         </InfoTextTooltip>
@@ -132,19 +132,19 @@ function BiomarkerPanelItem({
   return (
     // Rows are a fixed height by default; when the description is expanded, let the row grow to fit.
     <StackTemplate {...(descriptionExpanded ? { height: 'auto', minHeight: 52, alignItems: 'flex-start' } : {})}>
-      <BodyCell {...desktopConfig.name} aria-label="Name">
+      <BodyCell sx={desktopConfig.name} aria-label="Name">
         <Box>
           <InternalLink href={href}>{name}</InternalLink>
         </Box>
       </BodyCell>
-      <BodyCell {...desktopConfig.description} aria-label="Description">
+      <BodyCell sx={desktopConfig.description} aria-label="Description">
         <ExpandableDescription
           description={description}
           expanded={descriptionExpanded}
           onToggle={() => setDescriptionExpanded((prev) => !prev)}
         />
       </BodyCell>
-      <BodyCell {...desktopConfig.dataType} aria-label="Data Type">
+      <BodyCell sx={desktopConfig.dataType} aria-label="Data Type">
         <DataTypeChips
           geneName={geneName}
           name={name}

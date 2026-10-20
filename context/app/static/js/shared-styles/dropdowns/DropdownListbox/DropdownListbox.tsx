@@ -54,8 +54,22 @@ function DropdownListbox<T>({
         }}
         {...buttonProps}
       >
-        <Stack direction="row" alignItems="center" justifyContent="flex-end">
-          <Typography component="span" variant="inherit" flexGrow={1} display="flex" justifyContent="center">
+        <Stack
+          direction="row"
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Typography
+            component="span"
+            variant="inherit"
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             {getOptionLabel(options[selectedOptionIndex])}
           </Typography>
           {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}

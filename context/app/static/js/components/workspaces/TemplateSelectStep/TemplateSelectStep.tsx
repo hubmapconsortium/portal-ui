@@ -50,7 +50,12 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
   return (
     <Step title={title} index={stepIndex}>
       <StepDescription blocks={description} />
-      <Stack spacing={2} marginTop={3}>
+      <Stack
+        spacing={2}
+        sx={{
+          marginTop: 3,
+        }}
+      >
         <Typography sx={{ mt: 2 }} variant="subtitle1">
           Filter workspace templates by tags
         </Typography>

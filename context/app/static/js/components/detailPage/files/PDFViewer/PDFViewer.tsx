@@ -33,7 +33,11 @@ function PDFLoadingIndicator({ isProcessingPDF, onLoadSuccess, pdfUrl }: PDFLoad
       onLoadSuccess={onLoadSuccess}
       loading={<LinearProgress sx={{ maxWidth: '100px' }} />}
       error={
-        <Box display="flex">
+        <Box
+          sx={{
+            display: 'flex',
+          }}
+        >
           <ErrorIcon />
           <Typography>Failed to load</Typography>
         </Box>
@@ -60,7 +64,11 @@ function PDFViewer({ pdfUrl }: PDFViewerProps) {
 
   return (
     <>
-      <Box minWidth="125px">
+      <Box
+        sx={{
+          minWidth: '125px',
+        }}
+      >
         {/* We don't open the modal here because there may be an error processing the PDF. */}
         <Button
           type="button"

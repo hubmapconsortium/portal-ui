@@ -29,10 +29,21 @@ export default function ScFindAbout() {
 
   return (
     <Box>
-      <Box mb={2.5}>
+      <Box
+        sx={{
+          mb: 2.5,
+        }}
+      >
         <PageTitle>scFind Method</PageTitle>
       </Box>
-      <Stack component={SectionPaper} direction="column" spacing={2} mb={2}>
+      <Stack
+        component={SectionPaper}
+        direction="column"
+        spacing={2}
+        sx={{
+          mb: 2,
+        }}
+      >
         <LabelledSectionText label="What is scFind?">
           The scFind method calculates cell count proportions and statistical metrics based on uniformly processed
           HuBMAP RNAseq or ATACseq datasets with cell type annotations. More information can be found{' '}

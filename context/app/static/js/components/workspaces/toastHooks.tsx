@@ -95,7 +95,12 @@ export const useWorkspaceToasts = () => {
   const toastSuccessCreateWorkspaceOnly = useCallback(
     (id: idType) => {
       toastSuccess(
-        <Stack spacing={1} maxWidth="22rem">
+        <Stack
+          spacing={1}
+          sx={{
+            maxWidth: '22rem',
+          }}
+        >
           <Typography>Workspace successfully created.</Typography>
           <Button href={`/workspaces/${id}`} variant="text" color="inherit" sx={{ alignSelf: 'flex-end' }}>
             View Workspace Detail Page
@@ -123,7 +128,12 @@ export const useWorkspaceToasts = () => {
   const toastSuccessLaunchWorkspace = useCallback(
     (id: idType) => {
       toastSuccess(
-        <Stack spacing={1} maxWidth="22rem">
+        <Stack
+          spacing={1}
+          sx={{
+            maxWidth: '22rem',
+          }}
+        >
           <Typography>
             Workspace successfully launched in a new tab. If the tab didn&apos;t open, please check your pop-up blocker
             settings and relaunch your workspace.

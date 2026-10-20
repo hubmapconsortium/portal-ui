@@ -35,7 +35,12 @@ function Status() {
     return null;
   }
   return (
-    <Stack direction="row" alignItems="center">
+    <Stack
+      direction="row"
+      sx={{
+        alignItems: 'center',
+      }}
+    >
       <StatusIcon status={currentDataset.status} />
       <Typography variant="body2">{`${currentDataset.status} (${currentDataset.mapped_data_access_level})`}</Typography>
     </Stack>

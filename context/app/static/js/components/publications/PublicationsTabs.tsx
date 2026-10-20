@@ -10,7 +10,11 @@ function PublicationsTabs() {
   const { openTabIndex, handleTabChange, publicationsByStatus, isLoading } = usePublications();
 
   return (
-    <Stack overflow="auto">
+    <Stack
+      sx={{
+        overflow: 'auto',
+      }}
+    >
       <StyledTabs
         data-testid="publication-tabs"
         value={openTabIndex}

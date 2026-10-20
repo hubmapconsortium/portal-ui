@@ -74,7 +74,7 @@ function DatasetRow({
             // toggles the whole dataset.
             indeterminate={Boolean(selected)}
             onChange={() => toggleWholeDataset(datasetUuid)}
-            inputProps={{ 'aria-label': checkboxLabel }}
+            slotProps={{ input: { 'aria-label': checkboxLabel } }}
           />
         </Tooltip>
       </StyledTableCell>
@@ -162,10 +162,18 @@ function FilesResultsTable({ isLoading }: { isLoading: boolean }) {
             <TableRow sx={{ p: 0, borderBottom: 1, borderColor: 'divider' }}>
               <StyledTableCell colSpan={columnCount} sx={{ p: 1, borderBottom: 0 }}>
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
-                  <Box flexGrow={1}>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                    }}
+                  >
                     <TopSearchBar />
                   </Box>
-                  <Box flexGrow={1}>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                    }}
+                  >
                     <FilenameFilterBar />
                   </Box>
                 </Stack>

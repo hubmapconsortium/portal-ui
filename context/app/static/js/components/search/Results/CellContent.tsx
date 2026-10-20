@@ -59,7 +59,14 @@ export function HuBMAPIdLabel({
     <SecondaryBackgroundTooltip
       title={isRetracted ? 'This dataset has been retracted.' : 'A newer revision of this entity exists.'}
     >
-      <Stack direction="row" gap={0.5} alignItems="center" component="span">
+      <Stack
+        direction="row"
+        component="span"
+        sx={{
+          gap: 0.5,
+          alignItems: 'center',
+        }}
+      >
         {isRetracted ? <SeverityIcon status="retracted" fontSize="small" /> : <WarningRounded fontSize="small" />}
         {hubmapId}
       </Stack>
@@ -136,8 +143,20 @@ export function HuBMAPIDCellContent({
   latestRevisionUrl,
 }: HuBMAPIDCellContentProps) {
   return (
-    <Stack direction="column" gap={0.5} alignItems="flex-start">
-      <Stack direction="row" gap={0.5} alignItems="center">
+    <Stack
+      direction="column"
+      sx={{
+        gap: 0.5,
+        alignItems: 'flex-start',
+      }}
+    >
+      <Stack
+        direction="row"
+        sx={{
+          gap: 0.5,
+          alignItems: 'center',
+        }}
+      >
         <InternalLink
           href={`/browse/${hubmapId}`}
           data-testid="hubmap-id-link"
@@ -193,7 +212,14 @@ export function CellContent({
       // Add the retracted icon + color only for retracted datasets, for extra emphasis.
       if (isRetracted) {
         return (
-          <Stack direction="row" gap={0.5} alignItems="center" sx={{ color: 'retracted.main' }}>
+          <Stack
+            direction="row"
+            sx={{
+              gap: 0.5,
+              alignItems: 'center',
+              color: 'retracted.main',
+            }}
+          >
             <SeverityIcon status="retracted" fontSize="small" />
             {fieldValue}
           </Stack>
@@ -208,7 +234,12 @@ export function CellContent({
       return <DonorAgeTooltip donorAge={fieldValue}>{fieldValue}</DonorAgeTooltip>;
     case 'assay_display_name':
       return (
-        <Stack direction="column" gap={0.5}>
+        <Stack
+          direction="column"
+          sx={{
+            gap: 0.5,
+          }}
+        >
           <Typography variant="body2">{fieldValue}</Typography>
           {isSupport && <SupportChip />}
         </Stack>

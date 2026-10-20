@@ -16,7 +16,15 @@ function RouteBoundary({
   id: typeof leftRouteBoundaryID | typeof rightRouteBoundaryID;
   showBoundary: boolean;
 }) {
-  return <Box id={id} padding={2} display={!showBoundary ? 'none' : 'block'} />;
+  return (
+    <Box
+      id={id}
+      sx={{
+        padding: 2,
+        display: !showBoundary ? 'none' : 'block',
+      }}
+    />
+  );
 }
 
 interface RouteProps {

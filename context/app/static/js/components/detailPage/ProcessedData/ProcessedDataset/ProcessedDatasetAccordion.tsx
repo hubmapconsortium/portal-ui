@@ -95,17 +95,27 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
       >
         <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
           {isLoading || isLoadingConf ? iconPlaceholder : visualizationIcon}
-          <Typography variant="subtitle1" color="inherit" component="h4">
+          <Typography
+            variant="subtitle1"
+            component="h4"
+            sx={{
+              color: 'inherit',
+            }}
+          >
             {sectionDataset.pipeline ?? sectionDataset.assay_display_name[0]}
           </Typography>
           <Typography
             variant="body1"
-            ml="auto"
             component="div"
-            display="flex"
-            alignItems="center"
-            gap={1}
-            sx={isRetracted ? { color: 'retracted.main' } : undefined}
+            sx={[
+              {
+                ml: 'auto',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+              },
+              isRetracted ? { color: 'retracted.main' } : false,
+            ]}
           >
             <StatusIcon status={sectionDataset.status} noColor={!isRetracted && isExpanded} tooltip />
             {dataset?.hubmap_id}

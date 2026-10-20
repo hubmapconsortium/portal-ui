@@ -10,7 +10,14 @@ function EntityHeaderItem({
   children,
 }: PropsWithChildren<{ startIcon?: ReactNode; endIcon?: ReactNode }>) {
   return (
-    <Stack direction="row" alignItems="center" spacing={0.5} sx={{ svg: { fontSize: '1.25rem' } }}>
+    <Stack
+      direction="row"
+      spacing={0.5}
+      sx={{
+        alignItems: 'center',
+        svg: { fontSize: '1.25rem' },
+      }}
+    >
       {startIcon}
       <Typography> {typeof children === 'string' ? truncateText(children) : children}</Typography>
       {endIcon}

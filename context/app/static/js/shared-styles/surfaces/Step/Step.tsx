@@ -23,7 +23,14 @@ const requiredVariants = {
 
 function StepDescription({ blocks }: { blocks: (string | ReactElement<unknown>)[] }) {
   return (
-    <Stack gap={2} p={2} component={Paper} direction="column">
+    <Stack
+      component={Paper}
+      direction="column"
+      sx={{
+        gap: 2,
+        p: 2,
+      }}
+    >
       {blocks.map((block) => (typeof block === 'string' ? <Typography key={block}>{block}</Typography> : block))}
     </Stack>
   );

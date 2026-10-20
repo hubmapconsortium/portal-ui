@@ -467,15 +467,7 @@ function estimateItemSize(item: React.ReactNode): number {
 
 const VirtualizedListbox = React.forwardRef<HTMLUListElement, React.HTMLAttributes<HTMLUListElement>>(
   function VirtualizedListbox(props, ref) {
-    // ownerState is injected by MUI's styled-components integration; strip it to avoid DOM warning
-    const {
-      children,
-      style,
-      ownerState: _ownerState,
-      ...other
-    } = props as React.HTMLAttributes<HTMLUListElement> & {
-      ownerState?: unknown;
-    };
+    const { children, style, ...other } = props;
     const flatItems = useMemo(() => flattenGroupedChildren(children), [children]);
     const scrollRef = useRef<HTMLUListElement | null>(null);
 
@@ -568,7 +560,13 @@ const CheckboxOption = React.memo(function CheckboxOption({
         >
           {isParent ? `All ${option.displayValue}` : option.displayValue}
         </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0 }}>
+        <Typography
+          variant="caption"
+          sx={{
+            color: 'text.secondary',
+            flexShrink: 0,
+          }}
+        >
           ({option.count.toLocaleString()})
         </Typography>
       </Box>
@@ -712,8 +710,10 @@ function FacetSearchCombobox() {
           size="small"
           variant="outlined"
           slotProps={{
+            ...params.slotProps,
+
             input: {
-              ...params.InputProps,
+              ...params.slotProps.input,
               startAdornment: (
                 <InputAdornment position="start">
                   <SearchRoundedIcon fontSize="small" color="action" />
@@ -725,16 +725,19 @@ function FacetSearchCombobox() {
       )}
       slotProps={{
         paper: { ref: paperRef, sx: { width: 350 } },
+
+        listbox: {
+          component: VirtualizedListbox,
+        },
       }}
-      ListboxComponent={VirtualizedListbox}
       renderGroup={(params) => (
         <li key={params.key}>
           <Typography
             data-group-header
             variant="body2"
-            fontWeight={600}
-            color="text.secondary"
             sx={{
+              fontWeight: 600,
+              color: 'text.secondary',
               px: 2,
               py: 0.5,
               lineHeight: 1.3,
@@ -793,7 +796,7 @@ function FacetSearchCombobox() {
           />
         );
       }}
-      renderTags={() => null}
+      renderValue={() => null}
       filterOptions={(options, { inputValue: input }) => {
         const lowerInput = input.toLowerCase();
         return options.filter(
