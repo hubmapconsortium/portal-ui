@@ -106,7 +106,14 @@ function handleTrackButtonClick() {
   });
 }
 
-export const dataLinks: DrawerSection[] = [
+const filesSearchLink = {
+  label: 'Files (BETA)',
+  description: 'Find files across datasets by file type, organ, and other metadata.',
+  href: '/search/files',
+  icon: <entityIconMap.File color="primary" />,
+};
+
+export const dataLinks = (enableFilesSearch = false): DrawerSection[] => [
   {
     sectionTitle: 'Datasets',
     items: [
@@ -124,12 +131,7 @@ export const dataLinks: DrawerSection[] = [
         href: '/search/biomarkers-cell-types',
         icon: <SearchIcon color="primary" />,
       },
-      {
-        label: 'Files (BETA)',
-        description: 'Find files across datasets by file type, organ, and other metadata.',
-        href: '/search/files',
-        icon: <entityIconMap.File color="primary" />,
-      },
+      ...(enableFilesSearch ? [filesSearchLink] : []),
     ],
   },
   {
@@ -346,4 +348,5 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
   ];
 };
 
-export const mobileMenuLinks = dataLinks.concat(<DrawerTitle>Resources</DrawerTitle>, toolsAndAppsLinks);
+export const mobileMenuLinks = (enableFilesSearch = false) =>
+  dataLinks(enableFilesSearch).concat(<DrawerTitle>Resources</DrawerTitle>, toolsAndAppsLinks);

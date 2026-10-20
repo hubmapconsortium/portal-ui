@@ -77,6 +77,7 @@ def get_default_flask_data():
             'scFindEndpoint': current_app.config['SCFIND_ENDPOINT'],
             'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION'],
             'enableSaySeeMode': bool(current_app.config.get('ENABLE_SAY_SEE_MODE')),
+            'enableFilesSearch': bool(current_app.config.get('ENABLE_FILES_SEARCH')),
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD'),
         'pinnedPublicationUUIDs': current_app.config.get('PINNED_PUBLICATION_UUIDS', ''),

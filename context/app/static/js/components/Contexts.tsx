@@ -59,6 +59,7 @@ export interface AppContextType {
   userGlobusId?: string;
   userGlobusAffiliation?: string;
   enableSaySeeMode?: boolean;
+  enableFilesSearch?: boolean;
   [key: string]: unknown;
 }
 

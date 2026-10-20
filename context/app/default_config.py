@@ -91,3 +91,7 @@ class DefaultConfig(object):
     # Gates the Say & See Mode (BETA) front-end. When False, the search page
     # hides the mode tabs and promo alert, leaving only Filter & Browse mode.
     ENABLE_SAY_SEE_MODE = False
+
+    # Gates the header navigation links to the Files search (BETA). When False,
+    # /search/files is still reachable directly but is not linked from the site.
+    ENABLE_FILES_SEARCH = False
