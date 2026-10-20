@@ -47,7 +47,6 @@ export function DrawerTitle(props: TypographyProps) {
 export const DrawerList = List;
 
 export const DrawerListItem = styled(ListItem)(({ theme }) => ({
-  marginY: 0,
   '&:hover': {
     backgroundColor: theme.palette.accent.success90,
     borderRadius: theme.spacing(1),

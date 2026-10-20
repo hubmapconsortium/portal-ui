@@ -18,14 +18,12 @@ const Accordion = styled((props: AccordionProps) => <MuiAccordion disableGutters
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary expandIcon={<ExpandMore color="primary" />} {...props} />
-))({
+))(({ theme }) => ({
   backgroundColor: 'transparent',
   flexDirection: 'row',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  gap: 1,
-  px: 0,
-  pb: 0,
+  gap: theme.spacing(1),
   minHeight: 'auto',
   '&.MuiButtonBase-root': {
     padding: 0,
@@ -37,7 +35,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     flexGrow: 0,
     margin: 0,
   },
-}) as typeof MuiAccordionSummary;
+})) as typeof MuiAccordionSummary;
 
 const AccordionDetails = styled(MuiAccordionDetails)(() => ({
   padding: 0,

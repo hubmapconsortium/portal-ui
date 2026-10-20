@@ -27,8 +27,6 @@ const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({
 }));
 
 const FileTypeChip = styled(Chip)(({ theme }) => ({
-  px: theme.spacing(2),
-  py: theme.spacing(1),
   borderRadius: theme.spacing(1),
   '&:not(:first-of-type)': {
     marginLeft: theme.spacing(1),

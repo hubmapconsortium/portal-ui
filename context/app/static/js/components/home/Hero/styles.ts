@@ -127,7 +127,6 @@ export const PillBarOuter = styled('div')(({ theme }) => ({
   '& > nav': {
     maxWidth: '100%',
     width: '100%',
-    paddingY: 1,
     transition: theme.transitions.create(['max-width', 'box-shadow', 'border-radius', 'padding', 'margin']),
     margin: 0,
 
@@ -142,11 +141,10 @@ export const PillBarOuter = styled('div')(({ theme }) => ({
       maxWidth: 700,
       boxShadow: theme.shadows[3],
       borderRadius: theme.spacing(0.5),
-      paddingY: 0,
       // Add margin to bar to compensate for reduced padding on the links
       // This prevents scrolling from causing a layout shift due to the
       // change in height when the bar becomes sticky
-      // 2 to make up for py reduction on pillbar, 2 to make up for padding reduction on links
+      // 4 = the links' vertical padding dropping from 3 to 1 on each side
       marginBottom: theme.spacing(4),
 
       '& > button': {

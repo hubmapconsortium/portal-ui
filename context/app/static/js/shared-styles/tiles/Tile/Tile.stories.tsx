@@ -13,8 +13,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-// @ts-expect-error - styled-components component prop typing issue with MUI SvgIcon
-const Icon = <StyledIcon component={DatasetIcon} />;
+const Icon = <StyledIcon as={DatasetIcon} />;
 
 const sharedArgs = {
   href: '',

@@ -467,15 +467,7 @@ function estimateItemSize(item: React.ReactNode): number {
 
 const VirtualizedListbox = React.forwardRef<HTMLUListElement, React.HTMLAttributes<HTMLUListElement>>(
   function VirtualizedListbox(props, ref) {
-    // ownerState is injected by MUI's styled-components integration; strip it to avoid DOM warning
-    const {
-      children,
-      style,
-      ownerState: _ownerState,
-      ...other
-    } = props as React.HTMLAttributes<HTMLUListElement> & {
-      ownerState?: unknown;
-    };
+    const { children, style, ...other } = props;
     const flatItems = useMemo(() => flattenGroupedChildren(children), [children]);
     const scrollRef = useRef<HTMLUListElement | null>(null);
 
