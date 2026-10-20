@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { shouldForwardProp } from 'js/helpers/styled';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
@@ -27,7 +28,7 @@ interface StyledTypographyProps {
   $mb?: number;
 }
 
-const StyledTypography = styled(Typography)<StyledTypographyProps>(({ theme, $mb = 0 }) => ({
+const StyledTypography = styled(Typography, { shouldForwardProp })<StyledTypographyProps>(({ theme, $mb = 0 }) => ({
   marginBottom: theme.spacing($mb),
 }));
 

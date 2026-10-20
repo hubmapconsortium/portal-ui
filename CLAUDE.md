@@ -58,7 +58,7 @@ Flask handles server-side routing and renders a template (`react-content.html`) 
 
 ### Styling
 
-MUI v6 with **styled-components** as the CSS-in-JS engine (not Emotion). Custom theme in `theme/theme.tsx` extends MUI's palette with project-specific colors. Reusable styled components live in `shared-styles/`.
+MUI v7 with **Emotion** (MUI's default styled engine). Custom theme in `theme/theme.tsx` extends MUI's palette with project-specific colors. Reusable styled components live in `shared-styles/`.
 
 ### Vite Path Aliases
 
@@ -68,7 +68,6 @@ Defined in `context/vite.config.mts`:
 - `assets` → `./app/static/assets/`
 - `shared-styles` → `./app/static/js/shared-styles/`
 - `package` → `./package.json` (for reading `version` at runtime)
-- `@mui/styled-engine` → `@mui/styled-engine-sc` (styled-components engine)
 
 ### Portal-Visualization Integration
 
