@@ -10,7 +10,15 @@ import HeaderNavigationDrawer from './HeaderNavigationDrawer';
 import { dataLinks, resourceLinks, toolsAndAppsLinks, userLinks, mobileMenuLinks } from '../staticLinks';
 
 export function DataLinks() {
-  return <HeaderNavigationDrawer title="Data" sections={dataLinks} icon={<DatabaseIcon />} direction="left" />;
+  const { enableFilesSearch } = useAppContext();
+  return (
+    <HeaderNavigationDrawer
+      title="Data"
+      sections={dataLinks(enableFilesSearch)}
+      icon={<DatabaseIcon />}
+      direction="left"
+    />
+  );
 }
 
 export function ResourcesLinks() {
@@ -48,10 +56,11 @@ export function UserLinks() {
 }
 
 export function MobileMenu() {
+  const { enableFilesSearch } = useAppContext();
   return (
     <HeaderNavigationDrawer
       title="Data"
-      sections={mobileMenuLinks}
+      sections={mobileMenuLinks(enableFilesSearch)}
       icon={<MenuRounded />}
       direction="left"
       altOnlyTitle

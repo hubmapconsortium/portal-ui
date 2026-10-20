@@ -1,0 +1,1 @@
+- Gate the Files (BETA) search links in the header Data menu and mobile menu behind a new `ENABLE_FILES_SEARCH` Flask config flag, off by default. `/search/files` stays reachable by direct URL.
