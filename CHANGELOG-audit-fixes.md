@@ -1,0 +1,10 @@
+- Shared Vitessce links now restore the viewer's token only on requests to the assets endpoint.
+- Files search filter counts are cached per HuBMAP-Read access rather than per login.
+- The public UDI TSV cache is filled only by unfiltered requests.
+- Saved lists in browser storage are kept until they have been saved to the server, and are only moved for users with saved-list access.
+- Failed workspace launches and edits now show an error instead of a success message, and the workspace loading page stops polling when a job does not start.
+- Login checks the OAuth `state` parameter, and logout revokes the Globus groups token.
+- The sitemap and publication page descriptions are built from public data only, and lookup failures are no longer cached.
+- The scfind cell types landing and organ payloads are not cached when an upstream call fails, and unknown organ names no longer create cache entries.
+- The shared disk cache's in-process copy now expires with its TTL.
+- "Download Metadata" and LineUp from the search page now use the search text as well as the filters, and fail with an error instead of returning partial results.

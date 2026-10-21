@@ -138,6 +138,7 @@ interface UseLineupPageEntitiesReturnType {
   isLoading: boolean;
   allKeys: string[];
   totalHitsCount?: number;
+  error?: unknown;
 }
 
 /**

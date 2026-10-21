@@ -364,13 +364,9 @@ function useHandleUpdateWorkspace() {
 
   const handleUpdateWorkspace = useCallback(
     async ({ body, workspaceId }: { body: UpdateWorkspaceBody; workspaceId: number }) => {
-      try {
-        await updateWorkspace({ body, workspaceId });
-        await mutateWorkspacesAndJobs();
-        await globalMutateWorkspace(workspaceId);
-      } catch (e) {
-        console.error(e);
-      }
+      await updateWorkspace({ body, workspaceId });
+      await mutateWorkspacesAndJobs();
+      await globalMutateWorkspace(workspaceId);
     },
     [updateWorkspace, mutateWorkspacesAndJobs, globalMutateWorkspace],
   );

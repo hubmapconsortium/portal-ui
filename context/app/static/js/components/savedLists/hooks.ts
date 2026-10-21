@@ -49,12 +49,8 @@ function useHandleUpdateSavedList() {
 
   const handleUpdateSavedList = useCallback(
     async ({ body, listUUID }: { body: SavedEntitiesList; listUUID: string }) => {
-      try {
-        await updateSavedList({ body, listUUID });
-        await globalMutateSavedList(listUUID);
-      } catch (e) {
-        console.error(e);
-      }
+      await updateSavedList({ body, listUUID });
+      await globalMutateSavedList(listUUID);
     },
     [updateSavedList, globalMutateSavedList],
   );
@@ -86,11 +82,7 @@ function useSetListsAndEntities() {
       await Promise.all(
         Object.entries(savedLists)
           .filter(([key]) => !RESERVED_KEYS.includes(key))
-          .map(([listUUID, list]) =>
-            handleUpdateSavedList({ body: list, listUUID }).catch((e) => {
-              console.error(e);
-            }),
-          ),
+          .map(([listUUID, list]) => handleUpdateSavedList({ body: list, listUUID })),
       );
     },
     [handleUpdateSavedList],
@@ -107,11 +99,13 @@ interface LocalSavedEntities {
 function useCheckForLocalSavedEntities() {
   const setListsAndEntities = useSetListsAndEntities();
   const setTransferredToProfileAlert = useSavedListsAlertsStore((state) => state.setTransferredToProfileAlert);
+  const { hasAccess } = useBuildUkvSWRKey();
 
   return useEventCallback(() => {
     const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
 
-    if (!localEntities) {
+    // Without UKV access the PUT is rejected, so the local copy must stay where it is.
+    if (!localEntities || !hasAccess) {
       return;
     }
 

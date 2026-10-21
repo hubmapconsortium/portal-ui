@@ -494,7 +494,7 @@ async function startJob(
     name: workspaceId,
   });
 
-  const result = fetch(url, {
+  const response = await fetch(url, {
     method: 'PUT',
     headers,
     body: JSON.stringify({
@@ -503,8 +503,8 @@ async function startJob(
       resource_options: resourceOptions,
     }),
   });
-  if (!(await result).ok) {
-    console.error(`Failed to start workspace ${workspaceId}`, result);
+  if (!response.ok) {
+    throw Error(`Failed to start workspace ${workspaceId}: ${response.status}`);
   }
 }
 

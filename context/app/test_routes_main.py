@@ -161,6 +161,33 @@ def test_login(client):
     response = client.get('/login')
     assert response.status == '302 FOUND'
     assert response.location.startswith('https://auth.globus.org/v2/oauth2/authorize')
+    with client.session_transaction() as session:
+        assert f'state={session["oauth_state"]}' in response.location
+
+
+@pytest.mark.parametrize(
+    'callback_query', ['code=attacker-code', 'code=attacker-code&state=forged']
+)
+def test_login_callback_rejects_unexpected_state(client, mocker, callback_query):
+    exchange = mocker.patch('globus_sdk.ConfidentialAppAuthClient.oauth2_exchange_code_for_tokens')
+    client.get('/login')
+
+    response = client.get(f'/login?{callback_query}')
+
+    assert response.status == '302 FOUND'
+    assert response.location.endswith('/login')
+    exchange.assert_not_called()
+
+
+def test_logout_revokes_groups_token(client, mocker):
+    revoke = mocker.patch('globus_sdk.ConfidentialAppAuthClient.oauth2_revoke_token')
+    with client.session_transaction() as session:
+        session['groups_token'] = 'groups-token'
+
+    response = client.get('/logout')
+
+    assert response.status == '302 FOUND'
+    revoke.assert_called_once_with('groups-token')
 
 
 def test_robots_txt_disallow(client):
