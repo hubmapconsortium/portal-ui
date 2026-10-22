@@ -501,12 +501,15 @@ def peek_cell_type_name(clid):
     return _extract_cell_types_info(clid_to_label_map.get(clid, []))['name']
 
 
-def _fan_out(items, fetch_one, label):
+def _fan_out(items, fetch_one, label, strict=False):
     """
     Run ``fetch_one(item)`` for each item across a bounded thread pool, returning ``{item: result}``.
 
     Each task re-enters the app context (worker threads don't inherit it); a per-item failure is
     logged and the item is dropped from the result rather than failing the whole aggregate.
+
+    With ``strict``, each item is retried and a failure that persists raises instead. Builders
+    whose result is disk-cached use it, since a dropped item would stay missing until restart.
     """
     if not items:
         return {}
@@ -514,6 +517,8 @@ def _fan_out(items, fetch_one, label):
 
     def run(item):
         with app.app_context():
+            if strict:
+                return item, _retry(lambda: fetch_one(item))
             try:
                 return item, fetch_one(item)
             except Exception as e:
@@ -531,7 +536,7 @@ def _fan_out(items, fetch_one, label):
     return results
 
 
-def _gather(tasks):
+def _gather(tasks, strict=False):
     """
     Run independent ``{label: (callable, default)}`` tasks concurrently, returning ``{label: result}``.
 
@@ -539,6 +544,8 @@ def _gather(tasks):
     many items): each task runs in its own thread, re-entering the captured app context (worker
     threads don't inherit it). A task that raises degrades to its ``default`` (logged) instead of
     failing the whole aggregate, so e.g. one modality's scfind error doesn't 500 the page.
+
+    With ``strict``, a task that raises fails the whole aggregate instead, for disk-cached results.
     """
     if not tasks:
         return {}
@@ -546,6 +553,8 @@ def _gather(tasks):
 
     def run(label, fn, default):
         with app.app_context():
+            if strict:
+                return label, fn()
             try:
                 return label, fn()
             except Exception as e:
@@ -577,7 +586,7 @@ def _build_cell_counts_for_tissues(organs, modality=None):
     return _fan_out(organs, fetch, 'cellTypeCountForTissue')
 
 
-def _build_datasets_for_cell_types(cell_types, modality=None):
+def _build_datasets_for_cell_types(cell_types, modality=None, strict=False):
     """Per-cell-type findDatasetForCellType payloads ({counts, datasets}), keyed by cell type."""
 
     def fetch(cell_type):
@@ -592,7 +601,7 @@ def _build_datasets_for_cell_types(cell_types, modality=None):
             params['modality'] = modality
         return _cached_scfind_get('findDatasetForCellType', tuple(sorted(params.items())))
 
-    return _fan_out(cell_types, fetch, 'findDatasetForCellType')
+    return _fan_out(cell_types, fetch, 'findDatasetForCellType', strict=strict)
 
 
 def _dataset_counts_for_genes(genes, modality=None):
@@ -661,7 +670,8 @@ def _build_dataset_counts(modality=None):
         )
         return [c.get('index') for c in counts if isinstance(c, dict) and c.get('index')]
 
-    per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset')
+    # Only the disk-cached landing payload uses these counts, so a dataset must not be dropped.
+    per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset', strict=True)
     label_datasets = {}
     for dataset, indexes in per_dataset.items():
         for index in indexes:
@@ -675,8 +685,8 @@ def _build_cell_type_descriptions(label_to_clid_map):
 
     Returns ``{clid: definition}`` keyed by the full CLID (e.g. "CL:0000236"). Bundled into the
     landing payload (and warmed) so the panel's descriptions are cached server-side instead of being
-    fetched from UBKG on every page load. UBKG/network failures degrade to an empty map (the panel
-    then shows its "No description available." fallback).
+    fetched from UBKG on every page load. A UBKG/network failure is retried and then raised: every
+    caller disk-caches the result, so an empty map would hide the descriptions until restart.
     """
     clids = sorted({clid for clids in label_to_clid_map.values() for clid in clids})
     if not clids:
@@ -685,13 +695,13 @@ def _build_cell_type_descriptions(label_to_clid_map):
     # UBKG's /celltypes endpoint keys by the numeric portion of the CLID (mirrors stripCLIDPrefix).
     numeric_ids = ','.join(''.join(ch for ch in clid if ch.isdigit()) for clid in clids)
     url = f'{ubkg_endpoint}/celltypes/{numeric_ids}'
-    try:
+
+    def fetch():
         response = requests.get(url, timeout=EXTERNAL_REQUEST_TIMEOUT)
         response.raise_for_status()
-        data = response.json()
-    except requests.RequestException as e:
-        current_app.logger.warning(f'Failed to fetch cell type descriptions from UBKG: {e}')
-        return {}
+        return response.json()
+
+    data = _retry(fetch)
 
     descriptions = {}
     for entry in data:
@@ -870,12 +880,17 @@ def _build_organ_cell_types(organ):
     atac_labels = organ_labels('ATAC')
 
     # The two modalities' per-cell-type findDatasetForCellType fan-outs are independent — run them
-    # concurrently (each degrades to empty on a scfind error rather than failing the whole table).
+    # concurrently. Strict, because this payload is disk-cached: a scfind error fails the request
+    # (and is retried by the next one) rather than caching a table with missing datasets.
     results = _gather(
         {
-            'rna': (lambda: _build_datasets_for_cell_types(rna_labels), {}),
-            'atac': (lambda: _build_datasets_for_cell_types(atac_labels, modality='ATAC'), {}),
-        }
+            'rna': (lambda: _build_datasets_for_cell_types(rna_labels, strict=True), {}),
+            'atac': (
+                lambda: _build_datasets_for_cell_types(atac_labels, modality='ATAC', strict=True),
+                {},
+            ),
+        },
+        strict=True,
     )
 
     # Cell Ontology descriptions for every CLID across both modalities, fetched once from UBKG.
@@ -902,6 +917,16 @@ def _build_organ_cell_types(organ):
     return {
         'cell_types': rows(rna_labels, results['rna']),
         'cell_types_atac': rows(atac_labels, results['atac']),
+    }
+
+
+def _known_organs():
+    """Lower-cased organ prefixes of the cell type names scfind has, across both modalities."""
+    return {
+        cell_type.split('.', 1)[0].lower()
+        for modality in (None, 'ATAC')
+        for cell_type in _get_all_cell_type_names(modality)
+        if '.' in cell_type
     }
 
 
@@ -1451,6 +1476,11 @@ def organ_cell_types(organ):
     try:
         if not _is_valid_organ_name(organ):
             return jsonify({'error': 'Invalid organ.'}), 400
+        # The organ is user input, and each distinct value would add a disk file and an
+        # in-process memo entry for good, so only organs scfind knows get one. Any other organ
+        # has no cell types, which is the same payload without the cache entry.
+        if organ.lower() not in _known_organs():
+            return jsonify({'cell_types': [], 'cell_types_atac': []})
         return jsonify(_organ_cell_types(organ))
     except Exception as e:
         return _handle_scfind_error(e, 'organ cell types')

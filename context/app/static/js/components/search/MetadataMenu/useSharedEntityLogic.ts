@@ -15,47 +15,76 @@ const entityTypeMap: Record<string, ESEntityType | undefined> = {
 };
 
 /**
- * Shared logic for determining query parameters for both LineupMenuItem and DownloadTSVItem.
- * Returns the entity type and query parameters (either UUIDs or filters) for fetching entities.
+ * The query the search page lists its results from — free text, default and revision filters, and
+ * the active facet filters — as a single clause, so a download or LineUp view covers exactly the
+ * results the user sees.
  */
-export function useSharedEntityLogic(lcPluralType: string) {
-  const { selectedHits } = useMetadataMenu();
-  const searchStore = useSearchStore();
+export function useSearchResultsQuery() {
+  const {
+    filters,
+    facets,
+    search,
+    searchFields,
+    sortField,
+    defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
+  } = useSearchStore();
   const mappings = useEsMapping();
 
-  const entityType = entityTypeMap[lcPluralType];
-
-  // Convert SearchStore filters to Elasticsearch query format
-  const filtersQuery = useMemo(() => {
+  return useMemo(() => {
     if (!isESMapping(mappings)) {
       return undefined;
     }
 
     // Only include filters that have values
     const activeFilters = Object.fromEntries(
-      Object.entries(searchStore.filters).filter(([, filter]) => filterHasValues({ filter })),
+      Object.entries(filters).filter(([, filter]) => filterHasValues({ filter })),
     );
-
-    if (Object.keys(activeFilters).length === 0) {
-      return undefined;
-    }
 
     const builtQuery = buildQuery({
       filters: activeFilters,
-      facets: searchStore.facets,
-      search: '',
+      facets,
+      search,
       size: 0,
-      searchFields: [],
+      searchFields,
       sourceFields: {},
-      sortField: searchStore.sortField,
+      sortField,
+      defaultQuery,
+      defaultQueryWithAncestorFilter,
+      latestRevisionFilter,
+      includeSupersededEntities,
       mappings,
       buildAggregations: false,
-    });
+    }) as { query?: Record<string, unknown>; post_filter?: Record<string, unknown> } | null;
 
-    // Extract just the post_filter from the built query for use in our custom query
-    // Type assertion is safe here because buildQuery returns a structured object
-    return (builtQuery as { post_filter?: Record<string, unknown> })?.post_filter;
-  }, [searchStore.filters, searchStore.facets, searchStore.sortField, mappings]);
+    // The results table applies `query` and `post_filter` together, so both must hold here too.
+    const clauses = [builtQuery?.query, builtQuery?.post_filter].filter((clause) => clause !== undefined);
+    return clauses.length > 0 ? { bool: { must: clauses } } : undefined;
+  }, [
+    filters,
+    facets,
+    search,
+    searchFields,
+    sortField,
+    defaultQuery,
+    defaultQueryWithAncestorFilter,
+    latestRevisionFilter,
+    includeSupersededEntities,
+    mappings,
+  ]);
+}
+
+/**
+ * Shared logic for determining query parameters for both LineupMenuItem and DownloadTSVItem.
+ * Returns the entity type and query parameters (either UUIDs or filters) for fetching entities.
+ */
+export function useSharedEntityLogic(lcPluralType: string) {
+  const { selectedHits } = useMetadataMenu();
+  const filtersQuery = useSearchResultsQuery();
+
+  const entityType = entityTypeMap[lcPluralType];
 
   // Determine query parameters: use UUIDs if available, otherwise use filters
   const queryParams = useMemo(() => {

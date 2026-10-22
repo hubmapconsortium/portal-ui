@@ -1098,6 +1098,32 @@ class TestPerPageAggregates:
         row = next(r for r in data['cell_types'] if r['name'] == 'epithelial cell')
         assert set(row) == {'name', 'clid', 'description', 'datasets'}
 
+    def test_organ_cell_types_unknown_organ_is_not_cached(self, client, mocker, tmp_path):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        mocker.patch('requests.post', side_effect=mock_scfind_post)
+        response = client.get('/scfind/organ-cell-types/notanorgan.json')
+        assert response.status_code == 200
+        assert response.get_json() == {'cell_types': [], 'cell_types_atac': []}
+        assert not any('organ-cell-types' in path.name for path in tmp_path.iterdir())
+
+    def test_organ_cell_types_failure_is_not_cached(self, client, mocker):
+        mocker.patch.object(routes_scfind.time, 'sleep')
+
+        def failing_get(url, **kwargs):
+            if 'findDatasetForCellType' in url:
+                return mock_scfind_get_error(url, **kwargs)
+            return mock_scfind_get(url, **kwargs)
+
+        mocker.patch('requests.get', side_effect=failing_get)
+        mocker.patch('requests.post', side_effect=mock_scfind_post)
+        assert client.get('/scfind/organ-cell-types/kidney.json').status_code >= 500
+
+        # Once scfind recovers, the next request builds the full table rather than a cached
+        # empty one.
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        data = client.get('/scfind/organ-cell-types/kidney.json').get_json()
+        assert any(row['datasets'] for row in data['cell_types'])
+
     @pytest.mark.parametrize('organ', ['a1b', 'a;b', 'x' * 51])
     def test_organ_cell_types_invalid_organ(self, client, mocker, organ):
         mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get)
@@ -1153,6 +1179,27 @@ class TestSharedMapCache:
         os.utime(path, (old, old))
         cache_utils.clear_memory_cache()
         with app.app_context():
+            routes_scfind._get_or_build_map('m', builder)
+
+        assert calls['n'] == 2
+
+    def test_in_process_memo_expires_with_ttl(self, tmp_path, monkeypatch):
+        app = create_app(testing=True)
+        app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
+        app.config['SCFIND_CACHE_TTL'] = 60
+        cache_utils.clear_memory_cache()
+
+        calls = {'n': 0}
+
+        def builder():
+            calls['n'] += 1
+            return {'cell': ['CL:0001']}
+
+        with app.app_context():
+            routes_scfind._get_or_build_map('m', builder)
+            # Same worker, an hour later: the memo must not outlive the TTL.
+            real_time = time.time
+            monkeypatch.setattr(cache_utils.time, 'time', lambda: real_time() + 3600)
             routes_scfind._get_or_build_map('m', builder)
 
         assert calls['n'] == 2

@@ -32,6 +32,15 @@ def get_valid_tutorial_routes():
     return {tutorial['route'] for tutorial in tutorials}
 
 
+def is_hubmap_read_user():
+    """
+    Whether the session's token can read consortium data. Any Globus identity can log in, so
+    having a token is not enough: the user must be in the HuBMAP-Read group, keyed as in
+    routes_auth.py's permission_groups dict.
+    """
+    return bool(session.get('groups_token')) and 'HuBMAP' in (session.get('user_groups') or [])
+
+
 def get_client(use_groups_token=True):
     if current_app.config.get('IS_MOCK'):
         return MockApiClient()

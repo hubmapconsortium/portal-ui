@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { renderHook, act, AllTheProviders, appProviderToken } from 'test-utils/functions';
+import { renderHook, act, AllTheProviders, appProviderEndpoints, appProviderToken } from 'test-utils/functions';
 import useSWR from 'swr';
 import LZString from 'lz-string';
 
@@ -164,14 +164,17 @@ describe('useVitessceConfig', () => {
       return `#vitessce_conf_length=${compressed.length}&vitessce_conf_version=0.0.1&vitessce_conf=${compressed}`;
     }
 
+    // Tokens are only restored on requests to the assets endpoint.
+    const ASSETS = appProviderEndpoints.assetsEndpoint;
+
     const sharedConf = (name = 'conf1') => ({
       name,
       datasets: [
         {
           files: [
-            { url: `https://a/x.ome.tif?token=${SHARED_TOKEN_PLACEHOLDER}` },
+            { url: `${ASSETS}/x.ome.tif?token=${SHARED_TOKEN_PLACEHOLDER}` },
             {
-              url: 'https://a/y.zarr',
+              url: `${ASSETS}/y.zarr`,
               requestInit: { headers: { Authorization: `Bearer ${SHARED_TOKEN_PLACEHOLDER}` } },
             },
           ],
@@ -192,9 +195,9 @@ describe('useVitessceConfig', () => {
         datasets: [
           {
             files: [
-              { url: `https://a/x.ome.tif?token=${appProviderToken}` },
+              { url: `${ASSETS}/x.ome.tif?token=${appProviderToken}` },
               {
-                url: 'https://a/y.zarr',
+                url: `${ASSETS}/y.zarr`,
                 requestInit: { headers: { Authorization: `Bearer ${appProviderToken}` } },
               },
             ],
@@ -221,7 +224,7 @@ describe('useVitessceConfig', () => {
 
       expect(result.current.localVitessceState).toEqual({
         name: 'conf1',
-        datasets: [{ files: [{ url: 'https://a/x.ome.tif' }, { url: 'https://a/y.zarr' }] }],
+        datasets: [{ files: [{ url: `${ASSETS}/x.ome.tif` }, { url: `${ASSETS}/y.zarr` }] }],
       });
     });
 

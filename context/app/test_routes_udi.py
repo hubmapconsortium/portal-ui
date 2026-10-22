@@ -604,6 +604,25 @@ def test_tsv_public_route_serves_authed_users_from_shared_cache(client, mocker):
     assert post_mock.call_count == initial_post_calls
 
 
+@pytest.mark.parametrize(
+    'filtered_request',
+    [
+        lambda client: client.get('/metadata/v0/udi/datasets.tsv?uuids=ABC123'),
+        lambda client: client.post('/metadata/v0/udi/datasets.tsv', json={'uuids': ['ABC123']}),
+    ],
+)
+def test_tsv_filtered_request_does_not_fill_shared_cache(client, mocker, filtered_request):
+    post_mock, _ = _patch_es(mocker)
+    filtered_response = filtered_request(client)
+    assert filtered_response.status_code == 200
+    assert filtered_response.headers.get('Cache-Control') == 'private, no-store'
+    after_filtered_calls = post_mock.call_count
+
+    # The unfiltered table must be built fresh, not served from the filtered result.
+    assert client.get('/metadata/v0/udi/datasets.tsv').status_code == 200
+    assert post_mock.call_count > after_filtered_calls
+
+
 def test_tsv_consortium_route_does_not_share_cache_with_public(client, mocker):
     post_mock, _ = _patch_es(mocker)
     public_response = client.get('/metadata/v0/udi/datasets.tsv')

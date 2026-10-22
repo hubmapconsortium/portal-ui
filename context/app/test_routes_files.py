@@ -116,6 +116,7 @@ class TestScopeAndCacheSafety:
         with app.test_client() as authed:
             with authed.session_transaction() as sess:
                 sess['groups_token'] = 'a-real-token'
+                sess['user_groups'] = ['HuBMAP']
             authed_body = authed.post('/api/files/facets', json=VALID_BODY).get_json()
         assert authed_body['aggregations'] == {'a': 'private'}
 
@@ -123,6 +124,28 @@ class TestScopeAndCacheSafety:
         with app.test_client() as anon:
             anon_body = anon.post('/api/files/facets', json=VALID_BODY).get_json()
         assert anon_body['aggregations'] == {'a': 'public'}
+
+    def test_logged_in_user_without_read_access_gets_public_entry(self, app, mocker):
+        """Any Globus identity can log in; only HuBMAP-Read members may see private counts."""
+        private_payload = {'hits': {'total': {'value': 2}}, 'aggregations': {'a': 'private'}}
+        mocker.patch('requests.post', return_value=FakeResponse(private_payload))
+
+        with app.test_client() as member:
+            with member.session_transaction() as sess:
+                sess['groups_token'] = 'member-token'
+                sess['user_groups'] = ['HuBMAP']
+            member.post('/api/files/facets', json=VALID_BODY)
+
+        public_payload = {'hits': {'total': {'value': 1}}, 'aggregations': {'a': 'public'}}
+        post = mocker.patch('requests.post', return_value=FakeResponse(public_payload))
+        with app.test_client() as outsider:
+            with outsider.session_transaction() as sess:
+                sess['groups_token'] = 'outsider-token'
+                sess['user_groups'] = []
+            outsider_body = outsider.post('/api/files/facets', json=VALID_BODY).get_json()
+
+        assert outsider_body['aggregations'] == {'a': 'public'}
+        assert 'Authorization' not in post.call_args.kwargs['headers']
 
     def test_cache_name_differs_by_scope(self, app):
         with app.app_context():

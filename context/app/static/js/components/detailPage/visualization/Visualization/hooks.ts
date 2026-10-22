@@ -68,7 +68,7 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
   }, [headerOffset]);
 
   const toastError = useSnackbarStore((store) => store.toastError);
-  const { groupsToken } = useAppContext();
+  const { groupsToken, assetsEndpoint } = useAppContext();
 
   const isMultiDataset = Array.isArray(vitData);
 
@@ -134,11 +134,12 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       }
 
       // Shared links carry a placeholder where the sharer's expiring groups token was. Swap in the
-      // current viewer's token so one link works for any authorized user; for a viewer with no
-      // token, drop the auth material so public assets still load unauthenticated. Configs without
-      // a placeholder (a normal server-built conf, a static CDN conf, or a link shared before this
-      // existed) come back untouched, which is why one call covers both branches above.
-      vitessceURLConf = restoreTokenFromPlaceholder(vitessceURLConf, groupsToken);
+      // current viewer's token on requests to the assets endpoint, so one link works for any
+      // authorized user; drop the auth material everywhere else, and for a viewer with no token, so
+      // public assets still load unauthenticated. Configs without a placeholder (a normal
+      // server-built conf, a static CDN conf, or a link shared before this existed) come back
+      // untouched, which is why one call covers both branches above.
+      vitessceURLConf = restoreTokenFromPlaceholder(vitessceURLConf, groupsToken, assetsEndpoint);
 
       let initializedVitDataFromUrl: object | object[];
       let initialSelectionFromUrl;
@@ -184,7 +185,18 @@ export function useVitessceConfig({ vitData, markerGene, hubmapId }: UseVitessce
       if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
     };
     // markerGene is included to re-initialize when it changes (e.g., gene search)
-  }, [vitData, toastError, markerGene, isTargetViz, vizParam, hubmapId, confSlug, staticConf, groupsToken]);
+  }, [
+    vitData,
+    toastError,
+    markerGene,
+    isTargetViz,
+    vizParam,
+    hubmapId,
+    confSlug,
+    staticConf,
+    groupsToken,
+    assetsEndpoint,
+  ]);
 
   const currentConfig = useMemo(() => {
     if (isMultiDataset && Array.isArray(vitessceConfig) && Number.isInteger(vitessceSelection)) {

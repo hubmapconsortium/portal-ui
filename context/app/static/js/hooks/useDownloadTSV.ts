@@ -33,11 +33,22 @@ export function useDownloadTSV({
 
   const { data: metadataFieldDescriptions } = useMetadataFieldDescriptions();
 
-  const { entities, allKeys, isLoading } = useLineupEntities({
+  const {
+    entities,
+    allKeys,
+    isLoading,
+    error: fetchError,
+  } = useLineupEntities({
     ...(queryParams || {}),
     ...(uuids ? { uuids } : {}),
     shouldFetchData: hasClickedDownload,
   });
+
+  useEffect(() => {
+    if (fetchError && hasClickedDownload) {
+      toastError('Download failed.');
+    }
+  }, [fetchError, hasClickedDownload, toastError]);
 
   const { isReady: dataIsReady, ...tableData } = useMemo(() => {
     return entitiesToTableData(entities, allKeys, true, metadataFieldDescriptions, lcPluralType);

@@ -246,18 +246,14 @@ async function* fetchAllPages(
 ) {
   const q = query;
 
-  try {
-    let i = 0;
-    while (i < numberOfPagesToRequest) {
-      // disabling eslint rule because that's the whole point of this generator
-
-      const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken, useDefaultQuery);
-      yield firstPageResults;
-      q.search_after = getSearchAfterSort(firstPageResults.hits.hits);
-      i += 1;
-    }
-  } catch (error) {
-    console.error("Error fetching all pages' data", error);
+  // No catch here: a page that fails must fail the whole fetch, or callers return the pages that
+  // did arrive as if they were the complete result.
+  let i = 0;
+  while (i < numberOfPagesToRequest) {
+    const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken, useDefaultQuery);
+    yield firstPageResults;
+    q.search_after = getSearchAfterSort(firstPageResults.hits.hits);
+    i += 1;
   }
 }
 
@@ -411,7 +407,12 @@ export function useAllSearchHits<Documents>(
     fetcher = defaultConfig.fetcher,
     ...swrConfigRest
   }: UseSearchDataConfig = defaultConfig,
-) {
+): {
+  searchHits: Required<SearchHit<Documents>>[];
+  totalHitsCount?: number;
+  isLoading: boolean;
+  error?: unknown;
+} {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
   const shouldFetch = Boolean(query);
@@ -448,12 +449,12 @@ export function useAllSearchHits<Documents>(
     };
   }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
-  const { data, isLoading } = useSWR(getKey, (args) => fetchAllHits<Documents>(args), {
+  const { data, isLoading, ...swr } = useSWR(getKey, (args) => fetchAllHits<Documents>(args), {
     fallbackData: [],
     ...swrConfigRest,
   });
 
-  return { searchHits: data ?? [], totalHitsCount, isLoading };
+  return { searchHits: data ?? [], totalHitsCount, isLoading, error: swr.error as unknown };
 }
 
 export function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {

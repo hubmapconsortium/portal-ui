@@ -1,5 +1,6 @@
 from urllib.parse import urlencode, unquote, urlparse
 from datetime import datetime
+import secrets
 
 from flask import make_response, current_app, url_for, request, redirect, session
 import requests
@@ -368,20 +369,32 @@ def login():
     redirect_uri = url_for('routes_auth.login', _external=True)
 
     client = load_app_client()
-    log('1/4: oauth2_start_flow')
-
-    client.oauth2_start_flow(redirect_uri, GLOBUS_AUTH_SCOPE)
 
     # If there's no "code" query string parameter, we're in this route
     # starting a Globus Auth login flow; Redirect out to Globus Auth:
     if 'code' not in request.args:
+        state = secrets.token_urlsafe(32)
+        session['oauth_state'] = state
+        log('1/4: oauth2_start_flow')
+        client.oauth2_start_flow(redirect_uri, GLOBUS_AUTH_SCOPE, state=state)
         log('2: oauth2_get_authorize_url')
         auth_uri = client.oauth2_get_authorize_url(query_params={'scope': GLOBUS_AUTH_SCOPE})
         log('3: redirect auth_url')
         return redirect(auth_uri)
 
+    # A code whose `state` does not match the one this browser started with was not requested
+    # by this browser. Accepting it would let an attacker log the victim into the attacker's
+    # account (login CSRF), so start the flow over instead.
+    expected_state = session.pop('oauth_state', None)
+    if not expected_state or not secrets.compare_digest(
+        request.args.get('state', ''), expected_state
+    ):
+        log('4: state mismatch, restarting login')
+        return redirect(url_for('routes_auth.login'))
+
     # If we do have a "code" param, we're coming back from Globus Auth
     # and can start the process of exchanging an auth code for a token.
+    client.oauth2_start_flow(redirect_uri, GLOBUS_AUTH_SCOPE)
     code = request.args.get('code')
     log('5: oauth2_exchange_code_for_tokens')
     tokens = client.oauth2_exchange_code_for_tokens(code) if code else None
@@ -494,17 +507,14 @@ def logout():
         )
         return redirect(globus_logout_url)
 
-    client = load_app_client()
-
-    # Revoke the tokens with Globus Auth
-    try:
-        tokens = session['tokens']
-    except Exception:
-        # May have only hit this because of weird state during development,
-        # but if there are no tokens, there's nothing to revoke.
-        tokens = {}
-    for token in (token_info['access_token'] for token_info in tokens.values()):
-        client.oauth2_revoke_token(token)
+    # Revoke the groups token with Globus Auth: earlier pages embed it, so clearing the session
+    # alone would leave it usable. A failed revoke must not block the logout itself.
+    groups_token = session.get('groups_token')
+    if groups_token:
+        try:
+            load_app_client().oauth2_revoke_token(groups_token)
+        except globus_sdk.GlobusError as e:
+            current_app.logger.error(f'Failed to revoke groups token at logout: {e}')
 
     # Destroy the session state
     session.clear()

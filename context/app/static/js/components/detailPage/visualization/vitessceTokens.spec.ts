@@ -9,6 +9,8 @@ import {
   sharedConfNeedsCredentials,
 } from './vitessceTokens';
 
+const ASSETS = 'https://a';
+
 // Mirrors the three real credential shapes at once: a `?token=` param on a top-level `url`, the same
 // on a deeply nested `omeTiffOffsetsUrl`, and a `requestInit.headers.Authorization` header.
 const confWithToken = (token: string) => ({
@@ -49,12 +51,12 @@ describe('replaceTokenWithPlaceholder / restoreTokenFromPlaceholder', () => {
     // All three credential positions carry the placeholder.
     expect(serialized.split(SHARED_TOKEN_PLACEHOLDER)).toHaveLength(4);
 
-    expect(restoreTokenFromPlaceholder(shared, 'xyz')).toEqual(confWithToken('xyz'));
+    expect(restoreTokenFromPlaceholder(shared, 'xyz', ASSETS)).toEqual(confWithToken('xyz'));
   });
 
   test('strips credentials entirely for a viewer with no token', () => {
     const shared = replaceTokenWithPlaceholder(confWithToken('abc'), 'abc');
-    const conf = restoreTokenFromPlaceholder(shared, '');
+    const conf = restoreTokenFromPlaceholder(shared, '', ASSETS);
 
     const [imageFile, zarrFile] = filesOf(conf);
     // No dangling `?`, and the header is gone rather than left as an empty bearer.
@@ -73,7 +75,7 @@ describe('replaceTokenWithPlaceholder / restoreTokenFromPlaceholder', () => {
         headers: { Authorization: `Bearer ${SHARED_TOKEN_PLACEHOLDER}`, 'Content-Type': 'application/json' },
       },
     };
-    expect(restoreTokenFromPlaceholder(shared, '')).toEqual({
+    expect(restoreTokenFromPlaceholder(shared, '', ASSETS)).toEqual({
       requestInit: { headers: { 'Content-Type': 'application/json' } },
     });
   });
@@ -85,7 +87,7 @@ describe('replaceTokenWithPlaceholder / restoreTokenFromPlaceholder', () => {
       last: `https://a/x?z=1&token=${SHARED_TOKEN_PLACEHOLDER}`,
     };
 
-    expect(restoreTokenFromPlaceholder(shared, '')).toEqual({
+    expect(restoreTokenFromPlaceholder(shared, '', ASSETS)).toEqual({
       only: 'https://a/x',
       first: 'https://a/x?z=1',
       last: 'https://a/x?z=1',
@@ -100,7 +102,7 @@ describe('replaceTokenWithPlaceholder / restoreTokenFromPlaceholder', () => {
       ],
     };
     // The emptied element stays at its index rather than being filtered out.
-    expect(restoreTokenFromPlaceholder(shared, '')).toEqual({ datasets: [{ name: 'conf1' }, {}] });
+    expect(restoreTokenFromPlaceholder(shared, '', ASSETS)).toEqual({ datasets: [{ name: 'conf1' }, {}] });
   });
 
   test('keeps objects that were already empty', () => {
@@ -108,15 +110,15 @@ describe('replaceTokenWithPlaceholder / restoreTokenFromPlaceholder', () => {
       options: {},
       requestInit: { headers: { Authorization: `Bearer ${SHARED_TOKEN_PLACEHOLDER}` } },
     };
-    expect(restoreTokenFromPlaceholder(shared, '')).toEqual({ options: {} });
+    expect(restoreTokenFromPlaceholder(shared, '', ASSETS)).toEqual({ options: {} });
   });
 
   test('returns credential-free configs by reference', () => {
     const conf = { name: 'conf1', datasets: [{ files: [{ url: 'https://a/x.zarr' }] }] };
 
     expect(replaceTokenWithPlaceholder(conf, 'abc')).toBe(conf);
-    expect(restoreTokenFromPlaceholder(conf, 'abc')).toBe(conf);
-    expect(restoreTokenFromPlaceholder(conf, '')).toBe(conf);
+    expect(restoreTokenFromPlaceholder(conf, 'abc', ASSETS)).toBe(conf);
+    expect(restoreTokenFromPlaceholder(conf, '', ASSETS)).toBe(conf);
   });
 
   test('is a no-op when the sharer has no token', () => {
@@ -129,7 +131,7 @@ describe('replaceTokenWithPlaceholder / restoreTokenFromPlaceholder', () => {
 
   test('is idempotent, so a recipient can re-share', () => {
     const shared = replaceTokenWithPlaceholder(confWithToken('abc'), 'abc');
-    const reshared = replaceTokenWithPlaceholder(restoreTokenFromPlaceholder(shared, 'xyz'), 'xyz');
+    const reshared = replaceTokenWithPlaceholder(restoreTokenFromPlaceholder(shared, 'xyz', ASSETS), 'xyz');
 
     expect(reshared).toEqual(shared);
   });
@@ -137,7 +139,42 @@ describe('replaceTokenWithPlaceholder / restoreTokenFromPlaceholder', () => {
   test('handles null and undefined', () => {
     expect(replaceTokenWithPlaceholder(null, 'abc')).toBeNull();
     expect(replaceTokenWithPlaceholder(undefined, 'abc')).toBeUndefined();
-    expect(restoreTokenFromPlaceholder(null, 'abc')).toBeNull();
+    expect(restoreTokenFromPlaceholder(null, 'abc', ASSETS)).toBeNull();
+  });
+
+  test('never sends the token to a host other than the assets endpoint', () => {
+    const shared = {
+      datasets: [
+        {
+          files: [
+            { url: `https://evil.example/x?token=${SHARED_TOKEN_PLACEHOLDER}` },
+            { url: `https://a.evil.example/x?token=${SHARED_TOKEN_PLACEHOLDER}` },
+            {
+              url: 'https://evil.example/y.zarr',
+              requestInit: { headers: { Authorization: `Bearer ${SHARED_TOKEN_PLACEHOLDER}` } },
+            },
+            {
+              url: 'https://a/z.zarr',
+              requestInit: { headers: { Authorization: `Bearer ${SHARED_TOKEN_PLACEHOLDER}` } },
+            },
+          ],
+        },
+      ],
+    };
+    const [foreign, lookalike, foreignZarr, assetsZarr] = filesOf(restoreTokenFromPlaceholder(shared, 'xyz', ASSETS));
+
+    expect(foreign.url).toBe('https://evil.example/x');
+    expect(lookalike.url).toBe('https://a.evil.example/x');
+    expect(foreignZarr).not.toHaveProperty('requestInit');
+    expect(assetsZarr.requestInit).toEqual({ headers: { Authorization: 'Bearer xyz' } });
+  });
+
+  test('restores nothing when the assets endpoint is unknown', () => {
+    const shared = replaceTokenWithPlaceholder(confWithToken('abc'), 'abc');
+    const serialized = JSON.stringify(restoreTokenFromPlaceholder(shared, 'xyz', ''));
+
+    expect(serialized).not.toContain('xyz');
+    expect(serialized).not.toContain(SHARED_TOKEN_PLACEHOLDER);
   });
 });
 
