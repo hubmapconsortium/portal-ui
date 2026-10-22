@@ -1,2 +1,3 @@
 - Show a 504 Gateway Timeout page, instead of a 500 error, when an upstream API times out; show 502 or 503 pages when an upstream API is unreachable or unavailable.
 - Reuse connections to the search, entity, and assets APIs across requests, and stop requests to them from hanging indefinitely.
+- Update portal-visualization to 0.5.14, which reuses connections and sets timeouts on its requests to the search, entity, and assets APIs.
