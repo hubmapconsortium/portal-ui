@@ -3,6 +3,8 @@ const errorTitle: Record<number, string> = {
   401: 'Unauthorized',
   403: 'Access Denied',
   404: 'Page Not Found',
+  502: 'Bad Gateway',
+  503: 'Service Unavailable',
   504: 'Gateway Timeout',
   500: 'Internal Server Error',
 };

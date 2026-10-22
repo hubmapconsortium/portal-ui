@@ -74,7 +74,7 @@ ABC123\tHMB123.XYZ\teons\t42{len(extra_fields) * tab}\r
 def mock_es_post(path, **kwargs):
     class MockResponse:
         def __init__(self):
-            self.status_code = 0  # _request requires a status code
+            self.status_code = 0  # ApiClient.request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
@@ -94,7 +94,7 @@ def mock_es_get(path, **kwargs):
 
     class MockResponse:
         def __init__(self):
-            self.status_code = 0  # _request requires a status code
+            self.status_code = 0  # ApiClient.request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
@@ -117,21 +117,21 @@ def tsv_assertions(response):
 
 
 def test_tsv_get(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.get('/metadata/v0/donors.tsv')
     tsv_assertions(response)
 
 
 def test_tsv_post(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.post('/metadata/v0/donors.tsv', json={'uuids': []})
     tsv_assertions(response)
 
 
 def test_unexpected_json_tsv_post(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
     response = client.post('/metadata/v0/donors.tsv', json={'unexpected': []})
     assert response.status == '200 OK'  # TODO: Should not be 200!
     # https://github.com/hubmapconsortium/portal-ui/issues/2348
@@ -142,7 +142,7 @@ def test_unexpected_json_tsv_post(client, mocker):
 
 
 def test_unexpected_args_tsv_post(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
     response = client.post('/metadata/v0/donors.tsv?hello=world')
     assert response.status == '200 OK'  # TODO: Should not be 200!
     # https://github.com/hubmapconsortium/portal-ui/issues/2348
