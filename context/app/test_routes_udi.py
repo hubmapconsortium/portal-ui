@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from . import routes_udi
@@ -290,6 +292,28 @@ def test_yac_completions_anon_with_header(client, mocker):
     assert response.get_json() == [{'name': 'CreateVisualization', 'arguments': {'title': 'test'}}]
     assert captured['self'] is routes_udi._get_byok_orchestrator()
     assert captured['openai_api_key'] == 'sk-anon'
+    # udi-yac < 0.9 sends no filters; udiagent treats None as "no active filters".
+    assert captured['filters'] is None
+
+
+def test_yac_completions_forwards_filters(client, mocker):
+    captured = _capture_run(mocker)
+    filters = [
+        {
+            'id': 'f1',
+            'entity': 'datasets',
+            'field': 'organ',
+            'filterType': 'point',
+            'pointValues': ['Kidney'],
+        }
+    ]
+    response = client.post(
+        '/v1/yac/completions',
+        json={**_sample_completion_body, 'filters': filters},
+        headers={'X-OpenAI-Key': 'sk-anon'},
+    )
+    assert response.status == '200 OK'
+    assert captured['filters'] == filters
 
 
 def test_yac_completions_hubmap_user_uses_config_key(client, mocker):
@@ -836,3 +860,72 @@ def test_build_resource_survives_a_nested_field(client, mocker):
     entities = [{'hubmap_id': 'HBM1', 'nested': {'entity_type': ['Dataset']}}]
     with pytest.raises(TypeError):
         build_resource('datasets', entities, {}, {}, ['hubmap_id'])
+
+
+_vis_data_schema = json.dumps(
+    {
+        'name': 'hubmap_metadata',
+        'resources': [
+            {
+                'name': 'datasets',
+                'path': 'datasets.tsv',
+                'schema': {
+                    'fields': [
+                        {'name': name, 'type': 'string', 'udi:data_type': 'nominal'}
+                        for name in ('uuid', 'dataset_type', 'organ')
+                    ]
+                },
+            }
+        ],
+    }
+)
+
+
+def _bar_count_tool():
+    """Looked up by suffix: inserting a template renumbers every later one."""
+    from udiagent.generated_vis_tools import TOOL_DISPATCH
+
+    return next(name for name in TOOL_DISPATCH if name.endswith('_barchart_count_vert_grouped'))
+
+
+def test_yac_vis_instantiate_rebinds_a_template(client):
+    """Runs the real udiagent helpers, including the underscore-prefixed ones
+    the route imports, so a udiagent refactor that renames them fails here."""
+    response = client.post(
+        '/v1/yac/vis_instantiate',
+        json={
+            'tool': _bar_count_tool(),
+            'toolArgs': {'entity': 'datasets', 'field': 'organ', 'stale': 'dropped'},
+            'dataSchema': _vis_data_schema,
+        },
+    )
+    assert response.status_code == 200
+    body = response.get_json()
+    assert body['toolArgs'] == {'entity': 'datasets', 'field': 'organ'}
+    assert {'encoding': 'x', 'field': 'organ', 'type': 'nominal'} in body['spec'][
+        'representation'
+    ]['mapping']
+    assert [p['value'] for p in body['params']] == ['organ']
+
+
+@pytest.mark.parametrize(
+    'overrides, status, code',
+    [
+        ({'toolArgs': None}, 400, 'bad_request'),
+        ({'tool': 'vis_999_no_such_template'}, 404, 'unknown_template'),
+        ({'dataSchema': 'not json'}, 400, 'bad_schema'),
+        ({'toolArgs': {'entity': 'datasets'}}, 422, 'missing_bindings'),
+        ({'toolArgs': {'entity': 'datasets', 'field': 'nope'}}, 422, 'invalid_bindings'),
+    ],
+)
+def test_yac_vis_instantiate_errors_carry_a_code(client, overrides, status, code):
+    body = {
+        'tool': _bar_count_tool(),
+        'toolArgs': {'entity': 'datasets', 'field': 'organ'},
+        'dataSchema': _vis_data_schema,
+        **overrides,
+    }
+    response = client.post('/v1/yac/vis_instantiate', json=body)
+    assert response.status_code == status
+    # udi-yac reads the top-level `code`; `unknown_template` drops the tweak UI.
+    assert response.get_json()['code'] == code
