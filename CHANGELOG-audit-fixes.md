@@ -8,3 +8,4 @@
 - The scfind cell types landing and organ payloads are not cached when an upstream call fails, and unknown organ names no longer create cache entries.
 - The shared disk cache's in-process copy now expires with its TTL.
 - "Download Metadata" and LineUp from the search page now use the search text as well as the filters, and fail with an error instead of returning partial results.
+- Update Node to 24.22.1 and Python to 3.13.18, and update Storybook, Vitest, black, Brotli, OpenTelemetry, undici and DOMPurify to versions that fix reported security issues.
