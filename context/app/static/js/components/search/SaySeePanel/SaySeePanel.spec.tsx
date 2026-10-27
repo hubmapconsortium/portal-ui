@@ -27,8 +27,10 @@ vi.mock('udi-yac', () => ({
     onEvent,
     palette,
     recordUrl,
+    savedSessionsKey,
   }: {
     dataPackagePath: string;
+    savedSessionsKey?: string;
     onEvent?: (name: string, properties?: Record<string, unknown>) => void;
     palette?: { category?: unknown[]; mark?: string };
     recordUrl?: (record: Record<string, unknown>, source: string) => string | null | undefined;
@@ -36,6 +38,7 @@ vi.mock('udi-yac', () => ({
     <div
       data-testid="udi-chat"
       data-path={dataPackagePath}
+      data-saved-sessions-key={savedSessionsKey}
       data-record-url={recordUrl?.({ uuid: 'abc' }, 'datasets') ?? undefined}
       data-aggregate-record-url={String(recordUrl?.({ count: 3 }, 'datasets'))}
       data-palette-count={palette?.category?.length}
@@ -71,6 +74,7 @@ interface AppContextOverrides {
   isAuthenticated?: boolean;
   isHubmapUser?: boolean;
   isWorkspacesUser?: boolean;
+  userEmail?: string;
 }
 
 interface PrefsOverrides {
@@ -170,6 +174,16 @@ describe('SaySeePanel', () => {
     // and brand primary as the single-mark color.
     expect(chat).toHaveAttribute('data-palette-count', '18');
     expect(chat).toHaveAttribute('data-palette-mark', theme.palette.primary.main);
+  });
+
+  it('keeps saved sessions per user', async () => {
+    setup({ isAuthenticated: true, isHubmapUser: true, userEmail: 'a@example.org' }, { scope: 'authenticated' });
+    render(<SaySeePanel />, { wrapper: Wrapper });
+    const chat = await screen.findByTestId('udi-chat');
+    expect(chat).toHaveAttribute(
+      'data-saved-sessions-key',
+      '/metadata/v0/udi/consortium/datapackage.json:a@example.org',
+    );
   });
 
   it('links records to their detail page, and aggregated rows to nothing', async () => {

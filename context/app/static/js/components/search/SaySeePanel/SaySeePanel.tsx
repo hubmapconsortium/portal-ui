@@ -76,7 +76,7 @@ function ChatFallback() {
 }
 
 function SaySeePanel() {
-  const { isHubmapUser, isWorkspacesUser } = useAppContext();
+  const { isHubmapUser, isWorkspacesUser, userEmail } = useAppContext();
   const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(useShallow(visualizationSelector));
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
   // Subscribe to the shared Escape-collapses-fullscreen listener; the
@@ -168,8 +168,9 @@ function SaySeePanel() {
                 downloadActions={downloadActions}
                 downloadButtonLabel="Download Metadata"
                 recordUrl={recordUrl}
-                // One saved-session store per data package, as udi-yac requires.
-                savedSessionsKey={dataPackagePath}
+                // One saved-session store per data package, as udi-yac requires, and per
+                // user, so people sharing a browser don't see each other's sessions.
+                savedSessionsKey={userEmail ? `${dataPackagePath}:${userEmail}` : dataPackagePath}
               />
             )}
           </Suspense>

@@ -1,6 +1,5 @@
-import json
-
 import pytest
+from udiagent.api import EndpointError
 
 from . import routes_udi
 from .main import create_app
@@ -862,70 +861,45 @@ def test_build_resource_survives_a_nested_field(client, mocker):
         build_resource('datasets', entities, {}, {}, ['hubmap_id'])
 
 
-_vis_data_schema = json.dumps(
-    {
-        'name': 'hubmap_metadata',
-        'resources': [
-            {
-                'name': 'datasets',
-                'path': 'datasets.tsv',
-                'schema': {
-                    'fields': [
-                        {'name': name, 'type': 'string', 'udi:data_type': 'nominal'}
-                        for name in ('uuid', 'dataset_type', 'organ')
-                    ]
-                },
-            }
-        ],
-    }
-)
-
-
-def _bar_count_tool():
-    """Looked up by suffix: inserting a template renumbers every later one."""
-    from udiagent.generated_vis_tools import TOOL_DISPATCH
-
-    return next(name for name in TOOL_DISPATCH if name.endswith('_barchart_count_vert_grouped'))
-
-
-def test_yac_vis_instantiate_rebinds_a_template(client):
-    """Runs the real udiagent helpers, including the underscore-prefixed ones
-    the route imports, so a udiagent refactor that renames them fails here."""
-    response = client.post(
-        '/v1/yac/vis_instantiate',
-        json={
-            'tool': _bar_count_tool(),
-            'toolArgs': {'entity': 'datasets', 'field': 'organ', 'stale': 'dropped'},
-            'dataSchema': _vis_data_schema,
-        },
-    )
-    assert response.status_code == 200
-    body = response.get_json()
-    assert body['toolArgs'] == {'entity': 'datasets', 'field': 'organ'}
-    assert {'encoding': 'x', 'field': 'organ', 'type': 'nominal'} in body['spec'][
-        'representation'
-    ]['mapping']
-    assert [p['value'] for p in body['params']] == ['organ']
-
-
 @pytest.mark.parametrize(
-    'overrides, status, code',
+    'body, status, code',
     [
-        ({'toolArgs': None}, 400, 'bad_request'),
-        ({'tool': 'vis_999_no_such_template'}, 404, 'unknown_template'),
-        ({'dataSchema': 'not json'}, 400, 'bad_schema'),
-        ({'toolArgs': {'entity': 'datasets'}}, 422, 'missing_bindings'),
-        ({'toolArgs': {'entity': 'datasets', 'field': 'nope'}}, 422, 'invalid_bindings'),
+        ({'toolArgs': {}}, 404, 'unknown_template'),
+        ({'toolArgs': None}, 422, 'bad_request'),
     ],
 )
-def test_yac_vis_instantiate_errors_carry_a_code(client, overrides, status, code):
-    body = {
-        'tool': _bar_count_tool(),
-        'toolArgs': {'entity': 'datasets', 'field': 'organ'},
-        'dataSchema': _vis_data_schema,
-        **overrides,
-    }
-    response = client.post('/v1/yac/vis_instantiate', json=body)
+def test_yac_vis_instantiate_answers_like_udiagent(client, body, status, code):
+    """A real udiagent call, so an upstream rename or contract change fails here.
+    An unknown template is answered before the schema is read, so no real
+    template name (which udiagent renumbers) is needed."""
+    response = client.post(
+        '/v1/yac/vis_instantiate',
+        json={'tool': 'vis_999_no_such_template', 'dataSchema': '{}', **body},
+    )
     assert response.status_code == status
     # udi-yac reads the top-level `code`; `unknown_template` drops the tweak UI.
     assert response.get_json()['code'] == code
+
+
+def test_yac_vis_instantiate_returns_the_spec(client, mocker):
+    payload = {'spec': {'source': []}, 'toolArgs': {'field': 'organ'}, 'params': []}
+    instantiate = mocker.patch('app.routes_udi.vis_instantiate', return_value=payload)
+    body = {'tool': 'vis_001', 'toolArgs': {'field': 'organ'}, 'dataSchema': '{}'}
+    response = client.post('/v1/yac/vis_instantiate', json=body)
+    assert response.status_code == 200
+    assert response.get_json() == payload
+    instantiate.assert_called_once_with(body)
+
+
+def test_yac_vis_instantiate_logs_server_errors(client, mocker, caplog):
+    mocker.patch(
+        'app.routes_udi.vis_instantiate',
+        side_effect=EndpointError(500, 'instantiate_failed', 'Could not build a spec.'),
+    )
+    response = client.post('/v1/yac/vis_instantiate', json={})
+    assert response.status_code == 500
+    assert response.get_json() == {
+        'code': 'instantiate_failed',
+        'error': 'Could not build a spec.',
+    }
+    assert any(r.exc_info for r in caplog.records)

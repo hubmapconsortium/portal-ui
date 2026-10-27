@@ -1,4 +1,4 @@
-- Upgrade `udi-yac` (Say & See chat) from 0.5.0 to 0.9.0 and `udiagent` from 0.6.0 to 0.9.0. The chat now sends its active filters with each message, and the agent takes them into account, so it can answer "which filters are on?" and build on the current filters.
+- Upgrade `udi-yac` (Say & See chat) from 0.5.0 to 0.10.0 and `udiagent` from 0.6.0 to 0.10.0. The chat now sends its active filters with each message, and the agent takes them into account, so it can answer "which filters are on?" and build on the current filters.
 - Fix changing a field on a Say & See chart: the chat calls `/v1/yac/vis_instantiate` to rebuild the chart from its template, and the portal had no such route.
 - Link Say & See table rows and chart points to their donor, sample or dataset page.
-- Let Say & See users save sessions in the browser and load them later from the Session menu, kept separately for the public and consortium data.
+- Let Say & See users save sessions in the browser and load them later from the Session menu, kept separately for the public and consortium data, and for each signed-in user.

@@ -984,8 +984,8 @@ requires-dist = [
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "udiagent", specifier = ">=0.9.0" },
-    { name = "udiagent", extras = ["langfuse"], specifier = ">=0.9.0" },
+    { name = "udiagent", specifier = ">=0.10.0" },
+    { name = "udiagent", extras = ["langfuse"], specifier = ">=0.10.0" },
     { name = "whitenoise", extras = ["brotli"], specifier = ">=6.9.0" },
 ]
 
@@ -2888,17 +2888,18 @@ wheels = [
 
 [[package]]
 name = "udiagent"
-version = "0.9.0"
+version = "0.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
     { name = "openai" },
+    { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2f/77/89c27bd3d6b7038f935eb9b1534decbc78054c7375390f8d6b60aa3e4b48/udiagent-0.9.0.tar.gz", hash = "sha256:242fa2a8c8609b3c78125a8774193af64d17970082e3b5dcdb02c6cfe9442407", size = 28495958, upload-time = "2026-10-26T18:26:40.514Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/90/47e221475cdd1fdae245ac5c9037319bc7aac791689455efe1dba196849e/udiagent-0.10.0.tar.gz", hash = "sha256:a3193d10bca5dbf1ed10f55416d23eed8684e750d499811f23d9a0f802c490b2", size = 28503322, upload-time = "2026-10-27T19:37:39.592Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c1/a0/8cccda33a1f9457095a4c96fcb29086120d3e40255798febeb5997e4e826/udiagent-0.9.0-py3-none-any.whl", hash = "sha256:2179950436882c060770a61386995db47101a0e99b7181f7bebad0d898946478", size = 274098, upload-time = "2026-10-26T18:26:38.364Z" },
+    { url = "https://files.pythonhosted.org/packages/e4/ba/361d0d3af60b4a7719633b945c4c83ddb285a46115caab4214a78c2b19fa/udiagent-0.10.0-py3-none-any.whl", hash = "sha256:100605417dd41ecddbb1aba93c92e3e3740f4a484a179161eeaad837c5b1dd09", size = 279060, upload-time = "2026-10-27T19:37:37.873Z" },
 ]
 
 [package.optional-dependencies]

@@ -8,15 +8,7 @@ from contextlib import nullcontext
 from flask import current_app, jsonify, make_response, request, session
 
 from udiagent import Orchestrator, UDIAgent
-from udiagent.vis_generate import (
-    _load_generated_tools,
-    _parse_request_schema,
-    instantiate_template,
-    shared_entities_for,
-    template_tweakable_params,
-    unbound_placeholders,
-    validate_bindings,
-)
+from udiagent.api import EndpointError, vis_instantiate
 
 from .routes_api import (
     _first_fields,
@@ -469,100 +461,19 @@ def yac_completions():
     return jsonify(result.tool_calls)
 
 
-def _vis_instantiate_error(status, code, error, errors=None):
-    # udiagent's error shape, not `_get_api_json_error`'s: the chat reads the
-    # top-level `code`, and drops a chart's tweak controls on `unknown_template`.
-    body = {'code': code, 'error': error}
-    if errors is not None:
-        body['errors'] = errors
-    return jsonify(body), status
-
-
-# Port of udiagent's reference server route (`udiagent.server.app`), which the
-# chat calls when the user swaps a field on a template-generated chart. No LLM
-# call, so no OpenAI key is needed.
-# ponytail: relies on two underscore-prefixed udiagent helpers
-# (`_load_generated_tools`, `_parse_request_schema`), so a udiagent refactor can
-# break it; test_routes_udi exercises them. Installing `udiagent[server]` would
-# pull in FastAPI instead.
+# The chat calls this when the user swaps a field on a template-generated chart.
+# No LLM call, so no OpenAI key is needed.
 @blueprint.route('/v1/yac/vis_instantiate', methods=['POST'])
 def yac_vis_instantiate():
-    body = request.get_json(silent=True) or {}
-    tool = body.get('tool')
-    tool_args = body.get('toolArgs')
-    data_schema = body.get('dataSchema')
-    if (
-        not isinstance(tool, str)
-        or not isinstance(tool_args, dict)
-        or not isinstance(data_schema, str)
-    ):
-        return _vis_instantiate_error(
-            400, 'bad_request', 'Request body must include tool, toolArgs, and dataSchema.'
-        )
-
-    generated = _load_generated_tools()
-    if generated is None:
-        return _vis_instantiate_error(
-            503,
-            'templates_unavailable',
-            'This agent has no generated visualization templates.',
-        )
-    _tool_defs, tool_dispatch, templates, _tool_tags = generated
-
-    entry = tool_dispatch.get(tool)
-    if entry is None:
-        return _vis_instantiate_error(
-            404,
-            'unknown_template',
-            f"Unknown visualization template '{tool}'. The agent's templates may have "
-            'changed since this chart was created.',
-        )
-    template_idx, param_map = entry
-    spec_template = templates[template_idx]
-
-    schema = _parse_request_schema(data_schema)
-    if not schema.get('entities'):
-        # An unparseable schema degrades to an empty one, which would validate
-        # nothing and instantiate an unusable spec.
-        return _vis_instantiate_error(
-            400,
-            'bad_schema',
-            'dataSchema has no entities; send the data package descriptor.',
-        )
-
-    bindings = {param_map[k]: v for k, v in tool_args.items() if k in param_map}
-
-    missing = unbound_placeholders(spec_template, param_map, bindings)
-    if missing:
-        return _vis_instantiate_error(
-            422,
-            'missing_bindings',
-            'Missing bindings for this template: ' + ', '.join(missing),
-            missing,
-        )
-
-    errors = validate_bindings(
-        spec_template, bindings, schema, shared_entities=shared_entities_for(tool)
-    )
-    if errors:
-        # errors[0] is already reader-grade prose naming the valid alternatives.
-        return _vis_instantiate_error(422, 'invalid_bindings', errors[0], errors)
-
     try:
-        spec = instantiate_template(spec_template, bindings, schema)
-    except Exception as e:
-        current_app.logger.warning('vis_instantiate failed for %s: %s', tool, e)
-        return _vis_instantiate_error(
-            500, 'instantiate_failed', f"Could not build a spec from template '{tool}'."
-        )
-
-    return jsonify(
-        {
-            'spec': spec,
-            'toolArgs': {k: v for k, v in tool_args.items() if k in param_map},
-            'params': template_tweakable_params(spec_template, param_map, bindings, schema),
-        }
-    )
+        return jsonify(vis_instantiate(request.get_json(silent=True) or {}))
+    except EndpointError as e:
+        if e.status >= 500:
+            # udiagent logs only the message; keep the traceback of a template bug.
+            current_app.logger.exception('vis_instantiate failed: %s', e.code)
+        # udiagent's {code, error, errors} shape: the chat reads `code`, and drops a
+        # chart's tweak controls on `unknown_template`.
+        return jsonify(e.body()), e.status
 
 
 @blueprint.route('/v1/yac/examples', methods=['GET'])
