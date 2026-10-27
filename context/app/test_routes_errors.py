@@ -83,3 +83,22 @@ def test_upstream_failure_html_page(client, mocker, error, status):
     assert response.status == status
     # Rendered by our handler (the React error page), not werkzeug's bare default page.
     assert f'"errorCode": {status[:3]}' in response.get_data(as_text=True)
+
+
+def mock_post_503(path, **kwargs):
+    class MockResponse:
+        def __init__(self):
+            self.status_code = 503
+            self.text = 'Logger call requires this'
+
+        def raise_for_status(self):
+            raise requests.exceptions.HTTPError(response=self)
+
+    return MockResponse()
+
+
+def test_503_html_page(client, mocker):
+    mocker.patch('requests.Session.post', side_effect=mock_post_503)
+    response = client.get('/browse/donor/FAKE')
+    assert response.status == '503 SERVICE UNAVAILABLE'
+    assert '"errorCode": 503' in response.get_data(as_text=True)
