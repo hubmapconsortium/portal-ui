@@ -8,7 +8,7 @@ import { useWorkspacesList } from 'js/components/workspaces/hooks';
 const ACTIVATING_STATUS = 'Activating';
 // A just-started job can take a few polls to show up in /jobs; after this, a missing or inactive
 // job means the start failed and polling would never end.
-const NOT_STARTED_TIMEOUT_MS = 30 * 1000;
+const NOT_STARTED_TIMEOUT_MS = 90 * 1000;
 
 function useWorkspacesPleaseWait(workspaceId: number) {
   const [message, setMessage] = useState<string | undefined>();

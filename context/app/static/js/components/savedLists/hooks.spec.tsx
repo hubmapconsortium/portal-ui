@@ -97,3 +97,44 @@ describe('moving saved lists from local storage to UKV', () => {
     expect(localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY)).toBe(localLists);
   });
 });
+
+describe('resuming a partly moved local copy', () => {
+  const list = { title: 'List', description: '', dateSaved: 1, dateLastModified: 1, savedEntities: {} };
+  const putKeys: string[] = [];
+  let failingKey: string | undefined;
+
+  beforeEach(() => {
+    putKeys.length = 0;
+    failingKey = 'listB';
+    localStorage.setItem(
+      SAVED_ENTITIES_LOCAL_STORAGE_KEY,
+      JSON.stringify({ state: { savedLists: { listA: list, listB: list }, savedEntities: { abc: { dateSaved: 1 } } } }),
+    );
+    server.use(
+      http.put(`${ukvEndpoint}/user/keys/:key`, ({ params }) => {
+        const key = params.key as string;
+        putKeys.push(key);
+        return key === failingKey ? new HttpResponse(null, { status: 500 }) : new HttpResponse(null, { status: 200 });
+      }),
+      http.get(`${ukvEndpoint}/user/keys/:key`, () => HttpResponse.json({})),
+    );
+  });
+
+  test('sends only the parts that failed on the next load', async () => {
+    const view = renderHook(() => useSavedLists(), { wrapper: wrapperFor(true) });
+    await waitFor(() => expect(putKeys).toHaveLength(3));
+    await waitFor(() =>
+      expect(JSON.parse(localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY) ?? '{}')).toEqual({
+        state: { savedLists: { listB: list } },
+      }),
+    );
+    view.unmount();
+
+    // The next page load must not resend the saved entities, which may have changed on the server since.
+    putKeys.length = 0;
+    failingKey = undefined;
+    renderHook(() => useSavedLists(), { wrapper: wrapperFor(true) });
+    await waitFor(() => expect(localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY)).toBeNull());
+    expect(putKeys).toEqual(['listB']);
+  });
+});

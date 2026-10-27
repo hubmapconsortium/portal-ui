@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { ESEntityType } from 'js/components/types';
-import { useSearchStore, filterHasValues } from 'js/components/search/store';
+import { useSearchStore } from 'js/components/search/store';
 import { buildQuery } from 'js/components/search/utils';
 import useEsMapping, { isESMapping } from 'js/components/search/useEsMapping';
 import { useMetadataMenu } from './hooks';
@@ -38,13 +38,10 @@ export function useSearchResultsQuery() {
       return undefined;
     }
 
-    // Only include filters that have values
-    const activeFilters = Object.fromEntries(
-      Object.entries(filters).filter(([, filter]) => filterHasValues({ filter })),
-    );
-
+    // Filters go in unfiltered: buildQuery skips empty ones itself, and an inverted `exists` facet
+    // applies its clause precisely when it has no value selected.
     const builtQuery = buildQuery({
-      filters: activeFilters,
+      filters,
       facets,
       search,
       size: 0,

@@ -26,11 +26,29 @@ from flask import current_app
 # In-process memo of built entries, keyed by (namespace, cache name), holding
 # (expires_at, data). Guards against re-reading the shared file on every request within a
 # worker. The shared file is what makes the expensive build happen once per deploy across
-# all gunicorn worker processes. Entries expire with the namespace's TTL, measured from when
-# the data was built, so the memo never serves data the disk cache would treat as stale.
+# all gunicorn worker processes. Unless the namespace opts out, entries expire with its TTL,
+# measured from when the data was built, so the memo never serves data the disk cache would
+# treat as stale.
 _memory_cache = {}
 _memory_lock = threading.Lock()
 _MISSING = object()
+
+# How long a degraded result is served from the memo before the next request tries a full build.
+DEGRADED_RETRY_SECONDS = 300
+
+
+class Degraded(Exception):
+    """
+    Raised by a builder whose result is usable but incomplete (some upstream calls failed).
+
+    ``get_or_build`` serves ``data`` but never writes it to disk, and keeps it in the memo for
+    only ``DEGRADED_RETRY_SECONDS``, so a partial result neither outlives the outage nor turns
+    it into one rebuild per request.
+    """
+
+    def __init__(self, data):
+        super().__init__('degraded build')
+        self.data = data
 
 
 @dataclass(frozen=True)
@@ -47,6 +65,9 @@ class CacheNamespace:
                     filename is stable and the TTL bounds staleness instead.
     version_config_key: optional Flask config key mixed into the filename, for caches whose
                     validity depends on an upstream version.
+    expire_memo:    whether the in-process memo also expires with the TTL. Opt out when a
+                    rebuild is too slow to run inside a request; the entry then lives until
+                    the worker restarts.
     """
 
     dir_name: str
@@ -54,6 +75,7 @@ class CacheNamespace:
     ttl_config_key: str = None
     token_env_var: str = None
     version_config_key: str = None
+    expire_memo: bool = True
 
 
 def cache_dir(namespace):
@@ -110,9 +132,10 @@ def _memo_get(memo_key):
         return data
 
 
-def _memo_set(namespace, memo_key, data, built_at):
-    ttl = _ttl(namespace)
-    expires_at = built_at + ttl if ttl else float('inf')
+def _memo_set(namespace, memo_key, data, built_at=None, expires_at=None):
+    if expires_at is None:
+        ttl = _ttl(namespace) if namespace.expire_memo else None
+        expires_at = built_at + ttl if ttl else float('inf')
     now = time.time()
     with _memory_lock:
         # Sweep on insert, so entries whose keys are never asked for again (one per distinct
@@ -151,7 +174,19 @@ def get_or_build(namespace, name, builder):
             else:
                 start = time.monotonic()
                 built_at = time.time()
-                data = builder()
+                try:
+                    data = builder()
+                except Degraded as degraded:
+                    current_app.logger.warning(
+                        "Built '%s' with missing parts; not caching it to disk.", name
+                    )
+                    _memo_set(
+                        namespace,
+                        memo_key,
+                        degraded.data,
+                        expires_at=time.time() + DEGRADED_RETRY_SECONDS,
+                    )
+                    return degraded.data
                 tmp_path = f'{path}.{os.getpid()}.tmp'
                 with open(tmp_path, 'w') as tmp_file:
                     json.dump(data, tmp_file)

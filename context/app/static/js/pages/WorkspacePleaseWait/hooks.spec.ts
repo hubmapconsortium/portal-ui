@@ -37,7 +37,7 @@ describe('useWorkspacesPleaseWait', () => {
     mockGetWorkspaceJob.mockResolvedValue({ status: 'Inactive', allowNew: true });
     const { result } = renderHook(() => useWorkspacesPleaseWait(1));
 
-    await advance(35 * 1000);
+    await advance(95 * 1000);
     expect(result.current.message).toMatch(/did not start/);
 
     const calls = mockGetWorkspaceJob.mock.calls.length;

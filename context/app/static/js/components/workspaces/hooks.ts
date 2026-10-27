@@ -400,7 +400,10 @@ function useLaunchWorkspace() {
       window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
 
       if (isNewJobType) {
-        await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
+        // The workspace is already running, so failing to save its job type is not a failed launch.
+        await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } }).catch((e) => {
+          console.error(e);
+        });
       }
 
       toastSuccessLaunchWorkspace(workspace.id);

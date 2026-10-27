@@ -38,6 +38,7 @@ export function useDownloadTSV({
     allKeys,
     isLoading,
     error: fetchError,
+    mutate,
   } = useLineupEntities({
     ...(queryParams || {}),
     ...(uuids ? { uuids } : {}),
@@ -82,6 +83,11 @@ export function useDownloadTSV({
 
   const initiateDownload = useEventCallback(() => {
     setHasClickedDownload(true);
+    // After a failed fetch the key is unchanged, so clicking again has to refetch explicitly.
+    if (fetchError) {
+      void mutate();
+      return;
+    }
     // If entities are already loaded, trigger download immediately
     if (entities.length > 0) {
       download();

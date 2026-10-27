@@ -139,6 +139,7 @@ interface UseLineupPageEntitiesReturnType {
   allKeys: string[];
   totalHitsCount?: number;
   error?: unknown;
+  mutate: () => Promise<unknown>;
 }
 
 /**
@@ -193,6 +194,12 @@ export function useLineupEntities<EntityType extends ESEntityType>({
     },
     {
       shouldFetch: shouldFetchData,
+      // `filters` is the search page's own results query, which already carries its default and
+      // revision restrictions (or deliberately drops them, e.g. "Include superseded entities").
+      useDefaultQuery: Boolean(uuids) || !filters,
+      // A failed bulk fetch is reported to the user, who can retry; a silent retry would report
+      // the failure and then deliver the data anyway.
+      shouldRetryOnError: false,
     },
   );
 

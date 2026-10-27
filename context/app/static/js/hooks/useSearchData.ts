@@ -412,6 +412,7 @@ export function useAllSearchHits<Documents>(
   totalHitsCount?: number;
   isLoading: boolean;
   error?: unknown;
+  mutate: () => Promise<unknown>;
 } {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
@@ -449,12 +450,12 @@ export function useAllSearchHits<Documents>(
     };
   }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
-  const { data, isLoading, ...swr } = useSWR(getKey, (args) => fetchAllHits<Documents>(args), {
+  const { data, isLoading, mutate, ...swr } = useSWR(getKey, (args) => fetchAllHits<Documents>(args), {
     fallbackData: [],
     ...swrConfigRest,
   });
 
-  return { searchHits: data ?? [], totalHitsCount, isLoading, error: swr.error as unknown };
+  return { searchHits: data ?? [], totalHitsCount, isLoading, error: swr.error as unknown, mutate };
 }
 
 export function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {

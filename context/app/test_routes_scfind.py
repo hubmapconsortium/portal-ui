@@ -1106,7 +1106,9 @@ class TestPerPageAggregates:
         assert response.get_json() == {'cell_types': [], 'cell_types_atac': []}
         assert not any('organ-cell-types' in path.name for path in tmp_path.iterdir())
 
-    def test_organ_cell_types_failure_is_not_cached(self, client, mocker):
+    def test_organ_cell_types_failure_is_served_but_not_cached(
+        self, client, mocker, tmp_path, monkeypatch
+    ):
         mocker.patch.object(routes_scfind.time, 'sleep')
 
         def failing_get(url, **kwargs):
@@ -1116,11 +1118,22 @@ class TestPerPageAggregates:
 
         mocker.patch('requests.get', side_effect=failing_get)
         mocker.patch('requests.post', side_effect=mock_scfind_post)
-        assert client.get('/scfind/organ-cell-types/kidney.json').status_code >= 500
+        response = client.get('/scfind/organ-cell-types/kidney.json')
+        # The page still renders, just without datasets, and the gap never reaches the disk.
+        assert response.status_code == 200
+        assert response.get_json()['cell_types']
+        assert not any(row['datasets'] for row in response.get_json()['cell_types'])
+        assert not list(tmp_path.glob('organ-cell-types*.json'))
 
-        # Once scfind recovers, the next request builds the full table rather than a cached
-        # empty one.
+        # Once scfind recovers and the degraded entry's retry window has passed, the next
+        # request builds the full table.
         mocker.patch('requests.get', side_effect=mock_scfind_get)
+        real_time = time.time
+        monkeypatch.setattr(
+            cache_utils.time,
+            'time',
+            lambda: real_time() + cache_utils.DEGRADED_RETRY_SECONDS + 1,
+        )
         data = client.get('/scfind/organ-cell-types/kidney.json').get_json()
         assert any(row['datasets'] for row in data['cell_types'])
 
@@ -1183,10 +1196,15 @@ class TestSharedMapCache:
 
         assert calls['n'] == 2
 
-    def test_in_process_memo_expires_with_ttl(self, tmp_path, monkeypatch):
+    @pytest.mark.parametrize('expire_memo,expected_builds', [(True, 2), (False, 1)])
+    def test_in_process_memo_expiry(self, tmp_path, monkeypatch, expire_memo, expected_builds):
         app = create_app(testing=True)
-        app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
-        app.config['SCFIND_CACHE_TTL'] = 60
+        app.config['TEST_CACHE_TTL'] = 60
+        namespace = cache_utils.CacheNamespace(
+            dir_name=str(tmp_path / 'cache'),
+            ttl_config_key='TEST_CACHE_TTL',
+            expire_memo=expire_memo,
+        )
         cache_utils.clear_memory_cache()
 
         calls = {'n': 0}
@@ -1196,13 +1214,13 @@ class TestSharedMapCache:
             return {'cell': ['CL:0001']}
 
         with app.app_context():
-            routes_scfind._get_or_build_map('m', builder)
-            # Same worker, an hour later: the memo must not outlive the TTL.
+            cache_utils.get_or_build(namespace, 'm', builder)
+            # Same worker, an hour later: the memo outlives the TTL only if the namespace opts out.
             real_time = time.time
             monkeypatch.setattr(cache_utils.time, 'time', lambda: real_time() + 3600)
-            routes_scfind._get_or_build_map('m', builder)
+            cache_utils.get_or_build(namespace, 'm', builder)
 
-        assert calls['n'] == 2
+        assert calls['n'] == expected_builds
 
     def test_cache_token_isolates_server_starts(self, tmp_path, monkeypatch):
         app = create_app(testing=True)

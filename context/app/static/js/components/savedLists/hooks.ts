@@ -28,6 +28,7 @@ import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/
 import { trackEvent } from 'js/helpers/trackers';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { useFlaskDataContext } from 'js/components/Contexts';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useEventCallback } from '@mui/material/utils';
 
 function useGlobalMutateSavedList() {
@@ -67,22 +68,37 @@ function useSetListsAndEntities() {
       savedEntities,
     }: {
       savedLists: Record<string, SavedEntitiesList>;
-      savedEntities: Record<string, SavedEntity>;
+      savedEntities?: Record<string, SavedEntity>;
     }) => {
-      // Update the saved entities list
-      await handleUpdateSavedList({
-        listUUID: SAVED_ENTITIES_KEY,
-        body: {
-          ...SAVED_ENTITIES_DEFAULT,
-          savedEntities,
-        },
-      });
+      // Each part leaves local storage as soon as it is on the server. After a partial failure the
+      // next attempt then sends only what is missing, rather than overwriting the server's newer
+      // copy of the parts that did go through.
+      const remaining: LocalSavedEntities['state'] = { savedLists: { ...savedLists }, savedEntities };
+      const saveRemaining = () => {
+        localStorage.setItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY, JSON.stringify({ state: remaining }));
+      };
+
+      if (savedEntities) {
+        await handleUpdateSavedList({
+          listUUID: SAVED_ENTITIES_KEY,
+          body: {
+            ...SAVED_ENTITIES_DEFAULT,
+            savedEntities,
+          },
+        });
+        delete remaining.savedEntities;
+        saveRemaining();
+      }
 
       // Filter and update each saved list (excluding reserved keys)
       await Promise.all(
         Object.entries(savedLists)
           .filter(([key]) => !RESERVED_KEYS.includes(key))
-          .map(([listUUID, list]) => handleUpdateSavedList({ body: list, listUUID })),
+          .map(async ([listUUID, list]) => {
+            await handleUpdateSavedList({ body: list, listUUID });
+            delete remaining.savedLists[listUUID];
+            saveRemaining();
+          }),
       );
     },
     [handleUpdateSavedList],
@@ -92,9 +108,12 @@ function useSetListsAndEntities() {
 interface LocalSavedEntities {
   state: {
     savedLists: Record<string, SavedEntitiesList>;
-    savedEntities: Record<string, SavedEntity>;
+    savedEntities?: Record<string, SavedEntity>;
   };
 }
+
+// Every component using the saved lists hook runs the check on mount; only one may move the lists.
+let isMovingLocalSavedEntities = false;
 
 function useCheckForLocalSavedEntities() {
   const setListsAndEntities = useSetListsAndEntities();
@@ -105,7 +124,7 @@ function useCheckForLocalSavedEntities() {
     const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
 
     // Without UKV access the PUT is rejected, so the local copy must stay where it is.
-    if (!localEntities || !hasAccess) {
+    if (!localEntities || !hasAccess || isMovingLocalSavedEntities) {
       return;
     }
 
@@ -115,7 +134,8 @@ function useCheckForLocalSavedEntities() {
       const parsedEntities: unknown = JSON.parse(localEntities);
       const { savedLists, savedEntities } = (parsedEntities as LocalSavedEntities).state;
 
-      if (savedLists && savedEntities) {
+      if (savedLists) {
+        isMovingLocalSavedEntities = true;
         setListsAndEntities({ savedLists, savedEntities })
           .then(() => {
             // Necessary to do an explicit check here to ensure the event is tracked only once
@@ -128,13 +148,16 @@ function useCheckForLocalSavedEntities() {
                 action: 'Transfer Lists',
                 label: {
                   savedListsCount: Object.keys(savedLists).length,
-                  savedEntitiesCount: Object.keys(savedEntities).length,
+                  savedEntitiesCount: Object.keys(savedEntities ?? {}).length,
                 },
               });
             }
           })
           .catch((e) => {
             console.error(e);
+          })
+          .finally(() => {
+            isMovingLocalSavedEntities = false;
           });
       }
     } catch (error) {
@@ -208,6 +231,7 @@ function useListSavedListsAndEntities() {
 
 function useSavedListActions() {
   const { handleUpdateSavedList, isUpdating } = useHandleUpdateSavedList();
+  const { toastError } = useSnackbarActions();
 
   const updateList = useCallback(
     async ({
@@ -219,16 +243,22 @@ function useSavedListActions() {
       list: SavedEntitiesList;
       updates?: Partial<SavedEntitiesList>;
     }) => {
-      await handleUpdateSavedList({
-        listUUID,
-        body: {
-          ...list,
-          ...updates,
-          dateLastModified: Date.now(),
-        },
-      });
+      try {
+        await handleUpdateSavedList({
+          listUUID,
+          body: {
+            ...list,
+            ...updates,
+            dateLastModified: Date.now(),
+          },
+        });
+      } catch (e) {
+        // Rethrown so callers skip their success alert and keep their dialog open.
+        toastError('Your changes could not be saved. Please try again.');
+        throw e;
+      }
     },
-    [handleUpdateSavedList],
+    [handleUpdateSavedList, toastError],
   );
 
   const createList = useCallback(

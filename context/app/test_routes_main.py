@@ -174,8 +174,8 @@ def test_login_callback_rejects_unexpected_state(client, mocker, callback_query)
 
     response = client.get(f'/login?{callback_query}')
 
-    assert response.status == '302 FOUND'
-    assert response.location.endswith('/login')
+    # An error page, not a redirect back to /login: that would loop when the cookie is not kept.
+    assert response.status_code == 400
     exchange.assert_not_called()
 
 

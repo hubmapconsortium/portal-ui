@@ -2,7 +2,7 @@ from urllib.parse import urlencode, unquote, urlparse
 from datetime import datetime
 import secrets
 
-from flask import make_response, current_app, url_for, request, redirect, session
+from flask import abort, make_response, current_app, url_for, request, redirect, session
 import requests
 import globus_sdk
 from json import dumps
@@ -384,13 +384,14 @@ def login():
 
     # A code whose `state` does not match the one this browser started with was not requested
     # by this browser. Accepting it would let an attacker log the victim into the attacker's
-    # account (login CSRF), so start the flow over instead.
+    # account (login CSRF). Show an error rather than restarting the flow: if the session cookie
+    # is not being kept, the state is always missing and a restart would loop forever.
     expected_state = session.pop('oauth_state', None)
     if not expected_state or not secrets.compare_digest(
         request.args.get('state', ''), expected_state
     ):
-        log('4: state mismatch, restarting login')
-        return redirect(url_for('routes_auth.login'))
+        log('4: state mismatch')
+        abort(400)
 
     # If we do have a "code" param, we're coming back from Globus Auth
     # and can start the process of exchanging an auth code for a token.
