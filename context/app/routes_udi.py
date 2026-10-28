@@ -8,6 +8,7 @@ from contextlib import nullcontext
 from flask import current_app, jsonify, make_response, request, session
 
 from udiagent import Orchestrator, UDIAgent
+from udiagent.api import EndpointError, vis_instantiate
 
 from .routes_api import (
     _first_fields,
@@ -450,12 +451,29 @@ def yac_completions():
                 data_schema=data_schema,
                 data_domains=data_domains,
                 openai_api_key=openai_api_key,
+                # The chat's active filters; udiagent drops malformed entries.
+                filters=body.get('filters'),
             )
     except Exception as e:
         current_app.logger.exception('UDIAgent orchestrator failed')
         return _get_api_json_error(500, f'UDIAgent orchestration error: {e}'), 500
 
     return jsonify(result.tool_calls)
+
+
+# The chat calls this when the user swaps a field on a template-generated chart.
+# No LLM call, so no OpenAI key is needed.
+@blueprint.route('/v1/yac/vis_instantiate', methods=['POST'])
+def yac_vis_instantiate():
+    try:
+        return jsonify(vis_instantiate(request.get_json(silent=True) or {}))
+    except EndpointError as e:
+        if e.status >= 500:
+            # udiagent logs only the message; keep the traceback of a template bug.
+            current_app.logger.exception('vis_instantiate failed: %s', e.code)
+        # udiagent's {code, error, errors} shape: the chat reads `code`, and drops a
+        # chart's tweak controls on `unknown_template`.
+        return jsonify(e.body()), e.status
 
 
 @blueprint.route('/v1/yac/examples', methods=['GET'])
