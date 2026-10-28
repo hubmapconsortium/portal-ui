@@ -62,7 +62,7 @@ def mock_prov_get(path, **kwargs):
 def mock_search_donor_post(path, **kwargs):
     class MockResponse:
         def __init__(self):
-            self.status_code = 0  # _request requires a status code
+            self.status_code = 0  # ApiClient.request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
@@ -99,8 +99,8 @@ def mock_search_donor_post(path, **kwargs):
     ],
 )
 def test_200_html_page(client, path, mocker):
-    mocker.patch('requests.get', side_effect=mock_prov_get)
-    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    mocker.patch('requests.Session.get', side_effect=mock_prov_get)
+    mocker.patch('requests.Session.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '200 OK'
     assert_is_valid_html(response)
@@ -115,7 +115,7 @@ def test_200_valid_tutorial_page(client, path):
 
 @pytest.mark.parametrize('path', ['/docs'])
 def test_302_redirect(client, path, mocker):
-    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    mocker.patch('requests.Session.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '302 FOUND'
 
@@ -130,7 +130,7 @@ def test_301_hubmap_data_portal_publication(client):
 def test_301_entity_type_normalization(client, path, mocker):
     # The mocked entity is a Donor, so these URLs normalize to /browse/donor/fake-uuid.
     # 301 rather than 302 so search engines consolidate on the normalized URL.
-    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    mocker.patch('requests.Session.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '301 MOVED PERMANENTLY'
     assert response.location == '/browse/donor/fake-uuid'
@@ -138,7 +138,7 @@ def test_301_entity_type_normalization(client, path, mocker):
 
 @pytest.mark.parametrize('path', ['/browse/no-such-type/fake-uuid'])
 def test_404_details_page(client, path, mocker):
-    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    mocker.patch('requests.Session.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '404 NOT FOUND'
 
@@ -151,7 +151,7 @@ def test_404_invalid_tutorial_page(client, path):
 
 @pytest.mark.parametrize('path', [f'/browse/{t}/fake-uuid.json' for t in entity_types])
 def test_200_json_page(client, path, mocker):
-    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    mocker.patch('requests.Session.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '200 OK'
     assert isinstance(json.loads(response.data.decode('utf8')), dict)

@@ -980,7 +980,7 @@ requires-dist = [
     { name = "globus-sdk", specifier = ">=3.59.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "hubmap-commons", specifier = ">=2.1.20" },
-    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.13" },
+    { name = "portal-visualization", extras = ["full"], specifier = ">=0.5.14" },
     { name = "python-frontmatter", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
@@ -2063,11 +2063,11 @@ wheels = [
 
 [[package]]
 name = "portal-visualization"
-version = "0.5.13"
+version = "0.5.14"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/99/1c/188242f7b1d00808ba65043cb76b467091b591e38b9e169acebc0b77e558/portal_visualization-0.5.13.tar.gz", hash = "sha256:67ed60dee0d71e01924ab9e23a25f2843c9a2cf565a68e4d305bfd840edc2260", size = 83878, upload-time = "2026-09-09T19:06:14.817Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ea/59/d8082559d7a8eff51374d78e9b341923da1df0ae62b8edfdc387bc007807/portal_visualization-0.5.14.tar.gz", hash = "sha256:f50e2cb204512c0f7edb66d7e79f7bff5d47fbdb242bb33adbb2b80558430762", size = 84522, upload-time = "2026-10-21T15:19:40.7Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0a/f6/73a0d6c1452a07c1292bf02ee98422921037a4ad2bac73376e5cdfb8f723/portal_visualization-0.5.13-py3-none-any.whl", hash = "sha256:99df76a1bb3deb5723229f63e8ac836a789554862820dd514e125e9309f5e232", size = 86794, upload-time = "2026-09-09T19:06:13.537Z" },
+    { url = "https://files.pythonhosted.org/packages/35/4b/ef2648ca47847cf51876aa905b970b0452cbaeeeb4a15bc77724940bb510/portal_visualization-0.5.14-py3-none-any.whl", hash = "sha256:ed2d062add1d5b7f07aaf39a30351be978f3d70eb83ffad792f1fd6fbe479763", size = 87623, upload-time = "2026-10-21T15:19:39.326Z" },
 ]
 
 [package.optional-dependencies]
