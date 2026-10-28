@@ -14,12 +14,12 @@ Flask[async]>=3.1.1
 globus-sdk>=3.59.0
 gunicorn>=23.0.0
 hubmap-commons>=2.1.20
-portal-visualization[full]>=0.5.13
+portal-visualization[full]>=0.5.14
 python-frontmatter>=1.1.0
 pyyaml>=6.0.2
 requests>=2.32.5
-udiagent>=0.6.0
-udiagent[langfuse]>=0.6.0
+udiagent>=0.10.0
+udiagent[langfuse]>=0.10.0
 whitenoise[brotli]>=6.9.0
 
 # Development dependencies
@@ -90,7 +90,7 @@ ruff>=0.14.0
 "rehype-raw": "^7.0.0",
 "scellop": "^0.3.0",
 "swr": "^2.4.1",
-"udi-yac": "^0.5.0",
+"udi-yac": "^0.10.0",
 "universal-cookie": "^7.1.2",
 "use-resize-observer": "^9.1.0",
 "uuid": "^14.0.0",
