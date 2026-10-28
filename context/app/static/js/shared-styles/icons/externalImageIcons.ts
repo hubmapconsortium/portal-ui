@@ -1,11 +1,14 @@
 export interface ExternalIconProps {
   src: string;
   alt: string;
+  // Dark artwork on a transparent background, which needs a white backdrop to stay visible in dark mode.
+  whiteBackground?: boolean;
 }
 
 const nih: ExternalIconProps = {
   src: `${CDN_URL}/v2/icons/nih_common_fund.png`,
   alt: 'NIH Logo',
+  whiteBackground: true,
 };
 const protocols: ExternalIconProps = {
   src: `${CDN_URL}/v2/icons/protocols.png`,
@@ -40,6 +43,7 @@ const avr: ExternalIconProps = {
 const hubmapConsortium: ExternalIconProps = {
   src: `${CDN_URL}/v2/icons/hubmap_consortium.png`,
   alt: 'HuBMAP Consortium Logo',
+  whiteBackground: true,
 };
 
 const dataPortal: ExternalIconProps = {

@@ -4,15 +4,14 @@ import Paper from '@mui/material/Paper';
 import HomepageRelatedLink from 'js/components/home/HomepageRelatedLink';
 import Stack from '@mui/material/Stack';
 import { externalIconMap } from 'js/shared-styles/icons/externalImageIcons';
+import { whiteBackgroundStyle } from 'js/shared-styles/icons/ExternalImageIcon';
 
 const { avr, azimuth, fusion, googleScholar, hra, hubmapConsortium, nih, protocols } = externalIconMap;
-
-// These logos are dark artwork on a transparent background, so they get a white backdrop to stay visible in dark mode.
-const logosWithWhiteBackground = new Set([hubmapConsortium.src, nih.src]);
 
 interface ExternalLinkPropsAdapter {
   src: string;
   alt: string;
+  whiteBackground?: boolean;
   icon?: React.ReactNode;
   linkText: string;
   linkHref: string;
@@ -95,7 +94,7 @@ function LinkSectionContainer({ links, title }: LinkSectionContainerProps) {
   return (
     <Stack direction="column">
       <Paper>
-        {links.map(({ src, alt, ...rest }) => (
+        {links.map(({ src, alt, whiteBackground, ...rest }) => (
           <HomepageRelatedLink
             key={rest.linkText}
             img={
@@ -104,7 +103,7 @@ function LinkSectionContainer({ links, title }: LinkSectionContainerProps) {
                 alt={alt}
                 height={56}
                 width={56}
-                style={logosWithWhiteBackground.has(src) ? { backgroundColor: 'white', borderRadius: 4 } : undefined}
+                style={whiteBackground ? whiteBackgroundStyle : undefined}
               />
             }
             title={title}
