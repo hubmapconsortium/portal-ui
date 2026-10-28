@@ -12,7 +12,7 @@ import { HeaderCell } from 'js/shared-styles/tables';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 
 const border = (theme: Theme) => ({
-  border: `1px solid ${theme.palette.grey[300]}`,
+  border: `1px solid ${theme.palette.divider}`,
 });
 
 const checkboxStyles = {
@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const BorderedTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
-  borderBottom: `1px solid ${theme.palette.grey[300]}`,
+  borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
 const CompactTableRow = styled(StyledTableRow)({

@@ -1,16 +1,25 @@
-import { styled } from '@mui/material/styles';
+import { styled, type PaletteMode } from '@mui/material/styles';
 import { shouldForwardProp } from 'js/helpers/styled';
 import Box from '@mui/material/Box';
 
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { ThemeColorKey } from '../types';
 
-// Gradient accent color per theme key. The gradient runs from this color to white.
-export const accentColorMap: Record<ThemeColorKey, string> = {
-  info: '#bdcfe9', // Datasets Search, Metadata Exploration
-  warning: '#f1cac0', // Biomarkers & Cell Types, Integrated Maps
-  success: '#d1dac1', // Cloud Workspaces, Single-Cell and Spatial Data Visualizations
-  error: '#f4c0db', // Cell Populations Viewer
+// Gradient accent color per mode and theme key. The gradient runs from this color to the paper color.
+// The dark colors keep the hue of the light ones, with the same contrast against #333 as the light ones have against white.
+export const accentColorMap: Record<PaletteMode, Record<ThemeColorKey, string>> = {
+  light: {
+    info: '#bdcfe9', // Datasets Search, Metadata Exploration
+    warning: '#f1cac0', // Biomarkers & Cell Types, Integrated Maps
+    success: '#d1dac1', // Cloud Workspaces, Single-Cell and Spatial Data Visualizations
+    error: '#f4c0db', // Cell Populations Viewer
+  },
+  dark: {
+    info: '#425267',
+    warning: '#66463D',
+    success: '#474E39',
+    error: '#6E435A',
+  },
 };
 
 /**
@@ -75,7 +84,7 @@ export const GradientBackground = styled('div')<GradientBackgroundProps>(({ them
     right: 0,
     bottom: 0,
     zIndex: -1,
-    background: `linear-gradient(135deg, ${accentColorMap[$theme]} 0%, ${theme.palette.common.white} 100%)`,
+    background: `linear-gradient(135deg, ${accentColorMap[theme.palette.mode][$theme]} 0%, ${theme.palette.background.paper} 100%)`,
   };
 });
 
