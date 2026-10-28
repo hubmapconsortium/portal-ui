@@ -102,8 +102,8 @@ export default function SaySeePanelDescription() {
         <Typography variant="body1">
           Explore HuBMAP&apos;s public data through a natural language chat interface. Ask questions about donor,
           sample, and dataset metadata and get visualizations back. Results are independent from the Filter &amp; Browse
-          Mode and do not link to individual dataset, sample, or donor pages. <ContactUsLink capitalize /> to report an
-          issue or share feedback.
+          Mode. Table rows and chart points link to their dataset, sample, or donor pages. <ContactUsLink capitalize />{' '}
+          to report an issue or share feedback.
         </Typography>
         <div>
           <Typography variant="subtitle1">How to get access?</Typography>

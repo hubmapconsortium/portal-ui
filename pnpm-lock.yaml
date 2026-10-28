@@ -194,8 +194,8 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1(react@19.2.6)
       udi-yac:
-        specifier: ^0.5.0
-        version: 0.5.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: ^0.10.0
+        version: 0.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       universal-cookie:
         specifier: ^7.1.2
         version: 7.2.2
@@ -10529,8 +10529,8 @@ packages:
     resolution: {integrity: sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==}
     hasBin: true
 
-  udi-yac@0.5.0:
-    resolution: {integrity: sha512-7Lr9iRrPLXVpoptKOR/7/mvrDWTToL+XnLwRVVGlukTaqGeVcLhLZNAWHCbfvis0QBO7U+tcFGnKXZoOBFqSsw==}
+  udi-yac@0.10.0:
+    resolution: {integrity: sha512-O4PzNk0vX6d57ikuoDykxLn/rA/I15bldnxs+a6bMdx4SjScO2qUy8u3JfouO/GaVdmscUb+4ofVsV/6D6Uv+g==}
     peerDependencies:
       react: ^19.2.6
       react-dom: ^19.2.6
@@ -24300,7 +24300,7 @@ snapshots:
 
   ua-parser-js@1.0.41: {}
 
-  udi-yac@0.5.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+  udi-yac@0.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)

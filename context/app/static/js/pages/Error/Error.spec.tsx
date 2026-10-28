@@ -18,6 +18,8 @@ describe('Error page', () => {
     [401, 'Unauthorized'],
     [403, 'Access Denied'],
     [404, 'Page Not Found'],
+    [502, 'Bad Gateway'],
+    [503, 'Service Unavailable'],
     [504, 'Gateway Timeout'],
     [500, 'Internal Server Error'],
   ])('%i error page displays correct titles %s', (errorCode, title) => {
@@ -46,12 +48,12 @@ describe('Error page', () => {
   it('should display titles for unexpected error codes', () => {
     mockGetErrorTitleAndSubtitle.mockReturnValue({
       title: 'Unexpected Error',
-      subtitle: 'HTTP Error 502',
+      subtitle: 'HTTP Error 418',
     });
 
-    render(<Error errorCode={502} />);
+    render(<Error errorCode={418} />);
     expect(screen.getByText('Unexpected Error')).toBeInTheDocument();
-    expect(screen.getByText('502', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('418', { exact: false })).toBeInTheDocument();
   });
 
   it('should display titles and message for error boundary', () => {

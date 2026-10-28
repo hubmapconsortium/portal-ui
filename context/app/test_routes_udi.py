@@ -1,4 +1,5 @@
 import pytest
+from udiagent.api import EndpointError
 
 from . import routes_udi
 from .main import create_app
@@ -77,7 +78,7 @@ mock_ontology_field_types = [
 def mock_es_post(path, **kwargs):
     class MockResponse:
         def __init__(self):
-            self.status_code = 0  # _request requires a status code
+            self.status_code = 0  # ApiClient.request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
@@ -97,7 +98,7 @@ def mock_es_get(path, **kwargs):
 
     class MockResponse:
         def __init__(self):
-            self.status_code = 0  # _request requires a status code
+            self.status_code = 0  # ApiClient.request requires a status code
             self.text = 'Logger call requires this'
 
         def json(self):
@@ -110,8 +111,8 @@ def mock_es_get(path, **kwargs):
 
 
 def test_datapackage(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.get('/metadata/v0/udi/datapackage.json')
     assert response.status == '200 OK'
     data = response.get_json()
@@ -173,8 +174,8 @@ def test_datapackage(client, mocker):
 
 
 def test_datapackage_cors(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.get(
         '/metadata/v0/udi/datapackage.json',
         headers={'Origin': 'https://hms-dbmi.github.io'},
@@ -183,8 +184,8 @@ def test_datapackage_cors(client, mocker):
 
 
 def test_datapackage_no_cors_for_unknown_origin(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=mock_es_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     response = client.get(
         '/metadata/v0/udi/datapackage.json',
         headers={'Origin': 'https://evil.com'},
@@ -290,6 +291,28 @@ def test_yac_completions_anon_with_header(client, mocker):
     assert response.get_json() == [{'name': 'CreateVisualization', 'arguments': {'title': 'test'}}]
     assert captured['self'] is routes_udi._get_byok_orchestrator()
     assert captured['openai_api_key'] == 'sk-anon'
+    # udi-yac < 0.9 sends no filters; udiagent treats None as "no active filters".
+    assert captured['filters'] is None
+
+
+def test_yac_completions_forwards_filters(client, mocker):
+    captured = _capture_run(mocker)
+    filters = [
+        {
+            'id': 'f1',
+            'entity': 'datasets',
+            'field': 'organ',
+            'filterType': 'point',
+            'pointValues': ['Kidney'],
+        }
+    ]
+    response = client.post(
+        '/v1/yac/completions',
+        json={**_sample_completion_body, 'filters': filters},
+        headers={'X-OpenAI-Key': 'sk-anon'},
+    )
+    assert response.status == '200 OK'
+    assert captured['filters'] == filters
 
 
 def test_yac_completions_hubmap_user_uses_config_key(client, mocker):
@@ -484,8 +507,8 @@ def test_yac_completions_non_hubmap_authed_user_needs_header(client):
 
 def _patch_es(mocker):
     return (
-        mocker.patch('requests.post', side_effect=mock_es_post),
-        mocker.patch('requests.get', side_effect=mock_es_get),
+        mocker.patch('requests.Session.post', side_effect=mock_es_post),
+        mocker.patch('requests.Session.get', side_effect=mock_es_get),
     )
 
 
@@ -684,8 +707,8 @@ def _patch_es_with_assaytype(mocker):
         return MockResponse()
 
     return (
-        mocker.patch('requests.post', side_effect=_post),
-        mocker.patch('requests.get', side_effect=mock_es_get),
+        mocker.patch('requests.Session.post', side_effect=_post),
+        mocker.patch('requests.Session.get', side_effect=mock_es_get),
     )
 
 
@@ -731,8 +754,8 @@ def _capture_es_post_bodies(mocker):
 
         return MockResponse()
 
-    mocker.patch('requests.post', side_effect=_post)
-    mocker.patch('requests.get', side_effect=mock_es_get)
+    mocker.patch('requests.Session.post', side_effect=_post)
+    mocker.patch('requests.Session.get', side_effect=mock_es_get)
     return bodies
 
 
@@ -855,3 +878,47 @@ def test_build_resource_survives_a_nested_field(client, mocker):
     entities = [{'hubmap_id': 'HBM1', 'nested': {'entity_type': ['Dataset']}}]
     with pytest.raises(TypeError):
         build_resource('datasets', entities, {}, {}, ['hubmap_id'])
+
+
+@pytest.mark.parametrize(
+    'body, status, code',
+    [
+        ({'toolArgs': {}}, 404, 'unknown_template'),
+        ({'toolArgs': None}, 422, 'bad_request'),
+    ],
+)
+def test_yac_vis_instantiate_answers_like_udiagent(client, body, status, code):
+    """A real udiagent call, so an upstream rename or contract change fails here.
+    An unknown template is answered before the schema is read, so no real
+    template name (which udiagent renumbers) is needed."""
+    response = client.post(
+        '/v1/yac/vis_instantiate',
+        json={'tool': 'vis_999_no_such_template', 'dataSchema': '{}', **body},
+    )
+    assert response.status_code == status
+    # udi-yac reads the top-level `code`; `unknown_template` drops the tweak UI.
+    assert response.get_json()['code'] == code
+
+
+def test_yac_vis_instantiate_returns_the_spec(client, mocker):
+    payload = {'spec': {'source': []}, 'toolArgs': {'field': 'organ'}, 'params': []}
+    instantiate = mocker.patch('app.routes_udi.vis_instantiate', return_value=payload)
+    body = {'tool': 'vis_001', 'toolArgs': {'field': 'organ'}, 'dataSchema': '{}'}
+    response = client.post('/v1/yac/vis_instantiate', json=body)
+    assert response.status_code == 200
+    assert response.get_json() == payload
+    instantiate.assert_called_once_with(body)
+
+
+def test_yac_vis_instantiate_logs_server_errors(client, mocker, caplog):
+    mocker.patch(
+        'app.routes_udi.vis_instantiate',
+        side_effect=EndpointError(500, 'instantiate_failed', 'Could not build a spec.'),
+    )
+    response = client.post('/v1/yac/vis_instantiate', json={})
+    assert response.status_code == 500
+    assert response.get_json() == {
+        'code': 'instantiate_failed',
+        'error': 'Could not build a spec.',
+    }
+    assert any(r.exc_info for r in caplog.records)

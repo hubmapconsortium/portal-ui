@@ -8,7 +8,7 @@ import globus_sdk
 from json import dumps
 from hubmap_commons.hm_auth import AuthHelper
 
-from .utils import make_blueprint
+from .utils import EXTERNAL_REQUEST_TIMEOUT, make_blueprint
 
 
 # This is mostly copy-and-paste from
@@ -34,7 +34,11 @@ def get_globus_groups(groups_token):
         'Authorization': 'Bearer ' + groups_token,
     }
 
-    response = requests.get('https://groups.api.globus.org/v2/groups/my_groups', headers=headers)
+    response = requests.get(
+        'https://groups.api.globus.org/v2/groups/my_groups',
+        headers=headers,
+        timeout=EXTERNAL_REQUEST_TIMEOUT,
+    )
 
     response.raise_for_status()
     groups = response.json()
@@ -407,7 +411,9 @@ def login():
     log('6: userinfo')
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get(
-        'https://auth.globus.org/v2/oauth2/userinfo', headers=user_info_request_headers
+        'https://auth.globus.org/v2/oauth2/userinfo',
+        headers=user_info_request_headers,
+        timeout=EXTERNAL_REQUEST_TIMEOUT,
     ).json()
 
     # Extract user information
@@ -437,7 +443,9 @@ def login():
         # - If you're logged in, you should be logged in all the way... Easier to debug.
         workspaces_post_url = current_app.config['WORKSPACES_ENDPOINT'] + '/tokens/'
         workspaces_post_data = dumps({'auth_token': groups_token})
-        workspaces_post_resp = requests.post(workspaces_post_url, data=workspaces_post_data)
+        workspaces_post_resp = requests.post(
+            workspaces_post_url, data=workspaces_post_data, timeout=EXTERNAL_REQUEST_TIMEOUT
+        )
 
         try:
             workspaces_token = workspaces_post_resp.json()['token']

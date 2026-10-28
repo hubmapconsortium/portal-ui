@@ -12,6 +12,7 @@ from .utils import (
     make_blueprint,
     get_client,
     get_default_flask_data,
+    EXTERNAL_REQUEST_TIMEOUT,
 )
 
 
@@ -299,5 +300,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
 def get_globus_groups():
     # The globus auth helper from hubmap_commons omits the group descriptions,
     # so we need to fetch the full list of groups from the repo.
-    groups = requests.get(current_app.config['GLOBUS_GROUPS_URL']).json()
+    groups = requests.get(
+        current_app.config['GLOBUS_GROUPS_URL'], timeout=EXTERNAL_REQUEST_TIMEOUT
+    ).json()
     return groups
