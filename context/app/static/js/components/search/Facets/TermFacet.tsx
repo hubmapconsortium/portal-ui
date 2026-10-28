@@ -353,6 +353,8 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 
   return (
     <Accordion
+      // No elevation: in dark mode an elevated Paper gets a lighter overlay, which set these rows apart.
+      elevation={0}
       sx={{
         boxShadow: 'none',
         '&:before': {

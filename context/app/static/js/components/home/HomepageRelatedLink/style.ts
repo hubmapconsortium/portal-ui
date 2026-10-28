@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 
 const ExternalLinkContainer = styled(Stack)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.common.hoverShadow}`,
-  backgroundColor: theme.palette.background.paper,
   '&:hover': {
     backgroundColor: theme.palette.common.hoverShadow,
   },

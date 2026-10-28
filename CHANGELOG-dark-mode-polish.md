@@ -1,0 +1,1 @@
+- In dark mode, give expandable dataset type facets the same background as the other facets, and give the Related Tools and Resources cards on the home page the same background as the other home page cards.
