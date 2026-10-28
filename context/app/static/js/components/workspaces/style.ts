@@ -38,7 +38,7 @@ const StyledSubtitle2 = styled(Typography)(({ theme }) => ({
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.background.paper,
     borderRadius: theme.spacing(1),
     padding: theme.spacing(1, 0),
   },

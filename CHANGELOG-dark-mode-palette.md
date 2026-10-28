@@ -1,0 +1,1 @@
+- In dark mode, keep the HuBMAP purple header bar and the blue notice banner above it, and give tabs, accordions, tiles, provenance and relationship graph nodes, status colors and the matched/unmatched chart colors dark-mode values with the same hue as their light-mode colors.
