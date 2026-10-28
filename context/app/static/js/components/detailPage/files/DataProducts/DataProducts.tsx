@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
-import theme from 'js/theme';
 import { UnprocessedFile } from '../types';
 import { FilesContextProvider } from '../FilesContext';
 import { FileSize } from './FileSize';
@@ -41,7 +40,7 @@ function DataProducts({ files }: DataProductsProps) {
 
   return (
     <FilesContextProvider>
-      <Paper sx={{ p: 2, borderTop: `1px solid ${theme.palette.divider}` }} data-testid="data-products-container">
+      <Paper sx={{ p: 2, borderTop: 1, borderColor: 'divider' }} data-testid="data-products-container">
         <Box
           sx={{
             display: 'flex',

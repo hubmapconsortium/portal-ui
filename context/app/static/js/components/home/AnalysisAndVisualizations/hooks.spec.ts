@@ -39,7 +39,10 @@ describe('usePrefersReducedMotion', () => {
       matches: false,
       media: query,
       addEventListener: vi.fn((_event: string, handler: (e: { matches: boolean }) => void) => {
-        changeHandler = handler;
+        // Other media queries (e.g. the site's dark mode preference) register listeners too.
+        if (query === '(prefers-reduced-motion: reduce)') {
+          changeHandler = handler;
+        }
       }),
       removeEventListener: vi.fn(),
     }));

@@ -9,7 +9,7 @@ import MaintenanceHeader from './MaintenanceHeader';
 function App() {
   trackPageView('/maintenance');
   return (
-    <Providers endpoints={{}} flaskData={{}}>
+    <Providers endpoints={{}} flaskData={{}} forceLightTheme>
       <MaintenanceHeader />
       <div className="main-content">
         <Error isMaintenancePage />
