@@ -49,6 +49,19 @@ const ENTITY_ICONS = {
   donors: DonorIcon,
 };
 
+const ENTITY_TYPES: Record<string, string> = {
+  datasets: 'dataset',
+  samples: 'sample',
+  donors: 'donor',
+};
+
+// Links a chart point or table row to its detail page. Aggregated rows carry no
+// `uuid`, so they get no link.
+function recordUrl(record: Record<string, unknown>, source: string) {
+  const type = ENTITY_TYPES[source];
+  return type && typeof record.uuid === 'string' ? `/browse/${type}/${record.uuid}` : null;
+}
+
 function visualizationSelector(store: VisualizationStore) {
   return {
     fullscreenVizId: store.fullscreenVizId,
@@ -63,7 +76,7 @@ function ChatFallback() {
 }
 
 function SaySeePanel() {
-  const { isHubmapUser, isWorkspacesUser } = useAppContext();
+  const { isHubmapUser, isWorkspacesUser, userEmail } = useAppContext();
   const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(useShallow(visualizationSelector));
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
   // Subscribe to the shared Escape-collapses-fullscreen listener; the
@@ -154,6 +167,10 @@ function SaySeePanel() {
                 palette={palette}
                 downloadActions={downloadActions}
                 downloadButtonLabel="Download Metadata"
+                recordUrl={recordUrl}
+                // One saved-session store per data package, as udi-yac requires, and per
+                // user, so people sharing a browser don't see each other's sessions.
+                savedSessionsKey={userEmail ? `${dataPackagePath}:${userEmail}` : dataPackagePath}
               />
             )}
           </Suspense>
