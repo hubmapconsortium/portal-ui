@@ -7,6 +7,9 @@ import { externalIconMap } from 'js/shared-styles/icons/externalImageIcons';
 
 const { avr, azimuth, fusion, googleScholar, hra, hubmapConsortium, nih, protocols } = externalIconMap;
 
+// These logos are dark artwork on a transparent background, so they get a white backdrop to stay visible in dark mode.
+const logosWithWhiteBackground = new Set([hubmapConsortium.src, nih.src]);
+
 interface ExternalLinkPropsAdapter {
   src: string;
   alt: string;
@@ -95,7 +98,15 @@ function LinkSectionContainer({ links, title }: LinkSectionContainerProps) {
         {links.map(({ src, alt, ...rest }) => (
           <HomepageRelatedLink
             key={rest.linkText}
-            img={<img src={src} alt={alt} height={56} width={56} />}
+            img={
+              <img
+                src={src}
+                alt={alt}
+                height={56}
+                width={56}
+                style={logosWithWhiteBackground.has(src) ? { backgroundColor: 'white', borderRadius: 4 } : undefined}
+              />
+            }
             title={title}
             {...rest}
           />
