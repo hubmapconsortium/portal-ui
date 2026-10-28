@@ -7,15 +7,20 @@ const appBarHeight = 64;
 
 const headerHeight = appBarHeight + bannerHeight;
 
-const FixedHeightAppBar = styled(AppBar)({
+// The header keeps the brand color in dark mode, where MUI would otherwise give the AppBar the dark surface.
+const FixedHeightAppBar = styled(AppBar)(({ theme }) => ({
   height: appBarHeight,
   top: bannerHeight,
-});
+  backgroundColor: theme.palette.common.brand,
+  backgroundImage: 'none',
+  color: theme.palette.common.white,
+}));
 
 const FixedHeightBanner = styled(Paper)(({ theme }) => ({
   height: bannerHeight,
-  backgroundColor: theme.palette.info.dark,
-  color: theme.palette.white.main,
+  backgroundColor: theme.palette.common.banner,
+  backgroundImage: 'none',
+  color: theme.palette.common.white,
   display: 'flex',
   position: 'sticky',
   justifyContent: 'center',

@@ -10,13 +10,10 @@ interface StyledTableContainerProps extends TableContainerProps {
 
 const StyledTableContainer = styled(TableContainer, {
   shouldForwardProp: (prop) => prop !== 'maxHeight' && prop !== 'minHeight',
-})<StyledTableContainerProps>(({ theme, maxHeight = 340, minHeight }) => ({
+})<StyledTableContainerProps>(({ maxHeight = 340, minHeight }) => ({
   maxHeight,
   minHeight,
   overflowY: 'auto',
-  '& .MuiTableCell-root': {
-    backgroundColor: theme.palette.white,
-  },
 })) as typeof TableContainer & ComponentType<StyledTableContainerProps>;
 
 const HeaderCell = styled(TableCell)({

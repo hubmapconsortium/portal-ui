@@ -82,9 +82,9 @@ function NodeTemplate({
   isRetracted,
 }: NodeTemplateProps) {
   const theme = useTheme();
-  // Retracted datasets get a bright red background with white text and icons for emphasis.
+  // Retracted datasets get a bright red background with contrasting text and icons for emphasis.
   const effectiveBgColor = isRetracted ? theme.palette.retracted.main : bgColor;
-  const contentColor = isRetracted ? theme.palette.common.white : undefined;
+  const contentColor = isRetracted ? theme.palette.retracted.contrastText : undefined;
   // Outer wrapper Box makes sure that nodes are always the same height
   const contents = (
     <Box

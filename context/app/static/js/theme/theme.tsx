@@ -4,6 +4,7 @@ import { createTheme, type ThemeOptions } from '@mui/material/styles';
 const purple = '#444A65';
 const purpleDarkMode = '#BFC2D4'; // same hue as purple, but with AAA-compliant contrast ratio on #333 background
 const blue = '#2A6FB8';
+const blueDark = '#265a92';
 const blueDarkMode = '#A3C5EB'; // same hue as blue, but with AAA-compliant contrast ratio on #333 background
 
 interface ProvenanceColors {
@@ -62,6 +63,8 @@ declare module '@mui/material/styles' {
     link: string;
     halfShadow: string;
     hoverShadow: string;
+    brand: string;
+    banner: string;
   }
 
   export interface TypeAction {
@@ -168,6 +171,9 @@ const themeOptions = {
       link: blue,
       halfShadow: 'rgb(0, 0, 0, 0.54)',
       hoverShadow: 'rgb(0, 0, 0, 0.08)',
+      // The header bar and the notice banner above it keep these colors in both modes.
+      brand: purple,
+      banner: blueDark,
     },
     primaryContainer: {
       main: '#C5C7CF',
@@ -204,7 +210,7 @@ const themeOptions = {
     info: {
       main: blue,
       light: '#5f9ada',
-      dark: '#265a92',
+      dark: blueDark,
     },
     success: {
       main: '#6C8938',
@@ -368,16 +374,16 @@ const themeOptions = {
       variants: [
         {
           props: { variant: 'elevated' },
-          style: {
+          style: ({ theme }) => ({
             boxShadow:
               '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
-            backgroundColor: 'white',
+            backgroundColor: theme.palette.background.paper,
             '&:hover': {
-              backgroundColor: grey[100],
+              backgroundColor: theme.palette.grey[theme.palette.mode === 'dark' ? 800 : 100],
             },
             borderRadius: 4,
             fontWeight: 300,
-          },
+          }),
         },
       ],
     },
@@ -385,14 +391,14 @@ const themeOptions = {
       variants: [
         {
           props: { variant: 'elevated' },
-          style: {
-            backgroundColor: 'white',
+          style: ({ theme }) => ({
+            backgroundColor: theme.palette.background.paper,
             '&:hover': {
-              backgroundColor: grey[100],
+              backgroundColor: theme.palette.grey[theme.palette.mode === 'dark' ? 800 : 100],
             },
             boxShadow:
               '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
-          },
+          }),
         },
       ],
     },
@@ -447,10 +453,61 @@ export const darkTheme = createTheme(
       common: {
         ...themeOptions.palette.common,
         link: blueDarkMode,
+        halfShadow: 'rgba(255, 255, 255, 0.54)',
+        hoverShadow: 'rgba(255, 255, 255, 0.08)',
       },
       background: {
         default: '#333333',
         paper: '#333333',
+      },
+      // In dark mode `white` is the surface that pairs with `primary`, e.g. in inverted tiles.
+      // Text that must stay white, such as on the brand-colored header, uses `common.white`.
+      white: {
+        main: '#333333',
+        hover: 'brightness(115%)',
+        focus: '#FFFFFF1F', // 12% opacity
+      },
+      // The colors below keep the hue of their light-mode values.
+      // Text and marks have AAA contrast on #333, like purpleDarkMode and blueDarkMode.
+      // Tints have the same contrast against #333 as the light tints have against white.
+      info: { main: '#93C5FF' },
+      success: { main: '#ACCC79' },
+      warning: { main: '#FFAC97' },
+      error: { main: '#FEA8CA' },
+      retracted: { main: '#FEACA3', contrastText: '#000000' },
+      primaryContainer: {
+        main: '#53555B',
+        contrastText: '#F6F8FF',
+        secondaryContrastText: 'rgba(246, 248, 255, 0.6)',
+      },
+      secondaryContainer: {
+        main: '#3C3C3C',
+        contrastText: '#CECECE',
+        secondaryContrastText: 'rgba(246, 248, 255, 0.6)',
+      },
+      caption: {
+        ...themeOptions.palette.caption,
+        background: '#3B3B48',
+      },
+      accent: {
+        success90: '#393C35',
+        primary90: '#45393F',
+        info90: '#383C43',
+        warning90: '#433937',
+      },
+      provenance: {
+        step: '#495A6E',
+        default: '#454545',
+        input: '#554D75',
+        output: '#384828',
+        group: '#375A05',
+        parameter: '#3B4857',
+        inputFile: '#434051',
+        global: '#834244',
+      },
+      graphs: {
+        matched: '#B1C98E',
+        unmatched: '#474E39',
       },
       primary: {
         main: purpleDarkMode,
