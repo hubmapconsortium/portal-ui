@@ -400,7 +400,7 @@ function GroupedBarStackChart<
         })}
         labelProps={{
           fontSize: 14,
-          color: theme.palette.text.primary,
+          fill: theme.palette.text.primary,
           fontWeight: 500,
           fontFamily: 'Inter Variable',
         }}
@@ -429,7 +429,7 @@ function GroupedBarStackChart<
         label={xAxisLabel}
         labelProps={{
           fontSize: 14,
-          color: theme.palette.text.primary,
+          fill: theme.palette.text.primary,
           fontWeight: 500,
           fontFamily: 'Inter Variable',
         }}

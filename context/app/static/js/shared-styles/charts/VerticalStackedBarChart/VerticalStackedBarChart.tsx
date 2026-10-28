@@ -187,7 +187,7 @@ function VerticalStackedBarChart<
               })}
               labelProps={{
                 fontSize: 14,
-                color: theme.palette.text.primary,
+                fill: theme.palette.text.primary,
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',
                 dx: '-1em',
@@ -213,7 +213,7 @@ function VerticalStackedBarChart<
               tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data: tickComponentData })}
               labelProps={{
                 fontSize: AXIS_LABEL_SIZE,
-                color: theme.palette.text.primary,
+                fill: theme.palette.text.primary,
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',
               }}

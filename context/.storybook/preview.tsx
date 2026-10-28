@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Providers from '../app/static/js/components/Providers';
 import { mswLoader } from 'msw-storybook-addon/csf3';
 import { http, HttpResponse } from 'msw';
 import { enableMapSet } from 'immer';
 import { SCFIND_BASE_STORYBOOK } from '../app/static/js/api/scfind/utils';
+import { type ThemePreference, useThemePreferenceStore } from '../app/static/js/stores/useThemePreferenceStore';
 
 import '@fontsource-variable/inter/files/inter-latin-standard-normal.woff2';
 
@@ -65,8 +66,26 @@ export const mockEndpoints = {
   scFindEndpoint: SCFIND_BASE_STORYBOOK,
 };
 export const mockGroupsToken = '';
+
+// A toolbar switch for reviewing stories in either theme.
+export const globalTypes = {
+  theme: {
+    description: 'Portal theme',
+    toolbar: { title: 'Theme', icon: 'circlehollow', items: ['light', 'dark'], dynamicTitle: true },
+  },
+};
+export const initialGlobals = { theme: 'light' };
+
+// Sets the preference store directly, so the toolbar doesn't write the portal's theme cookie.
+function ThemePreferenceSync({ theme }: { theme: ThemePreference }) {
+  useEffect(() => {
+    useThemePreferenceStore.setState({ preference: theme });
+  }, [theme]);
+  return null;
+}
+
 export const decorators = [
-  (Story: React.FC) => (
+  (Story: React.FC, { globals }: { globals: { theme?: ThemePreference } }) => (
     <Providers
       endpoints={mockEndpoints}
       groupsToken={mockGroupsToken}
@@ -81,6 +100,7 @@ export const decorators = [
       userGlobusId={undefined}
       userGlobusAffiliation={undefined}
     >
+      <ThemePreferenceSync theme={globals.theme ?? 'light'} />
       <Story />
     </Providers>
   ),

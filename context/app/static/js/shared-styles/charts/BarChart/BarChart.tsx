@@ -193,7 +193,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
             })}
             labelProps={{
               fontSize: 14,
-              color: theme.palette.text.primary,
+              fill: theme.palette.text.primary,
               fontWeight: 500,
               fontFamily: 'Inter Variable',
             }}
@@ -216,7 +216,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
             tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data })}
             labelProps={{
               fontSize: 14,
-              color: theme.palette.text.primary,
+              fill: theme.palette.text.primary,
               fontWeight: 500,
               fontFamily: 'Inter Variable',
             }}
