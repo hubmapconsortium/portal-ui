@@ -8,7 +8,7 @@ const FlexMenuItem = styled(MenuItem)(({ theme, selected }) => ({
   display: 'flex',
   cursor: selected ? 'default' : 'pointer',
   '&&': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.background.paper,
   },
   '&:hover, :focus': {
     backgroundColor: theme.palette.action.hover,

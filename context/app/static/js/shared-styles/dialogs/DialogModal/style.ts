@@ -7,7 +7,7 @@ const StyledDialogTitle = styled(DialogTitle)({
 }) as typeof DialogTitle;
 
 const StyledDivider = styled(Divider)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[100],
+  backgroundColor: theme.palette.grey[theme.palette.mode === 'dark' ? 800 : 100],
   height: '1.5px',
 })) as typeof Divider;
 

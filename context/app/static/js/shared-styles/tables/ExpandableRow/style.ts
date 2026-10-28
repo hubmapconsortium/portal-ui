@@ -19,13 +19,11 @@ const ExpandedRow = styled(TableRow, { shouldForwardProp })<ExpandableRowProps>(
 
 interface ExpandableCellProps extends ExpandableComponentProps, TableCellProps {}
 
-const ExpandedCell = styled(TableCell, { shouldForwardProp })<ExpandableCellProps>(
-  ({ $isExpanded }: ExpandableCellProps) => ({
-    padding: 0,
-    borderBottom: $isExpanded ? ' 1px solid rgba(224, 224, 224, 1)' : 'none', // border color taken from MUI table cell
-    maxWidth: 0, // This prevents the cell from affecting the width of the table
-  }),
-);
+const ExpandedCell = styled(TableCell, { shouldForwardProp })<ExpandableCellProps>(({ theme, $isExpanded }) => ({
+  padding: 0,
+  borderBottom: $isExpanded ? `1px solid ${theme.palette.divider}` : 'none', // matches the MUI table cell border
+  maxWidth: 0, // This prevents the cell from affecting the width of the table
+}));
 
 const StyledExpandCollapseIcon = styled(ExpandCollapseIcon)({
   fontSize: '2rem',
