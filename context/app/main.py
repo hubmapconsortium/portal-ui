@@ -156,6 +156,11 @@ def create_app(testing=False):
             'user_email': session.get('user_email'),
             'workspaces_token': session.get('workspaces_token'),
             'user_groups': session.get('user_groups'),
+            # Lets base.html paint the dark background before the JS loads.
+            # Iframe pages are embedded in other sites and always stay light.
+            'theme_preference': 'light'
+            if request.path.startswith('/iframe/')
+            else request.cookies.get('portal_theme', 'light'),
         }
 
     @app.before_request

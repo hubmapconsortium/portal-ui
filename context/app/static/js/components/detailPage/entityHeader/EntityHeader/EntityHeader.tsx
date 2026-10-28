@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { animated } from '@react-spring/web';
 import Box from '@mui/material/Box';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 
 import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
@@ -27,6 +27,7 @@ function Header() {
   const startViewChangeSpring = useStartViewChangeSpring();
   const isLargeDesktop = useIsLargeDesktop();
   const { vizIsFullscreen, vizTheme } = useVisualizationStore(useShallow(visualizationSelector));
+  const siteTheme = useTheme();
 
   const { entity } = useFlaskDataContext();
   const uuid = entity?.uuid;
@@ -82,8 +83,9 @@ function Header() {
   }
 
   // The header only sits flush with the visualization in fullscreen, so only match its theme there.
+  const vizHeaderTheme = vizTheme === 'dark' ? darkTheme : lightTheme;
   return (
-    <ThemeProvider theme={vizIsFullscreen && vizTheme === 'dark' ? darkTheme : lightTheme}>
+    <ThemeProvider theme={vizIsFullscreen ? vizHeaderTheme : siteTheme}>
       <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={springValues[0]}>
         <Box>
           <EntityHeaderContent setView={handleViewChange} view={view} />

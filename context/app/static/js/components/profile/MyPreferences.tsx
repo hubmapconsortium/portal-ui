@@ -3,7 +3,10 @@ import Typography from '@mui/material/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import Stack from '@mui/material/Stack';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import useOpenKeyNavStore, { deleteOpenKeyNavCookie, readOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
+import useThemePreferenceStore, { type ThemePreference } from 'js/stores/useThemePreferenceStore';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
@@ -99,10 +102,55 @@ function OpenKeyNavSection() {
   );
 }
 
+const themeOptions: { value: ThemePreference; label: string }[] = [
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'system', label: 'System' },
+];
+
+function ThemeSection() {
+  const preference = useThemePreferenceStore((s) => s.preference);
+  const setPreference = useThemePreferenceStore((s) => s.setPreference);
+
+  return (
+    <SectionPaper>
+      <Stack spacing={1} sx={{ alignItems: 'flex-start' }}>
+        <Typography variant="subtitle2">Dark Mode (BETA)</Typography>
+        <Typography>
+          Choose a light or dark theme for the portal, or match your device&apos;s setting. Dark mode is in beta, so
+          some pages and visualizations may not display it fully yet.
+        </Typography>
+        <ToggleButtonGroup
+          value={preference}
+          exclusive
+          size="small"
+          color="primary"
+          aria-label="Portal theme"
+          onChange={(_, value: ThemePreference | null) => {
+            // No value means the user clicked the already active option.
+            if (value) {
+              setPreference(value);
+            }
+          }}
+        >
+          {themeOptions.map(({ value, label }) => (
+            <ToggleButton key={value} value={value}>
+              {label}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </Stack>
+    </SectionPaper>
+  );
+}
+
 export function MyPreferences() {
   return (
     <CollapsibleDetailPageSection id="my-preferences" title="My Preferences" component="h2" variant="h2">
-      <OpenKeyNavSection />
+      <Stack spacing={2}>
+        <ThemeSection />
+        <OpenKeyNavSection />
+      </Stack>
     </CollapsibleDetailPageSection>
   );
 }
