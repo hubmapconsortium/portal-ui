@@ -30,7 +30,7 @@ export default function FractionGraphTooltip({
   return (
     <TooltipInPortal left={tooltipLeft} top={tooltipTop} style={{ position: 'absolute', pointerEvents: 'none' }}>
       {tooltipData?.bar?.data && (
-        <Box sx={{ background: 'white', padding: 2, borderRadius: 4, zIndex: 1000 }}>
+        <Box sx={{ backgroundColor: 'background.paper', padding: 2, borderRadius: 4, zIndex: 1000 }}>
           <Typography variant="subtitle1" component="p" color="textPrimary">
             {tooltipData.bar.data.index.split('.')[1]}
           </Typography>

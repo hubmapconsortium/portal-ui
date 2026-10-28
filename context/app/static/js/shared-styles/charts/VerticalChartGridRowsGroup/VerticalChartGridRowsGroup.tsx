@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { GridRows } from '@visx/grid';
 import { Group } from '@visx/group';
 import { AnyD3Scale } from '@visx/scale';
@@ -22,6 +23,7 @@ function VerticalChartGridRowsGroup<YAxisScale extends AnyD3Scale>({
   xWidth,
   getTickValues,
 }: VerticalChartGridRowsGroupProps<YAxisScale>) {
+  const theme = useTheme();
   return (
     <>
       <GridRows
@@ -29,7 +31,7 @@ function VerticalChartGridRowsGroup<YAxisScale extends AnyD3Scale>({
         left={left}
         scale={yScale}
         width={xWidth}
-        stroke="black"
+        stroke={theme.palette.text.primary}
         opacity={0.2}
         tickValues={getTickValues?.(yScale)}
       />

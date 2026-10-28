@@ -11,7 +11,7 @@ interface AccordionProps {
 }
 
 const AccordionText = styled(Typography, { shouldForwardProp })<AccordionProps>(({ theme, $isExpanded }) => ({
-  color: $isExpanded ? '#fff' : theme.palette.text.primary,
+  color: $isExpanded ? theme.palette.secondary.contrastText : theme.palette.text.primary,
 }));
 
 const AccordionSummaryHeading = styled(AccordionText)({
@@ -21,13 +21,15 @@ const AccordionSummaryHeading = styled(AccordionText)({
 
 const StyledAccordionSummary = styled(AccordionSummary, { shouldForwardProp })<AccordionProps>(
   ({ theme, $isExpanded }) => ({
-    backgroundColor: $isExpanded ? theme.palette.secondary.main : '#E0E0E0',
+    backgroundColor: $isExpanded
+      ? theme.palette.secondary.main
+      : theme.palette.grey[theme.palette.mode === 'dark' ? 700 : 300],
     '> div': {
       minHeight: iconHeight,
     },
     // only color the expand icon
     'span > svg': {
-      color: $isExpanded ? '#fff' : theme.palette.text.primary,
+      color: $isExpanded ? theme.palette.secondary.contrastText : theme.palette.text.primary,
     },
   }),
 );

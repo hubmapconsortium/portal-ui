@@ -10,7 +10,7 @@ const OutlinedButton = forwardRef((props: ButtonProps, ref: ForwardedRef<HTMLBut
 OutlinedButton.displayName = 'OutlinedButton';
 
 export const HelperPanelButton = styled(OutlinedButton)(({ theme }) => ({
-  backgroundColor: 'white',
+  backgroundColor: theme.palette.background.paper,
   borderRadius: theme.spacing(0.5),
   whiteSpace: 'nowrap',
 }));
