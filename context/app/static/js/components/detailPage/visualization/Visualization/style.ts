@@ -44,7 +44,7 @@ const ExpandableDiv = styled('div')<ExpandableDivProps>(
     // Mobile stepper is lowest MUI z index, prevents from blocking nav menu
     zIndex: $isExpanded ? theme.zIndex.mobileStepper : 'auto',
     height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${$nonExpandedHeight}px`,
-    backgroundColor: $theme === 'dark' ? '#333333' : theme.palette.white.main,
+    backgroundColor: $theme === 'dark' ? '#333333' : theme.palette.common.white,
     width: '100%',
     overflow: 'scroll',
     '.vitessce-container': {

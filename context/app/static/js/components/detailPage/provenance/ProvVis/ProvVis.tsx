@@ -2,6 +2,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import { ReactFlow, Controls, Node, ReactFlowProps, useReactFlow, ReactFlowProvider } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useEventCallback } from '@mui/material/utils';
+import useReactFlowColorMode from 'js/hooks/useReactFlowColorMode';
 
 import { useProvenanceStore } from '../ProvContext';
 import { nodeTypes } from '../nodeTypes';
@@ -18,6 +19,7 @@ const reactFlowConfig: Partial<ReactFlowProps> = {
 } as const;
 
 function ProvVisInner() {
+  const colorModeProps = useReactFlowColorMode();
   const selectedNodeId = useProvenanceStore((state) => state.selectedNodeId);
   const setSelectedNodeId = useProvenanceStore((state) => state.setSelectedNodeId);
   const hasRendered = useProvenanceStore((state) => state.hasRendered);
@@ -69,7 +71,13 @@ function ProvVisInner() {
   }
 
   return (
-    <ReactFlow {...reactFlowConfig} nodes={nodesWithSelection} edges={storedEdges} onNodeClick={handleNodeClick}>
+    <ReactFlow
+      {...reactFlowConfig}
+      {...colorModeProps}
+      nodes={nodesWithSelection}
+      edges={storedEdges}
+      onNodeClick={handleNodeClick}
+    >
       <Controls showInteractive={false} />
     </ReactFlow>
   );

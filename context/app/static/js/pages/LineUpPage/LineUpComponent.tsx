@@ -6,7 +6,7 @@ import LineUp, {
   LineUpDateColumnDesc,
 } from 'lineupjsx';
 import 'lineupjsx/build/LineUpJSx.css';
-import Paper from '@mui/material/Paper';
+import LightThemePaper from 'js/shared-styles/surfaces/LightThemePaper';
 
 import { useMetadataFieldDescriptions, useMetadataFieldTypes } from 'js/hooks/useUBKG';
 import { ESEntityType } from 'js/components/types';
@@ -200,11 +200,11 @@ function LineUpWrapper({ uuids, entityType, filters }: LineUpProps) {
   }
 
   return (
-    <Paper>
+    <LightThemePaper>
       <LineUp data={entities}>
         <LineUpColumns dataKeys={selectedKeys} />
       </LineUp>
-    </Paper>
+    </LightThemePaper>
   );
 }
 
