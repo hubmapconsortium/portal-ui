@@ -1,0 +1,1 @@
+- In dark mode, dim the home page hero image and give the home page cards, entity counts and section gradients, publication visualization accordions, workspace tables and metadata menus dark-mode colors.

@@ -55,10 +55,12 @@ function HeroLeftColumn() {
           variant="outlined"
           // Can't make it white without !important due to MUI specificity, but it doesn't cause any issues in this case since it's only used here and we want it to be white.
           // The !important also suppresses the default outlined hover tint, so restore a
-          // hover state (grey[100], matching the theme's `elevated` variant on white).
+          // hover state matching the theme's `elevated` variant.
           sx={(theme) => ({
-            backgroundColor: 'white !important',
-            '&:hover': { backgroundColor: `${theme.palette.grey[100]} !important` },
+            backgroundColor: `${theme.palette.background.paper} !important`,
+            '&:hover': {
+              backgroundColor: `${theme.palette.grey[theme.palette.mode === 'dark' ? 800 : 100]} !important`,
+            },
           })}
           href="/workspaces"
           onClick={() => {
