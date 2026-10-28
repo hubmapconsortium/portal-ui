@@ -21,15 +21,13 @@ from .utils import (
     get_allowed_cors_origin,
     get_client,
     get_url_base_from_request,
+    is_hubmap_read_user,
     make_blueprint,
 )
 from .utils_datapackage import build_resource, resolve_field_type
 
 
 blueprint = make_blueprint(__name__)
-
-# Matches the permission key used in routes_auth.py's permission_groups dict.
-HUBMAP_READ_GROUP = 'HuBMAP'
 
 _UDI_CACHE_TTL = 43200  # 12 hours
 _udi_cache = {}
@@ -39,14 +37,6 @@ _udi_cache = {}
 # X-OpenAI-Key required).
 _udi_orchestrator_hubmap = None
 _udi_orchestrator_byok = None
-
-
-def _is_authenticated():
-    return bool(session.get('groups_token'))
-
-
-def _is_hubmap_read_user():
-    return _is_authenticated() and HUBMAP_READ_GROUP in (session.get('user_groups') or [])
 
 
 def _get_cached(key):
@@ -288,7 +278,7 @@ def _pick_orchestrator():
     everyone else it's the X-OpenAI-Key header value. Returns (None, None) if
     the caller has no usable key.
     """
-    if _is_hubmap_read_user() and current_app.config.get('OPENAI_API_KEY'):
+    if is_hubmap_read_user() and current_app.config.get('OPENAI_API_KEY'):
         return _get_hubmap_orchestrator(), None
     header_key = request.headers.get('X-OpenAI-Key')
     if not header_key:
@@ -316,7 +306,10 @@ def _pick_orchestrator():
 
 
 def _serve_tsv(entity_type, *, consortium):
-    if not consortium:
+    # `_generate_tsv_response` filters on query args and POSTed uuids, so only the plain, unfiltered
+    # GET is the full table that every caller can share.
+    use_cache = not consortium and request.method == 'GET' and not request.args
+    if use_cache:
         cached = _get_cached(f'tsv:{entity_type}')
         if cached:
             tsv, filename = cached
@@ -335,7 +328,7 @@ def _serve_tsv(entity_type, *, consortium):
         normalize_values=True,
     )
 
-    if not consortium:
+    if use_cache:
         tsv = response.get_data(as_text=True)
         filename = response.headers.get('Content-Disposition', '').split('filename=')[-1]
         _set_cached(f'tsv:{entity_type}', (tsv, filename))

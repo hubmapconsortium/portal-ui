@@ -120,7 +120,7 @@ async function updateSavedListFetcher(
   });
 
   if (!response.ok) {
-    console.error('Updating saved list failed', response);
+    throw Error(`Updating saved list failed: ${response.status}`);
   }
 }
 

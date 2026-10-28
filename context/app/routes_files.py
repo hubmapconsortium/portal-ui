@@ -17,11 +17,11 @@ otherwise the public one; it injects no per-user filtering on top of that. So re
 uniform within a scope, and a two-key public/private cache matches exactly the
 granularity search-api itself enforces.
 
-The cache key is derived from *the request this process made upstream*, not from a guess
-about what a token grants: with no session token we send no ``Authorization`` header at
-all, so the response is public by construction. If a forwarded token turns out to lack
-read privileges, search-api returns public data and we cache public data under the
-``private`` key -- over-restrictive, never leaky.
+The scope is HuBMAP-Read membership, not token presence: any Globus identity can log in, and
+its token gets public data from search-api. Keying on the token alone would let such a user
+read a HuBMAP-Read user's cached private counts, and let them fill the ``private`` entry with
+public ones. Outside the private scope no ``Authorization`` header is sent at all, so the
+public entry is public by construction.
 """
 
 from hashlib import sha256
@@ -31,7 +31,7 @@ import requests
 from flask import current_app, jsonify, request, session
 
 from .cache_utils import CacheNamespace, get_or_build, prune
-from .utils import make_blueprint
+from .utils import is_hubmap_read_user, make_blueprint
 
 
 blueprint = make_blueprint(__name__)
@@ -123,7 +123,7 @@ def files_facets():
     if len(serialized) > MAX_QUERY_BYTES:
         return jsonify({'error': 'Request body is too large.'}), 413
 
-    groups_token = session.get('groups_token') or ''
+    groups_token = session.get('groups_token') if is_hubmap_read_user() else ''
     scope = 'private' if groups_token else 'public'
 
     try:

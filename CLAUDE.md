@@ -91,5 +91,5 @@ The Python package `portal-visualization` (in the sibling `portal-visualization`
 ## Environment
 
 - Node: 24.x (see `.nvmrc`)
-- Python: 3.13 (`.python-version` pins 3.13.9; `pyproject.toml` requires `>=3.13`). Note the README's prerequisites section still says 3.12 — it's out of date.
+- Python: 3.13 (`.python-version` pins 3.13.18; `pyproject.toml` requires `>=3.13`). Note the README's prerequisites section still says 3.12 — it's out of date.
 - Python deps managed with `uv`; Node version managed with `nvm` or `n`; JS deps managed with `pnpm` (version pinned via `packageManager` field in repo-root `package.json`)

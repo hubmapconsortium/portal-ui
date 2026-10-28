@@ -125,11 +125,11 @@ describe('useSharedEntityLogic', () => {
 
       expect(result.current).toEqual({
         entityType: 'Sample',
-        filters: mockPostFilter,
+        filters: { bool: { must: [mockPostFilter] } },
       });
     });
 
-    it('should return undefined filters when no filters have values', () => {
+    it('should still apply the search page query when no filters have values', () => {
       const mockFilters = {
         'data_types.keyword': { values: new Set(), type: 'TERM' },
       };
@@ -142,11 +142,38 @@ describe('useSharedEntityLogic', () => {
 
       mockFilterHasValues.mockReturnValue(false);
 
+      const mockQuery = { bool: { must_not: [{ exists: { field: 'next_revision_uuid' } }] } };
+      mockBuildQuery.mockReturnValue({ query: mockQuery });
+
       const { result } = renderHook(() => useSharedEntityLogic('datasets'));
 
       expect(result.current).toEqual({
         entityType: 'Dataset',
-        filters: undefined,
+        filters: { bool: { must: [mockQuery] } },
+      });
+    });
+
+    it('should include the search text alongside the facet filters', () => {
+      mockUseSearchStore.mockReturnValue({
+        filters: {},
+        facets: {},
+        search: 'CODEX',
+        searchFields: ['all_text'],
+        sortField: { field: 'last_modified_timestamp', direction: 'desc' },
+      });
+
+      const mockQuery = { bool: { must: [{ simple_query_string: { query: 'CODEX', fields: ['all_text'] } }] } };
+      const mockPostFilter = { bool: { must: [{ terms: { 'origin_samples.mapped_organ.keyword': ['Kidney'] } }] } };
+      mockBuildQuery.mockReturnValue({ query: mockQuery, post_filter: mockPostFilter });
+
+      const { result } = renderHook(() => useSharedEntityLogic('datasets'));
+
+      expect(mockBuildQuery).toHaveBeenCalledWith(
+        expect.objectContaining({ search: 'CODEX', searchFields: ['all_text'] }),
+      );
+      expect(result.current).toEqual({
+        entityType: 'Dataset',
+        filters: { bool: { must: [mockQuery, mockPostFilter] } },
       });
     });
 

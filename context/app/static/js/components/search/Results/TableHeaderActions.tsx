@@ -14,11 +14,11 @@ import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuPro
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 import { useLineUpModalStore } from 'js/stores/useLineUpModalStore';
-import { useSearchStore, filterHasValues } from '../store';
-import { buildQuery, isDevSearch, isFileSearch } from '../utils';
-import useEsMapping, { isESMapping } from '../useEsMapping';
+import { useSearchStore } from '../store';
+import { isDevSearch, isFileSearch } from '../utils';
 import { DefaultSearchViewSwitch } from '../SearchViewSwitch';
 import { DownloadTSVItem } from '../MetadataMenu/DownloadTSVItem';
+import { useSearchResultsQuery } from '../MetadataMenu/useSharedEntityLogic';
 import { StyledMenuItem } from '../MetadataMenu/style';
 import { trackEvent } from 'js/helpers/trackers';
 import { ESEntityType } from 'js/components/types';
@@ -32,34 +32,9 @@ const entityTypeMap: Record<string, ESEntityType | undefined> = {
 
 function useEntityQueryParams(lcPluralType: string) {
   const { selectedRows } = useSelectableTableStore();
-  const searchStore = useSearchStore();
-  const mappings = useEsMapping();
+  const filtersQuery = useSearchResultsQuery();
 
   const entityType = entityTypeMap[lcPluralType];
-
-  const filtersQuery = useMemo(() => {
-    if (!isESMapping(mappings)) return undefined;
-
-    const activeFilters = Object.fromEntries(
-      Object.entries(searchStore.filters).filter(([, filter]) => filterHasValues({ filter })),
-    );
-
-    if (Object.keys(activeFilters).length === 0) return undefined;
-
-    const builtQuery = buildQuery({
-      filters: activeFilters,
-      facets: searchStore.facets,
-      search: '',
-      size: 0,
-      searchFields: [],
-      sourceFields: {},
-      sortField: searchStore.sortField,
-      mappings,
-      buildAggregations: false,
-    });
-
-    return (builtQuery as { post_filter?: Record<string, unknown> })?.post_filter;
-  }, [searchStore.filters, searchStore.facets, searchStore.sortField, mappings]);
 
   return useMemo(() => {
     const uuids = selectedRows.size > 0 ? Array.from(selectedRows) : undefined;

@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from functools import cache
+from functools import cache, lru_cache
 from importlib.metadata import version
 import json
 from math import ceil
@@ -272,7 +272,7 @@ def _entity_sitemap_names():
     """
     names = []
     for entity_type in SITEMAP_ENTITY_TYPES:
-        pages = _sitemap_page_count(len(_get_sitemap_entities_cached(entity_type, _hour_bucket())))
+        pages = _sitemap_page_count(len(_get_sitemap_entities(entity_type)))
         if pages == 1:
             names.append(f'sitemap-{entity_type}.xml')
         else:
@@ -342,7 +342,7 @@ def sitemap_pages_xml():
         '/collections',
         '/publications',
         # Detail pages
-        *[f'/templates/{key}' for key in _get_all_template_keys(_hour_bucket())],
+        *[f'/templates/{key}' for key in _get_all_template_keys()],
         *[f'/organs/{key}' for key in get_organs()],
         *[f'/tutorials/{route}' for route in get_valid_tutorial_routes()],
     ]
@@ -356,7 +356,7 @@ def sitemap_entity_xml(slug):
     if entity_type not in SITEMAP_ENTITY_TYPES:
         abort(404)
     url_base = get_url_base_from_request()
-    entities = _get_sitemap_entities_cached(entity_type, _hour_bucket())
+    entities = _get_sitemap_entities(entity_type)
     if not 1 <= page <= _sitemap_page_count(len(entities)):
         # 404 rather than an empty urlset: a page past the end is a stale URL, and Search
         # Console reports an empty sitemap it was told about as an error.
@@ -673,8 +673,11 @@ def _get_publication_data_types_and_organs(uuid: str):
     """
     Retrieves an aggregation of all data types and organs associated with the publication.
     This is used to generate the meta description for the publication detail page.
+
+    Cached for every visitor, so it reads public data only, and raises on failure rather than
+    caching an empty result for the life of the process.
     """
-    client = get_client()
+    client = get_client(use_groups_token=False)
 
     elasticsearch_url = (
         current_app.config['ELASTICSEARCH_ENDPOINT'] + current_app.config['PORTAL_INDEX_PATH']
@@ -705,18 +708,11 @@ def _get_publication_data_types_and_organs(uuid: str):
         'size': 0,
     }
 
-    data_types, organs = [[], []]
-    try:
-        response = client.request(elasticsearch_url, request)
-        aggregations = response.get('aggregations')
-        data_types = [
-            bucket.get('key') for bucket in aggregations.get('data_types').get('buckets')
-        ]
-        organs = [bucket.get('key') for bucket in aggregations.get('organs').get('buckets')]
-    except Exception as e:
-        current_app.logger.error(f'Error retrieving publication data types and organs: {e}')
-    finally:
-        return data_types, organs
+    response = client.request(elasticsearch_url, request)
+    aggregations = response.get('aggregations')
+    data_types = [bucket.get('key') for bucket in aggregations.get('data_types').get('buckets')]
+    organs = [bucket.get('key') for bucket in aggregations.get('organs').get('buckets')]
+    return data_types, organs
 
 
 # Matches the datasets that have a page of their own, mirroring should_redirect_entity in
@@ -771,14 +767,17 @@ def _hour_bucket():
     return int(time.time() // 3600)
 
 
-@cache
+# One entry per type is enough: older hour buckets are never asked for again.
+@lru_cache(maxsize=len(SITEMAP_ENTITY_TYPES))
 def _get_sitemap_entities_cached(entity_type, hour_bucket):
     """
     Returns [(uuid, last_modified_timestamp)] for every entity of the given type.
 
     ``hour_bucket`` is not used: it is only part of the cache key. See _hour_bucket.
+    The sitemap is public and cached for every visitor, so this reads public data only, and
+    raises on failure so that an error is not cached for the hour.
     """
-    client = get_client()
+    client = get_client(use_groups_token=False)
     elasticsearch_url = (
         current_app.config['ELASTICSEARCH_ENDPOINT'] + current_app.config['PORTAL_INDEX_PATH']
     )
@@ -790,37 +789,44 @@ def _get_sitemap_entities_cached(entity_type, hour_bucket):
         # tiebreaker used for search result sorting in js/components/search/utils.ts.
         'sort': [{'uuid.keyword': 'asc'}],
     }
-    try:
-        hits = _paginate_search_after(
-            lambda body: client.request(elasticsearch_url, body),
-            query,
-            description=f'{entity_type} sitemap',
-        )
-    except Exception as e:
-        # A sitemap missing entities is better than a 500, but it must be loud: this used to
-        # fail silently and truncate at the 10k result window.
-        current_app.logger.error(f'Error retrieving {entity_type} uuids for sitemap: {e}')
-        return []
+    hits = _paginate_search_after(
+        lambda body: client.request(elasticsearch_url, body),
+        query,
+        description=f'{entity_type} sitemap',
+    )
     return [
         (hit['_id'], (hit.get('_source') or {}).get('last_modified_timestamp')) for hit in hits
     ]
 
 
-@cache
-def _get_all_template_keys(hour_bucket):
+def _get_sitemap_entities(entity_type):
+    try:
+        return _get_sitemap_entities_cached(entity_type, _hour_bucket())
+    except Exception as e:
+        # A sitemap missing entities is better than a 500, but it must be loud: this used to
+        # fail silently and truncate at the 10k result window.
+        current_app.logger.error(f'Error retrieving {entity_type} uuids for sitemap: {e}')
+        return []
+
+
+@lru_cache(maxsize=1)
+def _get_all_template_keys_cached(hour_bucket):
     """
     Retrieves all keys for templates, for the sitemap.
 
     ``hour_bucket`` is not used: it is only part of the cache key. See _hour_bucket.
     """
-    client = get_client()
+    client = get_client(use_groups_token=False)
     templates_url = current_app.config['USER_TEMPLATES_ENDPOINT'] + '/templates/jupyter_lab'
+    return list(client.request(templates_url)['data'].keys())
+
+
+def _get_all_template_keys():
     try:
-        return list(client.request(templates_url)['data'].keys())
+        return _get_all_template_keys_cached(_hour_bucket())
     except Exception as e:
-        # A `finally: return response_json['data'].keys()` here swallowed the request error
-        # and then raised KeyError, taking down the whole sitemap. Losing the template pages
-        # from one sitemap render is the better failure.
+        # Losing the template pages from one sitemap render is better than a 500, and the
+        # failure is not cached, so the next render tries again.
         current_app.logger.error(f'Error retrieving template keys for sitemap: {e}')
         return []
 
@@ -850,7 +856,13 @@ def _get_entity_description(entity):
             )
         case 'publication':
             title = entity.get('title', entity.get('hubmap_id'))
-            data_types, organs = _get_publication_data_types_and_organs(entity.get('uuid'))
+            try:
+                data_types, organs = _get_publication_data_types_and_organs(entity.get('uuid'))
+            except Exception as e:
+                current_app.logger.error(
+                    f'Error retrieving publication data types and organs: {e}'
+                )
+                data_types, organs = [], []
             return (
                 f'Explore HuBMAP publication "{title}", '
                 f'featuring data from {", ".join(data_types)} from {", ".join(organs)}. '

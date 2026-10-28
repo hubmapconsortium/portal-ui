@@ -62,23 +62,26 @@ export function replaceTokenWithPlaceholder<T>(conf: T, groupsToken: string): T 
 }
 
 /**
- * Undo {@link replaceTokenWithPlaceholder} for the *current* viewer: splice in their token, or, for
- * a viewer with no token, remove the auth material so public assets are still fetched
- * unauthenticated. A config with no placeholder — a server-built conf, a static CDN conf, or a link
- * shared before this existed — is returned untouched, by reference.
+ * Undo {@link replaceTokenWithPlaceholder} for the *current* viewer: splice in their token where it
+ * is bound for `assetsEndpoint`, and remove the auth material everywhere else — and everywhere, for
+ * a viewer with no token — so public assets are still fetched unauthenticated. A config with no
+ * placeholder — a server-built conf, a static CDN conf, or a link shared before this existed — is
+ * returned untouched, by reference.
+ *
+ * A shared config is untrusted input: anyone can craft a link whose config points a placeholder at
+ * their own server. So the token only goes into strings that start with the assets endpoint, and
+ * into auth headers whose enclosing file `url` does.
  */
-export function restoreTokenFromPlaceholder<T>(conf: T, groupsToken: string): T {
+export function restoreTokenFromPlaceholder<T>(conf: T, groupsToken: string, assetsEndpoint: string): T {
   if (conf == null) {
     return conf;
   }
-  const serialized = JSON.stringify(conf);
-  if (!serialized.includes(SHARED_TOKEN_PLACEHOLDER)) {
+  if (!JSON.stringify(conf).includes(SHARED_TOKEN_PLACEHOLDER)) {
     return conf;
   }
-  if (groupsToken) {
-    return JSON.parse(serialized.replaceAll(SHARED_TOKEN_PLACEHOLDER, jsonEscape(groupsToken))) as T;
-  }
-  return stripPlaceholder(conf) as T;
+  // The trailing slash keeps a lookalike host such as `https://assets.example.org.evil.com` out.
+  const assetsPrefix = groupsToken && assetsEndpoint ? `${assetsEndpoint}/` : null;
+  return restorePlaceholder(conf, groupsToken, assetsPrefix, false) as T;
 }
 
 /**
@@ -146,30 +149,44 @@ function stripPlaceholderFromString(value: string) {
   );
 }
 
-function stripPlaceholder(value: unknown): unknown {
+/**
+ * Walk a shared config, restoring the token where `assetsPrefix` allows it and stripping the
+ * placeholder everywhere else. `assetsPrefix` is null when nothing may be restored. `urlTrusted`
+ * says whether the nearest enclosing object with a `url` points at the assets endpoint, since that
+ * is the request an auth header in `requestInit` goes out with.
+ */
+function restorePlaceholder(value: unknown, token: string, assetsPrefix: string | null, urlTrusted: boolean): unknown {
   if (typeof value === 'string') {
+    if (assetsPrefix && value.startsWith(assetsPrefix)) {
+      return value.replaceAll(SHARED_TOKEN_PLACEHOLDER, token);
+    }
     return stripPlaceholderFromString(value);
   }
   // `map`, never `filter`: Vitessce coordinates datasets/views/files by array index.
   if (Array.isArray(value)) {
-    return value.map(stripPlaceholder);
+    return value.map((child) => restorePlaceholder(child, token, assetsPrefix, urlTrusted));
   }
   if (!isObject(value)) {
     return value;
   }
 
+  const trusted =
+    typeof value.url === 'string' ? Boolean(assetsPrefix && value.url.startsWith(assetsPrefix)) : urlTrusted;
   const result: Record<string, unknown> = {};
   Object.entries(value).forEach(([key, child]) => {
-    // Drop the auth header outright rather than sending `Bearer ` — an empty bearer buys nothing
-    // and costs a CORS preflight.
     if (
       key.toLowerCase() === 'authorization' &&
       typeof child === 'string' &&
       child.includes(SHARED_TOKEN_PLACEHOLDER)
     ) {
+      // Otherwise drop the auth header outright rather than sending `Bearer ` — an empty bearer
+      // buys nothing and costs a CORS preflight.
+      if (trusted) {
+        result[key] = child.replaceAll(SHARED_TOKEN_PLACEHOLDER, token);
+      }
       return;
     }
-    const stripped = stripPlaceholder(child);
+    const stripped = restorePlaceholder(child, token, assetsPrefix, trusted);
     // Prune a container that existed only to carry the credential — `headers` first, then
     // `requestInit` on the way back up. Keyed on "was non-empty, is now empty" rather than a key
     // allow-list, so objects that were empty to begin with survive and a snake_case `request_init`

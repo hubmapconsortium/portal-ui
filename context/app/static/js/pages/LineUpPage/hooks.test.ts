@@ -94,6 +94,7 @@ describe('useLineupEntities', () => {
     mockUseSearchHits.mockReturnValue({
       searchHits: [],
       isLoading: false,
+      mutate: vi.fn(),
       totalHitsCount: undefined,
     });
   });
@@ -118,7 +119,7 @@ describe('useLineupEntities', () => {
           },
           _source: expect.arrayContaining(sourceFields) as string[],
         },
-        { shouldFetch: true },
+        { shouldFetch: true, useDefaultQuery: true, shouldRetryOnError: false },
       );
     });
 
@@ -143,7 +144,7 @@ describe('useLineupEntities', () => {
           },
           _source: expect.arrayContaining(sourceFields) as string[],
         },
-        { shouldFetch: true },
+        { shouldFetch: true, useDefaultQuery: false, shouldRetryOnError: false },
       );
     });
 
@@ -167,7 +168,7 @@ describe('useLineupEntities', () => {
             },
           },
         }),
-        { shouldFetch: true },
+        { shouldFetch: true, useDefaultQuery: true, shouldRetryOnError: false },
       );
     });
 
@@ -186,7 +187,7 @@ describe('useLineupEntities', () => {
             },
           },
         }),
-        { shouldFetch: true },
+        { shouldFetch: true, useDefaultQuery: true, shouldRetryOnError: false },
       );
     });
 
@@ -197,7 +198,7 @@ describe('useLineupEntities', () => {
         expect.objectContaining({
           query: {},
         }),
-        { shouldFetch: true },
+        { shouldFetch: true, useDefaultQuery: true, shouldRetryOnError: false },
       );
     });
 
@@ -209,7 +210,11 @@ describe('useLineupEntities', () => {
         }),
       );
 
-      expect(mockUseSearchHits).toHaveBeenCalledWith(expect.any(Object), { shouldFetch: false });
+      expect(mockUseSearchHits).toHaveBeenCalledWith(expect.any(Object), {
+        shouldFetch: false,
+        useDefaultQuery: true,
+        shouldRetryOnError: false,
+      });
     });
   });
 
@@ -220,6 +225,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: false,
+        mutate: vi.fn(),
         totalHitsCount: 1,
       });
 
@@ -253,6 +259,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: false,
+        mutate: vi.fn(),
         totalHitsCount: 1,
       });
 
@@ -272,6 +279,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: false,
+        mutate: vi.fn(),
         totalHitsCount: 1,
       });
 
@@ -293,6 +301,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: [],
         isLoading: false,
+        mutate: vi.fn(),
         totalHitsCount: 0,
       });
 
@@ -313,6 +322,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: false,
+        mutate: vi.fn(),
         totalHitsCount: 1,
       });
 
@@ -341,6 +351,7 @@ describe('useLineupEntities', () => {
       mockUseSearchHits.mockReturnValue({
         searchHits: mockEntities,
         isLoading: true,
+        mutate: vi.fn(),
         totalHitsCount: 1,
       });
 

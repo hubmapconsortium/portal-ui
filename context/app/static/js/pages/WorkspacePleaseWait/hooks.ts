@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
 import { getWorkspaceJob } from 'js/components/workspaces/utils';
@@ -6,6 +6,9 @@ import useInterval from 'js/hooks/useInterval';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 
 const ACTIVATING_STATUS = 'Activating';
+// A just-started job can take a few polls to show up in /jobs; after this, a missing or inactive
+// job means the start failed and polling would never end.
+const NOT_STARTED_TIMEOUT_MS = 90 * 1000;
 
 function useWorkspacesPleaseWait(workspaceId: number) {
   const [message, setMessage] = useState<string | undefined>();
@@ -14,11 +17,22 @@ function useWorkspacesPleaseWait(workspaceId: number) {
   const [loadingStartTime] = useState(() => new Date().getTime());
   const [jobStatus, setJobStatus] = useState<string | undefined>();
   const { handleStopWorkspace } = useWorkspacesList();
+  // The interval fires every second whether or not the last poll has finished.
+  const isPolling = useRef(false);
 
   async function setLocationOrRetry() {
-    if (dead) {
+    if (dead || isPolling.current) {
       return;
     }
+    isPolling.current = true;
+    try {
+      await pollJob();
+    } finally {
+      isPolling.current = false;
+    }
+  }
+
+  async function pollJob() {
     const jobLocation = await getWorkspaceJob({
       workspaceId,
       setMessage,
@@ -53,12 +67,23 @@ function useWorkspacesPleaseWait(workspaceId: number) {
       document.location.href = jupyterUrl;
     }
 
-    if (status === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime > 5 * 60 * 1000) {
+    const elapsed = new Date().getTime() - loadingStartTime;
+
+    if (status !== 'Active' && status !== ACTIVATING_STATUS && elapsed > NOT_STARTED_TIMEOUT_MS) {
+      setDead(true);
+      setMessage('This workspace did not start. Return to your workspaces and launch it again.');
+      return;
+    }
+
+    if (status === ACTIVATING_STATUS && elapsed > 5 * 60 * 1000) {
+      // Stop polling first, so the stop request goes out once.
+      setDead(true);
       try {
         await handleStopWorkspace(workspaceId);
         document.location.href = `/workspaces/?failed_workspace_id=${encodeURIComponent(workspaceId)}`;
       } catch (e) {
         console.error(e);
+        setMessage('This workspace took too long to start and could not be stopped. Stop it from your workspaces.');
       }
     }
   }

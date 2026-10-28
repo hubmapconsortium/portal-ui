@@ -6,7 +6,7 @@ import requests
 from flask import current_app, jsonify, request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from .cache_utils import CacheNamespace, get_or_build, load_cached
+from .cache_utils import CacheNamespace, Degraded, get_or_build, load_cached
 from .utils import (
     EXTERNAL_REQUEST_TIMEOUT,
     first_n_matches,
@@ -39,6 +39,9 @@ SCFIND_CACHE = CacheNamespace(
     ttl_config_key='SCFIND_CACHE_TTL',
     token_env_var='SCFIND_CACHE_TOKEN',
     version_config_key='SCFIND_DEFAULT_INDEX_VERSION',
+    # A rebuild takes 25-44s and holds the cache lock; expiring the memo would run one inside a
+    # request in every worker each TTL. The per-start token already bounds staleness in production.
+    expire_memo=False,
 )
 
 
@@ -501,12 +504,15 @@ def peek_cell_type_name(clid):
     return _extract_cell_types_info(clid_to_label_map.get(clid, []))['name']
 
 
-def _fan_out(items, fetch_one, label):
+def _fan_out(items, fetch_one, label, retry=False):
     """
     Run ``fetch_one(item)`` for each item across a bounded thread pool, returning ``{item: result}``.
 
     Each task re-enters the app context (worker threads don't inherit it); a per-item failure is
     logged and the item is dropped from the result rather than failing the whole aggregate.
+
+    With ``retry``, each item is retried before it is dropped. Builders whose result is
+    disk-cached use it, and check for dropped items so they can raise ``Degraded``.
     """
     if not items:
         return {}
@@ -515,7 +521,7 @@ def _fan_out(items, fetch_one, label):
     def run(item):
         with app.app_context():
             try:
-                return item, fetch_one(item)
+                return item, (_retry(lambda: fetch_one(item)) if retry else fetch_one(item))
             except Exception as e:
                 current_app.logger.warning(f'{label} failed for {item!r}: {e}')
                 return item, None
@@ -577,7 +583,7 @@ def _build_cell_counts_for_tissues(organs, modality=None):
     return _fan_out(organs, fetch, 'cellTypeCountForTissue')
 
 
-def _build_datasets_for_cell_types(cell_types, modality=None):
+def _build_datasets_for_cell_types(cell_types, modality=None, retry=False):
     """Per-cell-type findDatasetForCellType payloads ({counts, datasets}), keyed by cell type."""
 
     def fetch(cell_type):
@@ -592,7 +598,7 @@ def _build_datasets_for_cell_types(cell_types, modality=None):
             params['modality'] = modality
         return _cached_scfind_get('findDatasetForCellType', tuple(sorted(params.items())))
 
-    return _fan_out(cell_types, fetch, 'findDatasetForCellType')
+    return _fan_out(cell_types, fetch, 'findDatasetForCellType', retry=retry)
 
 
 def _dataset_counts_for_genes(genes, modality=None):
@@ -644,7 +650,8 @@ def _build_dataset_counts(modality=None):
 
     Fans out over datasets rather than cell types: one `cellTypeCountForDataset` call returns every
     cell type in a dataset, so this is O(#datasets) upstream calls (hundreds) instead of
-    O(#cell-type-names) (thousands). Returns ``{label: dataset_count}``. Shares the
+    O(#cell-type-names) (thousands). Returns ``({label: dataset_count}, complete)``, where
+    ``complete`` is false if any dataset's counts could not be fetched. Shares the
     `_cached_scfind_get` cache (so the per-dataset counts the distribution charts use are warmed too).
     """
     base_params = {}
@@ -661,12 +668,15 @@ def _build_dataset_counts(modality=None):
         )
         return [c.get('index') for c in counts if isinstance(c, dict) and c.get('index')]
 
-    per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset')
+    per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset', retry=True)
     label_datasets = {}
     for dataset, indexes in per_dataset.items():
         for index in indexes:
             label_datasets.setdefault(_format_cell_type_name(index), set()).add(dataset)
-    return {label: len(datasets_for_label) for label, datasets_for_label in label_datasets.items()}
+    counts = {
+        label: len(datasets_for_label) for label, datasets_for_label in label_datasets.items()
+    }
+    return counts, len(per_dataset) == len(set(datasets))
 
 
 def _build_cell_type_descriptions(label_to_clid_map):
@@ -675,8 +685,9 @@ def _build_cell_type_descriptions(label_to_clid_map):
 
     Returns ``{clid: definition}`` keyed by the full CLID (e.g. "CL:0000236"). Bundled into the
     landing payload (and warmed) so the panel's descriptions are cached server-side instead of being
-    fetched from UBKG on every page load. UBKG/network failures degrade to an empty map (the panel
-    then shows its "No description available." fallback).
+    fetched from UBKG on every page load. Descriptions are cosmetic, so a UBKG/network failure
+    is retried and then returns ``None``, which callers treat as an empty map and a ``Degraded``
+    build (so the gap is not disk-cached).
     """
     clids = sorted({clid for clids in label_to_clid_map.values() for clid in clids})
     if not clids:
@@ -685,13 +696,17 @@ def _build_cell_type_descriptions(label_to_clid_map):
     # UBKG's /celltypes endpoint keys by the numeric portion of the CLID (mirrors stripCLIDPrefix).
     numeric_ids = ','.join(''.join(ch for ch in clid if ch.isdigit()) for clid in clids)
     url = f'{ubkg_endpoint}/celltypes/{numeric_ids}'
-    try:
+
+    def fetch():
         response = requests.get(url, timeout=EXTERNAL_REQUEST_TIMEOUT)
         response.raise_for_status()
-        data = response.json()
+        return response.json()
+
+    try:
+        data = _retry(fetch)
     except requests.RequestException as e:
         current_app.logger.warning(f'Failed to fetch cell type descriptions from UBKG: {e}')
-        return {}
+        return None
 
     descriptions = {}
     for entry in data:
@@ -719,8 +734,8 @@ def _build_cell_types_landing_uncached():
         if organ not in organs:
             organs.append(organ)
     # Per-label RNAseq/ATACseq dataset counts for the panel's Data Type chips.
-    rna_counts = _build_dataset_counts()
-    atac_counts = _build_dataset_counts('ATAC')
+    rna_counts, rna_complete = _build_dataset_counts()
+    atac_counts, atac_complete = _build_dataset_counts('ATAC')
     dataset_counts = {
         label: {'rna': rna_counts.get(label, 0), 'atac': atac_counts.get(label, 0)}
         for label in set(rna_counts) | set(atac_counts)
@@ -728,13 +743,16 @@ def _build_cell_types_landing_uncached():
     # Static Cell Ontology descriptions, cached here so the panel doesn't fetch them from UBKG on
     # every load. Keyed by full CLID (the panel resolves each row's CLID via the label->CLID map).
     descriptions = _build_cell_type_descriptions(_build_label_to_clid_map())
-    return {
+    payload = {
         'cell_type_names': rna,
         'cell_type_names_atac': atac,
         'organs': organs,
         'dataset_counts': dataset_counts,
-        'descriptions': descriptions,
+        'descriptions': descriptions or {},
     }
+    if not (rna_complete and atac_complete and descriptions is not None):
+        raise Degraded(payload)
+    return payload
 
 
 def _build_cell_types_landing():
@@ -870,11 +888,15 @@ def _build_organ_cell_types(organ):
     atac_labels = organ_labels('ATAC')
 
     # The two modalities' per-cell-type findDatasetForCellType fan-outs are independent — run them
-    # concurrently (each degrades to empty on a scfind error rather than failing the whole table).
+    # concurrently. A cell type that still fails after retries is served without its datasets, but
+    # the table is then Degraded rather than disk-cached with the gap.
     results = _gather(
         {
-            'rna': (lambda: _build_datasets_for_cell_types(rna_labels), {}),
-            'atac': (lambda: _build_datasets_for_cell_types(atac_labels, modality='ATAC'), {}),
+            'rna': (lambda: _build_datasets_for_cell_types(rna_labels, retry=True), {}),
+            'atac': (
+                lambda: _build_datasets_for_cell_types(atac_labels, modality='ATAC', retry=True),
+                {},
+            ),
         }
     )
 
@@ -893,15 +915,33 @@ def _build_organ_cell_types(organ):
                 {
                     'name': label.split('.', 1)[1],
                     'clid': clid,
-                    'description': descriptions.get(clid) if clid else None,
+                    'description': (descriptions or {}).get(clid) if clid else None,
                     'datasets': (datasets_for_cell_types.get(label) or {}).get('datasets', []),
                 }
             )
         return result
 
-    return {
+    payload = {
         'cell_types': rows(rna_labels, results['rna']),
         'cell_types_atac': rows(atac_labels, results['atac']),
+    }
+    complete = (
+        all(label in results['rna'] for label in rna_labels)
+        and all(label in results['atac'] for label in atac_labels)
+        and descriptions is not None
+    )
+    if not complete:
+        raise Degraded(payload)
+    return payload
+
+
+def _known_organs():
+    """Lower-cased organ prefixes of the cell type names scfind has, across both modalities."""
+    return {
+        cell_type.split('.', 1)[0].lower()
+        for modality in (None, 'ATAC')
+        for cell_type in _get_all_cell_type_names(modality)
+        if '.' in cell_type
     }
 
 
@@ -1451,6 +1491,11 @@ def organ_cell_types(organ):
     try:
         if not _is_valid_organ_name(organ):
             return jsonify({'error': 'Invalid organ.'}), 400
+        # The organ is user input, and each distinct value would add a disk file and an
+        # in-process memo entry for good, so only organs scfind knows get one. Any other organ
+        # has no cell types, which is the same payload without the cache entry.
+        if organ.lower() not in _known_organs():
+            return jsonify({'cell_types': [], 'cell_types_atac': []})
         return jsonify(_organ_cell_types(organ))
     except Exception as e:
         return _handle_scfind_error(e, 'organ cell types')

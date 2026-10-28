@@ -606,6 +606,34 @@ def test_sitemap_lists_only_datasets_with_their_own_page(client, mocker):
     assert own_raw_page['bool']['must_not'] == [{'term': {'is_component': True}}]
 
 
+def test_sitemap_lookup_ignores_the_visitors_token(client, mocker):
+    """The lookup is cached for everyone, so whoever fills it must not add private entities."""
+    from .routes_browse import _get_sitemap_entities_cached
+
+    with client.session_transaction() as session:
+        session['groups_token'] = 'internal-token'
+    _get_sitemap_entities_cached.cache_clear()
+    post = mocker.patch('requests.Session.post', side_effect=mock_sitemap_search_post)
+    client.get('/sitemap-dataset.xml')
+    _get_sitemap_entities_cached.cache_clear()
+
+    assert 'Authorization' not in (post.call_args.kwargs.get('headers') or {})
+
+
+def test_sitemap_lookup_failure_is_not_cached(client, mocker):
+    from .routes_browse import _get_sitemap_entities_cached
+
+    _get_sitemap_entities_cached.cache_clear()
+    mocker.patch('requests.Session.post', side_effect=ConnectionError('search-api is down'))
+    assert client.get('/sitemap-dataset.xml').status == '200 OK'
+
+    mocker.patch('requests.Session.post', side_effect=mock_sitemap_search_post)
+    response = client.get('/sitemap-dataset.xml')
+    _get_sitemap_entities_cached.cache_clear()
+
+    assert len(list(ET.fromstring(response.data).iter(f'{SITEMAP_NS}url'))) == 1
+
+
 def mock_many_entities_post(count):
     """Mocks the sitemap lookup with `count` entities, all returned in one ES page."""
 
