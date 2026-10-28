@@ -9,6 +9,7 @@ import { InfoIcon } from 'js/shared-styles/icons';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { isRetractedStatus } from 'js/components/detailPage/utils';
+import useReactFlowColorMode from 'js/hooks/useReactFlowColorMode';
 import { nodeTypes } from './nodeTypes';
 import { applyLayout, makeAriaLabel } from './utils';
 import { NodeLegend, StatusLegend } from './Legend';
@@ -57,6 +58,7 @@ const reactFlowConfig: Partial<ReactFlowProps> = {
 
 function ReactFlowBody({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) {
   const { trackFitView, trackZoomIn, trackZoomOut } = useDatasetRelationshipsTracking();
+  const colorModeProps = useReactFlowColorMode();
 
   // If nodes haven't loaded yet, show a skeleton that fills the same container
   if (!nodes.length) {
@@ -64,7 +66,7 @@ function ReactFlowBody({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) {
   }
   const label = makeAriaLabel(nodes);
   return (
-    <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges} aria-label={label} fitView>
+    <ReactFlow {...reactFlowConfig} {...colorModeProps} nodes={nodes} edges={edges} aria-label={label} fitView>
       <Controls showInteractive={false} onFitView={trackFitView} onZoomIn={trackZoomIn} onZoomOut={trackZoomOut} />
     </ReactFlow>
   );

@@ -156,6 +156,7 @@ function SaySeePanel() {
             ) : (
               <UDIChat
                 key={dataPackagePath}
+                className={theme === 'dark' ? 'dark' : undefined}
                 apiBaseUrl={API_BASE_URL}
                 dataPackagePath={dataPackagePath}
                 fetchOptions={FETCH_OPTIONS}
