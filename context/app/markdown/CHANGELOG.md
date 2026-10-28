@@ -1,5 +1,28 @@
 # Changelog
 
+## v1.54.1 - 2026-10-28
+
+- Show a 504 Gateway Timeout page, instead of a 500 error, when an upstream API times out; show 502 or 503 pages when an upstream API is unreachable or unavailable.
+- Reuse connections to the search, entity, and assets APIs across requests, and stop requests to them from hanging indefinitely.
+- Update portal-visualization to 0.5.14, which reuses connections and sets timeouts on its requests to the search, entity, and assets APIs.
+- Shared Vitessce links now restore the viewer's token only on requests to the assets endpoint.
+- Files search filter counts are cached per HuBMAP-Read access rather than per login.
+- The public UDI TSV cache is filled only by unfiltered requests.
+- Saved lists in browser storage are kept until they have been saved to the server, and are only moved for users with saved-list access.
+- Failed workspace launches and edits now show an error instead of a success message, and the workspace loading page stops polling when a job does not start.
+- Login checks the OAuth `state` parameter, and logout revokes the Globus groups token.
+- The sitemap and publication page descriptions are built from public data only, and lookup failures are no longer cached.
+- The scfind cell types landing and organ payloads are not cached when an upstream call fails, and unknown organ names no longer create cache entries.
+- The shared disk cache's in-process copy now expires with its TTL.
+- "Download Metadata" and LineUp from the search page now use the search text as well as the filters, and fail with an error instead of returning partial results.
+- Update Node to 24.22.1 and Python to 3.13.18, and update Storybook, Vitest, black, Brotli, OpenTelemetry, undici and DOMPurify to versions that fix reported security issues.
+- Upgrade `udi-yac` (Say & See chat) from 0.5.0 to 0.10.0 and `udiagent` from 0.6.0 to 0.10.0. The chat now sends its active filters with each message, and the agent takes them into account, so it can answer "which filters are on?" and build on the current filters.
+- Fix changing a field on a Say & See chart: the chat calls `/v1/yac/vis_instantiate` to rebuild the chart from its template, and the portal had no such route.
+- Link Say & See table rows and chart points to their donor, sample or dataset page.
+- Let Say & See users save sessions in the browser and load them later from the Session menu, kept separately for the public and consortium data, and for each signed-in user.
+
+
+
 ## v1.54.0 - 2026-10-20
 
 - Run every Cypress spec in CI. The spec glob previously matched only `load-all-pages.cy.js`, so the specs under `pages/` and `flows/` never ran.
