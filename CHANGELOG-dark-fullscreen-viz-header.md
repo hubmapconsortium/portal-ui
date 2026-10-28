@@ -1,0 +1,1 @@
+- Match the fullscreen visualization header to the visualization's dark theme. The header and its buttons switch back to the light theme when fullscreen is exited.
