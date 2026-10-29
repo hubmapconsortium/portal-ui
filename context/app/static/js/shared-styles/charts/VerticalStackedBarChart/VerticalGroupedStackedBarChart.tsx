@@ -426,6 +426,8 @@ function GroupedBarStackChart<
         top={parentHeight - updatedMargin.bottom}
         left={updatedMargin.left}
         scale={xScale}
+        stroke={theme.palette.text.primary}
+        tickLabelProps={{ fill: theme.palette.text.primary }}
         label={xAxisLabel}
         labelProps={{
           fontSize: 14,
