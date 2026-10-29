@@ -4,3 +4,4 @@
 - In dark mode, make the x-axis line and tick labels of the datasets overview chart readable.
 - In dark mode, keep the signed-in user's initial visible in the header avatar.
 - In dark mode, remove the white corners around embedded tutorials.
+- In dark mode, outline the tutorial and workspace template cards so they stand out from the panel behind them.
