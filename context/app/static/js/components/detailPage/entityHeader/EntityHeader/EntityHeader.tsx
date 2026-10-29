@@ -2,11 +2,13 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { animated } from '@react-spring/web';
 import Box from '@mui/material/Box';
+import { ThemeProvider } from '@mui/material/styles';
 
 import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
+import lightTheme, { darkTheme } from 'js/theme/theme';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { useStartViewChangeSpring, expandedHeights } from './hooks';
@@ -17,13 +19,14 @@ const AnimatedPaper = animated(StyledPaper);
 
 const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: Boolean(state.fullscreenVizId),
+  vizTheme: state.vizTheme,
 });
 
 function Header() {
   const { springs, view, setView, summaryHeight, setSummaryHeight } = useEntityStore();
   const startViewChangeSpring = useStartViewChangeSpring();
   const isLargeDesktop = useIsLargeDesktop();
-  const { vizIsFullscreen } = useVisualizationStore(useShallow(visualizationSelector));
+  const { vizIsFullscreen, vizTheme } = useVisualizationStore(useShallow(visualizationSelector));
 
   const { entity } = useFlaskDataContext();
   const uuid = entity?.uuid;
@@ -78,25 +81,28 @@ function Header() {
     return null;
   }
 
+  // The header only sits flush with the visualization in fullscreen, so only match its theme there.
   return (
-    <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={springValues[0]}>
-      <Box>
-        <EntityHeaderContent setView={handleViewChange} view={view} />
-        {isLargeDesktop && (
-          <Box
-            ref={summaryBodyRef}
-            sx={{
-              height: expandedHeights[view],
-              width: '100%',
-              p: 2,
-            }}
-          >
-            {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
-            {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} isEntityHeader />}
-          </Box>
-        )}
-      </Box>
-    </AnimatedPaper>
+    <ThemeProvider theme={vizIsFullscreen && vizTheme === 'dark' ? darkTheme : lightTheme}>
+      <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={springValues[0]}>
+        <Box>
+          <EntityHeaderContent setView={handleViewChange} view={view} />
+          {isLargeDesktop && (
+            <Box
+              ref={summaryBodyRef}
+              sx={{
+                height: expandedHeights[view],
+                width: '100%',
+                p: 2,
+              }}
+            >
+              {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
+              {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} isEntityHeader />}
+            </Box>
+          )}
+        </Box>
+      </AnimatedPaper>
+    </ThemeProvider>
   );
 }
 
