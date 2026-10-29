@@ -1,3 +1,4 @@
 - In dark mode, give expandable dataset type facets the same background as the other facets, and give the Related Tools and Resources cards on the home page the same background as the other home page cards.
 - In dark mode, give the HuBMAP Consortium and NIH Common Fund logos a white background wherever they appear, including Related Tools and Resources and the Resources menu, and make the Say & See mascot's speech bubble readable.
 - In dark mode, give sticky table headers and the selected-rows bar the same background as the table body, so headers no longer blend into the page background.
+- In dark mode, make the x-axis line and tick labels of the datasets overview chart readable.
