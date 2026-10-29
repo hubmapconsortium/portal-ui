@@ -8,7 +8,12 @@ import { useAppContext } from 'js/components/Contexts';
 import { useInvitationsList } from 'js/components/workspaces/hooks';
 
 function Authenticated({ userEmail }: { userEmail: string }) {
-  return <Typography variant="subtitle2">{userEmail[0].toUpperCase()}</Typography>;
+  // The avatar background is the same in both modes, so pin the text to the light-mode subtitle color.
+  return (
+    <Typography variant="subtitle2" sx={{ color: 'common.brand' }}>
+      {userEmail[0].toUpperCase()}
+    </Typography>
+  );
 }
 
 function Anonymous() {
