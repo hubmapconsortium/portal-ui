@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 import { InternalLink } from 'js/shared-styles/Links';
 import Skeleton from '@mui/material/Skeleton';
 import { ExpandableDescription } from 'js/shared-styles/text';
+import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import ViewEntitiesButton from '../ViewEntitiesButton';
-import { useUUIDsFromHubmapIds } from '../hooks';
 import { CellTypeRowProps } from './types';
 
 interface CellTypeLinkProps {
@@ -61,11 +61,7 @@ export function MatchedDatasetsCell({
 }
 
 export function ViewDatasetsCell({ matchedDatasets }: Pick<CellTypeRowProps, 'matchedDatasets'>) {
-  const { datasetUUIDs, isLoading } = useUUIDsFromHubmapIds(matchedDatasets ?? []);
-
-  if (isLoading) {
-    return <Skeleton variant="text" width={150} />;
-  }
+  const datasetUUIDs = useSCFindIDAdapter(matchedDatasets);
 
   return <ViewEntitiesButton entityType="Dataset" filters={{ datasetUUIDs }} />;
 }

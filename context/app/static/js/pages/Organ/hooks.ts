@@ -186,7 +186,10 @@ export function useIndexedDatasetsForOrgan(searchItems: string[], organName: str
     _source: ['hubmap_id'],
   });
 
-  const datasetUUIDs = (searchData?.hits?.hits.map((h) => h._id) ?? []).filter((id) => id != null);
+  // These hits all tie on score, so ES returns them in a different order on each request. Sort them so
+  // that SWR revalidating this query (e.g. when the cell types section mounts its ATACseq tab) doesn't
+  // change the request keys that callers like the cell population plot build from this list.
+  const datasetUUIDs = (searchData?.hits?.hits.map((h) => h._id) ?? []).filter((id) => id != null).sort();
 
   const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
 
