@@ -396,6 +396,17 @@ const themeOptions = {
         },
       },
     },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        // MUI colors the sorted column's label text.primary. Inherit instead, so it matches the other headers in
+        // panel lists, whose headers are subtitle2. Table header cells are text.primary already.
+        root: {
+          '&.Mui-active': {
+            color: 'inherit',
+          },
+        },
+      },
+    },
     MuiChip: {
       variants: [
         {
