@@ -85,6 +85,9 @@ const StyledIframe = styled('iframe')({
   border: 'none',
   width: '100%',
   aspectRatio: '3 / 1.75',
+  // In dark mode the light Tango embed gets an opaque white backdrop, which shows around its 16px rounded
+  // corners. Clip slightly wider than 16px so no antialiased white fringe is left along the curve.
+  borderRadius: '20px',
 });
 
 function TutorialDetailPage({ tutorialRoute }: TutorialProps) {

@@ -3,3 +3,4 @@
 - In dark mode, give sticky table headers and the selected-rows bar the same background as the table body, so headers no longer blend into the page background.
 - In dark mode, make the x-axis line and tick labels of the datasets overview chart readable.
 - In dark mode, keep the signed-in user's initial visible in the header avatar.
+- In dark mode, remove the white corners around embedded tutorials.
