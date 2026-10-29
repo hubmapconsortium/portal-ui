@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from 'react';
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { InfoIcon } from 'js/shared-styles/icons';
@@ -27,20 +26,14 @@ export function SectionDescription({ addendum, children, subsection }: SectionDe
           alignItems: 'start',
         }}
       >
-        <Box>
-          <InfoIcon color="primary" fontSize={iconSize} />
-        </Box>
-        {/* Align icon with the first line of text. Render as a <div> rather
-            than the default <p> so callers can pass arbitrary block-level
-            content (Stacks, additional Typography, action buttons, etc.)
-            without producing invalid <p>-inside-<p> HTML. */}
-        <Typography
-          component="div"
-          variant="body1"
-          sx={{
-            marginTop: 0.5,
-          }}
-        >
+        {/* Give the icon the same line box as the text, so `middle` centers it on the first line. */}
+        <Typography component="span" variant="body1">
+          <InfoIcon color="primary" fontSize={iconSize} sx={{ verticalAlign: 'middle' }} />
+        </Typography>
+        {/* Render as a <div> rather than the default <p> so callers can pass
+            arbitrary block-level content (Stacks, additional Typography, action
+            buttons, etc.) without producing invalid <p>-inside-<p> HTML. */}
+        <Typography component="div" variant="body1">
           {children}
         </Typography>
       </Stack>

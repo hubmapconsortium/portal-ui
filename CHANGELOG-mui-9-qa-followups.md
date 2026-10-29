@@ -1,0 +1,4 @@
+- Fix the organ page's cell population plot reloading when the cell types section switches between its RNAseq and ATACseq tabs.
+- Fix bulk data transfer tab contents not spanning the full width of the section.
+- Align the info icon in section descriptions with the first line of the description text.
+- Fix the "View Datasets" buttons in the organ page's cell types table linking to an unfiltered dataset search.

@@ -183,6 +183,10 @@ export function useIndexedDatasetsForOrgan(searchItems: string[], organName: str
       },
     },
     size: 10000,
+    // These hits all tie on score, so without a sort ES returns them in a different order on each request.
+    // Callers like the cell population plot build request keys from this list, so a revalidation (e.g. when
+    // the cell types section mounts its ATACseq tab) would otherwise refetch them.
+    sort: [{ _id: 'asc' }],
     _source: ['hubmap_id'],
   });
 
