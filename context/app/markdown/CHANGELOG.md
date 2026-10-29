@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.54.2 - 2026-10-29
+
+- Fix the organ page's cell population plot reloading when the cell types section switches between its RNAseq and ATACseq tabs.
+- Fix bulk data transfer tab contents not spanning the full width of the section.
+- Align the info icon in section descriptions with the first line of the description text.
+- Fix the "View Datasets" buttons in the organ page's cell types table linking to an unfiltered dataset search.
+
+
+
 ## v1.54.1 - 2026-10-28
 
 - Show a 504 Gateway Timeout page, instead of a 500 error, when an upstream API times out; show 502 or 503 pages when an upstream API is unreachable or unavailable.
