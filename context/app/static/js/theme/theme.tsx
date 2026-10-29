@@ -387,6 +387,15 @@ const themeOptions = {
         },
       ],
     },
+    MuiTableCell: {
+      styleOverrides: {
+        // Sticky header cells are opaque, which hides the elevation overlay of the Paper they sit in.
+        // Paint that overlay on them too; Paper only sets the variable in dark mode.
+        stickyHeader: {
+          backgroundImage: 'var(--Paper-overlay)',
+        },
+      },
+    },
     MuiChip: {
       variants: [
         {
