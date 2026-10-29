@@ -561,11 +561,12 @@ export const darkTheme = createTheme(
         styleOverrides: {
           root: {
             color: purpleDarkMode,
+            // Not !important, so accordions that color their own summary, e.g. on a primary background, still can.
             '.MuiAccordionSummary-content': {
-              color: `${purpleDarkMode} !important`,
+              color: purpleDarkMode,
             },
             '.MuiAccordionSummary-expandIconWrapper': {
-              color: `${purpleDarkMode} !important`,
+              color: purpleDarkMode,
             },
           },
         },
