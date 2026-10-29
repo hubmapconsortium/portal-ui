@@ -2,3 +2,4 @@
 - In dark mode, give the HuBMAP Consortium and NIH Common Fund logos a white background wherever they appear, including Related Tools and Resources and the Resources menu, and make the Say & See mascot's speech bubble readable.
 - In dark mode, give sticky table headers and the selected-rows bar the same background as the table body, so headers no longer blend into the page background.
 - In dark mode, make the x-axis line and tick labels of the datasets overview chart readable.
+- In dark mode, keep the signed-in user's initial visible in the header avatar.
