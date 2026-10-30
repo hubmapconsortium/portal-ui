@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Paper from '@mui/material/Paper';
+import LightThemePaper from 'js/shared-styles/surfaces/LightThemePaper';
 
 import CCFOrganInfo from 'js/components/HRA/CCFOrganInfo';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
@@ -19,9 +19,9 @@ function HumanReferenceAtlas() {
       title="Human Reference Atlas"
       iconTooltipText="Atlas provided by the Common Coordinate Framework (CCF)."
     >
-      <Paper>
+      <LightThemePaper>
         <CCFOrganInfo uberonIri={uberon} />
-      </Paper>
+      </LightThemePaper>
     </OrganDetailSection>
   );
 }
