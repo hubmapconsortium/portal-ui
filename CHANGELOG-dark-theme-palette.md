@@ -1,0 +1,1 @@
+- Build the dark visualization theme with a full dark palette. Hover stripes, dividers, panel resizers and secondary icons in the Cell Population Plot and the fullscreen visualization header now use dark-mode colors instead of the light theme's.

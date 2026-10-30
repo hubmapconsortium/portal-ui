@@ -1,5 +1,5 @@
 import { grey } from '@mui/material/colors';
-import { createTheme } from '@mui/material/styles';
+import { createTheme, type ThemeOptions } from '@mui/material/styles';
 
 const purple = '#444A65';
 const purpleDarkMode = '#BFC2D4'; // same hue as purple, but with AAA-compliant contrast ratio on #333 background
@@ -161,7 +161,7 @@ declare module '@mui/material' {
 }
 
 // default HuBMAP color and font theme
-const theme = createTheme({
+const themeOptions = {
   palette: {
     mode: 'light',
     common: {
@@ -431,58 +431,70 @@ const theme = createTheme({
       ],
     },
   },
-});
-export const darkTheme = createTheme(theme, {
-  palette: {
-    mode: 'dark',
-    common: {
-      link: blueDarkMode,
-    },
-    background: {
-      default: '#333333',
-      paper: '#333333',
-    },
-    primary: {
-      main: purpleDarkMode,
-      hover: 'brightness(108%)',
-      contrastText: '#000000',
-      lowEmphasis: `${purpleDarkMode}61`, // 38% opacity
-    },
-    text: {
-      primary: '#FFFFFF',
-      secondary: 'rgba(255, 255, 255, 0.7)',
-      disabled: 'rgba(255, 255, 255, 0.5)',
-    },
-    action: {
-      disabled: 'rgba(255, 255, 255, 0.38)',
+} satisfies ThemeOptions;
+
+const theme = createTheme(themeOptions);
+
+// The palette must be in the options, not merged onto the finished light theme, so that MUI derives
+// the action, divider and text tokens and the light/dark color variants for dark mode.
+// Keys that depend on the mode are replaced rather than merged so their variants are recomputed.
+export const darkTheme = createTheme(
+  {
+    ...themeOptions,
+    palette: {
+      ...themeOptions.palette,
+      mode: 'dark',
+      common: {
+        ...themeOptions.palette.common,
+        link: blueDarkMode,
+      },
+      background: {
+        default: '#333333',
+        paper: '#333333',
+      },
+      primary: {
+        main: purpleDarkMode,
+        hover: 'brightness(108%)',
+        contrastText: '#000000',
+        lowEmphasis: `${purpleDarkMode}61`, // 38% opacity
+      },
+      secondary: {
+        main: grey[400], // about the same contrast on #333 as the light secondary has on white
+      },
+      action: {
+        ...themeOptions.palette.action,
+        disabled: 'rgba(255, 255, 255, 0.38)',
+      },
     },
   },
-  typography: {
-    subtitle1: {
-      color: purpleDarkMode,
+  {
+    typography: {
+      subtitle1: {
+        color: purpleDarkMode,
+      },
+      subtitle2: {
+        color: purpleDarkMode,
+      },
+      link: {
+        color: blueDarkMode,
+      },
     },
-    subtitle2: {
-      color: purpleDarkMode,
-    },
-    link: {
-      color: blueDarkMode,
-    },
-  },
-  components: {
-    MuiAccordion: {
-      styleOverrides: {
-        root: {
-          color: purpleDarkMode,
-          '.MuiAccordionSummary-content': {
-            color: `${purpleDarkMode} !important`,
-          },
-          '.MuiAccordionSummary-expandIconWrapper': {
-            color: `${purpleDarkMode} !important`,
+    components: {
+      MuiAccordion: {
+        styleOverrides: {
+          root: {
+            color: purpleDarkMode,
+            '.MuiAccordionSummary-content': {
+              color: `${purpleDarkMode} !important`,
+            },
+            '.MuiAccordionSummary-expandIconWrapper': {
+              color: `${purpleDarkMode} !important`,
+            },
           },
         },
       },
     },
   },
-});
+);
 
 export default theme;
