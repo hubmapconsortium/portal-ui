@@ -2,7 +2,6 @@ import React, { PropsWithChildren, ComponentProps, useId } from 'react';
 import { Theme, styled } from '@mui/material/styles';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ToggleButton from '@mui/material/ToggleButton';
-import Button from '@mui/material/Button';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from '../tooltips';
 import IconDropdownMenuButton from '../dropdowns/IconDropdownMenuButton';
@@ -88,10 +87,6 @@ function TooltipToggleButton({
   );
 }
 
-const WhiteTextButton = styled(Button)({
-  color: '#fff',
-});
-
 export default TooltipToggleButton;
 
 export {
@@ -101,5 +96,4 @@ export {
   RotatedTooltipButton,
   TooltipToggleButton,
   iconButtonHeight,
-  WhiteTextButton,
 };

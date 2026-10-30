@@ -158,10 +158,10 @@ function EntityTable<Doc extends Entity>({
                 top: 0,
                 zIndex: 3,
                 borderBottom: 0,
-                background: 'white',
+                backgroundColor: 'background.paper',
               }}
             >
-              <TableCell colSpan={fullWidthColSpan} sx={{ p: 0, background: 'white' }}>
+              <TableCell colSpan={fullWidthColSpan} sx={{ p: 0, backgroundColor: 'background.paper' }}>
                 <Stack
                   direction="row"
                   sx={{

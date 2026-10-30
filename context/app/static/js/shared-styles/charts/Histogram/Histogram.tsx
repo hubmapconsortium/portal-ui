@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { Bar } from '@visx/shape';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
@@ -38,6 +39,7 @@ function Histogram({
 
   const tickLabelSize = 11;
 
+  const theme = useTheme();
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
     tickLabelSize,
@@ -86,9 +88,9 @@ function Histogram({
               hideTicks
               scale={yScale}
               label={yAxisLabel}
-              stroke="black"
+              stroke={theme.palette.text.primary}
               tickLabelProps={() => ({
-                fill: 'black',
+                fill: theme.palette.text.primary,
                 fontSize: tickLabelSize,
                 textAnchor: 'end',
                 dy: '0.33em',
@@ -103,11 +105,11 @@ function Histogram({
               top={yHeight}
               scale={xScale}
               label={xAxisLabel}
-              stroke="black"
-              tickStroke="black"
+              stroke={theme.palette.text.primary}
+              tickStroke={theme.palette.text.primary}
               labelOffset={longestLabelSize}
               tickLabelProps={() => ({
-                fill: 'black',
+                fill: theme.palette.text.primary,
                 fontSize: tickLabelSize,
                 textAnchor: 'end',
                 angle: -90,

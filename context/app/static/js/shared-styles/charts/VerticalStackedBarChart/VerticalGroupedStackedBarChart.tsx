@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { scaleBand, AnyD3Scale } from '@visx/scale';
 import { AxisBottom, AxisLeft, AxisScale } from '@visx/axis';
 import { Group } from '@visx/group';
@@ -315,6 +316,7 @@ function GroupedBarStackChart<
   excludedKeys,
   simpleGroupedMode = false,
 }: GroupedBarStackChartProps<StackKey, CompareByKey, XAxisKey, XAxisScale, YAxisScale>) {
+  const theme = useTheme();
   const { xWidth, yHeight, updatedMargin } = useVerticalChart({
     margin,
     tickLabelSize: TICK_LABEL_SIZE,
@@ -330,6 +332,7 @@ function GroupedBarStackChart<
     tooltipOpen,
     containerRef,
     TooltipInPortal,
+    tooltipStyles,
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip<TooltipData<BarStackValues<StackKey> & { group: string }>>();
@@ -390,14 +393,14 @@ function GroupedBarStackChart<
         labelOffset={24}
         tickValues={getTickValues?.(yScale)}
         tickLabelProps={() => ({
-          fill: 'black',
+          fill: theme.palette.text.primary,
           fontSize: 11,
           textAnchor: 'end',
           dy: '0.33em',
         })}
         labelProps={{
           fontSize: 14,
-          color: 'black',
+          color: theme.palette.text.primary,
           fontWeight: 500,
           fontFamily: 'Inter Variable',
         }}
@@ -426,7 +429,7 @@ function GroupedBarStackChart<
         label={xAxisLabel}
         labelProps={{
           fontSize: 14,
-          color: 'black',
+          color: theme.palette.text.primary,
           fontWeight: 500,
           fontFamily: 'Inter Variable',
         }}
@@ -435,7 +438,7 @@ function GroupedBarStackChart<
         labelOffset={24}
       />
       {tooltipOpen && tooltipData && (
-        <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
+        <TooltipInPortal top={tooltipTop} left={tooltipLeft} style={tooltipStyles}>
           <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={tooltipExcludedKeys} />
         </TooltipInPortal>
       )}

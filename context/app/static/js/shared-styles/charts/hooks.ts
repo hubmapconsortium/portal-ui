@@ -1,5 +1,5 @@
 import { MouseEvent, useCallback, useMemo } from 'react';
-import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
+import { defaultStyles, useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 import { getStringWidth } from '@visx/text';
 import {
@@ -29,6 +29,13 @@ function useChartTooltip<T>() {
     debounce: 100,
   });
 
+  // visx's default tooltip is a white box with grey text, which doesn't follow the dark theme.
+  const theme = useTheme();
+  const tooltipStyles = useMemo(
+    () => ({ ...defaultStyles, backgroundColor: theme.palette.background.paper, color: theme.palette.text.secondary }),
+    [theme],
+  );
+
   const handleMouseEnter = useEventCallback((d: T) => (event: MouseEvent) => {
     const element = event.target as SVGElement;
     const owner = element.ownerSVGElement;
@@ -55,6 +62,7 @@ function useChartTooltip<T>() {
     tooltipOpen,
     containerRef,
     TooltipInPortal,
+    tooltipStyles,
     handleMouseEnter,
     handleMouseLeave,
   };

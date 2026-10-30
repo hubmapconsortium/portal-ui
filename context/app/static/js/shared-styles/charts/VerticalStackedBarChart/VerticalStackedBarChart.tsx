@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { BarStack } from '@visx/shape';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
@@ -95,6 +96,7 @@ function VerticalStackedBarChart<
   getBarHref,
   excludedKeys,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
+  const theme = useTheme();
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
     tickLabelSize: TICK_LABEL_SIZE,
@@ -113,6 +115,7 @@ function VerticalStackedBarChart<
     tooltipOpen,
     containerRef,
     TooltipInPortal,
+    tooltipStyles,
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
@@ -174,17 +177,17 @@ function VerticalStackedBarChart<
             <AxisLeft
               scale={yScale}
               label={yAxisLabel}
-              stroke="black"
+              stroke={theme.palette.text.primary}
               tickValues={getTickValues ? getTickValues(yScale) : undefined}
               tickLabelProps={() => ({
-                fill: 'black',
+                fill: theme.palette.text.primary,
                 fontSize: 11,
                 textAnchor: 'end',
                 dy: '0.33em',
               })}
               labelProps={{
                 fontSize: 14,
-                color: 'black',
+                color: theme.palette.text.primary,
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',
                 dx: '-1em',
@@ -196,11 +199,11 @@ function VerticalStackedBarChart<
               top={yHeight}
               scale={xScale}
               label={xAxisLabel}
-              stroke="black"
-              tickStroke="black"
+              stroke={theme.palette.text.primary}
+              tickStroke={theme.palette.text.primary}
               labelOffset={longestLabelSize}
               tickLabelProps={() => ({
-                fill: 'black',
+                fill: theme.palette.text.primary,
                 fontSize: TICK_LABEL_SIZE,
                 textAnchor: 'end',
                 angle: -90,
@@ -210,7 +213,7 @@ function VerticalStackedBarChart<
               tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data: tickComponentData })}
               labelProps={{
                 fontSize: AXIS_LABEL_SIZE,
-                color: 'black',
+                color: theme.palette.text.primary,
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',
               }}
@@ -219,7 +222,7 @@ function VerticalStackedBarChart<
         </VerticalChartGridRowsGroup>
       </svg>
       {tooltipOpen && tooltipData && (
-        <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
+        <TooltipInPortal top={tooltipTop} left={tooltipLeft} style={tooltipStyles}>
           <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
         </TooltipInPortal>
       )}
