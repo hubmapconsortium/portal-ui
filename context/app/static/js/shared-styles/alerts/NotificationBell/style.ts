@@ -7,7 +7,7 @@ const StyledContainer = styled(Stack)(({ theme }) => ({
   padding: theme.spacing(0.2, 0.75),
   marginRight: theme.spacing(2),
   borderRadius: theme.spacing(2),
-  color: theme.palette.common.white,
+  color: theme.palette.warning.contrastText,
   backgroundColor: theme.palette.warning.main,
 }));
 

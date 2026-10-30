@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 export const StyledSubsectionAccordion = styled(Accordion)(({ theme }) => ({
   '& .MuiAccordionSummary-root': {
     flexDirection: 'row-reverse',
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.background.paper,
     // margin: theme.spacing(2),
     '& .MuiAccordionSummary-content': {
       display: 'flex',
@@ -12,7 +12,7 @@ export const StyledSubsectionAccordion = styled(Accordion)(({ theme }) => ({
       marginLeft: 0,
       color: theme.palette.primary.main,
       '&.Mui-expanded': {
-        backgroundColor: theme.palette.common.white,
+        backgroundColor: theme.palette.background.paper,
         color: theme.palette.primary.main,
       },
     },
@@ -24,7 +24,7 @@ export const StyledSubsectionAccordion = styled(Accordion)(({ theme }) => ({
       },
     },
     '&.Mui-expanded': {
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: theme.palette.background.paper,
       color: theme.palette.primary.main,
     },
   },
