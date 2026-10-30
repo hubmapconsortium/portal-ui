@@ -28,7 +28,7 @@ function VisualizeDataSlide({ config, zIndex, stickyRef }: VisualizeDataSlidePro
   const isReducedMotion = usePrefersReducedMotion();
 
   const activeView = config.views[activeViewIndex];
-  const targetColor = accentColorMap[activeView.theme];
+  const targetColor = accentColorMap[theme.palette.mode][activeView.theme];
 
   const Icon = config.icon;
 
@@ -42,7 +42,7 @@ function VisualizeDataSlide({ config, zIndex, stickyRef }: VisualizeDataSlidePro
       <VisualizeSlideContent ref={stickyRef} role="region" aria-label={config.sectionTitle}>
         <AnimatedGradientLayer
           style={{
-            background: color.to((c) => `linear-gradient(135deg, ${c} 0%, ${theme.palette.common.white} 100%)`),
+            background: color.to((c) => `linear-gradient(135deg, ${c} 0%, ${theme.palette.background.paper} 100%)`),
           }}
         />
 

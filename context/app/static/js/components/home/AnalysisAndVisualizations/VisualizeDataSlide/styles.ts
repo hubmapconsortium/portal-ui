@@ -135,7 +135,9 @@ export const PaginationDot = styled('button')<{ $isActive: boolean }>(({ theme, 
   border: 'none',
   padding: 0,
   cursor: 'pointer',
-  backgroundColor: $isActive ? theme.palette.text.primary : theme.palette.grey[400],
+  backgroundColor: $isActive
+    ? theme.palette.text.primary
+    : theme.palette.grey[theme.palette.mode === 'dark' ? 600 : 400],
   transition: theme.transitions.create('background-color'),
 
   '&:focus-visible': {

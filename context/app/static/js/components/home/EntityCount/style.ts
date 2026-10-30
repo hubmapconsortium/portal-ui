@@ -10,12 +10,12 @@ const FlexLink = styled('a')(({ theme }) => ({
   color: theme.palette.text.primary,
   '&:hover': {
     backgroundColor: theme.palette.primary.light,
-    color: '#fff',
+    color: theme.palette.getContrastText(theme.palette.primary.light),
     svg: {
-      color: '#fff',
+      color: theme.palette.getContrastText(theme.palette.primary.light),
     },
     '[role="img"]': {
-      backgroundColor: '#fff',
+      backgroundColor: theme.palette.getContrastText(theme.palette.primary.light),
     },
   },
 }));

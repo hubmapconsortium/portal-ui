@@ -1,5 +1,5 @@
 import Container from '@mui/material/Container';
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 
 export const HeroSection = styled('section')(({ theme }) => ({
   position: 'relative',
@@ -53,12 +53,14 @@ export const BackgroundImageLayer = styled('div')<BackgroundImageLayerProps>(({ 
   },
 }));
 
-export const BackgroundOverlay = styled('div')({
+// Lightens the background image in light mode and dims it in dark mode, so the text over it stays readable.
+export const BackgroundOverlay = styled('div')(({ theme }) => ({
   position: 'absolute',
   inset: 0,
-  background: 'rgba(255, 255, 255, 0.4)',
+  background:
+    theme.palette.mode === 'dark' ? alpha(theme.palette.background.default, 0.75) : 'rgba(255, 255, 255, 0.4)',
   zIndex: 1,
-});
+}));
 
 export const CardContainer = styled('a')(({ theme }) => ({
   display: 'flex',
@@ -68,7 +70,7 @@ export const CardContainer = styled('a')(({ theme }) => ({
   textDecoration: 'none',
   color: 'inherit',
   borderRadius: theme.spacing(1),
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[1],
   transition: theme.transitions.create(['box-shadow', 'transform'], {
     duration: theme.transitions.duration.short,
@@ -84,7 +86,7 @@ export const CardVideoContainer = styled('div')(({ theme }) => ({
   borderRadius: 4,
   overflow: 'hidden',
   flexShrink: 0,
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.background.paper,
   // On small screens the fixed-width media crowds out the card text (causing overflow), so
   // shrink it to leave room for the title and description.
   [theme.breakpoints.down('sm')]: {
@@ -101,7 +103,7 @@ export const CardVideoContainer = styled('div')(({ theme }) => ({
 export const PillBar = styled('nav')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.background.paper,
   borderRadius: theme.spacing(1),
   boxShadow: theme.shadows[1],
   overflow: 'hidden',

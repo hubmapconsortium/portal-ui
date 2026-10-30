@@ -2,9 +2,9 @@ import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import SvgIcon from '@mui/material/SvgIcon';
 
-const Background = styled('div')({
-  backgroundColor: '#cfd3e2',
-});
+const Background = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#4A4D59' : '#cfd3e2',
+}));
 
 const FlexContainer = styled(Container)(({ theme }) => ({
   padding: theme.spacing(0, 0),

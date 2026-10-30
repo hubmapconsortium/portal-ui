@@ -13,7 +13,7 @@ import { StyledAccordionDetails } from './style';
 const StyledAccordion = styled(Accordion, { shouldForwardProp })<{ $isExpanded: boolean }>(
   ({ theme, $isExpanded }) => ({
     '& .MuiAccordionSummary-root': {
-      backgroundColor: $isExpanded ? theme.palette.primary.main : '#fff',
+      backgroundColor: $isExpanded ? theme.palette.primary.main : theme.palette.background.paper,
       '& > .MuiAccordionSummary-content': {
         ...theme.typography.subtitle1,
         color: $isExpanded ? theme.palette.primary.contrastText : theme.palette.text.primary,

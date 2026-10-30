@@ -26,7 +26,6 @@ const ExpandButton = styled(WhiteBackgroundIconButton)<ButtonProps>(({ theme }) 
 
 const SelectionButton = styled(Button)(({ theme }) => ({
   marginLeft: theme.spacing(1),
-  color: 'white',
   borderRadius: '3px',
 }));
 
