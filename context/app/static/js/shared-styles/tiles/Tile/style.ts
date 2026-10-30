@@ -34,6 +34,8 @@ const StyledPaper = styled(Paper, { shouldForwardProp })<TileProps>(
     marginBottom: theme.spacing(1),
     boxShadow: theme.shadows[1],
     width: $tileWidth,
+    // Shadows barely show on dark surfaces, so outline the tile to set it apart from the Paper it sits on.
+    border: theme.palette.mode === 'dark' ? `1px solid ${theme.palette.divider}` : undefined,
     ...invertSectionColors(theme.palette.white.main, theme.palette.primary.main, $invertColors),
     '&:hover': {
       boxShadow: theme.shadows[8],
