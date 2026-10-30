@@ -27,7 +27,7 @@ function Switch() {
 function Iframe({ flaskData }: { flaskData: FlaskData }) {
   const { endpoints = {} } = flaskData;
   return (
-    <Providers endpoints={endpoints} flaskData={flaskData}>
+    <Providers endpoints={endpoints} flaskData={flaskData} forceLightTheme>
       <base target="_parent" />
       {/* Set base to make sure links load in the parent of the iframe. */}
       <Suspense fallback={null}>

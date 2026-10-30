@@ -12,9 +12,11 @@ import GlobalStyles from 'js/components/globalStyles';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import { EntityStoreProvider } from 'js/stores/useEntityStore';
 import { OpenKeyNavStoreProvider, readOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
+import { useThemeMode } from 'js/stores/useThemePreferenceStore';
 
 import { InitialHashContextProvider } from 'js/hooks/useInitialHash';
 import theme from '../theme';
+import { darkTheme } from '../theme/theme';
 import GlobalFonts from '../fonts';
 import { useEntityHeaderSprings } from './detailPage/entityHeader/EntityHeader/hooks';
 
@@ -42,6 +44,8 @@ interface ProvidersProps {
   userLastName?: string;
   userGlobusId?: string;
   userGlobusAffiliation?: string;
+  // Ignore the user's dark mode preference, e.g. on pages embedded in other sites.
+  forceLightTheme?: boolean;
 }
 
 export default function Providers({
@@ -58,6 +62,7 @@ export default function Providers({
   userLastName,
   userGlobusId,
   userGlobusAffiliation,
+  forceLightTheme = false,
 }: PropsWithChildren<ProvidersProps>) {
   const appContext = useMemo(
     () =>
@@ -103,19 +108,20 @@ export default function Providers({
   );
 
   const { springs } = useEntityHeaderSprings();
+  const themeMode = useThemeMode();
 
   return (
     <NuqsAdapter>
       <SWRConfig value={swrConfig}>
         <InitialHashContextProvider>
           <GlobalFonts />
-          <ThemeProvider theme={theme}>
+          <ThemeProvider theme={themeMode === 'dark' && !forceLightTheme ? darkTheme : theme}>
             <AppContext.Provider value={appContext}>
               <FlaskDataContext.Provider value={flaskDataWithDefaults}>
                 <EntityStoreProvider springs={springs}>
                   <OpenKeyNavStoreProvider initialize={readOpenKeyNavCookie()}>
                     <ProtocolAPIContext.Provider value={protocolsContext}>
-                      <CssBaseline />
+                      <CssBaseline enableColorScheme />
                       <GlobalStyles />
                       {children}
                     </ProtocolAPIContext.Provider>
