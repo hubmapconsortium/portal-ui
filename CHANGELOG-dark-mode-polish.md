@@ -7,3 +7,4 @@
 - In dark mode, outline the tutorial and workspace template cards so they stand out from the panel behind them.
 - Color the sorted column's header like the other headers in panel lists, such as on the cell types and organs pages, instead of in plain text color.
 - In dark mode, keep the titles of expanded processed dataset and publication visualization accordions readable.
+- In dark mode, outline entity tiles, such as the provenance table's cards and search result tiles, so they stand out from the panel behind them.
