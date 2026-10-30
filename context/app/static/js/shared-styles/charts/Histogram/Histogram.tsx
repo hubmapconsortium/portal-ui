@@ -97,6 +97,7 @@ function Histogram({
               })}
               labelProps={{
                 fontSize: 12,
+                fill: theme.palette.text.primary,
               }}
               labelOffset={48}
             />
@@ -117,6 +118,7 @@ function Histogram({
               labelProps={{
                 fontSize: 12,
                 textAnchor: 'middle',
+                fill: theme.palette.text.primary,
               }}
             />
           </>
