@@ -45,7 +45,7 @@ function ProvVisInner() {
       );
       if (currentEntityNode) {
         // Wait for ReactFlow to be ready, then focus on the current entity
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           void fitView({
             nodes: [currentEntityNode],
             duration: 300,
@@ -56,8 +56,10 @@ function ProvVisInner() {
             setHasRendered();
           }
         }, 100);
+        return () => clearTimeout(timeout);
       }
     }
+    return undefined;
   }, [nodesWithSelection, fitView, hasRendered, setHasRendered]);
 
   const handleNodeClick = useEventCallback((_event: React.MouseEvent, node: Node) => {
