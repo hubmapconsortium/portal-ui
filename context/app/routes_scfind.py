@@ -6,7 +6,15 @@ import requests
 from flask import current_app, jsonify, request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from .cache_utils import CacheNamespace, Degraded, get_or_build, load_cached
+from .cache_utils import (
+    BuildFailed,
+    CacheNamespace,
+    Degraded,
+    get_or_build,
+    is_persisted,
+    load_cached,
+    store,
+)
 from .utils import (
     EXTERNAL_REQUEST_TIMEOUT,
     first_n_matches,
@@ -29,6 +37,9 @@ def _handle_scfind_error(e, context):
     if isinstance(e, requests.exceptions.Timeout):
         current_app.logger.error(f'Timeout in {context}: {e}')
         return jsonify({'error': TIMEOUT_ERROR_MESSAGE}), 504
+    if isinstance(e, BuildFailed):
+        current_app.logger.warning(f'{context}: {e}')
+        return jsonify({'error': 'scFind could not be reached. Please try again.'}), 503
     current_app.logger.error(f'Error in {context}: {e}')
     return jsonify({'error': 'An error occurred while querying scFind. Please try again.'}), 500
 
@@ -53,6 +64,17 @@ def _get_or_build_map(name, builder):
 def _load_cached_map(name):
     """Return an already-built aggregate map, or ``None`` if it hasn't been built yet."""
     return load_cached(SCFIND_CACHE, name)
+
+
+# Modalities whose modality-wide entries are shared on disk, mapped to the name used in the cache
+# key. Any other value arrives in a request param, and is served uncached so it never names a file.
+_SHARED_MODALITIES = {None: 'RNA', 'ATAC': 'ATAC'}
+
+
+def _shared_name(prefix, modality):
+    """Disk-cache name for a modality-wide entry, or ``None`` for a modality outside the known set."""
+    modality_name = _SHARED_MODALITIES.get(modality or None)
+    return f'{prefix}.{modality_name}' if modality_name else None
 
 
 def warm_scfind_caches(app):
@@ -228,7 +250,26 @@ def _proxy_scfind(endpoint, allowed):
     return _proxy_scfind_get(endpoint, allowed)
 
 
-@cache
+def _shared_scfind_get(endpoint, key, modality=None):
+    """
+    Modality-wide scfind lookup (no params besides modality), shared across worker processes.
+
+    A per-process cache left every worker but the one that ran the warm-up builds cold, so each of
+    them sent these lookups upstream itself, and timed out while scfind was slow. The response is
+    published to the disk cache only when its ``key`` is non-empty, so a failed or empty response is
+    never cached. Fetching happens outside any lock: racing workers just fetch it twice.
+    """
+    name = _shared_name(endpoint, modality)
+    if name:
+        cached = _load_cached_map(name)
+        if cached is not None:
+            return cached
+    response = _make_scfind_request(endpoint, {'modality': modality} if modality else None)
+    if name and response.get(key):
+        store(SCFIND_CACHE, name, response)
+    return response
+
+
 def _get_all_cell_type_names(modality=None):
     """
     Fetch all cell type names from the SCFIND API.
@@ -239,14 +280,9 @@ def _get_all_cell_type_names(modality=None):
     Returns:
         List of cell type names
     """
-    params = {}
-    if modality:
-        params['modality'] = modality
-    response = _make_scfind_request('cellTypeNames', params or None)
-    return response.get('cellTypeNames', [])
+    return _shared_scfind_get('cellTypeNames', 'cellTypeNames', modality).get('cellTypeNames', [])
 
 
-@cache
 def _get_all_genes(modality=None):
     """
     Fetch all gene names from the SCFIND API.
@@ -257,11 +293,7 @@ def _get_all_genes(modality=None):
     Returns:
         List of gene names
     """
-    params = {}
-    if modality:
-        params['modality'] = modality
-    response = _make_scfind_request('scfindGenes', params or None)
-    return response.get('genes', [])
+    return _shared_scfind_get('scfindGenes', 'genes', modality).get('genes', [])
 
 
 @cache
@@ -306,13 +338,16 @@ def _retry(fn, attempts=3, base_delay=0.5):
     Call ``fn`` up to ``attempts`` times with exponential backoff, re-raising the last error.
 
     Used by the map builders so a transient scfind failure during the concurrent fan-out is retried
-    rather than swallowed into a permanent empty entry that then gets cached to disk (which is what
-    previously left most cell types without a CLID, breaking their detail-page links).
+    rather than dropped, which would leave the build ``Degraded``. A timeout is not retried: each
+    retry would wait out the full timeout again, multiplying how long a build against a stalled
+    scfind holds its cache lock (and keeps every request for it waiting).
     """
     delay = base_delay
     for attempt in range(attempts):
         try:
             return fn()
+        except requests.exceptions.Timeout:
+            raise
         except Exception:
             if attempt == attempts - 1:
                 raise
@@ -329,42 +364,19 @@ def _build_label_to_clid_map_uncached():
     """
     Build a complete mapping from cell type labels to CLIDs using parallel requests.
 
+    A cell type whose lookup still fails after retries is left out, and the map is then
+    ``Degraded`` so the gap is never cached to disk. So is an empty map, since scfind having no
+    cell types means its `cellTypeNames` call failed.
+
     Returns:
         Dictionary mapping cell type labels to lists of CLIDs
     """
-    cell_types = _get_all_cell_type_names()
-    label_to_clid_map = {}
-
-    # Get the current Flask app instance to pass to worker threads
-    app = current_app._get_current_object()
-
-    def fetch_clids_for_cell_type(cell_type):
-        """Helper function to fetch CLIDs for a single cell type."""
-        with app.app_context():
-            try:
-                clids = _retry(lambda: _get_label_to_clid_mapping(cell_type))
-                return cell_type, clids
-            except Exception as e:
-                current_app.logger.warning(f"Failed to get CLIDs for cell type '{cell_type}': {e}")
-                return cell_type, []
-
-    # Use ThreadPoolExecutor to make parallel requests
-    # Limit concurrent connections to avoid overwhelming the API
-    max_workers_config = current_app.config.get('SCFIND_MAX_WORKERS', 20)
-    max_workers = min(max_workers_config, len(cell_types))
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        # Submit all tasks
-        future_to_cell_type = {
-            executor.submit(fetch_clids_for_cell_type, cell_type): cell_type
-            for cell_type in cell_types
-        }
-
-        # Collect results as they complete
-        for future in as_completed(future_to_cell_type):
-            cell_type, clids = future.result()
-            label_to_clid_map[cell_type] = clids
-
+    cell_types = set(_get_all_cell_type_names())
+    label_to_clid_map = _fan_out(
+        cell_types, _get_label_to_clid_mapping, 'CellType2CLID', retry=True
+    )
+    if not cell_types or len(label_to_clid_map) < len(cell_types):
+        raise Degraded(label_to_clid_map)
     return label_to_clid_map
 
 
@@ -383,68 +395,27 @@ def _build_clid_to_label_map_uncached():
     # First get all label-to-CLID mappings to collect all CLIDs (reuses the
     # shared label-to-CLID cache rather than rebuilding it).
     label_to_clid_map = _build_label_to_clid_map()
-
-    # Collect all unique CLIDs
-    all_clids = set()
-    for clids in label_to_clid_map.values():
-        all_clids.update(clids)
-
-    # Get the current Flask app instance to pass to worker threads
-    app = current_app._get_current_object()
-
-    def fetch_labels_for_clid(clid):
-        """Helper function to fetch labels for a single CLID."""
-        with app.app_context():
-            try:
-                labels = _retry(lambda: _get_clid_to_label_mapping(clid))
-                return clid, labels
-            except Exception as e:
-                current_app.logger.warning(f"Failed to get labels for CLID '{clid}': {e}")
-                return clid, []
-
-    # Use ThreadPoolExecutor to make parallel requests
-    # Limit concurrent connections to avoid overwhelming the API
-    max_workers = min(20, len(all_clids))
-    clid_to_label_map = {}
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        # Submit all tasks
-        future_to_clid = {executor.submit(fetch_labels_for_clid, clid): clid for clid in all_clids}
-
-        # Collect results as they complete
-        for future in as_completed(future_to_clid):
-            clid, labels = future.result()
-            clid_to_label_map[clid] = labels
-
+    all_clids = {clid for clids in label_to_clid_map.values() for clid in clids}
+    clid_to_label_map = _fan_out(
+        all_clids, _get_clid_to_label_mapping, 'CLID2CellType', retry=True
+    )
+    # A partial label-to-CLID map leaves CLIDs out of this one too, so it can't be cached either.
+    if len(clid_to_label_map) < len(all_clids) or not is_persisted(SCFIND_CACHE, 'label_to_clid'):
+        raise Degraded(clid_to_label_map)
     return clid_to_label_map
 
 
-@cache
 def _get_complete_mappings():
     """
     Get both label-to-CLID and CLID-to-label mappings.
-    This function is cached to avoid rebuilding the mappings on every request.
+
+    Not memoized here: both builders are already cached (and log their build times), and a memo
+    here would pin a Degraded pair for the life of the worker.
 
     Returns:
         Tuple of (label_to_clid_map, clid_to_label_map)
     """
-    start_time = time.time()
-    current_app.logger.info('Starting to build complete mappings...')
-
-    label_to_clid_map = _build_label_to_clid_map()
-    mid_time = time.time()
-    current_app.logger.info(
-        f'Label-to-CLID mapping completed in {mid_time - start_time:.2f} seconds'
-    )
-
-    clid_to_label_map = _build_clid_to_label_map()
-    end_time = time.time()
-    current_app.logger.info(
-        f'CLID-to-label mapping completed in {end_time - mid_time:.2f} seconds'
-    )
-    current_app.logger.info(f'Total mapping build time: {end_time - start_time:.2f} seconds')
-
-    return label_to_clid_map, clid_to_label_map
+    return _build_label_to_clid_map(), _build_clid_to_label_map()
 
 
 # ---------------------------------------------------------------------------
@@ -644,39 +615,55 @@ def _cell_type_markers_for(cell_types, modality=None):
     return _cached_scfind_get('cellTypeMarkers', tuple(sorted(params.items())))
 
 
+def _dataset_cell_type_counts(modality=None):
+    """
+    ``{dataset: cellTypeCountForDataset response}`` for every indexed dataset of a modality, built
+    once and shared across worker processes (disk-cached).
+
+    Built with the landing payload. The `cell-type-count-for-dataset` route serves from it too, so
+    the organ page's cell population plot (one request per dataset) isn't sent upstream from every
+    worker that didn't run the build.
+    """
+    base_params = {'modality': modality} if modality else {}
+
+    def fetch(dataset):
+        params = {'dataset': dataset, **base_params}
+        return _cached_scfind_get('cellTypeCountForDataset', tuple(sorted(params.items())))
+
+    def build():
+        datasets = set(_shared_scfind_get('getDatasets', 'datasets', modality).get('datasets', []))
+        per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset', retry=True)
+        # No indexed datasets means the getDatasets call failed, not that there are none.
+        if not datasets or len(per_dataset) < len(datasets):
+            raise Degraded(per_dataset)
+        return per_dataset
+
+    return _get_or_build_map(_shared_name('dataset_cell_type_counts', modality), build)
+
+
 def _build_dataset_counts(modality=None):
     """
     Count, per formatted cell type label, how many datasets contain it for a modality.
 
-    Fans out over datasets rather than cell types: one `cellTypeCountForDataset` call returns every
-    cell type in a dataset, so this is O(#datasets) upstream calls (hundreds) instead of
-    O(#cell-type-names) (thousands). Returns ``({label: dataset_count}, complete)``, where
-    ``complete`` is false if any dataset's counts could not be fetched. Shares the
-    `_cached_scfind_get` cache (so the per-dataset counts the distribution charts use are warmed too).
+    Derived from the per-dataset counts rather than fanning out over cell types: one
+    `cellTypeCountForDataset` call returns every cell type in a dataset, so this is O(#datasets)
+    upstream calls (hundreds) instead of O(#cell-type-names) (thousands). Returns
+    ``({label: dataset_count}, complete)``, where ``complete`` is false if any dataset's counts
+    could not be fetched.
     """
-    base_params = {}
-    if modality:
-        base_params['modality'] = modality
-    datasets = _cached_scfind_get('getDatasets', tuple(sorted(base_params.items()))).get(
-        'datasets', []
-    )
-
-    def fetch(dataset):
-        params = {'dataset': dataset, **base_params}
-        counts = _cached_scfind_get('cellTypeCountForDataset', tuple(sorted(params.items()))).get(
-            'cellTypeCounts', []
-        )
-        return [c.get('index') for c in counts if isinstance(c, dict) and c.get('index')]
-
-    per_dataset = _fan_out(datasets, fetch, 'cellTypeCountForDataset', retry=True)
+    per_dataset = _dataset_cell_type_counts(modality)
     label_datasets = {}
-    for dataset, indexes in per_dataset.items():
-        for index in indexes:
-            label_datasets.setdefault(_format_cell_type_name(index), set()).add(dataset)
+    for dataset, response in per_dataset.items():
+        for count in response.get('cellTypeCounts', []):
+            if isinstance(count, dict) and count.get('index'):
+                label_datasets.setdefault(_format_cell_type_name(count['index']), set()).add(
+                    dataset
+                )
     counts = {
         label: len(datasets_for_label) for label, datasets_for_label in label_datasets.items()
     }
-    return counts, len(per_dataset) == len(set(datasets))
+    complete = is_persisted(SCFIND_CACHE, _shared_name('dataset_cell_type_counts', modality))
+    return counts, complete
 
 
 def _build_cell_type_descriptions(label_to_clid_map):
@@ -750,7 +737,9 @@ def _build_cell_types_landing_uncached():
         'dataset_counts': dataset_counts,
         'descriptions': descriptions or {},
     }
-    if not (rna_complete and atac_complete and descriptions is not None):
+    # The descriptions are keyed by the label-to-CLID map's CLIDs, so a partial map leaves gaps.
+    l2c_complete = is_persisted(SCFIND_CACHE, 'label_to_clid')
+    if not (rna_complete and atac_complete and descriptions is not None and l2c_complete):
         raise Degraded(payload)
     return payload
 
@@ -929,6 +918,8 @@ def _build_organ_cell_types(organ):
         all(label in results['rna'] for label in rna_labels)
         and all(label in results['atac'] for label in atac_labels)
         and descriptions is not None
+        # Each row's CLID comes from the label-to-CLID map, so a partial map leaves gaps.
+        and is_persisted(SCFIND_CACHE, 'label_to_clid')
     )
     if not complete:
         raise Degraded(payload)
@@ -1293,6 +1284,12 @@ def find_dataset_for_cell_type():
 def cell_type_count_for_dataset():
     """Cell type composition (counts) of a single dataset."""
     try:
+        # Served from the per-dataset counts the landing build shares, once they're built.
+        name = _shared_name('dataset_cell_type_counts', request.args.get('modality'))
+        shared = (_load_cached_map(name) if name else None) or {}
+        dataset = request.args.get('dataset')
+        if dataset in shared:
+            return jsonify(shared[dataset])
         return jsonify(_proxy_scfind_get('cellTypeCountForDataset', ('dataset', 'modality')))
     except Exception as e:
         return _handle_scfind_error(e, 'cellTypeCountForDataset')
@@ -1442,7 +1439,7 @@ def find_tissue_specificities():
 def indexed_datasets():
     """All datasets indexed by scFind, with per-dataset cell counts."""
     try:
-        return jsonify(_proxy_scfind_get('getDatasets', ('modality',)))
+        return jsonify(_shared_scfind_get('getDatasets', 'datasets', request.args.get('modality')))
     except Exception as e:
         return _handle_scfind_error(e, 'getDatasets')
 

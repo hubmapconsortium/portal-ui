@@ -41,14 +41,26 @@ class Degraded(Exception):
     """
     Raised by a builder whose result is usable but incomplete (some upstream calls failed).
 
-    ``get_or_build`` serves ``data`` but never writes it to disk, and keeps it in the memo for
-    only ``DEGRADED_RETRY_SECONDS``, so a partial result neither outlives the outage nor turns
-    it into one rebuild per request.
+    ``get_or_build`` serves ``data`` but never writes it to the entry's file. It shares it with
+    the other workers through a ``.degraded`` sibling file, for only ``DEGRADED_RETRY_SECONDS``,
+    so a partial result neither outlives the outage nor turns into one rebuild per request (or
+    per worker waiting on the lock).
     """
 
     def __init__(self, data):
         super().__init__('degraded build')
         self.data = data
+
+
+class BuildFailed(Exception):
+    """
+    Raised to a request that queued on an entry's lock behind a build that then failed.
+
+    Queued requests share that attempt's outcome instead of each repeating it in turn: against a
+    stalled upstream, one retry per waiter keeps every queued request (and its server thread)
+    waiting one more timeout each. A request that arrives after the failure still builds afresh,
+    so the failure itself is never cached.
+    """
 
 
 @dataclass(frozen=True)
@@ -145,6 +157,33 @@ def _memo_set(namespace, memo_key, data, built_at=None, expires_at=None):
         _memory_cache[memo_key] = (expires_at, data)
 
 
+def _write_json(path, data):
+    """Write ``data`` to ``path`` atomically (temp file + rename), so readers never see half."""
+    tmp_path = f'{path}.{os.getpid()}.{threading.get_ident()}.tmp'
+    with open(tmp_path, 'w') as tmp_file:
+        json.dump(data, tmp_file)
+    os.replace(tmp_path, path)
+
+
+def _mtime(path):
+    try:
+        return os.path.getmtime(path)
+    except OSError:
+        return 0
+
+
+def _load_recent_degraded(degraded_path):
+    """Return ``(data, expires_at)`` for a degraded file still in its retry window, else None."""
+    try:
+        expires_at = os.path.getmtime(degraded_path) + DEGRADED_RETRY_SECONDS
+        if time.time() > expires_at:
+            return None
+        with open(degraded_path) as data_file:
+            return json.load(data_file), expires_at
+    except (OSError, ValueError):
+        return None
+
+
 def get_or_build(namespace, name, builder):
     """
     Return a cached entry, building it at most once across all worker processes.
@@ -158,19 +197,31 @@ def get_or_build(namespace, name, builder):
         return data
 
     path = cache_path(namespace, name)
+    degraded_path = f'{path}.degraded'
+    failed_path = f'{path}.failed'
     ttl = _ttl(namespace)
     lock_path = f'{path}.lock'
+    waiting_since = time.time()
     with open(lock_path, 'w') as lock_file:
         fcntl.flock(lock_file, fcntl.LOCK_EX)
         try:
             fresh = os.path.exists(path)
             if fresh and ttl and (time.time() - os.path.getmtime(path)) > ttl:
                 fresh = False  # aged out -> rebuild
+            recent_degraded = None if fresh else _load_recent_degraded(degraded_path)
             if fresh:
                 built_at = os.path.getmtime(path)
                 with open(path) as data_file:
                     data = json.load(data_file)
                 current_app.logger.info("Loaded '%s' from shared cache %s.", name, path)
+            elif recent_degraded:
+                # Another worker just built this with missing parts. Serve its result rather than
+                # repeating a build that would most likely hit the same upstream failures.
+                data, expires_at = recent_degraded
+                _memo_set(namespace, memo_key, data, expires_at=expires_at)
+                return data
+            elif _mtime(failed_path) >= waiting_since:
+                raise BuildFailed(f"'{name}' failed to build while this request waited for it")
             else:
                 start = time.monotonic()
                 built_at = time.time()
@@ -178,8 +229,11 @@ def get_or_build(namespace, name, builder):
                     data = builder()
                 except Degraded as degraded:
                     current_app.logger.warning(
-                        "Built '%s' with missing parts; not caching it to disk.", name
+                        "Built '%s' with missing parts; sharing it for %ss only.",
+                        name,
+                        DEGRADED_RETRY_SECONDS,
                     )
+                    _write_json(degraded_path, degraded.data)
                     _memo_set(
                         namespace,
                         memo_key,
@@ -187,10 +241,12 @@ def get_or_build(namespace, name, builder):
                         expires_at=time.time() + DEGRADED_RETRY_SECONDS,
                     )
                     return degraded.data
-                tmp_path = f'{path}.{os.getpid()}.tmp'
-                with open(tmp_path, 'w') as tmp_file:
-                    json.dump(data, tmp_file)
-                os.replace(tmp_path, path)
+                except Exception:
+                    # Mark the failure for the requests queued on the lock (see BuildFailed).
+                    open(failed_path, 'a').close()
+                    os.utime(failed_path)
+                    raise
+                _write_json(path, data)
                 current_app.logger.info(
                     "Built '%s' in %.1fs; cached to %s.",
                     name,
@@ -228,6 +284,35 @@ def load_cached(namespace, name):
         return None
     _memo_set(namespace, memo_key, data, built_at)
     return data
+
+
+def store(namespace, name, data):
+    """
+    Publish an entry fetched outside ``get_or_build``, for ``load_cached`` readers in any worker.
+
+    Takes no lock: for a cheap lookup, two workers racing to fetch it just write the same data
+    twice, whereas a lock would queue every request behind one stalled upstream call.
+    """
+    _write_json(cache_path(namespace, name), data)
+    _memo_set(namespace, _memo_key(namespace, name), data, time.time())
+
+
+def is_persisted(namespace, name):
+    """
+    Whether an entry's last build was complete, i.e. written to disk rather than Degraded.
+
+    Compares against the ``.degraded`` sibling, since a complete file from an earlier build can
+    outlive its TTL next to a newer degraded one.
+    """
+    path = cache_path(namespace, name)
+    try:
+        built_at = os.path.getmtime(path)
+    except OSError:
+        return False
+    try:
+        return built_at >= os.path.getmtime(f'{path}.degraded')
+    except OSError:
+        return True
 
 
 def clear_memory_cache():

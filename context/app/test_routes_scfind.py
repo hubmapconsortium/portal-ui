@@ -1,4 +1,5 @@
 import os
+import threading
 import time
 
 import pytest
@@ -1238,6 +1239,157 @@ class TestSharedMapCache:
         assert start_a != start_b
         assert '111' in start_a and '222' in start_b
         assert no_token != start_a
+
+    def test_degraded_build_is_shared_across_workers(self, tmp_path, monkeypatch):
+        app = create_app(testing=True)
+        app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
+        cache_utils.clear_memory_cache()
+
+        calls = {'n': 0}
+
+        def builder():
+            calls['n'] += 1
+            raise cache_utils.Degraded({'cell': []})
+
+        with app.app_context():
+            assert routes_scfind._get_or_build_map('m', builder) == {'cell': []}
+            # A fresh worker that was waiting on the lock serves the shared degraded result
+            # rather than repeating the build.
+            cache_utils.clear_memory_cache()
+            assert routes_scfind._get_or_build_map('m', builder) == {'cell': []}
+            assert calls['n'] == 1
+            assert not cache_utils.is_persisted(routes_scfind.SCFIND_CACHE, 'm')
+            # A complete file from an earlier build doesn't count once a newer build degraded.
+            path = cache_utils.cache_path(routes_scfind.SCFIND_CACHE, 'm')
+            with open(path, 'w') as stale:
+                stale.write('{}')
+            old = time.time() - 3600
+            os.utime(path, (old, old))
+            assert not cache_utils.is_persisted(routes_scfind.SCFIND_CACHE, 'm')
+            os.remove(path)
+
+            # Past the retry window, the next request tries a full build again.
+            real_time = time.time
+            monkeypatch.setattr(
+                cache_utils.time,
+                'time',
+                lambda: real_time() + cache_utils.DEGRADED_RETRY_SECONDS + 1,
+            )
+            cache_utils.clear_memory_cache()
+            routes_scfind._get_or_build_map('m', builder)
+            assert calls['n'] == 2
+
+    def test_requests_queued_behind_a_failed_build_fail_fast(self, tmp_path):
+        app = create_app(testing=True)
+        app.config['SCFIND_CACHE_DIR'] = str(tmp_path)
+        cache_utils.clear_memory_cache()
+
+        building, release = threading.Event(), threading.Event()
+        calls = {'n': 0}
+
+        def failing_builder():
+            calls['n'] += 1
+            building.set()
+            release.wait(5)
+            raise requests.exceptions.ReadTimeout()
+
+        errors = {}
+
+        def request(key):
+            with app.app_context():
+                try:
+                    routes_scfind._get_or_build_map('m', failing_builder)
+                except Exception as e:
+                    errors[key] = type(e)
+
+        first = threading.Thread(target=request, args=('first',))
+        first.start()
+        building.wait(5)
+        queued = threading.Thread(target=request, args=('queued',))
+        queued.start()
+        time.sleep(0.2)  # let it queue on the lock
+        release.set()
+        first.join()
+        queued.join()
+        # The queued request shares the failed attempt rather than repeating it.
+        assert errors == {
+            'first': requests.exceptions.ReadTimeout,
+            'queued': cache_utils.BuildFailed,
+        }
+        assert calls['n'] == 1
+
+        # A request arriving after the failure builds afresh: the failure isn't cached.
+        request('later')
+        assert calls['n'] == 2
+
+
+class TestFailuresAreNotCached:
+    """A failed or empty scfind response never ends up in the shared cache."""
+
+    def test_retry_does_not_retry_timeouts(self, mocker):
+        sleep = mocker.patch.object(routes_scfind.time, 'sleep')
+        fn = mocker.Mock(side_effect=requests.exceptions.ReadTimeout())
+        with pytest.raises(requests.exceptions.Timeout):
+            routes_scfind._retry(fn)
+        assert fn.call_count == 1
+        sleep.assert_not_called()
+
+    def test_label_to_clid_failure_is_served_but_not_cached(self, client, mocker, tmp_path):
+        mocker.patch.object(routes_scfind.time, 'sleep')
+
+        def failing_get(url, **kwargs):
+            if 'CellType2CLID' in url and kwargs['params']['cell_type'] == 'heart.cardiomyocyte':
+                return mock_scfind_get_error(url, **kwargs)
+            return mock_scfind_get(url, **kwargs)
+
+        mocker.patch('requests.get', side_effect=failing_get)
+        data = client.get('/scfind/label-to-clid-map.json').get_json()
+        assert 'heart.cardiomyocyte' not in data
+        assert data['kidney.epithelial cell'] == mock_label_to_clid['CLIDs']
+        # The CLID-to-label map is built from the partial map, so it isn't cached either.
+        assert client.get('/scfind/clid-to-label-map.json').status_code == 200
+        assert not list(tmp_path.glob('label_to_clid*.json'))
+        assert not list(tmp_path.glob('clid_to_label*.json'))
+        assert list(tmp_path.glob('label_to_clid*.json.degraded'))
+
+    def test_empty_cell_type_names_are_not_cached(self, client, mocker, tmp_path):
+        def empty_get(url, **kwargs):
+            if 'cellTypeNames' in url:
+                return _MockResponse({'cellTypeNames': []})
+            return mock_scfind_get(url, **kwargs)
+
+        mocker.patch('requests.get', side_effect=empty_get)
+        assert client.get('/scfind/cell-type-names.json').get_json() == {'cell_types': []}
+        assert client.get('/scfind/label-to-clid-map.json').get_json() == {}
+        assert not list(tmp_path.glob('cellTypeNames*.json'))
+        assert not list(tmp_path.glob('label_to_clid*.json'))
+
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        names = client.get('/scfind/cell-type-names.json').get_json()['cell_types']
+        assert names == mock_cell_type_names['cellTypeNames']
+        # Another worker reads the shared file instead of asking scfind.
+        cache_utils.clear_memory_cache()
+        mocker.patch('requests.get', side_effect=mock_scfind_get_error)
+        assert client.get('/scfind/cell-type-names.json').get_json()['cell_types'] == names
+
+    def test_unknown_modality_is_not_cached(self, client, mocker, tmp_path):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        assert client.get('/scfind/cell-type-names.json?modality=../x').status_code == 200
+        assert not list(tmp_path.glob('cellTypeNames*'))
+
+    def test_dataset_counts_are_shared_across_workers(self, client, mocker):
+        mocker.patch('requests.get', side_effect=mock_scfind_get)
+        assert client.get('/scfind/cell-types-landing.json').status_code == 200
+
+        # A worker that didn't run the landing build serves these from the shared cache.
+        cache_utils.clear_memory_cache()
+        routes_scfind._cached_scfind_get.cache_clear()
+        mock_get = mocker.patch('requests.get', side_effect=mock_scfind_get_error)
+        dataset = mock_indexed_datasets['datasets'][0]
+        response = client.get(f'/scfind/cell-type-count-for-dataset.json?dataset={dataset}')
+        assert response.get_json() == mock_cell_type_count_for_dataset
+        assert client.get('/scfind/indexed-datasets.json').get_json() == mock_indexed_datasets
+        mock_get.assert_not_called()
 
 
 @pytest.mark.parametrize(
