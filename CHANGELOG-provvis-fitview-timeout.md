@@ -1,1 +1,1 @@
-- The provenance graph no longer moves to the current entity after it has been removed from the page.
+- The provenance graph no longer tries to view the current entity after it has been removed from the page.
