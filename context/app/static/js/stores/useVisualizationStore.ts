@@ -1,5 +1,6 @@
 import { debounce } from 'js/helpers/nodash';
 import { create } from 'zustand';
+import { getInitialThemeMode } from 'js/stores/useThemePreferenceStore';
 
 type VizTheme = 'light' | 'dark';
 interface VisualizationStoreState {
@@ -47,7 +48,8 @@ export const useVisualizationStore = create<VisualizationStore>((set) => ({
     set({ fullscreenVizId: null, vizEscSnackbarIsOpen: false, vitessceVisualization: false });
     document.onkeydown = null;
   },
-  vizTheme: 'light',
+  // Start in the site's mode; the visualization theme switch overrides it for the session.
+  vizTheme: getInitialThemeMode(),
   setVizTheme: (theme) => {
     if (!['dark', 'light'].includes(theme)) {
       return;

@@ -1,5 +1,4 @@
 import { Edge, MarkerType } from '@xyflow/react';
-import theme from 'js/theme/theme';
 import { ProvData } from '../types';
 
 export interface NodeWithoutPosition {
@@ -22,7 +21,6 @@ function makeEdge(source: string, target: string): Edge {
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
-    style: { color: theme.palette.secondary.main },
   };
 }
 
