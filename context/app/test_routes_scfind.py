@@ -1352,6 +1352,41 @@ class TestFailuresAreNotCached:
         assert not list(tmp_path.glob('clid_to_label*.json'))
         assert list(tmp_path.glob('label_to_clid*.json.degraded'))
 
+    def test_label_to_clid_completed_mid_build_does_not_count(self, client, mocker, tmp_path):
+        """A complete label-to-CLID map saved by another worker during this worker's fan-out
+        doesn't make the CLID-to-label map built from the partial one cacheable."""
+        mocker.patch.object(routes_scfind.time, 'sleep')
+
+        def get(url, **kwargs):
+            params = kwargs['params']
+            if 'CellType2CLID' in url and params['cell_type'] == 'heart.cardiomyocyte':
+                return mock_scfind_get_error(url, **kwargs)
+            if 'CLID2CellType' in url:
+                # Another worker finishes a complete build while this one is fanning out.
+                path = cache_utils.cache_path(routes_scfind.SCFIND_CACHE, 'label_to_clid')
+                cache_utils._write_json(path, {})
+            return mock_scfind_get(url, **kwargs)
+
+        mocker.patch('requests.get', side_effect=get)
+        assert client.get('/scfind/clid-to-label-map.json').status_code == 200
+        assert list(tmp_path.glob('label_to_clid*.json'))
+        assert not list(tmp_path.glob('clid_to_label*.json'))
+
+    def test_empty_atac_cell_type_names_are_not_cached(self, client, mocker, tmp_path):
+        def empty_atac_get(url, **kwargs):
+            if 'cellTypeNames' in url and (kwargs.get('params') or {}).get('modality') == 'ATAC':
+                return _MockResponse({'cellTypeNames': []})
+            return mock_scfind_get(url, **kwargs)
+
+        mocker.patch('requests.get', side_effect=empty_atac_get)
+        mocker.patch('requests.post', side_effect=mock_scfind_post)
+        landing = client.get('/scfind/cell-types-landing.json').get_json()
+        assert landing['cell_type_names_atac'] == []
+        organ = client.get('/scfind/organ-cell-types/kidney.json').get_json()
+        assert organ['cell_types'] and organ['cell_types_atac'] == []
+        assert not list(tmp_path.glob('cell_types_landing*.json'))
+        assert not list(tmp_path.glob('organ-cell-types*.json'))
+
     def test_empty_cell_type_names_are_not_cached(self, client, mocker, tmp_path):
         def empty_get(url, **kwargs):
             if 'cellTypeNames' in url:

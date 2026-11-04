@@ -380,6 +380,17 @@ def _build_label_to_clid_map_uncached():
     return label_to_clid_map
 
 
+def _label_to_clid_map_with_status():
+    """
+    Return the label-to-CLID map and whether it is complete, checked as the map is read.
+
+    A builder that checked only after its own fan-out could see a complete map that another worker
+    saved in the meantime, and then cache a payload built from the partial map it was given.
+    """
+    label_to_clid_map = _build_label_to_clid_map()
+    return label_to_clid_map, is_persisted(SCFIND_CACHE, 'label_to_clid')
+
+
 def _build_clid_to_label_map():
     """Return the CLID-to-label map, built once and shared across worker processes."""
     return _get_or_build_map('clid_to_label', _build_clid_to_label_map_uncached)
@@ -394,13 +405,13 @@ def _build_clid_to_label_map_uncached():
     """
     # First get all label-to-CLID mappings to collect all CLIDs (reuses the
     # shared label-to-CLID cache rather than rebuilding it).
-    label_to_clid_map = _build_label_to_clid_map()
+    label_to_clid_map, label_to_clid_complete = _label_to_clid_map_with_status()
     all_clids = {clid for clids in label_to_clid_map.values() for clid in clids}
     clid_to_label_map = _fan_out(
         all_clids, _get_clid_to_label_mapping, 'CLID2CellType', retry=True
     )
     # A partial label-to-CLID map leaves CLIDs out of this one too, so it can't be cached either.
-    if len(clid_to_label_map) < len(all_clids) or not is_persisted(SCFIND_CACHE, 'label_to_clid'):
+    if len(clid_to_label_map) < len(all_clids) or not label_to_clid_complete:
         raise Degraded(clid_to_label_map)
     return clid_to_label_map
 
@@ -729,7 +740,8 @@ def _build_cell_types_landing_uncached():
     }
     # Static Cell Ontology descriptions, cached here so the panel doesn't fetch them from UBKG on
     # every load. Keyed by full CLID (the panel resolves each row's CLID via the label->CLID map).
-    descriptions = _build_cell_type_descriptions(_build_label_to_clid_map())
+    label_to_clid_map, label_to_clid_complete = _label_to_clid_map_with_status()
+    descriptions = _build_cell_type_descriptions(label_to_clid_map)
     payload = {
         'cell_type_names': rna,
         'cell_type_names_atac': atac,
@@ -737,9 +749,17 @@ def _build_cell_types_landing_uncached():
         'dataset_counts': dataset_counts,
         'descriptions': descriptions or {},
     }
-    # The descriptions are keyed by the label-to-CLID map's CLIDs, so a partial map leaves gaps.
-    l2c_complete = is_persisted(SCFIND_CACHE, 'label_to_clid')
-    if not (rna_complete and atac_complete and descriptions is not None and l2c_complete):
+    complete = (
+        # An empty name list means scfind's cellTypeNames call failed, not that it has none.
+        rna
+        and atac
+        and rna_complete
+        and atac_complete
+        and descriptions is not None
+        # The descriptions are keyed by the label-to-CLID map's CLIDs, so a partial map leaves gaps.
+        and label_to_clid_complete
+    )
+    if not complete:
         raise Degraded(payload)
     return payload
 
@@ -860,21 +880,23 @@ def _build_organ_cell_types(organ):
     datasets" denominator is intentionally NOT bundled — the page derives it client-side from the
     indexed-datasets route crossed with Elasticsearch (for organ scoping).
     """
-    label_to_clid_map = _build_label_to_clid_map()
+    label_to_clid_map, label_to_clid_complete = _label_to_clid_map_with_status()
+    rna_names = _get_all_cell_type_names()
+    atac_names = _get_all_cell_type_names('ATAC')
 
-    def organ_labels(modality=None):
+    def organ_labels(names):
         # scfind cell type names are organ-prefixed (e.g. "Kidney.epithelial cell"); match the prefix
         # case-insensitively, mirroring the client's useCellTypesOfOrgan.
         return [
             ct
-            for ct in _get_all_cell_type_names(modality)
+            for ct in names
             if '.' in ct
             and ct.split('.', 1)[0].lower() == organ.lower()
             and _format_cell_type_name(ct) != 'other'
         ]
 
-    rna_labels = organ_labels()
-    atac_labels = organ_labels('ATAC')
+    rna_labels = organ_labels(rna_names)
+    atac_labels = organ_labels(atac_names)
 
     # The two modalities' per-cell-type findDatasetForCellType fan-outs are independent — run them
     # concurrently. A cell type that still fails after retries is served without its datasets, but
@@ -915,11 +937,15 @@ def _build_organ_cell_types(organ):
         'cell_types_atac': rows(atac_labels, results['atac']),
     }
     complete = (
-        all(label in results['rna'] for label in rna_labels)
+        # An organ can lack one modality, but scfind as a whole can't: an empty name list means
+        # its cellTypeNames call failed.
+        rna_names
+        and atac_names
+        and all(label in results['rna'] for label in rna_labels)
         and all(label in results['atac'] for label in atac_labels)
         and descriptions is not None
         # Each row's CLID comes from the label-to-CLID map, so a partial map leaves gaps.
-        and is_persisted(SCFIND_CACHE, 'label_to_clid')
+        and label_to_clid_complete
     )
     if not complete:
         raise Degraded(payload)
