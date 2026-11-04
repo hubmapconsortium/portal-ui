@@ -146,7 +146,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
     return <Skeleton variant="rectangular" width={parentWidth} height={parentHeight} />;
   }
 
-  const axisLabelProps = srOnlyLabels ? srOnlyLabelStyles : undefined;
+  const axisLabelProps = srOnlyLabels ? srOnlyLabelStyles : { fill: theme.palette.text.primary };
 
   return (
     <>
