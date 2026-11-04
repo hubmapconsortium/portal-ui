@@ -23,15 +23,28 @@ interface ThemePreferenceStore {
   setPreference: (preference: ThemePreference) => void;
 }
 
+// Changing a cookie doesn't notify other tabs, so tell them directly.
+const otherTabs = typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel(THEME_COOKIE_KEY);
+
 export const useThemePreferenceStore = create<ThemePreferenceStore>((set) => ({
   preference: readThemePreferenceCookie(),
   setPreference: (preference) => {
     document.cookie = `${THEME_COOKIE_KEY}=${preference}; Max-Age=31536000; path=/; SameSite=Lax`;
+    otherTabs?.postMessage(preference);
     // The server-rendered background only covers the first paint; the MUI theme takes over from here.
     document.getElementById('theme-preload')?.remove();
     set({ preference });
   },
 }));
+
+// Follow a preference picked in another tab. That tab already saved the cookie, so don't re-save or re-broadcast it.
+otherTabs?.addEventListener('message', ({ data }: MessageEvent) => {
+  const preference = themePreferences.find((p) => p === data);
+  if (preference) {
+    document.getElementById('theme-preload')?.remove();
+    useThemePreferenceStore.setState({ preference });
+  }
+});
 
 /**
  * The theme mode at page load, for state that is initialized outside React.

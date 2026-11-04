@@ -9,6 +9,8 @@ import { HeaderCell } from 'js/shared-styles/tables';
 
 const StyledTable = styled(Table)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
+  // This opaque surface skips the dark-mode overlay of the Paper around it, so its descendants should too.
+  '--Paper-overlay': 'none',
   boxShadow: theme.shadows[1],
   tableLayout: 'auto',
 }));

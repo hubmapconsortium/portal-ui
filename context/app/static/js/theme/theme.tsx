@@ -387,6 +387,26 @@ const themeOptions = {
         },
       ],
     },
+    MuiTableCell: {
+      styleOverrides: {
+        // Sticky header cells are opaque, which hides the elevation overlay of the Paper they sit in.
+        // Paint that overlay on them too; Paper only sets the variable in dark mode.
+        stickyHeader: {
+          backgroundImage: 'var(--Paper-overlay)',
+        },
+      },
+    },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        // MUI colors the sorted column's label text.primary. Inherit instead, so it matches the other headers in
+        // panel lists, whose headers are subtitle2. Table header cells are text.primary already.
+        root: {
+          '&.Mui-active': {
+            color: 'inherit',
+          },
+        },
+      },
+    },
     MuiChip: {
       variants: [
         {
@@ -541,11 +561,12 @@ export const darkTheme = createTheme(
         styleOverrides: {
           root: {
             color: purpleDarkMode,
+            // Not !important, so accordions that color their own summary, e.g. on a primary background, still can.
             '.MuiAccordionSummary-content': {
-              color: `${purpleDarkMode} !important`,
+              color: purpleDarkMode,
             },
             '.MuiAccordionSummary-expandIconWrapper': {
-              color: `${purpleDarkMode} !important`,
+              color: purpleDarkMode,
             },
           },
         },

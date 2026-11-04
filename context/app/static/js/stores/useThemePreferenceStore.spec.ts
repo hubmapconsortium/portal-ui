@@ -42,6 +42,17 @@ test('resolves system to the OS setting', async () => {
   expect(getInitialThemeMode()).toBe('light');
 });
 
+test('follows a preference picked in another tab', async () => {
+  const { useThemePreferenceStore } = await loadStore();
+  const seen: string[] = [];
+  useThemePreferenceStore.subscribe((state) => seen.push(state.preference));
+  const otherTab = new BroadcastChannel('portal_theme');
+  otherTab.postMessage('purple');
+  otherTab.postMessage('dark');
+  await vi.waitFor(() => expect(seen).toEqual(['dark']));
+  otherTab.close();
+});
+
 test('setPreference saves the cookie and removes the server-rendered background', async () => {
   const { useThemePreferenceStore } = await loadStore();
   const preload = document.createElement('style');

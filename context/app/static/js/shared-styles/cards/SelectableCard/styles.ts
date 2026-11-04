@@ -18,6 +18,8 @@ const StyledCard = styled(Card, { shouldForwardProp })<CardProps & ColorVariant>
   minWidth: 275,
   flexGrow: $grow ? 1 : 0,
   backgroundColor: $colorVariant ? theme.palette[$colorVariant].main : theme.palette.background.paper,
+  // Shadows barely show on dark surfaces, so outline the card to set it apart from the Paper it sits on.
+  border: theme.palette.mode === 'dark' ? `1px solid ${theme.palette.divider}` : undefined,
 }));
 
 export { SelectableCardText, StyledCard };

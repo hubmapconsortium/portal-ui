@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, useEffect, useMemo } from 'react';
 import { NuqsAdapter } from 'nuqs/adapters/react';
 import { SWRConfig } from 'swr';
 import { ThemeProvider } from '@mui/material/styles';
@@ -13,6 +13,7 @@ import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAP
 import { EntityStoreProvider } from 'js/stores/useEntityStore';
 import { OpenKeyNavStoreProvider, readOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
 import { useThemeMode } from 'js/stores/useThemePreferenceStore';
+import useVisualizationStore from 'js/stores/useVisualizationStore';
 
 import { InitialHashContextProvider } from 'js/hooks/useInitialHash';
 import theme from '../theme';
@@ -109,6 +110,11 @@ export default function Providers({
 
   const { springs } = useEntityHeaderSprings();
   const themeMode = useThemeMode();
+  const setVizTheme = useVisualizationStore((state) => state.setVizTheme);
+  // vizTheme is seeded once at load; keep it in step when the OS flips a 'system' preference.
+  useEffect(() => {
+    setVizTheme(themeMode);
+  }, [themeMode, setVizTheme]);
 
   return (
     <NuqsAdapter>

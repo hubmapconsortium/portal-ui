@@ -31,6 +31,15 @@ const saySeeChatStyles = {
     '--muted': '#474747',
     '--accent': '#474747',
   },
+  // The mascot's speech bubble hard-codes a light blue background (and tail) under theme-colored text, which turns
+  // white-on-white in dark mode. Swap in a dark tint of the same blue until udi-yac themes the bubble itself:
+  // https://github.com/hms-dbmi/udi-yac/issues/238
+  '.udi-yac.dark [class~="udi:bg-[#e8f4fc]"]': {
+    backgroundColor: '#323C42',
+  },
+  '.udi-yac.dark [class~="udi:border-t-[#e8f4fc]"]': {
+    borderTopColor: '#323C42',
+  },
 } as const;
 
 export default function SaySeeChatCSS() {

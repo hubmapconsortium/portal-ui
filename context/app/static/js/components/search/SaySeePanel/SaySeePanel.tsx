@@ -65,7 +65,6 @@ function recordUrl(record: Record<string, unknown>, source: string) {
 function visualizationSelector(store: VisualizationStore) {
   return {
     fullscreenVizId: store.fullscreenVizId,
-    theme: store.vizTheme,
     expandViz: store.expandViz,
     collapseViz: store.collapseViz,
   };
@@ -77,7 +76,7 @@ function ChatFallback() {
 
 function SaySeePanel() {
   const { isHubmapUser, isWorkspacesUser, userEmail } = useAppContext();
-  const { fullscreenVizId, theme, expandViz, collapseViz } = useVisualizationStore(useShallow(visualizationSelector));
+  const { fullscreenVizId, expandViz, collapseViz } = useVisualizationStore(useShallow(visualizationSelector));
   const isFullscreen = fullscreenVizId === SAY_SEE_VIZ_ID;
   // Subscribe to the shared Escape-collapses-fullscreen listener; the
   // Vitessce viz wires this up on its detail page, but Say & See lives on
@@ -115,6 +114,9 @@ function SaySeePanel() {
     const categorical = getChartPalette(muiTheme.palette);
     return { category: categorical, ordinal: categorical, mark: muiTheme.palette.primary.main };
   }, [muiTheme]);
+  // The search page has no visualization theme switch, so the chat follows the site theme
+  // that the palette above comes from.
+  const theme = muiTheme.palette.mode;
 
   const onEvent = useEventCallback((name: string, properties?: Record<string, unknown>) => {
     // UDIChat emits events as (name, properties) with no category/action, but
