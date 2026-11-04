@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.13"
 
 [manifest]
@@ -961,7 +961,7 @@ wheels = [
 
 [[package]]
 name = "hubmap-portal-ui"
-version = "1.54.2"
+version = "1.55.0"
 source = { editable = "." }
 dependencies = [
     { name = "flask", extra = ["async"] },
