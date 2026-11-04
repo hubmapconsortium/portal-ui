@@ -17,6 +17,7 @@ function SecondaryBackgroundTooltip({ disabled, children, ...rest }: SecondaryBa
             '& .MuiTooltip-tooltip': {
               borderRadius: theme.spacing(1),
               backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.secondary.contrastText,
             },
           }),
         },

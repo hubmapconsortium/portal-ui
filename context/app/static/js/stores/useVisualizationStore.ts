@@ -48,7 +48,8 @@ export const useVisualizationStore = create<VisualizationStore>((set) => ({
     set({ fullscreenVizId: null, vizEscSnackbarIsOpen: false, vitessceVisualization: false });
     document.onkeydown = null;
   },
-  // Start in the site's mode; the visualization theme switch overrides it for the session.
+  // Follows the site's mode (Providers syncs it when that mode changes). The visualization
+  // theme switch overrides it until the site's mode changes or the page reloads.
   vizTheme: getInitialThemeMode(),
   setVizTheme: (theme) => {
     if (!['dark', 'light'].includes(theme)) {
