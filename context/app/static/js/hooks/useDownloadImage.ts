@@ -1,14 +1,17 @@
 import html2canvas from 'html2canvas';
+import { useTheme } from '@mui/material/styles';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 import { RefObject, useCallback } from 'react';
 
 export function useDownloadImage(ref: RefObject<HTMLElement | null>, chartName = 'chart', scale = 2) {
   const { toastError } = useSnackbarActions();
+  const theme = useTheme();
+  const { paper } = theme.palette.background;
   const downloadImage = useCallback(() => {
     if (!ref.current) return;
 
-    html2canvas(ref.current, { scale })
+    html2canvas(ref.current, { scale, backgroundColor: paper })
       .then((canvas) => {
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
@@ -21,7 +24,7 @@ export function useDownloadImage(ref: RefObject<HTMLElement | null>, chartName =
         console.error('Error downloading image:', error);
         toastError('Failed to download image. Please try again.');
       });
-  }, [ref, toastError, chartName, scale]);
+  }, [ref, toastError, chartName, scale, paper]);
 
   return downloadImage;
 }

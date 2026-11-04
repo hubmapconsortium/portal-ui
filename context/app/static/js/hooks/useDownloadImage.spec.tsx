@@ -71,7 +71,7 @@ describe('useDownloadImage', () => {
       await Promise.resolve(); // Wait for the html2canvas promise to resolve
     });
 
-    expect(mockHtml2canvas).toHaveBeenCalledWith(div, { scale: 2 });
+    expect(mockHtml2canvas).toHaveBeenCalledWith(div, { scale: 2, backgroundColor: '#fff' });
   });
 
   test('calls html2canvas with custom scale', async () => {
@@ -89,7 +89,7 @@ describe('useDownloadImage', () => {
       await Promise.resolve(); // Wait for the html2canvas promise to resolve
     });
 
-    expect(mockHtml2canvas).toHaveBeenCalledWith(div, { scale: 3 });
+    expect(mockHtml2canvas).toHaveBeenCalledWith(div, { scale: 3, backgroundColor: '#fff' });
   });
 
   test('downloads image with correct filename', async () => {
