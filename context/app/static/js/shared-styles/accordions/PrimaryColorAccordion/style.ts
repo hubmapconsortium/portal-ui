@@ -18,14 +18,14 @@ const PrimaryColorAccordion = styled(Accordion, { shouldForwardProp })<{ $retrac
         margin: theme.spacing(2),
         color: theme.palette.primary.main,
         '&.Mui-expanded': {
-          color: $retracted ? theme.palette.primary.main : theme.palette.common.white,
+          color: $retracted ? theme.palette.primary.main : theme.palette.primary.contrastText,
         },
       },
       '& .MuiAccordionSummary-expandIconWrapper': {
         marginRight: theme.spacing(2),
         color: theme.palette.primary.main,
         '&.Mui-expanded': {
-          color: $retracted ? theme.palette.primary.main : theme.palette.common.white,
+          color: $retracted ? theme.palette.primary.main : theme.palette.primary.contrastText,
         },
       },
       '&.Mui-expanded': {
