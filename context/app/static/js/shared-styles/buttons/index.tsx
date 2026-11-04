@@ -9,13 +9,14 @@ import IconDropdownMenuButton from '../dropdowns/IconDropdownMenuButton';
 
 const iconButtonHeight = 40;
 
-const whiteBackgroundCSS = {
-  backgroundColor: '#fff',
+// background.paper is white in the default theme and dark grey in darkTheme.
+const whiteBackgroundCSS = (theme: Theme) => ({
+  backgroundColor: theme.palette.background.paper,
   height: `${iconButtonHeight}px`,
   width: `${iconButtonHeight}px`,
   borderRadius: '4px',
   padding: '0px',
-};
+});
 
 const border = (theme: Theme) => ({
   border: `1px solid ${theme.palette.divider}`,
@@ -26,7 +27,7 @@ const svgStyles = {
 };
 
 const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme, disabled }) => ({
-  ...whiteBackgroundCSS,
+  ...whiteBackgroundCSS(theme),
   ...border(theme),
   '& svg': svgStyles,
   ...(disabled && {
@@ -35,12 +36,12 @@ const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme, 
 }));
 
 const WhiteBackgroundIconDropdownMenuButton = styled(IconDropdownMenuButton)(({ theme }) => ({
-  ...whiteBackgroundCSS,
+  ...whiteBackgroundCSS(theme),
   ...border(theme),
 }));
 
 const RotatedTooltipButton = styled(IconDropdownMenuButton)(({ theme }) => ({
-  ...whiteBackgroundCSS,
+  ...whiteBackgroundCSS(theme),
   color: theme.palette.primary.main,
   transform: 'rotate(90deg)',
   fontSize: '1.5rem',
@@ -50,15 +51,15 @@ const RotatedTooltipButton = styled(IconDropdownMenuButton)(({ theme }) => ({
 
 const WhiteBackgroundIconTooltipButton = styled(TooltipIconButton)(({ theme }) => ({
   ...border(theme),
-  ...whiteBackgroundCSS,
+  ...whiteBackgroundCSS(theme),
   '& svg': svgStyles,
 }));
 
-const WhiteBackgroundToggleButton = styled(ToggleButton)({
-  ...whiteBackgroundCSS,
+const WhiteBackgroundToggleButton = styled(ToggleButton)(({ theme }) => ({
+  ...whiteBackgroundCSS(theme),
   border: 0,
   '& svg': svgStyles,
-});
+}));
 
 interface TooltipToggleButtonProps extends PropsWithChildren, ComponentProps<typeof WhiteBackgroundToggleButton> {
   tooltipComponent?: React.ElementType;
