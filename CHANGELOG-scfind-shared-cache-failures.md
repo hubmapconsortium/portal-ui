@@ -1,4 +1,0 @@
-- scFind cell type names, gene lists, indexed datasets and per-dataset cell type counts are shared across server workers, so pages no longer time out on a worker that has not loaded them yet while scFind is slow.
-- scFind cell type ↔ CLID maps, and the cell types landing and organ payloads built from them, are no longer cached when some lookups fail.
-- A partially built scFind payload is shared across workers for its retry window instead of being rebuilt by each worker in turn, and scFind timeouts are no longer retried.
-- Requests waiting on a scFind payload whose build fails now get an error right away, instead of each retrying the build in turn, so a stalled scFind can no longer tie up every server thread.

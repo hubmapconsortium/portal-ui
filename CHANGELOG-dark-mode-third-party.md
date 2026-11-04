@@ -1,1 +1,0 @@
-- In dark mode, show the provenance graph, dataset relationship diagram and Say & See chat in dark mode, keep the Human Reference Atlas organ widget and LineUp on a light background (they have no dark mode), and give downloaded chart images the page background.

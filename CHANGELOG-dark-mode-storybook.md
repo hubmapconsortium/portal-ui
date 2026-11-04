@@ -1,1 +1,0 @@
-- Add a Theme switch to the Storybook toolbar for reviewing components in light and dark mode, and make chart axis titles follow the theme.

@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.55.0 - 2026-11-04
+
+- Match the fullscreen visualization header to the visualization's dark theme. The header and its buttons switch back to the light theme when fullscreen is exited.
+- In dark mode, dim the home page hero image and give the home page cards, entity counts and section gradients, publication visualization accordions, workspace tables and metadata menus dark-mode colors.
+- In dark mode, keep the HuBMAP purple header bar and the blue notice banner above it, and give tabs, accordions, tiles, provenance and relationship graph nodes, status colors and the matched/unmatched chart colors dark-mode values with the same hue as their light-mode colors.
+- In dark mode, give expandable dataset type facets the same background as the other facets, and give the Related Tools and Resources cards on the home page the same background as the other home page cards.
+- In dark mode, give the HuBMAP Consortium and NIH Common Fund logos a white background wherever they appear, including Related Tools and Resources and the Resources menu, and make the Say & See mascot's speech bubble readable.
+- In dark mode, give sticky table headers and the selected-rows bar the same background as the table body, so headers no longer blend into the page background.
+- In dark mode, make the x-axis line and tick labels of the datasets overview chart readable.
+- In dark mode, keep the signed-in user's initial visible in the header avatar.
+- In dark mode, remove the white corners around embedded tutorials.
+- In dark mode, outline the tutorial and workspace template cards so they stand out from the panel behind them.
+- Color the sorted column's header like the other headers in panel lists, such as on the cell types and organs pages, instead of in plain text color.
+- In dark mode, keep the titles of expanded processed dataset and publication visualization accordions readable.
+- In dark mode, outline entity tiles, such as the provenance table's cards and search result tiles, so they stand out from the panel behind them.
+- Add a Dark Mode (beta) preference to My Preferences on the profile page, with Light, Dark and System options. Light remains the default. The choice is saved in a cookie so pages open in dark mode without a white flash, and visualizations start in the chosen mode.
+- In dark mode, use dark-mode colors for chart axes, labels, gridlines and tooltips, and for shared tables, dropdown menus, dialogs, step accordions and helper panels.
+- Add a Theme switch to the Storybook toolbar for reviewing components in light and dark mode, and make chart axis titles follow the theme.
+- In dark mode, show the provenance graph, dataset relationship diagram and Say & See chat in dark mode, keep the Human Reference Atlas organ widget and LineUp on a light background (they have no dark mode), and give downloaded chart images the page background.
+- Build the dark visualization theme with a full dark palette. Hover stripes, dividers, panel resizers and secondary icons in the Cell Population Plot and the fullscreen visualization header now use dark-mode colors instead of the light theme's.
+- scFind cell type names, gene lists, indexed datasets and per-dataset cell type counts are shared across server workers, so pages no longer time out on a worker that has not loaded them yet while scFind is slow.
+- scFind cell type ↔ CLID maps, and the cell types landing and organ payloads built from them, are no longer cached when some lookups fail.
+- A partially built scFind payload is shared across workers for its retry window instead of being rebuilt by each worker in turn, and scFind timeouts are no longer retried.
+- Requests waiting on a scFind payload whose build fails now get an error right away, instead of each retrying the build in turn, so a stalled scFind can no longer tie up every server thread.
+
+
+
 ## v1.54.2 - 2026-10-29
 
 - Fix the organ page's cell population plot reloading when the cell types section switches between its RNAseq and ATACseq tabs.

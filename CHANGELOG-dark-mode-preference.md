@@ -1,1 +1,0 @@
-- Add a Dark Mode (beta) preference to My Preferences on the profile page, with Light, Dark and System options. Light remains the default. The choice is saved in a cookie so pages open in dark mode without a white flash, and visualizations start in the chosen mode.
