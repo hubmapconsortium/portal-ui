@@ -136,6 +136,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
     tooltipOpen,
     containerRef,
     TooltipInPortal,
+    tooltipStyles,
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip<TooltipData<T>>();
@@ -183,16 +184,16 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
             hideTicks
             scale={yScale as AxisScale}
             label={yAxisLabel}
-            stroke="black"
+            stroke={theme.palette.text.primary}
             tickLabelProps={() => ({
-              fill: 'black',
+              fill: theme.palette.text.primary,
               fontSize: 11,
               textAnchor: 'end',
               dy: '0.33em',
             })}
             labelProps={{
               fontSize: 14,
-              color: 'black',
+              color: theme.palette.text.primary,
               fontWeight: 500,
               fontFamily: 'Inter Variable',
             }}
@@ -202,12 +203,12 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
             top={yHeight}
             scale={xScale}
             label={xAxisLabel}
-            stroke="black"
-            tickStroke="black"
+            stroke={theme.palette.text.primary}
+            tickStroke={theme.palette.text.primary}
             numTicks={keys.length}
             labelOffset={longestLabelSize}
             tickLabelProps={() => ({
-              fill: 'black',
+              fill: theme.palette.text.primary,
               fontSize: tickLabelSize,
               textAnchor: 'end',
               angle: -90,
@@ -215,7 +216,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
             tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data })}
             labelProps={{
               fontSize: 14,
-              color: 'black',
+              color: theme.palette.text.primary,
               fontWeight: 500,
               fontFamily: 'Inter Variable',
             }}
@@ -224,7 +225,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
       </svg>
 
       {tooltipOpen && tooltipData && (
-        <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
+        <TooltipInPortal top={tooltipTop} left={tooltipLeft} style={tooltipStyles}>
           <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
         </TooltipInPortal>
       )}

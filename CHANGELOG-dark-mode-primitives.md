@@ -1,0 +1,1 @@
+- In dark mode, use dark-mode colors for chart axes, labels, gridlines and tooltips, and for shared tables, dropdown menus, dialogs, step accordions and helper panels.

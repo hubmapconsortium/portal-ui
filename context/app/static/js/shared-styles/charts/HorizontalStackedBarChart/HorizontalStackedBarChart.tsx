@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
@@ -103,6 +104,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   xTickValues,
   excludedKeys,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
+  const theme = useTheme();
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
     margin,
     tickLabelSize: TICK_LABEL_SIZE,
@@ -121,6 +123,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
     tooltipOpen,
     containerRef,
     TooltipInPortal,
+    tooltipStyles,
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
@@ -153,7 +156,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
           left={updatedMargin.left}
           scale={xScale}
           height={yHeight}
-          stroke="black"
+          stroke={theme.palette.text.primary}
           opacity={0.38}
         />
         <Group top={updatedMargin.top} left={updatedMargin.left}>
@@ -198,13 +201,13 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
           <AxisLeft
             hideTicks
             scale={yScale}
-            stroke="black"
+            stroke={theme.palette.text.primary}
             numTicks={yAxisTickLabels.length}
             label={yAxisLabel}
             labelProps={axisLabelProps}
             labelOffset={longestLabelSize + 10}
             tickLabelProps={() => ({
-              fill: 'black',
+              fill: theme.palette.text.primary,
               fontSize: TICK_LABEL_SIZE,
               textAnchor: 'end',
               dy: '0.33em',
@@ -215,14 +218,14 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
             hideTicks
             top={1}
             scale={xScale}
-            stroke="black"
-            tickStroke="black"
+            stroke={theme.palette.text.primary}
+            tickStroke={theme.palette.text.primary}
             label={xAxisLabel}
             tickValues={xTickValues}
             tickFormat={xTickFormat}
             labelProps={axisLabelProps}
             tickLabelProps={() => ({
-              fill: 'black',
+              fill: theme.palette.text.primary,
               fontSize: TICK_LABEL_SIZE,
               textAnchor: 'middle',
             })}
@@ -230,7 +233,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
         </Group>
       </svg>
       {showTooltipAndHover && tooltipOpen && tooltipData && (
-        <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
+        <TooltipInPortal top={tooltipTop} left={tooltipLeft} style={tooltipStyles}>
           <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
         </TooltipInPortal>
       )}
