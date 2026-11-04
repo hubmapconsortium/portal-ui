@@ -57,9 +57,9 @@ const StyledMenuItem = styled(({ tooltip, isLoading, children, href, disabled, .
   }
 
   return menuItem;
-})({
+})(({ theme }) => ({
   width: '100%',
-  color: 'black',
-});
+  color: theme.palette.text.primary,
+}));
 
 export { StyledInfoIcon, StyledMenuItem };

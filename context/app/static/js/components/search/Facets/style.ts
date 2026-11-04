@@ -23,7 +23,7 @@ const FacetAccordionSummary = styled(AccordionSummary, { shouldForwardProp })<{ 
     '& > *': {
       padding: 0,
       margin: 0,
-      color: '#000',
+      color: theme.palette.text.primary,
     },
     margin: 0,
   }),

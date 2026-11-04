@@ -8,7 +8,7 @@ interface FileSizeProps {
   color?: TypographyProps['color'];
 }
 
-export function FileSize({ size, variant = 'body2', color = 'black' }: FileSizeProps) {
+export function FileSize({ size, variant = 'body2', color = 'text.primary' }: FileSizeProps) {
   return (
     <Typography component="p" variant={variant} color={color}>
       {prettyBytes(size)}
