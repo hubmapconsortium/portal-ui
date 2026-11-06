@@ -29,37 +29,32 @@ export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 150;
  * @returns an API URL generator
  */
 export const apiUrls = (workspacesEndpoint: string) => ({
+  // The workspaces API (Django) only routes paths with a trailing slash.
   // Jobs
   get jobTypes(): string {
-    return `${workspacesEndpoint}/job_types`;
+    return `${workspacesEndpoint}/job_types/`;
   },
   get jobs(): string {
-    return `${workspacesEndpoint}/jobs`;
+    return `${workspacesEndpoint}/jobs/`;
   },
   stopJob(jobId: number): string {
-    return `${workspacesEndpoint}/jobs/${jobId}/stop`;
+    return `${workspacesEndpoint}/jobs/${jobId}/stop/`;
   },
   // Workspaces
   get workspaces(): string {
-    return `${workspacesEndpoint}/workspaces`;
-  },
-  get createWorkspaceFromTemplates(): string {
     return `${workspacesEndpoint}/workspaces/`;
   },
   workspace(workspaceId: number): string {
-    return `${workspacesEndpoint}/workspaces/${workspaceId}`;
+    return `${workspacesEndpoint}/workspaces/${workspaceId}/`;
   },
   startWorkspace(workspaceId: number): string {
-    return `${workspacesEndpoint}/workspaces/${workspaceId}/start`;
+    return `${workspacesEndpoint}/workspaces/${workspaceId}/start/`;
   },
   createWorkspaceFromNotebookPath(path: string): string {
     return `/notebooks/${path}`;
   },
   // Invitations
   get invitations(): string {
-    return `${workspacesEndpoint}/shared_workspaces`;
-  },
-  get shareInvitations(): string {
     return `${workspacesEndpoint}/shared_workspaces/`;
   },
   invitation(invitationId: number): string {
@@ -70,7 +65,7 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   },
   // Users
   users(query: string): string {
-    return `${workspacesEndpoint}/users?search=${query}`;
+    return `${workspacesEndpoint}/users/?search=${query}`;
   },
 });
 
@@ -353,7 +348,7 @@ export function useShareInvitation() {
   const shareInvitation = useCallback(
     (body: ShareInvitationBody) => {
       return trigger({
-        url: api.shareInvitations,
+        url: api.invitations,
         body,
         headers,
       });
@@ -591,7 +586,7 @@ export function useCreateWorkspace() {
   const createWorkspace = useCallback(
     (body: CreateWorkspaceBody) => {
       return trigger({
-        url: api.createWorkspaceFromTemplates,
+        url: api.workspaces,
         body,
         headers,
       });

@@ -552,7 +552,7 @@ function useCreateTemplates() {
 
   const createTemplates = useCallback(
     async ({ templateKeys, uuids }: { templateKeys: string[]; uuids: string[] }) => {
-      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}/templates/jupyter_lab/${key}`);
+      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}/templates/jupyter_lab/${key}/`);
       const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
         urls: templateUrls,
         requestInits: [
