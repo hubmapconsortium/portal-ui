@@ -252,7 +252,7 @@ async function getWorkspaceJob({
   workspacesEndpoint,
   workspacesToken,
 }: GetWorkspaceJobArgs) {
-  const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, {
+  const jobsResponse = await fetch(`${workspacesEndpoint}/jobs/`, {
     method: 'GET',
     headers: getWorkspaceHeaders(workspacesToken),
   });
