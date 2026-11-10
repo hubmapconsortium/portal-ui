@@ -1,7 +1,7 @@
 // One representative dataset per visualization variant, from the release QA checklist.
-// Each is Published with a visualization in both the test and prod indexes.
+// Each is Published with a visualization in the test, dev, and prod indexes.
 // Processed datasets redirect to their raw parent, scrolled to `#section-<hubmap id>`.
-// `notOnTest`: the dataset's files are not present in the test environment, so it is skipped unless API_ENV=prod.
+// `notOnTest`: the dataset's files are not present in the test environment, so it is skipped when API_ENV=test.
 const datasets = [
   {
     name: "CODEX [Cytokit + SPRM]",
@@ -43,7 +43,7 @@ describe("Dataset visualizations", () => {
     const suffix = notOnTest ? " (not present on test)" : "";
     it(`${name} renders every Vitessce view without errors${suffix}`, function () {
       cy.env(["API_ENV"]).then(({ API_ENV = "test" }) => {
-        if (notOnTest && API_ENV !== "prod") this.skip();
+        if (notOnTest && API_ENV === "test") this.skip();
       });
       cy.visit(`/browse/dataset/${uuid}`);
       cy.findByTestId("entity-title").should("be.visible");

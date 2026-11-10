@@ -1,0 +1,1 @@
+- Add `API_ENV=dev` to `etc/test/test-cypress.sh` and the Cypress Portal CI `workflow_dispatch` input, to run the Cypress suite against the dev environment APIs. The services spec checks the dev endpoints, and the Vitessce specs for datasets whose files are missing on test now also run on dev.
