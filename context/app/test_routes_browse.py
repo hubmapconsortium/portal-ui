@@ -6,6 +6,8 @@ import pytest
 
 from .main import create_app
 from .routes_browse import (
+    HUBMAP_DATA_PORTAL_PAPER_CITATION,
+    HUBMAP_DATA_PORTAL_PAPER_UUID,
     _get_dataset_ld,
     _get_entity_description,
     _get_entity_title,
@@ -129,9 +131,9 @@ def test_dataset_ld_does_not_self_cite(app_context):
     https://developers.google.com/search/docs/appearance/structured-data/dataset
     """
     ld = _get_dataset_ld(DATASET)
-    # No related publications in this fixture, so `citation` must be absent entirely rather
-    # than falling back to a citation of the dataset itself.
-    assert 'citation' not in ld
+    # No related publications in this fixture, so `citation` holds only the portal paper
+    # rather than falling back to a citation of the dataset itself.
+    assert ld['citation'] == [HUBMAP_DATA_PORTAL_PAPER_CITATION]
     assert ld['publisher'] == {
         '@type': 'Organization',
         'name': 'HuBMAP Consortium',
@@ -164,6 +166,14 @@ def test_citation_holds_related_publications(mocker):
                     'title': 'A preprint with no DOI',
                     'contributors': [{'first_name': 'Ada', 'last_name': 'Lovelace'}],
                 },
+                # The portal paper's own publication entity, still on its preprint DOI. The
+                # constant citation supersedes it, so it must not be cited a second time.
+                {
+                    'uuid': HUBMAP_DATA_PORTAL_PAPER_UUID,
+                    'title': 'HuBMAP Data Portal',
+                    'publication_venue': 'arXiv',
+                    'publication_doi': '10.48550/arXiv.2511.05708',
+                },
             ]
         ),
     )
@@ -172,6 +182,7 @@ def test_citation_holds_related_publications(mocker):
         ld = _get_dataset_ld({**DATASET, 'descendant_ids': ['processed-uuid']})
 
     assert ld['citation'] == [
+        HUBMAP_DATA_PORTAL_PAPER_CITATION,
         'Ada Lovelace. A preprint with no DOI. '
         'https://portal.hubmapconsortium.org/browse/publication/pub-1',
         'Doe J, et al. Zebra atlas of the kidney. Nature; 2024. https://doi.org/10.1111/222',
@@ -203,7 +214,7 @@ def test_citation_survives_a_failed_publication_lookup(mocker):
     app = create_app(testing=True)
     with app.test_request_context('/browse/dataset/fake-uuid'):
         ld = _get_dataset_ld(DATASET)
-    assert 'citation' not in ld
+    assert ld['citation'] == [HUBMAP_DATA_PORTAL_PAPER_CITATION]
     assert ld['name'] == 'Histology of Kidney (HBM123.ABCD.456)'
 
 
@@ -236,7 +247,6 @@ def test_dataset_ld_omits_missing_fields(app_context):
         'creator',
         'datePublished',
         'dateModified',
-        'citation',
         'isAccessibleForFree',
     ]:
         assert absent not in ld

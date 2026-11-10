@@ -1,0 +1,1 @@
+- Add the published HuBMAP Data Portal paper to the `citation` property of the schema.org structured data on dataset pages.
