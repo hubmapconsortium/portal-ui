@@ -43,9 +43,12 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
           <StyledHeader variant="h4">Acknowledgement</StyledHeader>
           <Typography variant="body1">
             Investigators using HuBMAP data in publications or presentations are asked to cite the{' '}
-            <OutboundLink href="https://arxiv.org/abs/2511.05708">HuBMAP Data Portal paper</OutboundLink> (preprint:{' '}
-            <OutboundLink href="https://doi.org/10.48550/arXiv.2511.05708">
-              https://doi.org/10.48550/arXiv.2511.05708
+            <OutboundLink href="https://www.nature.com/articles/s41467-026-77835-z">
+              HuBMAP Data Portal paper
+            </OutboundLink>{' '}
+            (
+            <OutboundLink href="https://doi.org/10.1038/s41467-026-77835-z">
+              https://doi.org/10.1038/s41467-026-77835-z
             </OutboundLink>
             ) when portal data were used in the study, portal tools were used in methods or analysis, or the portal is
             used as a data repository per journal requirements. See our{' '}
