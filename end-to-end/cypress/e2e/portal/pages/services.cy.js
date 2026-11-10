@@ -12,9 +12,9 @@ const expectedEndpoints = {
   test: {
     assets: "https://assets.test.hubmapconsortium.org",
     "entity-api": "https://entity-api.test.hubmapconsortium.org",
-    gateway: "https://gateway.api.hubmapconsortium.org",
+    gateway: "https://gateway.test.hubmapconsortium.org",
     "search-api": "https://search-api.test.hubmapconsortium.org/v3/portal/search",
-    "ontology-api": "https://ontology.api.hubmapconsortium.org",
+    "ontology-api": "https://ontology-api.dev.hubmapconsortium.org",
   },
   dev: {
     assets: "https://assets.dev.hubmapconsortium.org",
