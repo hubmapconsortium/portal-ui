@@ -60,6 +60,8 @@ export interface AppContextType {
   userGlobusAffiliation?: string;
   enableSaySeeMode?: boolean;
   enableFilesSearch?: boolean;
+  /** DOI URL of the HuBMAP Data Portal paper, which users of portal data are asked to cite. */
+  hubmapDataPortalPaperUrl: string;
   [key: string]: unknown;
 }
 

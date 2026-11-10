@@ -1,6 +1,12 @@
 from flask import render_template, current_app, abort, session, request, redirect, url_for
 
-from .utils import get_default_flask_data, make_blueprint, get_organs, get_valid_tutorial_routes
+from .utils import (
+    HUBMAP_DATA_PORTAL_PAPER_UUID,
+    get_default_flask_data,
+    make_blueprint,
+    get_organs,
+    get_valid_tutorial_routes,
+)
 
 
 blueprint = make_blueprint(__name__)
@@ -124,7 +130,7 @@ def hubmap_data_portal_publication():
         url_for(
             'routes_browse.details',
             type='publication',
-            uuid='6c9a473b6c49b85d58f1cdfd159a934b',
+            uuid=HUBMAP_DATA_PORTAL_PAPER_UUID,
         ),
         code=301,
     )

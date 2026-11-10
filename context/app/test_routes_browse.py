@@ -7,11 +7,11 @@ import pytest
 from .main import create_app
 from .routes_browse import (
     HUBMAP_DATA_PORTAL_PAPER_CITATION,
-    HUBMAP_DATA_PORTAL_PAPER_UUID,
     _get_dataset_ld,
     _get_entity_description,
     _get_entity_title,
 )
+from .utils import HUBMAP_DATA_PORTAL_PAPER_UUID
 
 SITEMAP_NS = '{http://www.sitemaps.org/schemas/sitemap/0.9}'
 

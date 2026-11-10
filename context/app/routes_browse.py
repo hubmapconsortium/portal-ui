@@ -26,6 +26,8 @@ from flask import (
 )
 
 from .utils import (
+    HUBMAP_DATA_PORTAL_PAPER_DOI_URL,
+    HUBMAP_DATA_PORTAL_PAPER_UUID,
     find_sibling_datasets,
     get_default_flask_data,
     make_blueprint,
@@ -886,17 +888,11 @@ def _get_entity_description(entity):
 HUBMAP_PORTAL_URL = 'https://portal.hubmapconsortium.org'
 CC_BY_4_0 = 'https://creativecommons.org/licenses/by/4.0/'
 
-# The HuBMAP Data Portal paper, which HuBMAP asks users of portal data to cite (see the
-# "How to cite?" guidance in js/components/home/DataUseGuidelines/DataUseGuidelines.tsx).
 HUBMAP_DATA_PORTAL_PAPER_CITATION = (
     'Turner ML, Smits TC, Liaw TS, et al. HuBMAP Data Portal: A Resource for Multimodal '
     'Spatial and Single-Cell Data of Healthy Human Tissues. Nat Commun. 2026;17:11125. '
-    'https://doi.org/10.1038/s41467-026-77835-z'
+    f'{HUBMAP_DATA_PORTAL_PAPER_DOI_URL}'
 )
-# The paper's own publication page, also the target of the /publications/hubmap-data-portal
-# redirect in routes_main.py. It references the datasets the paper used, so the related
-# publication lookup would otherwise cite the paper a second time.
-HUBMAP_DATA_PORTAL_PAPER_UUID = '6c9a473b6c49b85d58f1cdfd159a934b'
 
 
 def _timestamp_to_iso(timestamp):
@@ -1098,6 +1094,8 @@ def _get_related_publication_citations(entity):
         return []
 
     sources = [hit.get('_source') or {} for hit in hits]
+    # The portal paper's own publication page references the datasets the paper used, and
+    # HUBMAP_DATA_PORTAL_PAPER_CITATION already cites the paper, so it is skipped here.
     citations = [
         _publication_citation(source)
         for source in sources

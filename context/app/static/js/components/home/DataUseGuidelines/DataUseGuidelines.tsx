@@ -2,6 +2,7 @@ import React from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import HomepageOutboundLink from 'js/components/home/HomepageOutboundLink';
+import { useAppContext } from 'js/components/Contexts';
 import { StyledPaper, StyledTypography } from './style';
 import Typography from '@mui/material/Typography';
 
@@ -9,6 +10,23 @@ interface Paragraph {
   key: string;
   component: React.ReactNode;
   mt?: number;
+}
+
+function HowToCite() {
+  const { hubmapDataPortalPaperUrl } = useAppContext();
+  return (
+    <>
+      Please cite the{' '}
+      <HomepageOutboundLink href={hubmapDataPortalPaperUrl}>HuBMAP Data Portal paper</HomepageOutboundLink> (
+      <HomepageOutboundLink href={hubmapDataPortalPaperUrl}>{hubmapDataPortalPaperUrl}</HomepageOutboundLink>) when
+      HuBMAP data were used in the study, portal tools were used in methods or analysis, or the portal is used as a data
+      repository per journal requirements. See our{' '}
+      <HomepageOutboundLink href="https://hubmapconsortium.org/acknowledgement-in-publications/">
+        citation guidance
+      </HomepageOutboundLink>{' '}
+      for full details.
+    </>
+  );
 }
 
 const paragraphs: Paragraph[] = [
@@ -61,24 +79,7 @@ const paragraphs: Paragraph[] = [
   {
     key: 'cite',
     mt: 0.5,
-    component: (
-      <>
-        Please cite the{' '}
-        <HomepageOutboundLink href="https://www.nature.com/articles/s41467-026-77835-z">
-          HuBMAP Data Portal paper
-        </HomepageOutboundLink>{' '}
-        (
-        <HomepageOutboundLink href="https://doi.org/10.1038/s41467-026-77835-z">
-          https://doi.org/10.1038/s41467-026-77835-z
-        </HomepageOutboundLink>
-        ) when HuBMAP data were used in the study, portal tools were used in methods or analysis, or the portal is used
-        as a data repository per journal requirements. See our{' '}
-        <HomepageOutboundLink href="https://hubmapconsortium.org/acknowledgement-in-publications/">
-          citation guidance
-        </HomepageOutboundLink>{' '}
-        for full details.
-      </>
-    ),
+    component: <HowToCite />,
   },
   {
     key: 'help',

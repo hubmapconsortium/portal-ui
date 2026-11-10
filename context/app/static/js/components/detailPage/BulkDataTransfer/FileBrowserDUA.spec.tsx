@@ -136,3 +136,11 @@ test('calls handleClose when disagree button is clicked', async () => {
   await userEvent.click(duaModal.buttons.disagree);
   expect(mockClose).toHaveBeenCalledTimes(1);
 });
+
+test('links the HuBMAP Data Portal paper from the app context', () => {
+  const paperUrl = 'https://doi.org/10.1234/portal-paper';
+  render(<TestFileBrowserDUA />, { endpoints: { hubmapDataPortalPaperUrl: paperUrl } });
+
+  expect(screen.getByRole('link', { name: 'HuBMAP Data Portal paper' })).toHaveAttribute('href', paperUrl);
+  expect(screen.getByRole('link', { name: paperUrl })).toHaveAttribute('href', paperUrl);
+});

@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import { useAppContext } from 'js/components/Contexts';
 import { getDUAText } from './utils';
 import LicensingText from './LicensingText';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
@@ -24,6 +25,7 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
   const [isChecked, check] = useState(false);
 
   const { title, appropriateUse } = getDUAText(mapped_data_access_level);
+  const { hubmapDataPortalPaperUrl } = useAppContext();
 
   return (
     <Dialog
@@ -43,15 +45,10 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
           <StyledHeader variant="h4">Acknowledgement</StyledHeader>
           <Typography variant="body1">
             Investigators using HuBMAP data in publications or presentations are asked to cite the{' '}
-            <OutboundLink href="https://www.nature.com/articles/s41467-026-77835-z">
-              HuBMAP Data Portal paper
-            </OutboundLink>{' '}
-            (
-            <OutboundLink href="https://doi.org/10.1038/s41467-026-77835-z">
-              https://doi.org/10.1038/s41467-026-77835-z
-            </OutboundLink>
-            ) when portal data were used in the study, portal tools were used in methods or analysis, or the portal is
-            used as a data repository per journal requirements. See our{' '}
+            <OutboundLink href={hubmapDataPortalPaperUrl}>HuBMAP Data Portal paper</OutboundLink> (
+            <OutboundLink href={hubmapDataPortalPaperUrl}>{hubmapDataPortalPaperUrl}</OutboundLink>) when portal data
+            were used in the study, portal tools were used in methods or analysis, or the portal is used as a data
+            repository per journal requirements. See our{' '}
             <OutboundLink href="https://hubmapconsortium.org/acknowledgement-in-publications/">
               citation guidance
             </OutboundLink>{' '}

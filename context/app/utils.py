@@ -57,6 +57,14 @@ def get_client(use_groups_token=True):
     )
 
 
+# The HuBMAP Data Portal paper, which HuBMAP asks users of portal data to cite. The DOI URL
+# reaches the front end as `hubmapDataPortalPaperUrl` in the app context, and the dataset
+# JSON-LD citation is built from it.
+HUBMAP_DATA_PORTAL_PAPER_DOI_URL = 'https://doi.org/10.1038/s41467-026-77835-z'
+# The paper's own publication page in the portal.
+HUBMAP_DATA_PORTAL_PAPER_UUID = '6c9a473b6c49b85d58f1cdfd159a934b'
+
+
 def get_default_flask_data():
     return {
         'endpoints': {
@@ -87,6 +95,7 @@ def get_default_flask_data():
             'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION'],
             'enableSaySeeMode': bool(current_app.config.get('ENABLE_SAY_SEE_MODE')),
             'enableFilesSearch': bool(current_app.config.get('ENABLE_FILES_SEARCH')),
+            'hubmapDataPortalPaperUrl': HUBMAP_DATA_PORTAL_PAPER_DOI_URL,
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD'),
         'pinnedPublicationUUIDs': current_app.config.get('PINNED_PUBLICATION_UUIDS', ''),
