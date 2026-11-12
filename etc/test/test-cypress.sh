@@ -24,6 +24,7 @@ case $1 in
     export CYPRESS_API_ENV=${API_ENV:-test}
     case $CYPRESS_API_ENV in
       test) ENDPOINTS=$(grep -E "^[A-Z_]+ *= *'https://" example-app.conf) ;;
+      dev) ENDPOINTS=$(cat etc/test/dev-endpoints.conf) ;;
       prod) ENDPOINTS=$(cat etc/test/prod-endpoints.conf) ;;
       *) die "Unexpected API_ENV: $CYPRESS_API_ENV" ;;
     esac
