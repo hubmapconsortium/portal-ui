@@ -1,2 +1,0 @@
-- Add the published HuBMAP Data Portal paper to the `citation` property of the schema.org structured data on dataset pages.
-- Point the home page "How to cite?" section and the bulk download Data Use Agreement at the published HuBMAP Data Portal paper instead of its preprint.

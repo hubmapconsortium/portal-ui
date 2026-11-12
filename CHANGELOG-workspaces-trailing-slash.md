@@ -1,1 +1,0 @@
-- Add trailing slashes to workspaces and user templates API request URLs, which previously relied on the gateway to append them.

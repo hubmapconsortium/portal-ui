@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.55.1 - 2026-11-12
+
+- Add `API_ENV=dev` to `etc/test/test-cypress.sh` and the Cypress Portal CI `workflow_dispatch` input, to run the Cypress suite against the dev environment APIs. The services spec checks the dev endpoints, and the Vitessce specs for datasets whose files are missing on test now also run on dev.
+- Update the test, dev and production endpoints in `example-app.conf` to match the deployed portals. The test gateway is now `gateway.test`, test and dev use the dev ontology API, the dev and production blocks list the ontology API, and every block uses `data-products.hubmapconsortium.org` in place of the `data-products.cmu` host, which no longer resolves. The dev block no longer lists the scFind endpoint twice.
+- Add the published HuBMAP Data Portal paper to the `citation` property of the schema.org structured data on dataset pages.
+- Point the home page "How to cite?" section and the bulk download Data Use Agreement at the published HuBMAP Data Portal paper instead of its preprint.
+- The provenance graph no longer tries to view the current entity after it has been removed from the page.
+- Add trailing slashes to workspaces and user templates API request URLs, which previously relied on the gateway to append them.
+
+
+
 ## v1.55.0 - 2026-11-04
 
 - Match the fullscreen visualization header to the visualization's dark theme. The header and its buttons switch back to the light theme when fullscreen is exited.
