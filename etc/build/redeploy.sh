@@ -1,51 +1,66 @@
 #!/usr/bin/env bash
-set -o errexit
+set -euo pipefail
 
-die() { set +v; echo "$*" 1>&2 ; exit 1; }
+die() { echo "Error: $*" >&2; exit 1; }
 
-[ "$#" -eq 2 ] || die "usage: $0 USERNAME [dev | test]"
+[ "$#" -eq 1 ] || die "usage: $0 USERNAME"
 USER="$1"
-TARGET="$2"
+TARGET="dev"
+COMPOSE_CONFIG="hubmap.dev.yml"
 
-# heredoc will be interpolated: Escape backticks and variables defined inside the block.
-ssh "$USER@ingest.$TARGET.hubmapconsortium.org" << EOF
-echo 'whoami?' \`whoami\`
-sudo -i
-echo 'whoami?' \`whoami\`
-su - hive
-echo 'whoami?' \`whoami\`
+log() {
+    echo -e "\n==> [$(date +'%Y-%m-%d %H:%M:%S')] $1"
+}
+
+log "Connecting to ingest server and executing deployment..."
+
+ssh -t "$USER@ingest.$TARGET.hubmapconsortium.org" << 'EOF'
+set -euo pipefail
+
+echo -e "\n==> [Remote] Checking current user identity..."
+echo 'whoami?' `whoami`
+
+sudo -i << 'SU_EOF'
+set -euo pipefail
+echo 'whoami as root?' `whoami`
+
+su - hive << 'HIVE_EOF'
+set -euo pipefail
+echo 'whoami as hive?' `whoami`
 
 cd /opt/hubmap/portal-ui/compose
-echo 'portal running?' \`docker ps | grep portal-ui\`
 
-COMPOSE_CONFIG=hubmap.yml
-[ "$TARGET" = "test" ] && COMPOSE_CONFIG=hubmap.test.yml
-# hubmap.test.yml includes two portal instances.
+echo -e "\n==> [Remote] Current running portals:"
+docker ps --filter "name=portal-ui" --format "table {{.Names}}\t{{.Status}}"
 
-echo 'stopping...'
-docker compose -f \$COMPOSE_CONFIG down
-echo 'portal running?' \`docker ps | grep portal-ui\`
+echo -e "\n==> [Remote] Stopping existing stack..."
+docker compose -f hubmap.dev.yml down
 
-echo 'removing old "latest"...'
-# Unless we clear it, Docker will think it already has the image.
-docker rmi hubmap/portal-ui:latest
+echo -e "\n==> [Remote] Removing old 'latest' image cache..."
+docker rmi hubmap/portal-ui:latest || true
 
-echo 'starting...'
-docker compose -f \$COMPOSE_CONFIG up -d
+echo -e "\n==> [Remote] Starting updated stack in detached mode..."
+docker compose -f hubmap.dev.yml up -d
 
-# We don't understand why the prod-test instance is getting the wrong configuration.
-# We hope turning it off-and-on will help, but this is not a good situation.
-if [ "$TARGET" = "test" ]; then
-    echo 'Restart the hubmap-auth container... for TEST only'
-    docker restart hubmap-auth
-fi
+echo -e "\n==> [Remote] Verifying running portal containers:"
+docker ps --filter "name=portal-ui" --format "table {{.Names}}\t{{.Status}}"
 
-echo 'portal running?' \`docker ps | grep portal-ui\`
+echo -e "\n==> [Remote] Checking package.json across instances..."
+for container in portal-ui prod-portal-ui; do
+    echo "--- Container: $container ---"
+    if docker ps --format "{{.Names}}" | grep -q "^$container$"; then
+        # Robustly check root or typical app subdirectories for package.json
+        docker exec "$container" sh -c 'cat package.json 2>/dev/null || cat /app/package.json 2>/dev/null' | grep -E '"version"|"name"' || true
+    else
+        echo "WARNING: Container $container is not running!" >&2
+    fi
+done
 
-docker exec -it portal-ui cat package.json
+HIVE_EOF
+SU_EOF
 
 EOF
 
-echo "Visit --> http://portal.$TARGET.hubmapconsortium.org/"
-
-[ "$TARGET" = "test" ] && echo "Visit --> http://portal-prod.test.hubmapconsortium.org/"
+log "Deployment complete!"
+echo "Visit DEV Portal      --> https://portal.dev.hubmapconsortium.org/"
+echo "Visit DEV Prod Portal --> https://portal-prod.dev.hubmapconsortium.org/"
