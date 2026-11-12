@@ -11,7 +11,11 @@ test('every workspaces API URL path ends in a slash', () => {
     return typeof value === 'function' ? String((value as (arg: number) => string)(1)) : String(value);
   });
   // Skip portal-relative paths such as createWorkspaceFromNotebookPath; they don't call the workspaces API.
-  const apiCalls = built.filter((url) => url.startsWith(endpoint));
+  const endpointOrigin = new URL(endpoint).origin;
+  const apiCalls = built.filter((url) => {
+    const parsed = new URL(url, endpoint);
+    return /^https?:$/.test(parsed.protocol) && parsed.origin === endpointOrigin;
+  });
 
   expect(apiCalls.length).toBeGreaterThan(0);
   apiCalls.forEach((url) => expect(new URL(url).pathname).toMatch(/\/$/));
