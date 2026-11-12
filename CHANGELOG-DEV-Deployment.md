@@ -1,0 +1,2 @@
+- Updated the deployment script to fire up a second portal-ui instance connecting to the PROD services
+- Remove docker logs to CloudWatch forwarding as DEV no longer uses CloudWatch
