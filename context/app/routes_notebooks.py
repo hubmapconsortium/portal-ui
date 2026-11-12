@@ -43,7 +43,7 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
         raise Exception('No workspaces_token')
 
     auth_headers = {'UWS-Authorization': f'Token {session["workspaces_token"]}'}
-    workspaces_base_url = f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces'
+    workspaces_base_url = f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces/'
 
     notebook_path = f'{name_stem}.ipynb'
     create_workspace_response = post(

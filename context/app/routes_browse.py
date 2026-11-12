@@ -819,7 +819,7 @@ def _get_all_template_keys_cached(hour_bucket):
     ``hour_bucket`` is not used: it is only part of the cache key. See _hour_bucket.
     """
     client = get_client(use_groups_token=False)
-    templates_url = current_app.config['USER_TEMPLATES_ENDPOINT'] + '/templates/jupyter_lab'
+    templates_url = current_app.config['USER_TEMPLATES_ENDPOINT'] + '/templates/jupyter_lab/'
     return list(client.request(templates_url)['data'].keys())
 
 
