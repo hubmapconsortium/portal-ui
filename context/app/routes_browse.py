@@ -26,6 +26,8 @@ from flask import (
 )
 
 from .utils import (
+    HUBMAP_DATA_PORTAL_PAPER_DOI_URL,
+    HUBMAP_DATA_PORTAL_PAPER_UUID,
     find_sibling_datasets,
     get_default_flask_data,
     make_blueprint,
@@ -886,6 +888,12 @@ def _get_entity_description(entity):
 HUBMAP_PORTAL_URL = 'https://portal.hubmapconsortium.org'
 CC_BY_4_0 = 'https://creativecommons.org/licenses/by/4.0/'
 
+HUBMAP_DATA_PORTAL_PAPER_CITATION = (
+    'Turner ML, Smits TC, Liaw TS, et al. HuBMAP Data Portal: A Resource for Multimodal '
+    'Spatial and Single-Cell Data of Healthy Human Tissues. Nat Commun. 2026;17:11125. '
+    f'{HUBMAP_DATA_PORTAL_PAPER_DOI_URL}'
+)
+
 
 def _timestamp_to_iso(timestamp):
     """
@@ -1085,7 +1093,14 @@ def _get_related_publication_citations(entity):
         )
         return []
 
-    citations = [_publication_citation(hit.get('_source') or {}) for hit in hits]
+    sources = [hit.get('_source') or {} for hit in hits]
+    # The portal paper's own publication page references the datasets the paper used, and
+    # HUBMAP_DATA_PORTAL_PAPER_CITATION already cites the paper, so it is skipped here.
+    citations = [
+        _publication_citation(source)
+        for source in sources
+        if source.get('uuid') != HUBMAP_DATA_PORTAL_PAPER_UUID
+    ]
     # Sorted because a filter-only query has no meaningful score order, and unstable output
     # would churn the served markup between requests.
     return sorted(citation for citation in citations if citation)
@@ -1235,8 +1250,13 @@ def _get_dataset_ld(entity):
         'datePublished': _timestamp_to_iso(entity.get('published_timestamp')),
         'dateModified': _timestamp_to_iso(entity.get('last_modified_timestamp')),
         'measurementTechnique': assays,
-        # Related academic articles, per the property's documented purpose.
-        'citation': _get_related_publication_citations(entity),
+        # Articles "recommended by the data provider be cited in addition to the dataset
+        # itself", per Google's definition: the portal paper first, since HuBMAP asks it be
+        # cited for any use of portal data, then publications referencing this dataset.
+        'citation': [
+            HUBMAP_DATA_PORTAL_PAPER_CITATION,
+            *_get_related_publication_citations(entity),
+        ],
     }
     ld.update({key: value for key, value in optional.items() if value})
     return ld
