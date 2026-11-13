@@ -9,7 +9,7 @@ on:
       api_env:
         description: "Backend APIs the portal under test points at"
         type: choice
-        options: [test, prod]
+        options: [test, dev, prod]
         default: test
 
 jobs:

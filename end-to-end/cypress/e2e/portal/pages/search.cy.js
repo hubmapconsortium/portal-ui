@@ -111,7 +111,7 @@ describe("datasets search only", () => {
   });
 
   it("shows PAS microscopy thumbnails in tile view (not present on test)", function () {
-    // This dataset's thumbnail is not present in the test environment, so this only runs with API_ENV=prod.
+    // This dataset's thumbnail is not present in the test or dev environments, so this only runs with API_ENV=prod.
     cy.env(["API_ENV"]).then(({ API_ENV = "test" }) => {
       if (API_ENV !== "prod") this.skip();
     });

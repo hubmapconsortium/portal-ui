@@ -23,4 +23,4 @@ Some additional steps are necessary in order to run GUI applications (such as Cy
 
 ## Running the portal suite
 
-`./etc/test/test-cypress.sh portal` builds the portal image and runs every spec under `cypress/e2e/portal/` against it. By default the portal uses the test environment APIs from `example-app.conf`; set `API_ENV=prod` to use the production APIs from `etc/test/prod-endpoints.conf`. The services spec checks the endpoints for whichever environment is selected.
+`./etc/test/test-cypress.sh portal` builds the portal image and runs every spec under `cypress/e2e/portal/` against it. By default the portal uses the test environment APIs from `example-app.conf`; set `API_ENV=dev` to use the dev APIs from `etc/test/dev-endpoints.conf`, or `API_ENV=prod` to use the production APIs from `etc/test/prod-endpoints.conf`. The services spec checks the endpoints for whichever environment is selected.
