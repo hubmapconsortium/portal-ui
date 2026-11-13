@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.55.2 - 2026-11-13
+
+- Updated the deployment script to fire up a second portal-ui instance connecting to the PROD services
+- Remove docker logs to CloudWatch forwarding as DEV no longer uses CloudWatch
+- Run the Cypress Portal CI against the dev environment by default
+
+
+
 ## v1.55.1 - 2026-11-12
 
 - Add `API_ENV=dev` to `etc/test/test-cypress.sh` and the Cypress Portal CI `workflow_dispatch` input, to run the Cypress suite against the dev environment APIs. The services spec checks the dev endpoints, and the Vitessce specs for datasets whose files are missing on test now also run on dev.
