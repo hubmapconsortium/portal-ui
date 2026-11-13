@@ -379,6 +379,7 @@ def test_build_orchestrator_forwards_langfuse_config(client, mocker):
         ('portal-prod.test.hubmapconsortium.org', 'prod-test'),
         ('portal.test.hubmapconsortium.org', 'test'),
         ('portal.dev.hubmapconsortium.org', 'dev'),
+        ('portal-prod.dev.hubmapconsortium.org', 'dev-prod'),
         ('localhost:5000', 'localhost'),
         ('127.0.0.1:5001', 'localhost'),
         ('some-branch-deploy.hubmapconsortium.org', 'localhost'),

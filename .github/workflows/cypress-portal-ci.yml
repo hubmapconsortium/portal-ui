@@ -9,8 +9,8 @@ on:
       api_env:
         description: "Backend APIs the portal under test points at"
         type: choice
-        options: [test, dev, prod]
-        default: test
+        options: [dev, test, prod]
+        default: dev
 
 jobs:
   build:
@@ -44,7 +44,7 @@ jobs:
         env:
           GH_ACTIONS_BRANCH: ${{ github.ref }}
           GH_ACTIONS: true
-          API_ENV: ${{ inputs.api_env || 'test' }}
+          API_ENV: ${{ inputs.api_env || 'dev' }}
 
       - name: Show portal logs
         if: failure()

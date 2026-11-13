@@ -232,6 +232,7 @@ _LANGFUSE_ENVIRONMENTS = {
     'portal-prod.test.hubmapconsortium.org': 'prod-test',
     'portal.test.hubmapconsortium.org': 'test',
     'portal.dev.hubmapconsortium.org': 'dev',
+    'portal-prod.dev.hubmapconsortium.org': 'dev-prod',
 }
 
 
