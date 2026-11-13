@@ -6,7 +6,6 @@ die() { echo "Error: $*" >&2; exit 1; }
 [ "$#" -eq 1 ] || die "usage: $0 USERNAME"
 USER="$1"
 TARGET="dev"
-COMPOSE_CONFIG="hubmap.dev.yml"
 
 log() {
     echo -e "\n==> [$(date +'%Y-%m-%d %H:%M:%S')] $1"
@@ -14,7 +13,7 @@ log() {
 
 log "Connecting to ingest server and executing deployment..."
 
-ssh -t "$USER@ingest.$TARGET.hubmapconsortium.org" << 'EOF'
+ssh "$USER@ingest.$TARGET.hubmapconsortium.org" << 'EOF'
 set -euo pipefail
 
 echo -e "\n==> [Remote] Checking current user identity..."
@@ -49,8 +48,7 @@ echo -e "\n==> [Remote] Checking package.json across instances..."
 for container in portal-ui prod-portal-ui; do
     echo "--- Container: $container ---"
     if docker ps --format "{{.Names}}" | grep -q "^$container$"; then
-        # Robustly check root or typical app subdirectories for package.json
-        docker exec "$container" sh -c 'cat package.json 2>/dev/null || cat /app/package.json 2>/dev/null' | grep -E '"version"|"name"' || true
+        docker exec "$container" cat package.json | grep -E '"version"|"name"' || true
     else
         echo "WARNING: Container $container is not running!" >&2
     fi
