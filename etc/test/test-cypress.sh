@@ -21,7 +21,7 @@ case $1 in
   portal)
     CYPRESS_ARGS='--spec cypress/e2e/portal/**/*.cy.js'
     # API_ENV picks the backend: append its endpoints to a copy of app.conf (later assignments win).
-    export CYPRESS_API_ENV=${API_ENV:-test}
+    export CYPRESS_API_ENV=${API_ENV:-dev}
     case $CYPRESS_API_ENV in
       test) ENDPOINTS=$(grep -E "^[A-Z_]+ *= *'https://" example-app.conf) ;;
       dev) ENDPOINTS=$(cat etc/test/dev-endpoints.conf) ;;
